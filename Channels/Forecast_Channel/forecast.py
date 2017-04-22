@@ -753,8 +753,7 @@ def sign_file(name, local_name, server_name):
 	file.close()
 	key.close()
 	if platform.system() == "Linux" and production:
-		path = "/var/www/riiconnect24.net/public_html/%s/%s/%s" % (language_code, str(country_code).zfill(3), server_name)
-		subprocess.call(["cp", local_name, path])
+		subprocess.call(["cp", local_name, file_path])
 		os.remove(local_name)
 	os.remove(local_name + "-1")
 	

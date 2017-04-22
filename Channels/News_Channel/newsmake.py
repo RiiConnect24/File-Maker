@@ -81,8 +81,7 @@ def download_source(name, mode, thumb, language_code, countries, data):
 def copy_file(mode, system, country, language_code):
 	newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "." + system
 	newsfilename2 = "news.bin." + str(datetime.utcnow().hour).zfill(2)
-	path = "/var/www/riiconnect24.net/public_html/%s/%s/%s/%s" % ("v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
-	subprocess.call(["cp", newsfilename, path])
+	subprocess.call(["cp", newsfilename, file_path])
 
 """Run the functions to make the news."""
 
