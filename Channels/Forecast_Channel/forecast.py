@@ -15,7 +15,6 @@ import forecastlists
 import json
 import math
 import os
-import platform
 import pycountry
 import requests
 import struct
@@ -751,7 +750,7 @@ def sign_file(name, local_name, server_name):
 	dest.close()
 	file.close()
 	key.close()
-	if platform.system() == "Linux" and production:
+	if production:
 		path = "%s/%s/%s/%s" % (file_path, language_code, str(country_code).zfill(3), server_name)
 		subprocess.call(["cp", local_name, path])
 		os.remove(local_name)
@@ -1544,7 +1543,7 @@ print "Cities Processed: %s\n" % citycount
 
 os.remove('forecastlists.pyc')
 
-if platform.system() == "Linux" and production:
+if production:
 	"""This will use a webhook to log that the script has been ran."""
 	
 	data = {"username": "Forecast Bot", "content": "Weather Data has been updated!", "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script", "author_icon": "https://rc24.xyz/images/profile_forecast.png", "text": "Weather Data has been updated!", "title": "Update!", "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/profile_forecast.png", "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}

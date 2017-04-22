@@ -11,11 +11,10 @@
 import binascii # Used to write to stuff in hex.
 import calendar # Used for the timestamps.
 import collections # Used to write stuff in dictionaries in order.
-import requests
-import platform
 import newsdownload # Used to call the locations downloader.
 import os # Used to remove output from DSDecmp.
 import pickle # Used to save and load dictionaries.
+import requests
 import rsa # Used to make the RSA Signature.
 import struct # Needed to pack u32s and other integers.
 import subprocess # Needed to run DSDecmp, which is for LZ77 Compression.
@@ -60,7 +59,7 @@ def download_source(name, mode, thumb, language_code, countries, data):
 	make_news = make_news_bin(mode, "wii", data)
 	make_news = make_news_bin(mode, "wii_u", data)
 
-	if platform.system() == "Linux":
+	if production:
 		"""This will use a webhook to log that the script has been ran."""
 		
 		data = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/profile_news.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": thumb, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
