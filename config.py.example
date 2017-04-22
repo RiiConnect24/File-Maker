@@ -1,0 +1,5 @@
+# Example config.py for News and Forecast Channel
+webhook_urls = ["DISCORD WEBHOOK", "DISCORD WEBHOOK"]
+key_path = "/path/to/key/in/format/of/file.pem"
+file_path = "/path/to/folder"
+force_all = False
