@@ -12,4 +12,4 @@ google_maps_api_key = "api_key" # API Key for Google Maps geocoding API
 
 """Forecast Channel only"""
 
-api_keys = ["ACCUWEATHER API KEY", "ACCUWEATHER API KEY"] # API Key for AccuWeather developers
+accuweather_api_keys = ["ACCUWEATHER API KEY", "ACCUWEATHER API KEY"] # API Key for AccuWeather developers

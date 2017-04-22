@@ -160,14 +160,14 @@ def get_icon(icon,list,key):
 	else: return get_weathericon(icon)
 
 def test_keys():
-	global weathercities,api_keys
+	global weathercities,accuweather_api_keys
 	print "Checking API Keys ..."
 	total = 0
 	keys = 0
-	for key in api_keys:
+	for key in accuweather_api_keys:
 		invalid = False
 		keys += 1
-		if keys % 10 == 0 or keys == len(api_keys): print str(keys) + " / " + str(len(api_keys)) + " checked."
+		if keys % 10 == 0 or keys == len(accuweather_api_keys): print str(keys) + " / " + str(len(accuweather_api_keys)) + " checked."
 		testapi = request_data("http://dataservice.accuweather.com/locations/v1/regions?apikey=%s" % key)
 		if testapi is not None:
 			ratelimit_remaining = int(testapi.headers['RateLimit-Remaining'])
@@ -176,9 +176,9 @@ def test_keys():
 		else: invalid = True
 		if invalid:
 			print "Warning: Key %s marked as unusable" % keys
-			api_keys[keys-1] = None
+			accuweather_api_keys[keys-1] = None
 	print "%s Requests Available" % total
-	print "Processed %s Keys" % len(api_keys)
+	print "Processed %s Keys" % len(accuweather_api_keys)
 
 def reset_data(l): # Resets bin-specific values for next generation
 	print "Reloading ..."
@@ -198,8 +198,8 @@ def get_apikey():
 	apirequests+=1
 	key = None
 	while key is None:
-		key = api_keys[apicount]
-		if apicount == len(api_keys)-1:
+		key = accuweather_api_keys[apicount]
+		if apicount == len(accuweather_api_keys)-1:
 			apicount = 0
 			apicycle += 1
 		else: apicount += 1
