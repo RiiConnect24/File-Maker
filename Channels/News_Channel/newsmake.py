@@ -81,8 +81,8 @@ def download_source(name, mode, thumb, language_code, countries, data):
 def copy_file(mode, system, country, language_code):
 	if (force_all == True):
 		for hours in range(0, 24):
-			newsfilename = "news.bin.%s.%s.%s" % (hours.zfill(2), mode, system)
-			newsfilename2 = "news.bin.%s" % (hours.zfill(2))
+			newsfilename = "news.bin.%s.%s.%s" % (str(hours).zfill(2), mode, system)
+			newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
 			path = "%s/%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
 			subprocess.call(["cp", newsfilename, path])
 	else:
