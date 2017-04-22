@@ -42,7 +42,6 @@ citycount = 0 # City Count
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 useLegacy = True # Use AccuWeather Legacy API Instead (Faster)
-production = True # Use server production mode
 count = {} # Offset Storage
 file = None
 
