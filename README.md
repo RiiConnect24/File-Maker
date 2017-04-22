@@ -1,2 +1,2 @@
-# FileMaker
-OSS: A somewhat-working copy of FileMaker (it'll make the files but they won't work on your Wii)
+# RiiConnect24-File-Maker
+With these scripts, this will create data files for Wii Channels.
