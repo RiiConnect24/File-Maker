@@ -20,7 +20,6 @@ import requests
 import subprocess
 import struct
 import time # Used to get time stuff.
-import unidecode
 import urllib2 # Needed to download a few things for the news.
 import tempfile # For resizing images etc
 from bs4 import BeautifulSoup # Used to parse HTML.
