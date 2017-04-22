@@ -120,7 +120,7 @@ def replace(item):
 def locations_download(language_code, data):
 	locations = collections.OrderedDict()
 	locations_return = collections.OrderedDict()
-	gmaps = googlemaps.Client(key="AIzaSyCOHZJ1mZmaz6A5r6kpv2gQPOe6l0OLT4A")
+	gmaps = googlemaps.Client(key=google_maps_key)
 	
 	"""This dictionary is used to determine languages."""
 	
