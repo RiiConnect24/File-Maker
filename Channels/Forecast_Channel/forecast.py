@@ -753,7 +753,8 @@ def sign_file(name, local_name, server_name):
 	file.close()
 	key.close()
 	if platform.system() == "Linux" and production:
-		subprocess.call(["cp", local_name, file_path])
+		path = "%s/%s/%s/%s" % (file_path, language_code, str(country_code).zfill(3), server_name)
+		subprocess.call(["cp", local_name, path])
 		os.remove(local_name)
 	os.remove(local_name + "-1")
 	
