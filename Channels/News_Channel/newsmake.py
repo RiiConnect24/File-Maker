@@ -11,6 +11,7 @@
 import binascii # Used to write to stuff in hex.
 import calendar # Used for the timestamps.
 import collections # Used to write stuff in dictionaries in order.
+import errno # Used to catch errors when creating dirs recursively.
 import newsdownload # Used to call the locations downloader.
 import os # Used to remove output from DSDecmp.
 import pickle # Used to save and load dictionaries.
@@ -53,6 +54,16 @@ def u32_littleendian(data):
 		data = 0
 	return struct.pack("<I", data)
 
+# http://stackoverflow.com/a/600612/3874884
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+
 def download_source(name, mode, thumb, language_code, countries, data):
 	print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
@@ -83,6 +94,7 @@ def copy_file(mode, system, country, language_code):
 			newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
 			newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
 			path = "%s/%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
+			mkdir_p(path)
 			subprocess.call(["cp", newsfilename, path])
 	else:
 		newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
