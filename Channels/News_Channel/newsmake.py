@@ -93,16 +93,14 @@ def copy_file(mode, system, country, language_code):
 		for hours in range(0, 24):
 			newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
 			newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
-			# Create structure
-			path = "%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country)
+			path = "%s/%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
 			mkdir_p(path)
-			subprocess.call(["cp", newsfilename, path + '/' + newsfilename2])
+			subprocess.call(["cp", newsfilename, path])
 	else:
 		newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
 		newsfilename2 = "news.bin.%s" % (str(datetime.utcnow().hour).zfill(2))
-		# Create structure
-		path = "%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country)
-		subprocess.call(["cp", newsfilename, path + '/' + newsfilename2])
+		path = "%s/%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
+		subprocess.call(["cp", newsfilename, path])
 
 """Run the functions to make the news."""
 
