@@ -27,9 +27,7 @@ print "weathercities = collections.OrderedDict()"
 
 print "\n"
 
-weathercities = {
-	5: forecastlists.weathercities083_5,
-}
+weathercities = {} # Edit this to include the dictionaries to use. The key must be the language the dictionary is in, the value must be the dictionary.
 
 languages = {
 	"ja": 0,
