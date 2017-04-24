@@ -790,7 +790,7 @@ def make_riiconnect24_text():
 """Write everything to the file."""
 
 def write_dictionary(mode):
-	newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "." + system
+	newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
 
 	for dictionary in dictionaries:
 		for values in dictionary.values():
