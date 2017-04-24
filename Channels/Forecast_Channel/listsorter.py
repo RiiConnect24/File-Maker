@@ -46,6 +46,6 @@ for weather in weathercities:
 				missing.append(regiondata[region][2][1])
 			
 	for miss in missing:
-		print "A city for the %s region could not be found in the dictionary, please use a city for it." % miss
+		print "A city for the %s region could not be found, please add one." % miss
 	
 	print "\n"
