@@ -3,11 +3,10 @@
 
 # ===========================================================================
 # ACCUWEATHER API KEY GENERATION SCRIPT
-# VERSION 1.0 - RELEASE
+# VERSION 1.0
+# AUTHORS: JOHN PANSERA - ALL RIGHTS RESERVED
 # **********************************************************
-# © 2017 JOHN PANSERA - ALL RIGHTS RESERVED
-# **********************************************************
-# WWW.RC24.XYZ
+# Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
 import mechanize
