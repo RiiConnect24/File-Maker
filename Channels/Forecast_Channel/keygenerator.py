@@ -5,8 +5,6 @@
 # ACCUWEATHER API KEY GENERATION SCRIPT
 # VERSION 1.0 - RELEASE
 # **********************************************************
-# THIS SCRIPT IS NOT TO BE DISTRIBUTED
-# FOR RIICONNECT24 INTERNAL USE ONLY
 # © 2017 JOHN PANSERA - ALL RIGHTS RESERVED
 # **********************************************************
 # WWW.RC24.XYZ
