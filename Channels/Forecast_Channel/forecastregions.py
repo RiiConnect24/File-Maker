@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""These were taken from Nintendo's servers, these are for a region select screen."""
+"""In rare cases, the region data might be outdated because Nintendo never actively updated this list."""
+
 regioninfo_001 = {
 	1: [0, 0, ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"]],
 	2: [35.687, 139.765, ["東京都", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"]],
