@@ -5,7 +5,7 @@ import collections
 import forecastlists
 import forecastregions
 
-weathercities = [forecastlists.weathercities079]
+weathercities = [] # Edit this to include the dictionaries.
 
 for weather in weathercities:
 	weathercity = collections.OrderedDict()
@@ -46,6 +46,6 @@ for weather in weathercities:
 				missing.append(regiondata[region][2][1])
 			
 	for miss in missing:
-		print "%s not found." % miss
+		print "A city for the %s region could not be found in the dictionary, please use a city for it." % miss
 	
 	print "\n"
