@@ -15,12 +15,12 @@ import os
 import random
 import time
 
-# CONFIGURATION VALUES
+"""CONFIGURATION VALUES"""
 URL_USER_ADD = 'http://developer.accuweather.com/user/9344/apps/add' #<--- COPY LINK FROM 'ADD A NEW APP' BUTTON
 USER_NAME = 'USER NAME HERE'
 PASSWORD = 'PASSWORD HERE'
 cooldown = 5 # Cooldown (seconds) for key generation
-# === DO NOT EDIT PAST THIS LINE ===
+"""=== DO NOT EDIT PAST THIS LINE ==="""
 URL_LOGIN = 'http://developer.accuweather.com/user'
 URL_MY_APPS = 'http://developer.accuweather.com/user/me/apps'
 br = mechanize.Browser()
@@ -56,7 +56,7 @@ def get_results():
 			if key not in oldlist:
 				print key
 	else:
-		print "Currently there are %s keys active:" % len(results)
+		print "Currently there are %s keys active: " % len(results)
 		for key in results: print key
 		first = True
 	
@@ -68,9 +68,9 @@ def add_key():
 	br.form['machine'] = rndstring
 	a = random.randint(1,4)
 	if a == 1: br.find_control('attribute_create_with_api[partnerapp]').items[0].selected=True
-	if a == 2: br.find_control('attribute_create_with_api[internalapp]').items[0].selected=True
-	if a == 3: br.find_control('attribute_create_with_api[productivityapp]').items[0].selected=True
-	if a == 4: br.find_control('attribute_create_with_api[weatherapp]').items[0].selected=True
+	elif a == 2: br.find_control('attribute_create_with_api[internalapp]').items[0].selected=True
+	elif a == 3: br.find_control('attribute_create_with_api[productivityapp]').items[0].selected=True
+	elif a == 4: br.find_control('attribute_create_with_api[weatherapp]').items[0].selected=True
 	br.submit()
 	
 print "AccuWeather API Key Generator\n"
