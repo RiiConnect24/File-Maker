@@ -80,7 +80,7 @@ print "AccuWeather API Key Generator\n"
 print "By John Pansera / WWW.RC24.XYZ"
 connect()
 get_results()
-count = raw_input('Enter Amount of Keys To Generate (Cooldown: %s Seconds): ' % cooldown)
+count = raw_input('Enter Amount of Keys to Generate (Cooldown: %s Seconds): ' % cooldown)
 print "Processing ..."
 for _ in range(int(count)):
 	time.sleep(cooldown)
