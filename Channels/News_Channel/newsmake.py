@@ -808,7 +808,7 @@ def write_dictionary(mode):
 
 	FNULL = open(os.devnull, "w+")
 
-	subprocess.call(["mono", "--runtime=v4.0.30319", "DSDecmp.exe", "-c", "lz10", newsfilename + "-2", newsfilename], stdout=FNULL, stderr=subprocess.STDOUT)
+	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", newsfilename + "-2", newsfilename], stdout=FNULL, stderr=subprocess.STDOUT)
 
 	with open(newsfilename, "rb") as source_file:
 		read = source_file.read()

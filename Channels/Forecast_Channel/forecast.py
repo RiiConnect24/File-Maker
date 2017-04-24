@@ -736,7 +736,7 @@ def sign_file(name, local_name, server_name):
 	dest.close()
 	file.close()
 	print "Compressing ..."
-	subprocess.call(["mono", "--runtime=v4.0.30319", "DSDecmp.exe", "-c", "lz10", local_name, local_name + "-1"])
+	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", local_name, local_name + "-1"])
 	file = open(local_name + '-1', 'rb')
 	new = file.read()
 	dest = open(local_name, "w+")
