@@ -18,7 +18,7 @@ def decompress(file):
 	decompress = subprocess.call(["mono", "--runtime=v4.0.30319", "DSDecmp.exe", "-d", file + ".2", file + ".3"], stdout=FNULL, stderr=subprocess.STDOUT)
 	remove = os.remove(file + ".2")
 	move = subprocess.call(["mv", file + ".3", file + ".2"], stdout=FNULL, stderr=subprocess.STDOUT)
-	open_hex = subprocess.call(["open", "-a", "Hex Fiend", file + ".2"], stdout=FNULL, stderr=subprocess.STDOUT)
+	open_hex = subprocess.call(["open", "-a", "Hex Fiend", file + ".2"], stdout=FNULL, stderr=subprocess.STDOUT) // This is to open the news files in the Mac hex editor I use called Hex Fiend.
 	
 for file in glob.glob("news.bin.*"):
 	if os.path.exists(file):
