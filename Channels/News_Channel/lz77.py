@@ -2,6 +2,8 @@ import glob
 import os
 import subprocess
 
+"""This is used to decompress the news.bin files."""
+
 def decompress(file):
 	with open(file, "rb") as source_file:
 		read = source_file.read()
