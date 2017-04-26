@@ -14,6 +14,7 @@ import collections
 import forecastlists
 import json
 import math
+import numpy
 import os
 import pycountry
 import requests
@@ -25,7 +26,6 @@ import io
 import random
 import rsa
 import xmltodict
-import numpy
 from config import *
 from datetime import datetime, timedelta
 
