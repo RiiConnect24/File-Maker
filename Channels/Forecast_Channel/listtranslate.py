@@ -40,14 +40,13 @@ def get_translated(i):
 	return location[0]["LocalizedName"]
 					 
 for weather in weathercities.items():
-	print "weathercities = collections.OrderedDict()"
+	country_code = forecastlists.bincountries[weather[1].values()[0][2]]
+					 
+	print "weathercities%s = collections.OrderedDict()" % country_code
 					 
 	print "\n"
 					 
 	for items in weather[1].values():
-		country_code = forecastlists.bincountries[weather[1].values()[0][2]]
-					 
-		
 		try:
 			bincountry = forecastlists.bincountries[items[2]]
 		except:
@@ -82,4 +81,6 @@ for weather in weathercities.items():
 						
 			coordinates = items[3]
 			
-			print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)								  coordinates, key) y
+			print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)
+		
+		print "\n"
