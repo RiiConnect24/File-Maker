@@ -47,40 +47,34 @@ for weather in weathercities.items():
 	print "\n"
 					 
 	for items in weather[1].values():
-		try:
-			bincountry = forecastlists.bincountries[items[2]]
-		except:
-			bincountry = ""
-		
-		if bincountry == country_code:
-			city = items[0]
+		city = items[0]
+		region = items[1]
+		country = items[2]
+		key = forecast.get_location(weather, items[0])
+			
+		cities = []
+		regions = []
+		countries = []
+					 
+		cities[1] = city
+		regions[1] = region
+		countries[1] = country
+					 
+		for i in [0, 2, 3, 4, 5, 6]:							       
 			region = items[1]
-			country = items[2]
-			key = forecast.get_location(weather, items[0])
+			country = forecastregions.regioninfo[country_code][1][2][languages[i]]
 			
-			cities = []
-			regions = []
-			countries = []
-					 
-			cities[1] = city
-			regions[1] = region
-			countries[1] = country
-					 
-			for i in [0, 2, 3, 4, 5, 6]:							       
-				region = items[1]
-				country = forecastregions.regioninfo[country_code][1][2][languages[i]]
-			
-				for values in forecastregions.regioninfo[country_code].values():
-					if values[2][weather[0]] == region:
-						region = values[2][languages[sys.argv[1]]]
-						break
+			for values in forecastregions.regioninfo[country_code].values():
+				if values[2][weather[0]] == region:
+					region = values[2][languages[sys.argv[1]]]
+					break
 				
-				cities[i] = get_translated(i))
-				regions[i] = region
-				countries[i] = country
+			cities[i] = get_translated(i))
+			regions[i] = region
+			countries[i] = country
 						
-			coordinates = items[3]
+		coordinates = items[3]
 			
-			print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)
+		print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)
 		
-		print "\n"
+	print "\n"
