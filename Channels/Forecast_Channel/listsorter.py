@@ -4,8 +4,7 @@
 import collections
 import forecastlists
 import forecastregions
-
-weathercities = [] # Edit this to include the dictionaries to use.
+from config import *
 
 for weather in weathercities:
 	weathercity = collections.OrderedDict()
