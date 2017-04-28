@@ -77,6 +77,6 @@ for weather in weathercities.items():
 				regions.append(region)
 				countries.append(country)
 					
-				coordinates = items[3]
+			coordinates = items[3]
 			
-				print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s". "%s"]' % (str(country_code).zfill(3), city, city, region, country, coordinates, key)
+			print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s". "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)								  coordinates, key) y
