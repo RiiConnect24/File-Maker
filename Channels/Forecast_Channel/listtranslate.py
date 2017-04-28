@@ -34,6 +34,7 @@ def get_translated(i):
 	for language in languages.items():
 		if language[1] == i:
 			l = language[0]
+			brrak
 	
 	location = forecast.request_data("http://dataservice.accuweather.com/locations/v1/%s&apikey=%s&language=%s" % (key, forecast.get_apikey(), l)
 					 
