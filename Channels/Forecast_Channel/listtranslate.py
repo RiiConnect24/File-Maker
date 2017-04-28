@@ -36,10 +36,20 @@ languages = {
 	"it": 5,
 	"nl": 6,
 }
+
+def get_translated(i):
+	for language in languages.items():
+		if language[1] == i:
+			l = language[0]
 	
+	location = forecast.request_data("http://dataservice.accuweather.com/locations/v1/%s&apikey=%s&language=%s" % (key, forecast.get_apikey(), l)
+					 
+	return location[0]["LocalizedName"]
+					 
 for weather in weathercities.items():
 	for items in weather[1].values():
 		country_code = forecastlists.bincountries[weather[1].values()[0][2]]
+					 
 		
 		try:
 			bincountry = forecastlists.bincountries[items[2]]
@@ -47,11 +57,14 @@ for weather in weathercities.items():
 			bincountry = ""
 		
 		if bincountry == country_code:
+			city = items[0]
 			key = forecast.get_location(weather, items[0])
 			
-			for i in range(2, 7):
-				location = forecast.request_data("http://dataservice.accuweather.com/locations/v1/%s&apikey=%s&language=%s" % (key, forecast.get_apikey(), languages[i])
-													       
+			cities = []
+			regions = []
+			countries = []
+					 
+			for i in range(2, 7):							       
 				region = items[1]
 				country = forecastregions.regioninfo[country_code][1][2][languages[sys.argv[1]]]
 			
@@ -59,7 +72,11 @@ for weather in weathercities.items():
 					if values[2][weather[0]] == region:
 						region = values[2][languages[sys.argv[1]]]
 						break
+				
+				cities.append(get_translated(i))
+				regions.append(region)
+				countries.append(country)
 					
 				coordinates = items[3]
 			
-				print 'weathercities%s_%s["%s"] = ["%s", "%s", "%s", "%s". "%s"]' % (str(country_code).zfill(3), str(languages[sys.argv[1]]), city, city, region, country, coordinates, key)
+				print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s". "%s"]' % (str(country_code).zfill(3), city, city, region, country, coordinates, key)
