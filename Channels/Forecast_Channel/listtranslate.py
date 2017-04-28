@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from mtranslate import translate
 import collections
+import forecast
 import forecastlists
 import forecastregions
-import list
+import json
 import googlemaps
 import sys
 reload(sys)
@@ -13,8 +13,6 @@ sys.setdefaultencoding("UTF-8")
 
 print "Forecast Channel Metadata Translator"
 print "By Larsen Vallecillo - 2017"
-
-gmaps = googlemaps.Client(key="AIzaSyC8el52F4O5ifu10XA3DoQvm2NykAbw7FE")
 		
 if len(sys.argv) != 2:
 	print "Usage: listtranslate.py <output language>"
@@ -49,15 +47,19 @@ for weather in weathercities.items():
 			bincountry = ""
 		
 		if bincountry == country_code:
-			city = translate(items[0] + " city", sys.argv[1]).replace(" city", "")
-			region = items[1]
-			country = forecastregions.regioninfo[country_code][1][2][languages[sys.argv[1]]]
+			key = forecast.get_location(weather, items[0])
 			
-			for values in forecastregions.regioninfo[country_code].values():
-				if values[2][weather[0]] == region:
-					region = values[2][languages[sys.argv[1]]]
-					break
+			for i in range(2, 7):
+				location = forecast.request_data("http://dataservice.accuweather.com/locations/v1/%s&apikey=%s&language=%s" % (key, forecast.get_apikey(), languages[i])
+													       
+				region = items[1]
+				country = forecastregions.regioninfo[country_code][1][2][languages[sys.argv[1]]]
+			
+				for values in forecastregions.regioninfo[country_code].values():
+					if values[2][weather[0]] == region:
+						region = values[2][languages[sys.argv[1]]]
+						break
 					
-			coordinates = items[3]
+				coordinates = items[3]
 			
-			print 'weathercities%s_%s["%s"] = ["%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), str(languages[sys.argv[1]]), city, city, region, country, coordinates)
+				print 'weathercities%s_%s["%s"] = ["%s", "%s", "%s", "%s". "%s"]' % (str(country_code).zfill(3), str(languages[sys.argv[1]]), city, city, region, country, coordinates, key)
