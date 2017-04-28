@@ -6,7 +6,6 @@ import forecast
 import forecastlists
 import forecastregions
 import json
-import googlemaps
 import sys
 reload(sys)
 sys.setdefaultencoding("UTF-8")
@@ -14,11 +13,7 @@ sys.setdefaultencoding("UTF-8")
 print "Forecast Channel Metadata Translator"
 print "By Larsen Vallecillo - 2017"
 
-print "weathercities = collections.OrderedDict()"
-
-print "\n"
-
-weathercities = {} # Edit this to include the dictionaries to use. The key must be the language the dictionary is in, the value must be the dictionary.
+weathercities = {} # Edit this to include the dictionaries to use.
 
 languages = {
 	"ja": 0,
@@ -40,18 +35,22 @@ def get_translated(i):
 					 
 	return location[0]["LocalizedName"]
 					 
-for weather in weathercities.items():
+for weather in weathercities:
 	country_code = forecastlists.bincountries[weather[1].values()[0][2]]
 					 
 	print "weathercities%s = collections.OrderedDict()" % country_code
 					 
 	print "\n"
 					 
-	for items in weather[1].values():
-		city = items[0]
-		region = items[1]
-		country = items[2]
-		key = forecast.get_location(weather, items[0])
+	for items in weather.items():
+		value = items[1]
+					 
+		city_original = items[0]
+		city = value[0]
+		region = value[1]
+		country = value[2]			
+		coordinates = value[3]
+		key = forecast.get_location(value, items[0])
 			
 		cities = []
 		regions = []
@@ -73,9 +72,7 @@ for weather in weathercities.items():
 			cities[i] = get_translated(i))
 			regions[i] = region
 			countries[i] = country
-						
-		coordinates = items[3]
 			
-		print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)
+		print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city_original, cities, regions, countries, coordinates, key)
 		
 	print "\n"
