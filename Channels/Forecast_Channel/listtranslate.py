@@ -59,11 +59,15 @@ for weather in weathercities.items():
 			country = items[2]
 			key = forecast.get_location(weather, items[0])
 			
-			cities = ["", city]
-			regions = ["", region]
-			countries = ["", country]
+			cities = []
+			regions = []
+			countries = []
 					 
-			for i in range(2, 7):							       
+			cities[1] = city
+			regions[1] = region
+			countries[1] = country
+					 
+			for i in [0, 2, 3, 4, 5, 6]:							       
 				region = items[1]
 				country = forecastregions.regioninfo[country_code][1][2][languages[i]]
 			
@@ -72,9 +76,9 @@ for weather in weathercities.items():
 						region = values[2][languages[sys.argv[1]]]
 						break
 				
-				cities.append(get_translated(i))
-				regions.append(region)
-				countries.append(country)
+				cities[i] = get_translated(i))
+				regions[i] = region
+				countries[i] = country
 						
 			coordinates = items[3]
 			
