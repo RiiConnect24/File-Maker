@@ -13,10 +13,6 @@ sys.setdefaultencoding("UTF-8")
 
 print "Forecast Channel Metadata Translator"
 print "By Larsen Vallecillo - 2017"
-	
-print "import collections"
-
-print "\n"
 
 print "weathercities = collections.OrderedDict()"
 
@@ -44,6 +40,10 @@ def get_translated(i):
 	return location[0]["LocalizedName"]
 					 
 for weather in weathercities.items():
+	print "weathercities = collections.OrderedDict()"
+					 
+	print "\n"
+					 
 	for items in weather[1].values():
 		country_code = forecastlists.bincountries[weather[1].values()[0][2]]
 					 
