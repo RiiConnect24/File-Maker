@@ -13,9 +13,6 @@ sys.setdefaultencoding("UTF-8")
 
 print "Forecast Channel Metadata Translator"
 print "By Larsen Vallecillo - 2017"
-		
-if len(sys.argv) != 2:
-	print "Usage: listtranslate.py <output language>"
 	
 print "import collections"
 
@@ -58,15 +55,17 @@ for weather in weathercities.items():
 		
 		if bincountry == country_code:
 			city = items[0]
+			region = items[1]
+			country = items[2]
 			key = forecast.get_location(weather, items[0])
 			
-			cities = []
-			regions = []
-			countries = []
+			cities = ["", city]
+			regions = ["", region]
+			countries = ["", country]
 					 
 			for i in range(2, 7):							       
 				region = items[1]
-				country = forecastregions.regioninfo[country_code][1][2][languages[sys.argv[1]]]
+				country = forecastregions.regioninfo[country_code][1][2][languages[i]]
 			
 				for values in forecastregions.regioninfo[country_code].values():
 					if values[2][weather[0]] == region:
@@ -76,7 +75,7 @@ for weather in weathercities.items():
 				cities.append(get_translated(i))
 				regions.append(region)
 				countries.append(country)
-					
+						
 			coordinates = items[3]
 			
-			print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s". "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)								  coordinates, key) y
+			print 'weathercities%s["%s"] = ["%s", "%s", "%s", "%s", "%s"]' % (str(country_code).zfill(3), city, cities, regions, countries, coordinates, key)								  coordinates, key) y
