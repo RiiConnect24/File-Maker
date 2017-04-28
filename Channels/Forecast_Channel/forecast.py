@@ -517,6 +517,7 @@ def get_location(list, key):
 	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
 	globe[key]['offset'] = location[0]['TimeZone']['GmtOffset']
 	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
+	return locationkey[key]
 	
 """Tenki's where we're getting the laundry index for Japan."""
 
