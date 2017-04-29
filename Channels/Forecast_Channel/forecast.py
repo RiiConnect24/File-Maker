@@ -273,7 +273,7 @@ def request_data(url):
 					data = data.json()
 					data[0]
 					c = 1
-				except:
+				except: pass
 					if "locations" in url: return -1
 		i+=1
 	return data
@@ -474,6 +474,12 @@ def get_legacy_api(list, key):
 	wind[key][4] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
 	wind[key][5] = apilegacy['adc_database']['forecast']['day'][1]['daytime']['winddirection']
 	pollen[key] = 255
+	lat = float(apilegacy['adc_database']['local']['lat'])
+	lng = float(apilegacy['adc_database']['local']['lon'])
+	globe[key]['lat'] = u16(int(lat / 0.0055) & 0xFFFF)
+	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
+	globe[key]['offset'] = int(apilegacy['adc_database']['local']['currentGmtOffset'])
+	globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
 	
 def get_weekly(list, key):
 	week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
@@ -491,10 +497,10 @@ def get_location(list, key):
 	print "Getting Location Data ..."
 	globe[key] = {}
 	if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
-	else: search = get_city(list, key)
+	else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
 	if key in forecastlists.corrections: search = forecastlists.corrections[key]
 	if get_region(list, key) in forecastlists.region_corrections: search = " ".join(filter(None, ([get_city(list, key), forecastlists.region_corrections[get_region(list, key)]])))
-	if get_region(list, key) in forecastlists.region_delete_corrections: search = get_city(list, key)
+	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
 	location = -1
 	i = 0
 	while location is -1:
@@ -517,7 +523,20 @@ def get_location(list, key):
 	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
 	globe[key]['offset'] = location[0]['TimeZone']['GmtOffset']
 	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
-	return locationkey[key]
+	
+def get_legacy_location(list, key):
+	print "Getting Location Data ..."
+	globe[key] = {}
+	if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
+	else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+	if key in forecastlists.corrections: search = forecastlists.corrections[key]
+	if get_region(list, key) in forecastlists.region_corrections: search = " ".join(filter(None, ([get_city(list, key), forecastlists.region_corrections[get_region(list, key)]])))
+	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+	location = xmltodict.parse(requests.get("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s" % search).content)
+	try: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
+	except:
+		try: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
+		except: return -1
 	
 """Tenki's where we're getting the laundry index for Japan."""
 
@@ -767,10 +786,8 @@ def get_data(list, name):
 		blank_data(list,name,False) # Forecast data default values
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 		get_tenki_data(name) # Get data for Japanese cities
-		if useLegacy and get_index(list,name,2) is not 'Japan':
-			if apilegacy is not -1: get_legacy_api(list, name)
-		else: get_main_api(list, name)
 		if apilegacy is not -1:
+			get_legacy_api(list, name)
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
 	else: blank_data(list,name,True)
