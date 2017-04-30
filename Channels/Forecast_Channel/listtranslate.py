@@ -62,7 +62,16 @@ for weather in config.weathercities:
 
 		gmaps = googlemaps.Client(key=google_maps_api_key)
 
-		geocode = gmaps.geocode(unidecode(city.decode("utf-8")), components={"country": pycountry.countries.get(name=country).alpha2.upper()})
+		if country == "St. Lucia":
+			country_code2 = "LC"
+		elif country == "St. Kitts and Nevis":
+			country_code2 = "KN"
+		elif country == "St. Vincent and the Grenadines":
+			country_code2 = "VC"
+		else:
+			country_code2 = pycountry.countries.get(name=country).alpha2.upper()
+
+		geocode = gmaps.geocode(unidecode(city.decode("utf-8")), components={"country": country_code2})
 
 		for i in [0, 2, 3, 4, 5, 6]:
 			country = forecastregions.regioninfo[country_code][1][2][i]
