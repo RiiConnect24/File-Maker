@@ -1199,10 +1199,10 @@ weathercities050["Treinta y Tres"] = ["Treinta y Tres", "Treinta y Tres", "Urugu
 
 weathercities051 = collections.OrderedDict()
 
-weathercities051["Charlotte Amalie"] = ["Charlotte Amalie", "St. Thomas", "US Virgin Islands", "0d06d1e305030000"]
-weathercities051["Tutu"] = ["Tutu", "St. Thomas", "US Virgin Islands", "0d06d1eb03030000"]
-weathercities051["Frederiksted"] = ["Frederiksted", "St. Croix", "US Virgin Islands", "0c94d1ec07030000"]
-weathercities051["Cruz Bay"] = ["Cruz Bay", "St. John", "US Virgin Islands", "0d04d1fc07030000"]
+weathercities051["Charlotte Amalie"] = ["Charlotte Amalie", "", "US Virgin Islands", "0d06d1e305030000"]
+weathercities051["Tutu"] = ["Tutu", "", "US Virgin Islands", "0d06d1eb03030000"]
+weathercities051["Frederiksted"] = ["Frederiksted", "", "US Virgin Islands", "0c94d1ec07030000"]
+weathercities051["Cruz Bay"] = ["Cruz Bay", "", "US Virgin Islands", "0d04d1fc07030000"]
 
 weathercities052 = collections.OrderedDict()
 
