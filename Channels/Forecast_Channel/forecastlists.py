@@ -445,7 +445,7 @@ weathercities035["Fort-de-France"] = ["Fort-de-France", "Fort-de-France", "Marti
 
 weathercities036 = collections.OrderedDict()
 
-weathercities036["Mexico City"] = ["Mexico City", "Distrito Federal", "Mexico", "0dd1b98109030000"]
+weathercities036["Mexico City"] = ["Mexico City", "Mexico City", "Mexico", "0dd1b98109030000"]
 weathercities036["Aguascalientes"] = ["Aguascalientes", "Aguascalientes", "Mexico", "0f8fb74103030000"]
 weathercities036["Mexicali"] = ["Mexicali", "Baja California", "Mexico", "1738ade401030000"]
 weathercities036["Tijuana"] = ["Tijuana", "Baja California", "Mexico", "1722acca00030000"]
