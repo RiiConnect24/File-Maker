@@ -96,7 +96,7 @@ def s16(data):
 
 def s32(data):
 	return struct.pack(">i", data)
-	
+
 def temp(num):
 	return num & 0xFF
 
@@ -154,7 +154,7 @@ def num():
 	num1 = number
 	number += 1
 	return num1
-	
+
 def get_icon(icon,list,key):
 	if get_index(list,key,2) is 'Japan': return get_weatherjpnicon(icon)
 	else: return get_weathericon(icon)
@@ -204,7 +204,7 @@ def get_apikey():
 			apicycle += 1
 		else: apicount += 1
 	return key
-	
+
 def hex_write(where, what, offset, offset1):
 	global seek_offset,file
 	seek_temp = 0
@@ -218,19 +218,19 @@ def hex_write(where, what, offset, offset1):
 	if offset1 > 0:
 		seek_offset = seek_offset + offset1
 		file.seek(seek_offset)
-	
+
 def offset_write(offset1, offset2, offset3):
 	global seek_offset,seek_base,file
 	seek_offset = seek_offset + offset1
 	seek_base = seek_base + offset2
 	file.seek(seek_offset)
 	file.write(u32(seek_base+offset3))
-	
+
 def increment():
 	global constant,count,file
 	count[constant] = file.tell()
 	constant += 1
-	
+
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 def request_data(url):
@@ -277,7 +277,7 @@ def request_data(url):
 					if "locations" in url: return -1
 		i+=1
 	return data
-	
+
 def timestamps(mode, key):
 	time = time_convert(get_epoch())
 	if key != 0: citytime = time_convert(globe[key]['time'])
@@ -285,7 +285,7 @@ def timestamps(mode, key):
 	elif mode == 1: timestamp = citytime
 	elif mode == 2: timestamp = time + 180
 	return timestamp
-	
+
 def get_loccode(list, key):
 	global weathercities
 	country = get_country(list, key)
@@ -302,7 +302,7 @@ def get_loccode(list, key):
 		c = hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2)
 	string = "".join([c, b, a])
 	return string
-	
+
 def zoom(list, mode, key):
 	if mode == 1:
 		if get_index(list,key,3) == 'None':
@@ -312,7 +312,7 @@ def zoom(list, mode, key):
 		if get_index(list,key,3) == 'None': value = '03'
 		elif get_index(list,key,3) != 'None': value = get_index(list,key,3)[10:][:2]
 	return value
-	
+
 def get_locationcode(list):
 	global weathercities
 	listid = weathercities.index(list)
@@ -328,7 +328,7 @@ def get_locationcode(list):
 			weatherloc[listid][v[2]][v[1]].setdefault(v[0], len(weatherloc[listid][v[2]][v[1]])+1)
 			weatherloc[listid]['states'].setdefault(v[2], {})
 			weatherloc[listid]['states'][v[2]].setdefault(v[1], len(weatherloc[listid]['states'][v[2]])+2)
-	
+
 def blank_data(list, key, clear):
 	wind[key] = {}
 	uvindex[key] = {}
@@ -372,7 +372,7 @@ def blank_data(list, key, clear):
 		globe[key]['lat'] = binascii.unhexlify(get_index(list,key,3)[:4])
 		globe[key]['lng'] = binascii.unhexlify(get_index(list,key,3)[:8][4:])
 		globe[key]['time'] = get_epoch()
-	
+
 def get_main_api(list, key):
 	apidaily = request_data("http://dataservice.accuweather.com/forecasts/v1/daily/1day/%s?apikey=%s&details=true" % (get_lockey(key),get_apikey()))
 	api5day = request_data("http://dataservice.accuweather.com/forecasts/v1/daily/5day/%s?apikey=%s&details=true" % (get_lockey(key),get_apikey()))
@@ -431,7 +431,7 @@ def get_main_api(list, key):
 		if avg < 2: avg = 2
 		pollen[key] = avg
 	else: blank_data(list,key,False)
-	
+
 def get_legacy_api(list, key):
 	print "Parsing Data ..."
 	week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
@@ -480,7 +480,7 @@ def get_legacy_api(list, key):
 	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
 	globe[key]['offset'] = int(apilegacy['adc_database']['local']['currentGmtOffset'])
 	globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
-	
+
 def get_weekly(list, key):
 	week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
 	week[key][26] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['lowtemperature'])
@@ -492,7 +492,7 @@ def get_weekly(list, key):
 	week[key][32] = int(to_celcius(week[key][28]))
 	week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
 	week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
-	
+
 def get_location(list, key):
 	print "Getting Location Data ..."
 	globe[key] = {}
@@ -523,7 +523,7 @@ def get_location(list, key):
 	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
 	globe[key]['offset'] = location[0]['TimeZone']['GmtOffset']
 	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
-	
+
 def get_legacy_location(list, key):
 	print "Getting Location Data ..."
 	globe[key] = {}
@@ -537,7 +537,7 @@ def get_legacy_location(list, key):
 	except:
 		try: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
 		except: return -1
-	
+
 """Tenki's where we're getting the laundry index for Japan."""
 
 def get_tenki_data(key):
@@ -558,7 +558,7 @@ def get_tenki_data(key):
 		tomorrow[key][8] = int(tempdiff[3])
 		for i in range(0,8): precipitation[key][i] = int(precip[i])
 		for i in range(0,7): precipitation[key][i+8] = int(precip10[i])
-	
+
 def get_hourly_forecast(list, key):
 	hourly[key] = {}
 	time_index = [[3,9,15,21],[27,33,39,45]]
@@ -586,13 +586,13 @@ dictionaries_pollenindextable = []
 dictionaries_locationtable = []
 dictionaries_weathervaluetexttable = []
 dictionaries_weathervalue_offsettable = []
-	
+
 def make_bins(list):
 	print "[-] Generating Forecast.bin ..."
 	make_forecast_bin(list)
 	print "[-] Generating Short.bin ..."
 	make_short_bin(list)
-	
+
 def make_forecast_bin(list):
 	global japcount,constant,count,file,seek_offset,seek_base,extension
 	print "Building Binary Tables ..."
@@ -721,7 +721,7 @@ def make_forecast_bin(list):
 	sign_file(file2, file3, file4)
 	os.remove(file1)
 	print 'File Generation Successful'
-	
+
 def make_short_bin(list):
 	print "Building Binary Tables ..."
 	short_forecast_header = make_header_short(list)
@@ -738,7 +738,7 @@ def make_short_bin(list):
 	file.close()
 	sign_file(file1, file2, file3)
 	print 'File Generation Successful'
-	
+
 def sign_file(name, local_name, server_name):
 	print "[-] Processing " + local_name + " ..."
 	file = open(name, 'rb')
@@ -775,7 +775,7 @@ def sign_file(name, local_name, server_name):
 		subprocess.call(["cp", local_name, path])
 		os.remove(local_name)
 	os.remove(local_name + "-1")
-	
+
 def get_data(list, name):
 	print '[-] Retrieving Data for %s ...' % get_all(list, name)
 	global citycount,cache,apilegacy
@@ -791,7 +791,7 @@ def get_data(list, name):
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
 	else: blank_data(list,name,True)
-	
+
 def make_header_short(list):
 	header = collections.OrderedDict()
 	dictionaries_short.append(header)
@@ -802,9 +802,9 @@ def make_header_short(list):
 	header["padding_1"] = u8(0) # Padding.
 	header["short_forecast_number"] = u32(int(len(list))) # Number of short forecast entries.
 	header["start_offset"] = u32(36)
-	
+
 	return header
-	
+
 def make_header_forecast(list):
 	header = collections.OrderedDict()
 	dictionaries_forecast.append(header)
@@ -828,9 +828,9 @@ def make_header_forecast(list):
 	header["pollen_count_offset"] = u32(0) # Offset for the Pollen Count table.
 	header["location_number"] = u32(len(list)) # Number of location entries.
 	header["location_offset"] = u32(0) # Offset for the location table.
-	
+
 	return header
-	
+
 def make_long_forecast_table(list):
 	long_forecast_table = collections.OrderedDict()
 	dictionaries_forecast.append(long_forecast_table)
@@ -936,7 +936,7 @@ def make_long_forecast_table(list):
 			long_forecast_table["5day_tempf_low_7_%s" % numbers] = u8(128) # 5-Day forecast day 5 low temperature in Fahrenheit (JAPAN ONLY)
 			long_forecast_table["5day_precipitation_7_%s" % numbers] = u8(precipitation[key][14]) # 5-Day precipitation percentage 1 (JAPAN ONLY)
 			long_forecast_table["5day_forecast_padding_7_%s" % numbers] = u8(0) # Padding (JAPAN ONLY)
-		
+
 	return long_forecast_table
 
 def make_short_forecast_table(list):
@@ -947,7 +947,7 @@ def make_short_forecast_table(list):
 		short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_loccode(list, key)) # Wii location code for city
 		short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1,key)) # Timestamp 1
 		short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0,key)) # Timestamp 2
-		short_forecast_table["current_forecast_%s" % numbers] = binascii.unhexlify(weathericon[key]) # Current forecast 
+		short_forecast_table["current_forecast_%s" % numbers] = binascii.unhexlify(weathericon[key]) # Current forecast
 		short_forecast_table["unknown_%s" % numbers] = u8(0) # 0xE unknown
 		short_forecast_table["current_tempc_%s" % numbers] = u8(temp(current[key][4])) # Current temperature in Celsius
 		short_forecast_table["current_tempf_%s" % numbers] = u8(temp(current[key][3])) # Current temperature in Fahrenheit
@@ -956,9 +956,9 @@ def make_short_forecast_table(list):
 		short_forecast_table["current_windmph_%s" % numbers] = u8(current[key][2]) # Current wind in mph
 		short_forecast_table["unknown_2_%s" % numbers] = u16(0) # 00?
 		short_forecast_table["unknown_3_%s" % numbers] = binascii.unhexlify('FFFF') # FFFF?
-		
+
 	return short_forecast_table
-	
+
 def make_forecast_short_table(list):
 	short_forecast_table = collections.OrderedDict()
 	dictionaries_forecast_short.append(short_forecast_table)
@@ -1017,11 +1017,11 @@ def make_forecast_short_table(list):
 			short_forecast_table["laundry_index_%s" % numbers] = u8(laundry[key]) # Today's Laundry Index
 			short_forecast_table["pollen_index_%s" % numbers] = u8(pollen[key]) # Today's Pollen Index
 			japcount += 1
-		
+
 	return short_forecast_table
-	
+
 """Database of UV index values."""
-	
+
 def make_uvindex_table():
 	uvindex_table = collections.OrderedDict()
 	dictionaries_uvindextable.append(uvindex_table)
@@ -1064,11 +1064,11 @@ def make_uvindex_table():
 	uvindex_table["uv_12_number"] = u8(12)
 	uvindex_table["uv_12_padding"] = pad(3)
 	uvindex_table["uv_12_offset"] = u32(0)
-	
+
 	return uvindex_table
 
 """Database of laundry index values."""
-	
+
 def make_laundryindex_table():
 	laundryindex_table = collections.OrderedDict()
 	dictionaries_laundryindextable.append(laundryindex_table)
@@ -1108,11 +1108,11 @@ def make_laundryindex_table():
 	laundryindex_table["laundry_E7_number"] = u8(231)
 	laundryindex_table["laundry_E7_padding"] = pad(3)
 	laundryindex_table["laundry_E7_offset"] = u32(0)
-	
+
 	return laundryindex_table
-	
+
 """Database of pollen index values."""
-	
+
 def make_pollenindex_table():
 	pollenindex_table = collections.OrderedDict()
 	dictionaries_pollenindextable.append(pollenindex_table)
@@ -1131,9 +1131,9 @@ def make_pollenindex_table():
 	pollenindex_table["pollen_E7_number"] = u8(231)
 	pollenindex_table["pollen_E7_padding"] = pad(3)
 	pollenindex_table["pollen_E7_offset"] = u32(0)
-	
+
 	return pollenindex_table
-	
+
 """NOTE: \n is used as line feed."""
 """Needs to be in sync with the value table below."""
 
@@ -1221,16 +1221,16 @@ def make_weather_value_table():
 	weathervalue_text_table["japan_day_cold"] = "Cold\0".encode("utf-16be")
 	weathervalue_text_table["japan_day_windy"] = "Windy\0".encode("utf-16be")
 	weathervalue_text_table["end_padding"] = "\0".encode("utf-16be")
-	
+
 	i = 0
 	bytes = 0
 	for k,v in weathervalue_text_table.items():
 		weathervalue_text_offsets[i] = bytes
 		bytes+=len(v)
 		i+=1
-	
+
 	return weathervalue_text_table
-	
+
 """Makes the weather value offset table."""
 
 def make_weather_offset_table():
@@ -1319,14 +1319,14 @@ def make_weather_offset_table():
 	weathervalue['00EA'] = '0001'
 	weathervalue['00EB'] = '0001'
 	weathervalue['00EC'] = '0001'
-	
+
 	for k, v in weathervalue.items():
 		weathervalue_offset_table[num()] = binascii.unhexlify(k)
 		weathervalue_offset_table[num()] = binascii.unhexlify(v)
 		weathervalue_offset_table[num()] = u32(0)
-	
+
 	return weathervalue_offset_table
-	
+
 def make_uvindex_text_table():
 	uvindex_text_table = collections.OrderedDict()
 	dictionaries_uvindextexttable.append(uvindex_text_table)
@@ -1336,15 +1336,15 @@ def make_uvindex_text_table():
 	veryhigh = 'Very High'
 	extreme = 'Extreme'
 	uvindex_text_table[0] = "\0".join([low, low, low, moderate, moderate, moderate, high, high, veryhigh, veryhigh, veryhigh, extreme, extreme]).encode("utf-16be")+pad(2)
-	
+
 	return uvindex_text_table
-	
+
 """This makes the laundry text table. Since it's in Japanese, the strings are encoded in hex."""
-	
+
 def make_laundry_text_table():
 	laundry_text_table = collections.OrderedDict()
 	dictionaries_laundrytexttable.append(laundry_text_table)
-	
+
 	laundry_text_table[0] = binascii.unhexlify('5916306b5e72305b307e305b30930000')
 	laundry_text_table[1] = binascii.unhexlify('59165e7230576642306f59295019306b6ce8610f0000')
 	laundry_text_table[2] = binascii.unhexlify('59165e7230576642306f59295019306b6ce8610f0000')
@@ -1357,23 +1357,23 @@ def make_laundry_text_table():
 	laundry_text_table[9] = binascii.unhexlify('4e7e304d975e5e38306b30883057ff1a000a003230fb0033664295935e72305b3070304a304a3080306d4e7e304f0000')
 	laundry_text_table[10] = binascii.unhexlify('4e7e304d975e5e38306b30883057ff1a000a003230fb0033664295935e72305b3070534152063088304f4e7e304f0000')
 	laundry_text_table[11] = binascii.unhexlify('6b206e2cff0830c730fc30bf306a3057ff090000')
-	
+
 	return laundry_text_table
-	
+
 """This makes the pollen text table. Since it's in Japanese, the strings are encoded in hex."""
-	
+
 def make_pollen_text_table():
 	pollen_text_table = collections.OrderedDict()
 	dictionaries_pollentexttable.append(pollen_text_table)
-	
+
 	pollen_text_table[0] = binascii.unhexlify('5c11306a30440000')
 	pollen_text_table[1] = binascii.unhexlify('30843084591a30440000')
 	pollen_text_table[2] = binascii.unhexlify('591a30440000')
 	pollen_text_table[3] = binascii.unhexlify('975e5e38306b591a30440000')
 	pollen_text_table[4] = binascii.unhexlify('6b206e2cff0830c730fc30bf306a3057ff090000')
-	
+
 	return pollen_text_table
-	
+
 def make_location_table(list):
 	location_table = collections.OrderedDict()
 	dictionaries_locationtable.append(location_table)
@@ -1388,9 +1388,9 @@ def make_location_table(list):
 		location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(str(zoom(list, 1, keys))) # Location zoom for location on globe
 		location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(list, 2, keys)) # Location zoom for location on globe
 		location_table["padding_%s" % numbers] = u16(0)
-		
+
 	return location_table
-	
+
 def make_forecast_text_table(list):
 	text_table = collections.OrderedDict()
 	dictionaries_texttable.append(text_table)
@@ -1413,9 +1413,9 @@ def make_forecast_text_table(list):
 			append(list,keys,bytes)
 			bytes+=len(get_country(list, keys).decode("utf-8").encode("utf-16be"))+2
 		else: append(list,keys,'None')
-	
+
 	return text_table
-	
+
 def get_weathericon(icon):
 	weathericonstore[-1] = 'FFFF' # None
 	weathericonstore[1] = '0464' # Sunny
@@ -1458,9 +1458,9 @@ def get_weathericon(icon):
 	weathericonstore[42] = '84CA' # Mostly Cloudy with Thunderstorms
 	weathericonstore[43] = '8592' # Mostly Cloudy with Flurries
 	weathericonstore[44] = '84CC' # Mostly Cloudy with Snow
-	
+
 	return weathericonstore[icon]
-	
+
 def get_weatherjpnicon(icon):
 	jpnweathericonstore[-1] = 'FFFF' # None
 	jpnweathericonstore[1] = '0064' # Sunny
@@ -1503,9 +1503,9 @@ def get_weatherjpnicon(icon):
 	jpnweathericonstore[42] = '00D3' # Mostly Cloudy with Thunderstorms
 	jpnweathericonstore[43] = '00D4' # Mostly Cloudy with Flurries
 	jpnweathericonstore[44] = '00D5' # Mostly Cloudy with Snow
-	
+
 	return jpnweathericonstore[icon]
-	
+
 """Database of wind direction values."""
 
 def get_wind_direction(degrees):
@@ -1526,9 +1526,9 @@ def get_wind_direction(degrees):
 	winddirection["NW"] = '14'
 	winddirection["NNW"] = '15'
 	winddirection["N"] = '16'
-	
+
 	return winddirection[degrees]
-	
+
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 test_keys()
 print "Downloading Forecast Data ..."
