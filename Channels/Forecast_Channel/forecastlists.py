@@ -1534,6 +1534,9 @@ weathercities078["Oldenburg"] = ["Oldenburg", "Lower Saxony", "Germany", "25c805
 weathercities078["Göttingen"] = ["Göttingen", "Lower Saxony", "Germany", "24a5071001030000"]
 weathercities078["Wilhelmshaven"] = ["Wilhelmshaven", "Lower Saxony", "Germany", "260e05c301030000"]
 weathercities078["Uelzen"] = ["Uelzen", "Lower Saxony", "Germany", "25a8078201030000"]
+
+weathercities078 = collections.OrderedDict()
+
 weathercities078["Düsseldorf"] = ["Düsseldorf", "North Rhine-Westphalia", "Germany", "247004d104030000"]
 weathercities078["Köln"] = ["Köln", "North Rhine-Westphalia", "Germany", "243904f101030000"]
 weathercities078["Dortmund"] = ["Dortmund", "North Rhine-Westphalia", "Germany", "24a0054d01030000"]
