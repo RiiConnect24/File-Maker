@@ -37,9 +37,11 @@ seek_base = 0 # Base Offset Calculation Location
 number = 0 # Incremental Keys
 constant = 0 # Incremental Offset Counter
 apirequests = 0 # API Request Counter
-citycount = 0 # City Count
+citycount = 0 # City Progress Counter
+cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
+total = 0
 useLegacy = True # Use AccuWeather Legacy API Instead (Faster)
 count = {} # Offset Storage
 file = None
@@ -155,10 +157,10 @@ def num():
 	number += 1
 	return num1
 	
-def progress(percent,list,key):
+def progress(percent,list):
 	bar = 35
 	fill = int(round(percent*bar/100))
-	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)))
+	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached))
 	sys.stdout.flush()
 	
 def output(text):
@@ -192,13 +194,14 @@ def test_keys():
 
 def reset_data(l): # Resets bin-specific values for next generation
 	print "Reloading ..."
-	global japcount,seek_offset,seek_base,number,file,constant,count,cached
+	global japcount,seek_offset,seek_base,number,file,constant,count,cached,citycount
 	japcount = 0
 	seek_offset = 0
 	seek_base = 0
 	number = 0
 	constant = 0
 	cached = 0
+	citycount = 0
 	count = {}
 	file = None
 	for k in l.keys(): del l[k][-3:]
@@ -785,10 +788,11 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	global citycount,cache,apilegacy
+	global citycount,cache,apilegacy,apirequests
 	citycount+=1
 	cache[name] = get_all(list, name)
 	globe[name] = {}
+	if useLegacy: apirequests+=2
 	if get_legacy_location(list, name) is None:
 		blank_data(list,name,False) # Forecast data default values
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
@@ -798,7 +802,7 @@ def get_data(list, name):
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
 	else: blank_data(list,name,True)
-	progress(float(citycount)/float(len(list))*100,list,name)
+	progress(float(citycount)/float(len(list)-cached)*100,list)
 
 def make_header_short(list):
 	header = collections.OrderedDict()
@@ -1550,11 +1554,14 @@ for list in weathercities:
 			else: list[k] = v
 		elif v[2] is not list[k][2]: list[k+" 2"] = v
 	get_locationcode(list)
-	print "Downloading Forecast Data ...\n"
 	for keys in list.keys():
 		if keys in cache and cache[keys] == get_all(list,keys): cached+=1
-		else: get_data(list,keys)
+	print "Downloading Forecast Data ...\n"
+	for keys in list.keys():
+		if keys not in cache or cache[keys] != get_all(list,keys): get_data(list,keys)
 	print "\n\n[*] Skipped %s cached cities" % cached
+	cities+=citycount
+	total+=len(list)
 	for i in range(1, 3):
 		mode = i
 		make_bins(list)
@@ -1563,9 +1570,9 @@ for list in weathercities:
 	print "\n"
 
 print "API Requests: %s" % apirequests
-print "API Key Cycles: %s" % apicycle
+if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
-print "Cities Processed: %s\n" % citycount
+print "Processed Cities: %s/%s" % (cities,total)
 
 os.remove('forecastlists.pyc')
 
