@@ -729,7 +729,7 @@ def make_forecast_bin(list):
 		file.seek(seek_offset)
 	file.close()
 	os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12') # This cuts off the first 12 bytes.
-	sign_file(file2, file3, file4)
+	if production: sign_file(file2, file3, file4)
 	os.remove(file1)
 	print 'File Generation Successful'
 
@@ -747,7 +747,7 @@ def make_short_bin(list):
 		for k, v in short_forecast_table.items(): file.write(v)
 		file.flush()
 	file.close()
-	sign_file(file1, file2, file3)
+	if production: sign_file(file1, file2, file3)
 	print 'File Generation Successful'
 
 def sign_file(name, local_name, server_name):
@@ -781,10 +781,9 @@ def sign_file(name, local_name, server_name):
 	dest.close()
 	file.close()
 	key.close()
-	if production:
-		path = "%s/%s/%s/%s" % (file_path, language_code, str(country_code).zfill(3), server_name)
-		subprocess.call(["cp", local_name, path])
-		os.remove(local_name)
+	path = "%s/%s/%s/%s" % (file_path, language_code, str(country_code).zfill(3), server_name)
+	subprocess.call(["cp", local_name, path])
+	os.remove(local_name)
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
