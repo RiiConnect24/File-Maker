@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 2.5
+# VERSION 2.6
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ****************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -154,6 +154,16 @@ def num():
 	num1 = number
 	number += 1
 	return num1
+	
+def progress(percent,list,key):
+	bar = 35
+	fill = int(round(percent*bar/100))
+	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)))
+	sys.stdout.flush()
+	
+def output(text):
+	sys.stdout.write("\r%s\r%s\n\n" % ((" "*66),text))
+	sys.stdout.flush()
 
 def get_icon(icon,list,key):
 	if get_index(list,key,2) is 'Japan': return get_weatherjpnicon(icon)
@@ -241,8 +251,7 @@ def request_data(url):
 	while c == 0:
 		if i == 4: return -1
 		if i > 0:
-			time.sleep(1)
-			print "Retrying ..."
+			time.sleep(0.3)
 			retrycount+=1
 		if "regions" in url:
 			data = requests.get(url, headers=header)
@@ -367,7 +376,7 @@ def blank_data(list, key, clear):
 	tomorrow[key][4] = 'FFFF'
 	for k in range(5,9): tomorrow[key][k] = 128
 	if clear:
-		print "No data for %s - using defaults" % key
+		output('No data for %s - using defaults' % key)
 		locationkey[key] = None
 		globe[key]['lat'] = binascii.unhexlify(get_index(list,key,3)[:4])
 		globe[key]['lng'] = binascii.unhexlify(get_index(list,key,3)[:8][4:])
@@ -377,7 +386,6 @@ def get_main_api(list, key):
 	apidaily = request_data("http://dataservice.accuweather.com/forecasts/v1/daily/1day/%s?apikey=%s&details=true" % (get_lockey(key),get_apikey()))
 	api5day = request_data("http://dataservice.accuweather.com/forecasts/v1/daily/5day/%s?apikey=%s&details=true" % (get_lockey(key),get_apikey()))
 	apicurrent = request_data("http://dataservice.accuweather.com/currentconditions/v1/%s?apikey=%s&details=true" % (get_lockey(key), get_apikey()))
-	print "Parsing Data ..."
 	week[key][0] = int(round(api5day['DailyForecasts'][1]['Temperature']['Minimum']['Value']))
 	week[key][1] = int(round(api5day['DailyForecasts'][1]['Temperature']['Maximum']['Value']))
 	week[key][2] = int(round(api5day['DailyForecasts'][2]['Temperature']['Minimum']['Value']))
@@ -433,7 +441,6 @@ def get_main_api(list, key):
 	else: blank_data(list,key,False)
 
 def get_legacy_api(list, key):
-	print "Parsing Data ..."
 	week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
 	week[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
 	week[key][2] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['lowtemperature'])
@@ -478,7 +485,7 @@ def get_legacy_api(list, key):
 	lng = float(apilegacy['adc_database']['local']['lon'])
 	globe[key]['lat'] = u16(int(lat / 0.0055) & 0xFFFF)
 	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
-	globe[key]['offset'] = int(apilegacy['adc_database']['local']['currentGmtOffset'])
+	globe[key]['offset'] = float(apilegacy['adc_database']['local']['currentGmtOffset'])
 	globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
 
 def get_weekly(list, key):
@@ -493,14 +500,19 @@ def get_weekly(list, key):
 	week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
 	week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
 
-def get_location(list, key):
-	print "Getting Location Data ..."
-	globe[key] = {}
-	if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
-	else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+def get_search(list, key, mode):
+	if mode == 0:
+		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = get_all(list, key)
+		else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+	elif mode == 1: search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
+	elif mode == 3: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
 	if key in forecastlists.corrections: search = forecastlists.corrections[key]
 	if get_region(list, key) in forecastlists.region_corrections: search = " ".join(filter(None, ([get_city(list, key), forecastlists.region_corrections[get_region(list, key)]])))
 	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+	if "St." in search: search = search.replace('St.','Saint')
+	return search
+
+def get_location(list, key):
 	location = -1
 	i = 0
 	while location is -1:
@@ -508,12 +520,10 @@ def get_location(list, key):
 			try:
 				country = pycountry.countries.get(name=get_country(list, key)).alpha2.lower()
 				if get_city(list, key) in forecastlists.country_corrections: country = forecastlists.country_corrections[get_city(list, key)]
-				location = request_data("http://dataservice.accuweather.com/locations/v1/%s/search?apikey=%s&q=%s&details=true" % (country, get_apikey(), search))
+				location = request_data("http://dataservice.accuweather.com/locations/v1/%s/search?apikey=%s&q=%s&details=true" % (country, get_apikey(), get_search(list,key,0)))
 			except: pass
-		elif i == 1: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), search))
-		elif i == 2:
-			search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-			location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), search))
+		elif i == 1: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,0)))
+		elif i == 2: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,3)))
 		elif i == 3: return -1
 		i+=1
 	locationkey[key] = location[0]['Key']
@@ -525,18 +535,16 @@ def get_location(list, key):
 	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
 
 def get_legacy_location(list, key):
-	print "Getting Location Data ..."
-	globe[key] = {}
-	if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
-	else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-	if key in forecastlists.corrections: search = forecastlists.corrections[key]
-	if get_region(list, key) in forecastlists.region_corrections: search = " ".join(filter(None, ([get_city(list, key), forecastlists.region_corrections[get_region(list, key)]])))
-	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-	location = xmltodict.parse(requests.get("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s" % search).content)
-	try: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
-	except:
-		try: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
-		except: return -1
+	i = 0
+	locationkey[key] = None
+	while locationkey[key] is None:
+		if i == 2: return -1
+		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s" % get_search(list,key,i))
+		try:
+			if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
+			else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
+		except: pass
+		i+=1
 
 """Tenki's where we're getting the laundry index for Japan."""
 
@@ -777,12 +785,11 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	print '[-] Retrieving Data for %s ...' % get_all(list, name)
 	global citycount,cache,apilegacy
 	citycount+=1
 	cache[name] = get_all(list, name)
-	if get_location(list, name) is None:
-		print "Getting Weather Data ..."
+	globe[name] = {}
+	if get_legacy_location(list, name) is None:
 		blank_data(list,name,False) # Forecast data default values
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 		get_tenki_data(name) # Get data for Japanese cities
@@ -791,6 +798,7 @@ def get_data(list, name):
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
 	else: blank_data(list,name,True)
+	progress(float(citycount)/float(len(list))*100,list,name)
 
 def make_header_short(list):
 	header = collections.OrderedDict()
@@ -1530,8 +1538,7 @@ def get_wind_direction(degrees):
 	return winddirection[degrees]
 
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
-test_keys()
-print "Downloading Forecast Data ..."
+if not useLegacy: test_keys()
 for list in weathercities:
 	global language_code,country_code,mode
 	language_code = 1
@@ -1543,10 +1550,11 @@ for list in weathercities:
 			else: list[k] = v
 		elif v[2] is not list[k][2]: list[k+" 2"] = v
 	get_locationcode(list)
+	print "Downloading Forecast Data ...\n"
 	for keys in list.keys():
 		if keys in cache and cache[keys] == get_all(list,keys): cached+=1
 		else: get_data(list,keys)
-	print "[*] %s cached cities" % cached
+	print "\n\n[*] Skipped %s cached cities" % cached
 	for i in range(1, 3):
 		mode = i
 		make_bins(list)
