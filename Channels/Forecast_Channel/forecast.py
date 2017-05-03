@@ -42,6 +42,7 @@ cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 total = 0
+progcount = 0
 useLegacy = True # Use AccuWeather Legacy API Instead (Faster)
 count = {} # Offset Storage
 file = None
@@ -158,10 +159,14 @@ def num():
 	return num1
 	
 def progress(percent,list):
+	global progcount
 	bar = 35
+	prog = """-\|/"""
 	fill = int(round(percent*bar/100))
-	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached))
+	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) [%s] ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,prog[progcount]))
 	sys.stdout.flush()
+	progcount+=1
+	if progcount == 4: progcount = 0
 	
 def output(text):
 	sys.stdout.write("\r%s\r%s\n\n" % ((" "*66),text))
