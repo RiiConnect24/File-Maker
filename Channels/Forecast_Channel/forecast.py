@@ -505,10 +505,11 @@ def get_weekly(list, key):
 
 def get_search(list, key, mode):
 	if mode == 0:
-		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = get_all(list, key)
+		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
 		else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-	elif mode == 1: search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
-	elif mode == 3: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+	elif mode == 1:
+		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+		else: search = get_city(list, key)
 	if key in forecastlists.corrections: search = forecastlists.corrections[key]
 	if get_region(list, key) in forecastlists.region_corrections: search = " ".join(filter(None, ([get_city(list, key), forecastlists.region_corrections[get_region(list, key)]])))
 	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
@@ -526,7 +527,7 @@ def get_location(list, key):
 				location = request_data("http://dataservice.accuweather.com/locations/v1/%s/search?apikey=%s&q=%s&details=true" % (country, get_apikey(), get_search(list,key,0)))
 			except: pass
 		elif i == 1: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,0)))
-		elif i == 2: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,3)))
+		elif i == 2: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,1)))
 		elif i == 3: return -1
 		i+=1
 	locationkey[key] = location[0]['Key']
