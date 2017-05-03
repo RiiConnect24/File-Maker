@@ -295,7 +295,7 @@ def timestamps(mode, key):
 	if key != 0: citytime = time_convert(globe[key]['time'])
 	if mode == 0: timestamp = time
 	elif mode == 1: timestamp = citytime
-	elif mode == 2: timestamp = time + 180
+	elif mode == 2: timestamp = time + 60
 	return timestamp
 
 def get_loccode(list, key):
