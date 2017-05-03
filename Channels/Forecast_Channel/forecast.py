@@ -379,7 +379,6 @@ def blank_data(list, key, clear):
 	tomorrow[key][4] = 'FFFF'
 	for k in range(5,9): tomorrow[key][k] = 128
 	if clear:
-		output('No data for %s - using defaults' % key)
 		locationkey[key] = None
 		globe[key]['lat'] = binascii.unhexlify(get_index(list,key,3)[:4])
 		globe[key]['lng'] = binascii.unhexlify(get_index(list,key,3)[:8][4:])
@@ -441,7 +440,6 @@ def get_main_api(list, key):
 		avg = (grass+tree+ragweed)/3
 		if avg < 2: avg = 2
 		pollen[key] = avg
-	else: blank_data(list,key,False)
 
 def get_legacy_api(list, key):
 	week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
@@ -793,15 +791,15 @@ def get_data(list, name):
 	cache[name] = get_all(list, name)
 	globe[name] = {}
 	if useLegacy: apirequests+=2
+	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
-		blank_data(list,name,False) # Forecast data default values
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 		get_tenki_data(name) # Get data for Japanese cities
 		if apilegacy is not -1:
 			get_legacy_api(list, name)
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
-	else: blank_data(list,name,True)
+	else: output('No data for %s - using defaults' % name)
 	progress(float(citycount)/float(len(list)-cached)*100,list)
 
 def make_header_short(list):
