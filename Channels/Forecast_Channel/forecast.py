@@ -157,19 +157,24 @@ def num():
 	num1 = number
 	number += 1
 	return num1
-	
+
 def progress(percent,list):
 	global progcount
 	bar = 35
 	prog = """-\|/"""
 	fill = int(round(percent*bar/100))
-	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) [%s] ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,prog[progcount]))
+	if citycount/(len(list)-cached) == 1:
+		if os.name == 'nt': display = '*'
+		else: display = "✓"
+		progcount = 0
+	else: display = prog[progcount]
+	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) [%s] ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display))
 	sys.stdout.flush()
 	progcount+=1
 	if progcount == 4: progcount = 0
-	
+
 def output(text):
-	sys.stdout.write("\r%s\r%s\n\n" % ((" "*66),text))
+	sys.stdout.write("\r%s\r%s\n\n" % ((" "*69),text))
 	sys.stdout.flush()
 
 def get_icon(icon,list,key):
@@ -261,13 +266,9 @@ def request_data(url):
 		if i > 0:
 			time.sleep(0.3)
 			retrycount+=1
-		if "regions" in url:
-			data = requests.get(url, headers=header)
-			status_code = data.status_code
-			if status_code != 200: return None
-		else:
-			data = requests.get(url, headers=header)
-			status_code = data.status_code
+		data = requests.get(url, headers=header)
+		status_code = data.status_code
+		if "regions" in url and status_code != 200: return None
 		if status_code == 200:
 			if "daily" in url:
 				try:
