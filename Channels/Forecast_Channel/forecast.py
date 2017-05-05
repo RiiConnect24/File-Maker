@@ -801,7 +801,7 @@ def sign_file(name, local_name, server_name):
 	dest.close()
 	file.close()
 	key.close()
-	path = "%s/%s/%s/%s" % (file_path, language_code, str(country_code).zfill(3), server_name)
+	path = "%s/%s/%s/%s" % (file_path, language_code, str(country_code).zfill(3), server_name) # Path on the server to put the file.
 	subprocess.call(["cp", local_name, path])
 	os.remove(local_name)
 	os.remove(local_name + "-1")
@@ -1566,7 +1566,7 @@ for list in weathercities:
 	global language_code,country_code,mode
 	language_code = 1
 	country_code = forecastlists.bincountries[list.values()[0][2]]
-	print "Processing list #%s" % weathercities.index(list)
+	print "Processing list #%s - %s (%s)" % (weathercities.index(list), country_code, list.values()[0][2])
 	for k,v in forecastlists.weathercities_international.items():
 		if k not in list:
 			if v[2] in forecastlists.bincountries and forecastlists.bincountries[v[2]] is not country_code: list[k] = v
