@@ -205,7 +205,9 @@ def test_keys():
 	print "%s Requests Available" % total
 	print "Processed %s Keys" % len(accuweather_api_keys)
 
-def reset_data(l): # Resets bin-specific values for next generation
+"""Resets bin-specific values for next generation."""
+
+def reset_data(l):
 	print "Reloading ..."
 	global japcount,seek_offset,seek_base,number,file,constant,count,cached,citycount
 	japcount = 0
@@ -349,6 +351,8 @@ def get_locationcode(list):
 			weatherloc[listid][v[2]][v[1]].setdefault(v[0], len(weatherloc[listid][v[2]][v[1]])+1)
 			weatherloc[listid]['states'].setdefault(v[2], {})
 			weatherloc[listid]['states'][v[2]].setdefault(v[1], len(weatherloc[listid]['states'][v[2]])+2)
+
+"""If the script was unable to get forecast for a city, it's filled with this blank data."""
 
 def blank_data(list, key, clear):
 	wind[key] = {}
@@ -783,15 +787,15 @@ def sign_file(name, local_name, server_name):
 	dest.close()
 	file.close()
 	print "Compressing ..."
-	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", local_name, local_name + "-1"])
+	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", local_name, local_name + "-1"]) # Compresses the file with LZ77 compression.
 	file = open(local_name + '-1', 'rb')
 	new = file.read()
 	dest = open(local_name, "w+")
 	key = open(key_path, 'rb')
 	print "RSA Signing ..."
-	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")
+	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM") # Loads the RSA key.
 	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding. Beautiful.
-	dest.write(binascii.unhexlify(str(0).zfill(128)))
+	dest.write(binascii.unhexlify(str(0).zfill(128))) # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
 	dest.write(signature)
 	dest.write(new)
 	dest.close()
