@@ -103,7 +103,7 @@ def s32(data):
 def temp(num):
 	return num & 0xFF
 
-def to_celcius(temp):
+def to_celsius(temp):
 	return int((temp-32)*5/9)
 
 def to_fahrenheit(temp):
@@ -405,7 +405,7 @@ def get_main_api(list, key):
 	week[key][5] = int(round(api5day['DailyForecasts'][3]['Temperature']['Maximum']['Value']))
 	week[key][6] = int(round(api5day['DailyForecasts'][4]['Temperature']['Minimum']['Value']))
 	week[key][7] = int(round(api5day['DailyForecasts'][4]['Temperature']['Maximum']['Value']))
-	for i in range(0,8): week[key][i+10] = to_celcius(week[key][i])
+	for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
 	week[key][20] = get_icon(api5day['DailyForecasts'][1]['Day']['Icon'],list,key)
 	week[key][21] = get_icon(api5day['DailyForecasts'][2]['Day']['Icon'],list,key)
 	week[key][22] = get_icon(api5day['DailyForecasts'][3]['Day']['Icon'],list,key)
@@ -419,13 +419,13 @@ def get_main_api(list, key):
 	times[key] = apicurrent[0]['EpochTime']
 	today[key][0] = int(round(apidaily['DailyForecasts'][0]['Temperature']['Minimum']['Value']))
 	today[key][1] = int(round(apidaily['DailyForecasts'][0]['Temperature']['Maximum']['Value']))
-	today[key][2] = to_celcius(today[key][0])
-	today[key][3] = to_celcius(today[key][1])
+	today[key][2] = to_celsius(today[key][0])
+	today[key][3] = to_celsius(today[key][1])
 	today[key][4] = get_icon(int(apidaily['DailyForecasts'][0]['Day']['Icon']),list,key)
 	tomorrow[key][0] = int(round(api5day['DailyForecasts'][1]['Temperature']['Minimum']['Value']))
 	tomorrow[key][1] = int(round(api5day['DailyForecasts'][1]['Temperature']['Maximum']['Value']))
-	tomorrow[key][2] = to_celcius(tomorrow[key][0])
-	tomorrow[key][3] = to_celcius(tomorrow[key][1])
+	tomorrow[key][2] = to_celsius(tomorrow[key][0])
+	tomorrow[key][3] = to_celsius(tomorrow[key][1])
 	tomorrow[key][4] = get_icon(int(api5day['DailyForecasts'][1]['Day']['Icon']),list,key)
 	try: uvval = int(apidaily['DailyForecasts'][0]['AirAndPollen'][5]['Value'])
 	except: uvval = 255
@@ -459,26 +459,26 @@ def get_legacy_api(list, key):
 	week[key][5] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['hightemperature'])
 	week[key][6] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['lowtemperature'])
 	week[key][7] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['hightemperature'])
-	for i in range(0,8): week[key][i+10] = to_celcius(week[key][i])
+	for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
 	week[key][20] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
 	week[key][21] = get_icon(int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['weathericon']),list,key)
 	week[key][22] = get_icon(int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['weathericon']),list,key)
 	week[key][23] = get_icon(int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['weathericon']),list,key)
 	current[key][3] = int(apilegacy['adc_database']['currentconditions']['temperature'])
-	current[key][4] = to_celcius(current[key][3])
+	current[key][4] = to_celsius(current[key][3])
 	weathericon[key] = get_icon(int(apilegacy['adc_database']['currentconditions']['weathericon']),list,key)
 	current[key][0] = apilegacy['adc_database']['currentconditions']['winddirection']
 	current[key][2] = int(apilegacy['adc_database']['currentconditions']['windspeed'])
 	current[key][1] = mph_kmh(current[key][2])
 	today[key][0] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['lowtemperature'])
 	today[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['hightemperature'])
-	today[key][2] = to_celcius(today[key][0])
-	today[key][3] = to_celcius(today[key][1])
+	today[key][2] = to_celsius(today[key][0])
+	today[key][3] = to_celsius(today[key][1])
 	today[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['weathericon']),list,key)
 	tomorrow[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
 	tomorrow[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
-	tomorrow[key][2] = to_celcius(tomorrow[key][0])
-	tomorrow[key][3] = to_celcius(tomorrow[key][1])
+	tomorrow[key][2] = to_celsius(tomorrow[key][0])
+	tomorrow[key][3] = to_celsius(tomorrow[key][1])
 	tomorrow[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
 	try: uvval = int(apilegacy['adc_database']['currentconditions']['uvindex']['@index'])
 	except: uvval = 255
@@ -503,10 +503,10 @@ def get_weekly(list, key):
 	week[key][26] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['lowtemperature'])
 	week[key][27] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['hightemperature'])
 	week[key][28] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['lowtemperature'])
-	week[key][29] = int(to_celcius(week[key][25]))
-	week[key][30] = int(to_celcius(week[key][26]))
-	week[key][31] = int(to_celcius(week[key][27]))
-	week[key][32] = int(to_celcius(week[key][28]))
+	week[key][29] = int(to_celsius(week[key][25]))
+	week[key][30] = int(to_celsius(week[key][26]))
+	week[key][31] = int(to_celsius(week[key][27]))
+	week[key][32] = int(to_celsius(week[key][28]))
 	week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
 	week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
 
