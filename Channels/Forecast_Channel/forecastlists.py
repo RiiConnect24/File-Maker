@@ -2801,10 +2801,10 @@ jpncities["西表島"] = "10/50/9110"
 
 weatherconditions = collections.OrderedDict()
 
-weatherconditions[1] = [["", "Sunny\0", "", "", "", "", ""], "0464", "0065", "0067", "0002"]
-weatherconditions[2] = [["", "Mostly Sunny\0", "", "", "", "", ""], "0462", "0065", "0068", "0001"]
-weatherconditions[3] = [["", "Partly Cloudy\0", "", "", "", "", ""], "0465", "0066", "00C4", "000A"]
-weatherconditions[4] = [["", "Intermittent Clouds\0", "", "", "", "", ""], "0463", "006B", "00C5", "000A"]
+weatherconditions[1] = [["晴れ", "Sunny\0", "Sonnig", "Ensoleillé", "Soleado", "Soleggiato", "Zonnig"], "0464", "0065", "0067", "0002"]
+weatherconditions[2] = [["おおむね晴れ", "Mostly Sunny\0", "Überwiegend sonnig", "Plutôt Ensoleillé", "Mayormente soleado", "Prevalentemente soleggiato", "Overwegend zonnig"], "0462", "0065", "0068", "0001"]
+weatherconditions[3] = [["所により曇り", "Partly Cloudy\0", "Teilweise bewölkt", "Ciel assez nuageux", "Parcialmente nublado", "Parzialmente nuvoloso", "Deels bewolkt"], "0465", "0066", "00C4", "000A"]
+weatherconditions[4] = [["時々曇り", "Intermittent Clouds\0", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nubi sparse", "Wisselend bewolkt"], "0463", "006B", "00C5", "000A"]
 weatherconditions[5] = [["", "Haze\0", "", "", "", "", ""], "05F4", "007A", "00C6", "000A"]
 weatherconditions[6] = [["", "Mostly Cloudy\0", "", "", "", "", ""], "04C9", "006B", "00C7", "000A"]
 weatherconditions[7] = [["", "Cloudy\0", "", "", "", "", ""], "04C8", "006A", "012C", "0013"]
@@ -2831,8 +2831,8 @@ weatherconditions[31] = [["", "Cold\0", "", "", "", "", ""], "85F4", "8065", "00
 weatherconditions[32] = [["", "Windy\0", "", "", "", "", ""], "8465", "8066", "00CE", "800A"]
 weatherconditions[33] = [["", "Clear\0", "", "", "", "", ""], "84C9", "806B", "00CF", "800C"]
 weatherconditions[34] = [["", "Mostly Clear\0", "", "", "", "", ""], "05F8", "807A", "00D1", "800C"]
-weatherconditions[35] = [["", "Partly Cloudy\0", "", "", "", "", ""], "84C8", "806A", "00D2", "800E"]
-weatherconditions[36] = [["", "Intermittent Clouds\0", "", "", "", "", ""], "8466", "806C", "00D3", "800E"]
+weatherconditions[35] = [["所により曇り", "Partly Cloudy\0", "Teilweise bewölkt", "Partiellement nuageux", "Parcialmente nublado", "Parzialmente nuvoloso", "Deels bewolkt"], "84C8", "806A", "00D2", "800E"]
+weatherconditions[36] = [["時々曇り", "Intermittent Clouds\0", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nubi sparse", "Wisselend bewolkt"], "8466", "806C", "00D3", "800E"]
 weatherconditions[37] = [["", "Hazy Moonlight\0", "", "", "", "", ""], "852E", "8071", "00D4", "800D"]
 weatherconditions[38] = [["", "Mostly Cloudy\0", "", "", "", "", ""], "8467", "807D", "00D5", "800D"]
 weatherconditions[39] = [["", "Partly Cloudy\nwith Showers\0", "", "", "", "", ""], "84CA", "807D", "0459", "0065"]
