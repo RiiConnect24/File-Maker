@@ -542,6 +542,10 @@ def get_location(list, key):
 	globe[key]['offset'] = location[0]['TimeZone']['GmtOffset']
 	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
 
+"""Get the location data from the legacy API."""
+"""The script currently gets data from the servers the Android app of AccuWeather uses."""
+"""Please don't attack us for doing this, AccuWeather. You're my friend and I want to keep it that way."""
+
 def get_legacy_location(list, key):
 	i = 0
 	locationkey[key] = None
@@ -555,6 +559,7 @@ def get_legacy_location(list, key):
 		i+=1
 
 """Tenki's where we're getting the laundry index for Japan."""
+"""Currently, it's getting it from the webpage itself, but we might look for an API they use."""
 
 def get_tenki_data(key):
 	laundry[key] = 255
