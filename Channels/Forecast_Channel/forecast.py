@@ -50,7 +50,7 @@ file = None
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
 print "Forecast Channel Downloader \n"
-print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
+print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
 print "Preparing ..."
 
 uvindex = {}
@@ -117,7 +117,7 @@ def mph_kmh(wind):
 
 def time_convert(time):
 	if mode == 1: return int((time - 946684800) / 60)
-	elif mode == 2: return int((time - 1325376000) / 60)
+	elif mode == 2: return int((time - 1325376000) / 60) # Still have to adjust this.
 
 def get_epoch():
 	return int(time.time())
@@ -158,10 +158,13 @@ def num():
 	number += 1
 	return num1
 
+"""This is a progress bar to display how much of the forecast in a list has been downloaded."""
+"""It actually looks pretty cool."""
+
 def progress(percent,list):
 	global progcount
 	bar = 35
-	prog = """-\|/"""
+	prog = """-\|/""" # These are characters which will make a spinning effect.
 	fill = int(round(percent*bar/100))
 	if citycount/(len(list)-cached) == 1:
 		if os.name == 'nt': display = '*'
@@ -258,7 +261,7 @@ def increment():
 
 def request_data(url):
 	global retrycount
-	header = {'Accept-Encoding' : 'gzip, deflate'}
+	header = {'Accept-Encoding' : 'gzip, deflate'} # This is to make the data download faster.
 	i = 0
 	c = 0
 	while c == 0:
@@ -676,9 +679,12 @@ def make_forecast_bin(list):
 		print "Writing Location Text Table ..."
 		for k, v in text_table.items(): file.write(v)
 		file.write(pad(16))
-		file.write('RIICONNECT24'.encode('ASCII'))
+		file.write('RIICONNECT24'.encode('ASCII')) # This is a watermark for the file.
 		file.flush()
 	file.close()
+	"""This is some complicated method used to generate offsets."""
+	"""We could eventually replace it with a function which does the work."""
+	"""However, it'd be complicated to modify the script to do that."""
 	print "Processing Offsets ..."
 	file = open(file1, 'r+b')
 	hex_write(12,timestamps(0,0),0,0)
@@ -784,7 +790,7 @@ def sign_file(name, local_name, server_name):
 	key = open(key_path, 'rb')
 	print "RSA Signing ..."
 	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")
-	signature = rsa.sign(new, private_key, "SHA-1")
+	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding. Beautiful.
 	dest.write(binascii.unhexlify(str(0).zfill(128)))
 	dest.write(signature)
 	dest.write(new)
@@ -810,7 +816,7 @@ def get_data(list, name):
 			get_legacy_api(list, name)
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
-	else: output('No data for %s - using defaults' % name)
+	else: output('Unable to retrieve data for %s - using blank data' % name)
 	progress(float(citycount)/float(len(list)-cached)*100,list)
 
 def make_header_short(list):
