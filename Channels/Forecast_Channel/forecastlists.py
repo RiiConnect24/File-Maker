@@ -2799,15 +2799,18 @@ jpncities["石垣島"] = "10/50/9410"
 jpncities["与那国島"] = "10/50/9420"
 jpncities["西表島"] = "10/50/9110"
 
+"""Dictionary for weather conditions."""
+"""The last 4 values: First 2 - International code, Last 2 - Japanese code"""
+
 weatherconditions = collections.OrderedDict()
 
 weatherconditions[1] = [["晴れ", "Sunny\0", "Sonnig", "Ensoleillé", "Soleado", "Soleggiato", "Zonnig"], "0464", "0065", "0067", "0002"]
 weatherconditions[2] = [["おおむね晴れ", "Mostly Sunny\0", "Überwiegend sonnig", "Plutôt Ensoleillé", "Mayormente soleado", "Prevalentemente soleggiato", "Overwegend zonnig"], "0462", "0065", "0068", "0001"]
 weatherconditions[3] = [["所により曇り", "Partly Cloudy\0", "Teilweise bewölkt", "Ciel assez nuageux", "Parcialmente nublado", "Parzialmente nuvoloso", "Deels bewolkt"], "0465", "0066", "00C4", "000A"]
 weatherconditions[4] = [["時々曇り", "Intermittent Clouds\0", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nubi sparse", "Wisselend bewolkt"], "0463", "006B", "00C5", "000A"]
-weatherconditions[5] = [["", "Haze\0", "", "", "", "", ""], "05F4", "007A", "00C6", "000A"]
-weatherconditions[6] = [["", "Mostly Cloudy\0", "", "", "", "", ""], "04C9", "006B", "00C7", "000A"]
-weatherconditions[7] = [["", "Cloudy\0", "", "", "", "", ""], "04C8", "006A", "012C", "0013"]
+weatherconditions[5] = [["霞", "Haze\0", "Dunst", "Voilé", "Calina", "Foschia", "Nevelig"], "05F4", "007A", "00C6", "000A"]
+weatherconditions[6] = [["おおむね曇り", "Mostly Cloudy\0", "Stark bewölkt", "Ciel plutôt nuageux", "Muy nublado", "Prevalentemente nuvoloso", "Overwegend bewolkt"], "04C9", "006B", "00C7", "000A"]
+weatherconditions[7] = [["曇り", "Cloudy\0", "Wolkig", "Nuageux", "Nublado", "Nuvoloso", "Bewolkt"], "04C8", "006A", "012C", "0013"]
 weatherconditions[8] = [["", "Overcast\0", "", "", "", "", ""], "0469", "006A", "00C9", "000C"]
 weatherconditions[11] = [["", "Fog\0", "", "", "", "", ""], "0680", "007C", "0069", "0003"]
 weatherconditions[12] = [["", "Showers\0", "", "", "", "", ""], "052E", "0071", "0384", "0021"]
