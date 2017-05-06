@@ -19,7 +19,7 @@ import pytz # Used to find time zones.
 import requests
 import subprocess
 import struct
-import time # Used to get time stuff.
+import time # Used to get time stuff..
 import urllib2 # Needed to download a few things for the news.
 import tempfile # For resizing images etc
 from bs4 import BeautifulSoup # Used to parse HTML.
@@ -29,6 +29,7 @@ from dateutil import tz, parser
 from newspaper import * # Used to parse news articles.
 from PIL import Image # Used to work with images.
 from resizeimage import resizeimage # Used to resize images.
+from unidecode import unidecode
 
 """This will pack the integers."""
 
@@ -55,11 +56,11 @@ def u32_littleendian(data):
 		print "[+] Value Pack Failure: %s" % data
 		data = 0
 	return struct.pack("<I", data)
-	
+
 """This is to replace characters."""
-	
+
 replace_chars = collections.OrderedDict()
-		
+
 replace_chars["\x01\x0c"] = "\x00\x43"
 replace_chars["\x01\x0d"] = "\x00\x63"
 replace_chars["\x02\xdd"] = "\x00\xbd"
@@ -113,18 +114,18 @@ def replace(item):
 		for characters in replace_chars.items():
 			if characters[0] in item:
 				item = item.replace(characters[0], characters[1])
-				
+
 	return item
-			
+
 """Get the location data."""
 
 def locations_download(language_code, data):
 	locations = collections.OrderedDict()
 	locations_return = collections.OrderedDict()
 	gmaps = googlemaps.Client(key=google_maps_api_key)
-	
+
 	"""This dictionary is used to determine languages."""
-	
+
 	languages = {
 		0: "ja",
 		1: "en",
@@ -134,73 +135,73 @@ def locations_download(language_code, data):
 		5: "it",
 		6: "nl",
 	}
-	
+
 	"""This dictionary is used to get the right location with Google Maps."""
-	
+
 	corrections = {
 		"UNITED NATIONS": ["1cf0cb780000000006000000", "United Nations"],
 		"WASHINGTON": ["1ba2c94a0000000006000000", "Washington"],
 	}
-	
+
 	for keys,values in data.items():
 		location = values[8]
-		
+
 		if location > 0:
 			if location not in locations:
 				locations[location] = []
-				
+
 			locations[location].append(keys)
-	
+
 	for name in locations.keys():
 		read = 1
-		
+
 		if name not in corrections:
 			try:
-				read = gmaps.geocode(name.decode("utf-8"), language=languages[language_code])
+				read = gmaps.geocode(unidecode(name.decode("utf-8")), language=languages[language_code])
 			except:
 				pass
-			
+
 		if read == 1:
 			if name in corrections:
 				coordinates = binascii.unhexlify(corrections[name][0])
 				new_name = corrections[name][1]
-				
+
 				for filenames in locations[name]:
 					if new_name not in locations_return:
 						locations_return[new_name] = [coordinates, []]
-					
+
 					locations_return[new_name][1].append(filenames)
-	
+
 		elif read != 1:
 			try:
 				new_name = replace(read[0]["address_components"][0]["long_name"])
-			
+
 				"""Not doing anything with these at this time."""
-			
+
 				country = u8(0)
 				region = u8(0)
 				location = u16(0)
 				zoom_factor = u32_littleendian(6)
-			
+
 				coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0055) & 0xFFFF) + u16(int(read[0]["geometry"]["location"]["lng"] / 0.0055) & 0xFFFF) + country + region + u16(0) + zoom_factor
-				
+
 				for filenames in locations[name]:
 					if new_name not in locations_return:
 						locations_return[new_name] = [coordinates, []]
-					
+
 					locations_return[new_name][1].append(filenames)
 			except:
 				pass
-	
+
 	return locations_return
 
 def download_ap_english():
 	print "Downloading from the Associated Press (English)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["national"] = "National News"
 	topics_name["world"] = "International News"
 	topics_name["sports"] = "Sports"
@@ -208,9 +209,9 @@ def download_ap_english():
 	topics_name["business"] = "Business"
 	topics_name["science"] = "Science/Health"
 	topics_name["technology"] = "Technology"
-	
+
 	topics = collections.OrderedDict()
-	
+
 	topics["national"] = ["USHEADS"]
 	topics["world"] = ["WORLDHEADS"]
 	topics["sports"] = ["SPORTSHEADS"]
@@ -218,37 +219,37 @@ def download_ap_english():
 	topics["business"] = ["BUSINESSHEADS"]
 	topics["science"] = ["SCIENCEHEADS", "HEALTHHEADS"]
 	topics["technology"] = ["TECHHEADS"]
-	
+
 	return download_ap(topics_name, topics, "en")
-	
+
 def download_ap_spanish():
 	print "Downloading from the Associated Press (Spanish)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["general"] = "Generales"
 	topics_name["finance"] = "Financieras"
 	topics_name["sports"] = "Deportivas"
 	topics_name["shows"] = "Espectáculos"
-	
+
 	topics = collections.OrderedDict()
-	
+
 	topics["general"] = ["NOTICIAS_GENERALES"]
 	topics["finance"] = ["NOTICIAS_FINANCIERAS"]
 	topics["sports"] = ["NOTICIAS_DEPORTIVAS"]
 	topics["shows"] = ["NOTICIAS_ENTRETENIMIENTOS"]
-	
+
 	return download_ap(topics_name, topics, "es")
-	
+
 def download_reuters_english():
 	print "Downloading from Reuters (English)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["world"] = "World"
 	topics_name["uk"] = "UK"
 	topics_name["health"] = "Health"
@@ -257,9 +258,9 @@ def download_reuters_english():
 	topics_name["offbeat"] = "Oddly Enough"
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["sports"] = "Sports"
-	
+
 	topics = collections.OrderedDict()
-	
+
 	topics["world"] = ["UKWorldNews"]
 	topics["uk"] = ["UKdomesticNews"]
 	topics["health"] = ["UKHealthNews"]
@@ -268,30 +269,30 @@ def download_reuters_english():
 	topics["offbeat"] = ["UKOddlyEnoughNews"]
 	topics["entertainment"] = ["UKEntertainment"]
 	topics["sports"] = ["UKSportsNews"]
-	
+
 	return download_reuters(topics_name, topics)
-	
+
 def download_lobs_french():
 	print "Downloading from L'Obs (French)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["topnews"] = "Top News"
 	topics_name["society"] = "Société"
 	topics_name["world"] = "Monde"
 	topics_name["politique"] = "Politique"
-	
+
 	return download_lobs(topics_name)
-	
+
 def download_zeit_german():
 	print "Downloading from ZEIT (German)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["general"] = "General"
 	topics_name["politics"] = "Politik"
 	topics_name["economy"] = "Wirtschaft"
@@ -300,39 +301,39 @@ def download_zeit_german():
 	topics_name["knowledge"] = "Wissen"
 	topics_name["digital"] = "Digital"
 	topics_name["sports"] = "Sport"
-	
+
 	return download_zeit(topics_name)
-	
+
 def download_ansa_italian():
 	print "Downloading from ANSA (Italian)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["world"] = "Dal mondo"
 	topics_name["italy"] = "Dall'Italia"
 	topics_name["sports"] = "Sport"
 	topics_name["economy"] = "Economia"
 	topics_name["culture"] = "Cultura"
-	
+
 	topics = collections.OrderedDict()
-	
+
 	topics["world"] = ["mondo"]
 	topics["italy"] = ["abruzzo", "basilicata", "calabria", "campania", "emiliaromagna", "friuliveneziagiulia", "lazio", "liguria", "lombardia", "marche", "molise", "piemonte", "puglia", "sardegna", "sicilia", "toscana", "trentino", "umbria", "valledaosta", "veneto"]
 	topics["sports"] = ["sport"]
 	topics["economy"] = ["economia"]
 	topics["culture"] = ["cultura"]
-	
+
 	return download_ansa(topics_name, topics)
-	
+
 def download_anp_dutch():
 	print "Downloading from ANP (Dutch)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["general"] = "Algemeen"
 	topics_name["economy"] = "Economie"
 	topics_name["sports"] = "Sport"
@@ -340,9 +341,9 @@ def download_anp_dutch():
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["lifestyle"] = "Lifestyle"
 	topics_name["noteworthy"] = "Opmerkelijk"
-	
+
 	topics = collections.OrderedDict()
-	
+
 	topics["general"] = ["algemeen"]
 	topics["economy"] = ["economie"]
 	topics["sports"] = ["sport"]
@@ -350,106 +351,106 @@ def download_anp_dutch():
 	topics["entertainment"] = ["entertainment"]
 	topics["lifestyle"] = ["lifestyle"]
 	topics["noteworthy"] = ["opmerkelijk"]
-	
+
 	return download_anp(topics_name, topics)
-	
+
 def download_news24_mainichi_japanese():
 	print "Downloading from News24 and Mainichi (Japanese)..."
-	
+
 	print "\n"
-	
+
 	topics_name = collections.OrderedDict()
-	
+
 	topics_name["politics"] = "政治"
 	topics_name["economy"] = "経済"
 	topics_name["international"] = "国際"
 	topics_name["society"] = "社会"
 	topics_name["sports"] = "スポーツ"
 	topics_name["entertainment"] = "芸能文化"
-	
+
 	topics = collections.OrderedDict()
-	
+
 	topics["politics"] = ["politics"]
 	topics["economy"] = ["economy"]
 	topics["international"] = ["international"]
 	topics["society"] = ["society"]
 	topics["sports"] = ["sports"]
 	topics["entertainment"] = ["entertainment"]
-	
+
 	return download_news24_mainichi(topics_name, topics)
 
 def download_news24_mainichi(topics_name, topics):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	for rss_category in topics.items():
 		numbers = 0
-		
+
 		print "Downloading %s..." % topics_name[rss_category[0]]
-		
+
 		print "\n"
-		
+
 		for rss in rss_category[1]:
 			numbers_category = 0
-			
+
 			rss_feed = urllib2.urlopen("http://news24.jp/sitemap_%s.xml" % rss).read()
-			
+
 			soup = BeautifulSoup(rss_feed, "lxml")
-			
+
 			occurrences = 0
-			
+
 			format = "%Y-%m-%dT%H:%M:%SZ+09:00"
-			
+
 			for items in soup.findAll("url"):
 				updated = parser.parse(soup.findAll("news:publication_date")[occurrences].contents[0])
 				updated = updated.astimezone(tz.tzutc())
-				
+
 				updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-				
+
 				time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-				
+
 				if updated >= time_current - 60:
 					numbers += 1
-						
+
 					print "Downloading News Article %s..." % (str(numbers))
-					
+
 					parsedata = parsedata_news24(soup.findAll("loc")[occurrences].contents[0].replace("html", "jsonp"), soup.findAll("news:title")[occurrences].contents[0], updated, picture_number)
-					
+
 					if parsedata > 0:
 						picture_number += parsedata[7]
 						data[rss_category[0] + str(numbers)] = parsedata
-				
+
 				occurrences += 1
-				
+
 		print "\n"
-						
+
 	print "Downloading Breaking News..."
-		
+
 	print "\n"
-		
+
 	rss_feed = feedparser.parse(urllib2.urlopen("http://rss.rssad.jp/rss/mainichi/flash.rss").read())
-		
+
 	for items in rss_feed.entries:
 		updated = parser.parse(items.updated)
 		updated = updated.astimezone(tz.tzutc())
-				
+
 		updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-				
+
 		time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-				
+
 		if updated >= time_current - 60:
 			if "/ad/" not in items["link"]:
 				numbers += 1
-						
+
 				print "Downloading News Article %s..." % (str(numbers))
-					
+
 				parsedata = parsedata_mainichi(items["link"], items["title"], updated, picture_number)
-						
+
 				if parsedata > 0:
 					picture_number += parsedata[7]
 					data[rss_category[0] + str(numbers)] = parsedata
-	
+
 	return data
 
 def parsedata_mainichi(url, title, updated, picture_number):
@@ -459,35 +460,35 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		html = source_file.read()
 
 	os.remove("temp_mainichi")
-	
+
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
-	
+
 	article = ""
-	
+
 	for text in soup.findAll("p", {"class": "txt"}):
 		article += " " + text.getText().strip() + "\n\n"
-		
+
 	article = article.encode("utf-16be")
-	
+
 	location_list = collections.OrderedDict()
-	
+
 	for location in japanese_locations:
 		if location.encode("utf-16be") in article:
 			location_list[location] = article.count(location.encode("utf-16be"))
-	
+
 	try:
 		location = max(location_list, key=location_list.get)
 	except:
 		location = 0
-	
+
 	try:
 		if picture_number <= 5:
 			"""Parse the pictures."""
-		
+
 			picture = urllib2.urlopen(soup.find("img", {"alt", "vertical-photo"})["src"]).read()
-		
+
 			picture_number = 1
 		else:
 			picture_number = 0
@@ -495,7 +496,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 	except:
 		picture_number = 0
 		picture = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -509,28 +510,28 @@ def parsedata_mainichi(url, title, updated, picture_number):
 
 def parsedata_news24(url, title, updated, picture_number):
 	json_data = json.loads(jsonp2json.convert(urllib2.urlopen(url).read()))
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
 
 	article = json_data["article"]["newsBody"].replace("<br />", "\n").encode("utf-16be")
-	
+
 	location_list = collections.OrderedDict()
-	
+
 	for location in japanese_locations:
 		if location.encode("utf-16be") in article:
 			location_list[location] = article.count(location.encode("utf-16be"))
-	
+
 	try:
 		location = max(location_list, key=location_list.get)
 	except:
 		location = 0
-	
+
 	try:
 		if picture_number <= 5:
 			"""Parse the pictures."""
-		
+
 			picture = urllib2.urlopen("http://news24.jp/" + json_data["article"]["imageList"][2]["distributePath"] + json_data["article"]["imageList"][2]["imageFileName"]).read()
-		
+
 			picture_number = 1
 		else:
 			picture_number = 0
@@ -538,7 +539,7 @@ def parsedata_news24(url, title, updated, picture_number):
 	except:
 		picture_number = 0
 		picture = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -549,94 +550,94 @@ def parsedata_news24(url, title, updated, picture_number):
 		return 0
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "news24"]
-	
+
 def download_reuters(topics_name, topics):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	for rss_category in topics.items():
 		numbers = 0
-		
+
 		print "Downloading %s..." % topics_name[rss_category[0]]
-		
+
 		print "\n"
-		
+
 		for rss in rss_category[1]:
 			numbers_category = 0
-			
+
 			rss_feed = feedparser.parse(urllib2.urlopen("http://feeds.reuters.com/reuters/%s.rss" % rss).read())
-			
+
 			for items in rss_feed.entries:
 				updated = parser.parse(items.updated)
 				updated = updated.astimezone(tz.tzutc())
-				
+
 				updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-				
+
 				time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-				
+
 				if updated >= time_current - 60:
 					numbers += 1
-						
+
 					print "Downloading News Article %s..." % (str(numbers))
-					
+
 					parsedata = parsedata_reuters(items["link"], items["title"], updated, picture_number)
-					
+
 					if parsedata > 0:
 						picture_number += parsedata[7]
 						data[rss_category[0] + str(numbers)] = parsedata
-						
+
 		print "\n"
-	
+
 	return data
-	
+
 def parsedata_reuters(url, title, updated, picture_number):
 	utc = pytz.utc
-	
+
 	data1 = Article(url, language="en")
 	data1.download()
 	data1.parse()
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	soup2 = BeautifulSoup(html, "lxml")
-	
+
 	for s in soup2("div", {"class": "module-meta group"}):
 		s.extract()
-	
+
 	data2 = Article(url, language="en")
 	data2.set_html(str(soup2))
 	data2.parse()
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
-	
+
 	try:
 		location = soup.find("span", {"class": "articleLocation"}).contents[0]
-		
+
 		if "/" in location:
 			location = location.split("/", 1)[0]
 	except:
 		location = 0
-	
+
 	try:
 		article = (data2.text + "\n" + "\n" + soup.find("span", {"class": "author"}).get_text()).encode("utf-16be")
 	except:
 		article = data2.text.encode("utf-16be") # Parse the article.
-		
+
 	try:
 		if picture_number <= 5:
 			"""Parse the pictures."""
-		
+
 			picture = urllib2.urlopen(data1.top_image + "&w=200").read()
-		
+
 			picture_number = 1
-		
+
 			"""Parse the picture credits."""
-	
+
 			credits = soup.find("span", {"class": "module-credit"}).get_text().strip().encode("utf-16be")
-			
+
 			"""Parse the picture captions."""
-	
+
 			caption = soup.find("div", {"class": "module-caption"}).contents[0].strip().encode("utf-16be")
 		else:
 			picture_number = 0
@@ -648,7 +649,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 		picture = 0
 		credits = 0
 		caption = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -659,72 +660,72 @@ def parsedata_reuters(url, title, updated, picture_number):
 		return 0
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
-	
+
 def download_anp(topics_name, topics):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	for rss_category in topics.items():
 		numbers = 0
-		
+
 		print "Downloading %s..." % topics_name[rss_category[0]]
-		
+
 		print "\n"
-		
+
 		for rss in rss_category[1]:
 			numbers_category = 0
-			
+
 			rss_feed = feedparser.parse(urllib2.urlopen("http://nu.nl/rss/%s" % rss).read())
-			
+
 			for items in rss_feed.entries:
 				updated = parser.parse(items.updated)
 				try:
 					updated = updated.astimezone(tz.tzutc())
-				
+
 					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-				
+
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-				
+
 					if updated >= time_current - 60:
 						if items.author == "NU.nl" or "ANP":
 							numbers += 1
-						
+
 							print "Downloading News Article %s..." % (str(numbers))
-							
+
 							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP":
 								parsedata = parsedata_anp(items["link"], items["title"], "NU.nl", updated, picture_number)
 							else:
 								parsedata = parsedata_anp(items["link"], items["title"], items.author, updated, picture_number)
-						
+
 							if parsedata > 0:
 								picture_number += parsedata[7]
 								data[rss_category[0] + str(numbers)] = parsedata
 				except:
 					print "Failed."
-		
+
 		print "\n"
-	
+
 	return data
-						
+
 def parsedata_anp(url, title, source, updated, picture_number):
 	data1 = Article(url, language="nl")
 	data1.download()
 	data1.parse()
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
-	
+
 	try:
 		article = (soup.find("div", {"class": "item-excerpt"}).contents[0].replace("        ", "") + "\n" + data1.text).encode("utf-16be") # Parse the article.
 	except:
 		article = data1.text.encode("utf-16be") # Parse the article.
-	
+
 	try:
 		if picture_number <= 5:
 			"""Parse the pictures."""
-			
+
 			with tempfile.NamedTemporaryFile(dir=None, delete=True, prefix="jpg") as tmpfile:
 				with open(tmpfile.name, "w+") as dest_file:
 					picture = urllib2.urlopen(data1.top_image).read()
@@ -736,11 +737,11 @@ def parsedata_anp(url, title, source, updated, picture_number):
 
 				with open(tmpfile.name, "rb") as source_file:
 					picture = source_file.read()
-			
+
 			picture_number = 1
-			
+
 			"""Parse the caption."""
-			
+
 			credits = soup.find("span", {"class": "photographer"}).contents[0].encode("utf-16be")
 		else:
 			picture_number = 0
@@ -750,14 +751,14 @@ def parsedata_anp(url, title, source, updated, picture_number):
 		picture_number = 0
 		picture = 0
 		credits = 0
-	
+
 	location = 0
-		
+
 	for tag in soup.find("meta", {"name": "keywords"})["content"].split(","):
 		if tag in dutch_locations:
 			location = tag
 			break
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -768,49 +769,49 @@ def parsedata_anp(url, title, source, updated, picture_number):
 		return 0
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), source]
-	
+
 def download_ansa(topics_name, topics):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	for rss_category in topics.items():
 		numbers = 0
-		
+
 		print "Downloading %s..." % topics_name[rss_category[0]]
-		
+
 		print "\n"
-		
+
 		for rss in rss_category[1]:
 			numbers_category = 0
-			
+
 			if rss_category[0] == "italy":
 				rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/%s/notizie/%s_rss.xml" % (rss, rss)).read())
 			else:
 				rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (rss, rss)).read())
-			
+
 			for items in rss_feed.entries:
 				try:
 					updated = parser.parse(items.updated)
 					updated = updated.astimezone(tz.tzutc())
-					
+
 					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-				
+
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-					
+
 					if updated >= time_current - 60:
 						numbers_category += 1
-					
+
 						if numbers_category > 1:
 							if rss_category[0] == "italy":
 								pass
 						else:
 							numbers += 1
-						
+
 							print "Downloading News Article %s..." % (str(numbers))
-					
+
 							parsedata = parsedata_ansa(items["link"], items["title"], updated, picture_number)
-					
+
 							if parsedata > 0:
 								picture_number += parsedata[7]
 								data[rss_category[0] + str(numbers)] = parsedata
@@ -825,10 +826,10 @@ def parsedata_ansa(url, title, updated, picture_number):
 	data1.parse()
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
 	article = data1.text.encode("utf-16be") # Parse the article.
-	
+
 	try:
 		if picture_number <= 5:
 			"""Parse the pictures."""
@@ -844,11 +845,11 @@ def parsedata_ansa(url, title, updated, picture_number):
 
 				with open(tmpfile.name, "rb") as source_file:
 					picture = source_file.read()
-			
+
 			picture_number = 1
-		
+
 			"""Parse the picture credits."""
-			
+
 			credits = soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0].encode("utf-16be")
 		else:
 			picture_number = 0
@@ -858,12 +859,12 @@ def parsedata_ansa(url, title, updated, picture_number):
 		picture_number = 0
 		picture = 0
 		credits = 0
-		
+
 	try:
 		location = soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).contents[0]
 	except:
 		location = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -874,53 +875,53 @@ def parsedata_ansa(url, title, updated, picture_number):
 		return 0
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), "ansa"]
-	
+
 def download_lobs(topics_name):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	numbers = 0
-		
+
 	print "Downloading News..."
-		
+
 	print "\n"
-		
+
 	rss_feed = feedparser.parse(urllib2.urlopen("http://tempsreel.nouvelobs.com/depeche/rss.xml").read())
-			
+
 	for items in rss_feed.entries:
 		category = lobs_categories[items["tags"][0]["term"].encode("utf-8")]
-		
+
 		updated = parser.parse(items.updated)
 		updated = updated.astimezone(tz.tzutc())
-		
+
 		updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-				
+
 		time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-				
+
 		if updated >= time_current - 60:
 			numbers += 1
-					
+
 			print "Downloading News Article %s..." % (str(numbers))
-					
+
 			parsedata = parsedata_lobs(items["link"], items["title"], updated, picture_number)
-					
+
 			if parsedata > 0:
 				picture_number += parsedata[7]
 				data[category + str(numbers)] = parsedata
-	
+
 	return data
-						
+
 def parsedata_lobs(url, title, updated, picture_number):
 	data1 = Article(url, language="fr")
 	data1.download()
 	data1.parse()
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
 	article = data1.text.encode("utf-16be") # Parse the article.
-	
+
 	try:
 		if picture_number <= 5:
 			if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
@@ -937,11 +938,11 @@ def parsedata_lobs(url, title, updated, picture_number):
 
 					with open(tmpfile.name, "rb") as source_file:
 						picture = source_file.read()
-			
+
 				picture_number = 1
-		
+
 				"""Parse the picture captions."""
-		
+
 				try:
 					caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
 				except:
@@ -958,12 +959,12 @@ def parsedata_lobs(url, title, updated, picture_number):
 		picture_number = 0
 		picture = 0
 		caption = 0
-	
+
 	if " (AFP)" in article.decode("utf-16be"):
 		location = article.decode("utf-16be").split(" (AFP)", 1)[0]
 	else:
 		location = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -974,67 +975,67 @@ def parsedata_lobs(url, title, updated, picture_number):
 		return 0
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, replace(caption), picture_number, replace(location), "AFP"]
-		
+
 def download_zeit(topics_name):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	numbers = 0
-		
+
 	print "Downloading News..."
-		
+
 	print "\n"
-	
+
 	soup = BeautifulSoup(urllib2.urlopen("http://www.zeit.de/news/index").read(), "lxml")
-			
+
 	for items in soup.findAll("article", {"class": "newsteaser"}):
 		updated = parser.parse(items.find("time", {"class": "newsteaser__time"}).contents[0].strip() + " +0100")
 		updated = updated.astimezone(tz.tzutc())
-		
+
 		updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-		
+
 		time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-		
+
 		link = items.find("a", {"class": "newsteaser__combined-link"})["href"]
 		source = items.find("span", {"class": "newsteaser__product"}).contents[0]
-					
+
 		if updated >= time_current - 60:
 			numbers += 1
-			
+
 			print "Downloading News Article %s..." % (str(numbers))
-				
+
 			parsedata = parsedata_zeit(link, updated, source, picture_number)
-					
+
 			if parsedata > 0:
 				picture_number += parsedata[7]
 				data[parsedata[10] + str(numbers)] = parsedata
-				
+
 	return data
-	
+
 def parsedata_zeit(url, updated, source, picture_number):
 	data1 = Article(url, language="de")
 	data1.download()
 	data1.parse()
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	headline = data1.title.encode("utf-16be") # Parse the headline.
 	article = data1.text.encode("utf-16be") # Parse the article.
-	
+
 	headline_category = headline.decode("utf-16be").split(": ", 1)[0]
 	category = "general"
-	
+
 	if headline_category in zeit_categories:
 		category = zeit_categories[headline_category]
-			
+
 	if headline_category in zeit_sports_categories:
 		category = "sports"
-	
+
 	try:
 		if picture_number <= 3:
 			"""Parse the pictures."""
-					
+
 			with tempfile.NamedTemporaryFile(dir=None, delete=True, prefix="jpg") as tmpfile:
 				with open(tmpfile.name, "w+") as dest_file:
 					picture = urllib2.urlopen(data1.top_image).read()
@@ -1046,18 +1047,18 @@ def parsedata_zeit(url, updated, source, picture_number):
 
 				with open(tmpfile.name, "rb") as source_file:
 					picture = source_file.read()
-				
+
 			picture_number = 1
-		
+
 			"""Parse the picture captions."""
-		
+
 			try:
 				caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
 			except:
 				caption = 0
-				
+
 			"""Parse the picture credits."""
-			
+
 			try:
 				credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
 			except:
@@ -1072,42 +1073,42 @@ def parsedata_zeit(url, updated, source, picture_number):
 		picture = 0
 		caption = 0
 		credits = 0
-	
+
 	if source == "ZEIT ONLINE":
 		try:
 			credits = soup.find("div", {"class": "byline"}).get_text().strip().encode("utf-16be")
-				
+
 			if ", " in credits.decode("utf-16be"):
 				location = credits.decode("utf-16be").split(", ", 1)[1]
 			else:
 				location = 0
-				
+
 			article += "\n" + "\n" + credits
 		except:
 			location = 0
-			
+
 	elif source == "SID":
 		if " (SID)" in article.decode("utf-16be"):
 			location = article.decode("utf-16be").split(" (SID)", 1)[0]
 		else:
 			location = 0
 		category = "sports"
-			
+
 	elif source == "dpa":
 		if " (dpa)" in article.decode("utf-16be"):
 			location = article.decode("utf-16be").split(" (dpa)", 1)[0]
 		else:
 			location = 0
-			
+
 	elif source == "AFP":
 		if " (AFP)" in article.decode("utf-16be"):
 			location = article.decode("utf-16be").split(" (AFP)", 1)[0]
 		else:
 			location = 0
-	
+
 	else:
 		location = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
@@ -1121,78 +1122,78 @@ def parsedata_zeit(url, updated, source, picture_number):
 
 def download_ap(topics_name, topics, language):
 	picture_number = 0
-	
+
 	data = collections.OrderedDict()
-	
+
 	for rss_category in topics.items():
 		numbers = 0
-		
+
 		print "Downloading %s..." % topics_name[rss_category[0]]
-		
+
 		print "\n"
-		
+
 		for rss in rss_category[1]:
 			rss_feed = feedparser.parse(urllib2.urlopen("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).read())
-	
+
 			for items in rss_feed.entries:
 				format = "%Y-%m-%dT%H:%M:%SZ"
-	
+
 				try:
 					updated_utc = datetime.strptime(items["date"], format)
-				
+
 					updated_utc = updated_utc.strftime(format)
-				
+
 					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
-				
+
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
 					if updated >= time_current - 60:
 						numbers += 1
-					
+
 						print "Downloading News Article %s..." % (str(numbers))
-				
-						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, picture_number, language)	
-						
+
+						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, picture_number, language)
+
 						if parsedata > 0:
 							picture_number += parsedata[7]
 							data[rss_category[0] + str(numbers)] = parsedata
 				except:
 					print "Failed."
-		
+
 		print "\n"
-		
+
 	return data
-		
+
 def parsedata_ap(url, title, updated_utc, updated, format, picture_number, language):
 	utc = pytz.utc
-	
+
 	data1 = Article(url, language=language)
 	data1.download()
 	data1.parse()
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
-	
+
 	headline = title.encode("utf-16be") # Parse the headline.
-	
+
 	try:
 		article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).encode("utf-16be") # Parse the article.
 	except:
 		article = data1.text.encode("utf-16be") # Parse the article.
-		
+
 	if "ap-smallphoto-img" in html:
 		if picture_number <= 5:
 			"""Parse the pictures."""
-		
+
 			picture = urllib2.urlopen("http://hosted.ap.org/" + soup.find("img", {"class": "ap-smallphoto-img"})["src"][:-10] + "-small.jpg").read()
-		
+
 			picture_number = 1
-		
+
 			"""Parse the picture credits."""
-	
+
 			credits = soup.find("span", {"class": "apCaption"}).contents[0].encode("utf-16be")
-		
+
 			"""Parse the picture captions."""
-	
+
 			url_captions = urllib2.urlopen("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).read()
 			soup = BeautifulSoup(url_captions, "lxml")
 			caption = soup.find("font", {"class": "photo"}).contents[0].encode("utf-16be")
@@ -1206,12 +1207,12 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 		picture = 0
 		credits = 0
 		caption = 0
-	
+
 	if " (AP)" in article.decode("utf-16be"):
 		location = article.decode("utf-16be").split(" (AP)", 1)[0]
 	else:
 		location = 0
-			
+
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
