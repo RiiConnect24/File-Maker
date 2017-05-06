@@ -72,7 +72,7 @@ def download_source(name, mode, thumb, language_code, countries, data):
 
 	if production:
 		"""This will use a webhook to log that the script has been ran."""
-		
+
 		data = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/profile_news.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": thumb, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
 		for url in webhook_urls:
@@ -320,7 +320,7 @@ def make_header(country_code, languages, language_code, goo_flag, language_selec
 		numbers += 1
 
 		header[numbers] = u8(language)
-		
+
 	"""Fills the rest of the languages as null."""
 
 	while numbers < 16:
@@ -518,7 +518,7 @@ def make_source_table(header, articles_table, data):
 	header["source_offset"] = offset_count() # Offset for the source table.
 
 	source_articles = []
-	
+
 	"""These are the picture and position values."""
 
 	sources = {
@@ -677,7 +677,7 @@ def make_copyright(source_table, language_code, data):
 	dictionaries.append(copyright)
 
 	source_articles = []
-	
+
 	"""Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
 	sources = {
@@ -737,7 +737,7 @@ def make_source_pictures(source_table, data):
 	dictionaries.append(source_pictures)
 
 	source_articles = []
-	
+
 	"""These are the news sources which will get a custom news picture from them."""
 
 	sources = ["ANP", "ap", "dpa", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl"]
@@ -781,7 +781,7 @@ def make_pictures(pictures_table, data):
 def make_riiconnect24_text():
 	riiconnect24_text = collections.OrderedDict()
 	dictionaries.append(riiconnect24_text)
-	
+
 	"""The RiiConnect24 text is used just to say it's our file."""
 
 	riiconnect24_text["padding"] = u32(0) * 4 # Padding.
