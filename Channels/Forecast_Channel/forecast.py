@@ -683,7 +683,7 @@ def make_forecast_bin(list):
 		print "Writing Location Text Table ..."
 		for k, v in text_table.items(): file.write(v)
 		file.write(pad(16))
-		file.write('RIICONNECT24'.encode('ASCII')) # This is a watermark for the file.
+		file.write('RIICONNECT24'.encode('ASCII')) # This can be used to identify that we made this file.
 		file.flush()
 	file.close()
 	"""This is some complicated method used to generate offsets."""

@@ -782,7 +782,7 @@ def make_riiconnect24_text():
 	riiconnect24_text = collections.OrderedDict()
 	dictionaries.append(riiconnect24_text)
 
-	"""The RiiConnect24 text is used just to say it's our file."""
+	"""This can be used to identify that we made this file."""
 
 	riiconnect24_text["padding"] = u32(0) * 4 # Padding.
 	riiconnect24_text["text"] = "RIICONNECT24" # Text.
