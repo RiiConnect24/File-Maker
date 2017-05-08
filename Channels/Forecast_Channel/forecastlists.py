@@ -2145,7 +2145,7 @@ weathercities_international["Iqaluit"] = ["Iqaluit", "Nunavut", "Canada", "2d55c
 weathercities_international["George Town"] = ["George Town", "", "Cayman Islands", "0db9c62101030000"]
 weathercities_international["Santiago"] = ["Santiago", "Región Metropolitana", "Chile", "e837cdc007030000"]
 weathercities_international["Easter Island"] = ["Easter Island", "", "Chile", "ecb5b24109030000"]
-# weathercities_international["Cape Horn"] = ["Cape Horn", "", "Chile", "d831d02b09030000"]
+weathercities_international["Cape Horn"] = ["Cape Horn", "", "Chile", "d831d02b09030000"]
 weathercities_international["Bogotá"] = ["Bogotá", "Cundinamarca", "Colombia", "0345cb5207030000"]
 weathercities_international["Leticia"] = ["Leticia", "Amazonas", "Colombia", "fd01ce4407030000"]
 weathercities_international["San José"] = ["San José", "San José", "Costa Rica", "0710c43605030000"]
@@ -2456,7 +2456,7 @@ weathercities_international["Tel Aviv"] = ["Tel Aviv", "", "Israel", "16ca18b903
 weathercities_international["Erromango Island"] = ["Erromango Island", "", "Vanuatu", "f2ab783c00030000"]
 
 corrections = {
-	"The South Pole": "Amundsen-Scott South Pole Station",
+	"The South Pole": "South Poke",
 	"Moloka'i": "Molokai",
 	"Sri Jayawardenepura-Kotte": "Sri Jayewardenepura-Kotte",
 	"Teotihuacán": "San Juan Teotihuacan",
@@ -2468,6 +2468,7 @@ corrections = {
 	"Christmas Island": "Flying Fish Cove",
 	"Erromango Island": "Ipota",
 	"Arran": "Brodick",
+	"Cape Horn": "Puerto Williams",
 }
 
 country_corrections = {
