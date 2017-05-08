@@ -56,13 +56,10 @@ def u32_littleendian(data):
 
 # http://stackoverflow.com/a/600612/3874884
 def mkdir_p(path):
-    try:
-        os.makedirs(path)
+    try: os.makedirs(path)
     except OSError as exc:  # Python >2.5
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-        else:
-            raise
+        if exc.errno == errno.EEXIST and os.path.isdir(path): pass
+		else: raise
 
 def download_source(name, mode, thumb, language_code, countries, data):
 	print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
@@ -75,8 +72,7 @@ def download_source(name, mode, thumb, language_code, countries, data):
 
 		data = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/profile_news.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": thumb, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
-		for url in webhook_urls:
-			requests.post(url, json=data, allow_redirects=True)
+		for url in webhook_urls: requests.post(url, json=data, allow_redirects=True)
 
 		for country in countries:
 			copy_file(mode, "wii", country, language_code)
@@ -234,15 +230,13 @@ def make_news_bin(mode, console, data):
 
 		country_code = 1
 
-	global system
-	global dictionaries
+	global system, dictionaries
 
 	system = console
 
 	numbers = 0
 
-	if not os.path.exists("newstime"):
-		os.mkdir("newstime")
+	if not os.path.exists("newstime"): os.mkdir("newstime")
 
 	for topics in topics_news.values():
 		newstime = collections.OrderedDict()
@@ -280,15 +274,13 @@ def make_news_bin(mode, console, data):
 	headlines = []
 
 	for article in data.values():
-		if article[3].decode("utf-16be") not in headlines:
-			headlines.append(article[3].decode("utf-16be") + "\n")
+		if article[3].decode("utf-16be") not in headlines: headlines.append(article[3].decode("utf-16be") + "\n")
 
 	return "".join(headlines)
 
 """This is a function used to count offsets."""
 
-def offset_count():
-	return u32(12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
+def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
 
 """Return a timestamp."""
 
@@ -381,11 +373,11 @@ def make_wiimenu_articles(header, data):
 				header["headline_%s_size" % numbers] = u32(len(article[3])) # Size of the headline.
 				header["headline_%s_offset" % numbers] = offset_count() # Offset for the headline.
 				wiimenu_articles["headline_%s" % numbers] = article[3] # Headline.
+
 				"""For some reason, the News Channel uses this padding to separate news articles."""
-				if (int(binascii.hexlify(offset_count()), 16) + 2) % 4 == 0:
-					wiimenu_articles["padding_%s" % numbers] = u16(0) # Padding.
-				elif (int(binascii.hexlify(offset_count()), 16) + 4) % 4 == 0:
-					wiimenu_articles["padding_%s" % numbers] = u32(0) # Padding.
+
+				if (int(binascii.hexlify(offset_count()), 16) + 2) % 4 == 0: wiimenu_articles["padding_%s" % numbers] = u16(0) # Padding.
+				elif (int(binascii.hexlify(offset_count()), 16) + 4) % 4 == 0: wiimenu_articles["padding_%s" % numbers] = u32(0) # Padding.
 
 	header["wiimenu_articles_number"] = u32(numbers) # Number of Wii Menu article entries.
 
@@ -428,20 +420,18 @@ def make_timestamps_table(topics_table, topics_news, mode, data):
 
 		for numbers in range(0, 24):
 			start_time = datetime.today() - timedelta(hours = numbers)
-			times_files.append("newstime/" + "newstime." + str(start_time)[11:-13] + "-" + str(mode) + "-" + topics + "-" + system)
+			times_files.append("newstime/newstime.%s-%s-%s-%s" % (str(start_time)[11:-13], str(mode), topics, system))
 
 		for files in times_files:
 			if os.path.exists(files):
 				newstime = pickle.load(open(files, "rb"))
 
 				for keys in newstime.keys():
-					if keys not in times:
-						times[keys] = newstime[keys]
+					if keys not in times: times[keys] = newstime[keys]
 
 		times_list = []
 
-		for values in times.values():
-			times_list.append(values)
+		for values in times.values(): times_list.append(values)
 
 		timestamps = ''.join(times_list) # Timestamps.
 
@@ -478,8 +468,7 @@ def make_articles_table(header, locations_data, data):
 
 		for locations in locations_data.keys():
 			for article_name in locations_data[locations][1]:
-				if keys == article_name:
-					articles_table["location_%s_number" % numbers] = u32(locations_data.keys().index(locations)) # Number for the location.
+				if keys == article_name: articles_table["location_%s_number" % numbers] = u32(locations_data.keys().index(locations)) # Number for the location.
 
 		if article[4] != 0:
 			articles_table["term_timestamp_%s" % numbers] = get_timestamp(1) # Timestamp for the term.
@@ -492,16 +481,6 @@ def make_articles_table(header, locations_data, data):
 		articles_table["published_time_%s" % numbers] = article[0] # Published time.
 		articles_table["updated_time_%s" % numbers] = get_timestamp(1) # Updated time.
 		articles_table["headline_%s_size" % numbers] = u32(len(article[3])) # Size of the headline.
-
-		if len(article[3]) == 0:
-			print "Headline is 0."
-			print article[3].decode("utf-16be")
-			sys.exit(1)
-		elif len(article[2]) == 0:
-			print "Article is 0."
-			print article[2].decode("utf-16be")
-			sys.exit(1)
-
 		articles_table["headline_%s_offset" % numbers] = u32(0) # Offset for the headline.
 		articles_table["article_%s_size" % numbers] = u32(len(article[2])) # Size of the article.
 		articles_table["article_%s_offset" % numbers] = u32(0) # Offset for the article.
@@ -676,11 +655,16 @@ def make_copyright(source_table, language_code, data):
 	copyright = collections.OrderedDict()
 	dictionaries.append(copyright)
 
-	source_articles = []
+	sources = []
+
+	source_names = {
+		"mainichi": "(毎日新聞)".decode("utf-8").encode("utf-16be"),
+		"news24": "(日テレNEWS24)".decode("utf-8").encode("utf-16be"),
+	}
 
 	"""Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
-	sources = {
+	copyrights = {
 		"ap": ("Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"reuters": ("© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP": ("All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
@@ -696,24 +680,30 @@ def make_copyright(source_table, language_code, data):
 	}
 
 	for article in data.values():
-		if article[9] not in source_articles:
+		if article[9] not in sources:
+			if article[9] in source_names:
+				source_name = source_names[article[9]]
+
+				source_table["name_size_%s"] = u32(len(source_name)) # Size of the source name.
+
+				source_table["name_offset_%s" % article[9]] = offset_count() # Offset for the source name.
+
+				copyright["source_name_read_%s" % article[9]] = source_name # Read the source name.
+				copyright["padding_source_name_%s" % article[9]] = u16(0) # Padding for the source name.
+
 			if article[9] == "AFP":
-				if language_code == 3:
-					source = sources["AFP_french"]
-				else:
-					source = sources[article[9]]
-			else:
-				source = sources[article[9]]
+				if language_code == 3: copyright = copyrights["AFP_french"]
+				else: copyright = copyrights[article[9]]
+			else: copyright = copyrights[article[9]]
 
-			source_articles.append(article[9])
+			source_table["copyright_size_%s" % article[9]] = u32(len(copyright)) # Size of the copyright.
 
-			source_table["copyright_size_%s" % article[9]] = u32(len(source)) # Size of the copyright.
+			source_table["copyright_offset_%s" % article[9]] = offset_count() # Offset for the copyright.
 
-			if source != "":
-				source_table["copyright_offset_%s" % article[9]] = offset_count() # Offset for the copyright.
-
-			copyright["copyright_read_%s" % article[9]] = source # Read the copyright.
+			copyright["copyright_read_%s" % article[9]] = copyright # Read the copyright.
 			copyright["padding_copyright_%s" % article[9]] = u16(0) # Padding for the copyright.
+
+			sources.append(article[9])
 
 """Add the locations."""
 
@@ -771,8 +761,7 @@ def make_pictures(pictures_table, data):
 			pictures["nullbyte_%s_pictures" % numbers] = u8(0) # Null byte for the pictures.
 
 			for types in ["captions", "credits"]:
-				if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table["%s_%s_size" % (types, numbers)] == u32(0):
-					pictures_table["%s_%s_offset" % (types, numbers)] = u32(0)
+				if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table["%s_%s_size" % (types, numbers)] == u32(0): pictures_table["%s_%s_offset" % (types, numbers)] = u32(0)
 
 	return pictures
 
@@ -794,11 +783,9 @@ def write_dictionary(mode):
 
 	for dictionary in dictionaries:
 		for values in dictionary.values():
-			with open(newsfilename + "-1", "a+") as dest_file:
-				dest_file.write(values)
+			with open(newsfilename + "-1", "a+") as dest_file: dest_file.write(values)
 
-	with open(newsfilename + "-1", "rb") as source_file:
-		read = source_file.read()
+	with open(newsfilename + "-1", "rb") as source_file: read = source_file.read()
 
 	with open(newsfilename + "-2", "w+") as dest_file:
 		dest_file.write(u32(512))
@@ -810,11 +797,9 @@ def write_dictionary(mode):
 
 	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", newsfilename + "-2", newsfilename], stdout=FNULL, stderr=subprocess.STDOUT)
 
-	with open(newsfilename, "rb") as source_file:
-		read = source_file.read()
+	with open(newsfilename, "rb") as source_file: read = source_file.read()
 
-	with open(key_path, "rb") as source_file:
-		private_key_data = source_file.read()
+	with open(key_path, "rb") as source_file: private_key_data = source_file.read()
 
 	private_key = rsa.PrivateKey.load_pkcs1(private_key_data, "PEM")
 

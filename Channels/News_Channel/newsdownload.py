@@ -21,7 +21,7 @@ import subprocess
 import struct
 import time # Used to get time stuff..
 import urllib2 # Needed to download a few things for the news.
-import tempfile # For resizing images etc
+import tempfile # For resizing images etc.
 from bs4 import BeautifulSoup # Used to parse HTML.
 from config import *
 from datetime import timedelta, datetime, date # Used to get time stuff.
