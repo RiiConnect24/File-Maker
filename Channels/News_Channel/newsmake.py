@@ -59,7 +59,7 @@ def mkdir_p(path):
     try: os.makedirs(path)
     except OSError as exc:  # Python >2.5
         if exc.errno == errno.EEXIST and os.path.isdir(path): pass
-		else: raise
+	else: raise
 
 def download_source(name, mode, thumb, language_code, countries, data):
 	print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
@@ -263,7 +263,7 @@ def make_news_bin(mode, console, data):
 	pictures_table = make_pictures_table(header, data)
 	articles = make_articles(pictures_table, articles_table, data)
 	topics = make_topics(topics_table, source_table, 0, topics_news, 0)
-	copyright = make_copyright(source_table, language_code, data)
+	source_name_copyright = make_source_name_copyright(source_table, language_code, data)
 	locations = make_locations(locations_table, locations_data)
 	source_pictures = make_source_pictures(source_table, data)
 	pictures = make_pictures(pictures_table, data)
@@ -651,9 +651,9 @@ def make_topics(topics_table, source_table, message, topics_news, message_flag):
 
 	return topics
 
-def make_copyright(source_table, language_code, data):
-	copyright = collections.OrderedDict()
-	dictionaries.append(copyright)
+def make_source_name_copyright(source_table, language_code, data):
+	source_name_copyright = collections.OrderedDict()
+	dictionaries.append(source_name_copyright)
 
 	sources = []
 
@@ -688,8 +688,8 @@ def make_copyright(source_table, language_code, data):
 
 				source_table["name_offset_%s" % article[9]] = offset_count() # Offset for the source name.
 
-				copyright["source_name_read_%s" % article[9]] = source_name # Read the source name.
-				copyright["padding_source_name_%s" % article[9]] = u16(0) # Padding for the source name.
+				source_name_copyright["source_name_read_%s" % article[9]] = source_name # Read the source name.
+				source_name_copyright["padding_source_name_%s" % article[9]] = u16(0) # Padding for the source name.
 
 			if article[9] == "AFP":
 				if language_code == 3: copyright = copyrights["AFP_french"]
@@ -700,8 +700,8 @@ def make_copyright(source_table, language_code, data):
 
 			source_table["copyright_offset_%s" % article[9]] = offset_count() # Offset for the copyright.
 
-			copyright["copyright_read_%s" % article[9]] = copyright # Read the copyright.
-			copyright["padding_copyright_%s" % article[9]] = u16(0) # Padding for the copyright.
+			source_name_copyright["copyright_read_%s" % article[9]] = copyright # Read the copyright.
+			source_name_copyright["padding_copyright_%s" % article[9]] = u16(0) # Padding for the copyright.
 
 			sources.append(article[9])
 
