@@ -684,7 +684,7 @@ def make_source_name_copyright(source_table, language_code, data):
 			if article[9] in source_names:
 				source_name = source_names[article[9]]
 
-				source_table["name_size_%s"] = u32(len(source_name)) # Size of the source name.
+				source_table["name_size_%s" % article[9]] = u32(len(source_name)) # Size of the source name.
 
 				source_table["name_offset_%s" % article[9]] = offset_count() # Offset for the source name.
 
