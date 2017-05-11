@@ -471,7 +471,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 	for text in soup.findAll("p", {"class": "txt"}):
 		article += " " + text.getText().strip() + "\n\n"
 
-	article = textwrap.wrap(article, 30)
+	article = textwrap.wrap(article, 30
 
 	article = article.encode("utf-16be")
 
