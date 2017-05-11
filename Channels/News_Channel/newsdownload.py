@@ -22,6 +22,7 @@ import struct
 import time # Used to get time stuff..
 import urllib2 # Needed to download a few things for the news.
 import tempfile # For resizing images etc.
+import textwrap
 from bs4 import BeautifulSoup # Used to parse HTML.
 from config import *
 from datetime import timedelta, datetime, date # Used to get time stuff.
@@ -469,6 +470,8 @@ def parsedata_mainichi(url, title, updated, picture_number):
 
 	for text in soup.findAll("p", {"class": "txt"}):
 		article += " " + text.getText().strip() + "\n\n"
+
+	article = textwrap.wrap(article, 30)
 
 	article = article.encode("utf-16be")
 
