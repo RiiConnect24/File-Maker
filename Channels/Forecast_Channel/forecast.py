@@ -24,6 +24,7 @@ import sys
 import time
 import io
 import random
+import rollbar
 import rsa
 import xmltodict
 from config import *
@@ -53,6 +54,11 @@ print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
 print "Preparing ..."
 
+if production == True: rollbar_mode = "production"
+elif production == False: rollbar_mode = "development"
+
+rollbar.init(rollbar_key, rollbar_mode)
+
 uvindex = {}
 wind = {}
 weathericon = {}
@@ -76,18 +82,21 @@ weathervalue_text_offsets = {}
 def u8(data):
 	if data < 0 or data > 255:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u8 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u16 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">I", data)
 
@@ -181,7 +190,7 @@ def output(text):
 	sys.stdout.flush()
 
 def get_icon(icon,list,key):
-	if get_index(list,key,2) is 'Japan': return get_weatherjpnicon(icon)
+	if get_index(list,key,2) is "Japan": return get_weatherjpnicon(icon)
 	else: return get_weathericon(icon)
 
 def test_keys():
@@ -195,7 +204,7 @@ def test_keys():
 		if keys % 10 == 0 or keys == len(accuweather_api_keys): print str(keys) + " / " + str(len(accuweather_api_keys)) + " checked."
 		testapi = request_data("http://dataservice.accuweather.com/locations/v1/regions?apikey=%s" % key)
 		if testapi is not None:
-			ratelimit_remaining = int(testapi.headers['RateLimit-Remaining'])
+			ratelimit_remaining = int(testapi.headers["RateLimit-Remaining"])
 			if ratelimit_remaining > 0: total+=ratelimit_remaining
 			else: invalid = True
 		else: invalid = True
@@ -820,7 +829,9 @@ def get_data(list, name):
 			get_legacy_api(list, name)
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
-	else: output('Unable to retrieve data for %s - using blank data' % name)
+	else:
+		output("Unable to retrieve data for %s - using blank data" % name)
+		rollbar.report_message("Unable to retrieve data for %s - using blank data" % name, "warning")
 	progress(float(citycount)/float(len(list)-cached)*100,list)
 
 def make_header_short(list):
