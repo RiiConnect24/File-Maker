@@ -2842,3 +2842,19 @@ weatherconditions[41] = [["雷雨を伴い所により曇り", "Partly Cloudy\nw
 weatherconditions[42] = [["雷雨を伴いおおむね曇り", "Mostly Cloudy\nwith Thunderstorms\0", "Teilweise bewölkt mit Gewitter", "Principalement couvert, avec orages", "Muy nublado con Tormentas eléctricas", "Prevalentemente nuvoloso con temporali", "Overwegend bewolkt met onweersbuien"], "84CA", "807D", "00D3", "800E"]
 weatherconditions[43] = [["フラワーズを伴いおおむね曇り", "Mostly Cloudy\nwith Flurries\0", "Stark bewölkt mit Flurries", "Principalement couvert, avec rivières", "Muy nublado con ráfagas de nieve", "Prevalentemente nuvoloso con raffica", "Overwegend bewolkt met vlagen"], "8592", "8076", "00D4", "800D"]
 weatherconditions[44] = [["雪おおむね曇り", "Mostly Cloudy\nwith Snow\0", "Stark bewölkt mit Schnee", "Principalement couvert, avec neige", "Muy nublado con nieve", "Prevalentemente nuvoloso con la neve", "Overwegend bewolkt met sneeuw"], "84CC", "806D", "00D5", "800D"]
+
+uvindex = collections.OrderedDict()
+
+uvindex[0] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
+uvindex[1] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
+uvindex[2] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
+uvindex[3] = ["やや強い", "Moderate", "Leicht erhöht", "Modéré", "Moderado", "Medio", "Gemiddeld"]
+uvindex[4] = ["やや強い", "Moderate", "Leicht erhöht", "Modéré", "Moderado", "Medio", "Gemiddeld"]
+uvindex[5] = ["やや強い", "Moderate", "Leicht erhöht", "Modéré", "Moderado", "Medio", "Gemiddeld"]
+uvindex[6] = ["強い", "High", "Hoch", "Elevé", "Alto", "Alto", "Hoog"]
+uvindex[7] = ["強い", "High", "Hoch", "Elevé", "Alto", "Alto", "Hoog"]
+uvindex[8] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
+uvindex[9] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
+uvindex[10] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
+uvindex[11] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
+uvindex[12] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
