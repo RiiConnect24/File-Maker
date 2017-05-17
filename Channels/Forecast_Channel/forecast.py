@@ -30,6 +30,13 @@ import xmltodict
 from config import *
 from datetime import datetime, timedelta
 
+"""Set Rollbar up."""
+
+if production == True: rollbar_mode = "production"
+elif production == False: rollbar_mode = "development"
+
+rollbar.init(rollbar_key, rollbar_mode)
+
 apicount = 0 # API Key Count
 apicycle = 0 # API Key Cycle Count
 japcount = 0 # Short Forecast Table Count
@@ -53,11 +60,6 @@ weathercities = [forecastlists.weathercities008, forecastlists.weathercities009,
 print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
 print "Preparing ..."
-
-if production == True: rollbar_mode = "production"
-elif production == False: rollbar_mode = "development"
-
-rollbar.init(rollbar_key, rollbar_mode)
 
 uvindex = {}
 wind = {}

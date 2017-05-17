@@ -16,7 +16,8 @@ import newsdownload # Used to call the locations downloader.
 import os # Used to remove output from DSDecmp.
 import pickle # Used to save and load dictionaries.
 import requests
-import rsa # Used to make the RSA Signature.
+import rsa # Used to make the RSA signature.
+import rollbar
 import struct # Needed to pack u32s and other integers.
 import subprocess # Needed to run DSDecmp, which is for LZ77 Compression.
 import sys
@@ -28,29 +29,40 @@ reload(sys)
 sys.setdefaultencoding('ISO-8859-1')
 requests.packages.urllib3.disable_warnings()
 
+"""Set Rollbar up."""
+
+if production == True: rollbar_mode = "production"
+elif production == False: rollbar_mode = "development"
+
+rollbar.init(rollbar_key, rollbar_mode)
+
 """This will pack the integers."""
 
 def u8(data):
 	if data < 0 or data > 255:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u8 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u16 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">I", data)
 
 def u32_littleendian(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack("<I", data)
 

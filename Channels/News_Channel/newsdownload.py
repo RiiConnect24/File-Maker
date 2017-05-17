@@ -17,6 +17,7 @@ import jsonp2json
 import os
 import pytz # Used to find time zones.
 import requests
+import rollbar
 import subprocess
 import struct
 import time # Used to get time stuff..
@@ -32,29 +33,40 @@ from PIL import Image # Used to work with images.
 from resizeimage import resizeimage # Used to resize images.
 from unidecode import unidecode
 
+"""Set Rollbar up."""
+
+if production == True: rollbar_mode = "production"
+elif production == False: rollbar_mode = "development"
+
+rollbar.init(rollbar_key, rollbar_mode)
+
 """This will pack the integers."""
 
 def u8(data):
 	if data < 0 or data > 255:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u8 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u16 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">I", data)
 
 def u32_littleendian(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
+		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack("<I", data)
 
