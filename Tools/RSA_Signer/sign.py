@@ -82,8 +82,7 @@ elif (sys.argv[1] == "enc"):
 	with open(aes_key_path, "rb") as source_file:
 		key_data = binascii.hexlify(source_file.read())
 
-	with open(aes_iv_path, "rb") as source_file:
-		iv_data = binascii.hexlify(source_file.read())
+    iv_data = binascii.b2a_hex(os.urandom(16))
 
 	encrypt_aes = subprocess.call(["openssl", "enc", "-aes-128-ofb", "-in", input_file, "-out", output_file, "-K", key_data, "-iv", iv_data])
 
