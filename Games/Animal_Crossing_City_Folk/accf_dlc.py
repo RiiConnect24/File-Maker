@@ -10,19 +10,19 @@ import textwrap
 """This will pack the integers."""
 
 def u8(data):
-    return struct.pack(">B", data)
+	return struct.pack(">B", data)
 
 
 def u16(data):
-    return struct.pack(">H", data)
+	return struct.pack(">H", data)
 
 
 def u32(data):
-    return struct.pack(">I", data)
+	return struct.pack(">I", data)
 
 
 def u32_littleendian(data):
-    return struct.pack("<I", data)
+	return struct.pack("<I", data)
 
 def main():
 	print "Animal Crossing: City Folk DLC Maker, by Larsenv."
@@ -101,9 +101,9 @@ def write_dictionary():
 	open("item.bin", "w+")
 
 	for dictionary in dictionaries:
-        for values in dictionary.values():
-            with open("item.bin", "a+") as dest_file:
-                    dest_file.write(values)
+		for values in dictionary.values():
+			with open("item.bin", "a+") as dest_file:
+				dest_file.write(values)
 
 	with open("item.bin", "a+") as dest_file:
 		dest_file.write(binascii.unhexlify(subprocess.check_output(["perl", "crc32.pl"])[:8]))
