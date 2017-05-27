@@ -11,7 +11,8 @@
 import binascii # Used to write to stuff in hex.
 import calendar # Used for the timestamps.
 import collections # Used to write stuff in dictionaries in order.
-import errno # Used to catch errors when creating dirs recursively.
+import errno # Used to catch errors when creating directories recursively.
+import glob # Used to find files in a directory.
 import newsdownload # Used to call the locations downloader.
 import os # Used to remove output from DSDecmp.
 import pickle # Used to save and load dictionaries.
