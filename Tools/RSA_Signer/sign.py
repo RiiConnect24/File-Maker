@@ -67,21 +67,22 @@ if (sys.argv[1] == "dec"):
 		dest_file.write(read)
 
 	os.remove(input_file2)
+
 elif (sys.argv[1] == "enc"):
 	with open(input_file, "rb") as source_file:
 		read = source_file.read()
 
-	with open(key_path, "rb") as source_file:
+	with open(rsa_key_path, "rb") as source_file:
 		private_key_data = source_file.read()
 
 	private_key = rsa.PrivateKey.load_pkcs1(private_key_data, "PEM")
 
 	signature = rsa.sign(read, private_key, "SHA-1")
 
-	with open("key.bin", "rb") as source_file:
+	with open(aes_key_path, "rb") as source_file:
 		key_data = binascii.hexlify(source_file.read())
 
-	with open("iv.bin", "rb") as source_file:
+	with open(aes_iv_path, "rb") as source_file:
 		iv_data = binascii.hexlify(source_file.read())
 
 	encrypt_aes = subprocess.call(["openssl", "enc", "-aes-128-ofb", "-in", input_file, "-out", output_file, "-K", key_data, "-iv", iv_data])
