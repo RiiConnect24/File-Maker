@@ -7,19 +7,19 @@ import sys
 from config import *
 
 def u8(data):
-    return struct.pack(">B", data)
+	return struct.pack(">B", data)
 
 
 def u16(data):
-    return struct.pack(">H", data)
+	return struct.pack(">H", data)
 
 
 def u32(data):
-    return struct.pack(">I", data)
+	return struct.pack(">I", data)
 
 
 def u32_littleendian(data):
-    return struct.pack("<I", data)
+	return struct.pack("<I", data)
 
 if (len(sys.argv) != 4):
 	print "Usage: sign.py <mode> <input file> <output file>"
@@ -66,7 +66,7 @@ if (sys.argv[1] == "dec"):
 		dest_file.write(signature)
 		dest_file.write(read)
 
-	os.remove(input_file2)
+	os.remove(input_file)
 
 elif (sys.argv[1] == "enc"):
 	with open(input_file, "rb") as source_file:
@@ -82,7 +82,7 @@ elif (sys.argv[1] == "enc"):
 	with open(aes_key_path, "rb") as source_file:
 		key_data = binascii.hexlify(source_file.read())
 
-    iv_data = binascii.b2a_hex(os.urandom(16))
+	iv_data = binascii.b2a_hex(os.urandom(16))
 
 	encrypt_aes = subprocess.call(["openssl", "enc", "-aes-128-ofb", "-in", input_file, "-out", output_file, "-K", key_data, "-iv", iv_data])
 
