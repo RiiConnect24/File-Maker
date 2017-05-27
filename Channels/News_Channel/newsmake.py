@@ -110,6 +110,12 @@ def copy_file(mode, system, country, language_code):
 		path = "%s/%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
 		subprocess.call(["cp", newsfilename, path])
 
+	filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/1/049/news.bin.*"))
+
+	if filesize > 3712000:
+		print "Error: News files exceed the maximum file size amount."
+		rollbar.report_message("News files exceed the maximum file size amount.", "critical")
+
 """Run the functions to make the news."""
 
 def make_news_bin(mode, console, data):
