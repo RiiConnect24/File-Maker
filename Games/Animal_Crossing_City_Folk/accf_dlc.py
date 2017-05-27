@@ -100,9 +100,10 @@ def make_letter():
 def write_dictionary():
 	open("item.bin", "w+")
 
-	for values in dictionary.values():
-		with open("item.bin", "a+") as dest_file:
-			dest_file.write(values)
+	for dictionary in dictionaries:
+        for values in dictionary.values():
+            with open("item.bin", "a+") as dest_file:
+                    dest_file.write(values)
 
 	with open("item.bin", "a+") as dest_file:
 		dest_file.write(binascii.unhexlify(subprocess.check_output(["perl", "crc32.pl"])[:8]))
