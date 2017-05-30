@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 2.6
+# VERSION 3.0
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ****************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -16,6 +16,7 @@ import json
 import math
 import numpy
 import os
+import gc
 import pycountry
 import requests
 import struct
@@ -24,18 +25,12 @@ import sys
 import time
 import io
 import random
-import rollbar
 import rsa
 import xmltodict
+import threading
+import rollbar
 from config import *
 from datetime import datetime, timedelta
-
-"""Set Rollbar up."""
-
-if production == True: rollbar_mode = "production"
-elif production == False: rollbar_mode = "development"
-
-rollbar.init(rollbar_key, rollbar_mode)
 
 apicount = 0 # API Key Count
 apicycle = 0 # API Key Cycle Count
@@ -56,10 +51,16 @@ count = {} # Offset Storage
 file = None
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
+usbins = [1,3,4]
 
 print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
 print "Preparing ..."
+
+if production: rollbar_mode = "production"
+else: rollbar_mode = "development"
+
+rollbar.init(rollbar_key, rollbar_mode)
 
 uvindex = {}
 wind = {}
@@ -134,13 +135,13 @@ def get_epoch():
 	return int(time.time())
 
 def get_city(list, key):
-	return list[key][0]
+	return list[key][0][1]
 
 def get_region(list, key):
-	return list[key][1]
+	return list[key][1][1]
 
 def get_country(list, key):
-	return list[key][2]
+	return list[key][2][1]
 
 def get_all(list, key):
 	return ", ".join(filter(None, [get_city(list, key),get_region(list, key),get_country(list, key)]))
@@ -155,9 +156,7 @@ def get_number(list, key):
 	return list.keys().index(key)
 
 def pad(amnt):
-	buffer = ""
-	for _ in range(amnt): buffer+="\0"
-	return buffer
+	return "\0"*amnt
 
 def get_index(list, key, num):
 	if num != 0: return list[key][num]
@@ -182,14 +181,28 @@ def progress(percent,list):
 		else: display = "✓"
 		progcount = 0
 	else: display = prog[progcount]
-	sys.stdout.write("\rProgress: %s%% [%s] (%s/%s) [%s] ..." % (int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display))
+	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,concurrent,"."*progcount))
 	sys.stdout.flush()
 	progcount+=1
 	if progcount == 4: progcount = 0
+	
+def build_progress():
+	i = 0
+	while build:
+		sys.stdout.write("\r"+" "*58+"\rBuilding Files: "+"["+i*" "+"="*3+(35-i-2)*" "+"] ...")
+		sys.stdout.flush()
+		i+=1
+		if i == 34: i = 0
+		time.sleep(0.075)
 
 def output(text):
-	sys.stdout.write("\r%s\r%s\n\n" % ((" "*69),text))
+	sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
 	sys.stdout.flush()
+	
+def display_loop(list):
+	while loop == True:
+		progress(float(citycount)/float(len(list)-cached)*100,list)
+		time.sleep(0.1)
 
 def get_icon(icon,list,key):
 	if get_index(list,key,2) is "Japan": return get_weatherjpnicon(icon)
@@ -219,7 +232,6 @@ def test_keys():
 """Resets bin-specific values for next generation."""
 
 def reset_data(l):
-	print "Reloading ..."
 	global japcount,seek_offset,seek_base,number,file,constant,count,cached,citycount
 	japcount = 0
 	seek_offset = 0
@@ -279,9 +291,7 @@ def request_data(url):
 	c = 0
 	while c == 0:
 		if i == 4: return -1
-		if i > 0:
-			time.sleep(0.3)
-			retrycount+=1
+		if i > 0: retrycount+=1
 		data = requests.get(url, headers=header)
 		status_code = data.status_code
 		if "regions" in url and status_code != 200: return None
@@ -355,13 +365,13 @@ def get_locationcode(list):
 	weatherloc[listid]['null'] = {}
 	weatherloc[listid]['states'] = {}
 	for k, v in list.items():
-		if v[1] is "" and v[2] not in forecastlists.bincountries: weatherloc[listid]['null'].setdefault(v[0], len(weatherloc[listid]['null'])+1)
+		if v[1][1] is "" and v[2][1] not in forecastlists.bincountries: weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null'])+1)
 		else:
-			weatherloc[listid].setdefault(v[2], {})
-			weatherloc[listid][v[2]].setdefault(v[1], {})
-			weatherloc[listid][v[2]][v[1]].setdefault(v[0], len(weatherloc[listid][v[2]][v[1]])+1)
-			weatherloc[listid]['states'].setdefault(v[2], {})
-			weatherloc[listid]['states'][v[2]].setdefault(v[1], len(weatherloc[listid]['states'][v[2]])+2)
+			weatherloc[listid].setdefault(v[2][1], {})
+			weatherloc[listid][v[2][1]].setdefault(v[1][1], {})
+			weatherloc[listid][v[2][1]][v[1][1]].setdefault(v[0][1], len(weatherloc[listid][v[2][1]][v[1][1]])+1)
+			weatherloc[listid]['states'].setdefault(v[2][1], {})
+			weatherloc[listid]['states'][v[2][1]].setdefault(v[1][1], len(weatherloc[listid]['states'][v[2][1]])+2)
 
 """If the script was unable to get forecast for a city, it's filled with this blank data."""
 
@@ -610,31 +620,12 @@ def get_hourly_forecast(list, key):
 		if temp > -1 and temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
 		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
-dictionaries_forecast = []
-dictionaries_short = []
-dictionaries_texttable = []
-dictionaries_laundrytable = []
-dictionaries_forecast_short = []
-dictionaries_forecast_weather = []
-dictionaries_uvindextable = []
-dictionaries_laundryindextable = []
-dictionaries_uvindextexttable = []
-dictionaries_laundrytexttable = []
-dictionaries_pollentexttable = []
-dictionaries_pollenindextable = []
-dictionaries_locationtable = []
-dictionaries_weathervaluetexttable = []
-dictionaries_weathervalue_offsettable = []
-
 def make_bins(list):
-	print "[-] Generating Forecast.bin ..."
 	make_forecast_bin(list)
-	print "[-] Generating Short.bin ..."
 	make_short_bin(list)
 
 def make_forecast_bin(list):
 	global japcount,constant,count,file,seek_offset,seek_base,extension
-	print "Building Binary Tables ..."
 	header = make_header_forecast(list)
 	long_forecast_table = make_long_forecast_table(list)
 	location_table = make_location_table(list)
@@ -648,7 +639,6 @@ def make_forecast_bin(list):
 	weathervalue_text_table = make_weather_value_table()
 	weathervalue_offset_table = make_weather_offset_table()
 	short_japan_tables = make_forecast_short_table(list)
-	print "Processing ..."
 	if mode == 1: extension = "bin"
 	elif mode == 2: extension = "bi2"
 	file1 = 'forecast~.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
@@ -659,39 +649,27 @@ def make_forecast_bin(list):
 		file.write(pad(20))
 		for k, v in header.items(): file.write(v)
 		increment()
-		print "Writing Long Forecast Table ..."
 		for k, v in long_forecast_table.items(): file.write(v)
 		count[9] = file.tell()
 		if japcount > 0:
-			print "Writing Short Forecast Table ..."
 			for k, v in short_japan_tables.items(): file.write(v)
 		increment()
-		print "Writing Weather Value Offset Table ..."
 		for k, v in weathervalue_offset_table.items(): file.write(v)
 		increment()
-		print "Writing UV Index Table ..."
 		for k, v in uvindex_table.items(): file.write(v)
 		increment()
-		print "Writing Laundry Index Table ..."
 		for k, v in laundryindex_table.items(): file.write(v)
 		increment()
-		print "Writing Pollen Index Table ..."
 		for k, v in pollenindex_table.items(): file.write(v)
 		increment()
-		print "Writing Location Table ..."
 		for k, v in location_table.items(): file.write(v)
 		increment()
-		print "Writing Weather Value Text Table ..."
 		for k, v in weathervalue_text_table.items(): file.write(v)
 		increment()
-		print "Writing UV Index Text Table ..."
 		for k, v in uvindex_text_table.items(): file.write(v)
-		print "Writing Laundry Index Text Table ..."
 		for k, v in laundry_text_table.items(): file.write(v)
-		print "Writing Pollen Index Text Table ..."
 		for k, v in pollen_text_table.items(): file.write(v)
 		increment()
-		print "Writing Location Text Table ..."
 		for k, v in text_table.items(): file.write(v)
 		file.write(pad(16))
 		file.write('RIICONNECT24'.encode('ASCII')) # This can be used to identify that we made this file.
@@ -700,7 +678,6 @@ def make_forecast_bin(list):
 	"""This is some complicated method used to generate offsets."""
 	"""We could eventually replace it with a function which does the work."""
 	"""However, it'd be complicated to modify the script to do that."""
-	print "Processing Offsets ..."
 	file = open(file1, 'r+b')
 	hex_write(12,timestamps(0,0),0,0)
 	hex_write(16,timestamps(2,0),0,0)
@@ -742,7 +719,6 @@ def make_forecast_bin(list):
 	for i in [8,10,6,12]:
 		offset_write(8,i,0)
 	"""Location Text"""
-	print "Writing Location Text Offsets ..."
 	seek_offset = count[5]
 	file.seek(seek_offset)
 	for keys in list.keys():
@@ -759,13 +735,12 @@ def make_forecast_bin(list):
 		hex_write(0,country1,4,12)
 		file.seek(seek_offset)
 	file.close()
-	os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12') # This cuts off the first 12 bytes.
-	if production: sign_file(file2, file3, file4)
-	os.remove(file1)
-	print 'File Generation Successful'
+	if production:
+		os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12') # This cuts off the first 12 bytes.
+		sign_file(file2, file3, file4)
+		os.remove(file1)
 
 def make_short_bin(list):
-	print "Building Binary Tables ..."
 	short_forecast_header = make_header_short(list)
 	short_forecast_table = make_short_forecast_table(list)
 	file1 = 'short.%s~.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
@@ -779,15 +754,12 @@ def make_short_bin(list):
 		file.flush()
 	file.close()
 	if production: sign_file(file1, file2, file3)
-	print 'File Generation Successful'
 
 def sign_file(name, local_name, server_name):
-	print "[-] Processing " + local_name + " ..."
+	output("Processing " + local_name + " ...")
 	file = open(name, 'rb')
 	copy = file.read()
-	print "Calculating CRC32 ..."
 	crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
-	print "Calculating Size ..."
 	size = os.path.getsize(name)+12
 	dest = open(local_name, 'w+')
 	dest.write(u32(0))
@@ -797,13 +769,11 @@ def sign_file(name, local_name, server_name):
 	os.remove(name)
 	dest.close()
 	file.close()
-	print "Compressing ..."
 	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", local_name, local_name + "-1"]) # Compresses the file with LZ77 compression.
 	file = open(local_name + '-1', 'rb')
 	new = file.read()
 	dest = open(local_name, "w+")
 	key = open(key_path, 'rb')
-	print "RSA Signing ..."
 	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM") # Loads the RSA key.
 	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding. Beautiful.
 	dest.write(binascii.unhexlify(str(0).zfill(128))) # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
@@ -818,10 +788,12 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	global citycount,cache,apilegacy,apirequests
+	global citycount,cache,apilegacy,apirequests,last_dl,concurrent
+	start_time = time.time()
 	citycount+=1
 	cache[name] = get_all(list, name)
 	globe[name] = {}
+	if useMultithreaded: concurrent+=1
 	if useLegacy: apirequests+=2
 	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
@@ -832,13 +804,14 @@ def get_data(list, name):
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
 	else:
-		output("Unable to retrieve data for %s - using blank data" % name)
+		output('Unable to retrieve data for %s - using blank data' % name)
 		rollbar.report_message("Unable to retrieve data for %s - using blank data" % name, "warning")
-	progress(float(citycount)/float(len(list)-cached)*100,list)
+		progress(float(citycount)/float(len(list)-cached)*100,list)
+	last_dl = time.time()-start_time
+	if useMultithreaded: concurrent-=1
 
 def make_header_short(list):
 	header = collections.OrderedDict()
-	dictionaries_short.append(header)
 	header["country_code"] = u8(country_code) # Wii Country Code.
 	header["language_code"] = u32(language_code) # Wii Language Code.
 	header["unknown_1"] = u8(0) # Unknown.
@@ -851,7 +824,6 @@ def make_header_short(list):
 
 def make_header_forecast(list):
 	header = collections.OrderedDict()
-	dictionaries_forecast.append(header)
 	header["country_code"] = u8(country_code) # Wii Country Code.
 	header["language_code"] = u32(language_code) # Wii Language Code.
 	header["unknown_1"] = u8(1) # Unknown.
@@ -877,7 +849,6 @@ def make_header_forecast(list):
 
 def make_long_forecast_table(list):
 	long_forecast_table = collections.OrderedDict()
-	dictionaries_forecast.append(long_forecast_table)
 	for key in list.keys():
 		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2):
 			numbers = get_number(list, key)
@@ -985,7 +956,6 @@ def make_long_forecast_table(list):
 
 def make_short_forecast_table(list):
 	short_forecast_table = collections.OrderedDict()
-	dictionaries_short.append(short_forecast_table)
 	for key in list.keys():
 		numbers = get_number(list, key)
 		short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_loccode(list, key)) # Wii location code for city
@@ -1005,7 +975,6 @@ def make_short_forecast_table(list):
 
 def make_forecast_short_table(list):
 	short_forecast_table = collections.OrderedDict()
-	dictionaries_forecast_short.append(short_forecast_table)
 	for key in list.keys():
 		if get_loccode(list, key)[:2] != hex(country_code)[2:].zfill(2):
 			numbers = get_number(list, key)
@@ -1068,7 +1037,6 @@ def make_forecast_short_table(list):
 
 def make_uvindex_table():
 	uvindex_table = collections.OrderedDict()
-	dictionaries_uvindextable.append(uvindex_table)
 	uvindex_table["uv_0_number"] = u8(0)
 	uvindex_table["uv_0_padding"] = pad(3)
 	uvindex_table["uv_0_offset"] = u32(0)
@@ -1115,7 +1083,6 @@ def make_uvindex_table():
 
 def make_laundryindex_table():
 	laundryindex_table = collections.OrderedDict()
-	dictionaries_laundryindextable.append(laundryindex_table)
 	laundryindex_table["laundry_00_number"] = u8(0)
 	laundryindex_table["laundry_00_padding"] = pad(3)
 	laundryindex_table["laundry_00_offset"] = u32(0)
@@ -1159,7 +1126,6 @@ def make_laundryindex_table():
 
 def make_pollenindex_table():
 	pollenindex_table = collections.OrderedDict()
-	dictionaries_pollenindextable.append(pollenindex_table)
 	pollenindex_table["pollen_2_number"] = u8(2)
 	pollenindex_table["pollen_2_padding"] = pad(3)
 	pollenindex_table["pollen_2_offset"] = u32(0)
@@ -1177,209 +1143,36 @@ def make_pollenindex_table():
 	pollenindex_table["pollen_E7_offset"] = u32(0)
 
 	return pollenindex_table
-
-"""NOTE: \n is used as line feed."""
-"""Needs to be in sync with the value table below."""
-
+	
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
-	dictionaries_weathervaluetexttable.append(weathervalue_text_table)
-	weathervalue_text_table["day_sunny"] = "Sunny\0".encode("utf-16be")
-	weathervalue_text_table["day_mostly_sunny"] = "Mostly Sunny\0".encode("utf-16be")
-	weathervalue_text_table["day_partly_cloudy"] = "Partly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["day_intermittent_clouds"] = "Intermittent Clouds\0".encode("utf-16be")
-	weathervalue_text_table["day_haze"] = "Haze\0".encode("utf-16be")
-	weathervalue_text_table["day_mostly_cloudy"] = "Mostly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["day_cloudy"] = "Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["day_overcast"] = "Overcast\0".encode("utf-16be")
-	weathervalue_text_table["day_fog"] = "Fog\0".encode("utf-16be")
-	weathervalue_text_table["day_showers"] = "Showers\0".encode("utf-16be")
-	weathervalue_text_table["day_mostly_cloudy_with_showers"] = "Mostly Cloudy\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["day_partly_sunny_with_showers"] = "Partly Sunny\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["day_thunderstorms"] = "Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["day_mostly_cloudy_with_thunderstorms"] = "Mostly Cloudy\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["day_partly_sunny_with_thunderstorms"] = "Partly Sunny\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["day_rain"] = "Rain\0".encode("utf-16be")
-	weathervalue_text_table["day_flurries"] = "Flurries\0".encode("utf-16be")
-	weathervalue_text_table["day_mostly_cloudy_with_flurries"] = "Mostly Cloudy\nwith Flurries\0".encode("utf-16be")
-	weathervalue_text_table["day_partly_sunny_with_flurries"] = "Partly Sunny\nwith Flurries\0".encode("utf-16be")
-	weathervalue_text_table["day_snow"] = "Snow\0".encode("utf-16be")
-	weathervalue_text_table["day_mostly_cloudy_with_snow"] = "Mostly Cloudy\nwith Snow\0".encode("utf-16be")
-	weathervalue_text_table["day_ice"] = "Ice\0".encode("utf-16be")
-	weathervalue_text_table["day_sleet"] = "Sleet\0".encode("utf-16be")
-	weathervalue_text_table["day_freezing_rain"] = "Freezing Rain\0".encode("utf-16be")
-	weathervalue_text_table["day_rain_and_snow"] = "Rain and Snow\0".encode("utf-16be")
-	weathervalue_text_table["night_clear"] = "Clear\0".encode("utf-16be")
-	weathervalue_text_table["night_mostly_clear"] = "Mostly Clear\0".encode("utf-16be")
-	weathervalue_text_table["night_partly_cloudy"] = "Partly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["night_intermittent_clouds"] = "Intermittent Clouds\0".encode("utf-16be")
-	weathervalue_text_table["night_hazy_moonlight"] = "Hazy Moonlight\0".encode("utf-16be")
-	weathervalue_text_table["night_mostly_cloudy"] = "Mostly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["night_partly_cloudy_with_showers"] = "Partly Cloudy\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["night_mostly_cloudy_with_showers"] = "Mostly Cloudy\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["night_partly_cloudy_with_thunderstorms"] = "Partly Cloudy\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["night_mostly_cloudy_with_thunderstorms"] = "Mostly Cloudy\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["night_mostly_cloudy_with_flurries"] = "Mostly Cloudy\nwith Flurries\0".encode("utf-16be")
-	weathervalue_text_table["night_mostly_cloudy_with_snow"] = "Mostly Cloudy\nwith Snow\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_sunny"] = "Sunny\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_mostly_sunny"] = "Mostly Sunny\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_partly_cloudy"] = "Partly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_intermittent_clouds"] = "Intermittent Clouds\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_haze"] = "Haze\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_mostly_cloudy"] = "Mostly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_cloudy"] = "Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_overcast"] = "Overcast\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_fog"] = "Fog\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_showers"] = "Showers\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_mostly_cloudy_with_showers"] = "Mostly Cloudy\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_partly_sunny_with_showers"] = "Partly Sunny\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_thunderstorms"] = "Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_mostly_cloudy_with_thunderstorms"] = "Mostly Cloudy\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_partly_sunny_with_thunderstorms"] = "Partly Sunny\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_rain"] = "Rain\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_flurries"] = "Flurries\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_mostly_cloudy_with_flurries"] = "Mostly Cloudy\nwith Flurries\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_partly_sunny_with_flurries"] = "Partly Sunny\nwith Flurries\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_snow"] = "Snow\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_mostly_cloudy_with_snow"] = "Mostly Cloudy\nwith Snow\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_ice"] = "Ice\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_sleet"] = "Sleet\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_freezing_rain"] = "Freezing Rain\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_rain_and_snow"] = "Rain and Snow\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_clear"] = "Clear\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_mostly_clear"] = "Mostly Clear\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_partly_cloudy"] = "Partly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_intermittent_clouds"] = "Intermittent Clouds\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_hazy_moonlight"] = "Hazy Moonlight\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_mostly_cloudy"] = "Mostly Cloudy\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_partly_cloudy_with_showers"] = "Partly Cloudy\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_mostly_cloudy_with_showers"] = "Mostly Cloudy\nwith Showers\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_partly_cloudy_with_thunderstorms"] = "Partly Cloudy\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_mostly_cloudy_with_thunderstorms"] = "Mostly Cloudy\nwith Thunderstorms\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_mostly_cloudy_with_flurries"] = "Mostly Cloudy\nwith Flurries\0".encode("utf-16be")
-	weathervalue_text_table["japan_night_mostly_cloudy_with_snow"] = "Mostly Cloudy\nwith Snow\0".encode("utf-16be")
-	weathervalue_text_table["day_hot"] = "Hot\0".encode("utf-16be")
-	weathervalue_text_table["day_cold"] = "Cold\0".encode("utf-16be")
-	weathervalue_text_table["day_windy"] = "Windy\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_hot"] = "Hot\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_cold"] = "Cold\0".encode("utf-16be")
-	weathervalue_text_table["japan_day_windy"] = "Windy\0".encode("utf-16be")
-	weathervalue_text_table["end_padding"] = "\0".encode("utf-16be")
-
+	for k,v in forecastlists.weatherconditions.items():
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
 	i = 0
 	bytes = 0
 	for k,v in weathervalue_text_table.items():
 		weathervalue_text_offsets[i] = bytes
 		bytes+=len(v)
 		i+=1
-
 	return weathervalue_text_table
-
-"""Makes the weather value offset table."""
-
+	
 def make_weather_offset_table():
 	weathervalue_offset_table = collections.OrderedDict()
-	dictionaries_weathervalue_offsettable.append(weathervalue_offset_table)
-	weathervalue = collections.OrderedDict()
-	weathervalue['0464'] = '0065'
-	weathervalue['0462'] = '0065'
-	weathervalue['0465'] = '0066'
-	weathervalue['0463'] = '006B'
-	weathervalue['05F4'] = '007A'
-	weathervalue['04C9'] = '006B'
-	weathervalue['04C8'] = '006A'
-	weathervalue['0469'] = '006A'
-	weathervalue['0680'] = '007C'
-	weathervalue['052E'] = '0071'
-	weathervalue['04CB'] = '006C'
-	weathervalue['0467'] = '0067'
-	weathervalue['0784'] = '007D'
-	weathervalue['04CA'] = '007D'
-	weathervalue['0466'] = '007D'
-	weathervalue['052C'] = '006F'
-	weathervalue['0592'] = '0076'
-	weathervalue['04CD'] = '0076'
-	weathervalue['0468'] = '0068'
-	weathervalue['05E0'] = '0074'
-	weathervalue['04CC'] = '006D'
-	weathervalue['05AE'] = '0079'
-	weathervalue['04CF'] = '0079'
-	weathervalue['0549'] = '0073'
-	weathervalue['052F'] = '0072'
-	weathervalue['8464'] = '8065'
-	weathervalue['85F4'] = '8065'
-	weathervalue['8465'] = '8066'
-	weathervalue['84C9'] = '806B'
-	weathervalue['05F8'] = '807A'
-	weathervalue['84C8'] = '806A'
-	weathervalue['8466'] = '806C'
-	weathervalue['852E'] = '8071'
-	weathervalue['8467'] = '807D'
-	weathervalue['84CA'] = '807D'
-	weathervalue['8592'] = '8076'
-	weathervalue['84CC'] = '806D'
-	# Japan
-	weathervalue['0064'] = '0001'
-	weathervalue['0065'] = '0001'
-	weathervalue['0066'] = '0002'
-	weathervalue['0067'] = '0002'
-	weathervalue['0068'] = '0001'
-	weathervalue['00C4'] = '000A'
-	weathervalue['00C5'] = '000A'
-	weathervalue['00C6'] = '000A'
-	weathervalue['00C7'] = '000A'
-	weathervalue['012C'] = '0013'
-	weathervalue['00C9'] = '000C'
-	weathervalue['0069'] = '0003'
-	weathervalue['0384'] = '0021'
-	weathervalue['00D0'] = '000E'
-	weathervalue['006A'] = '0005'
-	weathervalue['012D'] = '0013'
-	weathervalue['8190'] = '801A'
-	weathervalue['00CA'] = '000C'
-	weathervalue['006B'] = '0004'
-	weathervalue['8191'] = '801A'
-	weathervalue['00CB'] = '000C'
-	weathervalue['8192'] = '801A'
-	weathervalue['8193'] = '801A'
-	weathervalue['8194'] = '801A'
-	weathervalue['012F'] = '0016'
-	weathervalue['006C'] = '8001'
-	weathervalue['006D'] = '8001'
-	weathervalue['00C8'] = '800A'
-	weathervalue['00CC'] = '800A'
-	weathervalue['00CD'] = '800A'
-	weathervalue['00CE'] = '800A'
-	weathervalue['00CF'] = '800C'
-	weathervalue['00D1'] = '800C'
-	weathervalue['00D2'] = '800E'
-	weathervalue['00D3'] = '800E'
-	weathervalue['00D4'] = '800D'
-	weathervalue['00D5'] = '800D'
-	# Extra
-	weathervalue['0459'] = '0065'
-	weathervalue['0460'] = '0065'
-	weathervalue['0461'] = '0065'
-	weathervalue['00EA'] = '0001'
-	weathervalue['00EB'] = '0001'
-	weathervalue['00EC'] = '0001'
-
-	for k, v in weathervalue.items():
-		weathervalue_offset_table[num()] = binascii.unhexlify(k)
-		weathervalue_offset_table[num()] = binascii.unhexlify(v)
+	for k,v in forecastlists.weatherconditions.items():
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[1])
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[2])
 		weathervalue_offset_table[num()] = u32(0)
-
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[3])
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[4])
+		weathervalue_offset_table[num()] = u32(0)
 	return weathervalue_offset_table
 
 def make_uvindex_text_table():
 	uvindex_text_table = collections.OrderedDict()
-	dictionaries_uvindextexttable.append(uvindex_text_table)
-	low = 'Low'
-	moderate = 'Moderate'
-	high = 'High'
-	veryhigh = 'Very High'
-	extreme = 'Extreme'
-	uvindex_text_table[0] = "\0".join([low, low, low, moderate, moderate, moderate, high, high, veryhigh, veryhigh, veryhigh, extreme, extreme]).encode("utf-16be")+pad(2)
+	uvindexlist = []
+	for k,v in forecastlists.uvindex.items():
+		uvindexlist.append(v[language_code])
+	uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be")+pad(2)
 
 	return uvindex_text_table
 
@@ -1387,7 +1180,6 @@ def make_uvindex_text_table():
 
 def make_laundry_text_table():
 	laundry_text_table = collections.OrderedDict()
-	dictionaries_laundrytexttable.append(laundry_text_table)
 
 	laundry_text_table[0] = binascii.unhexlify('5916306b5e72305b307e305b30930000')
 	laundry_text_table[1] = binascii.unhexlify('59165e7230576642306f59295019306b6ce8610f0000')
@@ -1408,7 +1200,6 @@ def make_laundry_text_table():
 
 def make_pollen_text_table():
 	pollen_text_table = collections.OrderedDict()
-	dictionaries_pollentexttable.append(pollen_text_table)
 
 	pollen_text_table[0] = binascii.unhexlify('5c11306a30440000')
 	pollen_text_table[1] = binascii.unhexlify('30843084591a30440000')
@@ -1420,7 +1211,6 @@ def make_pollen_text_table():
 
 def make_location_table(list):
 	location_table = collections.OrderedDict()
-	dictionaries_locationtable.append(location_table)
 	for keys in list.keys():
 		numbers = get_number(list, keys)
 		location_table["location_code_%s" % numbers] = binascii.unhexlify(get_loccode(list, keys)) # Wii Location Code.
@@ -1437,118 +1227,35 @@ def make_location_table(list):
 
 def make_forecast_text_table(list):
 	text_table = collections.OrderedDict()
-	dictionaries_texttable.append(text_table)
 	bytes = 0
 	for keys in list.keys():
 		numbers = get_number(list, keys)
-		if len(get_region(list, keys)) == 0: state = None
+		if len(list[keys][1][language_code]) == 0: state = None
 		else: state = get_region(list, keys)
-		if len(get_country(list, keys)) == 0: country = None
-		else: country = get_country(list, keys)
-		text = "\0".join(filter(None, [get_city(list, keys), state, country])).decode("utf-8").encode("utf-16be")
+		if len(list[keys][2][language_code]) == 0: country = None
+		else: country = list[keys][2][language_code]
+		text = "\0".join(filter(None, [list[keys][0][language_code], state, country])).decode("utf-8").encode("utf-16be")
 		text_table["keys_%s" % numbers] = text+pad(2)
 		append(list,keys,bytes)
-		bytes+=len(get_city(list, keys).decode("utf-8").encode("utf-16be"))+2
+		bytes+=len(list[keys][0][language_code].decode("utf-8").encode("utf-16be"))+2
 		if state is not None:
 			append(list,keys,bytes)
-			bytes+=len(get_region(list, keys).decode("utf-8").encode("utf-16be"))+2
+			bytes+=len(list[keys][1][language_code].decode("utf-8").encode("utf-16be"))+2
 		else: append(list,keys,'None')
 		if country is not None:
 			append(list,keys,bytes)
-			bytes+=len(get_country(list, keys).decode("utf-8").encode("utf-16be"))+2
+			bytes+=len(list[keys][2][language_code].decode("utf-8").encode("utf-16be"))+2
 		else: append(list,keys,'None')
 
 	return text_table
-
+	
 def get_weathericon(icon):
-	weathericonstore[-1] = 'FFFF' # None
-	weathericonstore[1] = '0464' # Sunny
-	weathericonstore[2] = '0462' # Mostly Sunny
-	weathericonstore[3] = '0465' # Partly Cloudy
-	weathericonstore[4] = '0463' # Intermittent Clouds
-	weathericonstore[5] = '05F4' # Haze
-	weathericonstore[6] = '04C9' # Mostly Cloudy
-	weathericonstore[7] = '04C8' # Cloudy
-	weathericonstore[8] = '0469' # Overcast
-	weathericonstore[11] = '0680' # Fog
-	weathericonstore[12] = '052E' # Showers
-	weathericonstore[13] = '04CB' # Mostly Cloudy with Showers
-	weathericonstore[14] = '0467' # Partly Sunny with Showers
-	weathericonstore[15] = '0784' # Thunderstorms
-	weathericonstore[16] = '04CA' # Mostly Cloudy with Thunderstorms
-	weathericonstore[17] = '0466' # Partly Sunny with Thunderstorms
-	weathericonstore[18] = '052C' # Rain
-	weathericonstore[19] = '0592' # Flurries
-	weathericonstore[20] = '04CD' # Mostly Cloudy with Flurries
-	weathericonstore[21] = '0468' # Partly Sunny with Flurries
-	weathericonstore[22] = '05E0' # Snow
-	weathericonstore[23] = '04CC' # Mostly Cloudy with Snow
-	weathericonstore[24] = '05AE' # Ice
-	weathericonstore[25] = '04CF' # Sleet
-	weathericonstore[26] = '0549' # Freezing Rain
-	weathericonstore[29] = '052F' # Rain and Snow
-	weathericonstore[30] = '0459' # Hot
-	weathericonstore[31] = '0460' # Cold
-	weathericonstore[32] = '0461' # Windy
-	weathericonstore[33] = '8464' # Clear
-	weathericonstore[34] = '85F4' # Mostly Clear
-	weathericonstore[35] = '8465' # Partly Cloudy
-	weathericonstore[36] = '84C9' # Intermittent Clouds
-	weathericonstore[37] = '05F8' # Hazy Moonlight (Custom)
-	weathericonstore[38] = '84C8' # Mostly Cloudy
-	weathericonstore[39] = '8466' # Partly Cloudy with Showers
-	weathericonstore[40] = '852E' # Mostly Cloudy with Showers
-	weathericonstore[41] = '8467' # Partly Cloudy with Thunderstorms
-	weathericonstore[42] = '84CA' # Mostly Cloudy with Thunderstorms
-	weathericonstore[43] = '8592' # Mostly Cloudy with Flurries
-	weathericonstore[44] = '84CC' # Mostly Cloudy with Snow
-
-	return weathericonstore[icon]
-
+	if icon == -1: return 'FFFF'
+	else: return forecastlists.weatherconditions[icon][1]
+	
 def get_weatherjpnicon(icon):
-	jpnweathericonstore[-1] = 'FFFF' # None
-	jpnweathericonstore[1] = '0064' # Sunny
-	jpnweathericonstore[2] = '0065' # Mostly Sunny
-	jpnweathericonstore[3] = '0066' # Partly Cloudy
-	jpnweathericonstore[4] = '0067' # Intermittent Clouds
-	jpnweathericonstore[5] = '0068' # Haze
-	jpnweathericonstore[6] = '00C4' # Mostly Cloudy
-	jpnweathericonstore[7] = '00C5' # Cloudy
-	jpnweathericonstore[8] = '00C6' # Overcast
-	jpnweathericonstore[11] = '00C7' # Fog
-	jpnweathericonstore[12] = '012C' # Showers
-	jpnweathericonstore[13] = '00C9' # Mostly Cloudy with Showers
-	jpnweathericonstore[14] = '0069' # Partly Sunny with Showers
-	jpnweathericonstore[15] = '0384' # Thunderstorms
-	jpnweathericonstore[16] = '00D0' # Mostly Cloudy with Thunderstorms
-	jpnweathericonstore[17] = '006A' # Partly Sunny with Thunderstorms
-	jpnweathericonstore[18] = '012D' # Rain
-	jpnweathericonstore[19] = '8190' # Flurries
-	jpnweathericonstore[20] = '00CA' # Mostly Cloudy with Flurries
-	jpnweathericonstore[21] = '006B' # Partly Sunny with Flurries
-	jpnweathericonstore[22] = '8191' # Snow
-	jpnweathericonstore[23] = '00CB' # Mostly Cloudy with Snow
-	jpnweathericonstore[24] = '8192' # Ice
-	jpnweathericonstore[25] = '8193' # Sleet
-	jpnweathericonstore[26] = '8194' # Freezing Rain
-	jpnweathericonstore[29] = '012F' # Rain and Snow
-	jpnweathericonstore[30] = '00EA' # Hot
-	jpnweathericonstore[31] = '00EB' # Cold
-	jpnweathericonstore[32] = '00EC' # Windy
-	jpnweathericonstore[33] = '006C' # Clear
-	jpnweathericonstore[34] = '006D' # Mostly Clear
-	jpnweathericonstore[35] = '00C8' # Partly Cloudy
-	jpnweathericonstore[36] = '00CC' # Intermittent Clouds
-	jpnweathericonstore[37] = '00CD' # Hazy Moonlight (Custom)
-	jpnweathericonstore[38] = '00CE' # Mostly Cloudy
-	jpnweathericonstore[39] = '00CF' # Partly Cloudy with Showers
-	jpnweathericonstore[40] = '00D1' # Mostly Cloudy with Showers
-	jpnweathericonstore[41] = '00D2' # Partly Cloudy with Thunderstorms
-	jpnweathericonstore[42] = '00D3' # Mostly Cloudy with Thunderstorms
-	jpnweathericonstore[43] = '00D4' # Mostly Cloudy with Flurries
-	jpnweathericonstore[44] = '00D5' # Mostly Cloudy with Snow
-
-	return jpnweathericonstore[icon]
+	if icon == -1: return 'FFFF'
+	else: return forecastlists.weatherconditions[icon][3]
 
 """Database of wind direction values."""
 
@@ -1576,29 +1283,59 @@ def get_wind_direction(degrees):
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 if not useLegacy: test_keys()
 for list in weathercities:
-	global language_code,country_code,mode
+	global language_code,country_code,mode,last_dl,useMultithreaded,concurrent
+	threads = []
+	delay = 0
+	last_dl = 0
+	concurrent = 0
 	language_code = 1
-	country_code = forecastlists.bincountries[list.values()[0][2]]
-	print "Processing list #%s - %s (%s)" % (weathercities.index(list), country_code, list.values()[0][2])
+	useMultithreaded = False
+	country_code = forecastlists.bincountries[list.values()[0][2][1]]
+	print "Processing list #%s - %s (%s)" % (weathercities.index(list), country_code, list.values()[0][2][1])
 	for k,v in forecastlists.weathercities_international.items():
 		if k not in list:
-			if v[2] in forecastlists.bincountries and forecastlists.bincountries[v[2]] is not country_code: list[k] = v
+			if v[2][1] in forecastlists.bincountries and forecastlists.bincountries[v[2][1]] is not country_code: list[k] = v
 			else: list[k] = v
-		elif v[2] is not list[k][2]: list[k+" 2"] = v
+		elif v[2][1] is not list[k][2][1]: list[k+" 2"] = v
 	get_locationcode(list)
 	for keys in list.keys():
 		if keys in cache and cache[keys] == get_all(list,keys): cached+=1
-	print "Downloading Forecast Data ...\n"
+	if len(list)-cached is not 0:
+		print "Downloading Forecast Data ...\n"
+		loop = True
+	dlthread = threading.Thread(target=display_loop,args=[list])
+	dlthread.start()
 	for keys in list.keys():
-		if keys not in cache or cache[keys] != get_all(list,keys): get_data(list,keys)
-	print "\n\n[*] Skipped %s cached cities" % cached
+		if keys not in cache or cache[keys] != get_all(list,keys):
+			if int(round(last_dl)) > 0: delay+=1
+			if useMultithreaded: threads.append(threading.Thread(target=get_data, args=(list,keys)))
+			else: get_data(list,keys)
+			if delay > 1: useMultithreaded = True
+	if useMultithreaded:
+		for i in threads:
+			while concurrent >= 5: time.sleep(0.01)
+			i.start()
+		for i in threads:
+			i.join()
+	loop = False
+	dlthread.join()
+	build = True
+	print "\n"
 	cities+=citycount
 	total+=len(list)
-	for i in range(1, 3):
+	buildthread = threading.Thread(target=build_progress,args=[])
+	buildthread.start()
+	for i in range(1,3):
 		mode = i
-		make_bins(list)
-		reset_data(list)
-	print "Done"
+		for j in usbins:
+			language_code = j
+			make_bins(list)
+			reset_data(list)
+	build = False
+	buildthread.join()
+	sys.stdout.write("\r"+" "*58+"\rBuilding Files: Done")
+	sys.stdout.flush()
+	gc.collect()
 	print "\n"
 
 print "API Requests: %s" % apirequests
@@ -1607,6 +1344,7 @@ print "Request Retries: %s" % retrycount
 print "Processed Cities: %s/%s" % (cities,total)
 
 os.remove('forecastlists.pyc')
+os.remove('config.pyc')
 
 if production:
 	"""This will use a webhook to log that the script has been ran."""
