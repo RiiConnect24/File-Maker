@@ -206,7 +206,7 @@ def display_loop(list):
 		time.sleep(0.1)
 
 def get_icon(icon,list,key):
-	if list[keys][2][1] is "Japan": return get_weatherjpnicon(icon)
+	if list[key][2][1] is "Japan": return get_weatherjpnicon(icon)
 	else: return get_weathericon(icon)
 
 def test_keys():
@@ -459,7 +459,7 @@ def get_main_api(list, key):
 	wind[key][4] = int(round(api5day['DailyForecasts'][1]['Day']['Wind']['Speed']['Value']))
 	wind[key][5] = api5day['DailyForecasts'][1]['Day']['Wind']['Direction']['English']
 	pollen[key] = 255
-	if list[keys][2][1] is "Japan":
+	if list[key][2][1] is "Japan":
 		precipitation[2] = round(apidaily['DailyForecasts'][0]['Day']['PrecipitationProbability'],-1)
 		precipitation[3] = round(apidaily['DailyForecasts'][0]['Night']['PrecipitationProbability'],-1)
 		precipitation[6] = round(api5day['DailyForecasts'][1]['Day']['PrecipitationProbability'],-1)
