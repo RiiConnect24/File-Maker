@@ -47,20 +47,17 @@ cached = 0 # Count Cached Cities
 total = 0
 progcount = 0
 useLegacy = True # Use AccuWeather Legacy API Instead (Faster)
+useDebug = False # Print more verbose messages
 count = {} # Offset Storage
 file = None
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
-usbins = [1,3,4]
 
 print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
 print "Preparing ..."
 
-if production: rollbar_mode = "production"
-else: rollbar_mode = "development"
-
-rollbar.init(rollbar_key, rollbar_mode)
+if production: rollbar.init(rollbar_key, "production")
 
 uvindex = {}
 wind = {}
@@ -84,21 +81,18 @@ weathervalue_text_offsets = {}
 
 def u8(data):
 	if data < 0 or data > 255:
-		print "[+] Value Pack Failure: %s" % data
 		rollbar.report_message("u8 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
-		print "[+] Value Pack Failure: %s" % data
 		rollbar.report_message("u16 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
-		print "[+] Value Pack Failure: %s" % data
 		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
 		data = 0
 	return struct.pack(">I", data)
@@ -193,14 +187,14 @@ def build_progress():
 		sys.stdout.flush()
 		i+=1
 		if i == 34: i = 0
-		time.sleep(0.075)
+		time.sleep(0.05)
 
 def output(text):
 	sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
 	sys.stdout.flush()
 	
 def display_loop(list):
-	while loop == True:
+	while loop:
 		progress(float(citycount)/float(len(list)-cached)*100,list)
 		time.sleep(0.1)
 
@@ -1147,7 +1141,8 @@ def make_pollenindex_table():
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
 	for k,v in forecastlists.weatherconditions.items():
-		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
+		weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
+		weathervalue_text_table[num()] = v[0][0].decode('utf-8').encode("utf-16be")
 	i = 0
 	bytes = 0
 	for k,v in weathervalue_text_table.items():
@@ -1282,6 +1277,7 @@ def get_wind_direction(degrees):
 
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 if not useLegacy: test_keys()
+total_time = time.time()
 for list in weathercities:
 	global language_code,country_code,mode,last_dl,useMultithreaded,concurrent
 	threads = []
@@ -1291,6 +1287,12 @@ for list in weathercities:
 	language_code = 1
 	useMultithreaded = False
 	country_code = forecastlists.bincountries[list.values()[0][2][1]]
+	if country_code == 0: bins = [0]
+	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
+	elif country_code >= 64 and country_code <= 110: bins = [1,2,3,4,5,6]
+	else:
+		print "Unknown country code - generating English only"
+		bins = [1]
 	print "Processing list #%s - %s (%s)" % (weathercities.index(list), country_code, list.values()[0][2][1])
 	for k,v in forecastlists.weathercities_international.items():
 		if k not in list:
@@ -1327,13 +1329,13 @@ for list in weathercities:
 	buildthread.start()
 	for i in range(1,3):
 		mode = i
-		for j in usbins:
+		for j in bins:
 			language_code = j
 			make_bins(list)
 			reset_data(list)
 	build = False
 	buildthread.join()
-	sys.stdout.write("\r"+" "*58+"\rBuilding Files: Done")
+	sys.stdout.write("\r"+" "*58+"\rBuilding Files: Complete")
 	sys.stdout.flush()
 	gc.collect()
 	print "\n"
@@ -1342,6 +1344,7 @@ print "API Requests: %s" % apirequests
 if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
 print "Processed Cities: %s/%s" % (cities,total)
+print "Total Time: %s Seconds" % round(time.time()-total_time)
 
 os.remove('forecastlists.pyc')
 os.remove('config.pyc')
