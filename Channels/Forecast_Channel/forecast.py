@@ -46,8 +46,8 @@ retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 total = 0
 progcount = 0
-useLegacy = True # Use AccuWeather Legacy API Instead (Faster)
-useDebug = False # Print more verbose messages
+useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
+useVerbose = False # Print more verbose messages
 count = {} # Offset Storage
 file = None
 
@@ -56,8 +56,6 @@ weathercities = [forecastlists.weathercities008, forecastlists.weathercities009,
 print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
 print "Preparing ..."
-
-if production: rollbar.init(rollbar_key, "production")
 
 uvindex = {}
 wind = {}
@@ -81,19 +79,19 @@ weathervalue_text_offsets = {}
 
 def u8(data):
 	if data < 0 or data > 255:
-		rollbar.report_message("u8 Value Pack Failure: %s" % data, "critical")
+		output("u8 Value Pack Failure: %s" % data, "CRITICAL")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
-		rollbar.report_message("u16 Value Pack Failure: %s" % data, "critical")
+		output("u16 Value Pack Failure: %s" % data, "CRITICAL")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
-		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
+		output("u32 Value Pack Failure: %s" % data, "CRITICAL")
 		data = 0
 	return struct.pack(">I", data)
 
@@ -153,8 +151,7 @@ def pad(amnt):
 	return "\0"*amnt
 
 def get_index(list, key, num):
-	if num != 0: return list[key][num]
-	else: return list[key]
+	return list[key][num]
 
 def num():
 	global number
@@ -189,17 +186,27 @@ def build_progress():
 		if i == 34: i = 0
 		time.sleep(0.05)
 
-def output(text):
-	sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
-	sys.stdout.flush()
-	
+def output(text,level):
+	if loop or build:
+		if level is "INFO":
+			sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
+			sys.stdout.flush()
+		elif level is "VERBOSE" and useVerbose:
+			sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
+			sys.stdout.flush()
+		elif level is "WARNING" or level is "CRITICAL":
+			sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
+			sys.stdout.flush()
+			if production: rollbar.report_message(text, level.lower())
+	else: print text
+
 def display_loop(list):
 	while loop:
 		progress(float(citycount)/float(len(list)-cached)*100,list)
 		time.sleep(0.1)
 
 def get_icon(icon,list,key):
-	if get_index(list,key,2) is "Japan": return get_weatherjpnicon(icon)
+	if list[keys][2][1] is "Japan": return get_weatherjpnicon(icon)
 	else: return get_weathericon(icon)
 
 def test_keys():
@@ -271,11 +278,6 @@ def offset_write(offset1, offset2, offset3):
 	file.seek(seek_offset)
 	file.write(u32(seek_base+offset3))
 
-def increment():
-	global constant,count,file
-	count[constant] = file.tell()
-	constant += 1
-
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 def request_data(url):
@@ -321,7 +323,7 @@ def timestamps(mode, key):
 	if key != 0: citytime = time_convert(globe[key]['time'])
 	if mode == 0: timestamp = time
 	elif mode == 1: timestamp = citytime
-	elif mode == 2: timestamp = time + 60
+	elif mode == 2: timestamp = time+60
 	return timestamp
 
 def get_loccode(list, key):
@@ -457,7 +459,7 @@ def get_main_api(list, key):
 	wind[key][4] = int(round(api5day['DailyForecasts'][1]['Day']['Wind']['Speed']['Value']))
 	wind[key][5] = api5day['DailyForecasts'][1]['Day']['Wind']['Direction']['English']
 	pollen[key] = 255
-	if get_index(list,keys,2) is 'Japan':
+	if list[keys][2][1] is "Japan":
 		precipitation[2] = round(apidaily['DailyForecasts'][0]['Day']['PrecipitationProbability'],-1)
 		precipitation[3] = round(apidaily['DailyForecasts'][0]['Night']['PrecipitationProbability'],-1)
 		precipitation[6] = round(api5day['DailyForecasts'][1]['Day']['PrecipitationProbability'],-1)
@@ -586,7 +588,7 @@ def get_legacy_location(list, key):
 def get_tenki_data(key):
 	laundry[key] = 255
 	if key in forecastlists.jpncities:
-		print "Getting Tenki Data ..."
+		output("Getting Tenki Data ...", "VERBOSE")
 		laundry[key] = int(os.popen("wget http://www.tenki.jp/indexes/cloth_dried/%s.html -q -O - | grep '指数:' | head -1 | awk '{print $6}' | grep -Eo '[0-9]{1,3}' | head -1" % forecastlists.jpncities[key]).read())
 		tempdiff = os.popen("wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep 'tempdiff' | grep -oP '\[(.*?)\]' | sed 's/\[//' | sed 's/\]//' | sed 's/\+//'" % forecastlists.jpncities[key]).read().splitlines()
 		precip = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep '<td>' | head -8 | tr -d '<td>' | tr -d 'span class="grayOu"/%%'""" % forecastlists.jpncities[key]).read().splitlines()
@@ -633,6 +635,7 @@ def make_forecast_bin(list):
 	weathervalue_text_table = make_weather_value_table()
 	weathervalue_offset_table = make_weather_offset_table()
 	short_japan_tables = make_forecast_short_table(list)
+	dictionaries = [header,long_forecast_table,short_japan_tables,weathervalue_offset_table,uvindex_table,laundryindex_table,pollenindex_table,location_table,weathervalue_text_table,uvindex_text_table,laundry_text_table,pollen_text_table,text_table]
 	if mode == 1: extension = "bin"
 	elif mode == 2: extension = "bi2"
 	file1 = 'forecast~.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
@@ -641,30 +644,10 @@ def make_forecast_bin(list):
 	file4 = 'forecast.%s' % extension
 	with open(file1, 'ab') as file:
 		file.write(pad(20))
-		for k, v in header.items(): file.write(v)
-		increment()
-		for k, v in long_forecast_table.items(): file.write(v)
-		count[9] = file.tell()
-		if japcount > 0:
-			for k, v in short_japan_tables.items(): file.write(v)
-		increment()
-		for k, v in weathervalue_offset_table.items(): file.write(v)
-		increment()
-		for k, v in uvindex_table.items(): file.write(v)
-		increment()
-		for k, v in laundryindex_table.items(): file.write(v)
-		increment()
-		for k, v in pollenindex_table.items(): file.write(v)
-		increment()
-		for k, v in location_table.items(): file.write(v)
-		increment()
-		for k, v in weathervalue_text_table.items(): file.write(v)
-		increment()
-		for k, v in uvindex_text_table.items(): file.write(v)
-		for k, v in laundry_text_table.items(): file.write(v)
-		for k, v in pollen_text_table.items(): file.write(v)
-		increment()
-		for k, v in text_table.items(): file.write(v)
+		for i in dictionaries:
+			for k,v in i.items(): file.write(v)
+			count[constant] = file.tell()
+			constant+=1
 		file.write(pad(16))
 		file.write('RIICONNECT24'.encode('ASCII')) # This can be used to identify that we made this file.
 		file.flush()
@@ -679,51 +662,51 @@ def make_forecast_bin(list):
 	hex_write(32,int(len(list)-japcount),0,0)
 	if japcount > 0:
 		hex_write(40,japcount,0,0)
-		hex_write(44,count[9],0,0)
+		hex_write(44,count[1],0,0)
 	hex_write(48,int((len(weathervalue_offset_table))/3),0,0)
-	hex_write(52,count[1],0,0)
-	hex_write(60,count[2],0,0)
-	hex_write(68,count[3],0,0)
-	hex_write(76,count[4],0,0)
-	hex_write(84,count[5],0,0)
-	seek_offset = count[1]
-	seek_base = count[6]
+	hex_write(52,count[2],0,0)
+	hex_write(60,count[3],0,0)
+	hex_write(68,count[4],0,0)
+	hex_write(76,count[5],0,0)
+	hex_write(84,count[6],0,0)
+	seek_offset = count[2]
+	seek_base = count[7]
 	file.seek(seek_offset)
 	for i in range(int(len(weathervalue_offset_table))/3):
 		hex_write(0,int(weathervalue_text_offsets[i]+seek_base),4,4)
 	"""UV Index"""
-	seek_offset = count[2]
-	seek_base = count[7]
+	seek_offset = count[3]
+	seek_base = count[8]
 	file.seek(seek_offset)
 	offset_write(4,0,0)
 	for i in [8,8,8,18,18,18,10,10,20,20,20,16]:
 		offset_write(8,i,0)
 	"""Laundry Table"""
-	seek_offset = count[3]
-	seek_base = count[7]
+	seek_offset = count[4]
+	seek_base = count[8]
 	file.seek(seek_offset)
 	offset_write(4,0,0)
 	for i in [16,38,60,82,134,174,210,246,288,336,384]:
 		offset_write(8,0,i)
 	"""Pollen Table"""
-	seek_offset = count[4]
-	seek_base = count[7]+594
+	seek_offset = count[5]
+	seek_base = count[8]+594
 	file.seek(seek_offset)
 	offset_write(4,0,0)
 	for i in [8,10,6,12]:
 		offset_write(8,i,0)
 	"""Location Text"""
-	seek_offset = count[5]
+	seek_offset = count[6]
 	file.seek(seek_offset)
 	for keys in list.keys():
 		city = get_index(list,keys,4)
 		state = get_index(list,keys,5)
 		country = get_index(list,keys,6)
-		city1 = city+count[8]
+		city1 = city+count[11]
 		if state is 'None': state1 = 0
-		else: state1 = state+count[8]
+		else: state1 = state+count[11]
 		if country is 'None': country1 = 0
-		else: country1 = country+count[8]
+		else: country1 = country+count[11]
 		hex_write(0,city1,4,0)
 		hex_write(0,state1,4,0)
 		hex_write(0,country1,4,12)
@@ -750,7 +733,7 @@ def make_short_bin(list):
 	if production: sign_file(file1, file2, file3)
 
 def sign_file(name, local_name, server_name):
-	output("Processing " + local_name + " ...")
+	output("Processing " + local_name + " ...", "VERBOSE")
 	file = open(name, 'rb')
 	copy = file.read()
 	crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
@@ -763,11 +746,13 @@ def sign_file(name, local_name, server_name):
 	os.remove(name)
 	dest.close()
 	file.close()
+	output("Compressing ...", "VERBOSE")
 	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", local_name, local_name + "-1"]) # Compresses the file with LZ77 compression.
 	file = open(local_name + '-1', 'rb')
 	new = file.read()
 	dest = open(local_name, "w+")
 	key = open(key_path, 'rb')
+	output("RSA Signing ...", "VERBOSE")
 	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM") # Loads the RSA key.
 	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding. Beautiful.
 	dest.write(binascii.unhexlify(str(0).zfill(128))) # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
@@ -798,8 +783,7 @@ def get_data(list, name):
 			get_weekly(list, name)
 			get_hourly_forecast(list, name)
 	else:
-		output('Unable to retrieve data for %s - using blank data' % name)
-		rollbar.report_message("Unable to retrieve data for %s - using blank data" % name, "warning")
+		output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
 		progress(float(citycount)/float(len(list)-cached)*100,list)
 	last_dl = time.time()-start_time
 	if useMultithreaded: concurrent-=1
@@ -1141,8 +1125,7 @@ def make_pollenindex_table():
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
 	for k,v in forecastlists.weatherconditions.items():
-		weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
-		weathervalue_text_table[num()] = v[0][0].decode('utf-8').encode("utf-16be")
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
 	i = 0
 	bytes = 0
 	for k,v in weathervalue_text_table.items():
@@ -1275,6 +1258,7 @@ def get_wind_direction(degrees):
 
 	return winddirection[degrees]
 
+if production: rollbar.init(rollbar_key, "production")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 if not useLegacy: test_keys()
 total_time = time.time()
@@ -1344,7 +1328,7 @@ print "API Requests: %s" % apirequests
 if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
 print "Processed Cities: %s/%s" % (cities,total)
-print "Total Time: %s Seconds" % round(time.time()-total_time)
+print "Total Time: %s Seconds\n" % round(time.time()-total_time)
 
 os.remove('forecastlists.pyc')
 os.remove('config.pyc')
