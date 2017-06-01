@@ -2858,3 +2858,45 @@ uvindex[9] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy
 uvindex[10] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
 uvindex[11] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
 uvindex[12] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
+
+winddirection = {}
+
+winddirection["NNE"] = '01'
+winddirection["NE"] = '02'
+winddirection["ENE"] = '03'
+winddirection["E"] = '04'
+winddirection["ESE"] = '05'
+winddirection["SE"] = '06'
+winddirection["SSE"] = '07'
+winddirection["S"] = '08'
+winddirection["SSW"] = '09'
+winddirection["SW"] = '10'
+winddirection["WSW"] = '11'
+winddirection["W"] = '12'
+winddirection["WNW"] = '13'
+winddirection["NW"] = '14'
+winddirection["NNW"] = '15'
+winddirection["N"] = '16'
+
+pollen = collections.OrderedDict()
+
+pollen[0] = "少ない"
+pollen[1] = "やや多い"
+pollen[2] = "多い"
+pollen[3] = "非常に多い"
+pollen[4] = "欠測（データなし）"
+
+laundry = collections.OrderedDict()
+
+laundry[0] = "外に干せません"
+laundry[1] = "外干し時は天候に注意"
+laundry[2] = "外干し時は天候に注意"
+laundry[3] = "外干し時は天候に注意"
+laundry[4] = "乾きいまいち："+"\n"+"一日干しても乾ききらないものが多い"
+laundry[5] = "乾きまあまあ："+"\n"+"一日干せばおおむね乾く"
+laundry[6] = "乾きよし："+"\n"+"一日干せば十分よく乾く"
+laundry[7] = "乾きよし："+"\n"+"半日干せばおおむね乾く"
+laundry[8] = "乾き非常によし："+"\n"+"半日干せば十分よく乾く"
+laundry[9] = "乾き非常によし："+"\n"+"2・3時間干せばおおむね乾く"
+laundry[10] = "乾き非常によし："+"\n"+"2・3時間干せば十分よく乾く"
+laundry[11] = "欠測（データなし）"

@@ -645,7 +645,7 @@ def make_forecast_bin(list):
 	with open(file1, 'ab') as file:
 		file.write(pad(20))
 		for i in dictionaries:
-			for k,v in i.items(): file.write(v)
+			for v in i.values(): file.write(v)
 			count[constant] = file.tell()
 			constant+=1
 		file.write(pad(16))
@@ -679,8 +679,8 @@ def make_forecast_bin(list):
 	seek_base = count[8]
 	file.seek(seek_offset)
 	offset_write(4,0,0)
-	for i in [8,8,8,18,18,18,10,10,20,20,20,16]:
-		offset_write(8,i,0)
+	for i in forecastlists.uvindex.values():
+		offset_write(8,len(i[language_code].decode('utf-8').encode('utf-16be'))+2,0)
 	"""Laundry Table"""
 	seek_offset = count[4]
 	seek_base = count[8]
@@ -726,8 +726,8 @@ def make_short_bin(list):
 	with open(file1, 'ab') as file:
 		file.write(u32(timestamps(0,0)))
 		file.write(u32(timestamps(2,0)))
-		for k, v in short_forecast_header.items(): file.write(v)
-		for k, v in short_forecast_table.items(): file.write(v)
+		for v in short_forecast_header.values(): file.write(v)
+		for v in short_forecast_table.values(): file.write(v)
 		file.flush()
 	file.close()
 	if production: sign_file(file1, file2, file3)
@@ -1122,71 +1122,6 @@ def make_pollenindex_table():
 
 	return pollenindex_table
 	
-def make_weather_value_table():
-	weathervalue_text_table = collections.OrderedDict()
-	for k,v in forecastlists.weatherconditions.items():
-		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
-	i = 0
-	bytes = 0
-	for k,v in weathervalue_text_table.items():
-		weathervalue_text_offsets[i] = bytes
-		bytes+=len(v)
-		i+=1
-	return weathervalue_text_table
-	
-def make_weather_offset_table():
-	weathervalue_offset_table = collections.OrderedDict()
-	for k,v in forecastlists.weatherconditions.items():
-		weathervalue_offset_table[num()] = binascii.unhexlify(v[1])
-		weathervalue_offset_table[num()] = binascii.unhexlify(v[2])
-		weathervalue_offset_table[num()] = u32(0)
-		weathervalue_offset_table[num()] = binascii.unhexlify(v[3])
-		weathervalue_offset_table[num()] = binascii.unhexlify(v[4])
-		weathervalue_offset_table[num()] = u32(0)
-	return weathervalue_offset_table
-
-def make_uvindex_text_table():
-	uvindex_text_table = collections.OrderedDict()
-	uvindexlist = []
-	for k,v in forecastlists.uvindex.items():
-		uvindexlist.append(v[language_code])
-	uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be")+pad(2)
-
-	return uvindex_text_table
-
-"""This makes the laundry text table. Since it's in Japanese, the strings are encoded in hex."""
-
-def make_laundry_text_table():
-	laundry_text_table = collections.OrderedDict()
-
-	laundry_text_table[0] = binascii.unhexlify('5916306b5e72305b307e305b30930000')
-	laundry_text_table[1] = binascii.unhexlify('59165e7230576642306f59295019306b6ce8610f0000')
-	laundry_text_table[2] = binascii.unhexlify('59165e7230576642306f59295019306b6ce8610f0000')
-	laundry_text_table[3] = binascii.unhexlify('59165e7230576642306f59295019306b6ce8610f0000')
-	laundry_text_table[4] = binascii.unhexlify('4e7e304d3044307e30443061ff1a000a4e0065e55e723057306630824e7e304d304d3089306a30443082306e304c591a30440000')
-	laundry_text_table[5] = binascii.unhexlify('4e7e304d307e3042307e3042ff1a000a4e0065e55e72305b3070304a304a3080306d4e7e304f0000')
-	laundry_text_table[6] = binascii.unhexlify('4e7e304d30883057ff1a000a4e0065e55e72305b3070534152063088304f4e7e304f0000')
-	laundry_text_table[7] = binascii.unhexlify('4e7e304d30883057ff1a000a534a65e55e72305b3070304a304a3080306d4e7e304f0000')
-	laundry_text_table[8] = binascii.unhexlify('4e7e304d975e5e38306b30883057ff1a000a534a65e55e72305b3070534152063088304f4e7e304f0000')
-	laundry_text_table[9] = binascii.unhexlify('4e7e304d975e5e38306b30883057ff1a000a003230fb0033664295935e72305b3070304a304a3080306d4e7e304f0000')
-	laundry_text_table[10] = binascii.unhexlify('4e7e304d975e5e38306b30883057ff1a000a003230fb0033664295935e72305b3070534152063088304f4e7e304f0000')
-	laundry_text_table[11] = binascii.unhexlify('6b206e2cff0830c730fc30bf306a3057ff090000')
-
-	return laundry_text_table
-
-"""This makes the pollen text table. Since it's in Japanese, the strings are encoded in hex."""
-
-def make_pollen_text_table():
-	pollen_text_table = collections.OrderedDict()
-
-	pollen_text_table[0] = binascii.unhexlify('5c11306a30440000')
-	pollen_text_table[1] = binascii.unhexlify('30843084591a30440000')
-	pollen_text_table[2] = binascii.unhexlify('591a30440000')
-	pollen_text_table[3] = binascii.unhexlify('975e5e38306b591a30440000')
-	pollen_text_table[4] = binascii.unhexlify('6b206e2cff0830c730fc30bf306a3057ff090000')
-
-	return pollen_text_table
-
 def make_location_table(list):
 	location_table = collections.OrderedDict()
 	for keys in list.keys():
@@ -1227,36 +1162,58 @@ def make_forecast_text_table(list):
 
 	return text_table
 	
+def make_weather_value_table():
+	weathervalue_text_table = collections.OrderedDict()
+	for k,v in forecastlists.weatherconditions.items():
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
+	i = 0
+	bytes = 0
+	for k,v in weathervalue_text_table.items():
+		weathervalue_text_offsets[i] = bytes
+		bytes+=len(v)
+		i+=1
+	return weathervalue_text_table
+	
+def make_weather_offset_table():
+	weathervalue_offset_table = collections.OrderedDict()
+	for k,v in forecastlists.weatherconditions.items():
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[1])
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[2])
+		weathervalue_offset_table[num()] = u32(0)
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[3])
+		weathervalue_offset_table[num()] = binascii.unhexlify(v[4])
+		weathervalue_offset_table[num()] = u32(0)
+	return weathervalue_offset_table
+
+def make_uvindex_text_table():
+	uvindex_text_table = collections.OrderedDict()
+	uvindexlist = []
+	for k,v in forecastlists.uvindex.items():
+		uvindexlist.append(v[language_code])
+	uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be")+pad(2)
+
+	return uvindex_text_table
+
+def make_laundry_text_table():
+	for i in forecastlists.laundry.values():
+		i = binascii.hexlify(i+pad(2))
+	return forecastlists.laundry
+
+def make_pollen_text_table():
+	for i in forecastlists.pollen.values():
+		i = binascii.hexlify(i+pad(2))
+	return forecastlists.pollen
+
 def get_weathericon(icon):
 	if icon == -1: return 'FFFF'
 	else: return forecastlists.weatherconditions[icon][1]
-	
+
 def get_weatherjpnicon(icon):
 	if icon == -1: return 'FFFF'
 	else: return forecastlists.weatherconditions[icon][3]
 
-"""Database of wind direction values."""
-
 def get_wind_direction(degrees):
-	winddirection = {}
-	winddirection["NNE"] = '01'
-	winddirection["NE"] = '02'
-	winddirection["ENE"] = '03'
-	winddirection["E"] = '04'
-	winddirection["ESE"] = '05'
-	winddirection["SE"] = '06'
-	winddirection["SSE"] = '07'
-	winddirection["S"] = '08'
-	winddirection["SSW"] = '09'
-	winddirection["SW"] = '10'
-	winddirection["WSW"] = '11'
-	winddirection["W"] = '12'
-	winddirection["WNW"] = '13'
-	winddirection["NW"] = '14'
-	winddirection["NNW"] = '15'
-	winddirection["N"] = '16'
-
-	return winddirection[degrees]
+	return forecastlists.winddirection[degrees]
 
 if production: rollbar.init(rollbar_key, "production")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
