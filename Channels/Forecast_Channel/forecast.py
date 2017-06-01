@@ -262,21 +262,21 @@ def hex_write(where, what, offset, offset1):
 	seek_temp = 0
 	if where == 0:
 		seek_temp = seek_offset
-		if offset > 0: seek_offset = seek_offset + offset
+		if offset > 0: seek_offset+=offset
 	else: seek_temp = where
-	if offset > 0: seek_temp = seek_temp + offset
+	if offset > 0: seek_temp+=offset
 	file.seek(seek_temp)
 	file.write(u32(what))
 	if offset1 > 0:
-		seek_offset = seek_offset + offset1
+		seek_offset+=offset1
 		file.seek(seek_offset)
 
-def offset_write(offset1, offset2, offset3):
+def offset_write(offset1, offset2):
 	global seek_offset,seek_base,file
-	seek_offset = seek_offset + offset1
-	seek_base = seek_base + offset2
+	seek_offset+=offset1
+	seek_base+=offset2
 	file.seek(seek_offset)
-	file.write(u32(seek_base+offset3))
+	file.write(u32(seek_base))
 
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
@@ -652,9 +652,6 @@ def make_forecast_bin(list):
 		file.write('RIICONNECT24'.encode('ASCII')) # This can be used to identify that we made this file.
 		file.flush()
 	file.close()
-	"""This is some complicated method used to generate offsets."""
-	"""We could eventually replace it with a function which does the work."""
-	"""However, it'd be complicated to modify the script to do that."""
 	file = open(file1, 'r+b')
 	hex_write(12,timestamps(0,0),0,0)
 	hex_write(16,timestamps(2,0),0,0)
@@ -679,37 +676,36 @@ def make_forecast_bin(list):
 	seek_base = count[8]
 	file.seek(seek_offset)
 	offset_write(4,0,0)
-	for i in forecastlists.uvindex.values():
-		offset_write(8,len(i[language_code].decode('utf-8').encode('utf-16be'))+2,0)
+	for i in forecastlists.uvindex.values()[:-1]:
+		offset_write(8,len(i[language_code].decode('utf-8').encode('utf-16be'))+2)
 	"""Laundry Table"""
 	seek_offset = count[4]
-	seek_base = count[8]
+	seek_base = count[9]
 	file.seek(seek_offset)
 	offset_write(4,0,0)
-	for i in [16,38,60,82,134,174,210,246,288,336,384]:
-		offset_write(8,0,i)
+	for i in forecastlists.laundry.values()[:-1]:
+		offset_write(8,len(i.decode('utf-8').encode('utf-16be'))+2)
 	"""Pollen Table"""
 	seek_offset = count[5]
-	seek_base = count[8]+594
+	seek_base = count[10]
 	file.seek(seek_offset)
 	offset_write(4,0,0)
-	for i in [8,10,6,12]:
-		offset_write(8,i,0)
+	for i in forecastlists.pollen.values()[:-1]:
+		offset_write(8,len(i.decode('utf-8').encode('utf-16be'))+2)
 	"""Location Text"""
 	seek_offset = count[6]
 	file.seek(seek_offset)
 	for keys in list.keys():
-		city = get_index(list,keys,4)
+		city = get_index(list,keys,4)+count[11]
 		state = get_index(list,keys,5)
 		country = get_index(list,keys,6)
-		city1 = city+count[11]
-		if state is 'None': state1 = 0
-		else: state1 = state+count[11]
-		if country is 'None': country1 = 0
-		else: country1 = country+count[11]
-		hex_write(0,city1,4,0)
-		hex_write(0,state1,4,0)
-		hex_write(0,country1,4,12)
+		if state is 'None': state = 0
+		else: state+=count[11]
+		if country is 'None': country = 0
+		else: country+=count[11]
+		hex_write(0,city,4,0)
+		hex_write(0,state,4,0)
+		hex_write(0,country,4,12)
 		file.seek(seek_offset)
 	file.close()
 	if production:
