@@ -1140,7 +1140,7 @@ def make_forecast_text_table(list):
 	for keys in list.keys():
 		numbers = get_number(list, keys)
 		if len(list[keys][1][language_code]) == 0: state = None
-		else: state = get_region(list, keys)
+		else: state = list[keys][1][language_code]
 		if len(list[keys][2][language_code]) == 0: country = None
 		else: country = list[keys][2][language_code]
 		text = "\0".join(filter(None, [list[keys][0][language_code], state, country])).decode("utf-8").encode("utf-16be")
