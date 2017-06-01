@@ -1196,12 +1196,12 @@ def make_uvindex_text_table():
 
 def make_laundry_text_table():
 	for i in forecastlists.laundry.values():
-		i = binascii.hexlify(i+pad(2))
+		i = binascii.hexlify(i.decode('utf-8').encode("utf-16be")+pad(2))
 	return forecastlists.laundry
 
 def make_pollen_text_table():
 	for i in forecastlists.pollen.values():
-		i = binascii.hexlify(i+pad(2))
+		i = binascii.hexlify(i.decode('utf-8').encode("utf-16be")+pad(2))
 	return forecastlists.pollen
 
 def get_weathericon(icon):
