@@ -1164,8 +1164,10 @@ def make_forecast_text_table(list):
 	
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
+	if language_code == 1: add = ""
+	else: add = "\0"
 	for k,v in forecastlists.weatherconditions.items():
-		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+add
 	i = 0
 	bytes = 0
 	for k,v in weathervalue_text_table.items():
@@ -1188,21 +1190,22 @@ def make_weather_offset_table():
 def make_uvindex_text_table():
 	uvindex_text_table = collections.OrderedDict()
 	uvindexlist = []
-	for k,v in forecastlists.uvindex.items():
+	for v in forecastlists.uvindex.values():
 		uvindexlist.append(v[language_code])
 	uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be")+pad(2)
-
 	return uvindex_text_table
 
 def make_laundry_text_table():
-	for i in forecastlists.laundry.values():
-		i = binascii.hexlify(i.decode('utf-8').encode("utf-16be")+pad(2))
-	return forecastlists.laundry
+	laundry = collections.OrderedDict()
+	for v in forecastlists.laundry.values():
+		laundry[num()] = v.decode('utf-8').encode("utf-16be")+pad(2)
+	return laundry
 
 def make_pollen_text_table():
-	for i in forecastlists.pollen.values():
-		i = binascii.hexlify(i.decode('utf-8').encode("utf-16be")+pad(2))
-	return forecastlists.pollen
+	pollen = collections.OrderedDict()
+	for v in forecastlists.pollen.values():
+		pollen[num()] = v.decode('utf-8').encode("utf-16be")+pad(2)
+	return pollen
 
 def get_weathericon(icon):
 	if icon == -1: return 'FFFF'
@@ -1256,7 +1259,7 @@ for list in weathercities:
 			if delay > 1: useMultithreaded = True
 	if useMultithreaded:
 		for i in threads:
-			while concurrent >= 5: time.sleep(0.01)
+			while concurrent >= 4: time.sleep(0.01)
 			i.start()
 		for i in threads:
 			i.join()
