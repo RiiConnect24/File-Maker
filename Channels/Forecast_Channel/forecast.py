@@ -1164,10 +1164,10 @@ def make_forecast_text_table(list):
 	
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
-	if language_code == 1: add = ""
-	else: add = "\0"
+	if language_code == 1: padding = ""
+	else: padding = pad(2)
 	for k,v in forecastlists.weatherconditions.items():
-		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+add
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+padding
 	i = 0
 	bytes = 0
 	for k,v in weathervalue_text_table.items():
