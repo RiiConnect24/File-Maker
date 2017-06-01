@@ -675,21 +675,21 @@ def make_forecast_bin(list):
 	seek_offset = count[3]
 	seek_base = count[8]
 	file.seek(seek_offset)
-	offset_write(4,0,0)
+	offset_write(4,0)
 	for i in forecastlists.uvindex.values()[:-1]:
 		offset_write(8,len(i[language_code].decode('utf-8').encode('utf-16be'))+2)
 	"""Laundry Table"""
 	seek_offset = count[4]
 	seek_base = count[9]
 	file.seek(seek_offset)
-	offset_write(4,0,0)
+	offset_write(4,0)
 	for i in forecastlists.laundry.values()[:-1]:
 		offset_write(8,len(i.decode('utf-8').encode('utf-16be'))+2)
 	"""Pollen Table"""
 	seek_offset = count[5]
 	seek_base = count[10]
 	file.seek(seek_offset)
-	offset_write(4,0,0)
+	offset_write(4,0)
 	for i in forecastlists.pollen.values()[:-1]:
 		offset_write(8,len(i.decode('utf-8').encode('utf-16be'))+2)
 	"""Location Text"""
