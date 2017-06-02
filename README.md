@@ -4,7 +4,6 @@
 
 These scripts will create static data files for Wii Channels.
 
-
 ## Installing Requirements
 
 Just run `pip install -r requirements.txt` in the `File-Maker` folder and it'll install. You might have to run as `sudo`.
