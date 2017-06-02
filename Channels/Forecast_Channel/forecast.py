@@ -12,23 +12,23 @@
 import binascii
 import collections
 import forecastlists
+import io
 import json
 import math
 import numpy
 import os
 import gc
 import pycountry
+import random
 import requests
+import rollbar
+import rsa
 import struct
 import subprocess
 import sys
-import time
-import io
-import random
-import rsa
-import xmltodict
 import threading
-import rollbar
+import time
+import xmltodict
 from config import *
 from datetime import datetime, timedelta
 
@@ -176,7 +176,7 @@ def progress(percent,list):
 	sys.stdout.flush()
 	progcount+=1
 	if progcount == 4: progcount = 0
-	
+
 def build_progress():
 	i = 0
 	while build:
@@ -1117,7 +1117,7 @@ def make_pollenindex_table():
 	pollenindex_table["pollen_E7_offset"] = u32(0)
 
 	return pollenindex_table
-	
+
 def make_location_table(list):
 	location_table = collections.OrderedDict()
 	for keys in list.keys():
@@ -1157,7 +1157,7 @@ def make_forecast_text_table(list):
 		else: append(list,keys,'None')
 
 	return text_table
-	
+
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
 	if language_code == 1: padding = ""
@@ -1171,7 +1171,7 @@ def make_weather_value_table():
 		bytes+=len(v)
 		i+=1
 	return weathervalue_text_table
-	
+
 def make_weather_offset_table():
 	weathervalue_offset_table = collections.OrderedDict()
 	for k,v in forecastlists.weatherconditions.items():

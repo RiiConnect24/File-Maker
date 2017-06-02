@@ -1,16 +1,14 @@
 bs4
-dateutil
 feedparser
 googlemaps
 jsonp2json
 newspaper
 numpy
 pycountry
+python-resize-image
 pytz
 requests
-resizeimage
 rollbar
 rsa
 unidecode
-urllib2
 xmltodict
