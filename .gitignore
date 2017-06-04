@@ -1,0 +1,8 @@
+DSDecmp.exe
+Plugins/
+
+*.pyc
+config.py
+newstime
+news.bin.*
+
