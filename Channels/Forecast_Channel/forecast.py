@@ -48,6 +48,7 @@ total = 0
 progcount = 0
 useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = False # Print more verbose messages
+useMultithreaded = False # Always use multithreading
 count = {} # Offset Storage
 file = None
 
@@ -1163,6 +1164,9 @@ def make_weather_value_table():
 	if language_code == 1: padding = ""
 	else: padding = pad(2)
 	for k,v in forecastlists.weatherconditions.items():
+<<<<<<< HEAD
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+pad(2)
+=======
 		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+padding
 	i = 0
 	bytes = 0
@@ -1170,6 +1174,7 @@ def make_weather_value_table():
 		weathervalue_text_offsets[i] = bytes
 		bytes+=len(v)
 		i+=1
+>>>>>>> e6f879c4b3aadccfac1e225550f876ab20acfe04
 	return weathervalue_text_table
 
 def make_weather_offset_table():
@@ -1219,13 +1224,11 @@ requests.packages.urllib3.disable_warnings() # This is so we don't get some warn
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
-	global language_code,country_code,mode,last_dl,useMultithreaded,concurrent
+	global language_code,country_code,mode,last_dl,concurrent
 	threads = []
-	delay = 0
 	last_dl = 0
 	concurrent = 0
 	language_code = 1
-	useMultithreaded = False
 	country_code = forecastlists.bincountries[list.values()[0][2][1]]
 	if country_code == 0: bins = [0]
 	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
@@ -1249,10 +1252,9 @@ for list in weathercities:
 	dlthread.start()
 	for keys in list.keys():
 		if keys not in cache or cache[keys] != get_all(list,keys):
-			if int(round(last_dl)) > 0: delay+=1
+			if last_dl > 1: useMultithreaded = True
 			if useMultithreaded: threads.append(threading.Thread(target=get_data, args=(list,keys)))
 			else: get_data(list,keys)
-			if delay > 1: useMultithreaded = True
 	if useMultithreaded:
 		for i in threads:
 			while concurrent >= 4: time.sleep(0.01)
