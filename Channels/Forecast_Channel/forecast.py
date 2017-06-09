@@ -44,10 +44,11 @@ citycount = 0 # City Progress Counter
 cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
-total = 0
-progcount = 0
+total = 0 # Total Amount of Cities Processed
+progcount = 0 # Progress Bar Character Counter
 useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = False # Print more verbose messages
+useMultithreaded = False # Always use multithreading
 count = {} # Offset Storage
 file = None
 
@@ -70,12 +71,9 @@ hourly = {}
 precipitation = {}
 current = {}
 globe = {}
-weathericonstore = {}
-jpnweathericonstore = {}
 weatherloc = {}
 cache = {}
 laundry = {}
-weathervalue_text_offsets = {}
 
 def u8(data):
 	if data < 0 or data > 255:
@@ -243,7 +241,6 @@ def reset_data(l):
 	citycount = 0
 	count = {}
 	file = None
-	for k in l.keys(): del l[k][-3:]
 
 def get_apikey():
 	global apicount,apicycle,apirequests
@@ -256,27 +253,6 @@ def get_apikey():
 			apicycle += 1
 		else: apicount += 1
 	return key
-
-def hex_write(where, what, offset, offset1):
-	global seek_offset,file
-	seek_temp = 0
-	if where == 0:
-		seek_temp = seek_offset
-		if offset > 0: seek_offset+=offset
-	else: seek_temp = where
-	if offset > 0: seek_temp+=offset
-	file.seek(seek_temp)
-	file.write(u32(what))
-	if offset1 > 0:
-		seek_offset+=offset1
-		file.seek(seek_offset)
-
-def offset_write(offset1, offset2):
-	global seek_offset,seek_base,file
-	seek_offset+=offset1
-	seek_base+=offset2
-	file.seek(seek_offset)
-	file.write(u32(seek_base))
 
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
@@ -616,6 +592,17 @@ def get_hourly_forecast(list, key):
 		if temp > -1 and temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
 		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
+def hex_write(loc, data):
+	global file
+	file.seek(loc)
+	file.write(u32(data))
+
+def offset_write(value):
+	global file,seek_offset
+	seek_offset+=4
+	file.seek(seek_offset)
+	file.write(u32(value))
+
 def make_bins(list):
 	make_forecast_bin(list)
 	make_short_bin(list)
@@ -653,60 +640,60 @@ def make_forecast_bin(list):
 		file.flush()
 	file.close()
 	file = open(file1, 'r+b')
-	hex_write(12,timestamps(0,0),0,0)
-	hex_write(16,timestamps(2,0),0,0)
-	hex_write(36,count[0],0,0)
-	hex_write(32,int(len(list)-japcount),0,0)
-	if japcount > 0:
-		hex_write(40,japcount,0,0)
-		hex_write(44,count[1],0,0)
-	hex_write(48,int((len(weathervalue_offset_table))/3),0,0)
-	hex_write(52,count[2],0,0)
-	hex_write(60,count[3],0,0)
-	hex_write(68,count[4],0,0)
-	hex_write(76,count[5],0,0)
-	hex_write(84,count[6],0,0)
+	hex_write(12,timestamps(0,0))
+	hex_write(16,timestamps(2,0))
+	hex_write(36,count[0])
+	hex_write(32,int(len(list)-japcount))
+	hex_write(40,japcount)
+	if japcount > 0: hex_write(44,count[1])
+	hex_write(48,len(forecastlists.weatherconditions))
+	hex_write(52,count[2])
+	hex_write(60,count[3])
+	hex_write(68,count[4])
+	hex_write(76,count[5])
+	hex_write(84,count[6])
 	seek_offset = count[2]
-	seek_base = count[7]
-	file.seek(seek_offset)
-	for i in range(int(len(weathervalue_offset_table))/3):
-		hex_write(0,int(weathervalue_text_offsets[i]+seek_base),4,4)
+	seek_base = count[7]		
+	for i in [forecastlists.weatherconditions.values()[j//2] for j in range(len(forecastlists.weatherconditions.values())*2)]:
+		offset_write(seek_base)
+		seek_base+=len(i[0][language_code].decode('utf-8').encode('utf-16be'))+2
+		seek_offset+=4
 	"""UV Index"""
 	seek_offset = count[3]
 	seek_base = count[8]
-	file.seek(seek_offset)
-	offset_write(4,0)
-	for i in forecastlists.uvindex.values()[:-1]:
-		offset_write(8,len(i[language_code].decode('utf-8').encode('utf-16be'))+2)
+	for i in forecastlists.uvindex.values():
+		offset_write(seek_base)
+		seek_base+=len(i[language_code].decode('utf-8').encode('utf-16be'))+2
+		seek_offset+=4
 	"""Laundry Table"""
 	seek_offset = count[4]
 	seek_base = count[9]
-	file.seek(seek_offset)
-	offset_write(4,0)
-	for i in forecastlists.laundry.values()[:-1]:
-		offset_write(8,len(i.decode('utf-8').encode('utf-16be'))+2)
+	for i in forecastlists.laundry.values():
+		offset_write(seek_base)
+		seek_base+=len(i.decode('utf-8').encode('utf-16be'))+2
+		seek_offset+=4
 	"""Pollen Table"""
 	seek_offset = count[5]
 	seek_base = count[10]
-	file.seek(seek_offset)
-	offset_write(4,0)
-	for i in forecastlists.pollen.values()[:-1]:
-		offset_write(8,len(i.decode('utf-8').encode('utf-16be'))+2)
+	for i in forecastlists.pollen.values():
+		offset_write(seek_base)
+		seek_base+=len(i.decode('utf-8').encode('utf-16be'))+2
+		seek_offset+=4
 	"""Location Text"""
 	seek_offset = count[6]
-	file.seek(seek_offset)
-	for keys in list.keys():
-		city = get_index(list,keys,4)+count[11]
-		state = get_index(list,keys,5)
-		country = get_index(list,keys,6)
-		if state is 'None': state = 0
-		else: state+=count[11]
-		if country is 'None': country = 0
-		else: country+=count[11]
-		hex_write(0,city,4,0)
-		hex_write(0,state,4,0)
-		hex_write(0,country,4,12)
-		file.seek(seek_offset)
+	seek_base = count[11]
+	for key in list.keys():
+		offset_write(seek_base)
+		seek_base+=len(list[key][0][language_code].decode('utf-8').encode('utf-16be'))+2
+		if len(list[key][1][language_code]) > 0:
+			offset_write(seek_base)
+			seek_base+=len(list[key][1][language_code].decode('utf-8').encode('utf-16be'))+2
+		else: offset_write(0)
+		if len(list[key][2][language_code]) > 0:
+			offset_write(seek_base)
+			seek_base+=len(list[key][2][language_code].decode('utf-8').encode('utf-16be'))+2
+		else: offset_write(0)
+		seek_offset+=12
 	file.close()
 	if production:
 		os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12') # This cuts off the first 12 bytes.
@@ -1136,40 +1123,15 @@ def make_location_table(list):
 
 def make_forecast_text_table(list):
 	text_table = collections.OrderedDict()
-	bytes = 0
 	for keys in list.keys():
-		numbers = get_number(list, keys)
-		if len(list[keys][1][language_code]) == 0: state = None
-		else: state = list[keys][1][language_code]
-		if len(list[keys][2][language_code]) == 0: country = None
-		else: country = list[keys][2][language_code]
-		text = "\0".join(filter(None, [list[keys][0][language_code], state, country])).decode("utf-8").encode("utf-16be")
-		text_table["keys_%s" % numbers] = text+pad(2)
-		append(list,keys,bytes)
-		bytes+=len(list[keys][0][language_code].decode("utf-8").encode("utf-16be"))+2
-		if state is not None:
-			append(list,keys,bytes)
-			bytes+=len(list[keys][1][language_code].decode("utf-8").encode("utf-16be"))+2
-		else: append(list,keys,'None')
-		if country is not None:
-			append(list,keys,bytes)
-			bytes+=len(list[keys][2][language_code].decode("utf-8").encode("utf-16be"))+2
-		else: append(list,keys,'None')
+		text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code], list[keys][1][language_code], list[keys][2][language_code]])).decode("utf-8").encode("utf-16be")+pad(2)
 
 	return text_table
 
 def make_weather_value_table():
 	weathervalue_text_table = collections.OrderedDict()
-	if language_code == 1: padding = ""
-	else: padding = pad(2)
 	for k,v in forecastlists.weatherconditions.items():
-		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+padding
-	i = 0
-	bytes = 0
-	for k,v in weathervalue_text_table.items():
-		weathervalue_text_offsets[i] = bytes
-		bytes+=len(v)
-		i+=1
+		for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be")+pad(2)
 	return weathervalue_text_table
 
 def make_weather_offset_table():
@@ -1219,13 +1181,11 @@ requests.packages.urllib3.disable_warnings() # This is so we don't get some warn
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
-	global language_code,country_code,mode,last_dl,useMultithreaded,concurrent
+	global language_code,country_code,mode,last_dl,concurrent
 	threads = []
-	delay = 0
 	last_dl = 0
 	concurrent = 0
 	language_code = 1
-	useMultithreaded = False
 	country_code = forecastlists.bincountries[list.values()[0][2][1]]
 	if country_code == 0: bins = [0]
 	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
@@ -1249,10 +1209,9 @@ for list in weathercities:
 	dlthread.start()
 	for keys in list.keys():
 		if keys not in cache or cache[keys] != get_all(list,keys):
-			if int(round(last_dl)) > 0: delay+=1
+			if last_dl > 1: useMultithreaded = True
 			if useMultithreaded: threads.append(threading.Thread(target=get_data, args=(list,keys)))
 			else: get_data(list,keys)
-			if delay > 1: useMultithreaded = True
 	if useMultithreaded:
 		for i in threads:
 			while concurrent >= 4: time.sleep(0.01)
