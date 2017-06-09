@@ -74,7 +74,7 @@ def mkdir_p(path):
         if exc.errno == errno.EEXIST and os.path.isdir(path): pass
 	else: raise
 
-def download_source(name, mode, thumb, language_code, countries, data):
+def download_source(name, mode, language_code, countries, data):
 	print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
 	make_news = make_news_bin(mode, "wii", data)
@@ -83,7 +83,7 @@ def download_source(name, mode, thumb, language_code, countries, data):
 	if production:
 		"""This will use a webhook to log that the script has been ran."""
 
-		data = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": thumb, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+		data = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
 		for url in webhook_urls: requests.post(url, json=data, allow_redirects=True)
 
