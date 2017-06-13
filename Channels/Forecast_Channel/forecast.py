@@ -1178,7 +1178,7 @@ if production:
 	print "Production Mode Enabled"
 	rollbar.init(rollbar_key, "production")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
-s = requests.Session()
+s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
@@ -1213,7 +1213,7 @@ for list in weathercities:
 			else: get_data(list,keys)
 	if useMultithreaded:
 		for i in threads:
-			while concurrent >= 4: time.sleep(0.001)
+			while concurrent >= 4: time.sleep(0.01)
 			i.start()
 		for i in threads:
 			i.join()
