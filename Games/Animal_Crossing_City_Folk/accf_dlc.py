@@ -80,7 +80,7 @@ def make_item_bin():
 
 	print "\n"
 
-	file_name_brres = raw_input("Please enter the file name of the BRRES: ")
+	file_name_brres =Wo raw_input("Please enter the file name of the BRRES: ")
 
 	compress_ash = subprocess.call(["wine", "ashcompress.exe", file_name_brres])
 

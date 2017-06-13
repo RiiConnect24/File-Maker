@@ -1,0 +1,14 @@
+bs4
+feedparser
+googlemaps
+jsonp2json
+newspaper
+numpy
+pycountry
+python-resize-image
+pytz
+requests
+rollbar
+rsa
+unidecode
+xmltodict

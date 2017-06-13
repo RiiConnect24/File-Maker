@@ -54,7 +54,7 @@ if (sys.argv[1] == "dec"):
 	with open(output_file, "rb") as source_file:
 		read = source_file.read()
 
-	with open(key_path, "rb") as source_file:
+	with open(rsa_key_path, "rb") as source_file:
 		private_key_data = source_file.read()
 
 	private_key = rsa.PrivateKey.load_pkcs1(private_key_data, "PEM")
