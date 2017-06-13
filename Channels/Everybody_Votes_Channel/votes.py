@@ -27,6 +27,7 @@ from config import *
 print "Everybody Votes Channel File Generator \n"
 print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
 
+"""This will be used in the future for retrieving the poll id and question/result data"""
 MYSQL_HOSTNAME = ''
 MYSQL_USERNAME = ''
 MYSQL_PASSWORD = ''
@@ -45,7 +46,7 @@ number = 0
 poll_id = 955 # Same as Nintendo's original question poll ID
 worldwide_q = False
 national_q = False
-voting = False
+file_type = None
 countries = {}
 countries["United States"] = ['United States', 'United States', 'United States', 'United States', 'United States', 'United States', 'United States']
 
@@ -73,23 +74,21 @@ def get_poll_id():
 	return i
 	
 def pad(amnt):
-	buffer = ""
-	for _ in range(amnt): buffer+="\0"
-	return buffer
+	return "\0"*amnt
 	
 def prepare():
-	global country_count
-	global countries
-	global voting
+	global country_count,countries,file_type
 	print "Preparing ..."
 	country_count = len(countries)*7
-	if raw_input('Is this a voting or an _q file? (v/q): ') is 'v': voting = True
-	# National questions are listed first, then worldwide
+	file_type = raw_input('Enter File Type (q/r/v): ')
+	if file_type == "r":
+		print "Result files are not implemented yet"
+		exit()
+	if country_code == 49: question_languages = [1,4,8]
+	else: question_languages = [1]
+	# National questions are written first, then worldwide
 	# \n is used as line break
-	add_question("Do you like the Everybody Votes Channel?", "Yes", "No", 0)
-	#add_question("What is for dinner?", "Meat", "Vegetables", 0)
-	#add_question("Which kind of weather do you prefer?", "Cold", "Hot", 1)
-	#add_question("Do you like RiiConnect24?", "Yes", "No", 1)
+	add_question("Do you like the Everybody Votes Channel?", "Yes", "No", 0) # question files can only contain one question
 	
 def num():
 	global number
@@ -119,12 +118,7 @@ def is_worldwide(q):
 	return i
 	
 def add_question(q,r1,r2,f):
-	global question_data
-	global questions
-	global national
-	global worldwide
-	global national_q
-	global worldwide_q
+	global question_data,questions,national,worldwide,national_q,worldwide_q
 	question_data[num()] = [q,r1,r2,f]
 	questions+=1
 	if f == 0:
@@ -197,29 +191,32 @@ def sign_file(name):
 	os.remove(final + "-1")
 	
 def make_bin(country_code):
-	global countries
+	global countries,file_type
 	print "Processing ..."
 	voting = make_header()
 	national_table = make_national_question_table(voting)
 	worldwide_question = make_worldwide_question_table(voting)
 	question_text_table = make_question_text_table(voting)
-	country_table = make_country_name_table(voting)
-	question_text = make_question_text(question_text_table)
-	if voting: country_text = make_country_table(country_table)
+	if file_type == "v": country_table = make_country_name_table(voting)
+	if file_type != "r": question_text = make_question_text(question_text_table)
+	if file_type == "v": country_text = make_country_table(country_table)
 	
-	question_file = get_name()+'_q'
-	print "Writing voting.bin ..."
+	if file_type == "q": question_file = get_name()+'_q'
+	elif file_type == "r": question_file = get_name()+'_r'
+	else: question_file = "voting.bin"
+	print "Loaded %s questions" % questions
+	print "Writing to %s ..." % question_file
 	
 	with open(question_file, 'wb') as f:
 		for dictionary in dictionaries:
-			print("Writing to %s ..." % hex(f.tell()))
+			print("Writing to %s ..." % hex(f.tell()).rstrip("L"))
 			for values in dictionary.values():
 				f.write(values)
-		f.write(pad(10))
+		f.write(pad(16))
 		f.write('RIICONNECT24'.encode("ascii"))
 		f.flush()
 	
-	sign_file(question_file)
+	if production: sign_file(question_file)
 	
 	print "Writing Completed"
 	

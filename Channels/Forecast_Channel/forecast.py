@@ -48,7 +48,7 @@ total = 0 # Total Amount of Cities Processed
 progcount = 0 # Progress Bar Character Counter
 useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = False # Print more verbose messages
-useMultithreaded = False # Use multithreading
+useMultithreaded = True # Use multithreading
 count = {} # Offset Storage
 file = None
 
@@ -1213,7 +1213,7 @@ for list in weathercities:
 			else: get_data(list,keys)
 	if useMultithreaded:
 		for i in threads:
-			while concurrent >= 4: time.sleep(0.01)
+			while concurrent >= 2: time.sleep(0.005)
 			i.start()
 		for i in threads:
 			i.join()
