@@ -272,7 +272,7 @@ def make_news_bin(mode, console, data):
 
 	locations_data = newsdownload.locations_download(language_code, data)
 
-	header = make_header(country_code, languages, language_code, 0, 0, 30, data)
+	header = make_header(country_code, languages, language_code, 0, 30, data)
 	wiimenu_articles = make_wiimenu_articles(header, data)
 	topics_table = make_topics_table(header, topics_news, data)
 	timestamps_table = make_timestamps_table(topics_table, topics_news, mode, data)
@@ -314,7 +314,7 @@ def get_timestamp(mode):
 
 """First part of the header."""
 
-def make_header(country_code, languages, language_code, goo_flag, language_select_screen_flag, download_interval, data):
+def make_header(country_code, languages, language_code, language_select_screen_flag, download_interval, data):
 	header = collections.OrderedDict()
 	dictionaries.append(header)
 
@@ -340,7 +340,7 @@ def make_header(country_code, languages, language_code, goo_flag, language_selec
 		header[numbers] = u8(255)
 
 	header["language_code"] = u8(language_code) # Wii language code.
-	header["goo_flag"] = u8(goo_flag) # Flag to make the Globe display "Powered by Goo".
+	header["goo_flag"] = u8(0) # Flag to make the Globe display "Powered by Goo".
 	header["language_select_screen_flag"] = u8(language_select_screen_flag) # Flag to bring up the language select screen.
 	header["download_interval"] = u8(download_interval) # Interval in minutes to check for new articles to display on the Wii Menu.
 	header["message_offset"] = u32(0) # Offset for a message.
