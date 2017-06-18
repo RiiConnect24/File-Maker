@@ -29,6 +29,7 @@ import sys
 import threading
 import time
 import xmltodict
+import pickle
 from config import *
 from datetime import datetime, timedelta
 
@@ -49,6 +50,7 @@ progcount = 0 # Progress Bar Character Counter
 useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = False # Print more verbose messages
 useMultithreaded = True # Use multithreading
+keyCache = False
 count = {} # Offset Storage
 file = None
 
@@ -74,6 +76,7 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
+duplicates = {}
 
 def u8(data):
 	if data < 0 or data > 255:
@@ -123,6 +126,9 @@ def time_convert(time):
 
 def get_epoch():
 	return int(time.time())
+
+def get_rounded_hour():
+	return round(time.time()/3600)*3600
 
 def get_city(list, key):
 	return list[key][0][1]
@@ -243,8 +249,7 @@ def reset_data(l):
 	file = None
 
 def get_apikey():
-	global apicount,apicycle,apirequests
-	apirequests+=1
+	global apicount,apicycle
 	key = None
 	while key is None:
 		key = accuweather_api_keys[apicount]
@@ -257,8 +262,9 @@ def get_apikey():
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 def request_data(url):
-	global retrycount
+	global retrycount,apirequests
 	header = {'Accept-Encoding' : 'gzip, deflate'} # This is to make the data download faster.
+	apirequests+=1
 	i = 0
 	c = 0
 	while c == 0:
@@ -299,7 +305,7 @@ def timestamps(mode, key):
 	if key != 0: citytime = time_convert(globe[key]['time'])
 	if mode == 0: timestamp = time
 	elif mode == 1: timestamp = citytime
-	elif mode == 2: timestamp = time+60
+	elif mode == 2: timestamp = time_convert(get_rounded_hour())
 	return timestamp
 
 def get_loccode(list, key):
@@ -548,7 +554,8 @@ def get_location(list, key):
 
 def get_legacy_location(list, key):
 	i = 0
-	locationkey[key] = None
+	if keyCache and key not in duplicates: locationkey[key] = cachefile[key]
+	else: locationkey[key] = None
 	while locationkey[key] is None:
 		if i == 2: return -1
 		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s" % get_search(list,key,i))
@@ -751,12 +758,11 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	global citycount,cache,apilegacy,apirequests,concurrent
+	global citycount,cache,apilegacy,concurrent
 	citycount+=1
 	cache[name] = get_all(list, name)
 	globe[name] = {}
 	if useMultithreaded: concurrent+=1
-	if useLegacy: apirequests+=2
 	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
@@ -1177,6 +1183,13 @@ def get_wind_direction(degrees):
 if production:
 	print "Production Mode Enabled"
 	rollbar.init(rollbar_key, "production")
+if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
+else:
+	cachefile = pickle.load(open('locations.db','rb'))
+	if time.time() > cachefile["cache_expiration"]:
+		cachefile.close()
+		os.remove('locations.db')
+	else: keyCache = True
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
@@ -1208,6 +1221,7 @@ for list in weathercities:
 	dlthread = threading.Thread(target=display_loop,args=[list])
 	dlthread.start()
 	for keys in list.keys():
+		if keys in cache and cache[keys] != get_all(list,keys) and keys not in duplicates: duplicates[keys] = locationkey[keys]
 		if keys not in cache or cache[keys] != get_all(list,keys):
 			if useMultithreaded: threads.append(threading.Thread(target=get_data, args=(list,keys)))
 			else: get_data(list,keys)
@@ -1243,6 +1257,13 @@ if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
 print "Processed Cities: %s/%s" % (cities,total)
 print "Total Time: %s Seconds\n" % round(time.time()-total_time)
+
+if not keyCache:
+	cachefile = pickle.load(open('locations.db','ab+'))
+	for k,v in duplicates.items(): locationkey[k] = v
+	pickle.dump(locationkey,cachefile)
+	cachefile.flush()
+	cachefile.close()
 
 os.remove('forecastlists.pyc')
 os.remove('config.pyc')
