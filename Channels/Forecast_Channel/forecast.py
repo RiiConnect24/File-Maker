@@ -660,7 +660,7 @@ def make_forecast_bin(list):
 	hex_write(76,count[5])
 	hex_write(84,count[6])
 	seek_offset = count[2]
-	seek_base = count[7]		
+	seek_base = count[7]
 	for i in [forecastlists.weatherconditions.values()[j//2] for j in range(len(forecastlists.weatherconditions.values())*2)]:
 		offset_write(seek_base)
 		seek_base+=len(i[0][language_code].decode('utf-8').encode('utf-16be'))+2
@@ -1270,7 +1270,7 @@ os.remove('config.pyc')
 
 if production:
 	"""This will use a webhook to log that the script has been ran."""
-	data = {"username": "Forecast Bot", "content": "Weather Data has been updated!", "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script", "author_icon": "https://rc24.xyz/images/profile_forecast.png", "text": "Weather Data has been updated!", "title": "Update!", "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/profile_forecast.png", "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+	data = {"username": "Forecast Bot", "content": "Weather Data has been updated!", "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script", "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png", "text": "Weather Data has been updated!", "title": "Update!", "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 	for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
 
 print "Completed Successfully"
