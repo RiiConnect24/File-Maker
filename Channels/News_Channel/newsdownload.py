@@ -1003,7 +1003,7 @@ def download_zeit(topics_name):
 	soup = BeautifulSoup(urllib2.urlopen("http://www.zeit.de/news/index").read(), "lxml")
 
 	for items in soup.findAll("article", {"class": "newsteaser"}):
-		updated = parser.parse(items.find("time", {"class": "newsteaser__time"}).contents[0].strip() + " +0100")
+		updated = parser.parse(items.find("time", {"class": "newsteaser__time"}).contents[0].strip() + " +0300")
 		updated = updated.astimezone(tz.tzutc())
 
 		updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
