@@ -632,21 +632,19 @@ def make_forecast_bin(list):
 	dictionaries = [header,long_forecast_table,short_japan_tables,weathervalue_offset_table,uvindex_table,laundryindex_table,pollenindex_table,location_table,weathervalue_text_table,uvindex_text_table,laundry_text_table,pollen_text_table,text_table]
 	if mode == 1: extension = "bin"
 	elif mode == 2: extension = "bi2"
+	file = io.BytesIO()
 	file1 = 'forecast~.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file2 = 'forecast.%s~.%s+%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file3 = 'forecast.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file4 = 'forecast.%s' % extension
-	with open(file1, 'ab') as file:
-		file.write(pad(20))
-		for i in dictionaries:
-			for v in i.values(): file.write(v)
-			count[constant] = file.tell()
-			constant+=1
-		file.write(pad(16))
-		file.write('RIICONNECT24'.encode('ASCII')) # This can be used to identify that we made this file.
-		file.flush()
-	file.close()
-	file = open(file1, 'r+b')
+	file.write(pad(20))
+	for i in dictionaries:
+		for v in i.values(): file.write(v)
+		count[constant] = file.tell()
+		constant+=1
+	file.write(pad(16))
+	file.write('RIICONNECT24'.encode('ASCII')) # This can be used to identify that we made this file.
+	file.seek(0)
 	hex_write(12,timestamps(0,0))
 	hex_write(16,timestamps(2,0))
 	hex_write(36,count[0])
@@ -701,6 +699,9 @@ def make_forecast_bin(list):
 			seek_base+=len(list[key][2][language_code].decode('utf-8').encode('utf-16be'))+2
 		else: offset_write(0)
 		seek_offset+=12
+	file.seek(0)
+	with open(file1, 'wb') as temp:
+		temp.write(file.read())
 	file.close()
 	if production:
 		os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12 status=none') # This cuts off the first 12 bytes.
@@ -713,12 +714,14 @@ def make_short_bin(list):
 	file1 = 'short.%s~.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file2 = 'short.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file3 = 'short.%s' % extension
-	with open(file1, 'ab') as file:
-		file.write(u32(timestamps(0,0)))
-		file.write(u32(timestamps(2,0)))
-		for v in short_forecast_header.values(): file.write(v)
-		for v in short_forecast_table.values(): file.write(v)
-		file.flush()
+	file = io.BytesIO()
+	file.write(u32(timestamps(0,0)))
+	file.write(u32(timestamps(2,0)))
+	for v in short_forecast_header.values(): file.write(v)
+	for v in short_forecast_table.values(): file.write(v)
+	file.seek(0)
+	with open(file1, 'wb') as temp:
+		temp.write(file.read())
 	file.close()
 	if production: sign_file(file1, file2, file3)
 
@@ -737,7 +740,8 @@ def sign_file(name, local_name, server_name):
 	dest.close()
 	file.close()
 	output("Compressing ...", "VERBOSE")
-	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", local_name, local_name + "-1"], stdout=subprocess.PIPE) # Compresses the file with LZ77 compression.
+	subprocess.call(["mv", local_name, local_name+"-1"])
+	subprocess.call(["%s/lzss" % lzss_path, "-evf", local_name+"-1"], stdout=subprocess.PIPE)
 	file = open(local_name + '-1', 'rb')
 	new = file.read()
 	dest = open(local_name, "w+")
@@ -1185,9 +1189,10 @@ if production:
 	rollbar.init(rollbar_key, "production")
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
 else:
-	cachefile = pickle.load(open('locations.db','rb'))
+	file = open('locations.db','rb')
+	cachefile = pickle.load(file)
 	if time.time() > cachefile["cache_expiration"]:
-		cachefile.close()
+		file.close()
 		os.remove('locations.db')
 	else: keyCache = True
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
@@ -1259,14 +1264,11 @@ print "Processed Cities: %s/%s" % (cities,total)
 print "Total Time: %s Seconds\n" % round(time.time()-total_time)
 
 if not keyCache:
-	cachefile = pickle.load(open('locations.db','ab+'))
+	cachefile = open('locations.db','wb+')
 	for k,v in duplicates.items(): locationkey[k] = v
 	pickle.dump(locationkey,cachefile)
 	cachefile.flush()
 	cachefile.close()
-
-os.remove('forecastlists.pyc')
-os.remove('config.pyc')
 
 if production:
 	"""This will use a webhook to log that the script has been ran."""

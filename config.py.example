@@ -4,6 +4,7 @@ webhook_urls = ["DISCORD WEBHOOK", "DISCORD WEBHOOK"] # Used to update webhooks 
 key_path = "/path/to/key/in/format/of/file.pem" # Private key to sign the file.
 file_path = "/path/to/folder" # Path to save the file to.
 dsdecmp_path = "/path/to/dsdecmp" # Path to DSDecmp.
+lzss_path = "/path/to/lzss" # Path to lzss
 production = None # Use production mode
 
 """News Channel only"""
