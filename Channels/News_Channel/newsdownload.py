@@ -253,9 +253,7 @@ def download_ap_spanish():
 	return download_ap(topics_name, topics, "es")
 
 def download_reuters_english():
-	print "Downloading from Reuters (English)..."
-
-	print "\n"
+	print "Downloading from Reuters (English)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -282,9 +280,7 @@ def download_reuters_english():
 	return download_reuters(topics_name, topics)
 
 def download_lobs_french():
-	print "Downloading from L'Obs (French)..."
-
-	print "\n"
+	print "Downloading from L'Obs (French)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -296,9 +292,7 @@ def download_lobs_french():
 	return download_lobs(topics_name)
 
 def download_zeit_german():
-	print "Downloading from ZEIT (German)..."
-
-	print "\n"
+	print "Downloading from ZEIT (German)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -314,9 +308,7 @@ def download_zeit_german():
 	return download_zeit(topics_name)
 
 def download_ansa_italian():
-	print "Downloading from ANSA (Italian)..."
-
-	print "\n"
+	print "Downloading from ANSA (Italian)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -337,9 +329,7 @@ def download_ansa_italian():
 	return download_ansa(topics_name, topics)
 
 def download_anp_dutch():
-	print "Downloading from ANP (Dutch)..."
-
-	print "\n"
+	print "Downloading from ANP (Dutch)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -364,9 +354,7 @@ def download_anp_dutch():
 	return download_anp(topics_name, topics)
 
 def download_news24_mainichi_japanese():
-	print "Downloading from News24 and Mainichi (Japanese)..."
-
-	print "\n"
+	print "Downloading from News24 and Mainichi (Japanese)...\n"
 
 	topics_name = collections.OrderedDict()
 
