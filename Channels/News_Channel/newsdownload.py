@@ -234,9 +234,7 @@ def download_ap_english():
 	return download_ap(topics_name, topics, "en")
 
 def download_ap_spanish():
-	print "Downloading from the Associated Press (Spanish)..."
-
-	print "\n"
+	print "Downloading from the Associated Press (Spanish)...\n"
 
 	topics_name = collections.OrderedDict()
 
