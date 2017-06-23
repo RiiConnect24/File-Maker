@@ -209,9 +209,7 @@ def locations_download(language_code, data):
 	return locations_return
 
 def download_ap_english():
-	print "Downloading from the Associated Press (English)..."
-
-	print "\n"
+	print "Downloading from the Associated Press (English)...\n"
 
 	topics_name = collections.OrderedDict()
 
