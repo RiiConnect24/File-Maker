@@ -87,6 +87,12 @@ def download_source(name, mode, language_code, countries, data):
 
 		for url in webhook_urls: requests.post(url, json=data, allow_redirects=True)
 
+		filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
+
+		if filesize > 3712000:
+			print "Error: News files exceed the maximum file size amount."
+			rollbar.report_message("News files exceed the maximum file size amount.", "critical")
+
 		for country in countries:
 			copy_file(mode, "wii", country, language_code)
 			copy_file(mode, "wii_u", country, language_code)
@@ -110,12 +116,6 @@ def copy_file(mode, system, country, language_code):
 		newsfilename2 = "news.bin.%s" % (str(datetime.utcnow().hour).zfill(2))
 		path = "%s/%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country, newsfilename2)
 		subprocess.call(["cp", newsfilename, path])
-
-	filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/1/049/news.bin.*"))
-
-	if filesize > 3712000:
-		print "Error: News files exceed the maximum file size amount."
-		rollbar.report_message("News files exceed the maximum file size amount.", "critical")
 
 """Run the functions to make the news."""
 
