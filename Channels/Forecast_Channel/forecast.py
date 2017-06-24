@@ -748,7 +748,7 @@ def sign_file(name, local_name, server_name):
 	key = open(key_path, 'rb')
 	output("RSA Signing ...", "VERBOSE")
 	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM") # Loads the RSA key.
-	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding. Beautiful.
+	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding.
 	dest.write(binascii.unhexlify(str(0).zfill(128))) # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
 	dest.write(signature)
 	dest.write(new)
