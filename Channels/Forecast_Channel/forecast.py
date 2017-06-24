@@ -1185,8 +1185,10 @@ def get_wind_direction(degrees):
 	return forecastlists.winddirection[degrees]
 
 if production:
-	print "Production Mode Enabled"
+	output("Production Mode Enabled", "VERBOSE")
 	rollbar.init(rollbar_key, "production")
+else:
+	output("Production Mode Disabled", "VERBOSE")
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
 else:
 	file = open('locations.db','rb')
