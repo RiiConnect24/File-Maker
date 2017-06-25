@@ -1202,7 +1202,7 @@ s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
-	global language_code,country_code,mode,concurrent
+	global language_code,country_code,mode,concurrent,loop
 	threads = []
 	concurrent = 0
 	language_code = 1
