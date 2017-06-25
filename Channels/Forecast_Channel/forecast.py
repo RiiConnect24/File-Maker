@@ -287,8 +287,8 @@ def request_data(url):
 				except: pass
 			elif "regions" in url:
 				try:
-					a = data.json()[0]
-					c = 1
+						a = data.json()[0]
+						c = 1
 				except: pass
 			else:
 				try:
@@ -748,7 +748,7 @@ def sign_file(name, local_name, server_name):
 	key = open(key_path, 'rb')
 	output("RSA Signing ...", "VERBOSE")
 	private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM") # Loads the RSA key.
-	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding.
+	signature = rsa.sign(new, private_key, "SHA-1") # Makes a SHA1 with ASN1 padding. Beautiful.
 	dest.write(binascii.unhexlify(str(0).zfill(128))) # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
 	dest.write(signature)
 	dest.write(new)
@@ -1187,8 +1187,6 @@ def get_wind_direction(degrees):
 if production:
 	print "Production Mode Enabled"
 	rollbar.init(rollbar_key, "production")
-else:
-	print "Production Mode Disabled"
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
 else:
 	file = open('locations.db','rb')
