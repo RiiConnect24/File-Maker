@@ -1186,7 +1186,7 @@ def get_wind_direction(degrees):
 
 if production:
 	print "Production Mode Enabled"
-	rollbar.init(rollbar_key, "production"
+	rollbar.init(rollbar_key, "production")
 else:
 	print "Production Mode Disabled"
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
