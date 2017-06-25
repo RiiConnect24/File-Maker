@@ -1187,8 +1187,6 @@ def get_wind_direction(degrees):
 if production:
 	output("Production Mode Enabled", "VERBOSE")
 	rollbar.init(rollbar_key, "production")
-else:
-	output("Production Mode Disabled", "VERBOSE")
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
 else:
 	file = open('locations.db','rb')
@@ -1202,7 +1200,7 @@ s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
-	global language_code,country_code,mode,concurrent,loop
+	global language_code,country_code,mode,concurrent
 	threads = []
 	concurrent = 0
 	language_code = 1
