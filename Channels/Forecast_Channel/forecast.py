@@ -562,6 +562,7 @@ def get_legacy_location(list, key):
 		try:
 			if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
 			else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
+			if key in forecastlists.key_corrections: locationkey[key] = key_corrections[key]
 		except: pass
 		i+=1
 

@@ -2470,6 +2470,10 @@ corrections = {
 	"Cape Horn": "Puerto Williams",
 }
 
+key_corrections = {
+	"Mount Everest": "2-11760_1_poi_al",
+}
+
 country_corrections = {
 	"San Juan": "pl",
 	"Nuuk": "gl",
