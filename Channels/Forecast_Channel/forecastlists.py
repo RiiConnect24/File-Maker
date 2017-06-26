@@ -2478,6 +2478,8 @@ country_corrections = {
 	"Christmas Island": "cx",
 }
 
+country_ignore = ["Pointe-a-Pitre", "Fort-de-France", "Basse-Terre"]
+
 region_delete_corrections = ["Central", "Flanders Region", "Walloon Region", "Brussels Region", "Southern Finland", "Western Finland", "Eastern Finland", "Province of Oulu", "Lapland", "Åland", "Dublin", "Border", "Midland", "Mid-East", "Mid-West", "South-East", "South-West", "West", "Østlandet", "Lisbon", "Alentejo", "Algarve", "Centro", "Norte", "Madeira", "Azores", "Varmland County", "Dalarna County", "Västra Götaland County", "Gavleborg County", "Jonkoping County", "Norrbotten County", "Halland County", "Skåne County", "Kalmar County", "Blekinge County", "Södermanland County", "Östergötland County", "Örebro County", "Jamtland County", "Stockholm County", "Västerbotten County", "Västernorrland County", "Uppsala County", "Västmanland County", "Kronoberg County", "Valais", "Geneva", "Vaud", "Canton of Schaffhausen", "Canton of Zug", "Zurich", "Basel-Stadt", "Canton of Bern", "Lucerne", "St. Gallen", "Canton of Neuchâtel", "Canton of Fribourg", "Île-de-France", "Alsace", "Aquitaine", "Auvergne", "Lower Normandy", "Burgundy", "Brittany", "Centre Loire Valley", "Champagne-Ardenne", "Corsica", "Franche-Comté", "Upper Normandy", "Languedoc-Roussillon", "Limousin", "Lorraine", "Midi-Pyrénées", "Nord-Pas-de-Calais", "Western Loire Valley", "Picardy", "Poitou-Charentes", "Provence-Alpes-Côte d'Azur", "Rhône-Alpes", "Guadeloupe", "Martinique", "French Guiana", "Réunion", "Distrito Federal", "San Juan", "Tierra del Fuego, Antártida e Islas del Atlántico Sur", "Mecklenburg-Western Pomerania", "Trentino-South Tyrol", "Friuli Venezia Giulia", "Newfoundland and Labrador"]
 
 bincountries = collections.OrderedDict()

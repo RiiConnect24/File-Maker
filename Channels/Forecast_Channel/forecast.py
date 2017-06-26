@@ -522,6 +522,7 @@ def get_search(list, key, mode):
 		else: search = get_city(list, key)
 	if key in forecastlists.corrections: search = forecastlists.corrections[key]
 	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
+	if get_city(list, key) in forecastlists.country_ignore: search = get_city(list, key)
 	if "St." in search: search = search.replace('St.','Saint')
 	return search
 
