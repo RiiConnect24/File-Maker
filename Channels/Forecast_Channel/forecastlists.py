@@ -2472,6 +2472,7 @@ corrections = {
 
 key_corrections = {
 	"Mount Everest": "2-11760_1_poi_al",
+	"Angkor Wat": "55826_poi",
 }
 
 country_corrections = {
