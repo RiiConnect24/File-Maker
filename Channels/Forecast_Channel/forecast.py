@@ -521,7 +521,6 @@ def get_search(list, key, mode):
 		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
 		else: search = get_city(list, key)
 	if key in forecastlists.corrections: search = forecastlists.corrections[key]
-	if get_region(list, key) in forecastlists.region_corrections: search = " ".join(filter(None, ([get_city(list, key), forecastlists.region_corrections[get_region(list, key)]])))
 	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
 	if "St." in search: search = search.replace('St.','Saint')
 	return search
