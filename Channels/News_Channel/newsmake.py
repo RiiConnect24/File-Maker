@@ -806,15 +806,13 @@ def write_dictionary(mode):
 
 	with open(newsfilename + "-1", "rb") as source_file: read = source_file.read()
 
-	with open(newsfilename + "-2", "w+") as dest_file:
+	with open(newsfilename, "w+") as dest_file:
 		dest_file.write(u32(512))
 		dest_file.write(u32(len(read) + 12))
 		dest_file.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))
 		dest_file.write(read)
 
-	FNULL = open(os.devnull, "w+")
-
-	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", newsfilename + "-2", newsfilename], stdout=FNULL, stderr=subprocess.STDOUT)
+	subprocess.call(["%s/lzss" % lzss_path, "-evf", newsfilename], stdout=subprocess.PIPE)
 
 	with open(newsfilename, "rb") as source_file: read = source_file.read()
 
