@@ -830,4 +830,3 @@ def write_dictionary(mode):
 	"""Remove the rest of the other files."""
 
 	os.remove(newsfilename + "-1")
-	os.remove(newsfilename + "-2")
