@@ -131,20 +131,15 @@ def get_country(list, key): return list[key][2][1]
 
 def get_all(list, key): return ", ".join(filter(None, [get_city(list, key),get_region(list, key),get_country(list, key)]))
 
-def get_lockey(key):
-	return locationkey[key]
+def get_lockey(key): return locationkey[key]
 
-def append(list, key, data):
-	list[str(key)].append(data)
+def append(list, key, data): list[str(key)].append(data)
 
-def get_number(list, key):
-	return list.keys().index(key)
+def get_number(list, key): return list.keys().index(key)
 
-def pad(amnt):
-	return "\0"*amnt
+def pad(amnt): return "\0"*amnt
 
-def get_index(list, key, num):
-	return list[key][num]
+def get_index(list, key, num): return list[key][num]
 
 def num():
 	global number
