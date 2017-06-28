@@ -704,8 +704,7 @@ def make_short_bin(list):
 	for v in short_forecast_header.values(): file.write(v)
 	for v in short_forecast_table.values(): file.write(v)
 	file.seek(0)
-	with open(file1, 'wb') as temp:
-		temp.write(file.read())
+	with open(file1, 'wb') as temp: temp.write(file.read())
 	file.close()
 	if production: sign_file(file1, file2, file3)
 
@@ -1116,8 +1115,7 @@ def make_location_table(list):
 
 def make_forecast_text_table(list):
 	text_table = collections.OrderedDict()
-	for keys in list.keys():
-		text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code], list[keys][1][language_code], list[keys][2][language_code]])).decode("utf-8").encode("utf-16be")+pad(2)
+	for keys in list.keys(): text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code], list[keys][1][language_code], list[keys][2][language_code]])).decode("utf-8").encode("utf-16be")+pad(2)
 	return text_table
 
 def make_weather_value_table():
@@ -1162,8 +1160,7 @@ def get_weatherjpnicon(icon):
 	if icon == -1: return 'FFFF'
 	else: return forecastlists.weatherconditions[icon][3]
 
-def get_wind_direction(degrees):
-	return forecastlists.winddirection[degrees]
+def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
 if production:
 	print "Production Mode Enabled"
