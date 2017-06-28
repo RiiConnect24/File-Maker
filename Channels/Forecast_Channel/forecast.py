@@ -1187,7 +1187,7 @@ for list in weathercities:
 	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
 	elif country_code >= 64 and country_code <= 110: bins = [1,2,3,4,5,6]
 	else:
-		print "Unknown country code - generating English only"
+		print "Unknown country code %s - generating English only" % country_code
 		bins = [1]
 	print "Processing list #%s - %s (%s)" % (weathercities.index(list), country_code, list.values()[0][2][1])
 	for k,v in forecastlists.weathercities_international.items():
