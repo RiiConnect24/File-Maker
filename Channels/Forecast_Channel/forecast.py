@@ -279,7 +279,8 @@ def request_data(url):
 					data = data.json()
 					data[0]
 					c = 1
-				except: if "locations" in url: return -1
+				except:
+					if "locations" in url: return -1
 		i+=1
 	return data
 
