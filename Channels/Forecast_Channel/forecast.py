@@ -105,14 +105,11 @@ def s16(data):
 def s32(data):
 	return struct.pack(">i", data)
 
-def temp(num):
-	return num & 0xFF
+def temp(num): return num & 0xFF
 
-def to_celsius(temp):
-	return int((temp-32)*5/9)
+def to_celsius(temp): return int((temp-32)*5/9)
 
-def to_fahrenheit(temp):
-	return int((temp*9/5)+32)
+def to_fahrenheit(temp): return int((temp*9/5)+32)
 
 def kmh_mph(wind):
 	return int(round(wind*0.621371))
