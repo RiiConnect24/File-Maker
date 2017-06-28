@@ -701,8 +701,7 @@ def make_forecast_bin(list):
 		else: offset_write(0)
 		seek_offset+=12
 	file.seek(0)
-	with open(file1, 'wb') as temp:
-		temp.write(file.read())
+	with open(file1, 'wb') as temp: temp.write(file.read())
 	file.close()
 	if production:
 		os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12 status=none') # This cuts off the first 12 bytes.
@@ -1157,21 +1156,18 @@ def make_weather_offset_table():
 def make_uvindex_text_table():
 	uvindex_text_table = collections.OrderedDict()
 	uvindexlist = []
-	for v in forecastlists.uvindex.values():
-		uvindexlist.append(v[language_code])
+	for v in forecastlists.uvindex.values(): uvindexlist.append(v[language_code])
 	uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be")+pad(2)
 	return uvindex_text_table
 
 def make_laundry_text_table():
 	laundry = collections.OrderedDict()
-	for v in forecastlists.laundry.values():
-		laundry[num()] = v.decode('utf-8').encode("utf-16be")+pad(2)
+	for v in forecastlists.laundry.values(): laundry[num()] = v.decode('utf-8').encode("utf-16be")+pad(2)
 	return laundry
 
 def make_pollen_text_table():
 	pollen = collections.OrderedDict()
-	for v in forecastlists.pollen.values():
-		pollen[num()] = v.decode('utf-8').encode("utf-16be")+pad(2)
+	for v in forecastlists.pollen.values():	pollen[num()] = v.decode('utf-8').encode("utf-16be")+pad(2)
 	return pollen
 
 def get_weathericon(icon):
@@ -1188,8 +1184,7 @@ def get_wind_direction(degrees):
 if production:
 	print "Production Mode Enabled"
 	rollbar.init(rollbar_key, "production")
-else:
-	print "Production Mode Disabled"
+else: print "Production Mode Disabled"
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
 else:
 	file = open('locations.db','rb')
