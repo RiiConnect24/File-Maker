@@ -111,33 +111,25 @@ def to_celsius(temp): return int((temp-32)*5/9)
 
 def to_fahrenheit(temp): return int((temp*9/5)+32)
 
-def kmh_mph(wind):
-	return int(round(wind*0.621371))
+def kmh_mph(wind): return int(round(wind*0.621371))
 
-def mph_kmh(wind):
-	return int(round(float(wind)*1.60934))
+def mph_kmh(wind): return int(round(float(wind)*1.60934))
 
 def time_convert(time):
 	if mode == 1: return int((time - 946684800) / 60)
 	elif mode == 2: return int((time - 1325376000) / 60) # Still have to adjust this.
 
-def get_epoch():
-	return int(time.time())
+def get_epoch(): return int(time.time())
 
-def get_rounded_hour():
-	return round(time.time()/3600)*3600
+def get_rounded_hour(): return round(time.time()/3600)*3600
 
-def get_city(list, key):
-	return list[key][0][1]
+def get_city(list, key): return list[key][0][1]
 
-def get_region(list, key):
-	return list[key][1][1]
+def get_region(list, key): return list[key][1][1]
 
-def get_country(list, key):
-	return list[key][2][1]
+def get_country(list, key): return list[key][2][1]
 
-def get_all(list, key):
-	return ", ".join(filter(None, [get_city(list, key),get_region(list, key),get_country(list, key)]))
+def get_all(list, key): return ", ".join(filter(None, [get_city(list, key),get_region(list, key),get_country(list, key)]))
 
 def get_lockey(key):
 	return locationkey[key]
