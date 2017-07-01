@@ -1169,10 +1169,12 @@ if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.ti
 else:
 	file = open('locations.db','rb')
 	cachefile = pickle.load(file)
-	if time.time() > cachefile["cache_expiration"]:
-		file.close()
-		os.remove('locations.db')
-	else: keyCache = True
+	try:
+		if time.time() > cachefile["cache_expiration"]:
+			file.close()
+			os.remove('locations.db')
+		else: keyCache = True
+	except: os.remove('locations.db')
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
