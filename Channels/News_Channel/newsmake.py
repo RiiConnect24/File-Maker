@@ -462,9 +462,9 @@ def make_timestamps_table(topics_table, topics_news, mode, data):
 		numbers += 1
 		timestamps_add = timestamps_table_add(topics)
 		if timestamps_add != 0:
-			topics_table["topics_%s_article_number" % str(numbers)] = u32(len(timestamps_add) / 8) # Number of articles that will be in a certain topic. Also, I don't like how it divides the thing by 8 but whatever.
-			topics_table["topics_%s_article_offset" % str(numbers)] = offset_count() # Offset for the articles to choose for the topic.
-			timestamps_table["timestamps_%s" + str(numbers)] = timestamps_add # Timestamps.
+			topics_table["topics_%s_article_number" % numbers] = u32(len(timestamps_add) / 8) # Number of articles that will be in a certain topic. Also, I don't like how it divides the thing by 8 but whatever.
+			topics_table["topics_%s_article_offset" % numbers] = offset_count() # Offset for the articles to choose for the topic.
+			timestamps_table["timestamps_%s" + numbers] = timestamps_add # Timestamps.
 
 	return timestamps_table
 
@@ -489,7 +489,7 @@ def make_articles_table(header, locations_data, data):
 			for article_name in locations_data[locations][1]:
 				if keys == article_name: articles_table["location_%s_number" % numbers] = u32(locations_data.keys().index(locations)) # Number for the location.
 
-		if article[4] != 0:
+		if article[4] != None:
 			articles_table["term_timestamp_%s" % numbers] = get_timestamp(1) # Timestamp for the term.
 			articles_table["picture_%s_number" % numbers] = u32(pictures_number) # Number for the picture.
 			pictures_number += 1
@@ -599,15 +599,15 @@ def make_pictures_table(header, data):
 
 	for article in data.values():
 		numbers += 1
-		if article[4] != 0:
-			if article[5] != 0:
+		if article[4] != None:
+			if article[5] != None:
 				pictures_table["credits_%s_size" % numbers] = u32(len(article[5])) # Size of the credits.
 				pictures_table["credits_%s_offset" % numbers] = u32(0) # Offset for the credits.
 			else:
 				pictures_table["credits_%s_size" % numbers] = u32(0) # Size of the credits.
 				pictures_table["credits_%s_offset" % numbers] = u32(0) # Offset for the credits.
 
-			if article[6] != 0:
+			if article[6] != None:
 				pictures_table["captions_%s_size" % numbers] = u32(len(article[6])) # Size of the captions.
 				pictures_table["captions_%s_offset" % numbers] = u32(0) # Offset for the captions.
 			else:
@@ -639,11 +639,11 @@ def make_articles(pictures_table, articles_table, data):
 		articles["article_%s_read" % numbers] = article[2] # Read the article.
 		articles["padding_%s_article" % numbers] = u16(0) # Padding for the article.
 
-		if article[6] != 0:
+		if article[6] != None:
 			pictures_table["captions_%s_offset" % numbers] = offset_count() # Offset for the caption.
 			articles["captions_%s_read" % numbers] = article[6] # Read the caption.
 			articles["padding_%s_captions" % numbers] = u16(0) # Padding for the caption.
-		if article[5] != 0:
+		if article[5] != None:
 			pictures_table["credits_%s_offset" % numbers] = offset_count() # Offset for the credits.
 			articles["credits_%s_read" % numbers] = article[5] # Read the credits.
 			articles["padding_%s_credits" % numbers] = u16(0) # Padding for the credits.
@@ -759,8 +759,7 @@ def make_source_pictures(source_table, data):
 				source_table["pictures_size_%s" % article[9]] = u32(os.path.getsize("./logos/%s.jpg" % article[9]))
 				source_table["pictures_offset_%s" % article[9]] = offset_count()
 
-				with open("./logos/%s.jpg" % article[9], "rb") as source_file:
-					source_pictures["logo_%s" % article[9]] = source_file.read()
+				with open("./logos/%s.jpg" % article[9], "rb") as source_file: source_pictures["logo_%s" % article[9]] = source_file.read()
 
 	return source_pictures
 
@@ -774,7 +773,7 @@ def make_pictures(pictures_table, data):
 
 	for article in data.values():
 		numbers += 1
-		if article[4] != 0:
+		if article[4] != None:
 			pictures_table["pictures_%s_offset" % numbers] = offset_count() # Offset for the pictures.
 			pictures["pictures_%s_read" % numbers] = article[4] # Read the pictures.
 			pictures["nullbyte_%s_pictures" % numbers] = u8(0) # Null byte for the pictures.
