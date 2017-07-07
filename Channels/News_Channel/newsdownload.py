@@ -197,8 +197,7 @@ def locations_download(language_code, data):
 					if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
 
 					locations_return[new_name][1].append(filenames)
-			except:
-				pass
+			except: pass
 
 	return locations_return
 
@@ -491,8 +490,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return 0
-	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "mainichi"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "mainichi"]
 
 def parsedata_news24(url, title, updated, picture_number):
 	json_data = json.loads(jsonp2json.convert(urllib2.urlopen(url).read()))
@@ -531,8 +529,7 @@ def parsedata_news24(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return 0
-	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "news24"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "news24"]
 
 def download_reuters(topics_name, topics):
 	picture_number = 0
@@ -636,8 +633,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return 0
-	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
 
 def download_anp(topics_name, topics):
 	picture_number = 0
@@ -739,8 +735,7 @@ def parsedata_anp(url, title, source, updated, picture_number):
 		print "Article is 0."
 		print url
 		return 0
-	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), source]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), source]
 
 def download_ansa(topics_name, topics):
 	picture_number = 0
@@ -838,8 +833,7 @@ def parsedata_ansa(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return 0
-	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), "ansa"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), "ansa"]
 
 def download_lobs(topics_name):
 	picture_number = 0
