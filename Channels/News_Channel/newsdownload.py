@@ -158,7 +158,7 @@ def locations_download(language_code, data):
 	for keys,values in data.items():
 		location = values[8]
 
-		if location > 0:
+		if location != None:
 			if location not in locations: locations[location] = []
 
 			locations[location].append(keys)
@@ -466,7 +466,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		if location.encode("utf-16be") in article: location_list[location] = article.count(location.encode("utf-16be"))
 
 	try: location = max(location_list, key=location_list.get)
-	except: location = 0
+	except: location = None
 
 	try:
 		if picture_number <= 5:
@@ -505,7 +505,7 @@ def parsedata_news24(url, title, updated, picture_number):
 		if location.encode("utf-16be") in article: location_list[location] = article.count(location.encode("utf-16be"))
 
 	try: location = max(location_list, key=location_list.get)
-	except: location = 0
+	except: location = None
 
 	try:
 		if picture_number <= 5:
@@ -594,7 +594,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 		location = soup.find("span", {"class": "articleLocation"}).contents[0]
 
 		if "/" in location: location = location.split("/", 1)[0]
-	except: location = 0
+	except: location = None
 
 	try: article = (data2.text + "\n" + "\n" + soup.find("span", {"class": "author"}).get_text()).encode("utf-16be")
 	except: article = data2.text.encode("utf-16be") # Parse the article.
@@ -720,7 +720,7 @@ def parsedata_anp(url, title, source, updated, picture_number):
 		picture = 0
 		credits = 0
 
-	location = 0
+	location = None
 
 	for tag in soup.find("meta", {"name": "keywords"})["content"].split(","):
 		if tag in dutch_locations:
@@ -823,7 +823,7 @@ def parsedata_ansa(url, title, updated, picture_number):
 		credits = 0
 
 	try: location = soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).contents[0]
-	except: location = 0
+	except: location = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -917,7 +917,7 @@ def parsedata_lobs(url, title, updated, picture_number):
 		caption = 0
 
 	if " (AFP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AFP)", 1)[0]
-	else: location = 0
+	else: location = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -1026,26 +1026,26 @@ def parsedata_zeit(url, updated, source, picture_number):
 			credits = soup.find("div", {"class": "byline"}).get_text().strip().encode("utf-16be")
 
 			if ", " in credits.decode("utf-16be"): location = credits.decode("utf-16be").split(", ", 1)[1]
-			else: location = 0
+			else: location = None
 
 			article += "\n" + "\n" + credits
 		except:
-			location = 0
+			location = None
 
 	elif source == "SID":
 		if " (SID)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (SID)", 1)[0]
-		else: location = 0
+		else: location = None
 		category = "sports"
 
 	elif source == "dpa":
 		if " (dpa)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (dpa)", 1)[0]
-		else: location = 0
+		else: location = None
 
 	elif source == "AFP":
 		if " (AFP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AFP)", 1)[0]
-		else: location = 0
+		else: location = None
 
-	else: location = 0
+	else: location = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -1144,7 +1144,7 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 		caption = 0
 
 	if " (AP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AP)", 1)[0]
-	else: location = 0
+	else: location = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
