@@ -407,7 +407,7 @@ def download_news24_mainichi(topics_name, topics):
 
 					parsedata = parsedata_news24(soup.findAll("loc")[occurrences].contents[0].replace("html", "jsonp"), soup.findAll("news:title")[occurrences].contents[0], updated, picture_number)
 
-					if parsedata > 0:
+					if parsedata != None:
 						picture_number += parsedata[7]
 						data[rss_category[0] + str(numbers)] = parsedata
 
@@ -437,7 +437,7 @@ def download_news24_mainichi(topics_name, topics):
 
 				parsedata = parsedata_mainichi(items["link"], items["title"], updated, picture_number)
 
-				if parsedata > 0:
+				if parsedata != None:
 					picture_number += parsedata[7]
 					data[rss_category[0] + str(numbers)] = parsedata
 
@@ -485,11 +485,11 @@ def parsedata_mainichi(url, title, updated, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "mainichi"]
 
 def parsedata_news24(url, title, updated, picture_number):
@@ -524,11 +524,11 @@ def parsedata_news24(url, title, updated, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "news24"]
 
 def download_reuters(topics_name, topics):
@@ -563,7 +563,7 @@ def download_reuters(topics_name, topics):
 
 					parsedata = parsedata_reuters(items["link"], items["title"], updated, picture_number)
 
-					if parsedata > 0:
+					if parsedata != None:
 						picture_number += parsedata[7]
 						data[rss_category[0] + str(numbers)] = parsedata
 
@@ -628,11 +628,11 @@ def parsedata_reuters(url, title, updated, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
 
 def download_anp(topics_name, topics):
@@ -670,7 +670,7 @@ def download_anp(topics_name, topics):
 							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP": parsedata = parsedata_anp(items["link"], items["title"], "NU.nl", updated, picture_number)
 							else: parsedata = parsedata_anp(items["link"], items["title"], items.author, updated, picture_number)
 
-							if parsedata > 0:
+							if parsedata != None:
 								picture_number += parsedata[7]
 								data[rss_category[0] + str(numbers)] = parsedata
 				except: print "Failed."
@@ -730,11 +730,11 @@ def parsedata_anp(url, title, source, updated, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), source]
 
 def download_ansa(topics_name, topics):
@@ -776,7 +776,7 @@ def download_ansa(topics_name, topics):
 
 							parsedata = parsedata_ansa(items["link"], items["title"], updated, picture_number)
 
-							if parsedata > 0:
+							if parsedata != None:
 								picture_number += parsedata[7]
 								data[rss_category[0] + str(numbers)] = parsedata
 				except: print "Failed."
@@ -828,11 +828,11 @@ def parsedata_ansa(url, title, updated, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), "ansa"]
 
 def download_lobs(topics_name):
@@ -865,7 +865,7 @@ def download_lobs(topics_name):
 
 			parsedata = parsedata_lobs(items["link"], items["title"], updated, picture_number)
 
-			if parsedata > 0:
+			if parsedata != None:
 				picture_number += parsedata[7]
 				data[category + str(numbers)] = parsedata
 
@@ -922,11 +922,11 @@ def parsedata_lobs(url, title, updated, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, replace(caption), picture_number, replace(location), "AFP"]
 
@@ -961,7 +961,7 @@ def download_zeit(topics_name):
 
 			parsedata = parsedata_zeit(link, updated, source, picture_number)
 
-			if parsedata > 0:
+			if parsedata != None:
 				picture_number += parsedata[7]
 				data[parsedata[10] + str(numbers)] = parsedata
 
@@ -1050,11 +1050,11 @@ def parsedata_zeit(url, updated, source, picture_number):
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, replace(caption), picture_number, replace(location), source, category]
 
@@ -1078,11 +1078,8 @@ def download_ap(topics_name, topics, language):
 
 				try:
 					updated_utc = datetime.strptime(items["date"], format)
-
 					updated_utc = updated_utc.strftime(format)
-
 					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
-
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
 					if updated >= time_current - 60:
@@ -1092,7 +1089,7 @@ def download_ap(topics_name, topics, language):
 
 						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, picture_number, language)
 
-						if parsedata > 0:
+						if parsedata != None:
 							picture_number += parsedata[7]
 							data[rss_category[0] + str(numbers)] = parsedata
 				except: print "Failed."
@@ -1149,9 +1146,9 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 	if len(headline) == 0:
 		print "Headline is 0."
 		print url
-		return 0
+		return None
 	elif len(article) == 0:
 		print "Article is 0."
 		print url
-		return 0
+		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "ap"]
