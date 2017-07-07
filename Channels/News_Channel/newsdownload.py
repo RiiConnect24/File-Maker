@@ -123,7 +123,7 @@ zeit_categories["Sport"] = "sports"
 """Function to replace characters."""
 
 def replace(item):
-	if item != 0:
+	if item != None:
 		for characters in replace_chars.items():
 			if characters[0] in item: item = item.replace(characters[0], characters[1])
 

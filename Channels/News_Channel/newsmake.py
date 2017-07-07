@@ -464,7 +464,7 @@ def make_timestamps_table(topics_table, topics_news, mode, data):
 		if timestamps_add != 0:
 			topics_table["topics_%s_article_number" % numbers] = u32(len(timestamps_add) / 8) # Number of articles that will be in a certain topic. Also, I don't like how it divides the thing by 8 but whatever.
 			topics_table["topics_%s_article_offset" % numbers] = offset_count() # Offset for the articles to choose for the topic.
-			timestamps_table["timestamps_%s" + numbers] = timestamps_add # Timestamps.
+			timestamps_table["timestamps_%s" % numbers] = timestamps_add # Timestamps.
 
 	return timestamps_table
 

@@ -1,8 +1,8 @@
 DSDecmp.exe
 Plugins/
 
+*.pem
 *.pyc
 config.py
 newstime
 news.bin.*
-
