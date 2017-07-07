@@ -477,10 +477,10 @@ def parsedata_mainichi(url, title, updated, picture_number):
 			picture_number = 1
 		else:
 			picture_number = 0
-			picture = 0
+			picture = None
 	except:
 		picture_number = 0
-		picture = 0
+		picture = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -516,10 +516,10 @@ def parsedata_news24(url, title, updated, picture_number):
 			picture_number = 1
 		else:
 			picture_number = 0
-			picture = 0
+			picture = None
 	except:
 		picture_number = 0
-		picture = 0
+		picture = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -616,14 +616,14 @@ def parsedata_reuters(url, title, updated, picture_number):
 			caption = soup.find("div", {"class": "module-caption"}).contents[0].strip().encode("utf-16be")
 		else:
 			picture_number = 0
-			picture = 0
-			credits = 0
-			caption = 0
+			picture = None
+			credits = None
+			caption = None
 	except:
 		picture_number = 0
-		picture = 0
-		credits = 0
-		caption = 0
+		picture = None
+		credits = None
+		caption = None
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -713,12 +713,12 @@ def parsedata_anp(url, title, source, updated, picture_number):
 			credits = soup.find("span", {"class": "photographer"}).contents[0].encode("utf-16be")
 		else:
 			picture_number = 0
-			picture = 0
-			credits = 0
+			picture = None
+			credits = None
 	except:
 		picture_number = 0
-		picture = 0
-		credits = 0
+		picture = None
+		credits = None
 
 	location = None
 
@@ -815,12 +815,12 @@ def parsedata_ansa(url, title, updated, picture_number):
 			credits = soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0].encode("utf-16be")
 		else:
 			picture_number = 0
-			picture = 0
-			credits = 0
+			picture = None
+			credits = None
 	except:
 		picture_number = 0
-		picture = 0
-		credits = 0
+		picture = None
+		credits = None
 
 	try: location = soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).contents[0]
 	except: location = None
@@ -902,19 +902,19 @@ def parsedata_lobs(url, title, updated, picture_number):
 				"""Parse the picture captions."""
 
 				try: caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
-				except: caption = 0
+				except: caption = None
 			else:
 				picture_number = 0
-				picture = 0
-				caption = 0
+				picture = None
+				caption = None
 		else:
 			picture_number = 0
-			picture = 0
-			caption = 0
+			picture = None
+			caption = None
 	except:
 		picture_number = 0
-		picture = 0
-		caption = 0
+		picture = None
+		caption = None
 
 	if " (AFP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AFP)", 1)[0]
 	else: location = None
@@ -1004,22 +1004,22 @@ def parsedata_zeit(url, updated, source, picture_number):
 			"""Parse the picture captions."""
 
 			try: caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
-			except: caption = 0
+			except: caption = None
 
 			"""Parse the picture credits."""
 
 			try: credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
-			except: credits = 0
+			except: credits = None
 		else:
 			picture_number = 0
-			picture = 0
-			caption = 0
-			credits = 0
+			picture = None
+			caption = None
+			credits = None
 	except:
 		picture_number = 0
-		picture = 0
-		caption = 0
-		credits = 0
+		picture = None
+		caption = None
+		credits = None
 
 	if source == "ZEIT ONLINE":
 		try:
@@ -1134,14 +1134,14 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 			caption = soup.find("font", {"class": "photo"}).contents[0].encode("utf-16be")
 		else:
 			picture_number = 0
-			picture = 0
-			credits = 0
-			caption = 0
+			picture = None
+			credits = None
+			caption = None
 	else:
 		picture_number = 0
-		picture = 0
-		credits = 0
-		caption = 0
+		picture = None
+		credits = None
+		caption = None
 
 	if " (AP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AP)", 1)[0]
 	else: location = None
