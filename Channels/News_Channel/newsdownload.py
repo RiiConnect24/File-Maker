@@ -125,8 +125,7 @@ zeit_categories["Sport"] = "sports"
 def replace(item):
 	if item != 0:
 		for characters in replace_chars.items():
-			if characters[0] in item:
-				item = item.replace(characters[0], characters[1])
+			if characters[0] in item: item = item.replace(characters[0], characters[1])
 
 	return item
 
@@ -160,8 +159,7 @@ def locations_download(language_code, data):
 		location = values[8]
 
 		if location > 0:
-			if location not in locations:
-				locations[location] = []
+			if location not in locations: locations[location] = []
 
 			locations[location].append(keys)
 
@@ -169,10 +167,8 @@ def locations_download(language_code, data):
 		read = 1
 
 		if name not in corrections:
-			try:
-				read = gmaps.geocode(unidecode(name.decode("utf-8")), language=languages[language_code])
-			except:
-				pass
+			try: read = gmaps.geocode(unidecode(name.decode("utf-8")), language=languages[language_code])
+			except: pass
 
 		if read == 1:
 			if name in corrections:
@@ -180,8 +176,7 @@ def locations_download(language_code, data):
 				new_name = corrections[name][1]
 
 				for filenames in locations[name]:
-					if new_name not in locations_return:
-						locations_return[new_name] = [coordinates, []]
+					if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
 
 					locations_return[new_name][1].append(filenames)
 
@@ -199,8 +194,7 @@ def locations_download(language_code, data):
 				coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0055) & 0xFFFF) + u16(int(read[0]["geometry"]["location"]["lng"] / 0.0055) & 0xFFFF) + country + region + u16(0) + zoom_factor
 
 				for filenames in locations[name]:
-					if new_name not in locations_return:
-						locations_return[new_name] = [coordinates, []]
+					if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
 
 					locations_return[new_name][1].append(filenames)
 			except:
@@ -453,8 +447,7 @@ def download_news24_mainichi(topics_name, topics):
 def parsedata_mainichi(url, title, updated, picture_number):
 	subprocess.call(["ruby", "newsmainichi.rb", url])
 
-	with open("temp_mainichi", "rb") as source_file:
-		html = source_file.read()
+	with open("temp_mainichi", "rb") as source_file: html = source_file.read()
 
 	os.remove("temp_mainichi")
 
@@ -464,21 +457,17 @@ def parsedata_mainichi(url, title, updated, picture_number):
 
 	article = ""
 
-	for text in soup.findAll("p", {"class": "txt"}):
-		article += " " + text.getText().strip() + "\n\n"
+	for text in soup.findAll("p", {"class": "txt"}): article += " " + text.getText().strip() + "\n\n"
 
 	article = textwrap.wrap(article, 30).encode("utf-16be")
 
 	location_list = collections.OrderedDict()
 
 	for location in japanese_locations:
-		if location.encode("utf-16be") in article:
-			location_list[location] = article.count(location.encode("utf-16be"))
+		if location.encode("utf-16be") in article: location_list[location] = article.count(location.encode("utf-16be"))
 
-	try:
-		location = max(location_list, key=location_list.get)
-	except:
-		location = 0
+	try: location = max(location_list, key=location_list.get)
+	except: location = 0
 
 	try:
 		if picture_number <= 5:
@@ -515,13 +504,10 @@ def parsedata_news24(url, title, updated, picture_number):
 	location_list = collections.OrderedDict()
 
 	for location in japanese_locations:
-		if location.encode("utf-16be") in article:
-			location_list[location] = article.count(location.encode("utf-16be"))
+		if location.encode("utf-16be") in article: location_list[location] = article.count(location.encode("utf-16be"))
 
-	try:
-		location = max(location_list, key=location_list.get)
-	except:
-		location = 0
+	try: location = max(location_list, key=location_list.get)
+	except: location = 0
 
 	try:
 		if picture_number <= 5:
@@ -599,8 +585,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 
 	soup2 = BeautifulSoup(html, "lxml")
 
-	for s in soup2("div", {"class": "module-meta group"}):
-		s.extract()
+	for s in soup2("div", {"class": "module-meta group"}): s.extract()
 
 	data2 = Article(url, language="en")
 	data2.set_html(str(soup2))
@@ -611,15 +596,11 @@ def parsedata_reuters(url, title, updated, picture_number):
 	try:
 		location = soup.find("span", {"class": "articleLocation"}).contents[0]
 
-		if "/" in location:
-			location = location.split("/", 1)[0]
-	except:
-		location = 0
+		if "/" in location: location = location.split("/", 1)[0]
+	except: location = 0
 
-	try:
-		article = (data2.text + "\n" + "\n" + soup.find("span", {"class": "author"}).get_text()).encode("utf-16be")
-	except:
-		article = data2.text.encode("utf-16be") # Parse the article.
+	try: article = (data2.text + "\n" + "\n" + soup.find("span", {"class": "author"}).get_text()).encode("utf-16be")
+	except: article = data2.text.encode("utf-16be") # Parse the article.
 
 	try:
 		if picture_number <= 5:
@@ -690,16 +671,13 @@ def download_anp(topics_name, topics):
 
 							print "Downloading News Article %s..." % (str(numbers))
 
-							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP":
-								parsedata = parsedata_anp(items["link"], items["title"], "NU.nl", updated, picture_number)
-							else:
-								parsedata = parsedata_anp(items["link"], items["title"], items.author, updated, picture_number)
+							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP": parsedata = parsedata_anp(items["link"], items["title"], "NU.nl", updated, picture_number)
+							else: parsedata = parsedata_anp(items["link"], items["title"], items.author, updated, picture_number)
 
 							if parsedata > 0:
 								picture_number += parsedata[7]
 								data[rss_category[0] + str(numbers)] = parsedata
-				except:
-					print "Failed."
+				except: print "Failed."
 
 		print "\n"
 
@@ -714,10 +692,8 @@ def parsedata_anp(url, title, source, updated, picture_number):
 
 	headline = title.encode("utf-16be") # Parse the headline.
 
-	try:
-		article = (soup.find("div", {"class": "item-excerpt"}).contents[0].replace("        ", "") + "\n" + data1.text).encode("utf-16be") # Parse the article.
-	except:
-		article = data1.text.encode("utf-16be") # Parse the article.
+	try: article = (soup.find("div", {"class": "item-excerpt"}).contents[0].replace("        ", "") + "\n" + data1.text).encode("utf-16be") # Parse the article.
+	except: article = data1.text.encode("utf-16be") # Parse the article.
 
 	try:
 		if picture_number <= 5:
@@ -732,8 +708,7 @@ def parsedata_anp(url, title, source, updated, picture_number):
 					picture = resizeimage.resize_width(picture, 200)
 					picture.save(tmpfile.name, picture.format)
 
-				with open(tmpfile.name, "rb") as source_file:
-					picture = source_file.read()
+				with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
 
 			picture_number = 1
 
@@ -800,8 +775,7 @@ def download_ansa(topics_name, topics):
 						numbers_category += 1
 
 						if numbers_category > 1:
-							if rss_category[0] == "italy":
-								pass
+							if rss_category[0] == "italy": pass
 						else:
 							numbers += 1
 
@@ -812,8 +786,7 @@ def download_ansa(topics_name, topics):
 							if parsedata > 0:
 								picture_number += parsedata[7]
 								data[rss_category[0] + str(numbers)] = parsedata
-				except:
-					print "Failed."
+				except: print "Failed."
 
 	return data
 
@@ -840,8 +813,7 @@ def parsedata_ansa(url, title, updated, picture_number):
 					picture = resizeimage.resize_width(picture, 200)
 					picture.save(tmpfile.name, picture.format)
 
-				with open(tmpfile.name, "rb") as source_file:
-					picture = source_file.read()
+				with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
 
 			picture_number = 1
 
@@ -857,10 +829,8 @@ def parsedata_ansa(url, title, updated, picture_number):
 		picture = 0
 		credits = 0
 
-	try:
-		location = soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).contents[0]
-	except:
-		location = 0
+	try: location = soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).contents[0]
+	except: location = 0
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -933,17 +903,14 @@ def parsedata_lobs(url, title, updated, picture_number):
 						picture = resizeimage.resize_width(picture, 200)
 						picture.save(tmpfile.name, picture.format)
 
-					with open(tmpfile.name, "rb") as source_file:
-						picture = source_file.read()
+					with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
 
 				picture_number = 1
 
 				"""Parse the picture captions."""
 
-				try:
-					caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
-				except:
-					caption = 0
+				try: caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
+				except: caption = 0
 			else:
 				picture_number = 0
 				picture = 0
@@ -957,10 +924,8 @@ def parsedata_lobs(url, title, updated, picture_number):
 		picture = 0
 		caption = 0
 
-	if " (AFP)" in article.decode("utf-16be"):
-		location = article.decode("utf-16be").split(" (AFP)", 1)[0]
-	else:
-		location = 0
+	if " (AFP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AFP)", 1)[0]
+	else: location = 0
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -1023,11 +988,9 @@ def parsedata_zeit(url, updated, source, picture_number):
 	headline_category = headline.decode("utf-16be").split(": ", 1)[0]
 	category = "general"
 
-	if headline_category in zeit_categories:
-		category = zeit_categories[headline_category]
+	if headline_category in zeit_categories: category = zeit_categories[headline_category]
 
-	if headline_category in zeit_sports_categories:
-		category = "sports"
+	if headline_category in zeit_sports_categories: category = "sports"
 
 	try:
 		if picture_number <= 3:
@@ -1042,24 +1005,19 @@ def parsedata_zeit(url, updated, source, picture_number):
 					picture = resizeimage.resize_width(picture, 200)
 					picture.save(tmpfile.name, picture.format)
 
-				with open(tmpfile.name, "rb") as source_file:
-					picture = source_file.read()
+				with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
 
 			picture_number = 1
 
 			"""Parse the picture captions."""
 
-			try:
-				caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
-			except:
-				caption = 0
+			try: caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
+			except: caption = 0
 
 			"""Parse the picture credits."""
 
-			try:
-				credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
-			except:
-				credits = 0
+			try: credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
+			except: credits = 0
 		else:
 			picture_number = 0
 			picture = 0
@@ -1075,36 +1033,27 @@ def parsedata_zeit(url, updated, source, picture_number):
 		try:
 			credits = soup.find("div", {"class": "byline"}).get_text().strip().encode("utf-16be")
 
-			if ", " in credits.decode("utf-16be"):
-				location = credits.decode("utf-16be").split(", ", 1)[1]
-			else:
-				location = 0
+			if ", " in credits.decode("utf-16be"): location = credits.decode("utf-16be").split(", ", 1)[1]
+			else: location = 0
 
 			article += "\n" + "\n" + credits
 		except:
 			location = 0
 
 	elif source == "SID":
-		if " (SID)" in article.decode("utf-16be"):
-			location = article.decode("utf-16be").split(" (SID)", 1)[0]
-		else:
-			location = 0
+		if " (SID)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (SID)", 1)[0]
+		else: location = 0
 		category = "sports"
 
 	elif source == "dpa":
-		if " (dpa)" in article.decode("utf-16be"):
-			location = article.decode("utf-16be").split(" (dpa)", 1)[0]
-		else:
-			location = 0
+		if " (dpa)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (dpa)", 1)[0]
+		else: location = 0
 
 	elif source == "AFP":
-		if " (AFP)" in article.decode("utf-16be"):
-			location = article.decode("utf-16be").split(" (AFP)", 1)[0]
-		else:
-			location = 0
+		if " (AFP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AFP)", 1)[0]
+		else: location = 0
 
-	else:
-		location = 0
+	else: location = 0
 
 	if len(headline) == 0:
 		print "Headline is 0."
@@ -1154,8 +1103,7 @@ def download_ap(topics_name, topics, language):
 						if parsedata > 0:
 							picture_number += parsedata[7]
 							data[rss_category[0] + str(numbers)] = parsedata
-				except:
-					print "Failed."
+				except: print "Failed."
 
 		print "\n"
 
@@ -1172,10 +1120,8 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 
 	headline = title.encode("utf-16be") # Parse the headline.
 
-	try:
-		article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).encode("utf-16be") # Parse the article.
-	except:
-		article = data1.text.encode("utf-16be") # Parse the article.
+	try: article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).encode("utf-16be") # Parse the article.
+	except: article = data1.text.encode("utf-16be") # Parse the article.
 
 	if "ap-smallphoto-img" in html:
 		if picture_number <= 5:
@@ -1205,10 +1151,8 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 		credits = 0
 		caption = 0
 
-	if " (AP)" in article.decode("utf-16be"):
-		location = article.decode("utf-16be").split(" (AP)", 1)[0]
-	else:
-		location = 0
+	if " (AP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AP)", 1)[0]
+	else: location = 0
 
 	if len(headline) == 0:
 		print "Headline is 0."
