@@ -1029,8 +1029,7 @@ def parsedata_zeit(url, updated, source, picture_number):
 			else: location = None
 
 			article += "\n" + "\n" + credits
-		except:
-			location = None
+		except: location = None
 
 	elif source == "SID":
 		if " (SID)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (SID)", 1)[0]
