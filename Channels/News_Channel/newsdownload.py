@@ -757,10 +757,8 @@ def download_ansa(topics_name, topics):
 		for rss in rss_category[1]:
 			numbers_category = 0
 
-			if rss_category[0] == "italy":
-				rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/%s/notizie/%s_rss.xml" % (rss, rss)).read())
-			else:
-				rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (rss, rss)).read())
+			if rss_category[0] == "italy": rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/%s/notizie/%s_rss.xml" % (rss, rss)).read())
+			else: rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (rss, rss)).read())
 
 			for items in rss_feed.entries:
 				try:
