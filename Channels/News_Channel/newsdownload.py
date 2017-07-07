@@ -1160,5 +1160,4 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 		print "Article is 0."
 		print url
 		return 0
-	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "ap"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "ap"]
