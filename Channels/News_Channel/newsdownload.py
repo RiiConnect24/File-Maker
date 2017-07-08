@@ -835,7 +835,7 @@ def parsedata_ansa(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), "ansa"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, picture_number, replace(location), "ansa"]
 
 def download_lobs(topics_name):
 	picture_number = 0
