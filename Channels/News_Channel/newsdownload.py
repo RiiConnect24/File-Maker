@@ -492,7 +492,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		if picture_number <= 5:
 			"""Parse the pictures."""
 
-			picture = shrink_image(soup.find("img", {"alt", "vertical-photo"})["src"]), False)
+			picture = shrink_image(soup.find("img", {"alt", "vertical-photo"})["src"], False)
 
 			picture_number = 1
 		else:
