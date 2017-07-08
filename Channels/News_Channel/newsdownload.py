@@ -510,7 +510,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "mainichi"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "mainichi"]
 
 def parsedata_news24(url, title, updated, picture_number):
 	json_data = json.loads(jsonp2json.convert(urllib2.urlopen(url).read()))
@@ -549,7 +549,7 @@ def parsedata_news24(url, title, updated, picture_number):
 		print "Article is 0."
 		print url
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, 0, picture_number, replace(location), "news24"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "news24"]
 
 def download_reuters(topics_name, topics):
 	picture_number = 0
@@ -746,7 +746,7 @@ def parsedata_anp(url, title, source, updated, picture_number):
 		print "Article is 0."
 		print url
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), 0, picture_number, replace(location), source]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, picture_number, replace(location), source]
 
 def download_ansa(topics_name, topics):
 	picture_number = 0
@@ -1039,7 +1039,7 @@ def parsedata_zeit(url, updated, source, picture_number):
 		print url
 		return None
 	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, replace(caption), picture_number, replace(location), source, category]
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), picture_number, replace(location), source, category]
 
 def download_ap(topics_name, topics, language):
 	picture_number = 0
