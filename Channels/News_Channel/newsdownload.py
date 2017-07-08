@@ -31,6 +31,7 @@ from dateutil import tz, parser
 from newspaper import * # Used to parse news articles.
 from PIL import Image # Used to work with images.
 from resizeimage import resizeimage # Used to resize images.
+from StringIO import StringIO
 from unidecode import unidecode
 
 """Set Rollbar up."""
@@ -128,6 +129,25 @@ def replace(item):
 			if characters[0] in item: item = item.replace(characters[0], characters[1])
 
 	return item
+
+"""Resize the image and strip metadata (to make the image size smaller)"""
+
+def shrink_image(data, resize):
+	picture = requests.get(data)
+	image = Image.open(StringIO(picture.content))
+
+	if resize == True: image = resizeimage.resize_width(image, 200)
+
+	data = list(image.getdata())
+	image_without_exif = Image.new(image.mode, image.size)
+	image_without_exif.putdata(data)
+
+	picture_number = 1
+
+	buffer = StringIO()
+	image_without_exif.save(buffer, format='jpeg')
+
+	return buffer.getvalue()
 
 """Get the location data."""
 
@@ -472,7 +492,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		if picture_number <= 5:
 			"""Parse the pictures."""
 
-			picture = urllib2.urlopen(soup.find("img", {"alt", "vertical-photo"})["src"]).read()
+			picture = shrink_image(soup.find("img", {"alt", "vertical-photo"})["src"]), False)
 
 			picture_number = 1
 		else:
@@ -511,7 +531,7 @@ def parsedata_news24(url, title, updated, picture_number):
 		if picture_number <= 5:
 			"""Parse the pictures."""
 
-			picture = urllib2.urlopen("http://news24.jp/" + json_data["article"]["imageList"][2]["distributePath"] + json_data["article"]["imageList"][2]["imageFileName"]).read()
+			picture = shrink_image("http://news24.jp/" + json_data["article"]["imageList"][2]["distributePath"] + json_data["article"]["imageList"][2]["imageFileName"], False)
 
 			picture_number = 1
 		else:
@@ -603,7 +623,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 		if picture_number <= 5:
 			"""Parse the pictures."""
 
-			picture = urllib2.urlopen(data1.top_image + "&w=200").read()
+			picture = shrink_image(data1.top_image + "&w=200", False)
 
 			picture_number = 1
 
@@ -695,16 +715,7 @@ def parsedata_anp(url, title, source, updated, picture_number):
 		if picture_number <= 5:
 			"""Parse the pictures."""
 
-			with tempfile.NamedTemporaryFile(dir=None, delete=True, prefix="jpg") as tmpfile:
-				with open(tmpfile.name, "w+") as dest_file:
-					picture = urllib2.urlopen(data1.top_image).read()
-					dest_file.write(picture)
-
-				with Image.open(tmpfile.name) as picture:
-					picture = resizeimage.resize_width(picture, 200)
-					picture.save(tmpfile.name, picture.format)
-
-				with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
+			picture = shrink_image(data1.top_image, True)
 
 			picture_number = 1
 
@@ -797,16 +808,7 @@ def parsedata_ansa(url, title, updated, picture_number):
 		if picture_number <= 5:
 			"""Parse the pictures."""
 
-			with tempfile.NamedTemporaryFile(dir=None, delete=True, prefix="jpg") as tmpfile:
-				with open(tmpfile.name, "w+") as dest_file:
-					picture = urllib2.urlopen(data1.top_image).read()
-					dest_file.write(picture)
-
-				with Image.open(tmpfile.name) as picture:
-					picture = resizeimage.resize_width(picture, 200)
-					picture.save(tmpfile.name, picture.format)
-
-				with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
+			picture = shrink_image(data1.top_image, True)
 
 			picture_number = 1
 
@@ -886,16 +888,7 @@ def parsedata_lobs(url, title, updated, picture_number):
 			if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
 				"""Parse the pictures."""
 
-				with tempfile.NamedTemporaryFile(dir=None, delete=True, prefix="jpg") as tmpfile:
-					with open(tmpfile.name, "w+") as dest_file:
-						picture = urllib2.urlopen(data1.top_image).read()
-						dest_file.write(picture)
-
-					with Image.open(tmpfile.name) as picture:
-						picture = resizeimage.resize_width(picture, 200)
-						picture.save(tmpfile.name, picture.format)
-
-					with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
+				picture = shrink_image(data1.top_image, True)
 
 				picture_number = 1
 
@@ -988,16 +981,7 @@ def parsedata_zeit(url, updated, source, picture_number):
 		if picture_number <= 3:
 			"""Parse the pictures."""
 
-			with tempfile.NamedTemporaryFile(dir=None, delete=True, prefix="jpg") as tmpfile:
-				with open(tmpfile.name, "w+") as dest_file:
-					picture = urllib2.urlopen(data1.top_image).read()
-					dest_file.write(picture)
-
-				with Image.open(tmpfile.name) as picture:
-					picture = resizeimage.resize_width(picture, 200)
-					picture.save(tmpfile.name, picture.format)
-
-				with open(tmpfile.name, "rb") as source_file: picture = source_file.read()
+			picture = shrink_image(data1.top_image, True)
 
 			picture_number = 1
 
@@ -1112,27 +1096,21 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 	except: article = data1.text.encode("utf-16be") # Parse the article.
 
 	if "ap-smallphoto-img" in html:
-		if picture_number <= 5:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = urllib2.urlopen("http://hosted.ap.org/" + soup.find("img", {"class": "ap-smallphoto-img"})["src"][:-10] + "-small.jpg").read()
+		picture = shrink_image("http://hosted.ap.org/" + soup.find("img", {"class": "ap-smallphoto-img"})["src"][:-10] + "-small.jpg", False)
 
-			picture_number = 1
+		picture_number = 1
 
-			"""Parse the picture credits."""
+		"""Parse the picture credits."""
 
-			credits = soup.find("span", {"class": "apCaption"}).contents[0].encode("utf-16be")
+		credits = soup.find("span", {"class": "apCaption"}).contents[0].encode("utf-16be")
 
-			"""Parse the picture captions."""
+		"""Parse the picture captions."""
 
-			url_captions = urllib2.urlopen("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).read()
-			soup = BeautifulSoup(url_captions, "lxml")
-			caption = soup.find("font", {"class": "photo"}).contents[0].encode("utf-16be")
-		else:
-			picture_number = 0
-			picture = None
-			credits = None
-			caption = None
+		url_captions = urllib2.urlopen("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).read()
+		soup = BeautifulSoup(url_captions, "lxml")
+		caption = soup.find("font", {"class": "photo"}).contents[0].encode("utf-16be")
 	else:
 		picture_number = 0
 		picture = None
