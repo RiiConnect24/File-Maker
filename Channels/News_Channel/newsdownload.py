@@ -921,7 +921,7 @@ def parsedata_lobs(url, title, updated, picture_number):
 		print url
 		return None
 	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, 0, replace(caption), picture_number, replace(location), "AFP"]
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), picture_number, replace(location), "AFP"]
 
 def download_zeit(topics_name):
 	picture_number = 0
