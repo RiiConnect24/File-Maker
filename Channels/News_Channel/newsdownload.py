@@ -489,15 +489,11 @@ def parsedata_mainichi(url, title, updated, picture_number):
 	except: location = None
 
 	try:
-		if picture_number <= 5:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = shrink_image(soup.find("img", {"alt", "vertical-photo"})["src"], False)
+		picture = shrink_image(soup.find("img", {"alt", "vertical-photo"})["src"], False)
 
-			picture_number = 1
-		else:
-			picture_number = 0
-			picture = None
+		picture_number = 1
 	except:
 		picture_number = 0
 		picture = None
@@ -528,15 +524,11 @@ def parsedata_news24(url, title, updated, picture_number):
 	except: location = None
 
 	try:
-		if picture_number <= 5:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = shrink_image("http://news24.jp/" + json_data["article"]["imageList"][2]["distributePath"] + json_data["article"]["imageList"][2]["imageFileName"], False)
+		picture = shrink_image("http://news24.jp/" + json_data["article"]["imageList"][2]["distributePath"] + json_data["article"]["imageList"][2]["imageFileName"], False)
 
-			picture_number = 1
-		else:
-			picture_number = 0
-			picture = None
+		picture_number = 1
 	except:
 		picture_number = 0
 		picture = None
@@ -620,25 +612,19 @@ def parsedata_reuters(url, title, updated, picture_number):
 	except: article = data2.text.encode("utf-16be") # Parse the article.
 
 	try:
-		if picture_number <= 5:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = shrink_image(data1.top_image + "&w=200", False)
+		picture = shrink_image(data1.top_image + "&w=200", False)
 
-			picture_number = 1
+		picture_number = 1
 
-			"""Parse the picture credits."""
+		"""Parse the picture credits."""
 
-			credits = soup.find("span", {"class": "module-credit"}).get_text().strip().encode("utf-16be")
+		credits = soup.find("span", {"class": "module-credit"}).get_text().strip().encode("utf-16be")
 
-			"""Parse the picture captions."""
+		"""Parse the picture captions."""
 
-			caption = soup.find("div", {"class": "module-caption"}).contents[0].strip().encode("utf-16be")
-		else:
-			picture_number = 0
-			picture = None
-			credits = None
-			caption = None
+		caption = soup.find("div", {"class": "module-caption"}).contents[0].strip().encode("utf-16be")
 	except:
 		picture_number = 0
 		picture = None
@@ -712,20 +698,15 @@ def parsedata_anp(url, title, source, updated, picture_number):
 	except: article = data1.text.encode("utf-16be") # Parse the article.
 
 	try:
-		if picture_number <= 5:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = shrink_image(data1.top_image, True)
+		picture = shrink_image(data1.top_image, True)
 
-			picture_number = 1
+		picture_number = 1
 
-			"""Parse the caption."""
+		"""Parse the caption."""
 
-			credits = soup.find("span", {"class": "photographer"}).contents[0].encode("utf-16be")
-		else:
-			picture_number = 0
-			picture = None
-			credits = None
+		credits = soup.find("span", {"class": "photographer"}).contents[0].encode("utf-16be")
 	except:
 		picture_number = 0
 		picture = None
@@ -805,20 +786,15 @@ def parsedata_ansa(url, title, updated, picture_number):
 	article = data1.text.encode("utf-16be") # Parse the article.
 
 	try:
-		if picture_number <= 5:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = shrink_image(data1.top_image, True)
+		picture = shrink_image(data1.top_image, True)
 
-			picture_number = 1
+		picture_number = 1
 
-			"""Parse the picture credits."""
+		"""Parse the picture credits."""
 
-			credits = soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0].encode("utf-16be")
-		else:
-			picture_number = 0
-			picture = None
-			credits = None
+		credits = soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0].encode("utf-16be")
 	except:
 		picture_number = 0
 		picture = None
@@ -884,22 +860,17 @@ def parsedata_lobs(url, title, updated, picture_number):
 	article = data1.text.encode("utf-16be") # Parse the article.
 
 	try:
-		if picture_number <= 5:
-			if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
-				"""Parse the pictures."""
+		if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
+			"""Parse the pictures."""
 
-				picture = shrink_image(data1.top_image, True)
+			picture = shrink_image(data1.top_image, True)
 
-				picture_number = 1
+			picture_number = 1
 
-				"""Parse the picture captions."""
+			"""Parse the picture captions."""
 
-				try: caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
-				except: caption = None
-			else:
-				picture_number = 0
-				picture = None
-				caption = None
+			try: caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
+			except: caption = None
 		else:
 			picture_number = 0
 			picture = None
@@ -978,27 +949,21 @@ def parsedata_zeit(url, updated, source, picture_number):
 	if headline_category in zeit_sports_categories: category = "sports"
 
 	try:
-		if picture_number <= 3:
-			"""Parse the pictures."""
+		"""Parse the pictures."""
 
-			picture = shrink_image(data1.top_image, True)
+		picture = shrink_image(data1.top_image, True)
 
-			picture_number = 1
+		picture_number = 1
 
-			"""Parse the picture captions."""
+		"""Parse the picture captions."""
 
-			try: caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
-			except: caption = None
+		try: caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
+		except: caption = None
 
-			"""Parse the picture credits."""
+		"""Parse the picture credits."""
 
-			try: credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
-			except: credits = None
-		else:
-			picture_number = 0
-			picture = None
-			caption = None
-			credits = None
+		try: credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
+		except: credits = None
 	except:
 		picture_number = 0
 		picture = None
