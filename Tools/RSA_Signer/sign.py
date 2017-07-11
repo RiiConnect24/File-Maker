@@ -49,7 +49,7 @@ if (sys.argv[1] == "dec"):
 			dest_file.write(binascii.unhexlify(crc32))
 			dest_file.write(read)
 
-	lz77 = subprocess.call(["mono", "--runtime=v4.0.30319", dsdecmp_path + "/DSDecmp.exe", "-c", "lz10", input_file2, output_file])
+	lz77 = subprocess.call([lzss_path + "lzss", "-evf", input_file2, output_file])
 
 	with open(output_file, "rb") as source_file:
 		read = source_file.read()
