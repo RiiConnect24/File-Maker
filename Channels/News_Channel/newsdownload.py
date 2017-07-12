@@ -594,7 +594,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 
 	soup2 = BeautifulSoup(html, "lxml")
 
-	for s in soup2("div", {"class": "module-meta group"}): s.extract()
+	for s in soup2("span", {"class": "Image_caption_KoNH1"}): s.extract()
 
 	data2 = Article(url, language="en")
 	data2.set_html(str(soup2))
@@ -602,29 +602,29 @@ def parsedata_reuters(url, title, updated, picture_number):
 
 	headline = title.encode("utf-16be") # Parse the headline.
 
+	try: article = (data2.text + "\n\n" + soup.find("p", {"class": "Attribution_content_27_rw"}).contents[0]).encode("utf-16be")
+	except: article = data2.text.encode("utf-16be") # Parse the article.
+
 	try:
-		location = soup.find("span", {"class": "articleLocation"}).contents[0]
+		location = article.decode("utf-16be").split(" (Reuters)")[0]
 
 		if "/" in location: location = location.split("/", 1)[0]
 	except: location = None
 
-	try: article = (data2.text + "\n" + "\n" + soup.find("span", {"class": "author"}).get_text()).encode("utf-16be")
-	except: article = data2.text.encode("utf-16be") # Parse the article.
-
 	try:
 		"""Parse the pictures."""
 
-		picture = shrink_image(data1.top_image + "&w=200", False)
+		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"] + "&w=200", False)
 
 		picture_number = 1
 
 		"""Parse the picture credits."""
 
-		credits = soup.find("span", {"class": "module-credit"}).get_text().strip().encode("utf-16be")
+		credits = None
 
 		"""Parse the picture captions."""
 
-		caption = soup.find("div", {"class": "module-caption"}).contents[0].strip().encode("utf-16be")
+		caption = soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0].encode("utf-16be")
 	except:
 		picture_number = 0
 		picture = None
