@@ -8,22 +8,22 @@
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
-import binascii # Used to write to stuff in hex.
-import calendar # Used for the timestamps.
-import collections # Used to write stuff in dictionaries in order.
-import errno # Used to catch errors when creating directories recursively.
-import glob # Used to find files in a directory.
-import newsdownload # Used to call the locations downloader.
-import os # Used to remove output from DSDecmp.
-import pickle # Used to save and load dictionaries.
+import binascii
+import calendar
+import collections
+import errno
+import glob
+import newsdownload
+import os
+import pickle
 import requests
-import rsa # Used to make the RSA signature.
+import rsa
 import rollbar
-import struct # Needed to pack u32s and other integers.
-import subprocess # Needed to run DSDecmp, which is for LZ77 Compression.
+import struct
+import subprocess
 import sys
-import time # Used to get time stuff.
-import urllib2 # Used to open URLs.
+import time
+import urllib2
 from config import *
 from datetime import timedelta, datetime, date # Used to get time stuff.
 reload(sys)

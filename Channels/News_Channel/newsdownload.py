@@ -11,26 +11,26 @@
 import binascii
 import collections
 import feedparser
-import googlemaps # Used to parse the Google Maps API.
-import json # Used for JSON parsing.
+import googlemaps
+import json
 import jsonp2json
 import os
-import pytz # Used to find time zones.
+import pytz
 import requests
 import rollbar
 import subprocess
 import struct
-import time # Used to get time stuff..
-import urllib2 # Needed to download a few things for the news.
-import tempfile # For resizing images etc.
+import tempfile
 import textwrap
-from bs4 import BeautifulSoup # Used to parse HTML.
+import time
+import urllib2
+from bs4 import BeautifulSoup
 from config import *
-from datetime import timedelta, datetime, date # Used to get time stuff.
+from datetime import timedelta, datetime, date
 from dateutil import tz, parser
-from newspaper import * # Used to parse news articles.
-from PIL import Image # Used to work with images.
-from resizeimage import resizeimage # Used to resize images.
+from newspaper import *
+from PIL import Image
+from resizeimage import resizeimage
 from StringIO import StringIO
 from unidecode import unidecode
 
