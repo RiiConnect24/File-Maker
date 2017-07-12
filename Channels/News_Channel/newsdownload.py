@@ -499,12 +499,12 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		picture = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "mainichi"]
 
@@ -534,12 +534,12 @@ def parsedata_news24(url, title, updated, picture_number):
 		picture = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "news24"]
 
@@ -632,12 +632,12 @@ def parsedata_reuters(url, title, updated, picture_number):
 		caption = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
 
@@ -720,12 +720,12 @@ def parsedata_anp(url, title, source, updated, picture_number):
 			break
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, picture_number, replace(location), source]
 
@@ -804,12 +804,12 @@ def parsedata_ansa(url, title, updated, picture_number):
 	except: location = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, picture_number, replace(location), "ansa"]
 
@@ -884,12 +884,12 @@ def parsedata_lobs(url, title, updated, picture_number):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), picture_number, replace(location), "AFP"]
@@ -996,12 +996,12 @@ def parsedata_zeit(url, updated, source, picture_number):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), picture_number, replace(location), source, category]
@@ -1086,11 +1086,11 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is 0."
-		print url
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is 0."
-		print url
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "ap"]
