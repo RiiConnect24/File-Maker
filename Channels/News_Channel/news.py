@@ -18,7 +18,7 @@ if len(sys.argv) > 1:
         download_source("ZEIT German", "zeit_german", 2, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_zeit_german())
     elif sys.argv[1] == "ansa_italian":
         download_source("ANSA Italian", "ansa_italian", 5, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_ansa_italian())
-    elif sys.argv[1] == "anp_dutch":
+    elif sys.argv[1] == "nu_dutch":
         download_source("NU.nl Dutch", "nu_dutch", 6, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_nu_dutch())
     elif sys.argv[1] == "news24_mainichi_japanese":
         download_source("News24/Mainichi Japanese", "news24_mainichi_japanese", 0, ["001"], download_news24_mainichi_japanese())
