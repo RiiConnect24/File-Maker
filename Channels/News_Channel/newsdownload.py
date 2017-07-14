@@ -341,8 +341,8 @@ def download_ansa_italian():
 
 	return download_ansa(topics_name, topics)
 
-def download_anp_dutch():
-	print "Downloading from ANP (Dutch)...\n"
+def download_nu_dutch():
+	print "Downloading from NU.nl (Dutch)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -641,7 +641,7 @@ def parsedata_reuters(url, title, updated, picture_number):
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
 
-def download_anp(topics_name, topics):
+def download_nu(topics_name, topics):
 	picture_number = 0
 
 	data = collections.OrderedDict()
@@ -673,8 +673,8 @@ def download_anp(topics_name, topics):
 
 							print "Downloading News Article %s..." % (str(numbers))
 
-							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP": parsedata = parsedata_anp(items["link"], items["title"], "NU.nl", updated, picture_number)
-							else: parsedata = parsedata_anp(items["link"], items["title"], items.author, updated, picture_number)
+							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP": parsedata = parsedata_nu(items["link"], items["title"], "NU.nl", updated, picture_number)
+							else: parsedata = parsedata_nu(items["link"], items["title"], items.author, updated, picture_number)
 
 							if parsedata != None:
 								picture_number += parsedata[7]
@@ -685,7 +685,7 @@ def download_anp(topics_name, topics):
 
 	return data
 
-def parsedata_anp(url, title, source, updated, picture_number):
+def parsedata_nu(url, title, source, updated, picture_number):
 	data1 = Article(url, language="nl")
 	data1.download()
 	data1.parse()

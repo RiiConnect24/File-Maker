@@ -216,7 +216,7 @@ def make_news_bin(mode, console, data):
 
 		country_code = 110
 
-	elif mode == "anp_dutch":
+	elif mode == "nu_dutch":
 		topics_news = collections.OrderedDict()
 
 		topics_news["Algemeen"] = "general"
