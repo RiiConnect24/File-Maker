@@ -686,6 +686,8 @@ def download_nu(topics_name, topics):
 	return data
 
 def parsedata_nu(url, title, source, updated, picture_number):
+	if "Video:" or "Liveblog:" in title: return None
+
 	data1 = Article(url, language="nl")
 	data1.download()
 	data1.parse()
