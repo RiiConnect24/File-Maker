@@ -364,7 +364,7 @@ def download_nu_dutch():
 	topics["lifestyle"] = ["lifestyle"]
 	topics["noteworthy"] = ["opmerkelijk"]
 
-	return download_anp(topics_name, topics)
+	return download_nu(topics_name, topics)
 
 def download_news24_mainichi_japanese():
 	print "Downloading from News24 and Mainichi (Japanese)...\n"
