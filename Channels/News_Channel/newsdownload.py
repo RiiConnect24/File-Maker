@@ -221,6 +221,21 @@ def locations_download(language_code, data):
 
 	return locations_return
 
+"""Get location from Geoparser."""
+
+def geoparser_get(article):
+	url = 'https://geoparser.io/api/geoparser'
+	headers = {'Authorization': "apiKey %s" % geoparser_key}
+	data = {'inputText': article}
+	response = requests.post(url, headers=headers, data=data)
+	if response.status_code == 402:
+		rollbar.report_message("Out of Geoparser requests.", "warning")
+	else:
+		try:
+			property = response.json()["features"][0]["properties"]
+			return property["name"] + ", " + property["country"]
+		except: return None
+
 def download_ap_english():
 	print "Downloading from the Associated Press (English)...\n"
 
@@ -720,6 +735,8 @@ def parsedata_nu(url, title, source, updated, picture_number):
 		if tag in dutch_locations:
 			location = tag
 			break
+
+	location = geoparser_get(article.decode("utf-16be"))
 
 	if len(headline) == 0:
 		print "Headline is blank. %s" % url
