@@ -23,7 +23,6 @@ import struct
 import tempfile
 import textwrap
 import time
-import urllib2
 from bs4 import BeautifulSoup
 from config import *
 from datetime import timedelta, datetime, date
@@ -133,8 +132,8 @@ def replace(item):
 """Resize the image and strip metadata (to make the image size smaller)"""
 
 def shrink_image(data, resize):
-	picture = requests.get(data)
-	image = Image.open(StringIO(picture.content))
+	picture = requests.get(data).content
+	image = Image.open(StringIO(picture))
 
 	if resize == True: image = resizeimage.resize_width(image, 200)
 
@@ -424,7 +423,7 @@ def download_news24_mainichi(topics_name, topics):
 		for rss in rss_category[1]:
 			numbers_category = 0
 
-			rss_feed = urllib2.urlopen("http://news24.jp/sitemap_%s.xml" % rss).read()
+			rss_feed = requests.get("http://news24.jp/sitemap_%s.xml" % rss).text
 
 			soup = BeautifulSoup(rss_feed, "lxml")
 
@@ -459,7 +458,7 @@ def download_news24_mainichi(topics_name, topics):
 
 	print "\n"
 
-	rss_feed = feedparser.parse(urllib2.urlopen("http://rss.rssad.jp/rss/mainichi/flash.rss").read())
+	rss_feed = feedparser.parse(requests.get("http://rss.rssad.jp/rss/mainichi/flash.rss").text)
 
 	for items in rss_feed.entries:
 		updated = parser.parse(items.updated)
@@ -529,7 +528,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "mainichi"]
 
 def parsedata_news24(url, title, updated, picture_number):
-	json_data = json.loads(jsonp2json.convert(urllib2.urlopen(url).read()))
+	json_data = json.loads(jsonp2json.convert(requests.get(url).text))
 
 	headline = title.encode("utf-16be") # Parse the headline.
 
@@ -578,7 +577,7 @@ def download_reuters(topics_name, topics):
 		for rss in rss_category[1]:
 			numbers_category = 0
 
-			rss_feed = feedparser.parse(urllib2.urlopen("http://feeds.reuters.com/reuters/%s.rss" % rss).read())
+			rss_feed = feedparser.parse(requests.get("http://feeds.reuters.com/reuters/%s.rss" % rss).text)
 
 			for items in rss_feed.entries:
 				updated = parser.parse(items.updated)
@@ -676,7 +675,7 @@ def download_nu(topics_name, topics):
 		for rss in rss_category[1]:
 			numbers_category = 0
 
-			rss_feed = feedparser.parse(urllib2.urlopen("http://nu.nl/rss/%s" % rss).read())
+			rss_feed = feedparser.parse(requests.get("http://nu.nl/rss/%s" % rss).text)
 
 			for items in rss_feed.entries:
 				updated = parser.parse(items.updated)
@@ -768,8 +767,8 @@ def download_ansa(topics_name, topics):
 		for rss in rss_category[1]:
 			numbers_category = 0
 
-			if rss_category[0] == "italy": rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/%s/notizie/%s_rss.xml" % (rss, rss)).read())
-			else: rss_feed = feedparser.parse(urllib2.urlopen("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (rss, rss)).read())
+			if rss_category[0] == "italy": rss_feed = feedparser.parse(requests.get("http://ansa.it/%s/notizie/%s_rss.xml" % (rss, rss)).text)
+			else: rss_feed = feedparser.parse(requests.get("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (rss, rss)).text)
 
 			for items in rss_feed.entries:
 				try:
@@ -848,7 +847,7 @@ def download_lobs(topics_name):
 
 	print "\n"
 
-	rss_feed = feedparser.parse(urllib2.urlopen("http://tempsreel.nouvelobs.com/depeche/rss.xml").read())
+	rss_feed = feedparser.parse(requests.get("http://tempsreel.nouvelobs.com/depeche/rss.xml").text)
 
 	for items in rss_feed.entries:
 		category = lobs_categories[items["tags"][0]["term"].encode("utf-8")]
@@ -929,7 +928,7 @@ def download_zeit(topics_name):
 
 	print "\n"
 
-	soup = BeautifulSoup(urllib2.urlopen("http://www.zeit.de/news/index").read(), "lxml")
+	soup = BeautifulSoup(requests.get("http://www.zeit.de/news/index").text, "lxml")
 
 	for items in soup.findAll("article", {"class": "newsteaser"}):
 		updated = parser.parse(items.find("time", {"class": "newsteaser__time"}).contents[0].strip() + " +0300")
@@ -1043,7 +1042,7 @@ def download_ap(topics_name, topics, language):
 		print "\n"
 
 		for rss in rss_category[1]:
-			rss_feed = feedparser.parse(urllib2.urlopen("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).read())
+			rss_feed = feedparser.parse(requests.get("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).text)
 
 			for items in rss_feed.entries:
 				format = "%Y-%m-%dT%H:%M:%SZ"
@@ -1097,7 +1096,7 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 
 		"""Parse the picture captions."""
 
-		url_captions = urllib2.urlopen("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).read()
+		url_captions = requests.get("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
 		soup = BeautifulSoup(url_captions, "lxml")
 		caption = soup.find("font", {"class": "photo"}).contents[0].decode("utf-8").encode("utf-16be")
 	else:
