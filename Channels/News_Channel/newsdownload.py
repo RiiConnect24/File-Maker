@@ -1079,10 +1079,10 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.encode("utf-16be") # Parse the headline.
+	headline = title.decode("utf-8").encode("utf-16be") # Parse the headline.
 
-	try: article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).encode("utf-16be") # Parse the article.
-	except: article = data1.text.encode("utf-16be") # Parse the article.
+	try: article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).decode("utf-8").encode("utf-16be") # Parse the article.
+	except: article = data1.text.decode("utf-8").encode("utf-16be") # Parse the article.
 
 	if "ap-smallphoto-img" in html:
 		"""Parse the pictures."""
@@ -1093,13 +1093,13 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 
 		"""Parse the picture credits."""
 
-		credits = soup.find("span", {"class": "apCaption"}).contents[0].encode("utf-16be")
+		credits = soup.find("span", {"class": "apCaption"}).contents[0].decode("utf-8").encode("utf-16be")
 
 		"""Parse the picture captions."""
 
 		url_captions = urllib2.urlopen("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).read()
 		soup = BeautifulSoup(url_captions, "lxml")
-		caption = soup.find("font", {"class": "photo"}).contents[0].encode("utf-16be")
+		caption = soup.find("font", {"class": "photo"}).contents[0].decode("utf-8").encode("utf-16be")
 	else:
 		picture_number = 0
 		picture = None
