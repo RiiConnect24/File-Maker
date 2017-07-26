@@ -982,7 +982,7 @@ def parsedata_zeit(url, updated, source):
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), replace(location), source, category]
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), replace(location), source, category]
 
 def download_ap(topics_name, topics, language):
 	data = collections.OrderedDict()
