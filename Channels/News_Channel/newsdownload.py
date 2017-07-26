@@ -175,7 +175,7 @@ def locations_download(language_code, data):
 	}
 
 	for keys,values in data.items():
-		location = values[8]
+		location = values[7]
 
 		if location != None:
 			if location not in locations: locations[location] = []
@@ -409,8 +409,6 @@ def download_news24_mainichi_japanese():
 	return download_news24_mainichi(topics_name, topics)
 
 def download_news24_mainichi(topics_name, topics):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	for rss_category in topics.items():
@@ -444,11 +442,9 @@ def download_news24_mainichi(topics_name, topics):
 
 					print "Downloading News Article %s..." % (str(numbers))
 
-					parsedata = parsedata_news24(soup.findAll("loc")[occurrences].contents[0].replace("html", "jsonp"), soup.findAll("news:title")[occurrences].contents[0], updated, picture_number)
+					parsedata = parsedata_news24(soup.findAll("loc")[occurrences].contents[0].replace("html", "jsonp"), soup.findAll("news:title")[occurrences].contents[0], updated)
 
-					if parsedata != None:
-						picture_number += parsedata[7]
-						data[rss_category[0] + str(numbers)] = parsedata
+					if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
 
 				occurrences += 1
 
@@ -474,15 +470,13 @@ def download_news24_mainichi(topics_name, topics):
 
 				print "Downloading News Article %s..." % (str(numbers))
 
-				parsedata = parsedata_mainichi(items["link"], items["title"], updated, picture_number)
+				parsedata = parsedata_mainichi(items["link"], items["title"], updated)
 
-				if parsedata != None:
-					picture_number += parsedata[7]
-					data[rss_category[0] + str(numbers)] = parsedata
+				if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
 
 	return data
 
-def parsedata_mainichi(url, title, updated, picture_number):
+def parsedata_mainichi(url, title, updated):
 	subprocess.call(["ruby", "newsmainichi.rb", url])
 
 	with open("temp_mainichi", "rb") as source_file: html = source_file.read()
@@ -511,10 +505,7 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		"""Parse the pictures."""
 
 		picture = shrink_image(soup.find("img", {"alt", "vertical-photo"})["src"], False)
-
-		picture_number = 1
 	except:
-		picture_number = 0
 		picture = None
 
 	if len(headline) == 0:
@@ -525,9 +516,9 @@ def parsedata_mainichi(url, title, updated, picture_number):
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "mainichi"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, replace(location), "mainichi"]
 
-def parsedata_news24(url, title, updated, picture_number):
+def parsedata_news24(url, title, updated):
 	json_data = json.loads(jsonp2json.convert(requests.get(url).text))
 
 	headline = title.encode("utf-16be") # Parse the headline.
@@ -546,10 +537,7 @@ def parsedata_news24(url, title, updated, picture_number):
 		"""Parse the pictures."""
 
 		picture = shrink_image("http://news24.jp/" + json_data["article"]["imageList"][2]["distributePath"] + json_data["article"]["imageList"][2]["imageFileName"], False)
-
-		picture_number = 1
 	except:
-		picture_number = 0
 		picture = None
 
 	if len(headline) == 0:
@@ -560,11 +548,9 @@ def parsedata_news24(url, title, updated, picture_number):
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, picture_number, replace(location), "news24"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, None, replace(location), "news24"]
 
 def download_reuters(topics_name, topics):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	for rss_category in topics.items():
@@ -592,17 +578,15 @@ def download_reuters(topics_name, topics):
 
 					print "Downloading News Article %s..." % (str(numbers))
 
-					parsedata = parsedata_reuters(items["link"], items["title"], updated, picture_number)
+					parsedata = parsedata_reuters(items["link"], items["title"], updated)
 
-					if parsedata != None:
-						picture_number += parsedata[7]
-						data[rss_category[0] + str(numbers)] = parsedata
+					if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
 
 		print "\n"
 
 	return data
 
-def parsedata_reuters(url, title, updated, picture_number):
+def parsedata_reuters(url, title, updated):
 	utc = pytz.utc
 
 	data1 = Article(url, language="en")
@@ -635,8 +619,6 @@ def parsedata_reuters(url, title, updated, picture_number):
 
 		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"] + "&w=200", False)
 
-		picture_number = 1
-
 		"""Parse the picture credits."""
 
 		credits = None
@@ -645,7 +627,6 @@ def parsedata_reuters(url, title, updated, picture_number):
 
 		caption = soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0].encode("utf-16be")
 	except:
-		picture_number = 0
 		picture = None
 		credits = None
 		caption = None
@@ -658,11 +639,9 @@ def parsedata_reuters(url, title, updated, picture_number):
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "reuters"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), replace(location), "reuters"]
 
 def download_nu(topics_name, topics):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	for rss_category in topics.items():
@@ -679,6 +658,7 @@ def download_nu(topics_name, topics):
 
 			for items in rss_feed.entries:
 				updated = parser.parse(items.updated)
+
 				try:
 					updated = updated.astimezone(tz.tzutc())
 
@@ -692,19 +672,18 @@ def download_nu(topics_name, topics):
 
 							print "Downloading News Article %s..." % (str(numbers))
 
-							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP": parsedata = parsedata_nu(items["link"], items["title"], "NU.nl", updated, picture_number)
-							else: parsedata = parsedata_nu(items["link"], items["title"], items.author, updated, picture_number)
+							if items.author == "NU.nl/Reuters" or "NU.nl/Reuters/ANP" or "NU.nl/ANP/Reuters" or "NU.nl/ANP": parsedata = parsedata_nu(items["link"], items["title"], "NU.nl", updated)
+							else: parsedata = parsedata_nu(items["link"], items["title"], items.author, updated)
 
-							if parsedata != None:
-								picture_number += parsedata[7]
-								data[rss_category[0] + str(numbers)] = parsedata
+							if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+
 				except: print "Failed."
 
 		print "\n"
 
 	return data
 
-def parsedata_nu(url, title, source, updated, picture_number):
+def parsedata_nu(url, title, source, updated):
 	if "Video" in title or "Liveblog" in title: return None
 
 	data1 = Article(url, language="nl")
@@ -723,13 +702,10 @@ def parsedata_nu(url, title, source, updated, picture_number):
 
 		picture = shrink_image(data1.top_image, True)
 
-		picture_number = 1
-
 		"""Parse the caption."""
 
 		credits = soup.find("span", {"class": "photographer"}).contents[0].encode("utf-16be")
 	except:
-		picture_number = 0
 		picture = None
 		credits = None
 
@@ -750,11 +726,9 @@ def parsedata_nu(url, title, source, updated, picture_number):
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, picture_number, replace(location), source]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, replace(location), source]
 
 def download_ansa(topics_name, topics):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	for rss_category in topics.items():
@@ -789,16 +763,15 @@ def download_ansa(topics_name, topics):
 
 							print "Downloading News Article %s..." % (str(numbers))
 
-							parsedata = parsedata_ansa(items["link"], items["title"], updated, picture_number)
+							parsedata = parsedata_ansa(items["link"], items["title"], updated)
 
-							if parsedata != None:
-								picture_number += parsedata[7]
-								data[rss_category[0] + str(numbers)] = parsedata
+							if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+
 				except: print "Failed."
 
 	return data
 
-def parsedata_ansa(url, title, updated, picture_number):
+def parsedata_ansa(url, title, updated):
 	data1 = Article(url, language="it")
 	data1.download()
 	data1.parse()
@@ -813,13 +786,10 @@ def parsedata_ansa(url, title, updated, picture_number):
 
 		picture = shrink_image(data1.top_image, True)
 
-		picture_number = 1
-
 		"""Parse the picture credits."""
 
 		credits = soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0].encode("utf-16be")
 	except:
-		picture_number = 0
 		picture = None
 		credits = None
 
@@ -834,11 +804,9 @@ def parsedata_ansa(url, title, updated, picture_number):
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, picture_number, replace(location), "ansa"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), None, replace(location), "ansa"]
 
 def download_lobs(topics_name):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	numbers = 0
@@ -864,15 +832,13 @@ def download_lobs(topics_name):
 
 			print "Downloading News Article %s..." % (str(numbers))
 
-			parsedata = parsedata_lobs(items["link"], items["title"], updated, picture_number)
+			parsedata = parsedata_lobs(items["link"], items["title"], updated)
 
-			if parsedata != None:
-				picture_number += parsedata[7]
-				data[category + str(numbers)] = parsedata
+			if parsedata != None: data[category + str(numbers)] = parsedata
 
 	return data
 
-def parsedata_lobs(url, title, updated, picture_number):
+def parsedata_lobs(url, title, updated):
 	data1 = Article(url, language="fr")
 	data1.download()
 	data1.parse()
@@ -888,18 +854,14 @@ def parsedata_lobs(url, title, updated, picture_number):
 
 			picture = shrink_image(data1.top_image, True)
 
-			picture_number = 1
-
 			"""Parse the picture captions."""
 
 			try: caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
 			except: caption = None
 		else:
-			picture_number = 0
 			picture = None
 			caption = None
 	except:
-		picture_number = 0
 		picture = None
 		caption = None
 
@@ -915,11 +877,9 @@ def parsedata_lobs(url, title, updated, picture_number):
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), picture_number, replace(location), "AFP"]
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), replace(location), "AFP"]
 
 def download_zeit(topics_name):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	numbers = 0
@@ -946,15 +906,13 @@ def download_zeit(topics_name):
 
 			print "Downloading News Article %s..." % (str(numbers))
 
-			parsedata = parsedata_zeit(link, updated, source, picture_number)
+			parsedata = parsedata_zeit(link, updated, source)
 
-			if parsedata != None:
-				picture_number += parsedata[7]
-				data[parsedata[10] + str(numbers)] = parsedata
+			if parsedata != None: data[parsedata[9] + str(numbers)] = parsedata
 
 	return data
 
-def parsedata_zeit(url, updated, source, picture_number):
+def parsedata_zeit(url, updated, source):
 	data1 = Article(url, language="de")
 	data1.download()
 	data1.parse()
@@ -976,8 +934,6 @@ def parsedata_zeit(url, updated, source, picture_number):
 
 		picture = shrink_image(data1.top_image, True)
 
-		picture_number = 1
-
 		"""Parse the picture captions."""
 
 		try: caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
@@ -988,7 +944,6 @@ def parsedata_zeit(url, updated, source, picture_number):
 		try: credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
 		except: credits = None
 	except:
-		picture_number = 0
 		picture = None
 		caption = None
 		credits = None
@@ -1027,11 +982,9 @@ def parsedata_zeit(url, updated, source, picture_number):
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else:
-		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), picture_number, replace(location), source, category]
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), replace(location), source, category]
 
 def download_ap(topics_name, topics, language):
-	picture_number = 0
-
 	data = collections.OrderedDict()
 
 	for rss_category in topics.items():
@@ -1058,18 +1011,17 @@ def download_ap(topics_name, topics, language):
 
 						print "Downloading News Article %s..." % (str(numbers))
 
-						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, picture_number, language)
+						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
 
-						if parsedata != None:
-							picture_number += parsedata[7]
-							data[rss_category[0] + str(numbers)] = parsedata
+						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+
 				except: print "Failed."
 
 		print "\n"
 
 	return data
 
-def parsedata_ap(url, title, updated_utc, updated, format, picture_number, language):
+def parsedata_ap(url, title, updated_utc, updated, format, language):
 	utc = pytz.utc
 
 	data1 = Article(url, language=language)
@@ -1088,8 +1040,6 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 
 		picture = shrink_image("http://hosted.ap.org/" + soup.find("img", {"class": "ap-smallphoto-img"})["src"][:-10] + "-small.jpg", False)
 
-		picture_number = 1
-
 		"""Parse the picture credits."""
 
 		credits = soup.find("span", {"class": "apCaption"}).contents[0].decode("utf-8").encode("utf-16be")
@@ -1100,7 +1050,6 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 		soup = BeautifulSoup(url_captions, "lxml")
 		caption = soup.find("font", {"class": "photo"}).contents[0].decode("utf-8").encode("utf-16be")
 	else:
-		picture_number = 0
 		picture = None
 		credits = None
 		caption = None
@@ -1116,4 +1065,4 @@ def parsedata_ap(url, title, updated_utc, updated, format, picture_number, langu
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), picture_number, replace(location), "ap"]
+	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), replace(location), "ap"]

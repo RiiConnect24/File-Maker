@@ -538,30 +538,30 @@ def make_source_table(header, articles_table, data):
 	numbers_article = 0
 
 	for article in data.values():
-		if article[9] not in source_articles:
-			source_articles.append(article[9])
+		if article[8] not in source_articles:
+			source_articles.append(article[8])
 
-			source = sources[article[9]]
+			source = sources[article[8]]
 
-			source_table["source_picture_%s" % article[9]] = u8(source[0]) # Picture for the source.
-			source_table["source_position_%s" % article[9]] = u8(source[1]) # Position for the source.
-			source_table["padding_%s" % article[9]] = u16(0) # Padding.
+			source_table["source_picture_%s" % article[8]] = u8(source[0]) # Picture for the source.
+			source_table["source_position_%s" % article[8]] = u8(source[1]) # Position for the source.
+			source_table["padding_%s" % article[8]] = u16(0) # Padding.
 
-			source_table["pictures_size_%s" % article[9]] = u32(0) # Size of the source picture.
-			source_table["pictures_offset_%s" % article[9]] = u32(0) # Offset for the source picture.
+			source_table["pictures_size_%s" % article[8]] = u32(0) # Size of the source picture.
+			source_table["pictures_offset_%s" % article[8]] = u32(0) # Offset for the source picture.
 
-			source_table["name_size_%s" % article[9]] = u32(0) # Size of the source name.
-			source_table["name_offset_%s" % article[9]] = u32(0) # Offset for the source name.
+			source_table["name_size_%s" % article[8]] = u32(0) # Size of the source name.
+			source_table["name_offset_%s" % article[8]] = u32(0) # Offset for the source name.
 
-			source_table["copyright_size_%s" % article[9]] = u32(0) # Size of the copyright.
-			source_table["copyright_offset_%s" % article[9]] = u32(0) # Offset for the copyright.
+			source_table["copyright_size_%s" % article[8]] = u32(0) # Size of the copyright.
+			source_table["copyright_offset_%s" % article[8]] = u32(0) # Offset for the copyright.
 
 			numbers += 1
 
 	for article in data.values():
 		numbers_article += 1
 
-		articles_table["source_%s_number" % numbers_article] = u32(source_articles.index(article[9])) # Number for the source.
+		articles_table["source_%s_number" % numbers_article] = u32(source_articles.index(article[8])) # Number for the source.
 
 	header["source_number"] = u32(numbers) # Number of entries for the source table.
 
@@ -699,30 +699,30 @@ def make_source_name_copyright(source_table, language_code, data):
 	}
 
 	for article in data.values():
-		if article[9] not in sources:
-			if article[9] in source_names:
-				source_name = source_names[article[9]]
+		if article[8] not in sources:
+			if article[8] in source_names:
+				source_name = source_names[article[8]]
 
-				source_table["name_size_%s" % article[9]] = u32(len(source_name)) # Size of the source name.
+				source_table["name_size_%s" % article[8]] = u32(len(source_name)) # Size of the source name.
 
-				source_table["name_offset_%s" % article[9]] = offset_count() # Offset for the source name.
+				source_table["name_offset_%s" % article[8]] = offset_count() # Offset for the source name.
 
-				source_name_copyright["source_name_read_%s" % article[9]] = source_name # Read the source name.
-				source_name_copyright["padding_source_name_%s" % article[9]] = u16(0) # Padding for the source name.
+				source_name_copyright["source_name_read_%s" % article[8]] = source_name # Read the source name.
+				source_name_copyright["padding_source_name_%s" % article[8]] = u16(0) # Padding for the source name.
 
-			if article[9] == "AFP":
+			if article[8] == "AFP":
 				if language_code == 3: copyright = copyrights["AFP_french"]
-				else: copyright = copyrights[article[9]]
-			else: copyright = copyrights[article[9]]
+				else: copyright = copyrights[article[8]]
+			else: copyright = copyrights[article[8]]
 
-			source_table["copyright_size_%s" % article[9]] = u32(len(copyright)) # Size of the copyright.
+			source_table["copyright_size_%s" % article[8]] = u32(len(copyright)) # Size of the copyright.
 
-			source_table["copyright_offset_%s" % article[9]] = offset_count() # Offset for the copyright.
+			source_table["copyright_offset_%s" % article[8]] = offset_count() # Offset for the copyright.
 
-			source_name_copyright["copyright_read_%s" % article[9]] = copyright # Read the copyright.
-			source_name_copyright["padding_copyright_%s" % article[9]] = u16(0) # Padding for the copyright.
+			source_name_copyright["copyright_read_%s" % article[8]] = copyright # Read the copyright.
+			source_name_copyright["padding_copyright_%s" % article[8]] = u16(0) # Padding for the copyright.
 
-			sources.append(article[9])
+			sources.append(article[8])
 
 """Add the locations."""
 
@@ -752,14 +752,14 @@ def make_source_pictures(source_table, data):
 	sources = ["ANP", "ap", "dpa", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl"]
 
 	for article in data.values():
-		if article[9] not in source_articles:
-			if article[9] in sources:
-				source_articles.append(article[9])
+		if article[8] not in source_articles:
+			if article[8] in sources:
+				source_articles.append(article[8])
 
-				source_table["pictures_size_%s" % article[9]] = u32(os.path.getsize("./logos/%s.jpg" % article[9]))
-				source_table["pictures_offset_%s" % article[9]] = offset_count()
+				source_table["pictures_size_%s" % article[8]] = u32(os.path.getsize("./logos/%s.jpg" % article[8]))
+				source_table["pictures_offset_%s" % article[8]] = offset_count()
 
-				with open("./logos/%s.jpg" % article[9], "rb") as source_file: source_pictures["logo_%s" % article[9]] = source_file.read()
+				with open("./logos/%s.jpg" % article[8], "rb") as source_file: source_pictures["logo_%s" % article[8]] = source_file.read()
 
 	return source_pictures
 
