@@ -252,6 +252,7 @@ def download_ap_english():
 	topics_name["business"] = "Business"
 	topics_name["science"] = "Science/Health"
 	topics_name["technology"] = "Technology"
+	topics_name["oddities"] = "Oddities"
 
 	topics = collections.OrderedDict()
 
@@ -262,6 +263,7 @@ def download_ap_english():
 	topics["business"] = ["BUSINESSHEADS"]
 	topics["science"] = ["SCIENCEHEADS", "HEALTHHEADS"]
 	topics["technology"] = ["TECHHEADS"]
+	topics["oddities"] = ["STRANGEHEADS"]
 
 	return download_ap(topics_name, topics, "en")
 
