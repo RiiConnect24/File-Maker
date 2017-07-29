@@ -1000,22 +1000,19 @@ def download_ap(topics_name, topics, language):
 			for items in rss_feed.entries:
 				format = "%Y-%m-%dT%H:%M:%SZ"
 
-				try:
-					updated_utc = datetime.strptime(items["date"], format)
-					updated_utc = updated_utc.strftime(format)
-					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
-					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+				updated_utc = datetime.strptime(items["date"], format)
+				updated_utc = updated_utc.strftime(format)
+				updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
+				time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
-					if updated >= time_current - 60:
-						numbers += 1
+				if updated >= time_current - 60:
+					numbers += 1
 
-						print "Downloading News Article %s..." % (str(numbers))
+					print "Downloading News Article %s..." % (str(numbers))
 
-						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
+					parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
 
-						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
-
-				except: print "Failed."
+					if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
 
 		print "\n"
 
@@ -1030,10 +1027,10 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.decode("utf-8").encode("utf-16be") # Parse the headline.
+	headline = title.encode("utf-16be") # Parse the headline.
 
-	try: article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).decode("utf-8").encode("utf-16be") # Parse the article.
-	except: article = data1.text.decode("utf-8").encode("utf-16be") # Parse the article.
+	try: article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).decode("windows-1252").encode("utf-16be") # Parse the article.
+	except: article = data1.text.decode("windows-1252").encode("utf-16be") # Parse the article.
 
 	if "ap-smallphoto-img" in html:
 		"""Parse the pictures."""
@@ -1042,13 +1039,13 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 
 		"""Parse the picture credits."""
 
-		credits = soup.find("span", {"class": "apCaption"}).contents[0].decode("utf-8").encode("utf-16be")
+		credits = soup.find("span", {"class": "apCaption"}).contents[0].decode("windows-1252").encode("utf-16be")
 
 		"""Parse the picture captions."""
 
 		url_captions = requests.get("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
 		soup = BeautifulSoup(url_captions, "lxml")
-		caption = soup.find("font", {"class": "photo"}).contents[0].decode("utf-8").encode("utf-16be")
+		caption = soup.find("font", {"class": "photo"}).contents[0].decode("windows-1252").encode("utf-16be")
 	else:
 		picture = None
 		credits = None
