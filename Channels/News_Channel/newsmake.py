@@ -266,7 +266,7 @@ def make_news_bin(mode, console, data):
 
 				newstime[data[keys][3]] = get_timestamp(1) + u32(numbers)
 
-		pickle.dump(newstime, open("newstime/" + "newstime." + str(datetime.now().hour).zfill(2) + "-" + mode + "-" + topics + "-" + system, "w+"))
+		pickle.dump(newstime, open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, system), "w+"))
 
 	dictionaries = []
 
