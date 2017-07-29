@@ -1029,7 +1029,7 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 
 	headline = title.encode("utf-16be") # Parse the headline.
 
-	try: article = (data1.text + "\n" + "\n" + "By " + soup.find("span", {"class": "fn"}).contents[0] + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).decode("windows-1252").encode("utf-16be") # Parse the article.
+	try: article = (data1.text + "\n\n" + soup.find("span", {"class": "byline"}).get_text() + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).decode("windows-1252").encode("utf-16be") # Parse the article.
 	except: article = data1.text.decode("windows-1252").encode("utf-16be") # Parse the article.
 
 	if "ap-smallphoto-img" in html:
