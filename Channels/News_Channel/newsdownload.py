@@ -1000,21 +1000,24 @@ def download_ap(topics_name, topics, language):
 			rss_feed = feedparser.parse(requests.get("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).text)
 
 			for items in rss_feed.entries:
-				format = "%Y-%m-%dT%H:%M:%SZ"
+				try:
+					format = "%Y-%m-%dT%H:%M:%SZ"
 
-				updated_utc = datetime.strptime(items["date"], format)
-				updated_utc = updated_utc.strftime(format)
-				updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
-				time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+					updated_utc = datetime.strptime(items["date"], format)
+					updated_utc = updated_utc.strftime(format)
+					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
+					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
-				if updated >= time_current - 60:
-					numbers += 1
+					if updated >= time_current - 60:
+						numbers += 1
 
-					print "Downloading News Article %s..." % (str(numbers))
+						print "Downloading News Article %s..." % (str(numbers))
 
-					parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
+						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
 
-					if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+				except:
+					print "Failed."
 
 		print "\n"
 
