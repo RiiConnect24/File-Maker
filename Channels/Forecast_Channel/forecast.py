@@ -1191,7 +1191,7 @@ for list in weathercities:
 	else:
 		output("Unknown country code %s - generating English only" % country_code, "WARNING")
 		bins = [1]
-	print "Processing list #%s - %s (%s)" % (weathercities.index(list), country_code, list.values()[0][2][1])
+	print "Processing list #%s - %s (%s)" % (weathercities.index(list) + 1, country_code, list.values()[0][2][1])
 	for k,v in forecastlists.weathercities_international.items():
 		if k not in list:
 			if v[2][1] in forecastlists.bincountries and forecastlists.bincountries[v[2][1]] is not country_code: list[k] = v
