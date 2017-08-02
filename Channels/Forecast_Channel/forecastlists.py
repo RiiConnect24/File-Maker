@@ -2468,6 +2468,7 @@ corrections = {
 	"Erromango Island": "Ipota",
 	"Arran": "Brodick",
 	"Cape Horn": "Puerto Williams",
+	"Saipan": "Capitol Hill, Northern Mariana Islands",
 }
 
 key_corrections = {
