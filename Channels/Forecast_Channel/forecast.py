@@ -213,7 +213,7 @@ def test_keys():
 			else: invalid = True
 		else: invalid = True
 		if invalid:
-			print "Warning: Key %s marked as unusable" % keys
+			output("Key %s marked as unusable" % keys, "WARNING")
 			accuweather_api_keys[keys-1] = None
 	print "%s Requests Available" % total
 	print "Processed %s Keys" % len(accuweather_api_keys)
