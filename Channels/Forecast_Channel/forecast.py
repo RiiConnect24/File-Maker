@@ -271,8 +271,8 @@ def request_data(url):
 				except: pass
 			elif "regions" in url:
 				try:
-						a = data.json()[0]
-						c = 1
+					a = data.json()[0]
+					c = 1
 				except: pass
 			else:
 				try:
