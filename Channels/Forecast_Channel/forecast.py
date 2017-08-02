@@ -538,6 +538,7 @@ def get_location(list, key):
 def get_legacy_location(list, key):
 	i = 0
 	if keyCache and key not in duplicates: locationkey[key] = cachefile[key]
+	elif key in forecastlists.key_corrections: locationkey[key] = key_corrections[key]
 	else: locationkey[key] = None
 	while locationkey[key] is None:
 		if i == 2: return -1
@@ -545,7 +546,6 @@ def get_legacy_location(list, key):
 		try:
 			if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
 			else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
-			if key in forecastlists.key_corrections: locationkey[key] = key_corrections[key]
 		except: pass
 		i+=1
 
