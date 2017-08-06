@@ -299,9 +299,9 @@ def get_loccode(list, key):
 	city = get_city(list, key)
 	listid = weathercities.index(list)
 	if state is '' and country not in forecastlists.bincountries:
-			b = 'FE'
-			c = 'FE'
-			a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
+		a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
+		b = 'FE'
+		c = 'FE'
 	else:
 		a = hex(weatherloc[listid][country][state][city])[2:].zfill(4)
 		b = hex(weatherloc[listid]['states'][country][state])[2:].zfill(2)
