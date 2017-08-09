@@ -1032,10 +1032,10 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.encode("utf-16be") # Parse the headline.
+	headline = soup.find("span", {"class": "headline entry-title"}).text.decode("iso-8859-1").encode("utf-16be") # Parse the headline.
 
-	try: article = (data1.text + "\n\n" + soup.find("span", {"class": "byline"}).get_text() + ", " + soup.find("span", {"class": "bylinetitle"}).contents[0]).decode("windows-1252").encode("utf-16be") # Parse the article.
-	except: article = data1.text.decode("windows-1252").encode("utf-16be") # Parse the article.
+	try: article = (data1.text + "\n\n" + soup.find("span", {"class": "byline"}).get_text() + ", " + soup.find("span", {"class": "bylinetitle"}).text).decode("iso-8859-1").encode("utf-16be") # Parse the article.
+	except: article = data1.text.decode("iso-8859-1").encode("utf-16be") # Parse the article.
 
 	if "ap-smallphoto-img" in html:
 		"""Parse the pictures."""
@@ -1044,13 +1044,13 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 
 		"""Parse the picture credits."""
 
-		credits = soup.find("span", {"class": "apCaption"}).contents[0].decode("windows-1252").encode("utf-16be")
+		credits = soup.find("span", {"class": "apCaption"}).text.decode("iso-8859-1").encode("utf-16be")
 
 		"""Parse the picture captions."""
 
 		url_captions = requests.get("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
 		soup = BeautifulSoup(url_captions, "lxml")
-		caption = soup.find("font", {"class": "photo"}).contents[0].decode("windows-1252").encode("utf-16be")
+		caption = soup.find("font", {"class": "photo"}).text.decode("iso-8859-1").encode("utf-16be")
 	else:
 		picture = None
 		credits = None
