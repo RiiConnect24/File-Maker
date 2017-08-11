@@ -15,9 +15,7 @@ import forecastlists
 import io
 import json
 import math
-import numpy
 import os
-import gc
 import pycountry
 import random
 import requests
@@ -147,6 +145,11 @@ def num():
 	number += 1
 	return num1
 
+def coord_decode(value):
+	value = int(value,16)
+	value = -(value & 0x8000) | (value & 0x7fff)
+	return value*0.0054931640625
+
 """This is a progress bar to display how much of the forecast in a list has been downloaded."""
 """It actually looks pretty cool."""
 
@@ -160,7 +163,7 @@ def progress(percent,list):
 		else: display = "✓"
 		progcount = 0
 	else: display = prog[progcount]
-	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,concurrent,"."*progcount))
+	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,concurrent,"."*progcount," "*(4-progcount)))
 	sys.stdout.flush()
 	progcount+=1
 	if progcount == 4: progcount = 0
@@ -310,12 +313,8 @@ def get_loccode(list, key):
 	return string
 
 def zoom(list, mode, key):
-	if mode == 1:
-		if get_index(list,key,3) == 'None': value = str(numpy.random.choice([0,1,2,3,4,5,6,7,8,9],p=[0.2,0.15,0.1,0.1,0.1,0.1,0.1,0.05,0.05,0.05])).zfill(2)
-		elif get_index(list,key,3) != 'None': value = get_index(list,key,3)[8:][:2]
-	elif mode == 2:
-		if get_index(list,key,3) == 'None': value = '03'
-		elif get_index(list,key,3) != 'None': value = get_index(list,key,3)[10:][:2]
+	if mode == 1: value = get_index(list,key,3)[8:][:2]
+	elif mode == 2: value = get_index(list,key,3)[10:][:2]
 	return value
 
 def get_locationcode(list):
@@ -483,8 +482,6 @@ def get_legacy_api(list, key):
 	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
 	globe[key]['offset'] = float(apilegacy['adc_database']['local']['currentGmtOffset'])
 	globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
-
-def get_weekly(list, key):
 	week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
 	week[key][26] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['lowtemperature'])
 	week[key][27] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['hightemperature'])
@@ -495,6 +492,15 @@ def get_weekly(list, key):
 	week[key][32] = int(to_celsius(week[key][28]))
 	week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
 	week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
+	time_index = [[3,9,15,21],[27,33,39,45]]
+	hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
+	for i in range(0,4):
+		temp = time_index[0][i]-hour
+		if temp > -1 and temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
+		else: hourly[key][i] = get_icon(int(-1),list,key)
+		temp = time_index[1][i]-hour
+		if temp > -1 and temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
+		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
 def get_search(list, key, mode):
 	if mode == 0:
@@ -536,18 +542,14 @@ def get_location(list, key):
 """Please don't attack us for doing this, AccuWeather. You're my friend and I want to keep it that way."""
 
 def get_legacy_location(list, key):
-	i = 0
 	if keyCache and key not in duplicates: locationkey[key] = cachefile[key]
 	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
 	else: locationkey[key] = None
-	while locationkey[key] is None:
-		if i == 2: return -1
-		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s" % get_search(list,key,i))
-		try:
-			if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
-			else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
-		except: pass
-		i+=1
+	location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
+	try:
+		if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
+		else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
+	except: return -1
 
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
@@ -570,18 +572,6 @@ def get_tenki_data(key):
 		tomorrow[key][8] = int(tempdiff[3])
 		for i in range(0,8): precipitation[key][i] = int(precip[i])
 		for i in range(0,7): precipitation[key][i+8] = int(precip10[i])
-
-def get_hourly_forecast(list, key):
-	hourly[key] = {}
-	time_index = [[3,9,15,21],[27,33,39,45]]
-	hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
-	for i in range(0,4):
-		temp = time_index[0][i]-hour
-		if temp > -1 and temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
-		else: hourly[key][i] = get_icon(int(-1),list,key)
-		temp = time_index[1][i]-hour
-		if temp > -1 and temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
-		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
 def hex_write(loc, data):
 	global file
@@ -753,10 +743,7 @@ def get_data(list, name):
 	if get_legacy_location(list, name) is None:
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 		get_tenki_data(name) # Get data for Japanese cities
-		if apilegacy is not -1:
-			get_legacy_api(list, name)
-			get_weekly(list, name)
-			get_hourly_forecast(list, name)
+		if apilegacy is not -1: get_legacy_api(list, name)
 	else:
 		output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
 		progress(float(citycount)/float(len(list)-cached)*100,list)
@@ -1204,6 +1191,7 @@ for list in weathercities:
 		print "Downloading Forecast Data ...\n"
 		loop = True
 	dlthread = threading.Thread(target=display_loop,args=[list])
+	dlthread.daemon = True
 	dlthread.start()
 	for keys in list.keys():
 		if keys in cache and cache[keys] != get_all(list,keys) and keys not in duplicates: duplicates[keys] = locationkey[keys]
@@ -1212,7 +1200,8 @@ for list in weathercities:
 			else: get_data(list,keys)
 	if useMultithreaded:
 		for i in threads:
-			while concurrent >= 2: time.sleep(0.005)
+			while concurrent >= 10: time.sleep(0.005)
+			i.daemon = True
 			i.start()
 		for i in threads:
 			i.join()
@@ -1223,6 +1212,7 @@ for list in weathercities:
 	cities+=citycount
 	total+=len(list)
 	buildthread = threading.Thread(target=build_progress,args=[])
+	buildthread.daemon = True
 	buildthread.start()
 	for i in range(1,3):
 		mode = i
@@ -1234,7 +1224,6 @@ for list in weathercities:
 	buildthread.join()
 	sys.stdout.write("\r"+" "*58+"\rBuilding Files: Complete")
 	sys.stdout.flush()
-	gc.collect()
 	print "\n"
 
 print "API Requests: %s" % apirequests
