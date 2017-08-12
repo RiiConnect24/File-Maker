@@ -106,7 +106,7 @@ replace_chars["\x20\x1d"] = "\x00\x22"
 japanese_locations = ["東京", "八丈島", "大島", "父島", "三宅島", "札幌市", "稚内市", "旭川市", "留萌市", "岩見沢市", "倶知安町", "網走市", "北見市", "紋別市", "根室市", "釧路市", "帯広市", "室蘭市", "浦河町", "函館市", "江差町", "枝幸町", "羽幌町", "小樽市", "寿都町", "雄武町", "広尾町", "苫小牧市", "青森市", "むつ市", "八戸市", "深浦町", "盛岡市", "宮古市", "大船渡市", "仙台市", "白石市", "石巻市", "秋田市", "横手市", "山形市", "米沢市", "酒田市", "新庄市", "福島市", "小名浜", "会津若松市", "白河市", "水戸市", "つくば市", "宇都宮市", "大田原市", "日光市", "前橋市", "みなかみ町", "さいたま市", "熊谷市", "秩父市", "千葉市", "銚子市", "勝浦市", "館山市", "横浜市", "小田原市", "富山市", "伏木", "金沢市", "輪島市", "福井市", "敦賀市", "甲府市", "河口湖", "長野市", "松本市", "飯田市", "軽井沢町", "諏訪市", "新潟市", "長岡市", "上越市", "相川", "岐阜市", "高山市", "静岡市", "網代", "三島市", "浜松市", "富士山", "御前崎市", "石廊崎", "名古屋市", "豊橋市", "伊良湖", "津市", "尾鷲市", "四日市市", "上野", "大津市", "彦根市", "京都市", "舞鶴市", "大阪市", "神戸市", "豊岡市", "姫路市", "洲本市", "奈良市", "風屋", "和歌山市", "潮岬", "鳥取市", "米子市", "境港市", "松江市", "浜田市", "西郷", "岡山市", "津山市", "広島市", "庄原市", "福山市", "呉市", "山口市", "下関市", "柳井市", "萩市", "宇部市", "徳島市", "美波町", "高松市", "多度津町", "松山市", "新居浜市", "宇和島市", "高知市", "室戸岬", "宿毛市", "土佐清水市", "福岡市", "八幡", "飯塚市", "久留米市", "佐賀市", "伊万里市", "長崎市", "厳原", "福江", "平戸市", "大村市", "佐世保市", "熊本市", "牛深", "人吉市", "阿蘇山", "大分市", "中津市", "日田市", "佐伯市", "宮崎市", "延岡市", "都城市", "高千穂町", "油津", "鹿児島市", "名瀬", "鹿屋市", "阿久根市", "溝辺", "枕崎市", "種子島", "屋久島", "喜界島", "沖永良部", "与論島", "那覇市", "名護市", "久米島町", "南大東島", "宮古島市", "石垣島", "与那国島", "西表島", "ザ・バレー", "セント・ジョン", "ブエノスアイレス", "コモドロ・リバダビア", "コルドバ", "コリエンテス", "オラニェスタード", "ナッソー", "ブリッジタウン", "ベルモパン", "ラパス", "ブラジリア", "マナウス", "サルバドール", "フォルタレザ", "リオデジャネイロ", "サンパウロ", "レシフェ", "ロードタウン", "オタワ", "トロント", "エドモントン", "カルガリー", "バンクーバー", "ウィニペグ", "チャーチル", "ケベック", "モントリオール", "イエローナイフ", "イカルイット", "ジョージタウン", "サンティアゴ", "イースター島", "ホーン岬", "ボゴタ", "レティシア", "サンホセ", "ロゾー", "サントドミンゴ", "キト", "サンサルバドル", "セントジョージ", "グアテマラ", "ポルトープランス", "テグシガルパ", "キングストン", "メキシコシティ", "サンルーカス岬", "アカプルコ", "プエルト・バヤルタ", "テオティワカン", "モンテレー", "カンクン", "プリマス", "ウィレムスタット", "マナグア", "パナマ", "アスンシオン", "リマ", "マチュ・ピチュ", "ナスカ", "バセテール", "カストリーズ", "キングスタウン", "パラマリボ", "ポートオブスペイン", "グランドターク", "ワシントン", "アンカレジ", "ロサンゼルス", "サンフランシスコ", "デンバー", "マイアミ", "オーランド", "アトランタ", "ホノルル", "シカゴ", "ニュー・オリンズ", "ボストン", "デトロイト", "ミネアポリス", "カンザスシティ", "セントルイス", "シャーロット", "ラスベガス", "ニューヨーク", "ナイアガラ", "シンシナティ", "オクラホマシティ", "ポートランド", "ピッツバーグ", "メンフィス", "ダラス", "エル・パソ", "ヒューストン", "ソルトレークシティ", "シアトル", "ペンシルベニア州", "サイパン", "モンテビデオ", "シャーロット・アマリエ", "カラカス", "ティラナ", "キャンベラ", "シドニー", "ダーウィン", "ウルル", "ブリスベン", "ゴールドコースト", "ケアンズ", "アデレード", "メルボルン", "パース", "クリスマス島", "ウィーン", "ブリュッセル", "サラエボ", "ハボローネ", "ソフィア", "ザグレブ", "ニコシア", "プラハ", "コペンハーゲン", "ヌーク", "タリン", "ヘルシンキ", "パリ", "ボルドー", "トゥールーズ", "ナント", "マルセイユ", "ニース", "ベルリン", "フランクフルト", "ミュンヘン", "ハンブルク", "デュッセルドルフ", "ボン", "アテネ", "ロードス", "ブダペスト", "レイキャビク", "ダブリン", "ローマ", "トリノ", "ミラノ", "ベネチア", "フィレンツェ", "ナポリ", "パレルモ", "シラクサ", "リガ", "マセル", "ファドゥーツ", "ビリニュス", "ルクセンブルク", "スコピエ", "バレッタ", "ポドゴリツァ", "マプト", "ウィントフーク", "アムステルダム", "ウェリントン", "オークランド", "クライストチャーチ", "オスロ", "ワルシャワ", "クラクフ", "リスボン", "ブカレスト", "モスクワ", "ハバロフスク", "ウラジオストク", "ユジノ・サハリンスク", "サンクトペテルブルク", "イルクーツク", "グロズヌイ", "ベオグラード", "ブラチスラヴァ", "リュブリャナ", "プレトリア", "ヨハネスバーグ", "ケープタウン", "マドリード", "トレド", "バルセロナ", "バレンシア", "ムババネ", "ストックホルム", "ベルン", "ジュネーブ", "ローザンヌ", "チューリヒ", "アンカラ", "イスタンブール", "ロンドン", "ケンブリッジ", "マンチェスター", "リバプール", "エジンバラ", "ベルファスト", "ルサカ", "ハラレ", "台北", "カオシュン", "ソウル", "プサン", "香港", "マカオ", "ジャカルタ", "デンパサル", "シンガポール", "バンコク", "プーケット", "マニラ", "セブ", "クアラルンプール", "北京", "上海", "広州", "ハルビン", "大連", "成都", "桂林", "アブダビ", "ドバイ", "ニューデリー", "ムンバイ", "カイロ", "ルクソール", "マスカット", "ドーハ", "クウェート", "リヤド", "メッカ", "ジッダ", "ダマスカス", "マナマ", "アンマン", "バクー", "カブール", "アルジェ", "アンド・ラ・ラベリャ", "ルアンダ", "エレバン", "ダッカ", "ミンスク", "ポルト・ノボ", "ティンプー", "バンダル・スリ・ブガワン", "ワガドゥグー", "ヤンゴン", "ブジュンブラ", "プノンペン", "アンコール・ワット", "ヤウンデ", "プライア", "バンギ", "ンジャメナ", "モロニ", "ブラザビル", "キンシャサ", "ヤムスクロ", "ハバナ", "ジブチ", "ディリ", "マラボ", "アスマラ", "アディス・アベバ", "スバ", "ナンディ", "パペーテ", "リーブルビル", "トビリシ", "アクラ", "コナクリ", "ビサオ", "テヘラン", "バグダッド", "エルサレム", "アスタナ", "ナイロビ", "タラワ", "ビシュケク", "ビエンチャン", "ベイルート", "モンロビア", "トリポリ", "アンタナナリボ", "リロングウェ", "マレ", "バマコ", "マジュロ", "ヌアクショット", "ポート・ルイス", "パリキール", "キシニョフ", "モナコ", "ウランバートル", "ラバト", "カサブランカ", "ヤレン", "カトマンズ", "ヌメア", "ニアメ", "アブジャ", "ピョンヤン", "イスラマバード", "カラチ", "コロール", "ラマッラ", "ポート・モレスビー", "アシガバット", "キガリ", "アピア", "サンマリノ", "サントメ", "ダカール", "ビクトリア", "フリータウン", "ホニアラ", "モガディシュ", "スリ・ジャヤワルダナプラ・コッテ", "ハルツーム", "ドゥシャンベ", "ドドマ", "バンジュール", "南極点", "ロメ", "ヌクアロファ", "チュニス", "フナフティ", "カンパラ", "キエフ", "タシケント", "ポート・ビラ", "ハノイ", "ホー・チミン", "サヌア", "テル・アビブ", "エロマンガ島", "セントルシア", "スリナム", "タークス・カイコス諸島", "エリトリア", "ニュージーランド", "リヒテンシュタイン", "ドミニカ共和国", "日本", "マケドニア", "エジプト", "ロシア", "ジャマイカ", "ブラジル", "ニジェール", "韓国", "ナミビア", "モントセラト", "ベリーズ", "ルーマニア", "スウェーデン", "ラトビア", "アルゼンチン", "レソト", "ブルガリア", "モザンビーク", "アラブ首長国連邦", "オランダ", "チェコ", "マリ", "オマーン", "イタリア", "カタール", "ボスニア・ヘルツェゴビナ", "イギリス", "キプロス", "カナダ", "ホンジュラス", "スロベニア", "インド", "セルビア", "デンマーク", "スロバキア", "コスタリカ", "ガイアナ", "エルサルバドル", "ボリビア", "アンティグア・バーブーダ", "ポルトガル", "ホンコン", "グアドループ", "インドネシア", "アイルランド", "コロンビア", "アンギラ", "グレナダ", "モーリタニア", "アルバニア", "オランダ領アンティル", "フィリピン", "トリニダード・トバゴ", "台湾", "フランス領ギアナ", "ペルー", "ジンバブエ", "バーレーン", "セントキッツ・ネイビス", "サウジアラビア", "ギリシャ", "モンテネグロ", "ボツワナ", "ザンビア", "ポーランド", "マルタ", "マルティニーク", "リトアニア", "ドイツ", "タイ", "アイスランド", "ケイマン諸島", "スイス", "シリア", "ベルギー", "バハマ", "クロアチア", "アゼルバイジャン", "スーダン", "南アフリカ", "エストニア", "メキシコ", "ウルグアイ", "エクアドル", "ハイチ", "スワジランド", "バルバドス", "アメリカ", "中国", "ノルウェー", "ニカラグア", "フィンランド", "チャド", "セントビンセント・グレナディーン", "トルコ", "フランス", "マレーシア", "オーストラリア", "ハンガリー", "英領ヴァージン諸島", "ベネズエラ", "スペイン", "ヨルダン", "米領バージン諸島", "アルバ", "オーストリア", "ドミニカ国", "パラグアイ", "ソマリア", "チリ", "コロンビア特別区", "アラスカ州", "アラバマ州", "アーカンソー州", "アリゾナ州", "カリフォルニア州", "コロラド州", "コネティカット州", "デラウェア州", "フロリダ州", "ジョージア州", "ハワイ州", "アイオワ州", "アイダホ州", "イリノイ州", "インディアナ州", "カンザス州", "ケンタッキー州", "ルイジアナ州", "マサチューセッツ州", "メリーランド州", "メーン州", "ミシガン州", "ミネソタ州", "ミズーリ州", "ミシシッピ州", "モンタナ州", "ノースカロライナ州", "ノースダコタ州", "ネブラスカ州", "ニューハンプシャー州", "ニュージャージー州", "ニューメキシコ州", "ネバダ州", "ニューヨーク州", "オハイオ州", "オクラホマ州", "オレゴン州", "ロードアイランド州", "サウスカロライナ州", "サウスダコタ州", "テネシー州", "テキサス州", "ユタ州", "バージニア州", "バーモント州", "ワシントン州", "ウィスコンシン州", "ウェストバージニア州", "ワイオミング州", "東京都", "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県", "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "神奈川県", "富山県", "石川県", "福井県", "山梨県", "長野県", "新潟県", "岐阜県", "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県", "鳥取県", "島根県", "岡山県", "広島県", "山口県", "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県"]
 dutch_locations = ["Assen", "Coevorden", "Emmen", "Hoogeveen", "Meppel", "Almere", "Lelystad", "Emmeloord", "Biddinghuizen", "Bolsward", "Dokkum", "Drachten", "Franeker", "Harlingen", "Heerenveen", "Leeuwarden", "Sloten", "Sneek", "Stavoren", "Workum", "Apeldoorn", "Arnhem", "Buren", "Culemborg", "Deil", "Dieren", "Doetinchem", "Ede", "Enspijk", "Gendt", "Groenlo", "Harderwijk", "Hattem", "Heukelum", "Huissen", "Nijkerk", "Nijmegen", "Tiel", "Wageningen", "Wijchen", "Winterswijk", "Zaltbommel", "Zevenaar", "Zutphen", "Appingedam", "Delfzijl", "Groningen", "Hoogezand-Sappemeer", "Stadskanaal", "Winschoten", "Veendam", "Geleen", "Gennep", "Heerlen", "Kerkrade", "Kessel", "Landgraaf", "Maastricht", "Montfort", "Nieuwstadt", "Roermond", "Sittard", "Schin op Geul", "Stein", "Thorn", "Valkenburg", "Venlo", "Weert", "Bergen op Zoom", "Breda", "'s-Hertogenbosch", "Eindhoven", "Geertruidenberg", "Grave", "Helmond", "Heusden", "Klundert", "Oosterhout", "Oss", "Ravenstein", "Roosendaal", "Sint-Oedenrode", "Tilburg", "Valkenswaard", "Veldhoven", "Waalwijk", "Willemstad", "Woudrichem", "Alkmaar", "Amstelveen", "Amsterdam", "Enkhuizen", "Haarlem", "Heerhugowaard", "Hilversum", "Hoofddorp", "Hoorn", "Laren", "Purmerend", "Medemblik", "Monnickendam", "Muiden", "Naarden", "Schagen", "Velsen", "Weesp", "Zaanstad", "Almelo", "Blokzijl", "Deventer", "Enschede", "Genemuiden", "Hasselt", "Hengelo", "Kampen", "Oldenzaal", "Steenwijk", "Vollenhove", "Zwolle", "Alphen aan den Rijn", "Delft", "Dordrecht", "Gorinchem", "Gouda", "Leiden", "Rotterdam", "Spijkenisse", "Zoetermeer", "Amersfoort", "Nieuwegein", "Utrecht", "Veenendaal", "Arnemuiden", "Goes", "Hulst", "Middelburg", "Sluis", "Terneuzen", "Veere", "Vlissingen", "Zierikzee", "Afghanistan", "Algerije", "Andorra", "Angola", "Antigua en Barbuda", "Azerbeidzjan", "Bahama's", "Bahrein", "Bangladesh", "Barbados", "Belize", "Benin", "Bhutan", "Bolivia", "Botswana", "Brunei", "Bulgarije", "Burundi", "Cambodja", "Canada", "Centraal-Afrikaanse Republiek", "Chili", "China", "Colombia", "Comoren", "Congo-Brazzaville", "Costa Rica", "Cuba", "Cyprus", "Denemarken", "Djibouti", "Dominica", "Dominicaanse Republiek", "Duitsland", "Ecuador", "Egypte", "El Salvador", "Equatoriaal-Guinea", "Eritrea", "Estland", "Fiji", "Filipijnen", "Finland", "Frankrijk", "Gabon", "Gambia", "Ghana", "Grenada", "Griekenland", "Guatemala", "Guinee", "Guinee-Bissau", "Guyana", "Honduras", "Hongarije", "Ierland", "IJsland", "India", "Irak", "Iran", "Ivoorkust", "Jamaica", "Japan", "Jemen", "Kameroen", "Kazachstan", "Kenia", "Kiribati", "Koeweit", "Kosovo", "Laos", "Lesotho", "Letland", "Libanon", "Liberia", "Liechtenstein", "Litouwen", "Luxemburg", "Madagaskar", "Malawi", "Maldiven", "Mali", "Malta", "Marokko", "Marshalleilanden", "Mauritius", "Mexico", "Micronesia", "Monaco", "Montenegro", "Mozambique", "Myanmar", "Nauru", "Nederland", "Nepal", "Nicaragua", "Nieuw-Zeeland", "Niger", "Nigeria", "Noord-Korea", "Noorwegen", "Oeganda", "Oezbekistan", "Oman", "Oostenrijk", "Oost-Timor", "Pakistan", "Palestina", "Panama", "Paraguay", "Peru", "Polen", "Portugal", "Qatar", "Rusland", "Rwanda", "Salomonseilanden", "Samoa", "San Marino", "Senegal", "Seychellen", "Sierra Leone", "Singapore", "Slowakije", "Soedan", "Spanje", "Sri Lanka", "Suriname", "Swaziland", "Tadzjikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad en Tobago", "Tsjaad", "Turkije", "Turkmenistan", "Tuvalu", "Uruguay", "Vanuatu", "Vaticaanstad", "Venezuela", "Verenigde Arabische Emiraten", "Verenigde Staten", "Vietnam", "Wit-Rusland", "Zambia", "Zimbabwe", "Zuid-Afrika", "Zuid-Korea", "Zuid-Soedan", "Zweden", "Zwitserland", "Noord-Holland", "Drenthe", "Flevoland", "Friesland", "Gelderland", "Limburg", "Noord-Brabant", "Overijssel", "Zuid-Holland", "Zeeland", "Alaska", "Alabama", "Arkansas", "Arizona", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", "Nebraska", "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "Tennessee", "Texas", "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", "West Virginia", "Wyoming", "Tokio", "Kyoto", "Osaka", "Fukuoka", "Buenos Aires", "Oranjestad", "Manaus", "Salvador", "Fortaleza", "Rio de Janeiro", "Ottawa", "Toronto", "Edmonton", "Calgary", "Vancouver", "Winnipeg", "Churchill", "Santiago", "Paaseiland", "Bogota", "Santo Domingo", "San Salvador", "Georgetown", "Port-au-Prince", "Tegucigalpa", "Kingston", "Mexico-stad", "Acapulco", "Monterrey", "Plymouth", "Lima", "Machu Picchu", "Paramaribo", "Washington D.C.", "Los Angeles", "San Francisco", "Denver", "Miami", "Orlando", "Atlanta", "Honolulu", "Chicago", "New Orleans", "Boston", "Detroit", "Minneapolis", "Kansas City", "Saint Louis", "Charlotte", "Las Vegas", "Niagara Falls", "Cincinnati", "Oklahoma City", "Portland", "Pittsburgh", "Memphis", "Dallas", "El Paso", "Houston", "Salt Lake City", "Seattle", "Guam", "Caracas", "Canberra", "Sydney", "Darwin", "Uluru", "Brisbane", "Gold Coast", "Cairns", "Adelaide", "Melbourne", "Perth", "Wenen", "Brussel", "Sarajevo", "Sofia", "Zagreb", "Nicosia", "Praag", "Kopenhagen", "Tallinn", "Helsinki", "Parijs", "Bordeaux", "Toulouse", "Nantes", "Marseille", "Nice", "Berlijn", "Frankfurt", "Hamburg", "Bonn", "Athene", "Rhodos", "Boedapest", "Reykjavik", "Dublin", "Rome", "Turijn", "Milaan", "Florence", "Napels", "Palermo", "Riga", "Skopje", "Podgorica", "Wellington", "Auckland", "Christchurch", "Oslo", "Warschau", "Lissabon", "Boekarest", "Moskou", "Sint-Petersburg", "Grozny", "Belgrado", "Bratislava", "Pretoria", "Johannesburg", "Kaapstad", "Madrid", "Barcelona", "Valencia", "Stockholm", "Bern", "Lausanne", "Ankara", "Istanbul", "Londen", "Cambridge", "Manchester", "Liverpool", "Edinburgh", "Belfast", "Lusaka", "Taipei", "Kaohsiung", "Seoul", "Busan", "Hongkong", "Macau", "Jakarta", "Bangkok", "Phuket", "Manilla", "Kuala Lumpur", "Beijing", "Sjanghai", "Harbin", "Chengdu", "Abu Dhabi", "Dubai", "New Delhi", "Mumbai", "Luxor", "Doha", "Riyad", "Mekka", "Djedda", "Damascus", "Amman", "Algiers", "Luanda", "Dhaka", "Minsk", "Ouagadougou", "Angkor Wat", "Bangui", "Brazzaville", "Kinshasa", "Havana", "Dili", "Tbilisi", "Accra", "Conakry", "Teheran", "Bagdad", "Jeruzalem", "Astana", "Nairobi", "Beiroet", "Tripoli", "Bamako", "Port Louis", "Rabat", "Casablanca", "Kathmandu", "Abuja", "Pyongyang", "Islamabad", "Karachi", "Ramallah", "Dakar", "Victoria", "Mogadishu", "Khartoem", "Tunis", "Kampala", "Kiev", "Hanoi", "Sanaa", "Tel Aviv", "Mosul", "Phoenix", "Sacramento", "Dover", "Tallahassee", "Springfield", "Indianapolis", "Topeka", "Baton Rouge", "Augusta", "Saint Paul", "Jackson", "Lincoln", "Albany", "Raleigh", "Columbus", "Salem", "Columbia", "Nashville", "Austin", "Richmond", "Olympia", "Charleston", "Madison", "Cheyenne", "Kabul", "Jerevan", "Phnom Penh", "Peking", "Asuncion", "Decatur", "Dothan", "Hoover", "Mobile", "Birmingham", "Flagstaff", "Tucson", "Yuma", "Anaheim", "Fresno", "Oakland", "Palm Springs", "Redding", "Riverside", "San Bernardino", "San Diego", "San Jose", "Santa Barbara", "Santa Cruz", "Colorado Springs", "Bristol", "Wilmington", "Fort Lauderdale", "Hollywood", "Miami Beach", "Naples", "Panama City", "Tampa", "Athens", "Brunswick", "Waterloo", "Aurora", "Mount Vernon", "Anderson", "Elkhart", "Evansville", "Gary", "Lafayette", "Hutchinson", "Manhattan", "Wichita", "Bowling Green", "Lexington", "Alexandria", "Monroe", "Lowell", "Worcester", "Baltimore", "Bethesda", "Flint", "Grand Rapids", "Holland", "Kalamazoo", "Midland", "Rochester", "Joplin", "St. Louis", "Hattiesburg", "Bozeman", "Durham", "Greenville", "Fargo", "Omaha", "Edison", "Newark", "Albuquerque", "Henderson", "Reno", "Binghamton", "Buffalo", "Ithaca", "Southampton", "Akron", "Cleveland", "Dayton", "Mansfield", "Portsmouth", "Lawton", "Tulsa", "Ontario", "Philadelphia", "Reading", "Newport", "Chattanooga", "Knoxville", "Amarillo", "Corpus Christi", "Odessa", "Paris", "San Antonio", "Tyler", "Waco", "Logan", "Moab", "Arlington", "Charlottesville", "Burlington", "Tacoma", "Yakima", "Milwaukee", "Casper"]
 
-"""Replace categories in French news with these."""
+"""Categories for L'Obs."""
 
 lobs_categories = collections.OrderedDict()
 
@@ -114,6 +114,17 @@ lobs_categories["TopNews"] = "topnews"
 lobs_categories["Société"] = "society"
 lobs_categories["Monde"] = "world"
 lobs_categories["Politique"] = "politics"
+
+"""Categories for EFE."""
+
+efe_categories = collections.OrderedDict()
+
+efe_categories["Mundo"] = "world"
+efe_categories["Deportes"] = "sports"
+efe_categories["Economía"] = "economy"
+efe_categories["Cultura"] = "culture"
+efe_categories["Sociedad"] = "society"
+efe_categories["Gente"] = "people"
 
 """Categories for ZEIT."""
 
@@ -372,6 +383,20 @@ def download_ansa_italian():
 
 	return download_ansa(topics_name, topics)
 
+def download_efe_spanish():
+	print "Downloading from EFE (Spanish)...\n"
+
+	topics_name = collections.OrderedDict()
+
+	topics_name["world"] = "Mundo"
+	topics_name["sports"] = "Deportes"
+	topics_name["economy"] = "Economía"
+	topics_name["culture"] = "Cultura"
+	topics_name["society"] = "Sociedad"
+	topics_name["people"] = "Gente"
+
+	return download_efe(topics_name)
+
 def download_nu_dutch():
 	print "Downloading from NU.nl (Dutch)...\n"
 
@@ -618,7 +643,7 @@ def parsedata_reuters(url, title, updated):
 	headline = fix_chars(title) # Parse the headline.
 
 	try: article = fix_chars((data2.text + "\n\n" + soup.find("p", {"class": "Attribution_content_27_rw"}).contents[0]))
-	except: article = fix_chars(data2.text # Parse the article.
+	except: article = fix_chars(data2.text) # Parse the article.
 
 	try:
 		location = article.decode("utf-16be").split(" (Reuters)")[0]
@@ -890,6 +915,78 @@ def parsedata_lobs(url, title, updated):
 		return None
 	else:
 		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), replace(location), "AFP"]
+
+def download_efe(topics_name):
+	data = collections.OrderedDict()
+
+	numbers = 0
+
+	print "Downloading News..."
+
+	print "\n"
+
+	rss_feed = feedparser.parse(requests.get("https://www.efe.com/efe/espana/1/rss").text)
+
+	for items in rss_feed.entries:
+		try:
+			category = efe_categories[items["category"]]
+		except:
+			continue
+
+		updated = parser.parse(items.updated)
+		updated = updated.astimezone(tz.tzutc())
+
+		updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
+
+		time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+
+		if updated >= time_current - 60:
+			numbers += 1
+
+			print "Downloading News Article %s..." % (str(numbers))
+
+			parsedata = parsedata_efe(items["link"].replace("?utm_source=wwwefecom&amp;utm_medium=rss&amp;utm_campaign=rss", ""), items["title"].split("- ", 1)[1], updated)
+
+			if parsedata != None: data[category + str(numbers)] = parsedata
+
+	return data
+
+def parsedata_efe(url, title, updated):
+	data1 = Article(url, language="fr")
+	data1.download()
+	data1.parse()
+	html = data1.html
+	soup = BeautifulSoup(html, "lxml")
+
+	headline = fix_chars(title) # Parse the headline.
+	article = fix_chars(data1.text) # Parse the article.
+
+	try:
+		"""Parse the pictures."""
+
+		picture = shrink_image(data1.top_image, True)
+
+		"""Parse the picture captions."""
+
+		try: caption = fix_chars(soup.find("p", {"itemprop": "description name caption"}).contents[0])
+		except: caption = None
+	except:
+		picture = None
+		caption = None
+
+	try: location = soup.find("span", {"class": "origen"}, {"itemprop": "dateline"}).contents[0].encode("utf-8")
+	except: location = None
+
+	if len(headline) == 0:
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	elif len(article) == 0:
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	else:
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), replace(location), "EFE"]
 
 def download_zeit(topics_name):
 	data = collections.OrderedDict()

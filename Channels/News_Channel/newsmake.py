@@ -205,6 +205,22 @@ def make_news_bin(mode, console, data):
 
 		country_code = 110
 
+	elif mode == "efe_spanish":
+		topics_news = collections.OrderedDict()
+
+		topics_news["Mundo"] = "world"
+		topics_news["Deportes"] = "sports"
+		topics_news["Economía"] = "economy"
+		topics_news["Cultura"] = "culture"
+		topics_news["Sociedad"] = "society"
+		topics_news["Gente"] = "people"
+
+		languages = [1, 2, 3, 4, 5, 6]
+
+		language_code = 4
+
+		country_code = 110
+
 	elif mode == "ansa_italian":
 		topics_news = collections.OrderedDict()
 
@@ -535,6 +551,7 @@ def make_source_table(header, articles_table, data):
 		"mainichi": [1, 1],
 		"news24": [0, 2],
 		"NU.nl": [0, 5],
+		"EFE": [0, 4],
 	}
 
 	numbers = 0
@@ -700,6 +717,7 @@ def make_source_name_copyright(source_table, language_code, data):
 		"mainichi": "©毎日新聞社　見出し・記事・写真の無断転載を禁止します。".decode("utf-8").encode("utf-16be"),
 		"news24": "Copyright(C)NIPPON TELEVISION NETWORK CORPORATION All rights reserved. 映像協力 NNN(Nippon News Network)".decode("utf-8").encode("utf-16be"),
 		"NU.nl": ("© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode("utf-8").encode("utf-16be"),
+		"EFE": ("© Agencia EFE, S.A. Avd. de Burgos, 8-B. 28036 Madrid. España Tel: +34 91 346 7100. Todos los derechos reservados").decode("utf-8").encode("utf-16be")
 	}
 
 	for article in data.values():
@@ -753,7 +771,7 @@ def make_source_pictures(source_table, data):
 
 	"""These are the news sources which will get a custom news picture from them."""
 
-	sources = ["ANP", "ap", "dpa", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl"]
+	sources = ["ANP", "ap", "dpa", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE"]
 
 	for article in data.values():
 		if article[8] not in source_articles:
