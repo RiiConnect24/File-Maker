@@ -220,7 +220,7 @@ def locations_download(language_code, data):
 				location = u16(0)
 				zoom_factor = u32_littleendian(6)
 
-				coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0055) & 0xFFFF) + u16(int(read[0]["geometry"]["location"]["lng"] / 0.0055) & 0xFFFF) + country + region + u16(0) + zoom_factor
+				coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0054931640625) & 0xFFFF) + u16(int(read[0]["geometry"]["location"]["lng"] / 0.0054931640625) & 0xFFFF) + country + region + u16(0) + zoom_factor
 
 				for filenames in locations[name]:
 					if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
