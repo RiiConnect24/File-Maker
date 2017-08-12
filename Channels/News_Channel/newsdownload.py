@@ -497,13 +497,13 @@ def parsedata_mainichi(url, title, updated):
 
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.encode("utf-16be") # Parse the headline.
+	headline = fix_chars(title) # Parse the headline.
 
 	article = ""
 
 	for text in soup.findAll("p", {"class": "txt"}): article += " " + text.getText().strip() + "\n\n"
 
-	article = textwrap.wrap(article, 30).encode("utf-16be")
+	article = fix_chars(textwrap.wrap(article, 30))
 
 	location_list = collections.OrderedDict()
 
@@ -533,9 +533,9 @@ def parsedata_mainichi(url, title, updated):
 def parsedata_news24(url, title, updated):
 	json_data = json.loads(jsonp2json.convert(requests.get(url).text))
 
-	headline = title.encode("utf-16be") # Parse the headline.
+	headline = fix_chars(title) # Parse the headline.
 
-	article = json_data["article"]["newsBody"].replace("<br />", "\n").encode("utf-16be")
+	article = fix_chars(json_data["article"]["newsBody"].replace("<br />", "\n"))
 
 	location_list = collections.OrderedDict()
 
@@ -615,10 +615,10 @@ def parsedata_reuters(url, title, updated):
 	data2.set_html(str(soup2))
 	data2.parse()
 
-	headline = title.encode("utf-16be") # Parse the headline.
+	headline = fix_chars(title) # Parse the headline.
 
-	try: article = (data2.text + "\n\n" + soup.find("p", {"class": "Attribution_content_27_rw"}).contents[0]).encode("utf-16be")
-	except: article = data2.text.encode("utf-16be") # Parse the article.
+	try: article = fix_chars((data2.text + "\n\n" + soup.find("p", {"class": "Attribution_content_27_rw"}).contents[0]))
+	except: article = fix_chars(data2.text # Parse the article.
 
 	try:
 		location = article.decode("utf-16be").split(" (Reuters)")[0]
@@ -637,7 +637,7 @@ def parsedata_reuters(url, title, updated):
 
 		"""Parse the picture captions."""
 
-		caption = soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0].encode("utf-16be")
+		caption = fix_chars(soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0])
 	except:
 		picture = None
 		credits = None
@@ -704,10 +704,10 @@ def parsedata_nu(url, title, source, updated):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.encode("utf-16be") # Parse the headline.
+	headline = fix_chars(title) # Parse the headline.
 
-	try: article = (soup.find("div", {"class": "item-excerpt"}).contents[0].replace("        ", "") + "\n" + data1.text).encode("utf-16be") # Parse the article.
-	except: article = data1.text.encode("utf-16be") # Parse the article.
+	try: article = fix_chars((soup.find("div", {"class": "item-excerpt"}).contents[0].replace("        ", "") + "\n" + data1.text)) # Parse the article.
+	except: article = fix_chars(data1.text) # Parse the article.
 
 	try:
 		"""Parse the pictures."""
@@ -716,7 +716,7 @@ def parsedata_nu(url, title, source, updated):
 
 		"""Parse the caption."""
 
-		credits = soup.find("span", {"class": "photographer"}).contents[0].encode("utf-16be")
+		credits = fix_chars(soup.find("span", {"class": "photographer"}).contents[0])
 	except:
 		picture = None
 		credits = None
@@ -790,8 +790,8 @@ def parsedata_ansa(url, title, updated):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.encode("utf-16be") # Parse the headline.
-	article = data1.text.encode("utf-16be") # Parse the article.
+	headline = fix_chars(title) # Parse the headline.
+	article = fix_chars(data1.text) # Parse the article.
 
 	try:
 		"""Parse the pictures."""
@@ -800,7 +800,7 @@ def parsedata_ansa(url, title, updated):
 
 		"""Parse the picture credits."""
 
-		credits = soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0].encode("utf-16be")
+		credits = fix_chars(soup.find("div", {"class": "news-caption hidden-phone"}).find("em").contents[0])
 	except:
 		picture = None
 		credits = None
@@ -857,8 +857,8 @@ def parsedata_lobs(url, title, updated):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = title.encode("utf-16be") # Parse the headline.
-	article = data1.text.encode("utf-16be") # Parse the article.
+	headline = fix_chars(title) # Parse the headline.
+	article = fix_chars(data1.text) # Parse the article.
 
 	try:
 		if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
@@ -868,7 +868,7 @@ def parsedata_lobs(url, title, updated):
 
 			"""Parse the picture captions."""
 
-			try: caption = soup.find("figcaption", {"class": "obs-legend"}).contents[0].encode("utf-16be")
+			try: caption = fix_chars(soup.find("figcaption", {"class": "obs-legend"}).contents[0])
 			except: caption = None
 		else:
 			picture = None
@@ -931,8 +931,8 @@ def parsedata_zeit(url, updated, source):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = data1.title.encode("utf-16be") # Parse the headline.
-	article = data1.text.encode("utf-16be") # Parse the article.
+	headline = fix_chars(data1.title) # Parse the headline.
+	article = fix_chars(data1.text) # Parse the article.
 
 	headline_category = headline.decode("utf-16be").split(": ", 1)[0]
 	category = "general"
@@ -948,12 +948,12 @@ def parsedata_zeit(url, updated, source):
 
 		"""Parse the picture captions."""
 
-		try: caption = soup.find("span", {"class": "figure__text"}).contents[0].encode("utf-16be")
+		try: caption = fix_chars(soup.find("span", {"class": "figure__text"}).contents[0])
 		except: caption = None
 
 		"""Parse the picture credits."""
 
-		try: credits = soup.find("span", {"class": "figure__copyright"}).get_text().encode("utf-16be")
+		try: credits = fix_chars(soup.find("span", {"class": "figure__copyright"}).get_text())
 		except: credits = None
 	except:
 		picture = None
@@ -962,7 +962,7 @@ def parsedata_zeit(url, updated, source):
 
 	if source == "ZEIT ONLINE":
 		try:
-			credits = soup.find("div", {"class": "byline"}).get_text().strip().encode("utf-16be")
+			credits = fix_chars(soup.find("div", {"class": "byline"}).get_text().strip())
 
 			if ", " in credits.decode("utf-16be"): location = credits.decode("utf-16be").split(", ", 1)[1]
 			else: location = None
