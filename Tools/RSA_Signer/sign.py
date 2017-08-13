@@ -43,15 +43,15 @@ if (sys.argv[1] == "dec"):
 	with open(input_file, "rb") as source_file:
 		with open(input_file2, "w+") as dest_file:
 			read = source_file.read()
-			version = u32(0)
+			version = u32(512)
 			dest_file.write(version)
 			dest_file.write(filesize)
 			dest_file.write(binascii.unhexlify(crc32))
 			dest_file.write(read)
 
-	lz77 = subprocess.call([lzss_path + "lzss", "-evf", input_file2, output_file])
+	lz77 = subprocess.call([lzss_path + "lzss", "-evf", input_file2])
 
-	with open(output_file, "rb") as source_file:
+	with open(input_file2, "rb") as source_file:
 		read = source_file.read()
 
 	with open(rsa_key_path, "rb") as source_file:
