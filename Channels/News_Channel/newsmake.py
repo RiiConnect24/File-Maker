@@ -546,6 +546,7 @@ def make_source_table(header, articles_table, data):
 		"ANP": [0, 5],
 		"ansa": [6, 6],
 		"dpa": [0, 4],
+		"DPA Hamburg": [0, 4],
 		"ZEIT ONLINE": [0, 4],
 		"SID": [0, 4],
 		"mainichi": [1, 1],
@@ -714,6 +715,7 @@ def make_source_name_copyright(source_table, language_code, data):
 		"SID": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s SID" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"ZEIT ONLINE": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s ZEIT ONLINE" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"dpa": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. f© %s dpa" % date.today().year).decode("utf-8").encode("utf-16be"),
+		"DPA Hamburg": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. f© %s dpa" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"mainichi": "©毎日新聞社　見出し・記事・写真の無断転載を禁止します。".decode("utf-8").encode("utf-16be"),
 		"news24": "Copyright(C)NIPPON TELEVISION NETWORK CORPORATION All rights reserved. 映像協力 NNN(Nippon News Network)".decode("utf-8").encode("utf-16be"),
 		"NU.nl": ("© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode("utf-8").encode("utf-16be"),
@@ -771,7 +773,7 @@ def make_source_pictures(source_table, data):
 
 	"""These are the news sources which will get a custom news picture from them."""
 
-	sources = ["ANP", "ap", "dpa", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE"]
+	sources = ["ANP", "ap", "dpa", "DPA Hamburg", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE"]
 
 	for article in data.values():
 		if article[8] not in source_articles:

@@ -1072,7 +1072,7 @@ def parsedata_zeit(url, updated, source):
 		else: location = None
 		category = "sports"
 
-	elif source == "dpa":
+	elif source == "dpa" or source == "DPA Hamburg":
 		if " (dpa)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (dpa)", 1)[0]
 		else: location = None
 
