@@ -5,7 +5,7 @@
 # EVERYBODY VOTES CHANNEL GENERATION SCRIPT
 # VERSION 0.5
 # AUTHORS: JOHN PANSERA
-# ****************************************************************************
+# ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
@@ -199,8 +199,8 @@ def make_bin(country_code):
 	print "Processing ..."
 	voting = make_header()
 	if write_questions:
-		national_table = make_national_question_table(voting)
-		worldwide_question = make_worldwide_question_table(voting)
+		make_national_question_table(voting)
+		make_worldwide_question_table(voting)
 		question_text_table = make_question_text_table(voting)
 	if write_results and national_results > 0:
 		make_national_result_table(voting)
@@ -211,7 +211,7 @@ def make_bin(country_code):
 		make_worldwide_result_detailed_table(voting)
 	if file_type == "v": country_table = make_country_name_table(voting)
 	if write_questions: make_question_text(question_text_table)
-	if file_type == "v": country_text = make_country_table(country_table)
+	if file_type == "v": make_country_table(country_table)
 	if file_type == "q": question_file = get_name()+'_q'
 	elif file_type == "r": question_file = get_name()+'_r'
 	else: question_file = "voting.bin"
@@ -417,7 +417,7 @@ def make_country_name_table(header):
 		i = 0
 		for _ in range(len(languages)):
 			country_name_table["language_code_%s_%s" % (num,i)] = u32(i)
-			country_name_table["text_offset_%s_%s" % (num,i)] = offset_count()
+			country_name_table["text_offset_%s_%s" % (num,i)] = u32(0)
 			i+=1
 
 	return country_name_table
@@ -456,11 +456,11 @@ def make_question_text(question_text_table):
 
 	for q in question_data.keys():
 		num = question_data.keys().index(q)
-		question_text_table["question_offset_%s" % num] = u32(dec(binascii.hexlify(offset_count())))
+		question_text_table["question_offset_%s" % num] = offset_count()
 		question_text["0_%s" % num] = get_question(q).encode("utf-16be")+pad(2)
-		question_text_table["response_1_offset_%s" % num] = u32(dec(binascii.hexlify(offset_count())))
+		question_text_table["response_1_offset_%s" % num] = offset_count()
 		question_text["1_%s" % num] = get_response1(q).encode("utf-16be")+pad(2)
-		question_text_table["response_2_offset_%s" % num] = u32(dec(binascii.hexlify(offset_count())))
+		question_text_table["response_2_offset_%s" % num] = offset_count()
 		question_text["2_%s" % num] = get_response2(q).encode("utf-16be")+pad(2)
 
 	return question_text

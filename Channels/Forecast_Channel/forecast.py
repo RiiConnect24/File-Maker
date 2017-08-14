@@ -3,9 +3,9 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.0
+# VERSION 3.1
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
-# ****************************************************************************
+# ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
@@ -175,7 +175,7 @@ def build_progress():
 		sys.stdout.flush()
 		i+=1
 		if i == 34: i = 0
-		time.sleep(0.05)
+		time.sleep(0.015)
 
 def output(text,level):
 	if loop or build:
@@ -876,18 +876,18 @@ def make_long_forecast_table(list):
 			long_forecast_table["5day_tempf_low_5_%s" % numbers] = u8(temp(week[key][26])) # 5-Day forecast day 5 low temperature in Fahrenheit
 			long_forecast_table["5day_precipitation_5_%s" % numbers] = u8(temp(precipitation[key][12])) # 5-Day precipitation percentage 1
 			long_forecast_table["5day_forecast_padding_5_%s" % numbers] = u8(0) # Padding
-			long_forecast_table["5day_forecast_6_%s" % numbers] = binascii.unhexlify(week[key][34]) # 5-Day forecast day 6 weather icon (JAPAN ONLY)
-			long_forecast_table["5day_tempc_high_6_%s" % numbers] = u8(temp(week[key][31])) # 5-Day forecast day 6 high temperature in Celsius (JAPAN ONLY)
-			long_forecast_table["5day_tempc_low_6_%s" % numbers] = u8(temp(week[key][32])) # 5-Day forecast day 6 low temperature in Celsius (JAPAN ONLY)
-			long_forecast_table["5day_tempf_high_6_%s" % numbers] = u8(temp(week[key][27])) # 5-Day forecast day 6 high temperature in Fahrenheit (JAPAN ONLY)
-			long_forecast_table["5day_tempf_low_6_%s" % numbers] = u8(temp(week[key][28])) # 5-Day forecast day 6 low temperature in Fahrenheit (JAPAN ONLY)
+			long_forecast_table["5day_forecast_6_%s" % numbers] = binascii.unhexlify(week[key][34]) # 5-Day forecast day 5 weather icon (JAPAN ONLY)
+			long_forecast_table["5day_tempc_high_6_%s" % numbers] = u8(temp(week[key][31])) # 5-Day forecast day 5 high temperature in Celsius (JAPAN ONLY)
+			long_forecast_table["5day_tempc_low_6_%s" % numbers] = u8(temp(week[key][32])) # 5-Day forecast day 5 low temperature in Celsius (JAPAN ONLY)
+			long_forecast_table["5day_tempf_high_6_%s" % numbers] = u8(temp(week[key][27])) # 5-Day forecast day 5 high temperature in Fahrenheit (JAPAN ONLY)
+			long_forecast_table["5day_tempf_low_6_%s" % numbers] = u8(temp(week[key][28])) # 5-Day forecast day 5 low temperature in Fahrenheit (JAPAN ONLY)
 			long_forecast_table["5day_precipitation_6_%s" % numbers] = u8(precipitation[key][13]) # 5-Day precipitation percentage 1 (JAPAN ONLY)
 			long_forecast_table["5day_forecast_padding_6_%s" % numbers] = u8(0) # Padding (JAPAN ONLY)
-			long_forecast_table["5day_forecast_7_%s" % numbers] = binascii.unhexlify('FFFF') # 5-Day forecast day 7 weather icon (JAPAN ONLY)
-			long_forecast_table["5day_tempc_high_7_%s" % numbers] = u8(128) # 5-Day forecast day 7 high temperature in Celsius (JAPAN ONLY)
-			long_forecast_table["5day_tempc_low_7_%s" % numbers] = u8(128) # 5-Day forecast day 7 low temperature in Celsius (JAPAN ONLY)
-			long_forecast_table["5day_tempf_high_7_%s" % numbers] = u8(128) # 5-Day forecast day 7 high temperature in Fahrenheit (JAPAN ONLY)
-			long_forecast_table["5day_tempf_low_7_%s" % numbers] = u8(128) # 5-Day forecast day 7 low temperature in Fahrenheit (JAPAN ONLY)
+			long_forecast_table["5day_forecast_7_%s" % numbers] = binascii.unhexlify('FFFF') # 5-Day forecast day 5 weather icon (JAPAN ONLY)
+			long_forecast_table["5day_tempc_high_7_%s" % numbers] = u8(128) # 5-Day forecast day 5 high temperature in Celsius (JAPAN ONLY)
+			long_forecast_table["5day_tempc_low_7_%s" % numbers] = u8(128) # 5-Day forecast day 5 low temperature in Celsius (JAPAN ONLY)
+			long_forecast_table["5day_tempf_high_7_%s" % numbers] = u8(128) # 5-Day forecast day 5 high temperature in Fahrenheit (JAPAN ONLY)
+			long_forecast_table["5day_tempf_low_7_%s" % numbers] = u8(128) # 5-Day forecast day 5 low temperature in Fahrenheit (JAPAN ONLY)
 			long_forecast_table["5day_precipitation_7_%s" % numbers] = u8(precipitation[key][14]) # 5-Day precipitation percentage 1 (JAPAN ONLY)
 			long_forecast_table["5day_forecast_padding_7_%s" % numbers] = u8(0) # Padding (JAPAN ONLY)
 
@@ -1205,6 +1205,7 @@ for list in weathercities:
 			i.start()
 		for i in threads:
 			i.join()
+	if len(list)-cached is not 0: progress(float(citycount)/float(len(list)-cached)*100,list)
 	loop = False
 	dlthread.join()
 	build = True
