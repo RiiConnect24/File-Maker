@@ -159,7 +159,7 @@ def progress(percent,list):
 		else: display = "✓"
 		progcount = 0
 	else: display = prog[progcount]
-	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,concurrent,"."*progcount," "*(4-progcount)))
+	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2,"."*progcount," "*(4-progcount)))
 	sys.stdout.flush()
 	progcount+=1
 	if progcount == 4: progcount = 0
@@ -728,18 +728,16 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	global citycount,cache,apilegacy,concurrent
+	global citycount,cache,apilegacy
 	citycount+=1
 	cache[name] = get_all(list, name)
 	globe[name] = {}
-	if useMultithreaded: concurrent+=1
 	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 		get_tenki_data(name) # Get data for Japanese cities
 		if apilegacy is not -1: get_legacy_api(list, name)
 	else: output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
-	if useMultithreaded: concurrent-=1
 
 def make_header_short(list):
 	header = collections.OrderedDict()
@@ -1157,9 +1155,8 @@ s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
-	global language_code,country_code,mode,concurrent,japcount
+	global language_code,country_code,mode,japcount
 	threads = []
-	concurrent = 0
 	language_code = 1
 	japcount = 0
 	country_code = forecastlists.bincountries[list.values()[0][2][1]]
@@ -1192,7 +1189,7 @@ for list in weathercities:
 			else: get_data(list,keys)
 	if useMultithreaded:
 		for i in threads:
-			while concurrent >= 10: time.sleep(0.005)
+			while threading.active_count()-2 >= 10: time.sleep(0.005)
 			i.daemon = True
 			i.start()
 		for i in threads:
