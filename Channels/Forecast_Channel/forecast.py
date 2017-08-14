@@ -33,23 +33,19 @@ from datetime import datetime, timedelta
 
 apicount = 0 # API Key Count
 apicycle = 0 # API Key Cycle Count
-japcount = 0 # Short Forecast Table Count
+apirequests = 0 # API Request Counter
 seek_offset = 0 # Seek Offset Location
 seek_base = 0 # Base Offset Calculation Location
 number = 0 # Incremental Keys
-constant = 0 # Incremental Offset Counter
-apirequests = 0 # API Request Counter
 citycount = 0 # City Progress Counter
 cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
-total = 0 # Total Amount of Cities Processed
 progcount = 0 # Progress Bar Character Counter
 useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = False # Print more verbose messages
 useMultithreaded = True # Use multithreading
 keyCache = False
-count = {} # Offset Storage
 file = None
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
@@ -147,7 +143,7 @@ def num():
 
 def coord_decode(value):
 	value = int(value,16)
-	value = -(value & 0x8000) | (value & 0x7fff)
+	if value >= 0x8000: value -= 0x10000
 	return value*0.0054931640625
 
 """This is a progress bar to display how much of the forecast in a list has been downloaded."""
@@ -224,15 +220,11 @@ def test_keys():
 """Resets bin-specific values for next generation."""
 
 def reset_data(l):
-	global japcount,seek_offset,seek_base,number,file,constant,count,cached,citycount
-	japcount = 0
+	global seek_offset,seek_base,file,cached,citycount
 	seek_offset = 0
 	seek_base = 0
-	number = 0
-	constant = 0
 	cached = 0
 	citycount = 0
-	count = {}
 	file = None
 
 def get_apikey():
@@ -496,10 +488,10 @@ def get_legacy_api(list, key):
 	hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
 	for i in range(0,4):
 		temp = time_index[0][i]-hour
-		if temp > -1 and temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
+		if -1 < temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
 		else: hourly[key][i] = get_icon(int(-1),list,key)
 		temp = time_index[1][i]-hour
-		if temp > -1 and temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
+		if -1 < temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
 		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
 def get_search(list, key, mode):
@@ -589,7 +581,9 @@ def make_bins(list):
 	make_short_bin(list)
 
 def make_forecast_bin(list):
-	global japcount,constant,count,file,seek_offset,seek_base,extension
+	global japcount,constant,file,seek_offset,seek_base,extension
+	constant = 0
+	count = {}
 	header = make_header_forecast(list)
 	long_forecast_table = make_long_forecast_table(list)
 	location_table = make_location_table(list)
@@ -744,9 +738,7 @@ def get_data(list, name):
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 		get_tenki_data(name) # Get data for Japanese cities
 		if apilegacy is not -1: get_legacy_api(list, name)
-	else:
-		output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
-		progress(float(citycount)/float(len(list)-cached)*100,list)
+	else: output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
 	if useMultithreaded: concurrent-=1
 
 def make_header_short(list):
@@ -917,7 +909,6 @@ def make_forecast_short_table(list):
 	for key in list.keys():
 		if get_loccode(list, key)[:2] != hex(country_code)[2:].zfill(2):
 			numbers = get_number(list, key)
-			global japcount
 			short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_loccode(list, key)) # Wii Location Code.
 			short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1,key)) # 1st timestamp.
 			short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0,key)) # 2nd timestamp.
@@ -968,7 +959,6 @@ def make_forecast_short_table(list):
 			short_forecast_table["uvindex_%s" % numbers] = u8(uvindex[key]) # Today's UV Index
 			short_forecast_table["laundry_index_%s" % numbers] = u8(laundry[key]) # Today's Laundry Index
 			short_forecast_table["pollen_index_%s" % numbers] = u8(pollen[key]) # Today's Pollen Index
-			japcount += 1
 
 	return short_forecast_table
 
@@ -1167,10 +1157,11 @@ s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:
-	global language_code,country_code,mode,concurrent
+	global language_code,country_code,mode,concurrent,japcount
 	threads = []
 	concurrent = 0
 	language_code = 1
+	japcount = 0
 	country_code = forecastlists.bincountries[list.values()[0][2][1]]
 	if country_code == 0: bins = [0]
 	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
@@ -1186,6 +1177,7 @@ for list in weathercities:
 		elif v[2][1] is not list[k][2][1]: list[k+" 2"] = v
 	get_locationcode(list)
 	for keys in list.keys():
+		if get_loccode(list, keys)[:2] != hex(country_code)[2:].zfill(2): japcount+=1
 		if keys in cache and cache[keys] == get_all(list,keys): cached+=1
 	if len(list)-cached is not 0:
 		print "Downloading Forecast Data ...\n"
@@ -1211,7 +1203,6 @@ for list in weathercities:
 	build = True
 	print "\n"
 	cities+=citycount
-	total+=len(list)
 	buildthread = threading.Thread(target=build_progress,args=[])
 	buildthread.daemon = True
 	buildthread.start()
@@ -1230,7 +1221,7 @@ for list in weathercities:
 print "API Requests: %s" % apirequests
 if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
-print "Processed Cities: %s/%s" % (cities,total)
+print "Processed Cities: %s" % (cities)
 print "Total Time: %s Seconds\n" % round(time.time()-total_time)
 
 if not keyCache:
