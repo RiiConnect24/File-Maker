@@ -41,7 +41,6 @@ citycount = 0 # City Progress Counter
 cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
-progcount = 0 # Progress Bar Character Counter
 useLegacy = True # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = False # Print more verbose messages
 useMultithreaded = True # Use multithreading
@@ -149,8 +148,7 @@ def coord_decode(value):
 """This is a progress bar to display how much of the forecast in a list has been downloaded."""
 """It actually looks pretty cool."""
 
-def progress(percent,list):
-	global progcount
+def progress(percent,list,progcount):
 	bar = 35
 	prog = """-\|/""" # These are characters which will make a spinning effect.
 	fill = int(round(percent*bar/100))
@@ -161,8 +159,6 @@ def progress(percent,list):
 	else: display = prog[progcount]
 	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2,"."*progcount," "*(4-progcount)))
 	sys.stdout.flush()
-	progcount+=1
-	if progcount == 4: progcount = 0
 
 def build_progress():
 	i = 0
@@ -188,8 +184,11 @@ def output(text,level):
 	else: print text
 
 def display_loop(list):
+	progcount = 0
 	while loop:
-		progress(float(citycount)/float(len(list)-cached)*100,list)
+		progress(float(citycount)/float(len(list)-cached)*100,list,progcount)
+		progcount+=1
+		if progcount == 4: progcount = 0
 		time.sleep(0.1)
 
 def get_icon(icon,list,key):
@@ -1194,7 +1193,7 @@ for list in weathercities:
 			i.start()
 		for i in threads:
 			i.join()
-	if len(list)-cached is not 0: progress(float(citycount)/float(len(list)-cached)*100,list)
+	if len(list)-cached is not 0: progress(float(citycount)/float(len(list)-cached)*100,list,0)
 	loop = False
 	dlthread.join()
 	build = True
