@@ -196,7 +196,7 @@ def get_icon(icon,list,key):
 	else: return get_weathericon(icon)
 
 def test_keys():
-	global weathercities,accuweather_api_keys
+	global accuweather_api_keys
 	print "Checking API Keys ..."
 	total = 0
 	keys = 0
@@ -287,7 +287,6 @@ def timestamps(mode, key):
 	return timestamp
 
 def get_loccode(list, key):
-	global weathercities
 	country = get_country(list, key)
 	state = get_region(list, key)
 	city = get_city(list, key)
@@ -309,7 +308,6 @@ def zoom(list, mode, key):
 	return value
 
 def get_locationcode(list):
-	global weathercities
 	listid = weathercities.index(list)
 	print 'Generating Location Keys ...'
 	weatherloc[listid] = {}
@@ -962,113 +960,35 @@ def make_forecast_short_table(list):
 """Database of UV index values."""
 
 def make_uvindex_table():
-	uvindex_table = collections.OrderedDict()
-	uvindex_table["uv_0_number"] = u8(0)
-	uvindex_table["uv_0_padding"] = pad(3)
-	uvindex_table["uv_0_offset"] = u32(0)
-	uvindex_table["uv_1_number"] = u8(1)
-	uvindex_table["uv_1_padding"] = pad(3)
-	uvindex_table["uv_1_offset"] = u32(0)
-	uvindex_table["uv_2_number"] = u8(2)
-	uvindex_table["uv_2_padding"] = pad(3)
-	uvindex_table["uv_2_offset"] = u32(0)
-	uvindex_table["uv_3_number"] = u8(3)
-	uvindex_table["uv_3_padding"] = pad(3)
-	uvindex_table["uv_3_offset"] = u32(0)
-	uvindex_table["uv_4_number"] = u8(4)
-	uvindex_table["uv_4_padding"] = pad(3)
-	uvindex_table["uv_4_offset"] = u32(0)
-	uvindex_table["uv_5_number"] = u8(5)
-	uvindex_table["uv_5_padding"] = pad(3)
-	uvindex_table["uv_5_offset"] = u32(0)
-	uvindex_table["uv_6_number"] = u8(6)
-	uvindex_table["uv_6_padding"] = pad(3)
-	uvindex_table["uv_6_offset"] = u32(0)
-	uvindex_table["uv_7_number"] = u8(7)
-	uvindex_table["uv_7_padding"] = pad(3)
-	uvindex_table["uv_7_offset"] = u32(0)
-	uvindex_table["uv_8_number"] = u8(8)
-	uvindex_table["uv_8_padding"] = pad(3)
-	uvindex_table["uv_8_offset"] = u32(0)
-	uvindex_table["uv_9_number"] = u8(9)
-	uvindex_table["uv_9_padding"] = pad(3)
-	uvindex_table["uv_9_offset"] = u32(0)
-	uvindex_table["uv_10_number"] = u8(10)
-	uvindex_table["uv_10_padding"] = pad(3)
-	uvindex_table["uv_10_offset"] = u32(0)
-	uvindex_table["uv_11_number"] = u8(11)
-	uvindex_table["uv_11_padding"] = pad(3)
-	uvindex_table["uv_11_offset"] = u32(0)
-	uvindex_table["uv_12_number"] = u8(12)
-	uvindex_table["uv_12_padding"] = pad(3)
-	uvindex_table["uv_12_offset"] = u32(0)
+	uvindex = collections.OrderedDict()
+	for i in forecastlists.uvindex:
+		uvindex["uv_%s_number" % i] = u8(i)
+		uvindex["uv_%s_padding" % i] = pad(3)
+		uvindex["uv_%s_offset" % i] = u32(0)
 
-	return uvindex_table
+	return uvindex
 
 """Database of laundry index values."""
 
 def make_laundryindex_table():
-	laundryindex_table = collections.OrderedDict()
-	laundryindex_table["laundry_00_number"] = u8(0)
-	laundryindex_table["laundry_00_padding"] = pad(3)
-	laundryindex_table["laundry_00_offset"] = u32(0)
-	laundryindex_table["laundry_10_number"] = u8(10)
-	laundryindex_table["laundry_10_padding"] = pad(3)
-	laundryindex_table["laundry_10_offset"] = u32(0)
-	laundryindex_table["laundry_20_number"] = u8(20)
-	laundryindex_table["laundry_20_padding"] = pad(3)
-	laundryindex_table["laundry_20_offset"] = u32(0)
-	laundryindex_table["laundry_30_number"] = u8(30)
-	laundryindex_table["laundry_30_padding"] = pad(3)
-	laundryindex_table["laundry_30_offset"] = u32(0)
-	laundryindex_table["laundry_40_number"] = u8(40)
-	laundryindex_table["laundry_40_padding"] = pad(3)
-	laundryindex_table["laundry_40_offset"] = u32(0)
-	laundryindex_table["laundry_50_number"] = u8(50)
-	laundryindex_table["laundry_50_padding"] = pad(3)
-	laundryindex_table["laundry_50_offset"] = u32(0)
-	laundryindex_table["laundry_60_number"] = u8(60)
-	laundryindex_table["laundry_60_padding"] = pad(3)
-	laundryindex_table["laundry_60_offset"] = u32(0)
-	laundryindex_table["laundry_70_number"] = u8(70)
-	laundryindex_table["laundry_70_padding"] = pad(3)
-	laundryindex_table["laundry_70_offset"] = u32(0)
-	laundryindex_table["laundry_80_number"] = u8(80)
-	laundryindex_table["laundry_80_padding"] = pad(3)
-	laundryindex_table["laundry_80_offset"] = u32(0)
-	laundryindex_table["laundry_90_number"] = u8(90)
-	laundryindex_table["laundry_90_padding"] = pad(3)
-	laundryindex_table["laundry_90_offset"] = u32(0)
-	laundryindex_table["laundry_100_number"] = u8(100)
-	laundryindex_table["laundry_100_padding"] = pad(3)
-	laundryindex_table["laundry_100_offset"] = u32(0)
-	laundryindex_table["laundry_E7_number"] = u8(231)
-	laundryindex_table["laundry_E7_padding"] = pad(3)
-	laundryindex_table["laundry_E7_offset"] = u32(0)
+	laundry = collections.OrderedDict()
+	for i in forecastlists.laundry:
+		laundry["laundry_%s_number" % i] = u8(i)
+		laundry["laundry_%s_padding" % i] = pad(3)
+		laundry["laundry_%s_offset" % i] = u32(0)
 
-	return laundryindex_table
+	return laundry
 
 """Database of pollen index values."""
 
 def make_pollenindex_table():
-	pollenindex_table = collections.OrderedDict()
-	pollenindex_table["pollen_2_number"] = u8(2)
-	pollenindex_table["pollen_2_padding"] = pad(3)
-	pollenindex_table["pollen_2_offset"] = u32(0)
-	pollenindex_table["pollen_3_number"] = u8(3)
-	pollenindex_table["pollen_3_padding"] = pad(3)
-	pollenindex_table["pollen_3_offset"] = u32(0)
-	pollenindex_table["pollen_4_number"] = u8(4)
-	pollenindex_table["pollen_4_padding"] = pad(3)
-	pollenindex_table["pollen_4_offset"] = u32(0)
-	pollenindex_table["pollen_5_number"] = u8(5)
-	pollenindex_table["pollen_5_padding"] = pad(3)
-	pollenindex_table["pollen_5_offset"] = u32(0)
-	pollenindex_table["pollen_E7_number"] = u8(231)
-	pollenindex_table["pollen_E7_padding"] = pad(3)
-	pollenindex_table["pollen_E7_offset"] = u32(0)
+	pollen = collections.OrderedDict()
+	for i in forecastlists.pollen:
+		pollen["pollen_%s_number" % i] = u8(i)
+		pollen["pollen_%s_padding" % i] = pad(3)
+		pollen["pollen_%s_offset" % i] = u32(0)
 
-	return pollenindex_table
+	return pollen
 
 def make_location_table(list):
 	location_table = collections.OrderedDict()
