@@ -5,6 +5,7 @@ key_path = "/path/to/key/in/format/of/file.pem" # Private key to sign the file.
 file_path = "/path/to/folder" # Path to save the file to.
 lzss_path = "/path/to/lzss" # Path to lzss.
 production = None # Use production mode
+rollbar_key = "api_key" # API Key for Rollbar
 
 """News Channel only"""
 
