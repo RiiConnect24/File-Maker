@@ -163,17 +163,16 @@ def build_progress():
 		if i == 34: i = 0
 		time.sleep(0.015)
 
+def log(text):
+	sys.stdout.write("\r%s\r%s" % ((" "*73),text))
+	sys.stdout.flush()
+
 def output(text,level):
 	if loop or build:
-		if level is "INFO":
-			sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
-			sys.stdout.flush()
-		elif level is "VERBOSE" and useVerbose:
-			sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
-			sys.stdout.flush()
+		if level is "INFO": log(text+"\n\n")
+		elif level is "VERBOSE" and useVerbose: log(text+"\n\n")
 		elif level is "WARNING" or level is "CRITICAL":
-			sys.stdout.write("\r%s\r%s\n\n" % ((" "*73),text))
-			sys.stdout.flush()
+			log(text+"\n\n")
 			if production: rollbar.report_message(text, level.lower())
 	else: print text
 
@@ -527,34 +526,32 @@ def get_location(list, key):
 def get_legacy_location(list, key):
 	if keyCache and key not in duplicates: locationkey[key] = cachefile[key]
 	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
-	else: locationkey[key] = None
-	location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
-	try:
-		if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
-		else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
-	except: return -1
+	else:
+		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
+		try:
+			if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
+			else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
+		except: return -1
 
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
 
 def get_tenki_data(key):
-	laundry[key] = 255
-	if key in forecastlists.jpncities:
-		output("Getting Tenki Data ...", "VERBOSE")
-		laundry[key] = int(os.popen("wget http://www.tenki.jp/indexes/cloth_dried/%s.html -q -O - | grep '指数:' | head -1 | awk '{print $6}' | grep -Eo '[0-9]{1,3}' | head -1" % forecastlists.jpncities[key]).read())
-		tempdiff = os.popen("wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep 'tempdiff' | grep -oP '\[(.*?)\]' | sed 's/\[//' | sed 's/\]//' | sed 's/\+//'" % forecastlists.jpncities[key]).read().splitlines()
-		precip = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep '<td>' | head -8 | tr -d '<td>' | tr -d 'span class="grayOu"/%%'""" % forecastlists.jpncities[key]).read().splitlines()
-		precip10 = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-10days.html -q -O - | grep '%%' | grep '<th>' | tr -d '<th>/%%' | tr -d ' '""" % forecastlists.jpncities[key]).read().splitlines()
-		today[key][5] = to_fahrenheit(int(tempdiff[0]))
-		today[key][6] = to_fahrenheit(int(tempdiff[1]))
-		today[key][7] = int(tempdiff[0])
-		today[key][8] = int(tempdiff[1])
-		tomorrow[key][5] = to_fahrenheit(int(tempdiff[2]))
-		tomorrow[key][6] = to_fahrenheit(int(tempdiff[3]))
-		tomorrow[key][7] = int(tempdiff[2])
-		tomorrow[key][8] = int(tempdiff[3])
-		for i in range(0,8): precipitation[key][i] = int(precip[i])
-		for i in range(0,7): precipitation[key][i+8] = int(precip10[i])
+	output("Getting Tenki Data ...", "VERBOSE")
+	laundry[key] = int(os.popen("wget http://www.tenki.jp/indexes/cloth_dried/%s.html -q -O - | grep '指数:' | head -1 | awk '{print $6}' | grep -Eo '[0-9]{1,3}' | head -1" % forecastlists.jpncities[key]).read())
+	tempdiff = os.popen("wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep 'tempdiff' | grep -oP '\[(.*?)\]' | sed 's/\[//' | sed 's/\]//' | sed 's/\+//'" % forecastlists.jpncities[key]).read().splitlines()
+	precip = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep '<td>' | head -8 | tr -d '<td>' | tr -d 'span class="grayOu"/%%'""" % forecastlists.jpncities[key]).read().splitlines()
+	precip10 = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-10days.html -q -O - | grep '%%' | grep '<th>' | tr -d '<th>/%%' | tr -d ' '""" % forecastlists.jpncities[key]).read().splitlines()
+	today[key][5] = to_fahrenheit(int(tempdiff[0]))
+	today[key][6] = to_fahrenheit(int(tempdiff[1]))
+	today[key][7] = int(tempdiff[0])
+	today[key][8] = int(tempdiff[1])
+	tomorrow[key][5] = to_fahrenheit(int(tempdiff[2]))
+	tomorrow[key][6] = to_fahrenheit(int(tempdiff[3]))
+	tomorrow[key][7] = int(tempdiff[2])
+	tomorrow[key][8] = int(tempdiff[3])
+	for i in range(0,8): precipitation[key][i] = int(precip[i])
+	for i in range(0,7): precipitation[key][i+8] = int(precip10[i])
 
 def hex_write(loc, data):
 	global file
@@ -726,7 +723,7 @@ def get_data(list, name):
 	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
 		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
-		get_tenki_data(name) # Get data for Japanese cities
+		if key in forecastlists.jpncities: get_tenki_data(name) # Get data for Japanese cities
 		if apilegacy is not -1: get_legacy_api(list, name)
 	else: output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
 
@@ -1124,8 +1121,7 @@ for list in weathercities:
 			reset_data(list)
 	build = False
 	buildthread.join()
-	sys.stdout.write("\r"+" "*58+"\rBuilding Files: Complete")
-	sys.stdout.flush()
+	log("Building Files: Complete")
 	print "\n"
 
 print "API Requests: %s" % apirequests
