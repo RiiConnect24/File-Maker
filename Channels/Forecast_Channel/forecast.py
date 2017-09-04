@@ -1153,7 +1153,7 @@ print "Request Retries: %s" % retrycount
 print "Processed Cities: %s" % (cities)
 print "Total Time: %s Seconds\n" % round(time.time()-total_time)
 
-if not keyCache:
+if keyCache:
 	cachefile = open('locations.db','wb+')
 	for k,v in duplicates.items(): locationkey[k] = v
 	pickle.dump(locationkey,cachefile)
