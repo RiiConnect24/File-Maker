@@ -42,7 +42,6 @@ cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 file = None
-keyCache = False
 loop = None
 build = None
 
