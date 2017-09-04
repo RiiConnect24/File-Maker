@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.1
+# VERSION 3.2
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -42,6 +42,9 @@ cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 file = None
+keyCache = False
+loop = None
+build = None
 
 print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
@@ -151,7 +154,7 @@ def progress(percent,list,progcount):
 		else: display = "✓"
 		progcount = 0
 	else: display = prog[progcount]
-	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+38),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2,"."*progcount," "*(4-progcount)))
+	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+39),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2,"."*progcount," "*(4-progcount)))
 	sys.stdout.flush()
 
 def build_progress():
@@ -164,7 +167,7 @@ def build_progress():
 		time.sleep(0.015)
 
 def log(text):
-	sys.stdout.write("\r%s\r%s" % ((" "*73),text))
+	sys.stdout.write("\r%s\r%s" % ((" "*74),text))
 	sys.stdout.flush()
 
 def output(text,level):
@@ -174,7 +177,10 @@ def output(text,level):
 		elif level is "WARNING" or level is "CRITICAL":
 			log(text+"\n\n")
 			if production: rollbar.report_message(text, level.lower())
-	else: print text
+	else:
+		if level is "INFO" or level is "VERBOSE":
+			if useVerbose: print text
+		else: print text
 
 def display_loop(list):
 	progcount = 0
@@ -204,8 +210,11 @@ def test_keys():
 			else: invalid = True
 		else: invalid = True
 		if invalid:
-			output("Key %s marked as unusable" % keys, "WARNING")
+			print "Key %s marked as unusable" % keys
 			accuweather_api_keys[keys-1] = None
+	if total == 0:
+		print "No Requests Available"
+		exit()
 	print "%s Requests Available" % total
 	print "Processed %s Keys" % len(accuweather_api_keys)
 
@@ -254,6 +263,9 @@ def request_data(url):
 			elif "accuwxturbotablet" in url:
 				try:
 					data = xmltodict.parse(data.content)
+					if 'failure' in data['adc_database']:
+						output("API Error: "+data['adc_database']['failure'],"WARNING")
+						return -1
 					c = 1
 				except: pass
 			elif "regions" in url:
@@ -302,7 +314,7 @@ def zoom(list, mode, key):
 
 def get_locationcode(list):
 	listid = weathercities.index(list)
-	print 'Generating Location Keys ...'
+	output("Generating Location Keys ...","VERBOSE")
 	weatherloc[listid] = {}
 	weatherloc[listid]['null'] = {}
 	weatherloc[listid]['states'] = {}
@@ -418,71 +430,74 @@ def get_main_api(list, key):
 		pollen[key] = avg
 
 def get_legacy_api(list, key):
-	week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
-	week[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
-	week[key][2] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['lowtemperature'])
-	week[key][3] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['hightemperature'])
-	week[key][4] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['lowtemperature'])
-	week[key][5] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['hightemperature'])
-	week[key][6] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['lowtemperature'])
-	week[key][7] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['hightemperature'])
-	for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
-	week[key][20] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
-	week[key][21] = get_icon(int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['weathericon']),list,key)
-	week[key][22] = get_icon(int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['weathericon']),list,key)
-	week[key][23] = get_icon(int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['weathericon']),list,key)
-	current[key][3] = int(apilegacy['adc_database']['currentconditions']['temperature'])
-	current[key][4] = to_celsius(current[key][3])
-	weathericon[key] = get_icon(int(apilegacy['adc_database']['currentconditions']['weathericon']),list,key)
-	current[key][0] = apilegacy['adc_database']['currentconditions']['winddirection']
-	current[key][2] = int(apilegacy['adc_database']['currentconditions']['windspeed'])
-	current[key][1] = mph_kmh(current[key][2])
-	today[key][0] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['lowtemperature'])
-	today[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['hightemperature'])
-	today[key][2] = to_celsius(today[key][0])
-	today[key][3] = to_celsius(today[key][1])
-	today[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['weathericon']),list,key)
-	tomorrow[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
-	tomorrow[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
-	tomorrow[key][2] = to_celsius(tomorrow[key][0])
-	tomorrow[key][3] = to_celsius(tomorrow[key][1])
-	tomorrow[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
-	try: uvval = int(apilegacy['adc_database']['currentconditions']['uvindex']['@index'])
-	except: uvval = 255
-	if uvval > 12: uvval = 12
-	uvindex[key] = uvval
-	wind[key][0] = mph_kmh(apilegacy['adc_database']['forecast']['day'][0]['daytime']['windspeed'])
-	wind[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['windspeed'])
-	wind[key][2] = apilegacy['adc_database']['forecast']['day'][0]['daytime']['winddirection']
-	wind[key][3] = mph_kmh(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
-	wind[key][4] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
-	wind[key][5] = apilegacy['adc_database']['forecast']['day'][1]['daytime']['winddirection']
-	pollen[key] = 255
-	lat = float(apilegacy['adc_database']['local']['lat'])
-	lng = float(apilegacy['adc_database']['local']['lon'])
-	globe[key]['lat'] = u16(int(lat / 0.0055) & 0xFFFF)
-	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
-	globe[key]['offset'] = float(apilegacy['adc_database']['local']['currentGmtOffset'])
-	globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
-	week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
-	week[key][26] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['lowtemperature'])
-	week[key][27] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['hightemperature'])
-	week[key][28] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['lowtemperature'])
-	week[key][29] = int(to_celsius(week[key][25]))
-	week[key][30] = int(to_celsius(week[key][26]))
-	week[key][31] = int(to_celsius(week[key][27]))
-	week[key][32] = int(to_celsius(week[key][28]))
-	week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
-	week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
-	time_index = [[3,9,15,21],[27,33,39,45]]
-	hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
-	for i in range(0,4):
-		temp = time_index[0][i]-hour
-		if -1 < temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
-		else: hourly[key][i] = get_icon(int(-1),list,key)
-		temp = time_index[1][i]-hour
-		if -1 < temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
-		else: hourly[key][i+4] = get_icon(int(-1),list,key)
+	apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(key))
+	if apilegacy is not -1:
+		week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
+		week[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
+		week[key][2] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['lowtemperature'])
+		week[key][3] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['hightemperature'])
+		week[key][4] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['lowtemperature'])
+		week[key][5] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['hightemperature'])
+		week[key][6] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['lowtemperature'])
+		week[key][7] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['hightemperature'])
+		for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
+		week[key][20] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
+		week[key][21] = get_icon(int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['weathericon']),list,key)
+		week[key][22] = get_icon(int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['weathericon']),list,key)
+		week[key][23] = get_icon(int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['weathericon']),list,key)
+		current[key][3] = int(apilegacy['adc_database']['currentconditions']['temperature'])
+		current[key][4] = to_celsius(current[key][3])
+		weathericon[key] = get_icon(int(apilegacy['adc_database']['currentconditions']['weathericon']),list,key)
+		current[key][0] = apilegacy['adc_database']['currentconditions']['winddirection']
+		current[key][2] = int(apilegacy['adc_database']['currentconditions']['windspeed'])
+		current[key][1] = mph_kmh(current[key][2])
+		today[key][0] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['lowtemperature'])
+		today[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['hightemperature'])
+		today[key][2] = to_celsius(today[key][0])
+		today[key][3] = to_celsius(today[key][1])
+		today[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['weathericon']),list,key)
+		tomorrow[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
+		tomorrow[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
+		tomorrow[key][2] = to_celsius(tomorrow[key][0])
+		tomorrow[key][3] = to_celsius(tomorrow[key][1])
+		tomorrow[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
+		try: uvval = int(apilegacy['adc_database']['currentconditions']['uvindex']['@index'])
+		except: uvval = 255
+		if uvval > 12: uvval = 12
+		uvindex[key] = uvval
+		wind[key][0] = mph_kmh(apilegacy['adc_database']['forecast']['day'][0]['daytime']['windspeed'])
+		wind[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['windspeed'])
+		wind[key][2] = apilegacy['adc_database']['forecast']['day'][0]['daytime']['winddirection']
+		wind[key][3] = mph_kmh(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
+		wind[key][4] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
+		wind[key][5] = apilegacy['adc_database']['forecast']['day'][1]['daytime']['winddirection']
+		pollen[key] = 255
+		lat = float(apilegacy['adc_database']['local']['lat'])
+		lng = float(apilegacy['adc_database']['local']['lon'])
+		globe[key]['lat'] = u16(int(lat / 0.0055) & 0xFFFF)
+		globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
+		globe[key]['offset'] = float(apilegacy['adc_database']['local']['currentGmtOffset'])
+		globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
+		week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
+		week[key][26] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['lowtemperature'])
+		week[key][27] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['hightemperature'])
+		week[key][28] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['lowtemperature'])
+		week[key][29] = int(to_celsius(week[key][25]))
+		week[key][30] = int(to_celsius(week[key][26]))
+		week[key][31] = int(to_celsius(week[key][27]))
+		week[key][32] = int(to_celsius(week[key][28]))
+		week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
+		week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
+		time_index = [[3,9,15,21],[27,33,39,45]]
+		hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
+		for i in range(0,4):
+			temp = time_index[0][i]-hour
+			if -1 < temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
+			else: hourly[key][i] = get_icon(int(-1),list,key)
+			temp = time_index[1][i]-hour
+			if -1 < temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
+			else: hourly[key][i+4] = get_icon(int(-1),list,key)
+	else: output('Unable to retrieve data for %s - using blank data' % key, "WARNING")
 
 def get_search(list, key, mode):
 	if mode == 0:
@@ -537,21 +552,32 @@ def get_legacy_location(list, key):
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
 
 def get_tenki_data(key):
-	output("Getting Tenki Data ...", "VERBOSE")
-	laundry[key] = int(os.popen("wget http://www.tenki.jp/indexes/cloth_dried/%s.html -q -O - | grep '指数:' | head -1 | awk '{print $6}' | grep -Eo '[0-9]{1,3}' | head -1" % forecastlists.jpncities[key]).read())
-	tempdiff = os.popen("wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep 'tempdiff' | grep -oP '\[(.*?)\]' | sed 's/\[//' | sed 's/\]//' | sed 's/\+//'" % forecastlists.jpncities[key]).read().splitlines()
-	precip = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-daily.html -q -O - | grep '<td>' | head -8 | tr -d '<td>' | tr -d 'span class="grayOu"/%%'""" % forecastlists.jpncities[key]).read().splitlines()
-	precip10 = os.popen("""wget http://www.tenki.jp/forecast/%s/38210-10days.html -q -O - | grep '%%' | grep '<th>' | tr -d '<th>/%%' | tr -d ' '""" % forecastlists.jpncities[key]).read().splitlines()
-	today[key][5] = to_fahrenheit(int(tempdiff[0]))
-	today[key][6] = to_fahrenheit(int(tempdiff[1]))
-	today[key][7] = int(tempdiff[0])
-	today[key][8] = int(tempdiff[1])
-	tomorrow[key][5] = to_fahrenheit(int(tempdiff[2]))
-	tomorrow[key][6] = to_fahrenheit(int(tempdiff[3]))
-	tomorrow[key][7] = int(tempdiff[2])
-	tomorrow[key][8] = int(tempdiff[3])
-	for i in range(0,8): precipitation[key][i] = int(precip[i])
-	for i in range(0,7): precipitation[key][i+8] = int(precip10[i])
+	output("Getting Tenki Data for %s ..." % key, "VERBOSE")
+	laundry_index = None
+	precip = []
+	temp_diff = []
+	precip10 = []
+	for line in requests.get("https://tenki.jp/forecast/%s/" % key).iter_lines():
+		if "high-temp tempdiff" in line or "low-temp tempdiff" in line: temp_diff.append(line.lstrip().split("[")[1].split("]")[0].lstrip("+")) # Temperature Difference
+		if "<td>" in line and len(precip) < 8: # Today/Tomorrow Precipitation
+			if "---" in line: precip.append(128) # No Data
+			else: precip.append(int(filter(str.isdigit, line)))
+	for line in requests.get("https://tenki.jp/forecast/%s/10days.html" % key).iter_lines():
+		if "%" in line and "<th>" in line: precip10.append(int(line.lstrip().lstrip("<th>").rstrip("%</th>"))) # 10-Day Precipitation Probability
+	if key.count("/") == 3: key = "/".join(key.split("/")[:-1])
+	for line in requests.get("http://www.tenki.jp/indexes/cloth_dried/%s/" % key).iter_lines():
+		if "indexes-telop-0" in line and not laundry_index: laundry_index = int(filter(str.isdigit, line.split("indexes-telop-0")[1])) # Laundry Index
+	laundry[key] = laundry_index
+	today[key][8] = temp_diff[0]
+	today[key][7] = temp_diff[1]
+	today[key][6] = to_fahrenheit(temp_diff[0])
+	today[key][5] = to_fahrenheit(temp_diff[1])
+	tomorrow[key][8] = temp_diff[2]
+	tomorrow[key][7] = temp_diff[3]
+	tomorrow[key][6] = to_fahrenheit(temp_diff[2])
+	tomorrow[key][5] = to_fahrenheit(temp_diff[3])
+	for i in range(2,9): precipitation[key][i+6] = precip10[i]
+	for i in range(0,8): precipitation[key][i] = precip[i]
 
 def hex_write(loc, data):
 	global file
@@ -716,15 +742,14 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	global citycount,cache,apilegacy
+	global citycount,cache
 	citycount+=1
 	cache[name] = get_all(list, name)
 	globe[name] = {}
 	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
-		apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
-		if key in forecastlists.jpncities: get_tenki_data(name) # Get data for Japanese cities
-		if apilegacy is not -1: get_legacy_api(list, name)
+		if name in forecastlists.jpncities: get_tenki_data(name)
+		get_legacy_api(list, name)
 	else: output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
 
 def make_header_short(list):
@@ -1046,10 +1071,7 @@ def get_weatherjpnicon(icon):
 
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
-if production:
-	print "Production Mode Enabled"
-	rollbar.init(rollbar_key, "production")
-else: print "Production Mode Disabled"
+if production: rollbar.init(rollbar_key, "production")
 if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
 else:
 	file = open('locations.db','rb')
@@ -1060,6 +1082,7 @@ else:
 			os.remove('locations.db')
 		else: keyCache = True
 	except: os.remove('locations.db')
+print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "In Use" if keyCache else "Not In Use")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
@@ -1076,7 +1099,7 @@ for list in weathercities:
 	else:
 		output("Unknown country code %s - generating English only" % country_code, "WARNING")
 		bins = [1]
-	print "Processing list #%s - %s (%s)" % (weathercities.index(list) + 1, country_code, list.values()[0][2][1])
+	print "Processing List #%s - %s (%s)" % (weathercities.index(list) + 1, country_code, list.values()[0][2][1])
 	for k,v in forecastlists.weathercities_international.items():
 		if k not in list:
 			if v[2][1] in forecastlists.bincountries and forecastlists.bincountries[v[2][1]] is not country_code: list[k] = v
