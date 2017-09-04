@@ -1082,7 +1082,7 @@ else:
 			os.remove('locations.db')
 		else: keyCache = True
 	except: os.remove('locations.db')
-print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "In Use" if keyCache else "Not In Use")
+print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "In Use" if keyCache else "Not in Use")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
 if not useLegacy: test_keys()
