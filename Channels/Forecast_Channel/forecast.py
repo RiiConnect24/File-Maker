@@ -473,8 +473,8 @@ def get_legacy_api(list, key):
 		pollen[key] = 255
 		lat = float(apilegacy['adc_database']['local']['lat'])
 		lng = float(apilegacy['adc_database']['local']['lon'])
-		globe[key]['lat'] = u16(int(lat / 0.0055) & 0xFFFF)
-		globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
+		globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
+		globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
 		globe[key]['offset'] = float(apilegacy['adc_database']['local']['currentGmtOffset'])
 		globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
 		week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
