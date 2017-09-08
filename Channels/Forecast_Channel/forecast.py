@@ -538,7 +538,7 @@ def get_location(list, key):
 """Please don't attack us for doing this, AccuWeather. You're my friend and I want to keep it that way."""
 
 def get_legacy_location(list, key):
-	if keyCache and key not in duplicates: locationkey[key] = cachefile[key]
+	if not keyCache and key not in duplicates: locationkey[key] = cachefile[key]
 	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
 	else:
 		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
