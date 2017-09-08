@@ -263,7 +263,7 @@ def request_data(url):
 				try:
 					data = xmltodict.parse(data.content)
 					if 'failure' in data['adc_database']:
-						output("API Error: "+data['adc_database']['failure'],"WARNING")
+						output("API Error: "+data['adc_database']['failure'],"INFO")
 						return -1
 					c = 1
 				except: pass
