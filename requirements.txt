@@ -12,3 +12,4 @@ rollbar
 rsa
 unidecode
 xmltodict
+config
