@@ -551,8 +551,8 @@ def get_location(list, key):
 	locationkey[key] = location[0]['Key']
 	lat = location[0]['GeoPosition']['Latitude']
 	lng = location[0]['GeoPosition']['Longitude']
-	globe[key]['lat'] = u16(int(lat / 0.0055) & 0xFFFF)
-	globe[key]['lng'] = u16(int(lng / 0.0055) & 0xFFFF)
+	globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
+	globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
 	globe[key]['offset'] = location[0]['TimeZone']['GmtOffset']
 	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
 
