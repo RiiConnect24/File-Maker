@@ -42,6 +42,7 @@ cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 file = None
+cachefile = None
 loop = None
 build = None
 
@@ -216,6 +217,20 @@ def test_keys():
 		exit()
 	print "%s Requests Available" % total
 	print "Processed %s Keys" % len(accuweather_api_keys)
+
+def check_cache():
+	global cachefile,locationkey
+	if keyCache:
+		if os.path.exists('locations.db'):
+			file = open('locations.db','rb')
+			temp = pickle.load(file)
+			try:
+				if time.time() > temp["cache_expiration"]:
+					file.close()
+					os.remove('locations.db')
+				else: cachefile = temp
+			except: os.remove('locations.db')
+		else: locationkey["cache_expiration"] = time.time()+86400
 
 """Resets bin-specific values for next generation."""
 
@@ -1071,16 +1086,8 @@ def get_weatherjpnicon(icon):
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
 if production: rollbar.init(rollbar_key, "production")
-if not os.path.exists('locations.db'): locationkey["cache_expiration"] = time.time()+86400
-else:
-	file = open('locations.db','rb')
-	cachefile = pickle.load(file)
-	try:
-		if time.time() > cachefile["cache_expiration"]:
-			file.close()
-			os.remove('locations.db')
-		else: keyCache = True
-	except: os.remove('locations.db')
+check_cache()
+if os.name == 'nt': os.system("title Forecast Downloader")
 print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "In Use" if keyCache else "Not in Use")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
@@ -1152,7 +1159,7 @@ print "Request Retries: %s" % retrycount
 print "Processed Cities: %s" % (cities)
 print "Total Time: %s Seconds\n" % round(time.time()-total_time)
 
-if keyCache:
+if keyCache and cachefile == None:
 	cachefile = open('locations.db','wb+')
 	for k,v in duplicates.items(): locationkey[k] = v
 	pickle.dump(locationkey,cachefile)
