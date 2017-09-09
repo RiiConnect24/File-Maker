@@ -21,6 +21,7 @@ import random
 import requests
 import rollbar
 import rsa
+import socket
 import struct
 import subprocess
 import sys
@@ -67,6 +68,7 @@ weatherloc = {}
 cache = {}
 laundry = {}
 duplicates = {}
+dnscache = {}
 
 def u8(data):
 	if data < 0 or data > 255:
@@ -231,6 +233,12 @@ def check_cache():
 				else: cachefile = temp
 			except: os.remove('locations.db')
 		else: locationkey["cache_expiration"] = time.time()+86400
+
+def dns(*args):
+	global dnscache
+	if args not in dnscache:
+		dnscache[args] = resolve_dns(*args)
+	return dnscache[args]
 
 """Resets bin-specific values for next generation."""
 
@@ -1088,9 +1096,12 @@ def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 if production: rollbar.init(rollbar_key, "production")
 check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
-print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "In Use" if keyCache else "Not in Use")
+print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "Enabled" if keyCache else "Disabled")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
+if cacheDNS:
+	resolve_dns = socket.getaddrinfo
+	socket.getaddrinfo = dns
 if not useLegacy: test_keys()
 total_time = time.time()
 for list in weathercities:

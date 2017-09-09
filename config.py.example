@@ -21,5 +21,6 @@ accuweather_api_keys = ["ACCUWEATHER API KEY", "ACCUWEATHER API KEY"] # API Key 
 useLegacy = None # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = None # Print more verbose messages
 useMultithreaded = None # Use multithreading
+cacheDNS = None # Cache API DNS Requests
 keyCache = None # Cache location keys
 weathercities = ["CITY LIST", "CITY LIST"] # Lists of cities to use
