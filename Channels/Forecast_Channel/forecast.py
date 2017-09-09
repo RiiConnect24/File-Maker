@@ -1139,7 +1139,7 @@ for list in weathercities:
 			else: get_data(list,keys)
 	if useMultithreaded:
 		for i in threads:
-			while threading.active_count()-2 >= 10: time.sleep(0.005)
+			while threading.active_count()-1 >= 10: time.sleep(0.005)
 			i.daemon = True
 			i.start()
 		for i in threads:
