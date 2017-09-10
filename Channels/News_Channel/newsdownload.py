@@ -288,6 +288,26 @@ def download_ap_english():
 
 	return download_ap(topics_name, topics, "en")
 
+def download_cp_english(ap_english):
+	print "Downloading from the Canadian Press (English)...\n"
+
+	topics_name = collections.OrderedDict()
+
+	topics_name["national"] = "National News"
+	topics_name["world"] = "International News"
+	topics_name["sports"] = "Sports"
+	topics_name["entertainment"] = "Arts/Entertainment"
+	topics_name["business"] = "Business"
+	topics_name["science"] = "Science/Health"
+	topics_name["technology"] = "Technology"
+	topics_name["oddities"] = "Oddities"
+
+	topics = collections.OrderedDict()
+
+	topics["national"] = ["canada"]
+
+	return download_cp(ap_english, topics_name, topics, "en")
+
 def download_ap_spanish():
 	print "Downloading from the Associated Press (Spanish)...\n"
 
@@ -1130,6 +1150,45 @@ def download_ap(topics_name, topics, language):
 
 	return data
 
+def download_cp(data, topics_name, topics, language):
+	for key in data.keys():
+		if "national" in key:
+			del key
+
+	for rss_category in topics.items():
+		numbers = 0
+
+		print "Downloading %s..." % topics_name[rss_category[0]]
+
+		print "\n"
+
+		for rss in rss_category[1]:
+			rss_feed = feedparser.parse(requests.get("http://www.metronews.ca/feeds.articles.news.%s.rss" % rss).text)
+
+			for items in rss_feed.entries:
+				try:
+					format = "%Y-%m-%dT%H:%M:%SZ"
+
+					updated_utc = datetime.strptime(items["date"], format)
+					updated_utc = updated_utc.strftime(format)
+					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
+					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+
+					if updated >= time_current - 60:
+						numbers += 1
+
+						print "Downloading News Article %s..." % (str(numbers))
+
+						parsedata = parsedata_cp(items["link"], items["title"], updated_utc, updated, format, language)
+
+						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+				except:
+					print "Failed."
+
+		print "\n"
+
+	return data
+
 def parsedata_ap(url, title, updated_utc, updated, format, language):
 	utc = pytz.utc
 
@@ -1175,3 +1234,41 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), replace(article), replace(headline), picture, replace(credits), replace(caption), replace(location), "ap"]
+
+def parsedata_cp(url, title, updated):
+	data1 = Article(url, language="en")
+	data1.download()
+	data1.parse()
+	html = data1.html
+	soup = BeautifulSoup(html, "lxml")
+
+	headline = fix_chars(title) # Parse the headline.
+	try: article = fix_chars(data1.text + "\n\n" + soup.find("div", {"class": "article-authors", "role": "contentinfo"})) # Parse the article.
+	except: article = fix_chars(data1.text) # Parse the article.
+
+	try:
+		"""Parse the pictures."""
+
+		picture = shrink_image(data1.top_image, True)
+
+		"""Parse the picture captions."""
+
+		try: caption = fix_chars(soup.find("p", {"class": "description"}).contents[0])
+		except: caption = None
+	except:
+		picture = None
+		caption = None
+
+	try: location = data1.text.split(" — ", 1)[0].encode("utf-8")
+	except: location = None
+
+	if len(headline) == 0:
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	elif len(article) == 0:
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	else:
+		return [u32(updated), u32(updated), replace(article), replace(headline), picture, None, replace(caption), replace(location), "cp"]
