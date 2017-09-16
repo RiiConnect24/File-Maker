@@ -253,15 +253,14 @@ def make_news_bin(mode, console, data):
 
 		country_code = 110
 
-	elif mode == "news24_mainichi_japanese":
+	elif mode == "reuters_japanese":
 		topics_news = collections.OrderedDict()
 
-		topics_news["政治"] = "politics"
-		topics_news["経済"] = "economy"
-		topics_news["国際"] = "international"
-		topics_news["社会"] = "society"
+		topics_news["ワールド"] = "world"
+		topics_news["ビジネス"] = "business"
 		topics_news["スポーツ"] = "sports"
-		topics_news["芸能文化"] = "entertainment"
+		topics_news["テクノロジー"] = "technology"
+		topics_news["エンタテインメント"] = "entertainment"
 
 		languages = [0]
 
