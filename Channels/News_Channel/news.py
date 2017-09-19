@@ -14,7 +14,7 @@ if len(sys.argv) > 1:
     elif sys.argv[1] == "efe_spanish": download_source("EFE Spanish", "efe_spanish", 4, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_efe_spanish())
     elif sys.argv[1] == "ansa_italian": download_source("ANSA Italian", "ansa_italian", 5, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_ansa_italian())
     elif sys.argv[1] == "nu_dutch": download_source("NU.nl Dutch", "nu_dutch", 6, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_nu_dutch())
-    elif sys.argv[1] == "news24_mainichi_japanese": download_source("News24/Mainichi Japanese", "news24_mainichi_japanese", 0, ["001"], download_news24_mainichi_japanese())
+    elif sys.argv[1] == "reuters_japanese": download_source("Reuters Japanese", "reuters_japanese", 0, ["001"], download_reuters_japanese())
     else:
         print "Invalid argument. Valid arguments include the following:"
         print "ap_english, ap_spanish, reuters_english, afp_french, zeit_german, ansa_italian, nu_dutch, news24_mainichi_japanese"
@@ -27,4 +27,4 @@ else:
     download_source("EFE Spanish", "efe_spanish", 4, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_efe_spanish())
     download_source("ANSA Italian", "ansa_italian", 5, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_ansa_italian())
     download_source("NU.nl Dutch", "nu_dutch", 6, ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"], download_nu_dutch())
-    download_source("News24/Mainichi Japanese", "news24_mainichi_japanese", 0, ["001"], download_news24_mainichi_japanese())
+    download_source("Reuters Japanese", "reuters_japanese", 0, ["001"], download_reuters_japanese())
