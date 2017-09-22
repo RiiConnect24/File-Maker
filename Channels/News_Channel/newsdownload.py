@@ -160,7 +160,7 @@ def locations_download(language_code, data):
 		6: "nl",
 	}
 
-	"""This dictionary is used to get the right location with Google Maps."""
+	"""This is to fix"""
 
 	corrections = {
 		"UNITED NATIONS": ["1cf0cb780000000006000000", "United Nations"],
@@ -203,7 +203,7 @@ def locations_download(language_code, data):
 				location = u16(0)
 				zoom_factor = u32_littleendian(6)
 
-				coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0054931640625) & 0xFFFF) + u16(int(read[0]["geometry"]["location"]["lng"] / 0.0054931640625) & 0xFFFF) + country + region + u16(0) + zoom_factor
+				coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0054931640625) & 0xFFFF) + u16(int(read[0]["geometry"]["location"]["lng"] / 0.0054931640625) & 0xFFFF) + country + region + location + zoom_factor
 
 				for filenames in locations[name]:
 					if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
@@ -760,10 +760,8 @@ def download_efe(topics_name):
 	rss_feed = feedparser.parse(requests.get("https://www.efe.com/efe/espana/1/rss").text)
 
 	for items in rss_feed.entries:
-		try:
-			category = efe_categories[items["category"]]
-		except:
-			continue
+		try: category = efe_categories[items["category"]]
+		except: continue
 
 		updated = parser.parse(items.updated)
 		updated = updated.astimezone(tz.tzutc())
