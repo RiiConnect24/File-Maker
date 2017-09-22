@@ -1013,7 +1013,7 @@ def parsedata_ap(url, title, updated_utc, updated, format, language):
 
 		"""Parse the picture captions."""
 
-		url_captions = requests.get("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href'].replace("&TEMPLATE=DEFAULT", "")).text
+		url_captions = requests.get("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
 		soup = BeautifulSoup(url_captions, "lxml")
 		caption = fix_chars(soup.find("font", {"class": "photo"}).text.decode("iso-8859-1"))
 	else:
