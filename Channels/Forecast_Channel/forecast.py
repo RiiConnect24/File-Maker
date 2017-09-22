@@ -42,6 +42,7 @@ citycount = 0 # City Progress Counter
 cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
+bw_usage = 0 # Bandwidth Usage Counter
 file = None
 cachefile = None
 loop = None
@@ -144,6 +145,16 @@ def coord_decode(value):
 	if value >= 0x8000: value -= 0x10000
 	return value*0.0054931640625
 
+def size(data):
+    total = 2
+    for k,v in data.items(): total+=len(k+v)+4
+    return total
+
+def get_bandwidth_usage(r):
+	req = len(r.request.method+r.request.path_url)+size(r.request.headers)+12
+	resp = len(r.reason)+size(r.headers)+int(r.headers['Content-Length'])+15
+	return req+resp
+
 """This is a progress bar to display how much of the forecast in a list has been downloaded."""
 """It actually looks pretty cool."""
 
@@ -156,7 +167,7 @@ def progress(percent,list,progcount):
 		else: display = "✓"
 		progcount = 0
 	else: display = prog[progcount]
-	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+39),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2,"."*progcount," "*(4-progcount)))
+	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+39),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2 if useMultithreaded else 1,"."*progcount," "*(4-progcount)))
 	sys.stdout.flush()
 
 def build_progress():
@@ -264,7 +275,7 @@ def get_apikey():
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 def request_data(url):
-	global retrycount,apirequests
+	global retrycount,apirequests,bw_usage
 	header = {'Accept-Encoding' : 'gzip, deflate'} # This is to make the data download faster.
 	apirequests+=1
 	i = 0
@@ -273,6 +284,7 @@ def request_data(url):
 		if i == 4: return -1
 		if i > 0: retrycount+=1
 		data = s.get(url, headers=header)
+		bw_usage+=get_bandwidth_usage(data)
 		status_code = data.status_code
 		if "regions" in url and status_code != 200: return None
 		if status_code == 200:
@@ -561,7 +573,7 @@ def get_location(list, key):
 """Please don't attack us for doing this, AccuWeather. You're my friend and I want to keep it that way."""
 
 def get_legacy_location(list, key):
-	if not keyCache and key not in duplicates: locationkey[key] = cachefile[key]
+	if keyCache and cachefile and key not in duplicates: locationkey[key] = cachefile[key]
 	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
 	else:
 		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
@@ -1139,7 +1151,7 @@ for list in weathercities:
 			else: get_data(list,keys)
 	if useMultithreaded:
 		for i in threads:
-			while threading.active_count()-1 >= 10: time.sleep(0.005)
+			while threading.active_count()-2 >= 10: time.sleep(0.005)
 			i.daemon = True
 			i.start()
 		for i in threads:
@@ -1168,9 +1180,10 @@ print "API Requests: %s" % apirequests
 if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
 print "Processed Cities: %s" % (cities)
-print "Total Time: %s Seconds\n" % round(time.time()-total_time)
+print "Total Time: %s Seconds" % round(time.time()-total_time)
+print "Bandwidth Usage: %s MiB\n" % round(float(bw_usage)/1048576,2)
 
-if keyCache and cachefile == None:
+if keyCache and not cachefile:
 	cachefile = open('locations.db','wb+')
 	for k,v in duplicates.items(): locationkey[k] = v
 	pickle.dump(locationkey,cachefile)
