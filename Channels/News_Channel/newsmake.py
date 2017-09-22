@@ -757,7 +757,7 @@ def make_locations(locations_table, locations_data):
 		numbers = locations_data.keys().index(locations_strings)
 		locations_table["location_%s_offset" % numbers] = offset_count() # Offset for the locations.
 
-		locations["location_%s_read" % numbers] = locations_strings.encode("utf-16be") # Read the locations.
+		locations["location_%s_read" % numbers] = locations_strings # Read the locations.
 		locations["nullbyte_%s_locations" % numbers] = u16(0) # Null byte for the locations.
 
 	return locations
