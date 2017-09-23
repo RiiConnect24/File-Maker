@@ -194,10 +194,10 @@ def make_news_bin(mode, console, data):
 	elif mode == "afp_french":
 		topics_news = collections.OrderedDict()
 
-		topics_news["Top News"] = "topnews"
-		topics_news["Société"] = "society"
 		topics_news["Monde"] = "world"
-		topics_news["Politique"] = "politique"
+		topics_news["Sports"] = "sports"
+		topics_news["Société"] = "society"
+		topics_news["Politique"] = "politics"
 
 		languages = [1, 2, 3, 4, 5, 6]
 

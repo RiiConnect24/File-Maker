@@ -10,6 +10,7 @@
 
 import binascii
 import collections
+import dateparser
 import feedparser
 import googlemaps
 import json
@@ -306,17 +307,30 @@ def download_reuters_english():
 
 	return download_reuters("en", topics_name, topics)
 
-def download_lobs_french():
-	print "Downloading from L'Obs (French)...\n"
+def download_afp_french():
+	print "Downloading from L'Obs and La Provence (French)...\n"
 
-	topics_name = collections.OrderedDict()
+	topics_name_laprovence = collections.OrderedDict()
 
-	topics_name["topnews"] = "Top News"
-	topics_name["society"] = "Société"
-	topics_name["world"] = "Monde"
-	topics_name["politique"] = "Politique"
+	topics_name_laprovence["world"] = "Monde"
+	topics_name_laprovence["sports"] = "Sports"
 
-	return download_lobs(topics_name)
+	topics_laprovence = collections.OrderedDict()
+
+	topics_laprovence["world"] = ["France-monde"]
+	topics_laprovence["sports"] = ["Sports"]
+
+	topics_name_lobs = collections.OrderedDict()
+
+	topics_name_lobs["society"] = "Société"
+	topics_name_lobs["politics"] = "Politique"
+
+	topics_lobs = collections.OrderedDict()
+
+	topics_lobs["society"] = ["4257574846401804"]
+	topics_lobs["politics"] = ["3745727240014883"]
+
+	return download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, topics_lobs)
 
 def download_zeit_german():
 	print "Downloading from ZEIT (German)...\n"
@@ -675,37 +689,82 @@ def parsedata_ansa(url, title, updated):
 		return None
 	else: return [u32(updated), u32(updated), article, headline, picture, credits, None, location, "ansa"]
 
-def download_lobs(topics_name):
+def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, topics_lobs):
 	data = collections.OrderedDict()
 
-	numbers = 0
+	for rss_category in topics_laprovence.items():
+		numbers = 0
 
-	print "Downloading News..."
+		print "Downloading %s..." % topics_name_laprovence[rss_category[0]]
 
-	print "\n"
+		print "\n"
 
-	rss_feed = feedparser.parse(requests.get("http://tempsreel.nouvelobs.com/depeche/rss.xml").text)
+		for rss in rss_category[1]:
+			rss_feed = feedparser.parse(requests.get("http://www.laprovence.com/rss/%s.xml" % rss).text)
 
-	for items in rss_feed.entries:
-		category = lobs_categories[items["tags"][0]["term"].encode("utf-8")]
+			for items in rss_feed.entries:
+				try:
+					updated = parser.parse(items.updated)
+					updated = updated.astimezone(tz.tzutc())
 
-		updated = parser.parse(items.updated)
-		updated = updated.astimezone(tz.tzutc())
+					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
 
-		updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
+					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
-		time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+					if updated >= time_current - 240:
+						numbers += 1
 
-		if updated >= time_current - 60:
-			numbers += 1
+						print "Downloading News Article %s..." % (str(numbers))
 
-			print "Downloading News Article %s..." % (str(numbers))
+						parsedata = parsedata_laprovence(items["link"], items["title"], updated)
 
-			parsedata = parsedata_lobs(items["link"], items["title"], updated)
+						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+				except: print "Failed."
 
-			if parsedata != None: data[category + str(numbers)] = parsedata
+		print "\n"
 
 	return data
+
+def parsedata_laprovence(url, title, updated):
+	data1 = Article(url, language="fr")
+	data1.download()
+	data1.parse()
+	html = data1.html
+	soup = BeautifulSoup(html, "lxml")
+
+	headline = fix_chars(title) # Parse the headline.
+	article = fix_chars(data1.text) # Parse the article.
+
+	try:
+		"""Parse the pictures."""
+
+		picture = shrink_image(data1.top_image, True)
+
+		"""Parse the picture captions."""
+
+		try: credits = fix_chars(soup.find("div", {"class": "boxlegende boxlegende-0-0"}).contents[0].find("figcaption").find("span", {"class": "credit"}).contents[0])
+		except: credits = None
+
+		try: caption = fix_chars(soup.find("div", {"class": "boxlegende boxlegende-0-0"}).contents[0].find("figcaption").contents[0])
+		except: caption = None
+	except:
+		picture = None
+		credits = None
+		caption = None
+
+	if " (AFP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AFP)", 1)[0]
+	else: location = None
+
+	if len(headline) == 0:
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	elif len(article) == 0:
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	else:
+		return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "AFP"]
 
 def parsedata_lobs(url, title, updated):
 	data1 = Article(url, language="fr")
