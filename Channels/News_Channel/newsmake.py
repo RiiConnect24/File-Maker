@@ -161,39 +161,6 @@ def make_news_bin(mode, console, data):
 
 		country_code = 110
 
-	elif mode == "zeit_german":
-		topics_news = collections.OrderedDict()
-
-		topics_news["General"] = "general"
-		topics_news["Politik"] = "politics"
-		topics_news["Wirtschaft"] = "economy"
-		topics_news["Gesellschaft"] = "society"
-		topics_news["Kultur"] = "culture"
-		topics_news["Wissen"] = "knowledge"
-		topics_news["Digital"] = "digital"
-		topics_news["Sport"] = "sports"
-
-		languages = [1, 2, 3, 4, 5, 6]
-
-		language_code = 2
-
-		country_code = 110
-
-	elif mode == "afp_french":
-		topics_news = collections.OrderedDict()
-
-		topics_news["Monde"] = "world"
-		topics_news["Sports"] = "sports"
-		topics_news["Société"] = "society"
-		topics_news["Politique"] = "politics"
-		topics_news["Top News"] = "topnews"
-
-		languages = [1, 2, 3, 4, 5, 6]
-
-		language_code = 3
-
-		country_code = 110
-
 	elif mode == "efe_america_spanish":
 		topics_news = collections.OrderedDict()
 
@@ -223,6 +190,39 @@ def make_news_bin(mode, console, data):
 		languages = [1, 2, 3, 4, 5, 6]
 
 		language_code = 4
+
+		country_code = 110
+
+	elif mode == "afp_french":
+		topics_news = collections.OrderedDict()
+
+		topics_news["Monde"] = "world"
+		topics_news["Sports"] = "sports"
+		topics_news["Société"] = "society"
+		topics_news["Politique"] = "politics"
+		topics_news["Top News"] = "topnews"
+
+		languages = [1, 2, 3, 4, 5, 6]
+
+		language_code = 3
+
+		country_code = 110
+
+	elif mode == "zeit_german":
+		topics_news = collections.OrderedDict()
+
+		topics_news["General"] = "general"
+		topics_news["Politik"] = "politics"
+		topics_news["Wirtschaft"] = "economy"
+		topics_news["Gesellschaft"] = "society"
+		topics_news["Kultur"] = "culture"
+		topics_news["Wissen"] = "knowledge"
+		topics_news["Digital"] = "digital"
+		topics_news["Sport"] = "sports"
+
+		languages = [1, 2, 3, 4, 5, 6]
+
+		language_code = 2
 
 		country_code = 110
 
