@@ -544,7 +544,6 @@ def make_source_table(header, articles_table, data):
 	"""These are the picture and position values."""
 
 	sources = {
-		"ap": [0, 3],
 		"reuters": [0, 4],
 		"AFP": [4, 4],
 		"ANP": [0, 5],
@@ -553,8 +552,6 @@ def make_source_table(header, articles_table, data):
 		"DPA Hamburg": [0, 4],
 		"ZEIT ONLINE": [0, 4],
 		"SID": [0, 4],
-		"mainichi": [1, 1],
-		"news24": [0, 2],
 		"NU.nl": [0, 5],
 		"EFE": [0, 4],
 	}
@@ -702,15 +699,11 @@ def make_source_name_copyright(source_table, language_code, data):
 
 	sources = []
 
-	source_names = {
-		"mainichi": "(毎日新聞)".decode("utf-8").encode("utf-16be"),
-		"news24": "(日テレNEWS24)".decode("utf-8").encode("utf-16be"),
-	}
+	source_names = {}
 
 	"""Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
 	copyrights = {
-		"ap": ("Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"reuters": ("© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP": ("All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP_french": ("Tous droits de reproduction et de diffusion réservés. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
@@ -720,8 +713,6 @@ def make_source_name_copyright(source_table, language_code, data):
 		"ZEIT ONLINE": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s ZEIT ONLINE" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"dpa": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"DPA Hamburg": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode("utf-8").encode("utf-16be"),
-		"mainichi": "©毎日新聞社　見出し・記事・写真の無断転載を禁止します。".decode("utf-8").encode("utf-16be"),
-		"news24": "Copyright(C)NIPPON TELEVISION NETWORK CORPORATION All rights reserved. 映像協力 NNN(Nippon News Network)".decode("utf-8").encode("utf-16be"),
 		"NU.nl": ("© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"EFE": ("© Agencia EFE, S.A. Avd. de Burgos, 8-B. 28036 Madrid. España Tel: +34 91 346 7100. Todos los derechos reservados").decode("utf-8").encode("utf-16be")
 	}
@@ -777,7 +768,7 @@ def make_source_pictures(source_table, data):
 
 	"""These are the news sources which will get a custom news picture from them."""
 
-	sources = ["ANP", "ap", "dpa", "DPA Hamburg", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE"]
+	sources = ["ANP", "dpa", "DPA Hamburg", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE"]
 
 	for article in data.values():
 		if article[8] not in source_articles:
