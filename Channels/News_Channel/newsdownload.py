@@ -234,52 +234,6 @@ def geoparser_get(article):
 	rollbar.report_message("Out of Geoparser requests.", "warning")
 	return None
 
-def download_ap_english():
-	print "Downloading from the Associated Press (English)...\n"
-
-	topics_name = collections.OrderedDict()
-
-	topics_name["national"] = "National News"
-	topics_name["world"] = "International News"
-	topics_name["sports"] = "Sports"
-	topics_name["entertainment"] = "Arts/Entertainment"
-	topics_name["business"] = "Business"
-	topics_name["science"] = "Science/Health"
-	topics_name["technology"] = "Technology"
-	topics_name["oddities"] = "Oddities"
-
-	topics = collections.OrderedDict()
-
-	topics["national"] = ["USHEADS"]
-	topics["world"] = ["WORLDHEADS"]
-	topics["sports"] = ["SPORTSHEADS"]
-	topics["entertainment"] = ["ENTERTAINMENTHEADS"]
-	topics["business"] = ["BUSINESSHEADS"]
-	topics["science"] = ["SCIENCEHEADS", "HEALTHHEADS"]
-	topics["technology"] = ["TECHHEADS"]
-	topics["oddities"] = ["STRANGEHEADS"]
-
-	return download_ap(topics_name, topics, "en")
-
-def download_ap_spanish():
-	print "Downloading from the Associated Press (Spanish)...\n"
-
-	topics_name = collections.OrderedDict()
-
-	topics_name["general"] = "Generales"
-	topics_name["finance"] = "Financieras"
-	topics_name["sports"] = "Deportivas"
-	topics_name["shows"] = "Espectáculos"
-
-	topics = collections.OrderedDict()
-
-	topics["general"] = ["NOTICIAS_GENERALES"]
-	topics["finance"] = ["NOTICIAS_FINANCIERAS"]
-	topics["sports"] = ["NOTICIAS_DEPORTIVAS"]
-	topics["shows"] = ["NOTICIAS_ENTRETENIMIENTOS"]
-
-	return download_ap(topics_name, topics, "es")
-
 def download_reuters_america_english():
 	print "Downloading from Reuters (America English)...\n"
 
