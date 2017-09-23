@@ -186,7 +186,7 @@ def locations_download(language_code, data):
 		if read == 1:
 			if name in corrections:
 				coordinates = binascii.unhexlify(corrections[name][0])
-				new_name = corrections[name][1]
+				new_name = corrections[name][1].encode("utf-16be")
 
 				for filenames in locations[name]:
 					if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
