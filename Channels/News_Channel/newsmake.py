@@ -226,7 +226,23 @@ def make_news_bin(mode, console, data):
 
 		country_code = 110
 
-	elif mode == "efe_spanish":
+	elif mode == "efe_america_spanish":
+		topics_news = collections.OrderedDict()
+
+		topics_news["Mundo"] = "world"
+		topics_news["Deportes"] = "sports"
+		topics_news["Economía"] = "economy"
+		topics_news["Cultura"] = "culture"
+		topics_news["Sociedad"] = "society"
+		topics_news["Gente"] = "people"
+
+		languages = [1, 3, 4]
+
+		language_code = 4
+
+		country_code = 49
+
+	elif mode == "efe_europe_spanish":
 		topics_news = collections.OrderedDict()
 
 		topics_news["Mundo"] = "world"

@@ -402,8 +402,8 @@ def download_ansa_italian():
 
 	return download_ansa(topics_name, topics)
 
-def download_efe_spanish():
-	print "Downloading from EFE (Spanish)...\n"
+def download_efe_america_spanish():
+	print "Downloading from EFE (America Spanish)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -414,7 +414,21 @@ def download_efe_spanish():
 	topics_name["society"] = "Sociedad"
 	topics_name["people"] = "Gente"
 
-	return download_efe(topics_name)
+	return download_efe("america", topics_name)
+
+def download_efe_europe_spanish():
+	print "Downloading from EFE (Europe Spanish)...\n"
+
+	topics_name = collections.OrderedDict()
+
+	topics_name["world"] = "Mundo"
+	topics_name["sports"] = "Deportes"
+	topics_name["economy"] = "Economía"
+	topics_name["culture"] = "Cultura"
+	topics_name["society"] = "Sociedad"
+	topics_name["people"] = "Gente"
+
+	return download_efe("europe", topics_name)
 
 def download_nu_dutch():
 	print "Downloading from NU.nl (Dutch)...\n"
@@ -870,7 +884,7 @@ def parsedata_lobs(url, title, updated):
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, None, caption, location, "AFP"]
 
-def download_efe(topics_name):
+def download_efe(mode, topics_name):
 	data = collections.OrderedDict()
 
 	numbers = 0
@@ -879,7 +893,8 @@ def download_efe(topics_name):
 
 	print "\n"
 
-	rss_feed = feedparser.parse(requests.get("https://www.efe.com/efe/espana/1/rss").text)
+	if mode == "america": rss_feed = feedparser.parse(requests.get("https://www.efe.com/efe/usa/5/rss").text)
+	elif mode == "europe": rss_feed = feedparser.parse(requests.get("https://www.efe.com/efe/espana/1/rss").text)
 
 	for items in rss_feed.entries:
 		try: category = efe_categories[items["category"]]
