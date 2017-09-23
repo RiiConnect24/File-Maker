@@ -123,39 +123,7 @@ def copy_file(mode, system, country, language_code):
 """Run the functions to make the news."""
 
 def make_news_bin(mode, console, data):
-	if mode == "ap_english":
-		topics_news = collections.OrderedDict()
-
-		topics_news["National News"] = "national"
-		topics_news["International News"] = "world"
-		topics_news["Sports"] = "sports"
-		topics_news["Arts/Entertainment"] = "entertainment"
-		topics_news["Business"] = "business"
-		topics_news["Science/Health"] = "science"
-		topics_news["Technology"] = "technology"
-		topics_news["Oddities"] = "oddities"
-
-		languages = [1, 3, 4]
-
-		language_code = 1
-
-		country_code = 49
-
-	elif mode == "ap_spanish":
-		topics_news = collections.OrderedDict()
-
-		topics_news["Generales"] = "general"
-		topics_news["Financieras"] = "finance"
-		topics_news["Deportivas"] = "sports"
-		topics_news["Espectáculos"] = "shows"
-
-		languages = [1, 3, 4]
-
-		language_code = 4
-
-		country_code = 49
-
-	elif mode == "reuters_america_english":
+	if mode == "reuters_america_english":
 		topics_news = collections.OrderedDict()
 
 		topics_news["World"] = "world"
