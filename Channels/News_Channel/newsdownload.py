@@ -280,8 +280,37 @@ def download_ap_spanish():
 
 	return download_ap(topics_name, topics, "es")
 
-def download_reuters_english():
-	print "Downloading from Reuters (English)...\n"
+def download_reuters_america_english():
+	print "Downloading from Reuters (America English)...\n"
+
+	topics_name = collections.OrderedDict()
+
+	topics_name["world"] = "World"
+	topics_name["us"] = "US"
+	topics_name["health"] = "Health"
+	topics_name["science"] = "Science"
+	topics_name["technology"] = "Technology"
+	topics_name["entertainment"] = "Entertainment"
+	topics_name["sports"] = "Sports"
+	topics_name["business"] = "Business"
+	topics_name["lifestyle"] = "Lifestyle"
+
+	topics = collections.OrderedDict()
+
+	topics["world"] = ["worldNews"]
+	topics["us"] = ["domesticNews"]
+	topics["health"] = ["healthNews"]
+	topics["science"] = ["scienceNews"]
+	topics["technology"] = ["technologyNews"]
+	topics["entertainment"] = ["entertainment"]
+	topics["sports"] = ["sportsNews"]
+	topics["business"] = ["businessNews"]
+	topics["lifestyle"] = ["lifestyle"]
+
+	return download_reuters("en", topics_name, topics)
+
+def download_reuters_europe_english():
+	print "Downloading from Reuters (Europe English)...\n"
 
 	topics_name = collections.OrderedDict()
 
@@ -290,9 +319,10 @@ def download_reuters_english():
 	topics_name["health"] = "Health"
 	topics_name["science"] = "Science"
 	topics_name["technology"] = "Technology"
-	topics_name["offbeat"] = "Oddly Enough"
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["sports"] = "Sports"
+	topics_name["business"] = "Business"
+	topics_name["lifestyle"] = "Lifestyle"
 
 	topics = collections.OrderedDict()
 
@@ -301,9 +331,10 @@ def download_reuters_english():
 	topics["health"] = ["UKHealthNews"]
 	topics["science"] = ["UKScienceNews"]
 	topics["technology"] = ["technologyNews"]
-	topics["offbeat"] = ["UKOddlyEnoughNews"]
 	topics["entertainment"] = ["UKEntertainment"]
 	topics["sports"] = ["UKSportsNews"]
+	topics["business"] = ["businessNews"]
+	topics["lifestyle"] = ["lifestyle"]
 
 	return download_reuters("en", topics_name, topics)
 
@@ -1013,86 +1044,3 @@ def parsedata_zeit(url, updated, source):
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, source, category]
-
-def download_ap(topics_name, topics, language):
-	data = collections.OrderedDict()
-
-	for rss_category in topics.items():
-		numbers = 0
-
-		print "Downloading %s..." % topics_name[rss_category[0]]
-
-		print "\n"
-
-		for rss in rss_category[1]:
-			rss_feed = feedparser.parse(requests.get("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=NVLAS&SECTION=HOME" % rss).text)
-
-			for items in rss_feed.entries:
-				try:
-					updated = parser.parse(items.updated)
-					updated = updated.astimezone(tz.tzutc())
-
-					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-
-					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-
-					if updated >= time_current - 60:
-						numbers += 1
-
-						print "Downloading News Article %s..." % (str(numbers))
-
-						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
-
-						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
-				except:
-					print "Failed."
-
-		print "\n"
-
-	return data
-
-def parsedata_ap(url, title, updated_utc, updated, format, language):
-	utc = pytz.utc
-
-	data1 = Article(url, language=language)
-	data1.download()
-	data1.parse()
-	html = data1.html
-	soup = BeautifulSoup(html, "lxml")
-
-	headline = fix_chars(soup.find("span", {"class": "headline entry-title"}).text.decode("iso-8859-1")) # Parse the headline.
-
-	try: article = fix_chars((data1.text + "\n\n" + soup.find("span", {"class": "byline"}).get_text() + ", " + soup.find("span", {"class": "bylinetitle"}).text).decode("iso-8859-1")) # Parse the article.
-	except: article = fix_chars(data1.text.decode("iso-8859-1")) # Parse the article.
-
-	if "ap-smallphoto-img" in html:
-		"""Parse the pictures."""
-
-		picture = shrink_image("http://hosted.ap.org/" + soup.find("img", {"class": "ap-smallphoto-img"})["src"][:-10] + "-small.jpg", False)
-
-		"""Parse the picture credits."""
-
-		credits = fix_chars(soup.find("span", {"class": "apCaption"}).text.decode("iso-8859-1"))
-
-		"""Parse the picture captions."""
-
-		url_captions = requests.get("http://hosted.ap.org/" + soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
-		soup = BeautifulSoup(url_captions, "lxml")
-		caption = fix_chars(soup.find("font", {"class": "photo"}).text.decode("iso-8859-1"))
-	else:
-		picture = None
-		credits = None
-		caption = None
-
-	if " (AP)" in article.decode("utf-16be"): location = article.decode("utf-16be").split(" (AP)", 1)[0]
-	else: location = None
-
-	if len(headline) == 0:
-		print "Headline is blank. %s" % url
-		rollbar.report_message("Headline is blank. %s" % url, "warning")
-		return None
-	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		rollbar.report_message("Headline is blank. %s" % url, "warning")
-		return None
-	else: return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "ap"]

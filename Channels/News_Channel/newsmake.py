@@ -155,7 +155,26 @@ def make_news_bin(mode, console, data):
 
 		country_code = 49
 
-	elif mode == "reuters_english":
+	elif mode == "reuters_america_english":
+		topics_news = collections.OrderedDict()
+
+		topics_news["World"] = "world"
+		topics_news["US"] = "us"
+		topics_news["Health"] = "health"
+		topics_news["Science"] = "science"
+		topics_news["Technology"] = "technology"
+		topics_news["Entertainment"] = "entertainment"
+		topics_news["Sports"] = "sports"
+		topics_news["Business"] = "business"
+		topics_news["Lifestyle"] = "lifestyle"
+
+		languages = [1, 3, 4]
+
+		language_code = 1
+
+		country_code = 49
+
+	elif mode == "reuters_europe_english":
 		topics_news = collections.OrderedDict()
 
 		topics_news["World"] = "world"
@@ -163,9 +182,10 @@ def make_news_bin(mode, console, data):
 		topics_news["Health"] = "health"
 		topics_news["Science"] = "science"
 		topics_news["Technology"] = "technology"
-		topics_news["Oddly Enough"] = "offbeat"
 		topics_news["Entertainment"] = "entertainment"
 		topics_news["Sports"] = "sports"
+		topics_news["Business"] = "business"
+		topics_news["Lifestyle"] = "lifestyle"
 
 		languages = [1, 2, 3, 4, 5, 6]
 
