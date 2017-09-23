@@ -198,6 +198,7 @@ def make_news_bin(mode, console, data):
 		topics_news["Sports"] = "sports"
 		topics_news["Société"] = "society"
 		topics_news["Politique"] = "politics"
+		topics_news["Top News"] = "topnews"
 
 		languages = [1, 2, 3, 4, 5, 6]
 

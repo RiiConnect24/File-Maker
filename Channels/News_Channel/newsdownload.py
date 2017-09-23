@@ -324,11 +324,13 @@ def download_afp_french():
 
 	topics_name_lobs["society"] = "Société"
 	topics_name_lobs["politics"] = "Politique"
+	topics_name_lobs["topnews"] = "Top News"
 
 	topics_lobs = collections.OrderedDict()
 
 	topics_lobs["society"] = ["4257574846401804"]
 	topics_lobs["politics"] = ["3745727240014883"]
+	topics_lobs["topnews"] = ["1437723251851358"]
 
 	return download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, topics_lobs)
 
@@ -711,12 +713,40 @@ def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, to
 
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
-					if updated >= time_current - 240:
+					if updated >= time_current - 60:
 						numbers += 1
 
 						print "Downloading News Article %s..." % (str(numbers))
 
 						parsedata = parsedata_laprovence(items["link"], items["title"], updated)
+
+						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+				except: print "Failed."
+
+		print "\n"
+
+	for rss_category in topics_lobs.items():
+		numbers = 0
+
+		print "Downloading %s..." % topics_name_lobs[rss_category[0]]
+
+		for rss in rss_category[1]:
+			rss_feed = feedparser.parse(requests.get("http://feed43.com/%s.xml" % rss).text)
+
+			for items in rss_feed.entries:
+				try:
+					updated = dateparser.parse(items["description"].split("<p>")[0], settings={'TIMEZONE': '+0200', 'TO_TIMEZONE': 'UTC'})
+
+					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
+
+					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+
+					if updated >= time_current - 60:
+						numbers += 1
+
+						print "Downloading News Article %s..." % (str(numbers))
+
+						parsedata = parsedata_lobs(items["link"], items["title"], updated)
 
 						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
 				except: print "Failed."
@@ -733,7 +763,9 @@ def parsedata_laprovence(url, title, updated):
 	soup = BeautifulSoup(html, "lxml")
 
 	headline = fix_chars(title) # Parse the headline.
-	article = fix_chars(data1.text) # Parse the article.
+	soup2 = BeautifulSoup(str(soup.find("div", {"id": "id_article_corps"})).replace("</p>", "\n\n</p>"), "lxml")
+	for s in soup2("script"): s.extract()
+	article = fix_chars(soup2.get_text()) # Parse the article.
 
 	try:
 		"""Parse the pictures."""
@@ -742,10 +774,10 @@ def parsedata_laprovence(url, title, updated):
 
 		"""Parse the picture captions."""
 
-		try: credits = fix_chars(soup.find("div", {"class": "boxlegende boxlegende-0-0"}).contents[0].find("figcaption").find("span", {"class": "credit"}).contents[0])
+		try: credits = fix_chars(soup.find("span", {"class": "credit"}).contents[0])
 		except: credits = None
 
-		try: caption = fix_chars(soup.find("div", {"class": "boxlegende boxlegende-0-0"}).contents[0].find("figcaption").contents[0])
+		try: caption = fix_chars(soup.find("figcaption").contents[0])
 		except: caption = None
 	except:
 		picture = None
