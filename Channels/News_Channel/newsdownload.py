@@ -1029,11 +1029,11 @@ def download_ap(topics_name, topics, language):
 
 			for items in rss_feed.entries:
 				try:
-					format = "%Y-%m-%dT%H:%M:%SZ"
+					updated = parser.parse(items.updated)
+					updated = updated.astimezone(tz.tzutc())
 
-					updated_utc = datetime.strptime(items["date"], format)
-					updated_utc = updated_utc.strftime(format)
-					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
+					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
+
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
 					if updated >= time_current - 60:
