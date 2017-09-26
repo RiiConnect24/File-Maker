@@ -500,7 +500,7 @@ def parsedata_reuters(language, url, title, updated):
 	try:
 		"""Parse the pictures."""
 
-		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"] + "&w=200", False)
+		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"], True)
 
 		"""Parse the picture credits."""
 
