@@ -133,7 +133,6 @@ def make_news_bin(mode, console, data):
 		topics_news["Technology"] = "technology"
 		topics_news["Entertainment"] = "entertainment"
 		topics_news["Sports"] = "sports"
-		topics_news["Business"] = "business"
 		topics_news["Lifestyle"] = "lifestyle"
 
 		languages = [1, 3, 4]
@@ -152,7 +151,6 @@ def make_news_bin(mode, console, data):
 		topics_news["Technology"] = "technology"
 		topics_news["Entertainment"] = "entertainment"
 		topics_news["Sports"] = "sports"
-		topics_news["Business"] = "business"
 		topics_news["Lifestyle"] = "lifestyle"
 
 		languages = [1, 2, 3, 4, 5, 6]
