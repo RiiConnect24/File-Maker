@@ -497,7 +497,7 @@ def parsedata_reuters(language, url, title, updated):
 		if "/" in location: location = location.split("/", 1)[0]
 	except: location = None
 
-	if 1 + 1 == 3:
+	try:
 		"""Parse the pictures."""
 
 		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"], True)
@@ -510,7 +510,7 @@ def parsedata_reuters(language, url, title, updated):
 
 		if language == "en": caption = fix_chars(soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0])
 		elif language == "jp": caption = fix_chars("\n".join(textwrap.wrap(soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0], 20)))
-	else:
+	except:
 		picture = None
 		credits = None
 		caption = None
