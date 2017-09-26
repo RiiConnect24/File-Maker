@@ -281,7 +281,6 @@ def make_news_bin(mode, console, data):
 		for article2 in data.items():
 			if article[0] != article2[0]:
 				if article[1][3] == article2[1][3]:
-					print "Saved"
 					data[article[0] + article2[0]] = data.pop(article2[0])
 
 	numbers = 0
