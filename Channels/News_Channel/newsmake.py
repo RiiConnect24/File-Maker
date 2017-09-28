@@ -133,7 +133,6 @@ def make_news_bin(mode, console, data):
 		topics_news["Technology"] = "technology"
 		topics_news["Entertainment"] = "entertainment"
 		topics_news["Sports"] = "sports"
-		topics_news["Business"] = "business"
 		topics_news["Lifestyle"] = "lifestyle"
 
 		languages = [1, 3, 4]
@@ -152,7 +151,6 @@ def make_news_bin(mode, console, data):
 		topics_news["Technology"] = "technology"
 		topics_news["Entertainment"] = "entertainment"
 		topics_news["Sports"] = "sports"
-		topics_news["Business"] = "business"
 		topics_news["Lifestyle"] = "lifestyle"
 
 		languages = [1, 2, 3, 4, 5, 6]
@@ -276,6 +274,12 @@ def make_news_bin(mode, console, data):
 	global system, dictionaries
 
 	system = console
+
+	"""for article in data.items():
+		for article2 in data.items():
+			if article[0] != article2[0]:
+				if article[1][3] == article2[1][3]:
+					data[article[0] + article2[0]] = data.pop(article2[0])"""
 
 	numbers = 0
 

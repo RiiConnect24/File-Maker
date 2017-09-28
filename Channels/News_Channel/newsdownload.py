@@ -246,7 +246,6 @@ def download_reuters_america_english():
 	topics_name["technology"] = "Technology"
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["sports"] = "Sports"
-	topics_name["business"] = "Business"
 	topics_name["lifestyle"] = "Lifestyle"
 
 	topics = collections.OrderedDict()
@@ -258,7 +257,6 @@ def download_reuters_america_english():
 	topics["technology"] = ["technologyNews"]
 	topics["entertainment"] = ["entertainment"]
 	topics["sports"] = ["sportsNews"]
-	topics["business"] = ["businessNews"]
 	topics["lifestyle"] = ["lifestyle"]
 
 	return download_reuters("en", topics_name, topics)
@@ -275,7 +273,6 @@ def download_reuters_europe_english():
 	topics_name["technology"] = "Technology"
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["sports"] = "Sports"
-	topics_name["business"] = "Business"
 	topics_name["lifestyle"] = "Lifestyle"
 
 	topics = collections.OrderedDict()
@@ -287,7 +284,6 @@ def download_reuters_europe_english():
 	topics["technology"] = ["technologyNews"]
 	topics["entertainment"] = ["UKEntertainment"]
 	topics["sports"] = ["UKSportsNews"]
-	topics["business"] = ["businessNews"]
 	topics["lifestyle"] = ["lifestyle"]
 
 	return download_reuters("en", topics_name, topics)
@@ -501,7 +497,7 @@ def parsedata_reuters(language, url, title, updated):
 	try:
 		"""Parse the pictures."""
 
-		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"] + "&w=200", False)
+		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"], True)
 
 		"""Parse the picture credits."""
 
