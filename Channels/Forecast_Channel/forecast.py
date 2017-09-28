@@ -17,6 +17,7 @@ import json
 import math
 import os
 import pycountry
+import queue
 import random
 import requests
 import rollbar
@@ -155,6 +156,14 @@ def get_bandwidth_usage(r):
 	resp = len(r.reason)+size(r.headers)+int(r.headers['Content-Length'])+15
 	return req+resp
 
+def worker():
+	while loop:
+		try:
+			item = q.get_nowait()
+			get_data(item[0],item[1])
+			q.task_done()
+		except: pass
+
 """This is a progress bar to display how much of the forecast in a list has been downloaded."""
 """It actually looks pretty cool."""
 
@@ -167,7 +176,7 @@ def progress(percent,list,progcount):
 		else: display = "✓"
 		progcount = 0
 	else: display = prog[progcount]
-	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+39),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,threading.active_count()-2 if useMultithreaded else 1,"."*progcount," "*(4-progcount)))
+	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+39),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,10 if useMultithreaded else 1,"."*progcount," "*(4-progcount)))
 	sys.stdout.flush()
 
 def build_progress():
@@ -1116,6 +1125,7 @@ if cacheDNS:
 	socket.getaddrinfo = dns
 if not useLegacy: test_keys()
 total_time = time.time()
+q = queue.Queue()
 for list in weathercities:
 	global language_code,country_code,mode,japcount
 	threads = []
@@ -1147,17 +1157,18 @@ for list in weathercities:
 	for keys in list.keys():
 		if keys in cache and cache[keys] != get_all(list,keys) and keys not in duplicates: duplicates[keys] = locationkey[keys]
 		if keys not in cache or cache[keys] != get_all(list,keys):
-			if useMultithreaded: threads.append(threading.Thread(target=get_data, args=(list,keys)))
+			if useMultithreaded: q.put([list,keys])
 			else: get_data(list,keys)
 	if useMultithreaded:
-		for i in threads:
-			while threading.active_count()-2 >= 10: time.sleep(0.005)
-			i.daemon = True
-			i.start()
-		for i in threads:
-			i.join()
+		for i in range(10):
+			t = threading.Thread(target=worker)
+			t.daemon = True
+			threads.append(t)
+			t.start()
+		q.join()
 	if len(list)-cached is not 0: progress(float(citycount)/float(len(list)-cached)*100,list,0)
 	loop = False
+	for t in threads: t.join()
 	dlthread.join()
 	build = True
 	print "\n"
