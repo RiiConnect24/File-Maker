@@ -246,7 +246,6 @@ def download_reuters_america_english():
 	topics_name["technology"] = "Technology"
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["sports"] = "Sports"
-	topics_name["business"] = "Business"
 	topics_name["lifestyle"] = "Lifestyle"
 
 	topics = collections.OrderedDict()
@@ -258,7 +257,6 @@ def download_reuters_america_english():
 	topics["technology"] = ["technologyNews"]
 	topics["entertainment"] = ["entertainment"]
 	topics["sports"] = ["sportsNews"]
-	topics["business"] = ["businessNews"]
 	topics["lifestyle"] = ["lifestyle"]
 
 	return download_reuters("en", topics_name, topics)
@@ -275,7 +273,6 @@ def download_reuters_europe_english():
 	topics_name["technology"] = "Technology"
 	topics_name["entertainment"] = "Entertainment"
 	topics_name["sports"] = "Sports"
-	topics_name["business"] = "Business"
 	topics_name["lifestyle"] = "Lifestyle"
 
 	topics = collections.OrderedDict()
@@ -287,7 +284,6 @@ def download_reuters_europe_english():
 	topics["technology"] = ["technologyNews"]
 	topics["entertainment"] = ["UKEntertainment"]
 	topics["sports"] = ["UKSportsNews"]
-	topics["business"] = ["businessNews"]
 	topics["lifestyle"] = ["lifestyle"]
 
 	return download_reuters("en", topics_name, topics)
@@ -480,7 +476,8 @@ def parsedata_reuters(language, url, title, updated):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
-	headline = fix_chars(soup.find("h1", {"class": "ArticleHeader_headline_2zdFM"}).get_text()) # Parse the headline.
+	try: headline = fix_chars(soup.find("h1", {"class": "ArticleHeader_headline_2zdFM"}).get_text()) # Parse the headline.
+	except: return None
 
 	article_text = BeautifulSoup(str(soup.find("div", {"class": "ArticleBody_body_2ECha"})).replace("</p>", "\n\n</p>"), "lxml").get_text()
 
@@ -500,7 +497,7 @@ def parsedata_reuters(language, url, title, updated):
 	try:
 		"""Parse the pictures."""
 
-		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"] + "&w=200", False)
+		picture = shrink_image(soup.find("link", {"rel": "image_src"})["href"], True)
 
 		"""Parse the picture credits."""
 
