@@ -1125,7 +1125,7 @@ if cacheDNS:
 	socket.getaddrinfo = dns
 if not useLegacy: test_keys()
 total_time = time.time()
-q = queue.Queue()
+q = Queue.Queue()
 for list in weathercities:
 	global language_code,country_code,mode,japcount
 	threads = []
