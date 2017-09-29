@@ -352,6 +352,27 @@ def download_ansa_italian():
 
 	return download_ansa(topics_name, topics)
 
+def download_expansion_spanish():
+	print "Downloading from Expansión (Spanish)...\n"
+
+	topics_name = collections.OrderedDict()
+
+	topics_name["national"] = "Nacional"
+	topics_name["world"] = "Mundo"
+	topics_name["economy"] = "Economía"
+	topics_name["business"] = "Empresas"
+	topics_name["technology"] = "Tecnología"
+
+	topics = collections.OrderedDict()
+
+	topics["national"] = ["nacional"]
+	topics["world"] = ["mundo"]
+	topics["economy"] = ["economia"]
+	topics["business"] = ["empresas"]
+	topics["technology"] = ["tecnologia"]
+
+	return download_expansion(topics_name, topics)
+
 def download_efe_america_spanish():
 	print "Downloading from EFE (America Spanish)...\n"
 
@@ -520,7 +541,7 @@ def parsedata_reuters(language, url, title, updated):
 		print "Article is blank. %s" % url
 		rollbar.report_message("Headline is blank. %s" % url, "warning")
 		return None
-	else: return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "reuters"]
+	else: return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "Reuters"]
 
 def download_nu(topics_name, topics):
 	data = collections.OrderedDict()
@@ -835,6 +856,99 @@ def parsedata_lobs(url, title, updated):
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, None, caption, location, "AFP"]
 
+def download_expansion(topics_name, topics):
+	data = collections.OrderedDict()
+
+	for rss_category in topics.items():
+		numbers = 0
+
+		print "Downloading %s..." % topics_name[rss_category[0]]
+
+		print "\n"
+
+		for rss in rss_category[1]:
+			numbers_category = 0
+
+			url = "http://expansion.mx/rss/%s.rss" % rss
+
+			rss_feed = feedparser.parse(requests.get(url).text)
+
+			for items in rss_feed.entries:
+				updated = parser.parse(items.updated)
+				updated = updated.astimezone(tz.tzutc())
+
+				updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
+
+				time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
+
+				if updated >= time_current - 60:
+					numbers += 1
+
+					print "Downloading News Article %s..." % (str(numbers))
+
+					source = items["author"]
+
+					sources = ["Expansión", "EFE", "Reuters", "AFP", "Notimex", "CNN en Español", "CNNMoney", "CNN"]
+
+					if source not in sources: source = "Expansión"
+
+					if source == "CNN en Español": source = "CNN"
+					elif source == "CNNMoney": source = "CNN"
+
+					parsedata = parsedata_expansion(items["link"], items["title"], updated, source)
+
+					if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+
+		print "\n"
+
+	return data
+
+def parsedata_expansion(url, title, updated, source):
+	data1 = Article(url, language="es")
+	data1.download()
+	data1.parse()
+	html = data1.html
+	soup = BeautifulSoup(html, "lxml")
+
+	headline = fix_chars(title) # Parse the headline.
+	article = fix_chars(data1.text) # Parse the article.
+
+	try:
+		"""Parse the pictures."""
+
+		picture = shrink_image(data1.top_image, True)
+
+		"""Parse the picture captions."""
+
+		try: caption = fix_chars(soup.find("p", {"itemprop": "description name caption"}).contents[0])
+		except: caption = None
+	except:
+		picture = None
+		caption = None
+
+	sources = ["Expansión", "EFE", "Reuters", "AFP", "Notimex"]
+
+	if source in sources: location = article.decode("utf-16be").split(" (%s)" % sources, 1)[0]
+	elif "CNN" in source:
+		article_decoded = article.decode("utf-16be")
+
+		cnn = ["(CNN)", "(CNN Español)", "(CNNMoney)"]
+
+		for c in cnn:
+			if c in article_decoded: location = article.decode("utf-16be").split(c, 1)[0]
+	else: location = None
+
+	if len(headline) == 0:
+		print "Headline is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	elif len(article) == 0:
+		print "Article is blank. %s" % url
+		rollbar.report_message("Headline is blank. %s" % url, "warning")
+		return None
+	else:
+		return [u32(updated), u32(updated), article, headline, picture, None, caption, location, source]
+
 def download_efe(mode, topics_name):
 	data = collections.OrderedDict()
 
@@ -870,7 +984,7 @@ def download_efe(mode, topics_name):
 	return data
 
 def parsedata_efe(url, title, updated):
-	data1 = Article(url, language="fr")
+	data1 = Article(url, language="es")
 	data1.download()
 	data1.parse()
 	html = data1.html

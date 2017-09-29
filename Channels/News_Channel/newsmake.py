@@ -159,15 +159,14 @@ def make_news_bin(mode, console, data):
 
 		country_code = 110
 
-	elif mode == "efe_america_spanish":
+	elif mode == "expansion_spanish":
 		topics_news = collections.OrderedDict()
 
+		topics_news["Nacional"] = "national"
 		topics_news["Mundo"] = "world"
-		topics_news["Deportes"] = "sports"
 		topics_news["Economía"] = "economy"
-		topics_news["Cultura"] = "culture"
-		topics_news["Sociedad"] = "society"
-		topics_news["Gente"] = "people"
+		topics_news["Empresas"] = "business"
+		topics_news["Tecnología"] = "technology"
 
 		languages = [1, 3, 4]
 
@@ -561,7 +560,7 @@ def make_source_table(header, articles_table, data):
 	"""These are the picture and position values."""
 
 	sources = {
-		"reuters": [0, 4],
+		"Reuters": [0, 4],
 		"AFP": [4, 4],
 		"ANP": [0, 5],
 		"ansa": [6, 6],
@@ -571,6 +570,9 @@ def make_source_table(header, articles_table, data):
 		"SID": [0, 4],
 		"NU.nl": [0, 5],
 		"EFE": [0, 4],
+		"Expansión": [0, 4],
+		"Notimex": [0, 4],
+		"CNN": [0, 4],
 	}
 
 	numbers = 0
@@ -721,7 +723,7 @@ def make_source_name_copyright(source_table, language_code, data):
 	"""Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
 	copyrights = {
-		"reuters": ("© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode("utf-8").encode("utf-16be"),
+		"Reuters": ("© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP": ("All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP_french": ("Tous droits de reproduction et de diffusion réservés. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"ANP": ("All reproduction and representation rights reserved. © %s B.V. Algemeen Nederlands Persbureau ANP" % date.today().year).decode("utf-8").encode("utf-16be"),
@@ -731,7 +733,10 @@ def make_source_name_copyright(source_table, language_code, data):
 		"dpa": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"DPA Hamburg": ("Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"NU.nl": ("© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode("utf-8").encode("utf-16be"),
-		"EFE": ("© Agencia EFE, S.A. Avd. de Burgos, 8-B. 28036 Madrid. España Tel: +34 91 346 7100. Todos los derechos reservados").decode("utf-8").encode("utf-16be")
+		"EFE": ("© Agencia EFE, S.A. Avd. de Burgos, 8-B. 28036 Madrid. España Tel: +34 91 346 7100. Todos los derechos reservados").decode("utf-8").encode("utf-16be"),
+		"Expansión": ("© %s Expansión" % date.today().year).decode("utf-8").encode("utf-16be"),
+		"Notimex": ("%s Derechos Reservados Notimex México - Avenida Baja California # 200, Colonia Roma Sur, Delegación Cuauhtémoc C.P. 06760, Ciudad de México, Conmutador: (5255) 5420-1100" % date.today().year).decode("utf-8").encode("utf-16be"),
+		"CNN": ("© %s Cable News Network. Turner Broadcasting System, Inc. All Rights Reserved." % date.today().year).decode("utf-8").encode("utf-16be"),
 	}
 
 	for article in data.values():
@@ -785,7 +790,7 @@ def make_source_pictures(source_table, data):
 
 	"""These are the news sources which will get a custom news picture from them."""
 
-	sources = ["ANP", "dpa", "DPA Hamburg", "reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE"]
+	sources = ["ANP", "dpa", "DPA Hamburg", "Reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE", "Expansión", "Notimex", "CNN"]
 
 	for article in data.values():
 		if article[8] not in source_articles:
