@@ -275,11 +275,17 @@ def make_news_bin(mode, console, data):
 
 	system = console
 
-	"""for article in data.items():
-		for article2 in data.items():
-			if article[0] != article2[0]:
-				if article[1][3] == article2[1][3]:
-					data[article[0] + article2[0]] = data.pop(article2[0])"""
+	data_dupe = collections.OrderedDict()
+
+	headlines = []
+
+	for k,v in data.items():
+		if v[3] not in headlines: data_dupe[k] = v
+		elif v in headlines:
+			for k2,v2 in data_dupe.items():
+				if v[3] == v2[3]:
+					del data_dupe[k2]
+					data_dupe[k + k2] = v2
 
 	numbers = 0
 
