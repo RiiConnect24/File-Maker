@@ -1,4 +1,5 @@
 bs4
+dateparser
 feedparser
 googlemaps
 jsonp2json
