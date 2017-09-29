@@ -17,7 +17,7 @@ import json
 import math
 import os
 import pycountry
-import Queue as queue
+import Queue
 import random
 import requests
 import rollbar
