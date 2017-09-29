@@ -910,6 +910,11 @@ def parsedata_expansion(url, title, updated, source):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
+	for s in soup("div", {"itemprop": "description"}, {"class": "description"}): s.extract()
+
+	data1.set_html(str(soup))
+	data1.parse()
+
 	headline = fix_chars(title) # Parse the headline.
 	article = fix_chars(data1.text) # Parse the article.
 
@@ -928,7 +933,7 @@ def parsedata_expansion(url, title, updated, source):
 
 	sources = ["Expansión", "EFE", "Reuters", "AFP", "Notimex"]
 
-	if source in sources: location = article.decode("utf-16be").split(" (%s)" % sources, 1)[0]
+	if source in sources: location = article.decode("utf-16be").split(" (%s)" % source, 1)[0]
 	elif "CNN" in source:
 		article_decoded = article.decode("utf-16be")
 
