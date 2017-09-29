@@ -275,18 +275,6 @@ def make_news_bin(mode, console, data):
 
 	system = console
 
-	data_dupe = collections.OrderedDict()
-
-	headlines = []
-
-	for k,v in data.items():
-		if v[3] not in headlines: data_dupe[k] = v
-		elif v in headlines:
-			for k2,v2 in data_dupe.items():
-				if v[3] == v2[3]:
-					del data_dupe[k2]
-					data_dupe[k + k2] = v2
-
 	numbers = 0
 
 	if not os.path.exists("newstime"): os.mkdir("newstime")
@@ -303,6 +291,8 @@ def make_news_bin(mode, console, data):
 		pickle.dump(newstime, open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, system), "w+"))
 
 	dictionaries = []
+
+	data = remove_duplicates(data)
 
 	locations_data = newsdownload.locations_download(language_code, data)
 
@@ -345,6 +335,23 @@ def get_timestamp(mode):
 	elif mode == 2: return u32(((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60) + 1500)
 
 """Make the news.bin."""
+
+def remove_duplicates(data):
+	data_dupe = collections.OrderedDict()
+
+	headlines = []
+
+	for k,v in data.items():
+		if v[3] not in headlines:
+			headlines.append(v[3])
+			data_dupe[k] = v
+		elif v[3] in headlines:
+			for k2,v2 in data_dupe.items():
+				if v[3] == v2[3]:
+					del data_dupe[k2]
+					data_dupe[k + k2] = v2
+
+	return data_dupe
 
 """First part of the header."""
 
