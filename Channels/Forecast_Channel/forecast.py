@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.2
+# VERSION 3.3
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -474,7 +474,7 @@ def get_main_api(list, key):
 
 def get_legacy_api(list, key):
 	apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(key))
-	if apilegacy is not -1:
+	if apilegacy != -1:
 		week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
 		week[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
 		week[key][2] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['lowtemperature'])
@@ -633,27 +633,53 @@ def offset_write(value):
 	file.seek(seek_offset)
 	file.write(u32(value))
 
-def make_bins(list):
-	make_forecast_bin(list)
-	make_short_bin(list)
+def make_bins(list, data):
+	make_forecast_bin(list, data)
+	make_short_bin(list, data)
 
-def make_forecast_bin(list):
+def generate_data(list, bins):
+	long_forecast_tables = dict.fromkeys([1,2])
+	short_japan_tables = dict.fromkeys([1,2])
+	short_forecast_tables = dict.fromkeys([1,2])
+	uvindex_text_tables = dict.fromkeys(bins)
+	weathervalue_text_tables = dict.fromkeys(bins)
+	text_tables = dict.fromkeys(bins)
+	uvindex_table = make_uvindex_table()
+	pollenindex_table = make_pollenindex_table()
+	pollen_text_table = make_pollen_text_table()
+	laundryindex_table = make_laundryindex_table()
+	laundry_text_table = make_laundry_text_table()
+	location_table = make_location_table(list)
+	weathervalue_offset_table = make_weather_offset_table()
+	for mode in [1,2]:
+		globals()['mode'] = mode
+		long_forecast_tables[mode] = make_long_forecast_table(list)
+		short_japan_tables[mode] = make_forecast_short_table(list)
+		short_forecast_tables[mode] = make_short_forecast_table(list)
+	for language in bins:
+		globals()['language_code'] = language
+		uvindex_text_tables[language] = make_uvindex_text_table()
+		text_tables[language] = make_forecast_text_table(list)
+		weathervalue_text_tables[language] = make_weather_value_table()
+	return [long_forecast_tables,uvindex_table,uvindex_text_tables,short_japan_tables,pollenindex_table,pollen_text_table,laundryindex_table,laundry_text_table,location_table,text_tables,weathervalue_offset_table,weathervalue_text_tables,short_forecast_tables]
+
+def make_forecast_bin(list, data):
 	global japcount,constant,file,seek_offset,seek_base,extension
 	constant = 0
 	count = {}
 	header = make_header_forecast(list)
-	long_forecast_table = make_long_forecast_table(list)
-	location_table = make_location_table(list)
-	text_table = make_forecast_text_table(list)
-	pollenindex_table = make_pollenindex_table()
-	uvindex_text_table = make_uvindex_text_table()
-	laundry_text_table = make_laundry_text_table()
-	pollen_text_table = make_pollen_text_table()
-	uvindex_table = make_uvindex_table()
-	laundryindex_table = make_laundryindex_table()
-	weathervalue_text_table = make_weather_value_table()
-	weathervalue_offset_table = make_weather_offset_table()
-	short_japan_tables = make_forecast_short_table(list)
+	long_forecast_table = data[0][mode]
+	uvindex_table = data[1]
+	uvindex_text_table = data[2][language_code]
+	short_japan_tables = data[3][mode]
+	pollenindex_table = data[4]
+	pollen_text_table = data[5]
+	laundryindex_table = data[6]
+	laundry_text_table = data[7]
+	location_table = data[8]
+	text_table = data[9][language_code]
+	weathervalue_offset_table = data[10]
+	weathervalue_text_table = data[11][language_code]
 	dictionaries = [header,long_forecast_table,short_japan_tables,weathervalue_offset_table,uvindex_table,laundryindex_table,pollenindex_table,location_table,weathervalue_text_table,uvindex_text_table,laundry_text_table,pollen_text_table,text_table]
 	if mode == 1: extension = "bin"
 	elif mode == 2: extension = "bi2"
@@ -732,9 +758,9 @@ def make_forecast_bin(list):
 		sign_file(file2, file3, file4)
 		os.remove(file1)
 
-def make_short_bin(list):
+def make_short_bin(list, data):
 	short_forecast_header = make_header_short(list)
-	short_forecast_table = make_short_forecast_table(list)
+	short_forecast_table = data[12][mode]
 	file1 = 'short.%s~.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file2 = 'short.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
 	file3 = 'short.%s' % extension
@@ -1176,11 +1202,12 @@ for list in weathercities:
 	buildthread = threading.Thread(target=build_progress,args=[])
 	buildthread.daemon = True
 	buildthread.start()
+	data = generate_data(list,bins)
 	for i in range(1,3):
 		mode = i
 		for j in bins:
 			language_code = j
-			make_bins(list)
+			make_bins(list,data)
 			reset_data(list)
 	build = False
 	buildthread.join()
