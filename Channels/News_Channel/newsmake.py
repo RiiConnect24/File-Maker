@@ -86,7 +86,7 @@ def download_source(name, mode, language_code, countries, data):
 		"""Tell Cachet how many news articles it downloaded."""
 
 		points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
-		new_point = json.loads(points.post(id=2, value=len(data)))
+		new_point = json.loads(points.post(id="2", value=len(data)))
 
 		"""This will use a webhook to log that the script has been ran."""
 
