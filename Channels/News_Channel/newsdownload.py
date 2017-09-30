@@ -294,15 +294,15 @@ def download_afp_french():
 
 	topics_name_lobs = collections.OrderedDict()
 
-	"""topics_name_lobs["society"] = "Société"
-	topics_name_lobs["politics"] = "Politique"
-	topics_name_lobs["topnews"] = "Top News""""
+	# topics_name_lobs["society"] = "Société"
+	# topics_name_lobs["politics"] = "Politique"
+	# topics_name_lobs["topnews"] = "Top News"
 
 	topics_lobs = collections.OrderedDict()
 
-	"""topics_lobs["society"] = ["4257574846401804"]
-	topics_lobs["politics"] = ["3745727240014883"]
-	topics_lobs["topnews"] = ["1437723251851358"]"""
+	# topics_lobs["society"] = ["4257574846401804"]
+	# topics_lobs["politics"] = ["3745727240014883"]
+	# topics_lobs["topnews"] = ["1437723251851358"]
 
 	return download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, topics_lobs)
 
