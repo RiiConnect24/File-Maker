@@ -9,10 +9,12 @@
 # ===========================================================================
 
 import binascii
+import cachetclient.cachet
 import calendar
 import collections
 import errno
 import glob
+import json
 import newsdownload
 import os
 import pickle
@@ -81,11 +83,16 @@ def download_source(name, mode, language_code, countries, data):
 	make_news = make_news_bin(mode, "wii_u", data)
 
 	if production:
+		"""Tell Cachet how many news articles it downloaded."""
+
+		points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
+		new_point = json.loads(points.post(id=2, value=len(data)))
+
 		"""This will use a webhook to log that the script has been ran."""
 
-		data = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+		webhook = {"username": "News Bot", "content": "News Data has been updated!", "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script", "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news, "title": "Update!", "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
-		for url in webhook_urls: requests.post(url, json=data, allow_redirects=True)
+		for url in webhook_urls: requests.post(url, json=webhook, allow_redirects=True)
 
 		filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
 

@@ -6,10 +6,10 @@ jsonp2json
 newspaper
 numpy
 pycountry
+python-cachetclient
 python-resize-image
 pytz
 requests
-rollbar
 rsa
 unidecode
 xmltodict
