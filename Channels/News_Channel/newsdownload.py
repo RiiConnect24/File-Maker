@@ -662,6 +662,8 @@ def download_ansa(topics_name, topics):
 
 				except: print "Failed."
 
+			print "\n"
+
 	return data
 
 def parsedata_ansa(url, title, updated):
