@@ -17,6 +17,7 @@ import io
 import json
 import math
 import os
+import pickle
 import pycountry
 import Queue
 import random
@@ -30,7 +31,6 @@ import sys
 import threading
 import time
 import xmltodict
-import pickle
 from config import *
 from datetime import datetime, timedelta
 
