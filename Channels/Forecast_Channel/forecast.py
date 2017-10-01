@@ -10,6 +10,7 @@
 # ===========================================================================
 
 import binascii
+import cachetclient.cachet
 import collections
 import forecastlists
 import io
@@ -1218,7 +1219,7 @@ print "API Requests: %s" % apirequests
 if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
 print "Processed Cities: %s" % (cities)
-print "Total Time: %s Seconds" % round(time.time()-total_time)
+print "Elapsed Time: %s Seconds" % round(time.time()-total_time)
 print "Bandwidth Usage: %s MiB\n" % round(float(bw_usage)/1048576,2)
 
 if keyCache and not cachefile:
@@ -1229,6 +1230,8 @@ if keyCache and not cachefile:
 	cachefile.close()
 
 if production:
+	points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
+	new_point = json.loads(points.post(id="7", value=round(time.time()-total_time)))
 	"""This will use a webhook to log that the script has been ran."""
 	data = {"username": "Forecast Bot", "content": "Weather Data has been updated!", "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script", "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png", "text": "Weather Data has been updated!", "title": "Update!", "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 	for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
