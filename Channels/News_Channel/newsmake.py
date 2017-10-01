@@ -79,6 +79,14 @@ def mkdir_p(path):
 def download_source(name, mode, language_code, countries, data):
 	print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
+	"""If there are more than 25 news articles, delete the rest. This is so the file doesn't get too large."""
+	
+	i = 0
+
+	for key in data.keys():
+		i += 1
+		if i > 25: del data[key]
+
 	make_news = make_news_bin(mode, "wii", data)
 	make_news = make_news_bin(mode, "wii_u", data)
 
