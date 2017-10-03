@@ -805,7 +805,7 @@ def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, to
 
 	return data
 
-"""Hi AFP! I'm suprised that you guys don't have your news in one centralized location. I have to cycle between 2 sources to obtain your news."""
+"""Hi AFP! I'm surprised that you guys don't have your news in one centralized location. I have to cycle between 2 sources to obtain your news."""
 """Is there a better location you could recommend to me?"""
 
 def parsedata_laprovence(url, title, updated):
