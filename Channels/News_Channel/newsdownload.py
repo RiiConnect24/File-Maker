@@ -1177,6 +1177,7 @@ def download_ap(topics_name, topics, language):
 			rss_feed = feedparser.parse(requests.get("http://staging.hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).text)
 
 			for items in rss_feed.entries:
+				try:
 					updated = parser.parse(items.updated)
 					updated = updated.astimezone(tz.tzutc())
 
@@ -1189,9 +1190,11 @@ def download_ap(topics_name, topics, language):
 
 						print "Downloading News Article %s..." % (str(numbers))
 
-						parsedata = parsedata_ap(items["link"], items["title"], updated, format, language)
+						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
 
 						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
+				except:
+					print "Failed."
 
 		print "\n"
 
