@@ -138,7 +138,39 @@ def copy_file(mode, system, country, language_code):
 """Run the functions to make the news."""
 
 def make_news_bin(mode, console, data):
-	if mode == "reuters_america_english":
+	if mode == "ap_english":
+		topics_news = collections.OrderedDict()
+
+		topics_news["National News"] = "national"
+		topics_news["International News"] = "world"
+		topics_news["Sports"] = "sports"
+		topics_news["Arts/Entertainment"] = "entertainment"
+		topics_news["Business"] = "business"
+		topics_news["Science/Health"] = "science"
+		topics_news["Technology"] = "technology"
+		topics_news["Oddities"] = "oddities"
+
+		languages = [1, 3, 4]
+
+		language_code = 1
+
+		country_code = 49
+
+	elif mode == "ap_spanish":
+		topics_news = collections.OrderedDict()
+
+		topics_news["Generales"] = "general"
+		topics_news["Financieras"] = "finance"
+		topics_news["Deportivas"] = "sports"
+		topics_news["Espectáculos"] = "shows"
+
+		languages = [1, 3, 4]
+
+		language_code = 4
+
+		country_code = 49
+		
+	elif mode == "reuters_america_english":
 		topics_news = collections.OrderedDict()
 
 		topics_news["World"] = "world"
@@ -575,6 +607,7 @@ def make_source_table(header, articles_table, data):
 	"""These are the picture and position values."""
 
 	sources = {
+		"ap": [0, 3],
 		"Reuters": [0, 4],
 		"AFP": [4, 4],
 		"ANP": [0, 5],
@@ -737,7 +770,8 @@ def make_source_name_copyright(source_table, language_code, data):
 
 	"""Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
-	copyrights = {
+	copyrights = {	
+		"ap": ("Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"Reuters": ("© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP": ("All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP_french": ("Tous droits de reproduction et de diffusion réservés. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
@@ -805,7 +839,7 @@ def make_source_pictures(source_table, data):
 
 	"""These are the news sources which will get a custom news picture from them."""
 
-	sources = ["ANP", "dpa", "DPA Hamburg", "Reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE", "Expansión", "Notimex", "CNN"]
+	sources = ["ANP", "ap", "dpa", "DPA Hamburg", "Reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE", "Expansión", "Notimex", "CNN"]
 
 	for article in data.values():
 		if article[8] not in source_articles:
