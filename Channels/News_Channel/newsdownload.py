@@ -805,6 +805,9 @@ def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, to
 
 	return data
 
+"""AFP, I'm shocked that you guys don't have all your news on your site (or the locations associated with the articles). So I'm just using 2 sources to get your news."""
+"""It was pretty hard to find a way to get some of your news that isn't half bad."""
+
 def parsedata_laprovence(url, title, updated):
 	data1 = Article(url, language="fr")
 	data1.download()
@@ -857,6 +860,8 @@ def parsedata_lobs(url, title, updated):
 
 	headline = fix_chars(title) # Parse the headline.
 	article = fix_chars(data1.text) # Parse the article.
+
+	"""L'Obs doesn't seem to have pictures associated with AFP articles anymore...?"""
 
 	try:
 		if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
