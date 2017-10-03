@@ -181,9 +181,10 @@ def progress(percent,list,progcount):
 	sys.stdout.flush()
 
 def build_progress():
+	global status
 	i = 0
 	while build:
-		sys.stdout.write("\r"+" "*58+"\rBuilding Files: "+"["+i*" "+"="*3+(35-i-2)*" "+"] ...")
+		sys.stdout.write("\r"+" "*74+"\r"+status+": "+"["+i*" "+"="*3+(35-i-2)*" "+"] ...")
 		sys.stdout.flush()
 		i+=1
 		if i == 34: i = 0
@@ -306,10 +307,8 @@ def request_data(url):
 				except: pass
 			elif "accuwxturbotablet" in url:
 				try:
-					data = xmltodict.parse(data.content)
-					if 'failure' in data['adc_database']:
-						output("API Error: "+data['adc_database']['failure'],"INFO")
-						return -1
+					if "city-find" in url: data = xmltodict.parse(data.content)
+					else: return data.content
 					c = 1
 				except: pass
 			elif "regions" in url:
@@ -474,8 +473,8 @@ def get_main_api(list, key):
 		pollen[key] = avg
 
 def get_legacy_api(list, key):
-	apilegacy = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(key))
-	if apilegacy != -1:
+	apilegacy = weather_data[key]
+	if apilegacy != None:
 		week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
 		week[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
 		week[key][2] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['lowtemperature'])
@@ -812,14 +811,14 @@ def sign_file(name, local_name, server_name):
 	os.remove(local_name + "-1")
 
 def get_data(list, name):
-	global citycount,cache
+	global citycount,cache,weather_data
 	citycount+=1
 	cache[name] = get_all(list, name)
 	globe[name] = {}
 	blank_data(list,name,True)
 	if get_legacy_location(list, name) is None:
 		if name in forecastlists.jpncities: get_tenki_data(name)
-		get_legacy_api(list, name)
+		weather_data[name] = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
 	else: output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
 
 def make_header_short(list):
@@ -1154,10 +1153,11 @@ if not useLegacy: test_keys()
 total_time = time.time()
 q = Queue.Queue()
 for list in weathercities:
-	global language_code,country_code,mode,japcount
+	global language_code,country_code,mode,japcount,weather_data
 	threads = []
 	language_code = 1
 	japcount = 0
+	weather_data = {}
 	country_code = forecastlists.bincountries[list.values()[0][2][1]]
 	if country_code == 0: bins = [0]
 	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
@@ -1199,10 +1199,19 @@ for list in weathercities:
 	dlthread.join()
 	build = True
 	print "\n"
-	cities+=citycount
+	status = "Parsing"
 	buildthread = threading.Thread(target=build_progress,args=[])
 	buildthread.daemon = True
 	buildthread.start()
+	for k,v in weather_data.items():
+		weather_data[k] = None
+		try:
+			data = xmltodict.parse(v)
+			if 'forecast' in data['adc_database']: weather_data[k] = data
+		except: pass
+		get_legacy_api(list, k)
+	status = "Building"
+	cities+=citycount
 	data = generate_data(list,bins)
 	for i in range(1,3):
 		mode = i
