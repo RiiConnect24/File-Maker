@@ -1163,7 +1163,7 @@ def parsedata_zeit(url, updated, source):
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, source, category]
 
-"""Associated Press, please don't take this down. Wii users love seeing Associated Press news on their News Channel and AP is a really good news source."""
+"""Associated Press, please don't take this down. Wii users love seeing AP news on their News Channel and AP is a really good news source."""
 
 def download_ap(topics_name, topics, language):
 	data = collections.OrderedDict()
