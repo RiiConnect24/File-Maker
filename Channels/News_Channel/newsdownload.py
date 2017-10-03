@@ -1190,7 +1190,7 @@ def download_ap(topics_name, topics, language):
 
 						print "Downloading News Article %s..." % (str(numbers))
 
-						parsedata = parsedata_ap(items["link"], items["title"], updated_utc, updated, format, language)
+						parsedata = parsedata_ap(items["link"], items["title"], updated, format, language)
 
 						if parsedata != None: data[rss_category[0] + str(numbers)] = parsedata
 				except:
