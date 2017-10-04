@@ -80,12 +80,12 @@ def download_source(name, mode, language_code, countries, data):
 	print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
 	"""If there are more than 25 news articles, delete the rest. This is so the file doesn't get too large."""
-	
+
 	i = 0
 
 	for key in data.keys():
 		i += 1
-		if i > 20: del data[key]
+		if i > 22: del data[key]
 
 	make_news = make_news_bin(mode, "wii", data)
 	make_news = make_news_bin(mode, "wii_u", data)
@@ -169,7 +169,7 @@ def make_news_bin(mode, console, data):
 		language_code = 4
 
 		country_code = 49
-		
+
 	elif mode == "reuters_america_english":
 		topics_news = collections.OrderedDict()
 
@@ -770,7 +770,7 @@ def make_source_name_copyright(source_table, language_code, data):
 
 	"""Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
-	copyrights = {	
+	copyrights = {
 		"ap": ("Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"Reuters": ("© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode("utf-8").encode("utf-16be"),
 		"AFP": ("All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode("utf-8").encode("utf-16be"),
