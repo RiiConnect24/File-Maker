@@ -85,7 +85,7 @@ def download_source(name, mode, language_code, countries, data):
 
 	for key in data.keys():
 		i += 1
-		if i > 22: del data[key]
+		if i > 20: del data[key]
 
 	make_news = make_news_bin(mode, "wii", data)
 	make_news = make_news_bin(mode, "wii_u", data)
