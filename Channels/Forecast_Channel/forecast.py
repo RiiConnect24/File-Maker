@@ -824,12 +824,9 @@ def make_forecast_bin(list, data):
 		else: offset_write(0)
 		seek_offset+=12
 	file.seek(0)
-	with open(file1, 'wb') as temp: temp.write(file.read())
+	with open(file2, 'wb') as temp: temp.write(file.read()[12:])
 	file.close()
-	if production:
-		os.system('dd if="' + file1 + '" of="' + file2 + '" bs=1 skip=12 status=none') # This cuts off the first 12 bytes.
-		sign_file(file2, file3, file4)
-		os.remove(file1)
+	if production: sign_file(file2, file3, file4)
 
 def make_short_bin(list, data):
 	short_forecast_header = make_header_short(list)
