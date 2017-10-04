@@ -805,6 +805,9 @@ def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, to
 
 	return data
 
+"""Hi AFP! I'm surprised that you guys don't have all your news in one centralized location. I have to cycle between 2 sources to obtain your news."""
+"""Is there a better location you could recommend to me?"""
+
 def parsedata_laprovence(url, title, updated):
 	data1 = Article(url, language="fr")
 	data1.download()
@@ -857,6 +860,8 @@ def parsedata_lobs(url, title, updated):
 
 	headline = fix_chars(title) # Parse the headline.
 	article = fix_chars(data1.text) # Parse the article.
+
+	"""L'Obs doesn't seem to have pictures associated with AFP articles anymore...?"""
 
 	try:
 		if data1.top_image != "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg":
@@ -1162,7 +1167,10 @@ def parsedata_zeit(url, updated, source):
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, source, category]
-	
+
+"""Associated Press, please contact us for an alternative resolution. We'd much rather find a way to obtain news from you for our non-profit project, Wii users love seeing AP news on their News Channel and AP is a really good news source."""
+"""I'd imagine us giving you a mini DDOS every hour for our scripts doesn't help either!"""
+
 def download_ap(topics_name, topics, language):
 	data = collections.OrderedDict()
 
