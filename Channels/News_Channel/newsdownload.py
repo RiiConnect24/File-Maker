@@ -1182,18 +1182,16 @@ def download_ap(topics_name, topics, language):
 		print "\n"
 
 		for rss in rss_category[1]:
-			rss_feed = feedparser.parse(requests.get("http://staging.hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).text)
+			rss_feed = feedparser.parse(requests.get("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=NVLAS&SECTION=HOME" % rss).text)
 
 			for items in rss_feed.entries:
 				try:
-					updated = parser.parse(items.updated)
-					updated = updated.astimezone(tz.tzutc())
+					format = "%Y-%m-%dT%H:%M:%SZ"
 
-					updated = (int(time.mktime(updated.timetuple()) - 946684800) / 60)
-
+					updated_utc = datetime.strptime(items["date"], format)
+					updated_utc = updated_utc.strftime(format)
+					updated = (int(time.mktime(datetime.strptime(updated_utc, format).timetuple()) - 946684800) / 60)
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
-
-					print updated >= time_current
 
 					if updated >= time_current - 60:
 						numbers += 1
