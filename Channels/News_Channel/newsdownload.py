@@ -1182,7 +1182,7 @@ def download_ap(topics_name, topics, language):
 		print "\n"
 
 		for rss in rss_category[1]:
-			rss_feed = feedparser.parse(requests.get("http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=NVLAS&SECTION=HOME" % rss).text)
+			rss_feed = feedparser.parse(requests.get("http://staging.hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME" % rss).text)
 
 			for items in rss_feed.entries:
 				try:
