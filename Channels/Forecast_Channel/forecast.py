@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.3
+# VERSION 3.4
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -31,6 +31,7 @@ import sys
 import threading
 import time
 import xmltodict
+import xml.etree.cElementTree as ElementTree
 from config import *
 from datetime import datetime, timedelta
 
@@ -472,7 +473,7 @@ def get_main_api(list, key):
 		if avg < 2: avg = 2
 		pollen[key] = avg
 
-def get_legacy_api(list, key):
+def get_legacy_api_old(list, key): # Leaving this in as backup while testing ElementTree
 	apilegacy = weather_data[key]
 	if apilegacy != None:
 		week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
@@ -541,6 +542,78 @@ def get_legacy_api(list, key):
 			if -1 < temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
 			else: hourly[key][i+4] = get_icon(int(-1),list,key)
 	else: output('Unable to retrieve data for %s - using blank data' % key, "WARNING")
+
+def get_legacy_api(list, key):
+	apilegacy = weather_data[key]
+	if apilegacy != None:
+		forecast = apilegacy.find("{http://www.accuweather.com}forecast")
+		currentConditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
+		week[key][0] = int(forecast[2][5][3].text)
+		week[key][1] = int(forecast[2][5][2].text)
+		week[key][2] = int(forecast[3][5][3].text)
+		week[key][3] = int(forecast[3][5][2].text)
+		week[key][4] = int(forecast[4][5][3].text)
+		week[key][5] = int(forecast[4][5][2].text)
+		week[key][6] = int(forecast[5][5][3].text)
+		week[key][7] = int(forecast[5][5][2].text)
+		for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
+		week[key][20] = get_icon(int(forecast[2][5][1].text),list,key)
+		week[key][21] = get_icon(int(forecast[3][5][1].text),list,key)
+		week[key][22] = get_icon(int(forecast[4][5][1].text),list,key)
+		week[key][23] = get_icon(int(forecast[5][5][1].text),list,key)
+		current[key][3] = int(currentConditions[3].text)
+		current[key][4] = to_celsius(current[key][3])
+		weathericon[key] = get_icon(int(currentConditions[7].text),list,key)
+		current[key][0] = currentConditions[10].text
+		current[key][2] = int(currentConditions[9].text)
+		current[key][1] = mph_kmh(current[key][2])
+		today[key][0] = int(forecast[1][5][3].text)
+		today[key][1] = int(forecast[1][5][2].text)
+		today[key][2] = to_celsius(today[key][0])
+		today[key][3] = to_celsius(today[key][1])
+		today[key][4] = get_icon(int(forecast[1][5][1].text),list,key)
+		tomorrow[key][0] = int(forecast[2][5][3].text)
+		tomorrow[key][1] = int(forecast[2][5][2].text)
+		tomorrow[key][2] = to_celsius(tomorrow[key][0])
+		tomorrow[key][3] = to_celsius(tomorrow[key][1])
+		tomorrow[key][4] = get_icon(int(forecast[2][5][1].text),list,key)
+		try: uvval = int(currentConditions[13].attrib['index'])
+		except: uvval = 255
+		if uvval > 12: uvval = 12
+		uvindex[key] = uvval
+		wind[key][0] = mph_kmh(forecast[1][5][6].text)
+		wind[key][1] = int(forecast[1][5][6].text)
+		wind[key][2] = forecast[1][5][7].text
+		wind[key][3] = mph_kmh(forecast[2][5][6].text)
+		wind[key][4] = int(forecast[2][5][6].text)
+		wind[key][5] = forecast[2][5][7].text
+		pollen[key] = 255
+		lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
+		lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
+		globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
+		globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
+		globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
+		globe[key]['time'] = int(get_epoch()+globe[key]['offset']*3600)
+		week[key][25] = int(forecast[6][5][2].text)
+		week[key][26] = int(forecast[6][5][3].text)
+		week[key][27] = int(forecast[7][5][2].text)
+		week[key][28] = int(forecast[7][5][3].text)
+		week[key][29] = int(to_celsius(week[key][25]))
+		week[key][30] = int(to_celsius(week[key][26]))
+		week[key][31] = int(to_celsius(week[key][27]))
+		week[key][32] = int(to_celsius(week[key][28]))
+		week[key][33] = get_icon(int(forecast[6][5][1].text),list,key)
+		week[key][34] = get_icon(int(forecast[7][5][1].text),list,key)
+		time_index = [[3,9,15,21],[27,33,39,45]]
+		hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
+		for i in range(0,4):
+			temp = time_index[0][i]-hour
+			if -1 < temp < 24: hourly[key][i] = get_icon(int(forecast[16][temp][0].text),list,key)
+			else: hourly[key][i] = get_icon(int(-1),list,key)
+			temp = time_index[1][i]-hour
+			if -1 < temp < 24: hourly[key][i+4] = get_icon(int(forecast[16][temp][0].text),list,key)
+			else: hourly[key][i+4] = get_icon(int(-1),list,key)
+	else: output('Unable to retrieve forecast data for %s - using blank data' % key, "WARNING")
 
 def get_search(list, key, mode):
 	if mode == 0:
@@ -819,7 +892,7 @@ def get_data(list, name):
 	if get_legacy_location(list, name) is None:
 		if name in forecastlists.jpncities: get_tenki_data(name)
 		weather_data[name] = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
-	else: output('Unable to retrieve data for %s - using blank data' % name, "WARNING")
+	else: output('Unable to retrieve location data for %s - using blank data' % name, "WARNING")
 
 def make_header_short(list):
 	header = collections.OrderedDict()
@@ -1199,18 +1272,17 @@ for list in weathercities:
 	dlthread.join()
 	build = True
 	print "\n"
-	status = "Parsing"
-	buildthread = threading.Thread(target=build_progress,args=[])
+	status = "Parsing Data"
+	buildthread = threading.Thread(target=build_progress)
 	buildthread.daemon = True
 	buildthread.start()
 	for k,v in weather_data.items():
-		weather_data[k] = None
 		try:
-			data = xmltodict.parse(v)
-			if 'forecast' in data['adc_database']: weather_data[k] = data
-		except: pass
+			weather_data[k] = ElementTree.fromstring(v)
+			if weather_data[k].find("{http://www.accuweather.com}failure") != None: weather_data[k] = None
+		except: weather_data[k] = None
 		get_legacy_api(list, k)
-	status = "Building"
+	status = "Building Files"
 	cities+=citycount
 	data = generate_data(list,bins)
 	for i in range(1,3):
