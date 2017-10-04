@@ -1193,6 +1193,8 @@ def download_ap(topics_name, topics, language):
 
 					time_current = (int(time.mktime(datetime.utcnow().timetuple())) - 946684800) / 60
 
+					print updated >= time_current
+
 					if updated >= time_current - 60:
 						numbers += 1
 
