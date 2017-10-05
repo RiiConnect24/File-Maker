@@ -334,15 +334,15 @@ def download_afp_french():
 
 	topics_name_lobs = collections.OrderedDict()
 
-	# topics_name_lobs["society"] = "Société"
-	# topics_name_lobs["politics"] = "Politique"
-	# topics_name_lobs["topnews"] = "Top News"
+	topics_name_lobs["society"] = "Société"
+	topics_name_lobs["politics"] = "Politique"
+	topics_name_lobs["topnews"] = "Top News"
 
 	topics_lobs = collections.OrderedDict()
 
-	# topics_lobs["society"] = ["4257574846401804"]
-	# topics_lobs["politics"] = ["3745727240014883"]
-	# topics_lobs["topnews"] = ["1437723251851358"]
+	topics_lobs["society"] = ["4257574846401804"]
+	topics_lobs["politics"] = ["3745727240014883"]
+	topics_lobs["topnews"] = ["1437723251851358"]
 
 	return download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, topics_lobs)
 
@@ -403,20 +403,6 @@ def download_expansion_spanish():
 	topics["technology"] = ["tecnologia"]
 
 	return download_expansion(topics_name, topics)
-
-def download_efe_america_spanish():
-	print "Downloading from EFE (America Spanish)...\n"
-
-	topics_name = collections.OrderedDict()
-
-	topics_name["world"] = "Mundo"
-	topics_name["sports"] = "Deportes"
-	topics_name["economy"] = "Economía"
-	topics_name["culture"] = "Cultura"
-	topics_name["society"] = "Sociedad"
-	topics_name["people"] = "Gente"
-
-	return download_efe("america", topics_name)
 
 def download_efe_europe_spanish():
 	print "Downloading from EFE (Europe Spanish)...\n"
