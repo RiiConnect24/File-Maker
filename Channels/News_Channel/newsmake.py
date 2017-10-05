@@ -87,6 +87,8 @@ def download_source(name, mode, language_code, countries, data):
 		i += 1
 		if i > 22: del data[key]
 
+	# data = remove_duplicates(data)
+
 	make_news = make_news_bin(mode, "wii", data)
 	make_news = make_news_bin(mode, "wii_u", data)
 
@@ -337,8 +339,6 @@ def make_news_bin(mode, console, data):
 		pickle.dump(newstime, open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, system), "w+"))
 
 	dictionaries = []
-
-	data = remove_duplicates(data)
 
 	locations_data = newsdownload.locations_download(language_code, data)
 
