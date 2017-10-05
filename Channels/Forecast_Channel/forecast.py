@@ -166,14 +166,6 @@ def worker():
 			q.task_done()
 		except: pass
 
-def worker_build():
-	while build:
-		try:
-			item = sign_q.get_nowait()
-			sign_file(item[0],item[1],item[2])
-			sign_q.task_done()
-		except: pass
-
 """This is a progress bar to display how much of the forecast in a list has been downloaded."""
 """It actually looks pretty cool."""
 
@@ -745,7 +737,7 @@ def generate_data(list, bins):
 	return [long_forecast_tables,uvindex_table,uvindex_text_tables,short_japan_tables,pollenindex_table,pollen_text_table,laundryindex_table,laundry_text_table,location_table,text_tables,weathervalue_offset_table,weathervalue_text_tables,short_forecast_tables]
 
 def make_forecast_bin(list, data):
-	global japcount,constant,file,seek_offset,seek_base,extension,sign_q
+	global japcount,constant,file,seek_offset,seek_base,extension
 	constant = 0
 	count = {}
 	header = make_header_forecast(list)
@@ -834,10 +826,9 @@ def make_forecast_bin(list, data):
 	file.seek(0)
 	with open(file2, 'wb') as temp: temp.write(file.read()[12:])
 	file.close()
-	if production: sign_q.put([file2,file3,file4])
+	if production: sign_file(file2, file3, file4)
 
 def make_short_bin(list, data):
-	global sign_q
 	short_forecast_header = make_header_short(list)
 	short_forecast_table = data[12][mode]
 	file1 = 'short.%s~.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
@@ -851,7 +842,7 @@ def make_short_bin(list, data):
 	file.seek(0)
 	with open(file1, 'wb') as temp: temp.write(file.read())
 	file.close()
-	if production: sign_q.put([file1,file2,file3])
+	if production: sign_file(file1, file2, file3)
 
 def sign_file(name, local_name, server_name):
 	output("Processing " + local_name + " ...", "VERBOSE")
@@ -1231,7 +1222,6 @@ if cacheDNS:
 if not useLegacy: test_keys()
 total_time = time.time()
 q = Queue.Queue()
-sign_q = Queue.Queue()
 for list in weathercities:
 	global language_code,country_code,mode,japcount,weather_data
 	threads = []
@@ -1298,14 +1288,7 @@ for list in weathercities:
 			language_code = j
 			make_bins(list,data)
 			reset_data(list)
-	for i in range(5):
-		t = threading.Thread(target=worker_build)
-		t.daemon = True
-		threads.append(t)
-		t.start()
-	sign_q.join()
 	build = False
-	for t in threads: t.join()
 	buildthread.join()
 	log("Building Files: Complete")
 	print "\n"
