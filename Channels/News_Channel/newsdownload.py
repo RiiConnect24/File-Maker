@@ -727,6 +727,9 @@ def parsedata_ansa(url, title, updated):
 		return None
 	else: return [u32(updated), u32(updated), article, headline, picture, credits, None, location, "ansa"]
 
+"""Hi AFP! I'm surprised that you guys don't have all your news in one centralized location. I have to cycle between 2 sources to obtain your news."""
+"""Is there a better location you could recommend to me?"""
+
 def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, topics_lobs):
 	data = collections.OrderedDict()
 
@@ -790,9 +793,6 @@ def download_afp(topics_name_laprovence, topics_laprovence, topics_name_lobs, to
 		print "\n"
 
 	return data
-
-"""Hi AFP! I'm surprised that you guys don't have all your news in one centralized location. I have to cycle between 2 sources to obtain your news."""
-"""Is there a better location you could recommend to me?"""
 
 def parsedata_laprovence(url, title, updated):
 	data1 = Article(url, language="fr")
