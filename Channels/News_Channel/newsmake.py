@@ -607,7 +607,7 @@ def make_source_table(header, articles_table, data):
 	"""These are the picture and position values."""
 
 	sources = {
-		"ap": [0, 3],
+		"ap": [0, 1],
 		"Reuters": [0, 4],
 		"AFP": [4, 4],
 		"ANP": [0, 5],
