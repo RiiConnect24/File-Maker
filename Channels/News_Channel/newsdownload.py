@@ -100,12 +100,6 @@ zeit_sports_categories = ["Eishockey", "Fußball", "Tennis", "Basketball", "Wint
 zeit_categories = collections.OrderedDict()
 
 zeit_categories["General"] = "general"
-zeit_categories["Politik"] = "politics"
-zeit_categories["Wirtschaft"] = "economy"
-zeit_categories["Gesellschaft"] = "society"
-zeit_categories["Kultur"] = "culture"
-zeit_categories["Wissen"] = "knowledge"
-zeit_categories["Digital"] = "digital"
 zeit_categories["Sport"] = "sports"
 
 """Resize the image and strip metadata (to make the image size smaller)"""
@@ -352,12 +346,6 @@ def download_zeit_german():
 	topics_name = collections.OrderedDict()
 
 	topics_name["general"] = "General"
-	topics_name["politics"] = "Politik"
-	topics_name["economy"] = "Wirtschaft"
-	topics_name["society"] = "Gesellschaft"
-	topics_name["culture"] = "Kultur"
-	topics_name["knowledge"] = "Wissen"
-	topics_name["digital"] = "Digital"
 	topics_name["sports"] = "Sport"
 
 	return download_zeit(topics_name)
@@ -1094,8 +1082,6 @@ def parsedata_zeit(url, updated, source):
 
 	headline_category = headline.decode("utf-16be").split(": ", 1)[0]
 	category = "general"
-
-	if headline_category in zeit_categories: category = zeit_categories[headline_category]
 
 	if headline_category in zeit_sports_categories: category = "sports"
 
