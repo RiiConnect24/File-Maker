@@ -359,6 +359,7 @@ def download_ansa_italian():
 	topics_name["italy"] = "Dall'Italia"
 	topics_name["sports"] = "Sport"
 	topics_name["economy"] = "Economia"
+	topics_name["technology"] = "Tecnologia"
 	topics_name["culture"] = "Cultura"
 
 	topics = collections.OrderedDict()
@@ -367,6 +368,7 @@ def download_ansa_italian():
 	topics["italy"] = ["abruzzo", "basilicata", "calabria", "campania", "emiliaromagna", "friuliveneziagiulia", "lazio", "liguria", "lombardia", "marche", "molise", "piemonte", "puglia", "sardegna", "sicilia", "toscana", "trentino", "umbria", "valledaosta", "veneto"]
 	topics["sports"] = ["sport"]
 	topics["economy"] = ["economia"]
+	topics["technology"] = ["tecnologia"]
 	topics["culture"] = ["cultura"]
 
 	return download_ansa(topics_name, topics)

@@ -273,6 +273,7 @@ def make_news_bin(mode, console, data):
 		topics_news["Dall'Italia"] = "italy"
 		topics_news["Sport"] = "sports"
 		topics_news["Economia"] = "economy"
+		topics_news["Tecnologia"] = "technology"
 		topics_news["Cultura"] = "culture"
 
 		languages = [1, 2, 3, 4, 5, 6]
