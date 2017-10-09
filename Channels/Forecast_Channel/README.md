@@ -37,7 +37,7 @@ Then comes the entries in this order:
 1. A list of the city names in 7 languages in this order: (Japanese, English, German, French, Spanish, Italian, Dutch)
 1. A list of the region names in 7 languages in the same order. You can find this in forecastregions.py or from another value.
 1. A list of the country names in 7 languages in the same order. You can also find this in forecastregions.py or from another value.
-1. Coordinates. You can get the latitude and longitude with this Python code:
+1. Coordinates. You can get the latitude and longitude of the city, and convert it to what the Wii uses with this Python code:
 
 ```python
 def coord_decode(value):
