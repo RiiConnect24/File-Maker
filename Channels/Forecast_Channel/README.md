@@ -20,6 +20,7 @@ We are not accepting new cities for these following countries:
 
 + Argentina
 + Brazil
++ Finland
 + France
 + Germany
 + Italy
