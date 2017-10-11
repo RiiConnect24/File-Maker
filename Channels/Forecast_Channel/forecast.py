@@ -77,28 +77,43 @@ dnscache = {}
 def u8(data):
 	if data < 0 or data > 255:
 		output("u8 Value Pack Failure: %s" % data, "CRITICAL")
+		json.loads(incidents.put(id="1", message="u8 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		output("u16 Value Pack Failure: %s" % data, "CRITICAL")
+		json.loads(incidents.put(id="1", message="u16 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		output("u32 Value Pack Failure: %s" % data, "CRITICAL")
+		json.loads(incidents.put(id="1", message="u32 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack(">I", data)
 
 def s8(data):
+	if data < -128 or data > 128:
+		output("s8 Value Pack Failure: %s" % data, "CRITICAL")
+		json.loads(incidents.put(id="1", message="s8 Value Pack Failure: %s" % data)
+		data = 0
 	return struct.pack(">b", data)
 
 def s16(data):
+	if data < -32768 or data > 32768:
+		output("s16 Value Pack Failure: %s" % data, "CRITICAL")
+		json.loads(incidents.put(id="1", message="s16 Value Pack Failure: %s" % data)
+		data = 0
 	return struct.pack(">h", data)
 
 def s32(data):
+	if data < -2147483648 or data > 2147483648:
+		output("s32 Value Pack Failure: %s" % data, "CRITICAL")
+		json.loads(incidents.put(id="1", message="s32 Value Pack Failure: %s" % data)
+		data = 0
 	return struct.pack(">i", data)
 
 def temp(num): return num & 0xFF
@@ -1309,7 +1324,7 @@ if keyCache and not cachefile:
 
 if production:
 	points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
-	new_point = json.loads(points.post(id="7", value=round(time.time()-total_time)))
+	json.loads(points.post(id="7", value=round(time.time()-total_time)))
 	"""This will use a webhook to log that the script has been ran."""
 	data = {"username": "Forecast Bot", "content": "Weather Data has been updated!", "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script", "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png", "text": "Weather Data has been updated!", "title": "Update!", "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 	for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
