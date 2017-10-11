@@ -77,42 +77,42 @@ dnscache = {}
 def u8(data):
 	if data < 0 or data > 255:
 		output("u8 Value Pack Failure: %s" % data, "CRITICAL")
-		json.loads(incidents.put(id="1", message="u8 Value Pack Failure: %s" % data)
+		json.loads(incidents.put(id="1", message="u8 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		output("u16 Value Pack Failure: %s" % data, "CRITICAL")
-		json.loads(incidents.put(id="1", message="u16 Value Pack Failure: %s" % data)
+		json.loads(incidents.put(id="1", message="u16 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		output("u32 Value Pack Failure: %s" % data, "CRITICAL")
-		json.loads(incidents.put(id="1", message="u32 Value Pack Failure: %s" % data)
+		json.loads(incidents.put(id="1", message="u32 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">I", data)
 
 def s8(data):
 	if data < -128 or data > 128:
 		output("s8 Value Pack Failure: %s" % data, "CRITICAL")
-		json.loads(incidents.put(id="1", message="s8 Value Pack Failure: %s" % data)
+		json.loads(incidents.put(id="1", message="s8 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">b", data)
 
 def s16(data):
 	if data < -32768 or data > 32768:
 		output("s16 Value Pack Failure: %s" % data, "CRITICAL")
-		json.loads(incidents.put(id="1", message="s16 Value Pack Failure: %s" % data)
+		json.loads(incidents.put(id="1", message="s16 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">h", data)
 
 def s32(data):
 	if data < -2147483648 or data > 2147483648:
 		output("s32 Value Pack Failure: %s" % data, "CRITICAL")
-		json.loads(incidents.put(id="1", message="s32 Value Pack Failure: %s" % data)
+		json.loads(incidents.put(id="1", message="s32 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">i", data)
 
