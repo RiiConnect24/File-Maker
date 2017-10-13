@@ -77,8 +77,8 @@ dnscache = {}
 def u8(data):
 	if data < 0 or data > 255:
 		output("u8 Value Pack Failure: %s" % data, "CRITICAL")
-		incidents = cachetclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		json.loads(incidents.put(id="1", message="u8 Value Pack Failure: %s" % data))
+		# incidents = cachetclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
+		# json.loads(incidents.put(id="1", message="u8 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">B", data)
 
