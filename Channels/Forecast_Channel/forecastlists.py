@@ -1,4 +1,4 @@
-#!/usr/bin/python
+sop#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import collections
@@ -2281,7 +2281,7 @@ weathercities_international["Christchurch"] = [["クライストチャーチ", "
 weathercities_international["Oslo"] = [["オスロ", "Oslo", "Oslo", "Oslo", "Oslo", "Oslo", "Oslo"], ["オストランデット", "Østlandet", "Østlandet", "Østlandet", "Østlandet", "Norvegia dell'Est", "Østlandet"], ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"], "2a9f079d07030000"]
 weathercities_international["Warsaw"] = [["ワルシャワ", "Warsaw", "Warschau", "Varsovie", "Varsovia", "Varsavia", "Warschau"], ["マゾフシェ", "Masovia", "Masowien", "Mazovie", "Mazovia", "Masovia", "Mazovië"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25260ef005030000"]
 weathercities_international["Kraków"] = [["クラクフ", "Kraków", "Krakau", "Cracovie", "Cracovia", "Cracovia", "Kraków"], ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23980e2e01030000"]
-weathercities_international["Sosnowiec"] = [["クラクフ", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec"], ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], ""]
+weathercities_international["Sosnowiec"] = [["クラクフ", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec"], ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23c40da105030000"]
 weathercities_international["Poznan"] = [["クラクフ", "Poznan", "Poznan", "Poznan", "Poznan", "Poznan", "Poznan"], ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25430c0705030000"]
 weathercities_international["Czestochowa"] = [["クラクフ", "Czestochowa", "Czestochowa", "Czestochowa", "Czestochowa", "Czestochowa", "Czestochowa"], ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "241f0d9805030000"]
 weathercities_international["Katowice"] = [["クラクフ", "Katowice", "Katowice", "Katowice", "Katowice", "Katowice", "Katowice"], ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"], ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23bb0d8205030000"]
@@ -2840,82 +2840,4 @@ weatherconditions[18] = [["雨", "Rain", "Regen", "Pluie", "Lluvia", "Pioggia", 
 weatherconditions[19] = [["フラワーズ", "Flurries", "Flurries", "Rivières", "Ráfagas de nieve", "Raffica", "Vlagen"], "0592", "0076", "8190", "801A"]
 weatherconditions[20] = [["フラワーズを伴いおおむね曇り", "Mostly Cloudy\nwith Flurries", "Stark bewölkt mit Flurries", "Principalement couvert, avec rivières", "Muy nublado con ráfagas de nieve", "Prevalentemente nuvoloso con raffica", "Overwegend bewolkt met vlagen"], "04CD", "0076", "00CA", "000C"]
 weatherconditions[21] = [["フラワーズを伴い所により晴れ", "Partly Sunny\nwith Flurries", "Teils sonnig mit Flurries", "Partiellement ensoleillé, avec rivières", "Parcialmente soleado con ráfagas de nieve", "Parzialmente soleggiato con raffica", "Deels zonnig met vlagen"], "0468", "0068", "006B", "0004"]
-weatherconditions[22] = [["雪", "Snow", "Schnee", "Neige", "Nieve", "La neve", "Sneeuw"], "05E0", "0074", "8191", "801A"]
-weatherconditions[23] = [["雪おおむね曇り", "Mostly Cloudy\nwith Snow", "Stark bewölkt mit Schnee", "Principalement couvert, avec neige", "Muy nublado con nieve", "Prevalentemente nuvoloso con la neve", "Overwegend bewolkt met sneeuw"], "04CC", "006D", "00CB", "000C"]
-weatherconditions[24] = [["氷", "Ice", "Eis", "La glace", "Hielo", "Ghiaccio", "Ijs"], "05AE", "0079", "8192", "801A"]
-weatherconditions[25] = [["おやすみ", "Sleet", "Schneeregen", "Neige fondue", "Aguanieve", "Nevischio", "Sleet"], "04CF", "0079", "8193", "801A"]
-weatherconditions[26] = [["フリーズレイン", "Freezing Rain", "Gefrierender Regen", "Pluie verglaçante", "Lluvia helada", "Grandine", "Ijskoude regen"], "0549", "0073", "8194", "801A"]
-weatherconditions[29] = [["雨と雪", "Rain and Snow", "Regen und Schnee", "Pluie et neige", "Lluvia y nieve", "Pioggia e neve", "Regen en sneeuw"], "052F", "0072", "012F", "0016"]
-weatherconditions[30] = [["ホット", "Hot", "Heiß", "Chaud", "Caliente", "Caldo", "Warm"], "0459", "0065", "00EA", "0001"]
-weatherconditions[31] = [["コールド", "Cold", "Kalt", "Du froid", "Frío", "Freddo", "Koude"], "0460", "0065", "00EB", "0001"]
-weatherconditions[32] = [["ウィンディ", "Windy", "Windig", "Venteux", "Ventoso", "Ventoso", "Winderig"], "0461", "0065", "00EC", "0001"]
-weatherconditions[33] = [["晴れ", "Clear", "Klar", "Ciel dégagé", "Despejado", "Sereno", "Helder"], "8464", "8065", "006C", "8001"]
-weatherconditions[34] = [["おおむね晴れ", "Mostly Clear", "Vielfach klar", "Ciel peu nuageux", "Muy despejado", "Prevalentemente sereno", "Overwegend helder"], "85F4", "8065", "006D", "8001"]
-weatherconditions[35] = [["所により曇り", "Partly Cloudy", "Teilweise bewölkt", "Partiellement nuageux", "Parcialmente nublado", "Parzialmente nuvoloso", "Deels bewolkt"], "8465", "8066", "00C8", "800A"]
-weatherconditions[36] = [["時々曇り", "Intermittent Clouds", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nubi sparse", "Wisselend bewolkt"], "84C9", "806B", "00CC", "800A"]
-weatherconditions[37] = [["朧月夜", "Hazy Moonlight", "Nachts klar bis diesig", "Lune voilée", "Luna con calima", "Foschia notturna", "Nevelig maanlicht"], "05F8", "807A", "00CD", "800A"]
-weatherconditions[38] = [["おおむね曇り", "Mostly Cloudy", "Stark bewölkt", "Ciel plutôt nuageux", "Muy nublado", "Prevalentemente nuvoloso", "Overwegend bewolkt"], "84C8", "806A", "00CE", "800A"]
-weatherconditions[39] = [["にわか雨を伴い所により曇り", "Partly Cloudy\nwith Showers", "Teilweise bewölkt mit Schauern", "Assez couvert, avec averses", "Parcialmente nublado con chubascos", "Parzialmente nuvoloso con rovesci", "Deels bewolkt en buiig"], "8466", "806C", "00CF", "800C"]
-weatherconditions[40] = [["にわか雨を伴いおおむね曇り", "Mostly Cloudy\nwith Showers", "Stark bewölkt mit Schauern", "Principalement couvert, avec averses", "Muy nublado con chubascos", "Prevalentemente nuvoloso con rovesci", "Overwegend bewolkt met buien"], "852E", "8071", "00D1", "800C"]
-weatherconditions[41] = [["雷雨を伴い所により曇り", "Partly Cloudy\nwith Thunderstorms", "Teilweise bewölkt mit Gewitter", "Ciel assez nuageux, avec orages", "Parcialmente nublado con Tormentas eléctricas", "Parzialmente nuvoloso con temporali", "Deels bewolkt met onweersbuien"], "8467", "807D", "00D2", "800E"]
-weatherconditions[42] = [["雷雨を伴いおおむね曇り", "Mostly Cloudy\nwith Thunderstorms", "Teilweise bewölkt mit Gewitter", "Principalement couvert, avec orages", "Muy nublado con Tormentas eléctricas", "Prevalentemente nuvoloso con temporali", "Overwegend bewolkt met onweersbuien"], "84CA", "807D", "00D3", "800E"]
-weatherconditions[43] = [["フラワーズを伴いおおむね曇り", "Mostly Cloudy\nwith Flurries", "Stark bewölkt mit Flurries", "Principalement couvert, avec rivières", "Muy nublado con ráfagas de nieve", "Prevalentemente nuvoloso con raffica", "Overwegend bewolkt met vlagen"], "8592", "8076", "00D4", "800D"]
-weatherconditions[44] = [["雪おおむね曇り", "Mostly Cloudy\nwith Snow", "Stark bewölkt mit Schnee", "Principalement couvert, avec neige", "Muy nublado con nieve", "Prevalentemente nuvoloso con la neve", "Overwegend bewolkt met sneeuw"], "84CC", "806D", "00D5", "800D"]
-
-uvindex = collections.OrderedDict()
-
-uvindex[0] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
-uvindex[1] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
-uvindex[2] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
-uvindex[3] = ["やや強い", "Moderate", "Leicht erhöht", "Modéré", "Moderado", "Medio", "Gemiddeld"]
-uvindex[4] = ["やや強い", "Moderate", "Leicht erhöht", "Modéré", "Moderado", "Medio", "Gemiddeld"]
-uvindex[5] = ["やや強い", "Moderate", "Leicht erhöht", "Modéré", "Moderado", "Medio", "Gemiddeld"]
-uvindex[6] = ["強い", "High", "Hoch", "Elevé", "Alto", "Alto", "Hoog"]
-uvindex[7] = ["強い", "High", "Hoch", "Elevé", "Alto", "Alto", "Hoog"]
-uvindex[8] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
-uvindex[9] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
-uvindex[10] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Muy alto", "Molto alto", "Zeer hoog"]
-uvindex[11] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
-uvindex[12] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
-
-winddirection = {}
-
-winddirection["NNE"] = '01'
-winddirection["NE"] = '02'
-winddirection["ENE"] = '03'
-winddirection["E"] = '04'
-winddirection["ESE"] = '05'
-winddirection["SE"] = '06'
-winddirection["SSE"] = '07'
-winddirection["S"] = '08'
-winddirection["SSW"] = '09'
-winddirection["SW"] = '10'
-winddirection["WSW"] = '11'
-winddirection["W"] = '12'
-winddirection["WNW"] = '13'
-winddirection["NW"] = '14'
-winddirection["NNW"] = '15'
-winddirection["N"] = '16'
-
-pollen = collections.OrderedDict()
-
-pollen[2] = "少ない"
-pollen[3] = "やや多い"
-pollen[4] = "多い"
-pollen[5] = "非常に多い"
-pollen[231] = "欠測（データなし）"
-
-laundry = collections.OrderedDict()
-
-laundry[0] = "外に干せません"
-laundry[10] = "外干し時は天候に注意"
-laundry[20] = "外干し時は天候に注意"
-laundry[30] = "外干し時は天候に注意"
-laundry[40] = "乾きいまいち：\n一日干しても乾ききらないものが多い"
-laundry[50] = "乾きまあまあ：\n一日干せばおおむね乾く"
-laundry[60] = "乾きよし：\n一日干せば十分よく乾く"
-laundry[70] = "乾きよし：\n半日干せばおおむね乾く"
-laundry[80] = "乾き非常によし：\n半日干せば十分よく乾く"
-laundry[90] = "乾き非常によし：\n2・3時間干せばおおむね乾く"
-laundry[100] = "乾き非常によし：\n2・3時間干せば十分よく乾く"
-laundry[231] = "欠測（データなし）"
+weatherconditions[22] = [["雪", "Snow", "Schnee", "Neige", "Nieve
