@@ -370,7 +370,7 @@ def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionari
 
 def get_timestamp(mode):
 	if system == "wii": seconds = 946684800
-	elif system == "wii_u": seconds = 789507840
+	elif system == "wii_u": seconds = 789563880
 
 	if mode == 1: return u32(((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60))
 	elif mode == 2: return u32(((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60) + 1500)
