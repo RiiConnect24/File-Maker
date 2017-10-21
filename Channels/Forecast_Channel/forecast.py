@@ -134,7 +134,7 @@ def mph_kmh(wind): return int(round(float(wind)*1.60934))
 
 def time_convert(time):
 	if mode == 1: return int((time - 946684800) / 60)
-	elif mode == 2: return int((time - 1325376000) / 60) # Still have to adjust this.
+	elif mode == 2: return int((time - 789507840) / 60) # Still have to adjust this.
 
 def get_epoch(): return int(time.time())
 
