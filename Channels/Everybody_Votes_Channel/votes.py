@@ -4,7 +4,7 @@
 # ===========================================================================
 # EVERYBODY VOTES CHANNEL GENERATION SCRIPT
 # VERSION 0.5
-# AUTHORS: JOHN PANSERA
+# AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
