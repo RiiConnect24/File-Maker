@@ -604,7 +604,8 @@ def get_legacy_location(list, key):
 	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
 	else:
 		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
-		loc = ElementTree.fromstring(location)
+		try: loc = ElementTree.fromstring(location)
+		except: return -1
 		if len(loc[0]) == 0: return -1
 		else: locationkey[key] = loc[0][0].attrib['location'].lstrip('cityId:')
 
