@@ -20,9 +20,9 @@ import os
 import pickle
 import pycountry
 import Queue
+import raven
 import random
 import requests
-import rollbar
 import rsa
 import socket
 import struct
@@ -77,48 +77,36 @@ dnscache = {}
 def u8(data):
 	if data < 0 or data > 255:
 		output("u8 Value Pack Failure: %s" % data, "CRITICAL")
-		# incidents = cachetclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		# json.loads(incidents.put(id="1", message="u8 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		output("u16 Value Pack Failure: %s" % data, "CRITICAL")
-		incidents = cacheclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		json.loads(incidents.put(id="1", message="u16 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		output("u32 Value Pack Failure: %s" % data, "CRITICAL")
-		incidents = cacheclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		json.loads(incidents.put(id="1", message="u32 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">I", data)
 
 def s8(data):
 	if data < -128 or data > 128:
 		output("s8 Value Pack Failure: %s" % data, "CRITICAL")
-		incidents = cacheclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		json.loads(incidents.put(id="1", message="s8 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">b", data)
 
 def s16(data):
 	if data < -32768 or data > 32768:
 		output("s16 Value Pack Failure: %s" % data, "CRITICAL")
-		incidents = cachetclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		json.loads(incidents.put(id="1", message="s16 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">h", data)
 
 def s32(data):
 	if data < -2147483648 or data > 2147483648:
 		output("s32 Value Pack Failure: %s" % data, "CRITICAL")
-		incidents = cachetclient.cachet.Incidents(endpoint=cachet_url, api_token=cachet_key)
-		json.loads(incidents.put(id="1", message="s32 Value Pack Failure: %s" % data))
 		data = 0
 	return struct.pack(">i", data)
 
@@ -222,7 +210,7 @@ def output(text,level):
 		elif level is "VERBOSE" and useVerbose: log(text+"\n\n")
 		elif level is "WARNING" or level is "CRITICAL":
 			log(text+"\n\n")
-			if production: rollbar.report_message(text, level.lower())
+			if production: raven.client.captureMessage(text)
 	else:
 		if level is "INFO" or level is "VERBOSE":
 			if useVerbose: print text
@@ -1231,7 +1219,7 @@ def get_weatherjpnicon(icon):
 
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
-if production: rollbar.init(rollbar_key, "production")
+if production: client = Client(sentry_url)
 check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
 print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "Enabled" if keyCache else "Disabled")

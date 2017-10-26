@@ -9,6 +9,7 @@ pycountry
 python-cachetclient
 python-resize-image
 pytz
+raven
 requests
 rsa
 unidecode
