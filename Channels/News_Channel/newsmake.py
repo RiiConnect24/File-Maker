@@ -18,9 +18,9 @@ import json
 import newsdownload
 import os
 import pickle
+import raven
 import requests
 import rsa
-import rollbar
 import struct
 import subprocess
 import sys
@@ -32,40 +32,40 @@ reload(sys)
 sys.setdefaultencoding('ISO-8859-1')
 requests.packages.urllib3.disable_warnings()
 
-"""Set Rollbar up."""
+"""Set up Sentry for error logging."""
 
-if production == True: rollbar_mode = "production"
-elif production == False: rollbar_mode = "development"
+if production: client = raven.Client(sentry_url)
 
-rollbar.init(rollbar_key, rollbar_mode)
+def captureMessage(text):
+	if production: client.captureMessage(text)
 
 """This will pack the integers."""
 
 def u8(data):
 	if data < 0 or data > 255:
 		print "[+] Value Pack Failure: %s" % data
-		rollbar.report_message("u8 Value Pack Failure: %s" % data, "critical")
+		captureMessage("u8 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
 		print "[+] Value Pack Failure: %s" % data
-		rollbar.report_message("u16 Value Pack Failure: %s" % data, "critical")
+		captureMessage("u16 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
-		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
+		captureMessage("u32 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack(">I", data)
 
 def u32_littleendian(data):
 	if data < 0 or data > 4294967295:
 		print "[+] Value Pack Failure: %s" % data
-		rollbar.report_message("u32 Value Pack Failure: %s" % data, "critical")
+		captureMessage("u32 Value Pack Failure: %s" % data)
 		data = 0
 	return struct.pack("<I", data)
 
@@ -108,7 +108,7 @@ def download_source(name, mode, language_code, countries, data):
 
 		if filesize > 3712000:
 			print "Error: News files exceed the maximum file size amount."
-			rollbar.report_message("News files exceed the maximum file size amount.", "critical")
+			captureMessage("News files exceed the maximum file size amount.")
 
 		for country in countries:
 			copy_file(mode, "wii", country, language_code)
