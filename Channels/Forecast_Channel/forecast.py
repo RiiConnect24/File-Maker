@@ -209,7 +209,7 @@ def output(text,level):
 		elif level is "VERBOSE" and useVerbose: log(text+"\n\n")
 		elif level is "WARNING" or level is "CRITICAL":
 			log(text+"\n\n")
-			if production: raven.client.captureMessage(text)
+			if production: client.captureMessage(text)
 	else:
 		if level is "INFO" or level is "VERBOSE":
 			if useVerbose: print text
