@@ -30,7 +30,6 @@ import subprocess
 import sys
 import threading
 import time
-import xmltodict
 import xml.etree.cElementTree as ElementTree
 from config import *
 from datetime import datetime, timedelta
@@ -237,7 +236,7 @@ def test_keys():
 		invalid = False
 		keys += 1
 		if keys % 10 == 0 or keys == len(accuweather_api_keys): print str(keys) + " / " + str(len(accuweather_api_keys)) + " checked."
-		testapi = request_data("http://dataservice.accuweather.com/locations/v1/regions?apikey=%s" % key)
+		testapi = s.head("http://dataservice.accuweather.com/locations/v1/regions?apikey=%s" % key).json()
 		if testapi is not None:
 			ratelimit_remaining = int(testapi.headers["RateLimit-Remaining"])
 			if ratelimit_remaining > 0: total+=ratelimit_remaining
@@ -315,12 +314,7 @@ def request_data(url):
 					data["DailyForecasts"]
 					c = 1
 				except: pass
-			elif "accuwxturbotablet" in url:
-				try:
-					if "city-find" in url: data = xmltodict.parse(data.content)
-					else: return data.content
-					c = 1
-				except: pass
+			elif "accuwxturbotablet" in url: return data.content
 			elif "regions" in url:
 				try:
 					a = data.json()[0]
@@ -482,76 +476,6 @@ def get_main_api(list, key):
 		if avg < 2: avg = 2
 		pollen[key] = avg
 
-def get_legacy_api_old(list, key): # Leaving this in as backup while testing ElementTree
-	apilegacy = weather_data[key]
-	if apilegacy != None:
-		week[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
-		week[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
-		week[key][2] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['lowtemperature'])
-		week[key][3] = int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['hightemperature'])
-		week[key][4] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['lowtemperature'])
-		week[key][5] = int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['hightemperature'])
-		week[key][6] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['lowtemperature'])
-		week[key][7] = int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['hightemperature'])
-		for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
-		week[key][20] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
-		week[key][21] = get_icon(int(apilegacy['adc_database']['forecast']['day'][2]['daytime']['weathericon']),list,key)
-		week[key][22] = get_icon(int(apilegacy['adc_database']['forecast']['day'][3]['daytime']['weathericon']),list,key)
-		week[key][23] = get_icon(int(apilegacy['adc_database']['forecast']['day'][4]['daytime']['weathericon']),list,key)
-		current[key][3] = int(apilegacy['adc_database']['currentconditions']['temperature'])
-		current[key][4] = to_celsius(current[key][3])
-		weathericon[key] = get_icon(int(apilegacy['adc_database']['currentconditions']['weathericon']),list,key)
-		current[key][0] = apilegacy['adc_database']['currentconditions']['winddirection']
-		current[key][2] = int(apilegacy['adc_database']['currentconditions']['windspeed'])
-		current[key][1] = mph_kmh(current[key][2])
-		today[key][0] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['lowtemperature'])
-		today[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['hightemperature'])
-		today[key][2] = to_celsius(today[key][0])
-		today[key][3] = to_celsius(today[key][1])
-		today[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['weathericon']),list,key)
-		tomorrow[key][0] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['lowtemperature'])
-		tomorrow[key][1] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['hightemperature'])
-		tomorrow[key][2] = to_celsius(tomorrow[key][0])
-		tomorrow[key][3] = to_celsius(tomorrow[key][1])
-		tomorrow[key][4] = get_icon(int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['weathericon']),list,key)
-		try: uvval = int(apilegacy['adc_database']['currentconditions']['uvindex']['@index'])
-		except: uvval = 255
-		if uvval > 12: uvval = 12
-		uvindex[key] = uvval
-		wind[key][0] = mph_kmh(apilegacy['adc_database']['forecast']['day'][0]['daytime']['windspeed'])
-		wind[key][1] = int(apilegacy['adc_database']['forecast']['day'][0]['daytime']['windspeed'])
-		wind[key][2] = apilegacy['adc_database']['forecast']['day'][0]['daytime']['winddirection']
-		wind[key][3] = mph_kmh(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
-		wind[key][4] = int(apilegacy['adc_database']['forecast']['day'][1]['daytime']['windspeed'])
-		wind[key][5] = apilegacy['adc_database']['forecast']['day'][1]['daytime']['winddirection']
-		pollen[key] = 255
-		lat = float(apilegacy['adc_database']['local']['lat'])
-		lng = float(apilegacy['adc_database']['local']['lon'])
-		globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
-		globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-		globe[key]['offset'] = float(apilegacy['adc_database']['local']['currentGmtOffset'])
-		globe[key]['time'] = int(get_epoch()+float(apilegacy['adc_database']['local']['currentGmtOffset'])*3600)
-		week[key][25] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['hightemperature'])
-		week[key][26] = int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['lowtemperature'])
-		week[key][27] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['hightemperature'])
-		week[key][28] = int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['lowtemperature'])
-		week[key][29] = int(to_celsius(week[key][25]))
-		week[key][30] = int(to_celsius(week[key][26]))
-		week[key][31] = int(to_celsius(week[key][27]))
-		week[key][32] = int(to_celsius(week[key][28]))
-		week[key][33] = get_icon(int(apilegacy['adc_database']['forecast']['day'][5]['daytime']['weathericon']),list,key)
-		week[key][34] = get_icon(int(apilegacy['adc_database']['forecast']['day'][6]['daytime']['weathericon']),list,key)
-		time_index = [[3,9,15,21],[27,33,39,45]]
-		hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
-		for i in range(0,4):
-			temp = time_index[0][i]-hour
-			if -1 < temp < 24: hourly[key][i] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
-			else: hourly[key][i] = get_icon(int(-1),list,key)
-			temp = time_index[1][i]-hour
-			if -1 < temp < 24: hourly[key][i+4] = get_icon(int(apilegacy['adc_database']['forecast']['hourly']['hour'][temp]['weathericon']),list,key)
-			else: hourly[key][i+4] = get_icon(int(-1),list,key)
-	else: output('Unable to retrieve data for %s - using blank data' % key, "WARNING")
-
 def get_legacy_api(list, key):
 	apilegacy = weather_data[key]
 	if apilegacy != None:
@@ -664,14 +588,14 @@ def get_location(list, key):
 """Please don't attack us for doing this, AccuWeather. You're my friend and I want to keep it that way."""
 
 def get_legacy_location(list, key):
-	if keyCache and cachefile and key not in duplicates: locationkey[key] = cachefile[key]
+	if keyCache and cachefile and key not in duplicates and key in cachefile: locationkey[key] = cachefile[key]
 	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
 	else:
 		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
-		try:
-			if int(location['adc_database']['citylist']['@us'])+int(location['adc_database']['citylist']['@intl']) > 1: locationkey[key] = location['adc_database']['citylist']['location'][0]['@location'][7:]
-			else: locationkey[key] = location['adc_database']['citylist']['location']['@location'][7:]
+		try: loc = ElementTree.fromstring(location)
 		except: return -1
+		if len(loc[0]) == 0: return -1
+		else: locationkey[key] = loc[0][0].attrib['location'].lstrip('cityId:')
 
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
