@@ -33,6 +33,10 @@ from resizeimage import resizeimage
 from StringIO import StringIO
 from unidecode import unidecode
 
+"""Set up Sentry for error logging."""
+
+if production: client = raven.Client(sentry_url)
+
 def captureMessage(text):
 	if production: client.captureMessage(text)
 
