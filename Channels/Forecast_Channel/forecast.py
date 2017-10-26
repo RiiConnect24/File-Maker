@@ -1143,7 +1143,7 @@ def get_weatherjpnicon(icon):
 
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
-if production: client = Client(sentry_url)
+if production: client = raven.Client(sentry_url)
 check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
 print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "Enabled" if keyCache else "Disabled")
