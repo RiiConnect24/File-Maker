@@ -28,6 +28,7 @@ import time
 import urllib2
 from config import *
 from datetime import timedelta, datetime, date # Used to get time stuff.
+from raven.handlers.logging import SentryHandler
 reload(sys)
 sys.setdefaultencoding('ISO-8859-1')
 requests.packages.urllib3.disable_warnings()
@@ -35,37 +36,38 @@ requests.packages.urllib3.disable_warnings()
 """Set up Sentry for error logging."""
 
 if production: client = raven.Client(sentry_url)
+handler = SentryHandler(client)
+logger = logging.getLogger(__name__)
 
-def captureMessage(text):
-	if production: client.captureMessage(text)
+def captureMessage(text, mode):
+	if production:
+		print error
+		if mode is "warning": logger.warning(text)
+		elif mode is "error": logger.error(text)
 
 """This will pack the integers."""
 
 def u8(data):
 	if data < 0 or data > 255:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u8 Value Pack Failure: %s" % data)
+		captureMessage("u8 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u16 Value Pack Failure: %s" % data)
+		captureMessage("u16 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u32 Value Pack Failure: %s" % data)
+		captureMessage("u32 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack(">I", data)
 
 def u32_littleendian(data):
 	if data < 0 or data > 4294967295:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u32 Value Pack Failure: %s" % data)
+		captureMessage("u32 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack("<I", data)
 
@@ -106,9 +108,7 @@ def download_source(name, mode, language_code, countries, data):
 
 		filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
 
-		if filesize > 3712000:
-			print "Error: News files exceed the maximum file size amount."
-			captureMessage("News files exceed the maximum file size amount.")
+		if filesize > 3712000: captureMessage("News files exceed the maximum file size amount.", "error")
 
 		for country in countries:
 			copy_file(mode, "wii", country, language_code)
