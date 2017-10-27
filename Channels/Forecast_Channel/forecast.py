@@ -15,6 +15,7 @@ import collections
 import forecastlists
 import io
 import json
+import logging
 import math
 import os
 import pickle
@@ -33,6 +34,7 @@ import time
 import xml.etree.cElementTree as ElementTree
 from config import *
 from datetime import datetime, timedelta
+from raven.handlers.logging import SentryHandler
 
 apicount = 0 # API Key Count
 apicycle = 0 # API Key Cycle Count
@@ -204,12 +206,15 @@ def log(text):
 	sys.stdout.flush()
 
 def output(text,level):
-	if level is "INFO" or level is "VERBOSE":
-		if useVerbose: print text
-	elif level is "WARNING" or level is "CRITICAL":
-		log(text+"\n\n")
-		if production: client.captureMessage(text)
-	else: print text
+	if production:
+		if level is "WARNING":
+			log(text+"\n\n")
+			logger.warning(text)
+		elif level is "CRITICAL":
+			log(text+"\n\n")
+			logger.error(text)
+		elif level is "INFO" or level is "VERBOSE":
+			if useVerbose: log(text+"\n\n")
 
 def display_loop(list):
 	progcount = 0
@@ -1139,7 +1144,10 @@ def get_weatherjpnicon(icon):
 
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
-if production: client = raven.Client(sentry_url)
+if production:
+	client = raven.Client(sentry_url)
+	handler = SentryHandler(client)
+	logger = logging.getLogger(__name__)
 check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
 print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "Enabled" if keyCache else "Disabled")
