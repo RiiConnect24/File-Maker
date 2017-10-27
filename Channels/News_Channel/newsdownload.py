@@ -14,6 +14,7 @@ import dateparser
 import feedparser
 import googlemaps
 import json
+import logging
 import os
 import pytz
 import raven
@@ -29,6 +30,7 @@ from datetime import timedelta, datetime, date
 from dateutil import tz, parser
 from newspaper import *
 from PIL import Image
+from raven.handlers.logging import SentryHandler
 from resizeimage import resizeimage
 from StringIO import StringIO
 from unidecode import unidecode
@@ -36,37 +38,38 @@ from unidecode import unidecode
 """Set up Sentry for error logging."""
 
 if production: client = raven.Client(sentry_url)
+handler = SentryHandler(client)
+logger = logging.getLogger(__name__)
 
-def captureMessage(text):
-	if production: client.captureMessage(text)
+def captureMessage(text, mode):
+	if production:
+		print error
+		if mode is "warning": logger.warning(text)
+		elif mode is "error": logger.error(text)
 
 """This will pack the integers."""
 
 def u8(data):
 	if data < 0 or data > 255:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u8 Value Pack Failure: %s" % data)
+		captureMessage("u8 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack(">B", data)
 
 def u16(data):
 	if data < 0 or data > 65535:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u16 Value Pack Failure: %s" % data)
+		captureMessage("u16 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack(">H", data)
 
 def u32(data):
 	if data < 0 or data > 4294967295:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u32 Value Pack Failure: %s" % data)
+		captureMessage("u32 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack(">I", data)
 
 def u32_littleendian(data):
 	if data < 0 or data > 4294967295:
-		print "[+] Value Pack Failure: %s" % data
-		captureMessage("u32 Value Pack Failure: %s" % data)
+		captureMessage("u32 Value Pack Failure: %s" % data, "error")
 		data = 0
 	return struct.pack("<I", data)
 
@@ -547,12 +550,10 @@ def parsedata_reuters(language, url, title, updated):
 		caption = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "Reuters"]
 
@@ -634,12 +635,10 @@ def parsedata_nu(url, title, source, updated):
 	location = geoparser_get(article.decode("utf-16be"))
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), article, headline, picture, credits, None, location, source]
 
@@ -714,11 +713,9 @@ def parsedata_ansa(url, title, updated):
 	except: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), article, headline, picture, credits, None, location, "ansa"]
@@ -823,12 +820,10 @@ def parsedata_laprovence(url, title, updated):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "AFP"]
@@ -866,12 +861,10 @@ def parsedata_lobs(url, title, updated):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, None, caption, location, "AFP"]
@@ -964,12 +957,10 @@ def parsedata_expansion(url, title, updated, source):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, None, caption, location, source]
@@ -1035,12 +1026,10 @@ def parsedata_efe(url, title, updated):
 	except: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, None, caption, location, "EFE"]
@@ -1138,12 +1127,10 @@ def parsedata_zeit(url, updated, source):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else:
 		return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, source, category]
@@ -1225,11 +1212,9 @@ def parsedata_ap(url, title, updated, format, language):
 	else: location = None
 
 	if len(headline) == 0:
-		print "Headline is blank. %s" % url
 		captureMessage("Headline is blank. %s" % url, "warning")
 		return None
 	elif len(article) == 0:
-		print "Article is blank. %s" % url
-		captureMessage("Headline is blank. %s" % url, "warning")
+		captureMessage("Article is blank. %s" % url, "warning")
 		return None
 	else: return [u32(updated), u32(updated), article, headline, picture, credits, caption, location, "ap"]
