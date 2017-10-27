@@ -34,6 +34,7 @@ import time
 import xml.etree.cElementTree as ElementTree
 from config import *
 from datetime import datetime, timedelta
+from raven.handlers.logging import SentryHandler
 
 apicount = 0 # API Key Count
 apicycle = 0 # API Key Cycle Count
@@ -1150,7 +1151,7 @@ def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
 if production:
 	client = raven.Client(sentry_url)
-	handler = raven.handlers.logging.SentryHandler(client)
+	handler = SentryHandler(client)
 	logger = logging.getLogger(__name__)
 check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
