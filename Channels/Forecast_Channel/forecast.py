@@ -208,6 +208,7 @@ def log(text):
 def output(text,level):
 	if loop or build:
 		log(text+"\n\n")
+		print level
 		if production:
 			if level is "WARNING": logger.warning(text)
 			elif level is "CRITICAL": logger.error(text)
