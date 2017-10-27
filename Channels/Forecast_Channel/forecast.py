@@ -204,16 +204,12 @@ def log(text):
 	sys.stdout.flush()
 
 def output(text,level):
-	if loop or build:
-		if level is "INFO": log(text+"\n\n")
-		elif level is "VERBOSE" and useVerbose: log(text+"\n\n")
-		elif level is "WARNING" or level is "CRITICAL":
-			log(text+"\n\n")
-			if production: client.captureMessage(text)
-	else:
-		if level is "INFO" or level is "VERBOSE":
-			if useVerbose: print text
-		else: print text
+	if level is "INFO" or level is "VERBOSE":
+		if useVerbose: print text
+	elif level is "WARNING" or level is "CRITICAL":
+		log(text+"\n\n")
+		if production: client.captureMessage(text)
+	else: print text
 
 def display_loop(list):
 	progcount = 0
