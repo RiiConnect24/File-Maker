@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 def captureMessage(text, mode):
 	if production:
-		print error
+		print text
 		if mode is "warning": logger.warning(text)
 		elif mode is "error": logger.error(text)
 
