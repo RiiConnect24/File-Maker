@@ -15,6 +15,7 @@ import collections
 import errno
 import glob
 import json
+import logging
 import newsdownload
 import os
 import pickle
