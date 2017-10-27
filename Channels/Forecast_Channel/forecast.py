@@ -208,15 +208,12 @@ def log(text):
 def output(text,level):
 	if loop or build:
 		log(text+"\n\n")
-		# if level is "INFO": log(text+"\n\n")
-		# elif level is "VERBOSE" and useVerbose: log(text+"\n\n")
 		if production:
 			if level is "WARNING": logger.warning(text)
 			elif level is "CRITICAL": logger.error(text)
 	else:
 		if level is "INFO" or level is "VERBOSE":
-			if useVerbose: print text
-		else: print text
+			if useVerbose: log(text+"\n\n")
 
 def display_loop(list):
 	progcount = 0
