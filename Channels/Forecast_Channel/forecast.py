@@ -211,11 +211,8 @@ def output(text,level):
 		# if level is "INFO": log(text+"\n\n")
 		# elif level is "VERBOSE" and useVerbose: log(text+"\n\n")
 		if production:
-			if level is "WARNING":
-				logger.warning(text)
-			elif level is "CRITICAL":
-				logger.error(text)
-			if production: client.captureMessage(text)
+			if level is "WARNING": logger.warning(text)
+			elif level is "CRITICAL": logger.error(text)
 	else:
 		if level is "INFO" or level is "VERBOSE":
 			if useVerbose: print text
