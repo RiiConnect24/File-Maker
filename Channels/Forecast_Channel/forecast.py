@@ -21,7 +21,6 @@ import os
 import pickle
 import pycountry
 import Queue
-import raven
 import random
 import requests
 import rsa
@@ -34,7 +33,9 @@ import time
 import xml.etree.cElementTree as ElementTree
 from config import *
 from datetime import datetime, timedelta
+from raven import Client
 from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
 
 apicount = 0 # API Key Count
 apicycle = 0 # API Key Cycle Count
@@ -1146,8 +1147,9 @@ def get_weatherjpnicon(icon):
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
 if production:
-	client = raven.Client(sentry_url)
+	client = Client(sentry_url)
 	handler = SentryHandler(client)
+	setup_logging(handler)
 	logger = logging.getLogger(__name__)
 check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
