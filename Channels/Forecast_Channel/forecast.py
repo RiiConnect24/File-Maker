@@ -201,20 +201,23 @@ def build_progress():
 		i+=1
 		if i == 34: i = 0
 		time.sleep(0.015)
-
-def log(text):
-	sys.stdout.write("\r%s\r%s" % ((" "*74),text))
+	sys.stdout.write("\r"+" "*74+"\r"+"Building Files: Complete")
 	sys.stdout.flush()
 
+def log(text):
+	if loop or build:
+		sys.stdout.write("\r"+" "*74+"\r"+text+"\n\n")
+		sys.stdout.flush()
+	else: print text
+
 def output(text,level):
-	if level is "WARNING":
-		log(text+"\n\n")
-		if production: logger.warning(text)
-	elif level is "CRITICAL":
-		log(text+"\n\n")
-		if production: logger.error(text)
-	elif level is "INFO" or level is "VERBOSE":
-		if useVerbose: log(text+"\n\n")
+	if level is not "VERBOSE":
+		log(text)
+		if production:
+			if level is "WARNING": logger.warning(text)
+			if level is "CRITICAL": logger.error(text)
+	else:
+		if useVerbose: log(text)
 
 def display_loop(list):
 	progcount = 0
@@ -479,77 +482,74 @@ def get_main_api(list, key):
 
 def get_legacy_api(list, key):
 	apilegacy = weather_data[key]
-	if apilegacy != None:
-		try:
-			forecast = apilegacy.find("{http://www.accuweather.com}forecast")
-			currentConditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
-			week[key][0] = int(forecast[2][5][3].text)
-			week[key][1] = int(forecast[2][5][2].text)
-			week[key][2] = int(forecast[3][5][3].text)
-			week[key][3] = int(forecast[3][5][2].text)
-			week[key][4] = int(forecast[4][5][3].text)
-			week[key][5] = int(forecast[4][5][2].text)
-			week[key][6] = int(forecast[5][5][3].text)
-			week[key][7] = int(forecast[5][5][2].text)
-			for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
-			week[key][20] = get_icon(int(forecast[2][5][1].text),list,key)
-			week[key][21] = get_icon(int(forecast[3][5][1].text),list,key)
-			week[key][22] = get_icon(int(forecast[4][5][1].text),list,key)
-			week[key][23] = get_icon(int(forecast[5][5][1].text),list,key)
-			current[key][3] = int(currentConditions[3].text)
-			current[key][4] = to_celsius(current[key][3])
-			weathericon[key] = get_icon(int(currentConditions[7].text),list,key)
-			current[key][0] = currentConditions[10].text
-			current[key][2] = int(currentConditions[9].text)
-			current[key][1] = mph_kmh(current[key][2])
-			today[key][0] = int(forecast[1][5][3].text)
-			today[key][1] = int(forecast[1][5][2].text)
-			today[key][2] = to_celsius(today[key][0])
-			today[key][3] = to_celsius(today[key][1])
-			today[key][4] = get_icon(int(forecast[1][5][1].text),list,key)
-			tomorrow[key][0] = int(forecast[2][5][3].text)
-			tomorrow[key][1] = int(forecast[2][5][2].text)
-			tomorrow[key][2] = to_celsius(tomorrow[key][0])
-			tomorrow[key][3] = to_celsius(tomorrow[key][1])
-			tomorrow[key][4] = get_icon(int(forecast[2][5][1].text),list,key)
-			try: uvval = int(currentConditions[13].attrib['index'])
-			except: uvval = 255
-			if uvval > 12: uvval = 12
-			uvindex[key] = uvval
-			wind[key][0] = mph_kmh(forecast[1][5][6].text)
-			wind[key][1] = int(forecast[1][5][6].text)
-			wind[key][2] = forecast[1][5][7].text
-			wind[key][3] = mph_kmh(forecast[2][5][6].text)
-			wind[key][4] = int(forecast[2][5][6].text)
-			wind[key][5] = forecast[2][5][7].text
-			pollen[key] = 255
-			lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
-			lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
-			globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
-			globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-			globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
-			globe[key]['time'] = int(get_epoch()+globe[key]['offset']*3600)
-			week[key][25] = int(forecast[6][5][2].text)
-			week[key][26] = int(forecast[6][5][3].text)
-			week[key][27] = int(forecast[7][5][2].text)
-			week[key][28] = int(forecast[7][5][3].text)
-			week[key][29] = int(to_celsius(week[key][25]))
-			week[key][30] = int(to_celsius(week[key][26]))
-			week[key][31] = int(to_celsius(week[key][27]))
-			week[key][32] = int(to_celsius(week[key][28]))
-			week[key][33] = get_icon(int(forecast[6][5][1].text),list,key)
-			week[key][34] = get_icon(int(forecast[7][5][1].text),list,key)
-			time_index = [[3,9,15,21],[27,33,39,45]]
-			hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
-			for i in range(0,4):
-				temp = time_index[0][i]-hour
-				if -1 < temp < 24: hourly[key][i] = get_icon(int(forecast[16][temp][0].text),list,key)
-				else: hourly[key][i] = get_icon(int(-1),list,key)
-				temp = time_index[1][i]-hour
-				if -1 < temp < 24: hourly[key][i+4] = get_icon(int(forecast[16][temp][0].text),list,key)
-				else: hourly[key][i+4] = get_icon(int(-1),list,key)
-		except: output('Error when parsing forecast data for %s - using blank data' % key, "WARNING")
-	else: output('Unable to retrieve forecast data for %s - using blank data' % key, "WARNING")
+	forecast = apilegacy.find("{http://www.accuweather.com}forecast")
+	currentConditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
+	hourlyForecast = forecast.find("{http://www.accuweather.com}hourly")
+	week[key][0] = int(forecast[2][5][3].text)
+	week[key][1] = int(forecast[2][5][2].text)
+	week[key][2] = int(forecast[3][5][3].text)
+	week[key][3] = int(forecast[3][5][2].text)
+	week[key][4] = int(forecast[4][5][3].text)
+	week[key][5] = int(forecast[4][5][2].text)
+	week[key][6] = int(forecast[5][5][3].text)
+	week[key][7] = int(forecast[5][5][2].text)
+	for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
+	week[key][20] = get_icon(int(forecast[2][5][1].text),list,key)
+	week[key][21] = get_icon(int(forecast[3][5][1].text),list,key)
+	week[key][22] = get_icon(int(forecast[4][5][1].text),list,key)
+	week[key][23] = get_icon(int(forecast[5][5][1].text),list,key)
+	current[key][3] = int(currentConditions[3].text)
+	current[key][4] = to_celsius(current[key][3])
+	weathericon[key] = get_icon(int(currentConditions[7].text),list,key)
+	current[key][0] = currentConditions[10].text
+	current[key][2] = int(currentConditions[9].text)
+	current[key][1] = mph_kmh(current[key][2])
+	today[key][0] = int(forecast[1][5][3].text)
+	today[key][1] = int(forecast[1][5][2].text)
+	today[key][2] = to_celsius(today[key][0])
+	today[key][3] = to_celsius(today[key][1])
+	today[key][4] = get_icon(int(forecast[1][5][1].text),list,key)
+	tomorrow[key][0] = int(forecast[2][5][3].text)
+	tomorrow[key][1] = int(forecast[2][5][2].text)
+	tomorrow[key][2] = to_celsius(tomorrow[key][0])
+	tomorrow[key][3] = to_celsius(tomorrow[key][1])
+	tomorrow[key][4] = get_icon(int(forecast[2][5][1].text),list,key)
+	try: uvval = int(currentConditions[13].attrib['index'])
+	except: uvval = 255
+	if uvval > 12: uvval = 12
+	uvindex[key] = uvval
+	wind[key][0] = mph_kmh(forecast[1][5][6].text)
+	wind[key][1] = int(forecast[1][5][6].text)
+	wind[key][2] = forecast[1][5][7].text
+	wind[key][3] = mph_kmh(forecast[2][5][6].text)
+	wind[key][4] = int(forecast[2][5][6].text)
+	wind[key][5] = forecast[2][5][7].text
+	pollen[key] = 255
+	lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
+	lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
+	globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
+	globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
+	globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
+	globe[key]['time'] = int(get_epoch()+globe[key]['offset']*3600)
+	week[key][25] = int(forecast[6][5][2].text)
+	week[key][26] = int(forecast[6][5][3].text)
+	week[key][27] = int(forecast[7][5][2].text)
+	week[key][28] = int(forecast[7][5][3].text)
+	week[key][29] = int(to_celsius(week[key][25]))
+	week[key][30] = int(to_celsius(week[key][26]))
+	week[key][31] = int(to_celsius(week[key][27]))
+	week[key][32] = int(to_celsius(week[key][28]))
+	week[key][33] = get_icon(int(forecast[6][5][1].text),list,key)
+	week[key][34] = get_icon(int(forecast[7][5][1].text),list,key)
+	time_index = [[3,9,15,21],[27,33,39,45]]
+	hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
+	for i in range(0,4):
+		temp = time_index[0][i]-hour
+		if -1 < temp < 24: hourly[key][i] = get_icon(int(hourlyForecast[temp][0].text),list,key)
+		else: hourly[key][i] = get_icon(int(-1),list,key)
+		temp = time_index[1][i]-hour
+		if -1 < temp < 24: hourly[key][i+4] = get_icon(int(hourlyForecast[temp][0].text),list,key)
+		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
 def get_search(list, key, mode):
 	if mode == 0:
@@ -1218,7 +1218,8 @@ for list in weathercities:
 			weather_data[k] = ElementTree.fromstring(v)
 			if weather_data[k].find("{http://www.accuweather.com}failure") != None: weather_data[k] = None
 		except: weather_data[k] = None
-		get_legacy_api(list, k)
+		if weather_data[k] != None: get_legacy_api(list, k)
+		else: output('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
 	status = "Building Files"
 	cities+=citycount
 	data = generate_data(list,bins)
@@ -1230,7 +1231,6 @@ for list in weathercities:
 			reset_data(list)
 	build = False
 	buildthread.join()
-	log("Building Files: Complete")
 	print "\n"
 
 print "API Requests: %s" % apirequests
