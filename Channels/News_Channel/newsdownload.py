@@ -17,7 +17,6 @@ import json
 import logging
 import os
 import pytz
-import raven
 import requests
 import subprocess
 import struct
@@ -30,16 +29,20 @@ from datetime import timedelta, datetime, date
 from dateutil import tz, parser
 from newspaper import *
 from PIL import Image
+from raven import Client
 from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
 from resizeimage import resizeimage
 from StringIO import StringIO
 from unidecode import unidecode
 
 """Set up Sentry for error logging."""
 
-if production: client = raven.Client(sentry_url)
-handler = SentryHandler(client)
-logger = logging.getLogger(__name__)
+if production:
+	client = Client(sentry_url)
+	handler = SentryHandler(client)
+	setup_logging(handler)
+	logger = logging.getLogger(__name__)
 
 def captureMessage(text, mode):
 	if production:

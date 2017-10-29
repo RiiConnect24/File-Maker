@@ -19,7 +19,6 @@ import logging
 import newsdownload
 import os
 import pickle
-import raven
 import requests
 import rsa
 import struct
@@ -29,16 +28,20 @@ import time
 import urllib2
 from config import *
 from datetime import timedelta, datetime, date # Used to get time stuff.
+from raven import Client
 from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
 reload(sys)
 sys.setdefaultencoding('ISO-8859-1')
 requests.packages.urllib3.disable_warnings()
 
 """Set up Sentry for error logging."""
 
-if production: client = raven.Client(sentry_url)
-handler = SentryHandler(client)
-logger = logging.getLogger(__name__)
+if production:
+	client = Client(sentry_url)
+	handler = SentryHandler(client)
+	setup_logging(handler)
+	logger = logging.getLogger(__name__)
 
 def captureMessage(text, mode):
 	if production:
