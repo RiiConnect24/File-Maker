@@ -3,6 +3,7 @@ dateparser
 feedparser
 googlemaps
 logging
+mysql-connector==2.1.4
 newspaper
 numpy
 pycountry
@@ -13,4 +14,3 @@ raven
 requests
 rsa
 unidecode
-xmltodict
