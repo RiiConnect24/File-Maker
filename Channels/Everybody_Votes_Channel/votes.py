@@ -76,7 +76,7 @@ countries["Netherlands"] = ["オランダ", "Netherlands", "Niederlande", "Pays-
 countries["New Zealand"] = ["ニュージーランド", "New Zealand", "Neuseeland", "Nouvelle-Zélande", "Nueva Zelanda", "Nuova Zelanda", "Nieuw-Zeeland"]
 countries["Norway"] = ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"]
 """We have a few users in Poland, so we'll consider supporting Poland for the EVC."""
-# countries["Poland"] = ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"] 
+# countries["Poland"] = ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"]
 countries["Portugal"] = ["ポルトガル", "Portugal", "Portugal", "Portugal", "Portugal", "Portogallo", "Portugal"]
 countries["Spain"] = ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"]
 countries["Sweden"] = ["スウェーデン", "Sweden", "Schweden", "Suède", "Suecia", "Svezia", "Zweden"]
@@ -203,7 +203,7 @@ def sign_file(name):
 	crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
 	print "Calculating Size ..."
 	size = os.path.getsize(name)+12
-	dest = open(final, 'w+')
+	dest = open(final + '-1', 'w+')
 	dest.write(u32(0))
 	dest.write(u32(size))
 	dest.write(binascii.unhexlify(crc32))
@@ -212,7 +212,7 @@ def sign_file(name):
 	dest.close()
 	file.close()
 	print "Compressing ..."
-	subprocess.call(["mono", "--runtime=v4.0.30319", "%s/DSDecmp.exe" % dsdecmp_path, "-c", "lz10", final, final + "-1"])
+	subprocess.call(["%s/lzss" % lzss_path, "-evf", final + '-1'], stdout=subprocess.PIPE)
 	file = open(final + '-1', 'rb')
 	new = file.read()
 	dest = open(final, "w+")
@@ -226,7 +226,7 @@ def sign_file(name):
 	dest.close()
 	file.close()
 	key.close()
-	os.remove(final + "-1")
+	os.remove(final + '-1')
 
 def make_bin(country_code):
 	global countries,file_type
