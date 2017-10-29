@@ -26,3 +26,9 @@ useMultithreaded = None # Use multithreading
 cacheDNS = None # Cache API DNS Requests
 keyCache = None # Cache location keys
 weathercities = ["CITY LIST", "CITY LIST"] # Lists of cities to use
+
+"""Everybody Votes Channel only"""
+
+mysql_user = "user" # MySQL username
+mysql_password = "password" # MySQL password
+mysql_database = "database" # MySQL database
