@@ -13,6 +13,7 @@ import binascii
 import collections
 import json
 import math
+import mysql.connector
 import os
 import platform
 import struct
@@ -24,6 +25,7 @@ import rsa
 import random
 import datetime
 from config import *
+from mysql.connector import errorcode
 
 print "Everybody Votes Channel File Generator \n"
 print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
@@ -138,6 +140,17 @@ def prepare():
 		else: worldwide_results = 1
 	if write_questions: add_question("Do you like the Everybody Votes Channel?", "Yes", "No", 0) # Test question
 	questions = national+worldwide
+
+def mysql_connect():
+	try:
+		cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
+									  	  host='127.0.0.1',
+									  	  database=mysql_database)
+	except mysql.connector.Error as err:
+	  if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Something is wrong with your user name or password"
+	  elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
+	  else: print err
+	else: cnx.close()
 
 def num():
 	global number
