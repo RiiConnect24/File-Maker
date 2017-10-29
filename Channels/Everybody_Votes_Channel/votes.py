@@ -75,7 +75,8 @@ countries["Luxembourg"] = ["ルクセンブルク", "Luxembourg", "Luxemburg", "
 countries["Netherlands"] = ["オランダ", "Netherlands", "Niederlande", "Pays-Bas", "Países Bajos", "Paesi Bassi", "Nederland"]
 countries["New Zealand"] = ["ニュージーランド", "New Zealand", "Neuseeland", "Nouvelle-Zélande", "Nueva Zelanda", "Nuova Zelanda", "Nieuw-Zeeland"]
 countries["Norway"] = ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"]
-countries["Poland"] = ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"]
+"""We have a few users in Poland, so we'll consider supporting Poland for the EVC."""
+# countries["Poland"] = ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"] 
 countries["Portugal"] = ["ポルトガル", "Portugal", "Portugal", "Portugal", "Portugal", "Portogallo", "Portugal"]
 countries["Spain"] = ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"]
 countries["Sweden"] = ["スウェーデン", "Sweden", "Schweden", "Suède", "Suecia", "Svezia", "Zweden"]
