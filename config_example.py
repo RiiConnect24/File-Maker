@@ -26,6 +26,7 @@ useMultithreaded = None # Use multithreading
 cacheDNS = None # Cache API DNS Requests
 keyCache = None # Cache location keys
 weathercities = ["CITY LIST", "CITY LIST"] # Lists of cities to use
+cachet_elapsed_time = None # ID of the Cachet point to log elapsed time.
 
 """Everybody Votes Channel only"""
 
