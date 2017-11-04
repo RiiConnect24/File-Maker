@@ -488,7 +488,7 @@ def make_country_table(country_name_table):
 		for i in range(len(languages)):
 			country_name_table["language_code_%s_%s" % (num,i)] = u32(i)
 			country_name_table["text_offset_%s_%s" % (num,i)] = offset_count()
-			country_table[j] = countries[k][i].encode("utf-16be")+pad(2)
+			country_table[j] = countries[k][i].decode('utf-8').encode("utf-16be")+pad(2)
 			j+=1
 
 	return country_table
