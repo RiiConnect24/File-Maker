@@ -163,15 +163,10 @@ def mysql_get_votes():
 	query = ("SELECT * from EVC.votes WHERE questionID = %s" % str(question_id))
 	cursor.execute(query)
 
-	male_voters_response_1 = 0
-	female_voters_response_1 = 0
-	male_voters_response_2 = 0
-	female_voters_response_2 = 0
-
-	worldwide_male_response_1 = [0] * 33
-	worldwide_female_response_1 = [0] * 33
-	worldwide_male_response_2 = [0] * 33
-	worldwide_female_response_2 = [0] * 33
+	male_voters_response_1 = [0] * 33
+	female_voters_response_1 = [0] * 33
+	male_voters_response_2 = [0] * 33
+	female_voters_response_2 = [0] * 33
 
 	predict_response_1 = 0
 	predict_response_2 = 0
@@ -181,66 +176,49 @@ def mysql_get_votes():
 	region_response_1 = [0] * 77
 	region_response_2 = [0] * 77
 
-	worldwide_predict_response_1 = [0] * 33
-	worldwide_predict_response_2 = [0] * 33
+	predict_response_1 = [0] * 33
+	predict_response_2 = [0] * 33
 
 	for row in cursor:
 		if row["typeCD"] == 0:
-			male_voters_response_1 += int(row["ansCNT"][0])
-			female_voters_response_1 += int(row["ansCNT"][1])
-			male_voters_response_2 += int(row["ansCNT"][2])
-			female_voters_response_2 += int(row["ansCNT"][3])
+			male_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0])
+			female_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][1])
+			male_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][2])
+			female_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][3])
 
 			region_response_1[row["regionID"]] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			region_response_2[row["regionID"]] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
-
-			worldwide_male_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0])
-			worldwide_female_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][1])
-			worldwide_male_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][2])
-			worldwide_female_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][3])
 		elif row["typeCD"] == 1:
-			predict_response_1 += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
-			predict_response_2 += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
-
-			worldwide_predict_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
-			worldwide_predict_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2]) + int(row["ansCNT"][2])
+			predict_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
+			predict_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2]) + int(row["ansCNT"][2])
 
 	print "Male Voters Response 1: %s" % male_voters_response_1
 	print "Female Voters Response 1: %s" % female_voters_response_1
 	print "Male Voters Response 2: %s" % male_voters_response_2
 	print "Female Voters Response 2: %s" % female_voters_response_2
-	print "Worldwide Male Response 1: %s" % worldwide_male_response_1
-	print "Worldwide Female Response 1: %s" % worldwide_female_response_1
-	print "Worldwide Male Response 2: %s" % worldwide_male_response_2
-	print "Worldwide Female Response 2: %s" % worldwide_female_response_2
 	print "Predict Response 1: %s" % predict_response_1
 	print "Predict Response 2: %s" % predict_response_2
 	print "Region Response 1: %s" % region_response_1
 	print "Region Response 2: %s" % region_response_2
-	print "Worldwide Predict Response 1: %s" % worldwide_predict_response_1
-	print "Worldwide Predict Response 2: %s" % worldwide_predict_response_2
 
 	cursor.close()
 
 	return [male_voters_response_1, female_voters_response_1,
 			male_voters_response_2, female_voters_response_2,
-			worldwide_male_response_1, worldwide_female_response_1,
-			worldwide_male_response_2, worldwide_female_response_2,
 			predict_response_1, predict_response_2,
-			region_response_1, region_response_2,
-			worldwide_predict_response_1, worldwide_predict_response_2]
+			region_response_1, region_response_2]
 
 def mysql_get_questions():
 	cursor = cnx.cursor(dictionary=True)
 	query = "SELECT * from EVC.questions"
 	cursor.execute(query)
-	
+
 	for row in cursor:
 		if int(row["active"]) == 1:
 			if row["type"] == "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
 			elif row["type"] == "w": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
 			print row["content"]
-	
+
 	cursor.close()
 
 def mysql_close():
@@ -513,7 +491,7 @@ def make_worldwide_result_table(header):
 
 	worldwide_detailed_table_count = 0
 	header["worldwide_result_table_offset"] = offset_count()
-	
+
 	for i in results:
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0])
