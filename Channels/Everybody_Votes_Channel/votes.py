@@ -170,7 +170,6 @@ def mysql_get_votes():
 	predict_response_2 = 0
 
 	for row in cursor:
-		print row
 		if row["typeCD"] == 0:
 			male_voters_response_1 += int(row["ansCNT"][0])
 			female_voters_response_1 += int(row["ansCNT"][1])
