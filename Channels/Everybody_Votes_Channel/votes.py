@@ -493,13 +493,24 @@ def make_worldwide_result_table(header):
 	header["worldwide_result_table_offset"] = offset_count()
 
 	for i in results:
+		resp1 = 0 # total resp1 votes (worldwide)
+		resp2 = 0 # total resp2 votes (worldwide)
+		for j in results[i][0]: resp1+=results[i][0][j]
+		for j in results[i][1]: resp1+=results[i][1][j]
+		for j in results[i][2]: resp2+=results[i][2][j]
+		for j in results[i][3]: resp2+=results[i][3][j]
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0])
 		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2])
 		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1])
 		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3])
-		table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][11])
-		table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][12])
+		if resp1 > resp2: # response 1 won
+			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][4][i])
+			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][5][i])
+		elif resp2 > resp1: # response 2 won
+			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][5][i])
+			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][i])
+		else: pass # tie
 		table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
 		table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
 		worldwide_detailed_table_count+=33
@@ -515,10 +526,10 @@ def make_worldwide_result_detailed_table(header):
 
 	for i in range(len(countries)): # 33
 		table["unknown_%s" % num()] = u32(0)
-		table["male_voters_response_1_num_%s" % num()] = u32(results[i][4][i])
-		table["male_voters_response_2_num_%s" % num()] = u32(results[i][6][i])
-		table["female_voters_response_1_num_%s" % num()] = u32(results[i][5][i])
-		table["female_voters_response_2_num_%s" % num()] = u32(results[i][7][i])
+		table["male_voters_response_1_num_%s" % num()] = u32(results[955][0][i])
+		table["male_voters_response_2_num_%s" % num()] = u32(results[955][2][i])
+		table["female_voters_response_1_num_%s" % num()] = u32(results[955][1][i])
+		table["female_voters_response_2_num_%s" % num()] = u32(results[955][3][i])
 		table["country_table_count_%s" % num()] = u16(7)
 		table["starting_country_table_number_%s" % num()] = u32(country_table_count)
 		country_table_count+=7
