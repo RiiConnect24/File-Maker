@@ -490,23 +490,35 @@ def make_worldwide_result_table(header):
 	header["worldwide_result_table_offset"] = offset_count()
 
 	for i in results:
+	
 		resp1 = 0 # total resp1 votes (worldwide)
 		resp2 = 0 # total resp2 votes (worldwide)
-		for j in results[i][0]: resp1+=results[i][0][j]
-		for j in results[i][1]: resp1+=results[i][1][j]
-		for j in results[i][2]: resp2+=results[i][2][j]
-		for j in results[i][3]: resp2+=results[i][3][j]
+		male_resp1 = 0
+		female_resp1 = 0
+		male_resp2 = 0
+		female_resp2 = 0
+		predict1 = 0
+		predict2 = 0
+		for j in results[i][0]: male_resp1+=results[i][0][j]
+		for j in results[i][1]: female_resp1+=results[i][1][j]
+		for j in results[i][2]: male_resp2+=results[i][2][j]
+		for j in results[i][3]: female_resp2+=results[i][3][j]
+		resp1+=male_resp1+female_resp1
+		resp2+=male_resp2+female_resp2
+		for j in results[i][4]: predict1+=results[i][4][j]
+		for j in results[i][5]: predict2+=results[i][5][j]
+		
 		table["poll_id_%s" % num()] = u32(i)
-		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0])
-		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2])
-		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1])
-		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3])
+		table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
+		table["male_voters_response_2_num_%s" % num()] = u32(female_resp1)
+		table["female_voters_response_1_num_%s" % num()] = u32(male_resp2)
+		table["female_voters_response_2_num_%s" % num()] = u32(female_resp2)
 		if resp1 > resp2: # response 1 won
-			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][4][i])
-			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][5][i])
+			table["accurate_prediction_voters_num_%s" % num()] = u32(predict1)
+			table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict2)
 		elif resp2 > resp1: # response 2 won
-			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][5][i])
-			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][i])
+			table["accurate_prediction_voters_num_%s" % num()] = u32(predict2)
+			table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict1)
 		else: pass # tie
 		table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
 		table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
