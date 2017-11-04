@@ -167,8 +167,10 @@ def mysql_get_votes():
 	male_voters_response_2 = 0
 	female_voters_response_2 = 0
 
-	worldwide_response_1 = [0] * 33
-	worldwide_response_2 = [0] * 33
+	worldwide_male_response_1 = [0] * 33
+	worldwide_female_response_1 = [0] * 33
+	worldwide_male_response_2 = [0] * 33
+	worldwide_female_response_2 = [0] * 33
 
 	predict_response_1 = 0
 	predict_response_2 = 0
@@ -191,8 +193,10 @@ def mysql_get_votes():
 			region_response_1[row["regionID"]] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			region_response_2[row["regionID"]] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
 
-			worldwide_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
-			worldwide_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
+			worldwide_male_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0])
+			worldwide_female_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][1])
+			worldwide_male_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][2])
+			worldwide_female_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][3])
 		elif row["typeCD"] == 1:
 			predict_response_1 += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			predict_response_2 += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
@@ -204,8 +208,10 @@ def mysql_get_votes():
 	print "Female Voters Response 1: %s" % female_voters_response_1
 	print "Male Voters Response 2: %s" % male_voters_response_2
 	print "Female Voters Response 2: %s" % female_voters_response_2
-	print "Worldwide Response 1: %s" % worldwide_response_1
-	print "Worldwide Response 2: %s" % worldwide_response_2
+	print "Worldwide Male Response 1: %s" % worldwide_male_response_1
+	print "Worldwide Female Response 1: %s" % worldwide_female_response_1
+	print "Worldwide Male Response 2: %s" % worldwide_male_response_2
+	print "Worldwide Female Response 2: %s" % worldwide_female_response_2
 	print "Predict Response 1: %s" % predict_response_1
 	print "Predict Response 2: %s" % predict_response_2
 	print "Region Response 1: %s" % region_response_1
@@ -218,7 +224,8 @@ def mysql_get_votes():
 
 	return [male_voters_response_1, female_voters_response_1,
 			male_voters_response_2, female_voters_response_2,
-			worldwide_response_1, worldwide_response_2,
+			worldwide_male_response_1, worldwide_female_response_1,
+			worldwide_male_response_2, worldwide_female_response_2,
 			predict_response_1, predict_response_2,
 			region_response_1, region_response_2,
 			worldwide_predict_response_1, worldwide_predict_response_2]
