@@ -118,11 +118,14 @@ def prepare():
 	print "Preparing ..."
 	mysql_connect()
 	mysql_get_votes()
-	print "Current Poll ID: %s" % poll_id
-	print "Current Country Code: %s" % country_code
-	print "Current Language Code: %s" % language_code
+	mysql_get_questions()
+	mysql_close()
+	#print "Current Poll ID: %s" % poll_id
+	#print "Current Country Code: %s" % country_code
+	#print "Current Language Code: %s" % language_code
 	country_count = len(countries)
 	print "Loaded %s Countries" % country_count
+	print "Loaded %s Questions" % len(question_data)
 	file_type = raw_input('Enter File Type (q/r/v): ')
 	if file_type == "q": write_questions = True
 	elif file_type == "r": write_results = True
@@ -141,7 +144,6 @@ def prepare():
 	elif write_results and file_type == "v":
 		if raw_input('Enter Result Type (n/w): ') == "n": national_results = 1
 		else: worldwide_results = 1
-	if write_questions: add_question("Do you like the Everybody Votes Channel?", "Yes", "No", 0) # Test question
 	questions = national+worldwide
 	make_language_table()
 
@@ -214,7 +216,6 @@ def mysql_get_votes():
 	print "Worldwide Predict Response 2: %s" % worldwide_predict_response_2
 
 	cursor.close()
-	cnx.close()
 
 	return [male_voters_response_1, female_voters_response_1,
 			male_voters_response_2, female_voters_response_2,
@@ -230,8 +231,13 @@ def mysql_get_questions():
 	
 	for row in cursor:
 		if int(row["active"]) == 1:
-			if row["type"] = "n": add_question(row["poll_ID"],row["question"],row["ans1"],row["ans2"],0)
-			elif row["type"] == "w": add_question(row["poll_ID"],row["question"],row["ans1"],row["ans2"],1)
+			if row["type"] = "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
+			elif row["type"] == "w": add_question(row["questionID"],row["content"],row["choice1"],row["choice2"],1)
+	
+	cursor.close()
+	
+def mysql_close():
+	cnx.close()
 
 def num():
 	global number
