@@ -367,7 +367,7 @@ def make_header():
 	header["question_table_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
-	header["national_result_detailed"] = u16(national_results*52) # 049 has 52 regions
+	header["national_result_detailed"] = u16(national_results*region_list[country_code])
 	header["national_result_detailed_offset"] = u32(0)
 	header["position_entry_number"] = u16(national_results*52)
 	header["position_header_offset"] = u32(0)
@@ -441,6 +441,7 @@ def make_national_result_table(header):
 	dictionaries.append(table)
 
 	national_result_detailed_count = 0
+	national_result_detailed_tables = region_list[country_code]
 	header["national_result_offset"] = offset_count()
 
 	for i in results: # check national
@@ -462,9 +463,9 @@ def make_national_result_table(header):
 			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][country_code])
 		else: pass # tie
 		table["unknown_%s" % num()] = u16(1)
-		table["national_result_detailed_number_%s" % num()] = u8(52)
+		table["national_result_detailed_number_%s" % num()] = u8(national_result_detailed_tables)
 		table["starting_national_result_detailed_table_number_%s" % num()] = u32(national_result_detailed_count)
-		national_result_detailed_count+=52
+		national_result_detailed_count+=national_result_detailed_tables
 
 	return table
 
