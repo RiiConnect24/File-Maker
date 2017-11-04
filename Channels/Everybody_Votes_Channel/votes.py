@@ -177,7 +177,7 @@ def mysql_get_votes():
 			male_voters_response_2 += int(ansCNT[2])
 			female_voters_response_2 += int(ansCNT[3])
 		elif typeCD == 1:
-			predict_response_1 += int(ansCNT[0]) + int(ansCNT[1))
+			predict_response_1 += int(ansCNT[0]) + int(ansCNT[1])
 			predict_response_2 += int(ansCNT[2]) + int(ansCNT[2])
 
 	print "Male Voters Response 1: " + male_voters_response_1
