@@ -84,6 +84,7 @@ countries["Spain"] = ["スペイン", "Spain", "Spanien", "Espagne", "España", 
 countries["Sweden"] = ["スウェーデン", "Sweden", "Schweden", "Suède", "Suecia", "Svezia", "Zweden"]
 countries["Switzerland"] = ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"]
 countries["United Kingdom"] = ["イギリス", "United Kingdom", "Großbritannien", "Royaume-Uni", "Reino Unido", "Regno Unito", "Verenigd Koninkrijk"]
+country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 98, 105, 107, 108, 110]
 region_list = {"49",52}
 
 def time_convert(time):
@@ -166,6 +167,9 @@ def mysql_get_votes():
 	male_voters_response_2 = 0
 	female_voters_response_2 = 0
 
+	worldwide_response_1 = [0] * 33
+	worldwide_response_2 = [0] * 33
+
 	predict_response_1 = 0
 	predict_response_2 = 0
 
@@ -173,6 +177,9 @@ def mysql_get_votes():
 
 	region_response_1 = [0] * 77
 	region_response_2 = [0] * 77
+
+	worldwide_predict_response_1 = [0] * 33
+	worldwide_predict_response_2 = [0] * 33
 
 	for row in cursor:
 		if row["typeCD"] == 0:
@@ -184,9 +191,14 @@ def mysql_get_votes():
 			region_response_1[row["regionID"]] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			region_response_2[row["regionID"]] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
 
+			worldwide_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
+			worldwide_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
 		elif row["typeCD"] == 1:
 			predict_response_1 += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			predict_response_2 += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
+
+			worldwide_predict_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
+			worldwide_predict_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2]) + int(row["ansCNT"][2])
 
 	print "Male Voters Response 1: %s" % male_voters_response_1
 	print "Female Voters Response 1: %s" % female_voters_response_1
@@ -197,6 +209,13 @@ def mysql_get_votes():
 
 	cursor.close()
 	cnx.close()
+
+	return [male_voters_response_1, female_voters_response_1,
+			male_voters_response_2, female_voters_response_2,
+			worldwide_response_1, worldwide_response_2,
+			predict_response_1, predict_response_2,
+			region_response_1, region_response_2,
+			worldwide_predict_response_1, worldwide_predict_response_2]
 
 def num():
 	global number
