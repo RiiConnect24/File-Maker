@@ -192,8 +192,8 @@ def mysql_get_votes():
 	print "Female Voters Response 1: %s" % female_voters_response_1
 	print "Male Voters Response 2: %s" % male_voters_response_2
 	print "Female Voters Response 2: %s" % female_voters_response_2
-	print "Region Response 1: " + region_response_1
-	print "Region Response 2: " + region_response_2
+	print "Region Response 1: %s" % region_response_1
+	print "Region Response 2: %s" % region_response_2
 
 	cursor.close()
 	cnx.close()
