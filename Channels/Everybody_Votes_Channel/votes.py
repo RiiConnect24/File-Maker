@@ -169,12 +169,21 @@ def mysql_get_votes():
 	predict_response_1 = 0
 	predict_response_2 = 0
 
+	"""77 is the largest number of regions I have found, I'll make this better later."""
+
+	region_response_1 = [0] * 77
+	region_response_2 = [0] * 77
+
 	for row in cursor:
 		if row["typeCD"] == 0:
 			male_voters_response_1 += int(row["ansCNT"][0])
 			female_voters_response_1 += int(row["ansCNT"][1])
 			male_voters_response_2 += int(row["ansCNT"][2])
 			female_voters_response_2 += int(row["ansCNT"][3])
+
+			region_response_1[row["regionID"]] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
+			region_response_2[row["regionID"]] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
+
 		elif row["typeCD"] == 1:
 			predict_response_1 += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			predict_response_2 += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
@@ -183,6 +192,11 @@ def mysql_get_votes():
 	print "Female Voters Response 1: %s" % female_voters_response_1
 	print "Male Voters Response 2: %s" % male_voters_response_2
 	print "Female Voters Response 2: %s" % female_voters_response_2
+	print "Region Response 1: " + region_response_1
+	print "Region Response 2: " + region_response_2
+
+	cursor.close()
+	cnx.close()
 
 def num():
 	global number
