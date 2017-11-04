@@ -231,8 +231,9 @@ def mysql_get_questions():
 	
 	for row in cursor:
 		if int(row["active"]) == 1:
-			if row["type"] = "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
-			elif row["type"] == "w": add_question(row["questionID"],row["content"],row["choice1"],row["choice2"],1)
+			if row["type"] == "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
+			elif row["type"] == "w": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
+			print row["content"]
 	
 	cursor.close()
 	
