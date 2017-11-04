@@ -169,9 +169,8 @@ def mysql_get_votes():
 	predict_response_1 = 0
 	predict_response_2 = 0
 
-	print cursor
-
-	for (typeCD, countryID, regionID, ansCNT) in cursor:
+	for row in cursor:
+		print row
 		if typeCD == 0:
 			male_voters_response_1 += int(ansCNT[0])
 			female_voters_response_1 += int(ansCNT[1])
