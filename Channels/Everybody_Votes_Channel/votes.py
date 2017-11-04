@@ -171,12 +171,12 @@ def mysql_get_votes():
 
 	for row in cursor:
 		print row
-		if typeCD == 0:
+		if row["typeCD"] == 0:
 			male_voters_response_1 += int(row["ansCNT"][0])
 			female_voters_response_1 += int(row["ansCNT"][1])
 			male_voters_response_2 += int(row["ansCNT"][2])
 			female_voters_response_2 += int(row["ansCNT"][3])
-		elif typeCD == 1:
+		elif row["typeCD"] == 1:
 			predict_response_1 += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
 			predict_response_2 += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
 
