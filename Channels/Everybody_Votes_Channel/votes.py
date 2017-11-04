@@ -140,6 +140,7 @@ def prepare():
 		else: worldwide_results = 1
 	if write_questions: add_question("Do you like the Everybody Votes Channel?", "Yes", "No", 0) # Test question
 	questions = national+worldwide
+	make_language_table()
 
 def mysql_connect():
 	try:
@@ -461,11 +462,9 @@ def make_country_name_table(header):
 
 	for k in countries.keys():
 		num = countries.keys().index(k)
-		i = 0
-		for _ in range(len(languages)):
+		for i in range(len(languages)):
 			country_name_table["language_code_%s_%s" % (num,i)] = u32(i)
 			country_name_table["text_offset_%s_%s" % (num,i)] = u32(0)
-			i+=1
 
 	return country_name_table
 
@@ -486,12 +485,10 @@ def make_country_table(country_name_table):
 	j = 0
 	for k in countries.keys():
 		num = countries.keys().index(k)
-		i = 0
-		for _ in range(7):
+		for i in range(len(languages)):
 			country_name_table["language_code_%s_%s" % (num,i)] = u32(i)
 			country_name_table["text_offset_%s_%s" % (num,i)] = offset_count()
 			country_table[j] = countries[k][i].encode("utf-16be")+pad(2)
-			i+=1
 			j+=1
 
 	return country_table
