@@ -204,8 +204,14 @@ def mysql_get_votes():
 	print "Female Voters Response 1: %s" % female_voters_response_1
 	print "Male Voters Response 2: %s" % male_voters_response_2
 	print "Female Voters Response 2: %s" % female_voters_response_2
+	print "Worldwide Response 1: %s" % worldwide_response_1
+	print "Worldwide Response 2: %s" % worldwide_response_2
+	print "Predict Response 1: %s" % predict_response_1
+	print "Predict Response 2: %s" % predict_response_2
 	print "Region Response 1: %s" % region_response_1
 	print "Region Response 2: %s" % region_response_2
+	print "Worldwide Predict Response 1: %s" % worldwide_predict_response_1
+	print "Worldwide Predict Response 2: %s" % worldwide_predict_response_2
 
 	cursor.close()
 	cnx.close()
