@@ -115,6 +115,8 @@ def pad(amnt):
 def prepare():
 	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results
 	print "Preparing ..."
+	mysql_connect()
+	mysql_get_votes()
 	print "Current Poll ID: %s" % poll_id
 	print "Current Country Code: %s" % country_code
 	print "Current Language Code: %s" % language_code
@@ -144,6 +146,7 @@ def prepare():
 
 def mysql_connect():
 	try:
+		global cnx
 		cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
 									  	  host='127.0.0.1',
 									  	  database=mysql_database)
@@ -152,6 +155,35 @@ def mysql_connect():
 	  elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
 	  else: print err
 	else: cnx.close()
+
+def mysql_get_votes():
+	cursor = cnx.cursor()
+	question_id = 955 # Just for now :P
+	query = ("SELECT * from EVC.votes WHERE questionID = " % question_id)
+	cursor.execute(query)
+
+	male_voters_response_1 = 0
+	female_voters_response_1 = 0
+	male_voters_response_2 = 0
+	female_voters_response_2 = 0
+
+	predict_response_1 = 0
+	predict_response_2 = 0
+
+	for (typeCD, countryID, regionID, ansCNT) in cursor:
+		if typeCD == 0:
+			male_voters_response_1 += int(ansCNT[0])
+			female_voters_response_1 += int(ansCNT[1])
+			male_voters_response_2 += int(ansCNT[2])
+			female_voters_response_2 += int(ansCNT[3])
+		elif typeCD == 1:
+			predict_response_1 += int(ansCNT[0]) + int(ansCNT[1))
+			predict_response_2 += int(ansCNT[2]) + int(ansCNT[2])
+
+	print "Male Voters Response 1: " + male_voters_response_1
+	print "Female Voters Response 1: " + female_voters_response_1
+	print "Male Voters Response 2: " + male_voters_response_2
+	print "Female Voters Response 2: " + female_voters_response_2
 
 def num():
 	global number
