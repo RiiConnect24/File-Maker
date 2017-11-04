@@ -40,6 +40,7 @@ country_code = 49
 country_count = 0
 language_code = 1
 languages = {}
+results = {}
 num = 0
 number = 0
 poll_id = 955 # Same as Nintendo's original question poll ID
@@ -114,18 +115,15 @@ def pad(amnt):
 	return "\0"*amnt
 
 def prepare():
-	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results
+	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results
 	print "Preparing ..."
 	mysql_connect()
-	mysql_get_votes()
+	results[955] = mysql_get_votes()
 	mysql_get_questions()
 	mysql_close()
-	#print "Current Poll ID: %s" % poll_id
-	#print "Current Country Code: %s" % country_code
-	#print "Current Language Code: %s" % language_code
 	country_count = len(countries)
 	print "Loaded %s Countries" % country_count
-	print "Loaded %s Questions" % len(question_data)
+	print "Loaded %s Question(s)" % len(question_data)
 	file_type = raw_input('Enter File Type (q/r/v): ')
 	if file_type == "q": write_questions = True
 	elif file_type == "r": write_results = True
@@ -148,6 +146,7 @@ def prepare():
 	make_language_table()
 
 def mysql_connect():
+	print "Connecting to MySQL ..."
 	try:
 		global cnx
 		cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
@@ -236,7 +235,7 @@ def mysql_get_questions():
 			print row["content"]
 	
 	cursor.close()
-	
+
 def mysql_close():
 	cnx.close()
 
@@ -253,18 +252,18 @@ def question():
 	if raw_input('Would you like to enter a question? (Y/N) ') is 'Y':
 		add_question(raw_input('Enter Question: '),raw_input('Enter Answer 1: '),raw_input('Enter Answer 2: '),int(raw_input('Is this a national (0) or a worldwide (1) question? ')))
 
-def get_question(q):
-	return question_data[q][0]
+def get_question(id):
+	return question_data[id][0]
 
-def get_response1(q):
-	return question_data[q][1]
+def get_response1(id):
+	return question_data[id][1]
 
-def get_response2(q):
-	return question_data[q][2]
+def get_response2(id):
+	return question_data[id][2]
 
-def is_worldwide(q):
+def is_worldwide(id):
 	i = True
-	if question_data[q][3] == 0: i = False
+	if question_data[id][3] == 0: i = False
 	return i
 
 def add_question(poll_id,q,r1,r2,f):
@@ -507,17 +506,18 @@ def make_worldwide_result_table(header):
 
 	worldwide_detailed_table_count = 0
 	header["worldwide_result_table_offset"] = offset_count()
-
-	table["poll_id_%s" % num()] = u32(get_poll_id())
-	table["male_voters_response_1_num_%s" % num()] = u32(get_randint())
-	table["male_voters_response_2_num_%s" % num()] = u32(get_randint())
-	table["female_voters_response_1_num_%s" % num()] = u32(get_randint())
-	table["female_voters_response_2_num_%s" % num()] = u32(get_randint())
-	table["accurate_prediction_voters_num_%s" % num()] = u32(get_randint())
-	table["inaccurate_prediction_voters_num_%s" % num()] = u32(get_randint())
-	table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
-	table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
-	worldwide_detailed_table_count+=33
+	
+	for i in results:
+		table["poll_id_%s" % num()] = u32(i)
+		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0])
+		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2])
+		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1])
+		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3])
+		table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][11])
+		table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][12])
+		table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
+		table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
+		worldwide_detailed_table_count+=33
 
 	return table
 
@@ -528,12 +528,12 @@ def make_worldwide_result_detailed_table(header):
 	country_table_count = 0
 	header["worldwide_result_detailed_offset"] = offset_count()
 
-	for _ in range(33):
+	for _ in range(len(countries)): # 33
 		table["unknown_%s" % num()] = u32(0)
-		table["male_voters_response_1_num_%s" % num()] = u32(get_randint())
-		table["male_voters_response_2_num_%s" % num()] = u32(get_randint())
-		table["female_voters_response_1_num_%s" % num()] = u32(get_randint())
-		table["female_voters_response_2_num_%s" % num()] = u32(get_randint())
+		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0])
+		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2])
+		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1])
+		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3])
 		table["country_table_count_%s" % num()] = u16(7)
 		table["starting_country_table_number_%s" % num()] = u32(country_table_count)
 		country_table_count+=7
