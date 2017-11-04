@@ -535,12 +535,12 @@ def make_worldwide_result_detailed_table(header):
 	country_table_count = 0
 	header["worldwide_result_detailed_offset"] = offset_count()
 
-	for _ in range(len(countries)): # 33
+	for i in range(len(countries)): # 33
 		table["unknown_%s" % num()] = u32(0)
-		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0])
-		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2])
-		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1])
-		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3])
+		table["male_voters_response_1_num_%s" % num()] = u32(results[i][4][i])
+		table["male_voters_response_2_num_%s" % num()] = u32(results[i][6][i])
+		table["female_voters_response_1_num_%s" % num()] = u32(results[i][5][i])
+		table["female_voters_response_2_num_%s" % num()] = u32(results[i][7][i])
 		table["country_table_count_%s" % num()] = u16(7)
 		table["starting_country_table_number_%s" % num()] = u32(country_table_count)
 		country_table_count+=7
