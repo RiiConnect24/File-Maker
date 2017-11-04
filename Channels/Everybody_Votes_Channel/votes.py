@@ -158,7 +158,7 @@ def mysql_connect():
 def mysql_get_votes():
 	cursor = cnx.cursor()
 	question_id = 955 # Just for now :P
-	query = ("SELECT * from EVC.votes WHERE questionID = 955")
+	query = ("SELECT * from EVC.votes WHERE questionID = %s" % str(question_id))
 	cursor.execute(query)
 
 	male_voters_response_1 = 0
