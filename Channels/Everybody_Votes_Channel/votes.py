@@ -223,6 +223,16 @@ def mysql_get_votes():
 			region_response_1, region_response_2,
 			worldwide_predict_response_1, worldwide_predict_response_2]
 
+def mysql_get_questions():
+	cursor = cnx.cursor(dictionary=True)
+	query = "SELECT * from EVC.questions"
+	cursor.execute(query)
+	
+	for row in cursor:
+		if int(row["active"]) == 1:
+			if row["type"] = "n": add_question(row["poll_ID"],row["question"],row["ans1"],row["ans2"],0)
+			elif row["type"] == "w": add_question(row["poll_ID"],row["question"],row["ans1"],row["ans2"],1)
+
 def num():
 	global number
 	num1 = number
@@ -250,9 +260,9 @@ def is_worldwide(q):
 	if question_data[q][3] == 0: i = False
 	return i
 
-def add_question(q,r1,r2,f):
+def add_question(poll_id,q,r1,r2,f):
 	global question_data,national,worldwide,national_q,worldwide_q
-	question_data[num()] = [q,r1,r2,f]
+	question_data[poll_id] = [q,r1,r2,f]
 	if f == 0:
 		national+=1
 		national_q = True
