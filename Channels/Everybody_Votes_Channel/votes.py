@@ -262,8 +262,8 @@ def make_bin(country_code):
 	if file_type == "v": make_country_table(country_table)
 	if file_type == "q": question_file = get_name()+'_q'
 	elif file_type == "r": question_file = get_name()+'_r'
-	else: question_file = "voting.bin"
-	print "Writing to %s ..." % question_file
+	else: question_file = "voting"
+	print "Writing to %s.bin ..." % question_file
 
 	with open(question_file, 'wb') as f:
 		for dictionary in dictionaries:
