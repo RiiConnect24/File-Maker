@@ -156,7 +156,7 @@ def mysql_connect():
 	  else: print err
 
 def mysql_get_votes():
-	cursor = cnx.cursor()
+	cursor = cnx.cursor(dictionary=True)
 	question_id = 955 # Just for now :P
 	query = ("SELECT * from EVC.votes WHERE questionID = %s" % str(question_id))
 	cursor.execute(query)
@@ -169,7 +169,9 @@ def mysql_get_votes():
 	predict_response_1 = 0
 	predict_response_2 = 0
 
-	for (typeCD, ansCNT) in cursor:
+	print cursor
+
+	for (typeCD, countryID, regionID, ansCNT) in cursor:
 		if typeCD == 0:
 			male_voters_response_1 += int(ansCNT[0])
 			female_voters_response_1 += int(ansCNT[1])
