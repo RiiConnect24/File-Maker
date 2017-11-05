@@ -367,7 +367,7 @@ def make_header():
 	header["question_table_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
-	header["national_result_detailed"] = u16(national_results*region_list[country_code])
+	header["national_result_detailed"] = u16(national_results*52)
 	header["national_result_detailed_offset"] = u32(0)
 	header["position_entry_number"] = u16(national_results*52)
 	header["position_header_offset"] = u32(0)
@@ -458,10 +458,9 @@ def make_national_result_table(header):
 		if total_resp1 > total_resp2: # response 1 won
 			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][4][country_code])
 			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][5][country_code])
-		elif total_resp2 > total_resp1: # response 2 won
+		else: # response 2 won - or tie
 			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][5][country_code])
 			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][country_code])
-		else: pass # tie
 		table["unknown_%s" % num()] = u16(1)
 		table["national_result_detailed_number_%s" % num()] = u8(national_result_detailed_tables)
 		table["starting_national_result_detailed_table_number_%s" % num()] = u32(national_result_detailed_count)
@@ -505,7 +504,7 @@ def make_worldwide_result_table(header):
 	worldwide_detailed_table_count = 0
 	header["worldwide_result_table_offset"] = offset_count()
 
-	for i in results:
+	for i in results: # to-do: check for active
 		resp1 = 0 # total resp1 votes (worldwide)
 		resp2 = 0 # total resp2 votes (worldwide)
 		male_resp1 = 0
@@ -531,10 +530,9 @@ def make_worldwide_result_table(header):
 		if resp1 > resp2: # response 1 won
 			table["accurate_prediction_voters_num_%s" % num()] = u32(predict1)
 			table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict2)
-		elif resp2 > resp1: # response 2 won
+		else: # response 2 won - or tie
 			table["accurate_prediction_voters_num_%s" % num()] = u32(predict2)
 			table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict1)
-		else: pass # tie
 		table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
 		table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
 		worldwide_detailed_table_count+=33
@@ -545,11 +543,10 @@ def make_worldwide_result_detailed_table(header):
 	table = collections.OrderedDict()
 	dictionaries.append(table)
 
-	#country_table_count = 0
+	country_table_count = 0
 	header["worldwide_result_detailed_offset"] = offset_count()
 
 	for i in results:
-		country_table_count = 0
 		for j in range(len(countries)): # 33
 			table["unknown_%s" % num()] = u32(0)
 			table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
