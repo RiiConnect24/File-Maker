@@ -1,0 +1,35 @@
+"""Example config.py"""
+
+webhook_urls = ["DISCORD WEBHOOK", "DISCORD WEBHOOK"] # Used to update webhooks on Discord
+key_path = "/path/to/key/in/format/of/file.pem" # Private key to sign the file
+file_path = "/path/to/folder" # Path to save the file to
+lzss_path = "/path/to/lzss" # Path to lzss
+production = None # Use production mode
+cachet_url = "http://status.domain.tld/api/v1" # URL for Cachet
+cachet_key = "api_key" # API Key for Cachet
+sentry_url = "http://status.domain.tld/" # URL for Sentry
+
+"""News Channel only"""
+
+force_all = False # Force the script to replace all news files
+google_maps_api_key = "api_key" # API Key for Google Maps geocoding API
+geoparser_keys = ["GEOPARSER KEY", "GEOPARSER KEY"] # API Key for Geoparser
+
+"""Forecast Channel only"""
+
+import forecastlists
+
+accuweather_api_keys = ["ACCUWEATHER API KEY", "ACCUWEATHER API KEY"] # API Key for AccuWeather developers (only if using the paid API)
+useLegacy = None # Use AccuWeather Legacy API Instead (Speedup)
+useVerbose = None # Print more verbose messages
+useMultithreaded = None # Use multithreading
+cacheDNS = None # Cache API DNS Requests
+keyCache = None # Cache location keys
+weathercities = ["CITY LIST", "CITY LIST"] # Lists of cities to use
+cachet_elapsed_time = None # ID of the Cachet point to log elapsed time.
+
+"""Everybody Votes Channel only"""
+
+mysql_user = "user" # MySQL username
+mysql_password = "password" # MySQL password
+mysql_database = "database" # MySQL database
