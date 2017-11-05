@@ -173,7 +173,7 @@ def mysql_get_votes():
 	predict_response_1 = [0] * 33
 	predict_response_2 = [0] * 33
 	
-	poll_type = raw_input("Enter poll type for "+question_id+" (n/w): ")
+	poll_type = raw_input("Enter poll type for %s (n/w): " % question_id)
 	if poll_type is "n": national_results=1
 	elif poll_type is "w": worldwide_results=1
 
