@@ -135,9 +135,6 @@ def prepare():
 	# \n is used as line break
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
 	if write_results and file_type == "r": national_results = 1
-	elif write_results and file_type == "v":
-		if raw_input('Enter Result Type (n/w): ') == "n": national_results = 1
-		else: worldwide_results = 1
 	questions = national+worldwide
 	mysql_connect()
 	results[get_poll_id()] = mysql_get_votes()
@@ -175,6 +172,10 @@ def mysql_get_votes():
 
 	predict_response_1 = [0] * 33
 	predict_response_2 = [0] * 33
+	
+	poll_type = raw_input("Enter poll type for "+question_id+" (n/w): ")
+	if poll_type is "n": national_results=1
+	elif poll_type is "w": worldwide_results=1
 
 	for row in cursor:
 		if row["typeCD"] == 0:
@@ -211,9 +212,12 @@ def mysql_get_questions():
 	cursor.execute(query)
 
 	for row in cursor:
-		if row["type"] == "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
-		elif row["type"] == "w": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
-		print row["content"]
+		if row["type"] == "n":
+			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
+			print "ID: "+int(row["questionID"])+" Question: "+[row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: National"
+		elif row["type"] == "w":
+			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
+			print "ID: "+int(row["questionID"])+" Question: "+[row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: Worldwide"
 
 	cursor.close()
 
