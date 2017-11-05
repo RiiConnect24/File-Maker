@@ -117,10 +117,6 @@ def pad(amnt):
 def prepare():
 	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results
 	print "Preparing ..."
-	mysql_connect()
-	results[955] = mysql_get_votes()
-	mysql_get_questions()
-	mysql_close()
 	country_count = len(countries)
 	print "Loaded %s Countries" % country_count
 	print "Loaded %s Question(s)" % len(question_data)
@@ -137,12 +133,16 @@ def prepare():
 	else: question_languages = [1]
 	# National questions are written first, then worldwide
 	# \n is used as line break
-	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Poll ID: '))
+	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
 	if write_results and file_type == "r": national_results = 1
 	elif write_results and file_type == "v":
 		if raw_input('Enter Result Type (n/w): ') == "n": national_results = 1
 		else: worldwide_results = 1
 	questions = national+worldwide
+	mysql_connect()
+	results[get_poll_id()] = mysql_get_votes()
+	mysql_get_questions()
+	mysql_close()
 	make_language_table()
 
 def mysql_connect():
@@ -159,7 +159,7 @@ def mysql_connect():
 
 def mysql_get_votes():
 	cursor = cnx.cursor(dictionary=True)
-	question_id = 955 # Just for now :P
+	question_id = get_poll_id()
 	query = ("SELECT * from EVC.votes WHERE questionID = %s" % str(question_id))
 	cursor.execute(query)
 
@@ -207,14 +207,13 @@ def mysql_get_votes():
 
 def mysql_get_questions():
 	cursor = cnx.cursor(dictionary=True)
-	query = "SELECT * from EVC.questions"
+	query = "SELECT * from EVC.questions WHERE active = 1"
 	cursor.execute(query)
 
 	for row in cursor:
-		if int(row["active"]) == 1:
-			if row["type"] == "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
-			elif row["type"] == "w": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
-			print row["content"]
+		if row["type"] == "n": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
+		elif row["type"] == "w": add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
+		print row["content"]
 
 	cursor.close()
 
@@ -444,7 +443,7 @@ def make_national_result_table(header):
 	national_result_detailed_tables = region_list[country_code]
 	header["national_result_offset"] = offset_count()
 
-	for i in results: # check national
+	for i in results:
 		total_resp1 = 0
 		total_resp2 = 0
 		total_resp1+=results[i][0][country_code]+results[i][1][country_code]
@@ -483,8 +482,8 @@ def make_national_result_detailed_table(header):
 			
 			table["voters_response_1_num_%s" % num()] = u32(voters1)
 			table["voters_response_2_num_%s" % num()] = u32(voters2)
-			table["position_entry_table_count_%s" % num()] = u8(1)
-			table["starting_position_entry_table_%s" % num()] = u32(region)
+			table["position_entry_table_count_%s" % num()] = u8(0)
+			table["starting_position_entry_table_%s" % num()] = u32(0)
 
 	return table
 
@@ -504,9 +503,9 @@ def make_worldwide_result_table(header):
 	worldwide_detailed_table_count = 0
 	header["worldwide_result_table_offset"] = offset_count()
 
-	for i in results: # to-do: check for active
-		resp1 = 0 # total resp1 votes (worldwide)
-		resp2 = 0 # total resp2 votes (worldwide)
+	for i in results:
+		resp1 = 0
+		resp2 = 0
 		male_resp1 = 0
 		female_resp1 = 0
 		male_resp2 = 0
