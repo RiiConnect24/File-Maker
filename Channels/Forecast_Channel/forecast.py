@@ -37,8 +37,6 @@ from raven import Client
 from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
 
-apicount = 0 # API Key Count
-apicycle = 0 # API Key Cycle Count
 apirequests = 0 # API Request Counter
 seek_offset = 0 # Seek Offset Location
 seek_base = 0 # Base Offset Calculation Location
@@ -49,9 +47,7 @@ retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 bw_usage = 0 # Bandwidth Usage Counter
 file = None
-cachefile = None
 loop = None
-build = None
 
 print "Forecast Channel Downloader \n"
 print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
@@ -60,7 +56,6 @@ print "Preparing ..."
 uvindex = {}
 wind = {}
 weathericon = {}
-locationkey = {}
 times = {}
 pollen = {}
 today = {}
@@ -137,8 +132,6 @@ def get_country(list, key): return list[key][2][1]
 
 def get_all(list, key): return ", ".join(filter(None, [get_city(list, key),get_region(list, key),get_country(list, key)]))
 
-def append(list, key, data): list[str(key)].append(data)
-
 def get_number(list, key): return list.keys().index(key)
 
 def pad(amnt): return "\0"*amnt
@@ -192,7 +185,7 @@ def progress(percent,list,progcount):
 def build_progress():
 	global status
 	i = 0
-	while build:
+	while loop:
 		sys.stdout.write("\r"+" "*74+"\r"+status+": "+"["+i*" "+"="*3+(35-i-2)*" "+"] ...")
 		sys.stdout.flush()
 		i+=1
@@ -202,7 +195,7 @@ def build_progress():
 	sys.stdout.flush()
 
 def log(text):
-	if loop or build:
+	if loop:
 		sys.stdout.write("\r"+" "*74+"\r"+text+"\n\n")
 		sys.stdout.flush()
 	else: print text
@@ -252,10 +245,9 @@ def request_data(url):
 		data = s.get(url, headers=header)
 		bw_usage+=get_bandwidth_usage(data)
 		status_code = data.status_code
-		if status_code == 200:
-			return data.content
+		if status_code == 200: c = 1
 		i+=1
-	return data
+	return data.content
 
 def timestamps(mode, key):
 	time = time_convert(get_epoch())
@@ -312,6 +304,7 @@ def blank_data(list, key, clear):
 	today[key] = {}
 	tomorrow[key] = {}
 	current[key] = {}
+	globe[key] = {}
 	wind[key][0] = 0
 	wind[key][1] = 0
 	wind[key][2] = 'N'
@@ -341,7 +334,6 @@ def blank_data(list, key, clear):
 	tomorrow[key][4] = 'FFFF'
 	for k in range(5,9): tomorrow[key][k] = 128
 	if clear:
-		locationkey[key] = None
 		globe[key]['lat'] = binascii.unhexlify(get_index(list,key,3)[:4])
 		globe[key]['lng'] = binascii.unhexlify(get_index(list,key,3)[:8][4:])
 		globe[key]['time'] = get_epoch()
@@ -637,7 +629,6 @@ def get_data(list, name):
 	global citycount,cache,weather_data
 	citycount+=1
 	cache[name] = get_all(list, name)
-	globe[name] = {}
 	blank_data(list,name,True)
 	if name in forecastlists.jpncities: get_tenki_data(name)
 	weather_data[name] = request_data("http://%s/widget/accuwxturbotablet/weather-data.asp?location=%s,%s" % (ip,coord_decode(get_index(list,name,3)[:4]),coord_decode(get_index(list,name,3)[:8][4:])))
@@ -1017,7 +1008,7 @@ for list in weathercities:
 	loop = False
 	for t in threads: t.join()
 	dlthread.join()
-	build = True
+	loop = True
 	print "\n"
 	status = "Parsing Data"
 	buildthread = threading.Thread(target=build_progress)
@@ -1040,7 +1031,7 @@ for list in weathercities:
 			language_code = j
 			make_bins(list,data)
 			reset_data(list)
-	build = False
+	loop = False
 	buildthread.join()
 	print "\n"
 
