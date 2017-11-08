@@ -19,8 +19,6 @@ geoparser_keys = ["GEOPARSER KEY", "GEOPARSER KEY"] # API Key for Geoparser
 
 import forecastlists
 
-accuweather_api_keys = ["ACCUWEATHER API KEY", "ACCUWEATHER API KEY"] # API Key for AccuWeather developers (only if using the paid API)
-useLegacy = None # Use AccuWeather Legacy API Instead (Speedup)
 useVerbose = None # Print more verbose messages
 useMultithreaded = None # Use multithreading
 cacheDNS = None # Cache API DNS Requests

@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.4
+# VERSION 3.6
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -74,7 +74,6 @@ weatherloc = {}
 cache = {}
 laundry = {}
 duplicates = {}
-dnscache = {}
 
 def u8(data):
 	if data < 0 or data > 255:
@@ -137,8 +136,6 @@ def get_region(list, key): return list[key][1][1]
 def get_country(list, key): return list[key][2][1]
 
 def get_all(list, key): return ", ".join(filter(None, [get_city(list, key),get_region(list, key),get_country(list, key)]))
-
-def get_lockey(key): return locationkey[key]
 
 def append(list, key, data): list[str(key)].append(data)
 
@@ -231,50 +228,6 @@ def get_icon(icon,list,key):
 	if list[key][2][1] is "Japan": return get_weatherjpnicon(icon)
 	else: return get_weathericon(icon)
 
-def test_keys():
-	global accuweather_api_keys
-	print "Checking API Keys ..."
-	total = 0
-	keys = 0
-	for key in accuweather_api_keys:
-		invalid = False
-		keys += 1
-		if keys % 10 == 0 or keys == len(accuweather_api_keys): print str(keys) + " / " + str(len(accuweather_api_keys)) + " checked."
-		testapi = s.head("http://dataservice.accuweather.com/locations/v1/regions?apikey=%s" % key).json()
-		if testapi is not None:
-			ratelimit_remaining = int(testapi.headers["RateLimit-Remaining"])
-			if ratelimit_remaining > 0: total+=ratelimit_remaining
-			else: invalid = True
-		else: invalid = True
-		if invalid:
-			print "Key %s marked as unusable" % keys
-			accuweather_api_keys[keys-1] = None
-	if total == 0:
-		print "No Requests Available"
-		exit()
-	print "%s Requests Available" % total
-	print "Processed %s Keys" % len(accuweather_api_keys)
-
-def check_cache():
-	global cachefile,locationkey
-	if keyCache:
-		if os.path.exists('locations.db'):
-			file = open('locations.db','rb')
-			temp = pickle.load(file)
-			try:
-				if time.time() > temp["cache_expiration"]:
-					file.close()
-					os.remove('locations.db')
-				else: cachefile = temp
-			except: os.remove('locations.db')
-		else: locationkey["cache_expiration"] = time.time()+86400
-
-def dns(*args):
-	global dnscache
-	if args not in dnscache:
-		dnscache[args] = resolve_dns(*args)
-	return dnscache[args]
-
 """Resets bin-specific values for next generation."""
 
 def reset_data(l):
@@ -285,52 +238,22 @@ def reset_data(l):
 	citycount = 0
 	file = None
 
-def get_apikey():
-	global apicount,apicycle
-	key = None
-	while key is None:
-		key = accuweather_api_keys[apicount]
-		if apicount == len(accuweather_api_keys)-1:
-			apicount = 0
-			apicycle += 1
-		else: apicount += 1
-	return key
-
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 def request_data(url):
 	global retrycount,apirequests,bw_usage
-	header = {'Accept-Encoding' : 'gzip, deflate'} # This is to make the data download faster.
+	header = {'Accept-Encoding' : 'gzip, deflate', 'Host' : 'accuwxturbotablet.accu-weather.com'} # This is to make the data download faster.
 	apirequests+=1
 	i = 0
 	c = 0
 	while c == 0:
-		if i == 4: return -1
+		if i == 3: return -1
 		if i > 0: retrycount+=1
 		data = s.get(url, headers=header)
 		bw_usage+=get_bandwidth_usage(data)
 		status_code = data.status_code
-		if "regions" in url and status_code != 200: return None
 		if status_code == 200:
-			if "daily" in url:
-				try:
-					data = data.json()
-					data["DailyForecasts"]
-					c = 1
-				except: pass
-			elif "accuwxturbotablet" in url: return data.content
-			elif "regions" in url:
-				try:
-					a = data.json()[0]
-					c = 1
-				except: pass
-			else:
-				try:
-					data = data.json()
-					data[0]
-					c = 1
-				except:
-					if "locations" in url: return -1
+			return data.content
 		i+=1
 	return data
 
@@ -423,63 +346,6 @@ def blank_data(list, key, clear):
 		globe[key]['lng'] = binascii.unhexlify(get_index(list,key,3)[:8][4:])
 		globe[key]['time'] = get_epoch()
 
-def get_main_api(list, key):
-	apidaily = request_data("http://dataservice.accuweather.com/forecasts/v1/daily/1day/%s?apikey=%s&details=true" % (get_lockey(key),get_apikey()))
-	api5day = request_data("http://dataservice.accuweather.com/forecasts/v1/daily/5day/%s?apikey=%s&details=true" % (get_lockey(key),get_apikey()))
-	apicurrent = request_data("http://dataservice.accuweather.com/currentconditions/v1/%s?apikey=%s&details=true" % (get_lockey(key), get_apikey()))
-	week[key][0] = int(round(api5day['DailyForecasts'][1]['Temperature']['Minimum']['Value']))
-	week[key][1] = int(round(api5day['DailyForecasts'][1]['Temperature']['Maximum']['Value']))
-	week[key][2] = int(round(api5day['DailyForecasts'][2]['Temperature']['Minimum']['Value']))
-	week[key][3] = int(round(api5day['DailyForecasts'][2]['Temperature']['Maximum']['Value']))
-	week[key][4] = int(round(api5day['DailyForecasts'][3]['Temperature']['Minimum']['Value']))
-	week[key][5] = int(round(api5day['DailyForecasts'][3]['Temperature']['Maximum']['Value']))
-	week[key][6] = int(round(api5day['DailyForecasts'][4]['Temperature']['Minimum']['Value']))
-	week[key][7] = int(round(api5day['DailyForecasts'][4]['Temperature']['Maximum']['Value']))
-	for i in range(0,8): week[key][i+10] = to_celsius(week[key][i])
-	week[key][20] = get_icon(api5day['DailyForecasts'][1]['Day']['Icon'],list,key)
-	week[key][21] = get_icon(api5day['DailyForecasts'][2]['Day']['Icon'],list,key)
-	week[key][22] = get_icon(api5day['DailyForecasts'][3]['Day']['Icon'],list,key)
-	week[key][23] = get_icon(api5day['DailyForecasts'][4]['Day']['Icon'],list,key)
-	current[key][3] = int(round(apicurrent[0]['Temperature']['Imperial']['Value']))
-	current[key][4] = int(round(apicurrent[0]['Temperature']['Metric']['Value']))
-	weathericon[key] = get_icon(int(apicurrent[0]['WeatherIcon']),list,key)
-	current[key][0] = apicurrent[0]['Wind']['Direction']['English']
-	current[key][1] = int(round(apicurrent[0]['Wind']['Speed']['Metric']['Value']))
-	current[key][2] = int(round(apicurrent[0]['Wind']['Speed']['Imperial']['Value']))
-	times[key] = apicurrent[0]['EpochTime']
-	today[key][0] = int(round(apidaily['DailyForecasts'][0]['Temperature']['Minimum']['Value']))
-	today[key][1] = int(round(apidaily['DailyForecasts'][0]['Temperature']['Maximum']['Value']))
-	today[key][2] = to_celsius(today[key][0])
-	today[key][3] = to_celsius(today[key][1])
-	today[key][4] = get_icon(int(apidaily['DailyForecasts'][0]['Day']['Icon']),list,key)
-	tomorrow[key][0] = int(round(api5day['DailyForecasts'][1]['Temperature']['Minimum']['Value']))
-	tomorrow[key][1] = int(round(api5day['DailyForecasts'][1]['Temperature']['Maximum']['Value']))
-	tomorrow[key][2] = to_celsius(tomorrow[key][0])
-	tomorrow[key][3] = to_celsius(tomorrow[key][1])
-	tomorrow[key][4] = get_icon(int(api5day['DailyForecasts'][1]['Day']['Icon']),list,key)
-	try: uvval = int(apidaily['DailyForecasts'][0]['AirAndPollen'][5]['Value'])
-	except: uvval = 255
-	if uvval > 12: uvval = 12
-	uvindex[key] = uvval
-	wind[key][0] = mph_kmh(api5day['DailyForecasts'][0]['Day']['Wind']['Speed']['Value'])
-	wind[key][1] = int(round(api5day['DailyForecasts'][0]['Day']['Wind']['Speed']['Value']))
-	wind[key][2] = api5day['DailyForecasts'][0]['Day']['Wind']['Direction']['English']
-	wind[key][3] = mph_kmh(api5day['DailyForecasts'][1]['Day']['Wind']['Speed']['Value'])
-	wind[key][4] = int(round(api5day['DailyForecasts'][1]['Day']['Wind']['Speed']['Value']))
-	wind[key][5] = api5day['DailyForecasts'][1]['Day']['Wind']['Direction']['English']
-	pollen[key] = 255
-	if list[key][2][1] is "Japan":
-		precipitation[2] = round(apidaily['DailyForecasts'][0]['Day']['PrecipitationProbability'],-1)
-		precipitation[3] = round(apidaily['DailyForecasts'][0]['Night']['PrecipitationProbability'],-1)
-		precipitation[6] = round(api5day['DailyForecasts'][1]['Day']['PrecipitationProbability'],-1)
-		precipitation[7] = round(api5day['DailyForecasts'][1]['Night']['PrecipitationProbability'],-1)
-		grass = int(apidaily['DailyForecasts'][0]['AirAndPollen'][1]['Value'])
-		tree = int(apidaily['DailyForecasts'][0]['AirAndPollen'][3]['Value'])
-		ragweed = int(apidaily['DailyForecasts'][0]['AirAndPollen'][4]['Value'])
-		avg = (grass+tree+ragweed)/3
-		if avg < 2: avg = 2
-		pollen[key] = avg
-
 def get_legacy_api(list, key):
 	apilegacy = weather_data[key]
 	forecast = apilegacy.find("{http://www.accuweather.com}forecast")
@@ -550,55 +416,6 @@ def get_legacy_api(list, key):
 		temp = time_index[1][i]-hour
 		if -1 < temp < 24: hourly[key][i+4] = get_icon(int(hourlyForecast[temp][0].text),list,key)
 		else: hourly[key][i+4] = get_icon(int(-1),list,key)
-
-def get_search(list, key, mode):
-	if mode == 0:
-		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_region(list, key)])))
-		else: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-	elif mode == 1:
-		if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2): search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-		else: search = get_city(list, key)
-	if key in forecastlists.corrections: search = forecastlists.corrections[key]
-	if get_region(list, key) in forecastlists.region_delete_corrections: search = " ".join(filter(None, ([get_city(list, key), get_country(list, key)])))
-	if get_city(list, key) in forecastlists.country_ignore: search = get_city(list, key)
-	if "St." in search: search = search.replace('St.','Saint')
-	return search
-
-def get_location(list, key):
-	location = -1
-	i = 0
-	while location is -1:
-		if i == 0:
-			try:
-				country = pycountry.countries.get(name=get_country(list, key)).alpha2.lower()
-				if get_city(list, key) in forecastlists.country_corrections: country = forecastlists.country_corrections[get_city(list, key)]
-				location = request_data("http://dataservice.accuweather.com/locations/v1/%s/search?apikey=%s&q=%s&details=true" % (country, get_apikey(), get_search(list,key,0)))
-			except: pass
-		elif i == 1: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,0)))
-		elif i == 2: location = request_data("http://dataservice.accuweather.com/locations/v1/search?apikey=%s&q=%s&details=true" % (get_apikey(), get_search(list,key,1)))
-		elif i == 3: return -1
-		i+=1
-	locationkey[key] = location[0]['Key']
-	lat = location[0]['GeoPosition']['Latitude']
-	lng = location[0]['GeoPosition']['Longitude']
-	globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
-	globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-	globe[key]['offset'] = location[0]['TimeZone']['GmtOffset']
-	globe[key]['time'] = int(get_epoch()+location[0]['TimeZone']['GmtOffset']*3600)
-
-"""Get the location data from the legacy API."""
-"""The script currently gets data from the servers the Android app of AccuWeather uses."""
-"""Please don't attack us for doing this, AccuWeather. You're my friend and I want to keep it that way."""
-
-def get_legacy_location(list, key):
-	if keyCache and cachefile and key not in duplicates and key in cachefile: locationkey[key] = cachefile[key]
-	elif key in forecastlists.key_corrections: locationkey[key] = forecastlists.key_corrections[key]
-	else:
-		location = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/city-find.asp?location=%s,%s" % (coord_decode(get_index(list,key,3)[:4]),coord_decode(get_index(list,key,3)[:8][4:])))
-		try: loc = ElementTree.fromstring(location)
-		except: return -1
-		if len(loc[0]) == 0: return -1
-		else: locationkey[key] = loc[0][0].attrib['location'].lstrip('cityId:')
 
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
@@ -822,10 +639,8 @@ def get_data(list, name):
 	cache[name] = get_all(list, name)
 	globe[name] = {}
 	blank_data(list,name,True)
-	if get_legacy_location(list, name) is None:
-		if name in forecastlists.jpncities: get_tenki_data(name)
-		weather_data[name] = request_data("http://accuwxturbotablet.accu-weather.com/widget/accuwxturbotablet/weather-data.asp?locationkey=%s" % get_lockey(name))
-	else: output('Unable to retrieve location data for %s - using blank data' % name, "WARNING")
+	if name in forecastlists.jpncities: get_tenki_data(name)
+	weather_data[name] = request_data("http://%s/widget/accuwxturbotablet/weather-data.asp?location=%s,%s" % (ip,coord_decode(get_index(list,name,3)[:4]),coord_decode(get_index(list,name,3)[:8][4:])))
 
 def make_header_short(list):
 	header = collections.OrderedDict()
@@ -1151,16 +966,12 @@ if production:
 	handler = SentryHandler(client)
 	setup_logging(handler)
 	logger = logging.getLogger(__name__)
-check_cache()
 if os.name == 'nt': os.system("title Forecast Downloader")
-print "Production Mode %s | Multithreading %s | %s API | Cache %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled", "Legacy" if useLegacy else "Main", "Enabled" if keyCache else "Disabled")
+print "Production Mode %s | Multithreading %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
-if cacheDNS:
-	resolve_dns = socket.getaddrinfo
-	socket.getaddrinfo = dns
-if not useLegacy: test_keys()
 total_time = time.time()
+ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
 q = Queue.Queue()
 for list in weathercities:
 	global language_code,country_code,mode,japcount,weather_data
@@ -1192,7 +1003,6 @@ for list in weathercities:
 	dlthread.daemon = True
 	dlthread.start()
 	for keys in list.keys():
-		if keys in cache and cache[keys] != get_all(list,keys) and keys not in duplicates: duplicates[keys] = locationkey[keys]
 		if keys not in cache or cache[keys] != get_all(list,keys):
 			if useMultithreaded: q.put([list,keys])
 			else: get_data(list,keys)
@@ -1220,9 +1030,10 @@ for list in weathercities:
 		except: weather_data[k] = None
 		if weather_data[k] != None: get_legacy_api(list, k)
 		else: output('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
-	status = "Building Files"
 	cities+=citycount
+	status = "Generating Data"
 	data = generate_data(list,bins)
+	status = "Building Files"
 	for i in range(1,3):
 		mode = i
 		for j in bins:
@@ -1234,18 +1045,10 @@ for list in weathercities:
 	print "\n"
 
 print "API Requests: %s" % apirequests
-if not useLegacy: print "API Key Cycles: %s" % apicycle
 print "Request Retries: %s" % retrycount
-print "Processed Cities: %s" % (cities)
+print "Processed Cities: %s" % cities
 print "Elapsed Time: %s Seconds" % round(time.time()-total_time)
 print "Bandwidth Usage: %s MiB\n" % round(float(bw_usage)/1048576,2)
-
-if keyCache and not cachefile:
-	cachefile = open('locations.db','wb+')
-	for k,v in duplicates.items(): locationkey[k] = v
-	pickle.dump(locationkey,cachefile)
-	cachefile.flush()
-	cachefile.close()
 
 if production:
 	points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
