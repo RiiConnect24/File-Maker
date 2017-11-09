@@ -7,7 +7,9 @@ import os
 import pickle
 import sys
 
-print "Forecast Locations Parser\nBy John Pansera (2017) - www.rc24.xyz\nParsing ..."
+print "Forecast Locations Parser"
+print "By John Pansera (2017) - www.rc24.xyz"
+print "Parsing ..."
 
 filename = "forecast.bin"
 amnt = None
