@@ -444,7 +444,7 @@ def make_national_result_table(header):
 	dictionaries.append(table)
 
 	national_result_detailed_count = 0
-	national_result_detailed_tables = region_list[country_code]
+	national_result_detailed_tables = 52
 	header["national_result_offset"] = offset_count()
 
 	for i in results:
