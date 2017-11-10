@@ -372,7 +372,7 @@ def make_header():
 	header["national_result_offset"] = u32(0)
 	header["national_result_detailed"] = u16(national_results*52)
 	header["national_result_detailed_offset"] = u32(0)
-	header["position_entry_number"] = u16(national_results*52)
+	header["position_entry_number"] = u16(58)
 	header["position_header_offset"] = u32(0)
 	header["worldwide_result_entry_num"] = u8(worldwide_results)
 	header["worldwide_result_table_offset"] = u32(0)
@@ -497,8 +497,12 @@ def make_position_entry_table(header):
 
 	header["position_header_offset"] = offset_count()
 
-	table["response_1_%s" % num()] = u8(get_randint())
-	table["response_2_%s" % num()] = u8(get_randint())
+	position_table_data = '3C46CD559B46272F8C5A4164A53FAF5019643C78C8A078D252E748E15A647D7D7891B95DCD692341A08CD746E254557D9169D25EE249A0648741D273DC55917D7869BE879191AA5FB46C5550AA782D5ADC5FDC64C87D735A2EE628DF18D9C364714BAA87E04E5037DC3FE440EB37F0BE7337E84C'
+	
+	table["data_%s" % num()] = binascii.unhexlify(position_table_data)
+	
+	#table["response_1_%s" % num()] = u8(0)
+	#table["response_2_%s" % num()] = u8(0)
 
 def make_worldwide_result_table(header):
 	table = collections.OrderedDict()
