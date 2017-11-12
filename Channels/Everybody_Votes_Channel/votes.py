@@ -451,7 +451,6 @@ def make_national_result_table(header):
 	for i in results:
 		total_resp1 = 0
 		total_resp2 = 0
-		print results[i]
 		total_resp1+=results[i][0][country_code]+results[i][1][country_code]
 		total_resp2+=results[i][2][country_code]+results[i][3][country_code]
 
