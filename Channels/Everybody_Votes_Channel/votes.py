@@ -488,6 +488,8 @@ def make_national_result_detailed_table(header):
 			voters1+=results[i][6][j]
 			voters2+=results[i][7][j]
 
+			print j
+
 			table["voters_response_1_num_%s" % num()] = u32(voters1)
 			table["voters_response_2_num_%s" % num()] = u32(voters2)
 			table["position_entry_table_count_%s" % num()] = u8(position_test_us[j])
