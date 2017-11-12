@@ -449,22 +449,24 @@ def make_national_result_table(header):
 	header["national_result_offset"] = offset_count()
 
 	for i in results:
+		results_country_code = country_codes.index(country_code)
+
 		total_resp1 = 0
 		total_resp2 = 0
-		total_resp1+=results[i][0][country_code]+results[i][1][country_code]
-		total_resp2+=results[i][2][country_code]+results[i][3][country_code]
+		total_resp1+=results[i][0][results_country_code]+results[i][1][results_country_code]
+		total_resp2+=results[i][2][results_country_code]+results[i][3][results_country_code]
 
 		table["poll_id_%s" % num()] = u32(i)
-		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][country_code])
-		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][country_code])
-		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][country_code])
-		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][country_code])
+		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][results_country_code])
+		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][results_country_code])
+		table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][results_country_code])
+		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][results_country_code])
 		if total_resp1 > total_resp2: # response 1 won
-			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][4][country_code])
-			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][5][country_code])
+			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][4][results_country_code])
+			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][5][results_country_code])
 		else: # response 2 won - or tie
-			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][5][country_code])
-			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][country_code])
+			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][5][results_country_code])
+			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][results_country_code])
 		table["unknown_%s" % num()] = u16(1)
 		table["national_result_detailed_number_%s" % num()] = u8(national_result_detailed_tables)
 		table["starting_national_result_detailed_table_number_%s" % num()] = u32(national_result_detailed_count)
