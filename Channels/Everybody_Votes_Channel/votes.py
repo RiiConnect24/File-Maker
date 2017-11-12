@@ -490,7 +490,7 @@ def make_national_result_detailed_table(header):
 
 			table["voters_response_1_num_%s" % num()] = u32(voters1)
 			table["voters_response_2_num_%s" % num()] = u32(voters2)
-			table["position_entry_table_count_%s" % num()] = u8(position_test_us(num()))
+			table["position_entry_table_count_%s" % num()] = u8(position_test_us[num()])
 			table["starting_position_entry_table_%s" % num()] = u32(0)
 
 	return table
