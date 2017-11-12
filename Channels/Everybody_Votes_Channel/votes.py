@@ -86,7 +86,8 @@ countries["Sweden"] = ["スウェーデン", "Sweden", "Schweden", "Suède", "Su
 countries["Switzerland"] = ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"]
 countries["United Kingdom"] = ["イギリス", "United Kingdom", "Großbritannien", "Royaume-Uni", "Reino Unido", "Regno Unito", "Verenigd Koninkrijk"]
 country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 98, 105, 107, 108, 110]
-region_list = {"49",52}
+region_list = collections.OrderedDict()
+region_list[49] = 52
 position_test_us = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 def time_convert(time):
@@ -481,7 +482,6 @@ def make_national_result_detailed_table(header):
 	header["national_result_detailed_offset"] = offset_count()
 
 	for i in results:
-		print region_list[country_code]
 		for j in range(region_list[country_code]):
 			voters1 = 0
 			voters2 = 0
