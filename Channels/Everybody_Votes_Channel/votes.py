@@ -481,6 +481,7 @@ def make_national_result_detailed_table(header):
 	header["national_result_detailed_offset"] = offset_count()
 
 	for i in results:
+		print region_list[country_code]
 		for j in range(region_list[country_code]):
 			voters1 = 0
 			voters2 = 0
