@@ -169,8 +169,8 @@ def mysql_get_votes():
 
 	"""77 is the largest number of regions I have found, I'll make this better later."""
 
-	region_response_1 = [0] * 77
-	region_response_2 = [0] * 77
+	region_response_1 = [0] * 52
+	region_response_2 = [0] * 52
 
 	predict_response_1 = [0] * 33
 	predict_response_2 = [0] * 33
