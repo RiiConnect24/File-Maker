@@ -483,6 +483,8 @@ def make_national_result_detailed_table(header):
 
 	for i in results:
 		for j in range(region_list[country_code]):
+			print j
+			
 			voters1 = 0
 			voters2 = 0
 			voters1+=results[i][6][j]
