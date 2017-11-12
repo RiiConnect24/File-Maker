@@ -87,6 +87,7 @@ countries["Switzerland"] = ["スイス", "Switzerland", "Schweiz", "Suisse", "Su
 countries["United Kingdom"] = ["イギリス", "United Kingdom", "Großbritannien", "Royaume-Uni", "Reino Unido", "Regno Unito", "Verenigd Koninkrijk"]
 country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 98, 105, 107, 108, 110]
 region_list = {"49",52}
+position_test_us = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 def time_convert(time):
 	return int((time-946684800)/60)
@@ -172,7 +173,7 @@ def mysql_get_votes():
 
 	predict_response_1 = [0] * 33
 	predict_response_2 = [0] * 33
-	
+
 	poll_type = raw_input("Enter poll type for %s (n/w): " % question_id)
 	if poll_type is "n": national_results=1
 	elif poll_type is "w": worldwide_results=1
@@ -452,7 +453,7 @@ def make_national_result_table(header):
 		total_resp2 = 0
 		total_resp1+=results[i][0][country_code]+results[i][1][country_code]
 		total_resp2+=results[i][2][country_code]+results[i][3][country_code]
-		
+
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][country_code])
 		table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][country_code])
@@ -476,17 +477,17 @@ def make_national_result_detailed_table(header):
 	dictionaries.append(table)
 
 	header["national_result_detailed_offset"] = offset_count()
-	
+
 	for i in results:
 		for j in range(region_list[country_code]):
 			voters1 = 0
 			voters2 = 0
 			voters1+=results[i][0][j]+results[i][1][j]
 			voters2+=results[i][2][j]+results[i][3][j]
-			
+
 			table["voters_response_1_num_%s" % num()] = u32(voters1)
 			table["voters_response_2_num_%s" % num()] = u32(voters2)
-			table["position_entry_table_count_%s" % num()] = u8(0)
+			table["position_entry_table_count_%s" % num()] = u8(position_test_us(num()))
 			table["starting_position_entry_table_%s" % num()] = u32(0)
 
 	return table
@@ -498,9 +499,9 @@ def make_position_entry_table(header):
 	header["position_header_offset"] = offset_count()
 
 	position_table_data = '3C46CD559B46272F8C5A4164A53FAF5019643C78C8A078D252E748E15A647D7D7891B95DCD692341A08CD746E254557D9169D25EE249A0648741D273DC55917D7869BE879191AA5FB46C5550AA782D5ADC5FDC64C87D735A2EE628DF18D9C364714BAA87E04E5037DC3FE440EB37F0BE7337E84C'
-	
+
 	table["data_%s" % num()] = binascii.unhexlify(position_table_data)
-	
+
 	#table["response_1_%s" % num()] = u8(0)
 	#table["response_2_%s" % num()] = u8(0)
 
@@ -528,7 +529,7 @@ def make_worldwide_result_table(header):
 		resp2+=male_resp2+female_resp2
 		for j in results[i][4]: predict1+=results[i][4][j]
 		for j in results[i][5]: predict2+=results[i][5][j]
-		
+
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
 		table["male_voters_response_2_num_%s" % num()] = u32(female_resp1)
