@@ -214,12 +214,13 @@ def mysql_get_questions():
 	cursor.execute(query)
 
 	for row in cursor:
-		if row["type"] == "n":
-			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
-			print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: National"
-		elif row["type"] == "w":
-			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
-			print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: Worldwide"
+		if row["active"] == 1:
+			if row["type"] == "n":
+				add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
+				print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: National"
+			elif row["type"] == "w":
+				add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
+				print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: Worldwide"
 
 	cursor.close()
 
