@@ -120,6 +120,7 @@ def prepare():
 	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results
 	print "Preparing ..."
 	country_count = len(countries)
+	mysql_get_questions()
 	print "Loaded %s Countries" % country_count
 	print "Loaded %s Question(s)" % len(question_data)
 	file_type = raw_input('Enter File Type (q/r/v): ')
@@ -140,7 +141,6 @@ def prepare():
 	questions = national+worldwide
 	mysql_connect()
 	results[get_poll_id()] = mysql_get_votes()
-	mysql_get_questions()
 	mysql_close()
 	make_language_table()
 
@@ -214,7 +214,6 @@ def mysql_get_questions():
 	cursor.execute(query)
 
 	for row in cursor:
-		print row
 		if row["type"] == "n":
 			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
 			print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: National"
