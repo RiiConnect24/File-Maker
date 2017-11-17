@@ -117,7 +117,7 @@ def pad(amnt):
 	return "\0"*amnt
 
 def prepare():
-	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results,position,national,worldwide
+	global country_count,countries,file_type,questions,poll_id,write_questions,write_results,results,position,national,worldwide
 	print "Preparing ..."
 	country_count = len(countries)
 	mysql_connect()
@@ -170,6 +170,8 @@ def mysql_get_votes():
 	query = ("SELECT * from EVC.votes WHERE questionID = %s" % str(question_id))
 	cursor.execute(query)
 
+	global national_results,worldwide_results
+
 	male_voters_response_1 = [0] * 33
 	female_voters_response_1 = [0] * 33
 	male_voters_response_2 = [0] * 33
@@ -185,9 +187,7 @@ def mysql_get_votes():
 
 	poll_type = raw_input("Enter poll type for %s (n/w): " % question_id)
 	if poll_type is "n": national_results=1
-	elif poll_type is "w":
-		print "help me."
-		worldwide_results=1
+	elif poll_type is "w": worldwide_results=1
 
 	for row in cursor:
 		if row["typeCD"] == 0:
