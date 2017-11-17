@@ -124,8 +124,8 @@ def prepare():
 	mysql_get_questions()
 	print "Loaded %s Countries" % country_count
 	question_count = len(question_data)
-	if question_count == 1: print "Loaded %s Question" % question_data
-	else: print "Loaded %s Questions" % question_data
+	if question_count == 1: print "Loaded %s Question" % question_count
+	else: print "Loaded %s Questions" % question_count
 	file_type = raw_input('Enter File Type (q/r/v): ')
 	if file_type == "q": write_questions = True
 	elif file_type == "r": write_results = True
