@@ -577,6 +577,7 @@ def make_country_name_table(header):
 	country_name_table = collections.OrderedDict()
 	dictionaries.append(country_name_table)
 
+	print offset_count()
 	header["country_name_header_offset"] = offset_count()
 
 	for k in countries.keys():
