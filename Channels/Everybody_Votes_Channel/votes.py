@@ -120,8 +120,8 @@ def prepare():
 	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results
 	print "Preparing ..."
 	country_count = len(countries)
-	if production: mysql_connect()
-	if production: mysql_get_questions()
+	mysql_connect()
+	mysql_get_questions()
 	print "Loaded %s Countries" % country_count
 	question_count = len(question_data)
 	if question_count == 1: print "Loaded %s Question" % question_count
@@ -142,8 +142,8 @@ def prepare():
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
 	if write_results and file_type == "r": national_results = 1
 	questions = national+worldwide
-	if production: results[get_poll_id()] = mysql_get_votes()
-	if production: mysql_close()
+	results[get_poll_id()] = mysql_get_votes()
+	mysql_close()
 	make_language_table()
 
 def mysql_connect():
