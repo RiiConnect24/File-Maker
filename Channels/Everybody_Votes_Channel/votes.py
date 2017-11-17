@@ -149,6 +149,7 @@ def prepare():
 		questions = national+worldwide
 		position = 58
 	results[get_poll_id()] = mysql_get_votes()
+	print worldwide_results		
 	mysql_close()
 	make_language_table()
 
