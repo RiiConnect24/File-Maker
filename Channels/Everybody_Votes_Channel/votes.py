@@ -140,7 +140,6 @@ def prepare():
 	# National questions are written first, then worldwide
 	# \n is used as line break
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
-	if write_results and file_type == "r": national_results = 1
 	questions = national+worldwide
 	results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
@@ -325,11 +324,11 @@ def make_bin(country_code):
 		make_national_question_table(voting)
 		make_worldwide_question_table(voting)
 		question_text_table = make_question_text_table(voting)
-	if write_results and national_results == True and worldwide_results == False:
+	if write_results and national_results > 0:
 		make_national_result_table(voting)
 		make_national_result_detailed_table(voting)
 		make_position_entry_table(voting)
-	if write_results and worldwide_results == True and national_results == False:
+	if write_results and worldwide_results > 0:
 		make_worldwide_result_table(voting)
 		make_worldwide_result_detailed_table(voting)
 	if file_type == "v" or "r": country_table = make_country_name_table(voting)
