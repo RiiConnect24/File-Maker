@@ -117,7 +117,7 @@ def pad(amnt):
 	return "\0"*amnt
 
 def prepare():
-	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results
+	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results,position
 	print "Preparing ..."
 	country_count = len(countries)
 	mysql_connect()
@@ -140,7 +140,10 @@ def prepare():
 	# National questions are written first, then worldwide
 	# \n is used as line break
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
-	questions = national+worldwide
+	if file_type == "r": questions = 0
+	else: questions = national+worldwide
+	if file_type == "r": position = 0
+	else: position = 58
 	results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
 	make_language_table()
@@ -369,13 +372,13 @@ def make_header():
 	header["nqen_header_offset"] = u32(0)
 	header["worldwide_question_num"] = u8(worldwide)
 	header["worldwide_question_offset"] = u32(0)
-	header["question_entry_number"] = u8(national+worldwide)
+	header["question_entry_number"] = u8(0)
 	header["question_table_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
 	header["national_result_detailed"] = u16(national_results*52)
 	header["national_result_detailed_offset"] = u32(0)
-	header["position_entry_number"] = u16(58)
+	header["position_entry_number"] = u16(position)
 	header["position_header_offset"] = u32(0)
 	header["worldwide_result_entry_num"] = u8(worldwide_results)
 	header["worldwide_result_table_offset"] = u32(0)
