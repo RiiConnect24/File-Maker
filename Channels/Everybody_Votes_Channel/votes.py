@@ -143,9 +143,11 @@ def prepare():
 	if file_type == "r":
 		national = 0
 		worldwide = 0
-	else: questions = national+worldwide
-	if file_type == "r": position = 0
-	else: position = 58
+		questions = 0
+		position = 0
+	else:
+		questions = national+worldwide
+		position = 58
 	results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
 	make_language_table()
