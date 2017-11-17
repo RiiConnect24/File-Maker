@@ -117,7 +117,7 @@ def pad(amnt):
 	return "\0"*amnt
 
 def prepare():
-	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results,position
+	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results,position,national,worldwide
 	print "Preparing ..."
 	country_count = len(countries)
 	mysql_connect()
@@ -141,7 +141,6 @@ def prepare():
 	# \n is used as line break
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
 	if file_type == "r":
-		print "filetype"
 		national = 0
 		worldwide = 0
 		questions = 0
