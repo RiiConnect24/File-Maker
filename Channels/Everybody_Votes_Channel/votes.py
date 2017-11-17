@@ -120,8 +120,8 @@ def prepare():
 	global country_count,countries,file_type,questions,poll_id,national_results,worldwide_results,write_questions,write_results,results
 	print "Preparing ..."
 	country_count = len(countries)
-	mysql_connect()
-	mysql_get_questions()
+	if production: mysql_connect()
+	if production: mysql_get_questions()
 	print "Loaded %s Countries" % country_count
 	question_count = len(question_data)
 	if question_count == 1: print "Loaded %s Question" % question_count
@@ -142,8 +142,8 @@ def prepare():
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
 	if write_results and file_type == "r": national_results = 1
 	questions = national+worldwide
-	results[get_poll_id()] = mysql_get_votes()
-	mysql_close()
+	if production: results[get_poll_id()] = mysql_get_votes()
+	if production: mysql_close()
 	make_language_table()
 
 def mysql_connect():
@@ -154,9 +154,9 @@ def mysql_connect():
 									  	  host='127.0.0.1',
 									  	  database=mysql_database)
 	except mysql.connector.Error as err:
-	  if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Something is wrong with your user name or password"
-	  elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
-	  else: print err
+		 if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Something is wrong with your user name or password"
+		 elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
+		 else: print err
 
 def mysql_get_votes():
 	cursor = cnx.cursor(dictionary=True)
