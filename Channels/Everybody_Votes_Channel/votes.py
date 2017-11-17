@@ -149,7 +149,6 @@ def prepare():
 		questions = national+worldwide
 		position = 58
 	results[get_poll_id()] = mysql_get_votes()
-	print worldwide_results		
 	mysql_close()
 	make_language_table()
 
@@ -186,7 +185,9 @@ def mysql_get_votes():
 
 	poll_type = raw_input("Enter poll type for %s (n/w): " % question_id)
 	if poll_type is "n": national_results=1
-	elif poll_type is "w": worldwide_results=1
+	elif poll_type is "w":
+		print "help me."
+		worldwide_results=1
 
 	for row in cursor:
 		if row["typeCD"] == 0:
