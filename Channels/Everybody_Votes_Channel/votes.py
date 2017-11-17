@@ -325,11 +325,11 @@ def make_bin(country_code):
 		make_national_question_table(voting)
 		make_worldwide_question_table(voting)
 		question_text_table = make_question_text_table(voting)
-	if write_results and national_results == True:
+	if write_results and national_results == True and worldwide_results == False:
 		make_national_result_table(voting)
 		make_national_result_detailed_table(voting)
 		make_position_entry_table(voting)
-	if write_results and worldwide_results == True:
+	if write_results and worldwide_results == True and national_results == False:
 		make_worldwide_result_table(voting)
 		make_worldwide_result_detailed_table(voting)
 	if file_type == "v" or "r": country_table = make_country_name_table(voting)
