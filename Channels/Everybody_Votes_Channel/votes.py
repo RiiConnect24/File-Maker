@@ -332,9 +332,9 @@ def make_bin(country_code):
 	if write_results and worldwide_results > 0:
 		make_worldwide_result_table(voting)
 		make_worldwide_result_detailed_table(voting)
-	if file_type == "v": country_table = make_country_name_table(voting)
+	if file_type == "v" or "r": country_table = make_country_name_table(voting)
 	if write_questions: make_question_text(question_text_table)
-	if file_type == "v": make_country_table(country_table)
+	if file_type == "v" or "r": make_country_table(country_table)
 	if file_type == "q": question_file = get_name()+'_q'
 	elif file_type == "r": question_file = get_name()+'_r'
 	else: question_file = "voting"
@@ -577,7 +577,6 @@ def make_country_name_table(header):
 	country_name_table = collections.OrderedDict()
 	dictionaries.append(country_name_table)
 
-	print offset_count()
 	header["country_name_header_offset"] = offset_count()
 
 	for k in countries.keys():
