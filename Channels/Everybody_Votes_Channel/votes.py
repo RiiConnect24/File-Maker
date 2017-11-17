@@ -582,7 +582,7 @@ def make_country_name_table(header):
 	for k in countries.keys():
 		num = countries.keys().index(k)
 		for i in range(len(languages)):
-			country_name_table["language_code_%s_%s" % (num,i)] = u32(i)
+			country_name_table["language_code_%s_%s" % (num,i)] = u8(i)
 			country_name_table["text_offset_%s_%s" % (num,i)] = u32(0)
 
 	return country_name_table
