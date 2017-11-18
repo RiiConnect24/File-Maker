@@ -534,14 +534,14 @@ def make_worldwide_result_table(header):
 		female_resp2 = 0
 		predict1 = 0
 		predict2 = 0
-		for j in results[i][0]: male_resp1+=results[i][0][j]
-		for j in results[i][1]: female_resp1+=results[i][1][j]
-		for j in results[i][2]: male_resp2+=results[i][2][j]
-		for j in results[i][3]: female_resp2+=results[i][3][j]
+		male_resp1+=sum(results[i][0])
+		female_resp1+=sum(results[i][1])
+		male_resp2+=sum(results[i][2])
+		female_resp2+=sum(results[i][3])
 		resp1+=male_resp1+female_resp1
 		resp2+=male_resp2+female_resp2
-		for j in results[i][4]: predict1+=results[i][4][j]
-		for j in results[i][5]: predict2+=results[i][5][j]
+		predict1+=sum(results[i][4)
+		predict2+=sum(results[i][5])
 
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
