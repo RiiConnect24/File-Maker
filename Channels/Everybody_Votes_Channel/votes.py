@@ -229,7 +229,7 @@ def mysql_get_questions():
 			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],0,row["category"])
 			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: National"
 		elif row["type"] == "w":
-			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1,row["category"])
+			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],1,row["category"])
 			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: Worldwide"
 
 	cursor.close()
