@@ -26,6 +26,6 @@ cachet_elapsed_time = None # ID of the Cachet point to log elapsed time.
 
 """Everybody Votes Channel only"""
 
-mysql_user = "user" # MySQL username
-mysql_password = "password" # MySQL password
-mysql_database = "database" # MySQL database
+evc_mysql_user = "user" # MySQL username
+evc_mysql_password = "password" # MySQL password
+evc_mysql_database = "database" # MySQL database

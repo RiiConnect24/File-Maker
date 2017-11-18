@@ -157,9 +157,9 @@ def mysql_connect():
 	print "Connecting to MySQL ..."
 	try:
 		global cnx
-		cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
+		cnx = mysql.connector.connect(user=evc_mysql_user, password=evc_mysql_password,
 									  	  host='127.0.0.1',
-									  	  database=mysql_database)
+									  	  database=evc_mysql_database)
 	except mysql.connector.Error as err:
 		 if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Something is wrong with your user name or password"
 		 elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
