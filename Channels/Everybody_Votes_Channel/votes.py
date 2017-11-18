@@ -390,7 +390,7 @@ def make_header():
 	header["worldwide_result_table_offset"] = u32(0)
 	header["worldwide_result_detailed_num"] = u16(worldwide_results*33)
 	header["worldwide_result_detailed_offset"] = u32(0)
-	header["country_name_entry_num"] = u16(country_count)
+	header["country_name_entry_num"] = u16(country_count * 7)
 	header["country_name_header_offset"] = u32(0)
 
 	return header
