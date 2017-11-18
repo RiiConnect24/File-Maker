@@ -526,22 +526,14 @@ def make_worldwide_result_table(header):
 	header["worldwide_result_table_offset"] = offset_count()
 
 	for i in results:
-		resp1 = 0
-		resp2 = 0
-		male_resp1 = 0
-		female_resp1 = 0
-		male_resp2 = 0
-		female_resp2 = 0
-		predict1 = 0
-		predict2 = 0
-		male_resp1+=sum(results[i][0])
-		female_resp1+=sum(results[i][1])
-		male_resp2+=sum(results[i][2])
-		female_resp2+=sum(results[i][3])
-		resp1+=male_resp1+female_resp1
-		resp2+=male_resp2+female_resp2
-		predict1+=sum(results[i][4])
-		predict2+=sum(results[i][5])
+		male_resp1=sum(results[i][0])
+		female_resp1=sum(results[i][1])
+		male_resp2=sum(results[i][2])
+		female_resp2=sum(results[i][3])
+		resp1=male_resp1+female_resp1
+		resp2=male_resp2+female_resp2
+		predict1=sum(results[i][4])
+		predict2=sum(results[i][5])
 
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
