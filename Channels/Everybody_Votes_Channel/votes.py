@@ -191,8 +191,8 @@ def mysql_get_votes():
 	for row in cursor:
 		if row["typeCD"] == 0:
 			male_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0])
-			female_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][1])
-			male_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][2])
+			female_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][1])
+			male_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2])
 			female_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][3])
 
 			region_response_1[row["regionID"]] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
