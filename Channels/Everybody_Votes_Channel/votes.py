@@ -144,11 +144,11 @@ def prepare():
 		national = 0
 		worldwide = 0
 		questions = 0
-		position = 58
 	else:
 		questions = national+worldwide
-		position = 0
-	if write_results == True: results[get_poll_id()] = mysql_get_votes()
+	if write_results: position = 58
+	else: position = 0
+	if write_results : results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
 	make_language_table()
 
