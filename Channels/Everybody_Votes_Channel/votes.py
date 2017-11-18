@@ -493,13 +493,8 @@ def make_national_result_detailed_table(header):
 
 	for i in results:
 		for j in range(region_list[country_code]):
-			voters1 = 0
-			voters2 = 0
-			voters1+=results[i][6][j]
-			voters2+=results[i][7][j]
-
-			table["voters_response_1_num_%s" % num()] = u32(voters1)
-			table["voters_response_2_num_%s" % num()] = u32(voters2)
+			table["voters_response_1_num_%s" % num()] = u32(results[i][6][j])
+			table["voters_response_2_num_%s" % num()] = u32(results[i][7][j])
 			table["position_entry_table_count_%s" % num()] = u8(position_test_us[j])
 			table["starting_position_entry_table_%s" % num()] = u32(sum(position_test_us[:j]))
 
