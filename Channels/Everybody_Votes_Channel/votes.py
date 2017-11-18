@@ -263,13 +263,17 @@ def is_worldwide(id):
 
 def add_question(poll_id,q,r1,r2,f,c):
 	global question_data,national,worldwide,national_q,worldwide_q
-	question_data[poll_id] = [q,r1,r2,f,c]
+	question_data[poll_id] = [question_text_replace(q),question_text_replace(r1),question_text_replace(r2),f,c]
 	if f == 0:
 		national+=1
 		national_q = True
 	elif f == 1:
 		worldwide+=1
 		worldwide_q = True
+
+def question_text_replace(text):
+	text = text.replace("...", " . . .")
+	return text
 
 dictionaries = []
 
