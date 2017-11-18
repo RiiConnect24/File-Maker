@@ -144,10 +144,10 @@ def prepare():
 		national = 0
 		worldwide = 0
 		questions = 0
-		position = 0
+		position = 58
 	else:
 		questions = national+worldwide
-		position = 58
+		position = 0
 	if write_results == True: results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
 	make_language_table()
@@ -378,7 +378,7 @@ def make_header():
 	header["nqen_header_offset"] = u32(0)
 	header["worldwide_question_num"] = u8(worldwide)
 	header["worldwide_question_offset"] = u32(0)
-	header["question_entry_number"] = u8(0)
+	header["question_entry_number"] = u8(questions)
 	header["question_table_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
