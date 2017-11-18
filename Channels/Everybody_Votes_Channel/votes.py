@@ -90,14 +90,11 @@ region_list = collections.OrderedDict()
 region_list[49] = 52
 position_test_us = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-def time_convert(time):
-	return int((time-946684800)/60)
+def time_convert(time): return int((time-946684800)/60)
 
-def get_epoch():
-	return int(time.time())
+def get_epoch(): return int(time.time())
 
-def get_randint():
-	return random.randint(50,255)
+def get_randint(): return random.randint(50,255)
 
 def get_timestamp(mode):
 	time = time_convert(get_epoch())
@@ -113,8 +110,7 @@ def get_name():
 def get_poll_id():
 	return poll_id
 
-def pad(amnt):
-	return "\0"*amnt
+def pad(amnt): return "\0"*amnt
 
 def prepare():
 	global country_count,countries,file_type,questions,poll_id,write_questions,write_results,results,position,national,worldwide
@@ -232,8 +228,7 @@ def mysql_get_questions():
 
 	cursor.close()
 
-def mysql_close():
-	cnx.close()
+def mysql_close(): cnx.close()
 
 def num():
 	global number
@@ -241,21 +236,17 @@ def num():
 	number += 1
 	return num1
 
-def dec(data):
-	return int(data, 16)
+def dec(data): return int(data, 16)
 
 def question():
 	if raw_input('Would you like to enter a question? (Y/N) ') is 'Y':
 		add_question(raw_input('Enter Question: '),raw_input('Enter Answer 1: '),raw_input('Enter Answer 2: '),int(raw_input('Is this a national (0) or a worldwide (1) question? ')))
 
-def get_question(id):
-	return question_data[id][0]
+def get_question(id): return question_data[id][0]
 
-def get_response1(id):
-	return question_data[id][1]
+def get_response1(id): return question_data[id][1]
 
-def get_response2(id):
-	return question_data[id][2]
+def get_response2(id): return question_data[id][2]
 
 def is_worldwide(id):
 	i = True
