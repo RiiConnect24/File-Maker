@@ -140,7 +140,7 @@ def prepare():
 	# National questions are written first, then worldwide
 	# \n is used as line break
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
-	if file_type == "r" or (file_type == "v" and write_results == False):
+	if file_type == "r":
 		national = 0
 		worldwide = 0
 		questions = 0
@@ -148,7 +148,7 @@ def prepare():
 	else:
 		questions = national+worldwide
 		position = 58
-	results[get_poll_id()] = mysql_get_votes()
+	if write_results == True: results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
 	make_language_table()
 
