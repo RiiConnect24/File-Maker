@@ -89,6 +89,12 @@ country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 
 region_list = collections.OrderedDict()
 region_list[49] = 52
 position_test_us = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+categories = collections.OrderedDict()
+categories[0] = 3
+categories[1] = 5
+categories[2] = 7
+categories[3] = 9
+categories[4] = 10
 
 def time_convert(time): return int((time-946684800)/60)
 
@@ -220,10 +226,10 @@ def mysql_get_questions():
 
 	for row in cursor:
 		if row["type"] == "n":
-			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],0)
+			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],0,row["category"])
 			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: National"
 		elif row["type"] == "w":
-			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
+			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1,row["category"])
 			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: Worldwide"
 
 	cursor.close()
@@ -240,7 +246,7 @@ def dec(data): return int(data, 16)
 
 def question():
 	if raw_input('Would you like to enter a question? (Y/N) ') is 'Y':
-		add_question(raw_input('Enter Question: '),raw_input('Enter Answer 1: '),raw_input('Enter Answer 2: '),int(raw_input('Is this a national (0) or a worldwide (1) question? ')))
+		add_question(raw_input('Enter Question: '),raw_input('Enter Answer 1: '),raw_input('Enter Answer 2: '),int(raw_input('Is this a national (0) or a worldwide (1) question? ')), 0)
 
 def get_question(id): return question_data[id][0]
 
@@ -248,14 +254,16 @@ def get_response1(id): return question_data[id][1]
 
 def get_response2(id): return question_data[id][2]
 
+def get_category(id): return question_data[id][4]
+
 def is_worldwide(id):
 	i = True
 	if question_data[id][3] == 0: i = False
 	return i
 
-def add_question(poll_id,q,r1,r2,f):
+def add_question(poll_id,q,r1,r2,f,c):
 	global question_data,national,worldwide,national_q,worldwide_q
-	question_data[poll_id] = [q,r1,r2,f]
+	question_data[poll_id] = [q,r1,r2,f,c]
 	if f == 0:
 		national+=1
 		national_q = True
@@ -396,7 +404,8 @@ def make_national_question_table(header):
 	for q in question_data.keys():
 		if not is_worldwide(q):
 			national_question_table["poll_id_%s" % num()] = u32(q)
-			national_question_table["unknown_%s" % num()] = u16(0)
+			national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
+			national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
 			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
 			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
 			national_question_table["question_table_count_%s" % num()] = u8(1)
@@ -416,7 +425,8 @@ def make_worldwide_question_table(header):
 	for q in question_data.keys():
 		if is_worldwide(q):
 			worldwide_question_table["poll_id_%s" % num()] = u32(q)
-			worldwide_question_table["unknown_%s" % num()] = u16(0)
+			worldwide_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
+			worldwide_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
 			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
 			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
 			worldwide_question_table["question_table_count_%s" % num()] = u8(1)
@@ -491,7 +501,7 @@ def make_national_result_detailed_table(header):
 			table["voters_response_1_num_%s" % num()] = u32(voters1)
 			table["voters_response_2_num_%s" % num()] = u32(voters2)
 			table["position_entry_table_count_%s" % num()] = u8(position_test_us[j])
-			table["starting_position_entry_table_%s" % num()] = u32(sum(position_test_us[:j]))
+			table["starting_position_entry_table_%s" % num()] = u32(sum(position_test_us[:j]W))
 
 	return table
 
