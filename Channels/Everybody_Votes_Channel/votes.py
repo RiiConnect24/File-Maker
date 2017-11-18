@@ -540,7 +540,7 @@ def make_worldwide_result_table(header):
 		female_resp2+=sum(results[i][3])
 		resp1+=male_resp1+female_resp1
 		resp2+=male_resp2+female_resp2
-		predict1+=sum(results[i][4)
+		predict1+=sum(results[i][4])
 		predict2+=sum(results[i][5])
 
 		table["poll_id_%s" % num()] = u32(i)
