@@ -147,7 +147,7 @@ def prepare():
 	else: questions = national+worldwide
 	if write_results: position = 58
 	else: position = 0
-	if write_results : results[get_poll_id()] = mysql_get_votes()
+	if write_results: results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
 	make_language_table()
 
@@ -224,11 +224,11 @@ def mysql_get_questions():
 
 	for row in cursor:
 		if row["type"] == "n":
-			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],0)
-			print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: National"
+			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],0)
+			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: National"
 		elif row["type"] == "w":
 			add_question(int(row["questionID"]),row["content"],row["choice1"],row["choice2"],1)
-			print "ID: "+str(row["questionID"])+" Question: "+row["content"]+" Choice 1: "+row["choice1"]+" Choice 2: "+row["choice2"]+" Type: Worldwide"
+			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: Worldwide"
 
 	cursor.close()
 
