@@ -405,7 +405,7 @@ def make_national_question_table(header):
 
 	for q in question_data.keys():
 		if not is_worldwide(q):
-			national_question_table["poll_id_%s" % num()] = u32(get_poll_id())
+			national_question_table["poll_id_%s" % num()] = u32(q)
 			national_question_table["unknown_%s" % num()] = u16(0)
 			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
 			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
@@ -425,7 +425,7 @@ def make_worldwide_question_table(header):
 
 	for q in question_data.keys():
 		if is_worldwide(q):
-			worldwide_question_table["poll_id_%s" % num()] = u32(get_poll_id())
+			worldwide_question_table["poll_id_%s" % num()] = u32(q)
 			worldwide_question_table["unknown_%s" % num()] = u16(0)
 			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
 			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
