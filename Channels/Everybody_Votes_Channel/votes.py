@@ -497,7 +497,7 @@ def make_national_result_detailed_table(header):
 	header["national_result_detailed_offset"] = offset_count()
 
 	for i in results:
-		for j in range(region_list[country_code]):
+		for j in range(len(position_table[country_code])):
 			table["voters_response_1_num_%s" % num()] = u32(results[i][6][j])
 			table["voters_response_2_num_%s" % num()] = u32(results[i][7][j])
 			table["position_entry_table_count_%s" % num()] = u8(position_table[49][j])
