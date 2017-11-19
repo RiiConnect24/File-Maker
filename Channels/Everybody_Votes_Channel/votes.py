@@ -88,7 +88,8 @@ countries["United Kingdom"] = ["イギリス", "United Kingdom", "Großbritannie
 country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 98, 105, 107, 108, 110]
 region_list = collections.OrderedDict()
 region_list[49] = 52
-position_test_us = [1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+position_table = collections.OrderedDict()
+position_table[49] = [1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 categories = collections.OrderedDict()
 categories[0] = 3
 categories[1] = 5
@@ -499,8 +500,8 @@ def make_national_result_detailed_table(header):
 		for j in range(region_list[country_code]):
 			table["voters_response_1_num_%s" % num()] = u32(results[i][6][j])
 			table["voters_response_2_num_%s" % num()] = u32(results[i][7][j])
-			table["position_entry_table_count_%s" % num()] = u8(position_test_us[j])
-			table["starting_position_entry_table_%s" % num()] = u32(sum(position_test_us[:j]))
+			table["position_entry_table_count_%s" % num()] = u8(position_table[49][j])
+			table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[49][:j]))
 
 	return table
 
