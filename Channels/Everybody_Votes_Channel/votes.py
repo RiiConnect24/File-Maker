@@ -618,11 +618,11 @@ def make_question_text(question_text_table):
 	for q in question_data.keys():
 		num = question_data.keys().index(q)
 		question_text_table["question_offset_%s" % num] = offset_count()
-		question_text["0_%s" % num] = get_question(q).encode("utf-16be")+pad(2)
+		question_text["question_%s" % num] = get_question(q).encode("utf-16be")+pad(2)
 		question_text_table["response_1_offset_%s" % num] = offset_count()
-		question_text["1_%s" % num] = get_response1(q).encode("utf-16be")+pad(2)
+		question_text["response_1_%s" % num] = get_response1(q).encode("utf-16be")+pad(2)
 		question_text_table["response_2_offset_%s" % num] = offset_count()
-		question_text["2_%s" % num] = get_response2(q).encode("utf-16be")+pad(2)
+		question_text["response_2_%s" % num] = get_response2(q).encode("utf-16be")+pad(2)
 
 	return question_text
 
