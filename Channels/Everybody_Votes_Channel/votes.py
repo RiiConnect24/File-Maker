@@ -222,8 +222,6 @@ def mysql_get_votes():
 	male_voters_response_2 = [0] * 33
 	female_voters_response_2 = [0] * 33
 
-	"""77 is the largest number of regions I have found, I'll make this better later."""
-
 	region_response_1 = [0] * 52
 	region_response_2 = [0] * 52
 
