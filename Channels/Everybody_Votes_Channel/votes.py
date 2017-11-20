@@ -278,7 +278,7 @@ def add_question(poll_id,q,r1,r2,f,c):
 		worldwide_q = True
 
 def question_text_replace(text):
-	text = text.replace("\xE2\x80\xA6", " . . .").replace("...", " . . .")
+	text = text.decode("utf-8").replace("\xE2\x80\xA6", " . . .").replace("...", " . . .")
 	return text
 
 dictionaries = []
