@@ -140,15 +140,13 @@ def prepare():
 		exit()
 	if country_code == 49: question_languages = [1,4,8]
 	else: question_languages = [1]
-	# National questions are written first, then worldwide
-	# \n is used as line break
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
 	if write_questions == False:
 		national = 0
 		worldwide = 0
 		questions = 0
 	else: questions = national+worldwide
-	if write_results: position = 58
+	if write_results: position = len(position_table[country_code])
 	else: position = 0
 	if write_results: results[get_poll_id()] = mysql_get_votes()
 	mysql_close()
