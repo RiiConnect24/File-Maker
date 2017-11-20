@@ -165,9 +165,7 @@ def mysql_connect():
 		global cnx
 		cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
 									  	  host='127.0.0.1',
-									  	  database=mysql_database,
-										  charset='utf8',
-										  use_unicode=True)
+									  	  database=mysql_database)
 		print cnx.charset
 	except mysql.connector.Error as err:
 		 if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Something is wrong with your user name or password"
