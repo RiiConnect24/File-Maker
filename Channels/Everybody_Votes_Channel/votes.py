@@ -88,6 +88,8 @@ countries["United Kingdom"] = ["イギリス", "United Kingdom", "Großbritannie
 country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 98, 105, 107, 108, 110]
 position_table = collections.OrderedDict()
 position_table[49] = [1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+position_data = collections.OrderedDict()
+position_data[49] = "D25E78D252E748E1AA87917D3C7819645A64E04EDC5FC8A0BE872EE628DF18D98C5A3C46A064AA5F7869B46C9191E249DC64EB37A53FAF5087419169A08C5037D2737337735AE440DC55557D2D5AD746E254B95D7D7D2341CD55E84CC87D714BAA7878914164CD69DC3F272F9B46C3645550F0BE"
 categories = collections.OrderedDict()
 categories[0] = 3
 categories[1] = 5
@@ -498,8 +500,8 @@ def make_national_result_detailed_table(header):
 		for j in range(len(position_table[country_code])):
 			table["voters_response_1_num_%s" % num()] = u32(results[i][6][j])
 			table["voters_response_2_num_%s" % num()] = u32(results[i][7][j])
-			table["position_entry_table_count_%s" % num()] = u8(position_table[49][j])
-			table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[49][:j]))
+			table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
+			table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
 
 	return table
 
@@ -509,9 +511,7 @@ def make_position_entry_table(header):
 
 	header["position_header_offset"] = offset_count()
 
-	position_table_data = 'D25E78D252E748E1AA87917D3C7819645A64E04EDC5FC8A0BE872EE628DF18D98C5A3C46A064AA5F7869B46C9191E249DC64EB37A53FAF5087419169A08C5037D2737337735AE440DC55557D2D5AD746E254B95D7D7D2341CD55E84CC87D714BAA7878914164CD69DC3F272F9B46C3645550F0BE'
-
-	table["data_%s" % num()] = binascii.unhexlify(position_table_data)
+	table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
 
 	#table["response_1_%s" % num()] = u8(0)
 	#table["response_2_%s" % num()] = u8(0)
