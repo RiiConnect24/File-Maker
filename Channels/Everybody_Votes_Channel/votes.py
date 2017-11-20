@@ -165,7 +165,9 @@ def mysql_connect():
 		global cnx
 		cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
 									  	  host='127.0.0.1',
-									  	  database=mysql_database)
+									  	  database=mysql_database,
+										  charset='utf8',
+										  use_unicode=True)
 	except mysql.connector.Error as err:
 		 if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Something is wrong with your user name or password"
 		 elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
@@ -278,7 +280,7 @@ def add_question(poll_id,q,r1,r2,f,c):
 		worldwide_q = True
 
 def question_text_replace(text):
-	text = text.decode("utf-8").replace("\xE2\x80\xA6", " . . .").replace("...", " . . .")
+	text = text.replace("\xE2\x80\xA6", " . . .").replace("...", " . . .")
 	return text
 
 dictionaries = []
