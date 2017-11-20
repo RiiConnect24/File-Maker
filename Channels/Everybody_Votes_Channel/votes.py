@@ -474,10 +474,8 @@ def make_national_result_table(header):
 	for i in results:
 		results_country_code = country_codes.index(country_code)
 
-		total_resp1 = 0
-		total_resp2 = 0
-		total_resp1+=results[i][0][results_country_code]+results[i][1][results_country_code]
-		total_resp2+=results[i][2][results_country_code]+results[i][3][results_country_code]
+		total_resp1=results[i][0][results_country_code]+results[i][1][results_country_code]
+		total_resp2=results[i][2][results_country_code]+results[i][3][results_country_code]
 
 		table["poll_id_%s" % num()] = u32(i)
 		table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][results_country_code])
