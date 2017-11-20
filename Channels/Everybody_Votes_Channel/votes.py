@@ -97,6 +97,42 @@ position_data[49] = "D25E78D252E748E1AA87917D3C7819645A64E04EDC5FC8A0BE872EE628D
 position_data[77] = "8246DC465AB49196463CA06E28467864AA46E6E6C86E6E3296C87896C84678C88C14505A8C2D508CC8C8BE96"
 position_data[105] = "6E5F64E6A03C3C1EF852E65FCA739AD9A7E6B4E1C8E6EBE1641E7878503CC832AA73468C1E32A0968C28781E7832"
 position_data[110] = "B4B4738732E67846D71E82B4507D"
+region_number = collections.OrderedDict()
+region_number[1] = 47
+region_number[10] = 24
+region_number[16] = 27
+region_number[18] = 13
+region_number[20] = 13
+region_number[21] = 33
+region_number[22] = 7
+region_number[25] = 22
+region_number[30] = 22
+region_number[36] = 32
+region_number[40] = 10
+region_number[42] = 25
+region_number[49] = 52
+region_number[52] = 25
+region_number[65] = 8
+region_number[66] = 9
+region_number[67] = 3
+region_number[74] = 17
+region_number[76] = 6
+region_number[77] = 26
+region_number[78] = 16
+region_number[79] = 13
+region_number[82] = 8
+region_number[83] = 20
+region_number[88] = 3
+region_number[94] = 12
+region_number[95] = 13
+region_number[96] = 5
+"""Hi KcrPL :)"""
+# region_number[97] = 16
+region_number[98] = 7
+region_number[105] = 17
+region_number[107] = 21
+region_number[108] = 23
+region_number[110] = 5
 categories = collections.OrderedDict()
 categories[0] = 3
 categories[1] = 5
@@ -392,7 +428,7 @@ def make_header():
 	header["question_table_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
-	header["national_result_detailed"] = u16(national_results*52)
+	header["national_result_detailed"] = u16(national_results*region_number[country_code])
 	header["national_result_detailed_offset"] = u32(0)
 	header["position_entry_number"] = u16(position)
 	header["position_header_offset"] = u32(0)
@@ -468,7 +504,7 @@ def make_national_result_table(header):
 	dictionaries.append(table)
 
 	national_result_detailed_count = 0
-	national_result_detailed_tables = 52
+	national_result_detailed_tables = region_number[country_code]
 	header["national_result_offset"] = offset_count()
 
 	for i in results:
