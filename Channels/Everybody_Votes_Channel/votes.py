@@ -545,7 +545,8 @@ def make_national_result_detailed_table(header):
 		for j in range(len(position_table[country_code])):
 			table["voters_response_1_num_%s" % num()] = u32(results[i][6][j])
 			table["voters_response_2_num_%s" % num()] = u32(results[i][7][j])
-			table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
+			if results[i][6][j] and results[i][7][j] == 0: table["position_entry_table_count_%s" % num()] = u8(0)
+			else: table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
 			table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
 
 	return table
