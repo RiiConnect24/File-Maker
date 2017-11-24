@@ -182,7 +182,25 @@ def prepare():
 	country_count = len(countries)
 	mysql_connect()
 	mysql_get_questions()
-	print "Loaded %s Countries" % country_count
+	if len(sys.argv) == 1: manual_run()
+	elif len(sys.argv) >= 2:
+		file_type = sys.argv[1]
+		if file_type == "q": write_questions = True
+		elif file_type == "r": automatic_results()
+	if country_code == 49: question_languages = [1,4,8]
+	else: question_languages = [1]
+	if write_questions == False:
+		national = 0
+		worldwide = 0
+		questions = 0
+	else: questions = national+worldwide
+	if write_results: position = len(position_table[country_code])
+	else: position = 0
+	if write_results: results[get_poll_id()] = mysql_get_votes()
+	mysql_close()
+	make_language_table()
+
+def manual_run():
 	question_count = len(question_data)
 	if question_count == 1: print "Loaded %s Question" % question_count
 	else: print "Loaded %s Questions" % question_count
@@ -195,19 +213,13 @@ def prepare():
 	else:
 		print "Error: Invalid file type selected"
 		exit()
-	if country_code == 49: question_languages = [1,4,8]
-	else: question_languages = [1]
 	if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
-	if write_questions == False:
-		national = 0
-		worldwide = 0
-		questions = 0
-	else: questions = national+worldwide
-	if write_results: position = len(position_table[country_code])
-	else: position = 0
-	if write_results: results[get_poll_id()] = mysql_get_votes()
-	mysql_close()
-	make_language_table()
+
+def automatic_results():
+	write_results = True
+	if sys.argv[2] == "n": days = 7
+	elif sys.argv[2] == "w": days = 15
+	results[get_poll_id()] = mysql_get_votes(days)
 
 def mysql_connect():
 	print "Connecting to MySQL ..."
@@ -223,13 +235,19 @@ def mysql_connect():
 		 elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
 		 else: print err
 
-def mysql_get_votes():
+def mysql_get_votes(days):
 	cursor = cnx.cursor(dictionary=True)
-	question_id = get_poll_id()
-	query = ("SELECT * from EVC.votes WHERE questionID = %s" % str(question_id))
+	query = "SELECT questionID, type from EVC.questions WHERE date <= CURDATE() - %s" % days
 	cursor.execute(query)
-
+	global poll_id, poll_type
+	for row in cursor:
+		poll_id = row["questionID"]
+		poll_type = row["type"]
 	global national_results,worldwide_results
+	if poll_type is "n": national_results=1
+	elif poll_type is "w": worldwide_results=1
+	query = "SELECT * from EVC.votes WHERE questionID = %s" % poll_id
+	cursor.execute(query)
 
 	male_voters_response_1 = [0] * 33
 	female_voters_response_1 = [0] * 33
@@ -241,10 +259,6 @@ def mysql_get_votes():
 
 	predict_response_1 = [0] * 33
 	predict_response_2 = [0] * 33
-
-	poll_type = raw_input("Enter poll type for %s (n/w): " % question_id)
-	if poll_type is "n": national_results=1
-	elif poll_type is "w": worldwide_results=1
 
 	for row in cursor:
 		if row["typeCD"] == 0:
@@ -277,7 +291,8 @@ def mysql_get_votes():
 
 def mysql_get_questions():
 	cursor = cnx.cursor(dictionary=True)
-	query = "SELECT * from EVC.questions WHERE active = 1"
+	query = "SELECT * from EVC.questions WHERE active = 1 AND date = CURDATE()"
+
 	cursor.execute(query)
 
 	for row in cursor:
