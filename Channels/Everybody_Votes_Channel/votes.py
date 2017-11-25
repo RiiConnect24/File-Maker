@@ -254,24 +254,32 @@ def mysql_get_votes(days):
 	male_voters_response_2 = [0] * 33
 	female_voters_response_2 = [0] * 33
 
-	region_response_1 = [0] * 52
-	region_response_2 = [0] * 52
+	region_response_1 = [0] * 33
+	region_response_2 = [0] * 33
+
+	for k,v in region_number.items():
+		region_response_1[country_codes.index(k)] = [0] * v
+		region_response_2[country_codes.index(k)] = [0] * v
 
 	predict_response_1 = [0] * 33
 	predict_response_2 = [0] * 33
 
 	for row in cursor:
-		if row["typeCD"] == 0:
-			male_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0])
-			female_voters_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][1])
-			male_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2])
-			female_voters_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][3])
+		country_index = country_codes.index(row["countryID"])
+		anscnt = row["ansCNT"]
+		region_id = row["regionID"] - 2
 
-			region_response_1[row["regionID"] - 2] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
-			region_response_2[row["regionID"] - 2] += int(row["ansCNT"][2]) + int(row["ansCNT"][3])
+		if row["typeCD"] == 0:
+			male_voters_response_1[country_index] += int(anscnt[0])
+			female_voters_response_1[country_index] += int(anscnt[1])
+			male_voters_response_2[country_index] += int(anscnt[2])
+			female_voters_response_2[country_index] += int(anscnt[3])
+
+			region_response_1[country_index][region_id] += int(anscnt[0]) + int(anscnt[1])
+			region_response_2[country_index][region_id] += int(anscnt[2]) + int(anscnt[3])
 		elif row["typeCD"] == 1:
-			predict_response_1[country_codes.index(row["countryID"])] += int(row["ansCNT"][0]) + int(row["ansCNT"][1])
-			predict_response_2[country_codes.index(row["countryID"])] += int(row["ansCNT"][2]) + int(row["ansCNT"][2])
+			predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
+			predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[2])
 
 	print "Male Voters Response 1: %s" % male_voters_response_1
 	print "Female Voters Response 1: %s" % female_voters_response_1
@@ -566,9 +574,10 @@ def make_national_result_detailed_table(header):
 
 	for i in results:
 		for j in range(len(position_table[country_code])):
+			country_index = country_codes.index(country_code)
 			table["voters_response_1_num_%s" % num()] = u32(results[i][6][j])
 			table["voters_response_2_num_%s" % num()] = u32(results[i][7][j])
-			if results[i][6][j] == 0 and results[i][7][j] == 0: table["position_entry_table_count_%s" % num()] = u8(0)
+			if results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0: table["position_entry_table_count_%s" % num()] = u8(0)
 			else: table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
 			table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
 
