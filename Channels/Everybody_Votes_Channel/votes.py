@@ -11,6 +11,7 @@
 
 import binascii
 import collections
+import datetime
 import json
 import math
 import mysql.connector
@@ -23,7 +24,7 @@ import time
 import io
 import rsa
 import random
-import datetime
+import textwrap
 from config import *
 from mysql.connector import errorcode
 
@@ -147,6 +148,38 @@ region_number[105] = 17
 region_number[107] = 21
 region_number[108] = 23
 region_number[110] = 5
+country_language = collections.OrderedDict()
+country_language[1] = [0]
+country_language[10] = [1, 3, 8]
+country_language[16] = [1, 3, 7, 8]
+country_language[18] = [1, 3, 8]
+country_language[20] = [1, 3, 8]
+country_language[21] = [1, 3, 8]
+country_language[22] = [1, 3, 8]
+country_language[25] = [1, 3, 8]
+country_language[30] = [1, 3, 8]
+country_language[36] = [1, 3, 8]
+country_language[40] = [1, 3, 8]
+country_language[42] = [1, 3, 8]
+country_language[49] = [1, 3, 8]
+country_language[52] = [1, 3, 8]
+country_language[65] = [1]
+country_language[66] = [2, 3, 5, 6]
+country_language[67] = [2, 3, 5, 6]
+country_language[74] = [1]
+country_language[76] = [1]
+country_language[77] = [3]
+country_language[78] = [2]
+country_language[79] = [1, 4, 7]
+country_language[82] = [1]
+country_language[83] = [5]
+country_language[88] = [2, 3, 5, 6]
+country_language[94] = [6]
+country_language[98] = [1, 4, 7]
+country_language[105] = [4]
+country_language[107] = [4]
+country_language[108] = [2, 3, 5, 6]
+country_language[110] = [1]
 categories = collections.OrderedDict()
 categories[0] = 3
 categories[1] = 5
@@ -305,10 +338,10 @@ def mysql_get_questions():
 
 	for row in cursor:
 		if row["type"] == "n":
-			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],0,row["category"])
+			add_question(row)
 			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: National"
 		elif row["type"] == "w":
-			add_question(int(row["questionID"]),row["content_english"],row["choice1_english"],row["choice2_english"],1,row["category"])
+			add_question(row)
 			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: Worldwide"
 
 	cursor.close()
@@ -323,35 +356,46 @@ def num():
 
 def dec(data): return int(data, 16)
 
-def question():
-	if raw_input('Would you like to enter a question? (Y/N) ') is 'Y':
-		add_question(raw_input('Enter Question: '),raw_input('Enter Answer 1: '),raw_input('Enter Answer 2: '),int(raw_input('Is this a national (0) or a worldwide (1) question? ')), 0)
+def get_question(id, language_code): return question_data[id][0][language_code]
 
-def get_question(id): return question_data[id][0]
+def get_response1(id, language_code): return question_data[id][1][language_code]
 
-def get_response1(id): return question_data[id][1]
+def get_response2(id, language_code): return question_data[id][2][language_code]
 
-def get_response2(id): return question_data[id][2]
-
-def get_category(id): return question_data[id][4]
+def get_category(id): return question_data[id][3]
 
 def is_worldwide(id):
 	i = True
 	if question_data[id][3] == 0: i = False
 	return i
 
-def add_question(poll_id,q,r1,r2,f,c):
+def add_question(row):
 	global question_data,national,worldwide,national_q,worldwide_q
-	question_data[poll_id] = [question_text_replace(q),question_text_replace(r1),question_text_replace(r2),f,c]
-	if f == 0:
+	for r in row:
+		if "content" in r or "choice" in r:
+			if row[r] != None: row[r] = question_text_replace(row[r])
+
+	question_data[row["questionID"]] = [[row["content_japanese"], row["content_english"], row["content_german"],
+										 row["content_french"], row["content_spanish"], row["content_italian"],
+										 row["content_dutch"], row["content_portuguese"], row["content_french_canada"]],
+										[row["choice1_japanese"], row["choice1_english"], row["choice1_german"],
+										 row["choice1_french"], row["choice1_spanish"], row["choice1_italian"],
+										 row["choice1_dutch"], row["choice1_portuguese"], row["choice1_french_canada"]],
+										[row["choice2_japanese"], row["choice2_english"], row["choice2_german"],
+										 row["choice2_french"], row["choice2_spanish"], row["choice2_italian"],
+										 row["choice2_dutch"], row["choice2_portuguese"], row["choice2_french_canada"]],
+										row["category"]]
+
+	if row["type"] == "n":
 		national+=1
 		national_q = True
-	elif f == 1:
+	elif row["type"] == "w":
 		worldwide+=1
 		worldwide_q = True
 
 def question_text_replace(text):
 	text = text.replace(u"\u2026", " . . .").replace("...", " . . .")
+	text = "\\n".join(textwrap.wrap(text, 50))
 	return text
 
 dictionaries = []
@@ -526,11 +570,13 @@ def make_question_text_table(header):
 	header["question_table_offset"] = offset_count()
 
 	for q in question_data.keys():
-		num = question_data.keys().index(q)
-		question_text_table["language_code_%s" % num] = u8(language_code)
-		question_text_table["question_offset_%s" % num] = u32(0)
-		question_text_table["response_1_offset_%s" % num] = u32(0)
-		question_text_table["response_2_offset_%s" % num] = u32(0)
+		for language_code in country_language[country_code]:
+			if get_question(q, language_code) != None:
+				num = question_data.keys().index(q)
+				question_text_table["language_code_%s" % num] = u8(language_code)
+				question_text_table["question_offset_%s" % num] = u32(0)
+				question_text_table["response_1_offset_%s" % num] = u32(0)
+				question_text_table["response_2_offset_%s" % num] = u32(0)
 
 	return question_text_table
 
@@ -693,13 +739,15 @@ def make_question_text(question_text_table):
 	dictionaries.append(question_text)
 
 	for q in question_data.keys():
-		num = question_data.keys().index(q)
-		question_text_table["question_offset_%s" % num] = offset_count()
-		question_text["question_%s" % num] = get_question(q).encode("utf-16be")+pad(2)
-		question_text_table["response_1_offset_%s" % num] = offset_count()
-		question_text["response_1_%s" % num] = get_response1(q).encode("utf-16be")+pad(2)
-		question_text_table["response_2_offset_%s" % num] = offset_count()
-		question_text["response_2_%s" % num] = get_response2(q).encode("utf-16be")+pad(2)
+		for language_code in country_language[country_code]:
+			if get_question(q, language_code) != None:
+				num = question_data.keys().index(q)
+				question_text_table["question_offset_%s" % num] = offset_count()
+				question_text["question_%s" % num] = get_question(q, language_code).encode("utf-16be")+pad(2)
+				question_text_table["response_1_offset_%s" % num] = offset_count()
+				question_text["response_1_%s" % num] = get_response1(q, language_code).encode("utf-16be")+pad(2)
+				question_text_table["response_2_offset_%s" % num] = offset_count()
+				question_text["response_2_%s" % num] = get_response2(q, language_code).encode("utf-16be")+pad(2)
 
 	return question_text
 
