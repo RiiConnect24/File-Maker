@@ -49,6 +49,8 @@ national_q = False
 file_type = None
 write_questions = False
 write_results = False
+national_results = 0
+worldwide_results = 0
 countries = collections.OrderedDict()
 countries["Japan"] = ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"]
 countries["Argentina"] = ["アルゼンチン", "Argentina", "Argentinien", "Argentine", "Argentina", "Argentina", "Argentinië"]
@@ -218,6 +220,7 @@ def prepare():
 		file_type = sys.argv[1]
 		if file_type == "q": automatic_questions()
 		elif file_type == "r": automatic_results()
+		elif file_type == "v": automatic_votes()
 	mysql_close()
 	make_language_table()
 
@@ -239,26 +242,35 @@ def manual_run():
 def automatic_questions():
 	global write_questions,write_results,questions
 	write_questions = True
-	questions = national+worldwide
-	mysql_get_questions()
-	question_count = len(question_data)
-	if question_count == 1: print "Loaded %s Question" % question_count
-	else: print "Loaded %s Questions" % question_count
+	mysql_get_questions(1, sys.argv[2])
+	questions = 1
 
 def automatic_results():
-	global write_results,position,results,national,worldwide,questions,national_results,worldwide_results
+	global write_results,results,national,worldwide,questions,national_results,worldwide_results
 	write_results = True
-	if sys.argv[2] == "n":
-		national_results=1
-		days = 7
-	elif sys.argv[2] == "w":
-		worldwide_results=1
-		days = 15
-	position = len(position_table[country_code])
-	results[get_poll_id()] = mysql_get_votes(days, sys.argv[2])
+	if sys.argv[2] == "n": days = 7
+	elif sys.argv[2] == "w": days = 15
+	results[get_poll_id()] = mysql_get_votes(days, sys.argv[2], 1)
+	try: del results[None]
+	except KeyError: pass
 	national = 0
 	worldwide = 0
 	questions = 0
+
+def automatic_votes():
+	global write_questions,write_results,questions,results,national,worldwide,questions
+	write_questions = True
+	write_results = True
+	mysql_get_questions(4, "n")
+	mysql_get_questions(1, "w")
+	questions = national+worldwide
+	question_count = len(question_data)
+	if question_count == 1: print "Loaded %s Question" % question_count
+	else: print "Loaded %s Questions" % question_count
+	for v in range(1, 7): results[get_poll_id()] = mysql_get_votes(0, "n", v)
+	results[get_poll_id()] = mysql_get_votes(0, "w", 1)
+	try: del results[None]
+	except KeyError: pass
 
 def mysql_connect():
 	print "Connecting to MySQL ..."
@@ -274,19 +286,29 @@ def mysql_connect():
 		 elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
 		 else: print err
 
-def mysql_get_votes(days, type):
-	cursor = cnx.cursor(dictionary=True)
-	query = "SELECT questionID from EVC.questions WHERE DATE(date) = CURDATE() - %s AND type = '%s'" % (days, type)
+def mysql_get_votes(days, type, index):
+	cursor = cnx.cursor(dictionary=True, buffered=True)
+	query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - %s AND type = '%s' ORDER BY questionID DESC" % (days, type)
 	cursor.execute(query)
 	global poll_id, poll_type
-	row = cursor.fetchone()
-	if row == None:
-		print "Warning: No poll found for this date."
-		poll_id = None
-		return None
+
+	i = 0
+
+	while i < index:
+		row = cursor.fetchone()
+		if row == None:
+			poll_id = None
+			return None
+		i += 1
+
 	poll_id = row["questionID"]
 	query = "SELECT * from EVC.votes WHERE questionID = %s" % poll_id
 	cursor.execute(query)
+
+	global national_results,worldwide_results
+
+	if type == "n": national_results+=1
+	elif type == "w": worldwide_results+=1
 
 	male_voters_response_1 = [0] * 33
 	female_voters_response_1 = [0] * 33
@@ -336,19 +358,19 @@ def mysql_get_votes(days, type):
 			predict_response_1, predict_response_2,
 			region_response_1, region_response_2]
 
-def mysql_get_questions():
-	cursor = cnx.cursor(dictionary=True)
-	query = "SELECT * from EVC.questions WHERE active = 1 AND date = CURDATE()"
+def mysql_get_questions(count, type):
+	cursor = cnx.cursor(dictionary=True, buffered=True)
+	query = "SELECT * from EVC.questions WHERE date <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % type
 
 	cursor.execute(query)
 
-	for row in cursor:
-		if row["type"] == "n":
-			add_question(row)
-			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: National"
-		elif row["type"] == "w":
-			add_question(row)
-			print "ID: "+str(row["questionID"])+" Question: "+row["content_english"]+" Choice 1: "+row["choice1_english"]+" Choice 2: "+row["choice2_english"]+" Type: Worldwide"
+	i = 0
+
+	while i < count:
+		row = cursor.fetchone()
+		if row == None: break
+		add_question(row)
+		i += 1
 
 	cursor.close()
 
@@ -466,7 +488,7 @@ def make_bin(country_code):
 		question_text_table = make_question_text_table(voting)
 	if write_results and national_results > 0:
 		make_national_result_table(voting)
-		make_national_result_detailed_number_table(voting)
+		make_national_result_detailed_table(voting)
 		make_position_entry_table(voting)
 	if write_results and worldwide_results > 0:
 		make_worldwide_result_table(voting)
@@ -505,24 +527,24 @@ def make_header():
 	else:
 		header["question_version"] = u8(1)
 		header["result_version"] = u8(0)
-	header["national_question_number"] = u8(national)
-	header["national_question_offset"] = u32(0)
-	header["worldwide_question_number"] = u8(worldwide)
+	header["nqen_entry_number"] = u8(national)
+	header["nqen_header_offset"] = u32(0)
+	header["worldwide_question_num"] = u8(worldwide)
 	header["worldwide_question_offset"] = u32(0)
-	header["question_number"] = u8(questions)
-	header["question_offset"] = u32(0)
+	header["question_entry_number"] = u8(questions)
+	header["question_table_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
-	header["national_result_detailed_number"] = u16(national_results*region_number[country_code])
+	header["national_result_detailed"] = u16(national_results*region_number[country_code])
 	header["national_result_detailed_offset"] = u32(0)
-	header["position_number"] = u16(position)
-	header["position_offset"] = u32(0)
-	header["worldwide_result_number"] = u8(worldwide_results)
-	header["worldwide_result_offset"] = u32(0)
-	header["worldwide_result_detailed_number"] = u16(worldwide_results*33)
+	header["position_entry_number"] = u16(len(position_table[country_code]))
+	header["position_header_offset"] = u32(0)
+	header["worldwide_result_entry_num"] = u8(worldwide_results)
+	header["worldwide_result_table_offset"] = u32(0)
+	header["worldwide_result_detailed_num"] = u16(worldwide_results*33)
 	header["worldwide_result_detailed_offset"] = u32(0)
-	header["country_name_number"] = u16(len(countries) * 7)
-	header["country_name_offset"] = u32(0)
+	header["country_name_entry_num"] = u16(len(countries) * 7)
+	header["country_name_header_offset"] = u32(0)
 
 	return header
 
@@ -532,7 +554,7 @@ def make_national_question_table(header):
 	dictionaries.append(national_question_table)
 
 	question_table_count = 0
-	if national_q: header["national_question_offset"] = offset_count()
+	if national_q: header["nqen_header_offset"] = offset_count()
 
 	for q in question_data.keys():
 		if not is_worldwide(q):
@@ -573,7 +595,7 @@ def make_question_text_table(header):
 	question_text_table = collections.OrderedDict()
 	dictionaries.append(question_text_table)
 
-	header["question_offset"] = offset_count()
+	header["question_table_offset"] = offset_count()
 
 	for q in question_data.keys():
 		for language_code in country_language[country_code]:
@@ -590,8 +612,8 @@ def make_national_result_table(header):
 	table = collections.OrderedDict()
 	dictionaries.append(table)
 
-	national_result_detailed_number_count = 0
-	national_result_detailed_number_tables = region_number[country_code]
+	national_result_detailed_count = 0
+	national_result_detailed_tables = region_number[country_code]
 	header["national_result_offset"] = offset_count()
 
 	for i in results:
@@ -612,13 +634,13 @@ def make_national_result_table(header):
 			table["accurate_prediction_voters_num_%s" % num()] = u32(results[i][5][country_index])
 			table["inaccurate_prediction_voters_num_%s" % num()] = u32(results[i][4][country_index])
 		table["unknown_%s" % num()] = u16(1)
-		table["national_result_detailed_number_number_%s" % num()] = u8(national_result_detailed_number_tables)
-		table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(national_result_detailed_number_count)
-		national_result_detailed_number_count+=national_result_detailed_number_tables
+		table["national_result_detailed_number_%s" % num()] = u8(national_result_detailed_tables)
+		table["starting_national_result_detailed_table_number_%s" % num()] = u32(national_result_detailed_count)
+		national_result_detailed_count+=national_result_detailed_tables
 
 	return table
 
-def make_national_result_detailed_number_table(header):
+def make_national_result_detailed_table(header):
 	table = collections.OrderedDict()
 	dictionaries.append(table)
 
@@ -639,7 +661,7 @@ def make_position_entry_table(header):
 	table = collections.OrderedDict()
 	dictionaries.append(table)
 
-	header["position_offset"] = offset_count()
+	header["position_header_offset"] = offset_count()
 
 	table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
 
@@ -651,7 +673,7 @@ def make_worldwide_result_table(header):
 	dictionaries.append(table)
 
 	worldwide_detailed_table_count = 0
-	header["worldwide_result_offset"] = offset_count()
+	header["worldwide_result_table_offset"] = offset_count()
 
 	for i in results:
 		male_resp1=sum(results[i][0])
@@ -705,7 +727,7 @@ def make_country_name_table(header):
 	country_name_table = collections.OrderedDict()
 	dictionaries.append(country_name_table)
 
-	header["country_name_offset"] = offset_count()
+	header["country_name_header_offset"] = offset_count()
 
 	for k in countries.keys():
 		num = countries.keys().index(k)
