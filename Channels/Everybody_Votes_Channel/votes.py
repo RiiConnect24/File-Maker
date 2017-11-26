@@ -493,9 +493,9 @@ def make_bin(country_code):
 	if write_results and worldwide_results > 0:
 		make_worldwide_result_table(voting)
 		make_worldwide_result_detailed_table(voting)
-	if file_type == "v" or "r": country_table = make_country_name_table(voting)
+	if file_type == "v" or file_type == "r" and national_results == 0: country_table = make_country_name_table(voting)
 	if write_questions: make_question_text(question_text_table)
-	if file_type == "v" or "r": make_country_table(country_table)
+	if file_type == "v" or file_type == "r" and national_results == 0: make_country_table(country_table)
 	if file_type == "q": question_file = get_name()+'_q'
 	elif file_type == "r": question_file = get_name()+'_r'
 	else: question_file = "voting"
@@ -537,13 +537,15 @@ def make_header():
 	header["national_result_offset"] = u32(0)
 	header["national_result_detailed_number"] = u16(national_results*region_number[country_code])
 	header["national_result_detailed_offset"] = u32(0)
-	header["position_number"] = u16(position)
+	if file_type == "q": header["position_number"] = u16(0)
+	else: header["position_number"] = u16(len(position_table[country_code]))
 	header["position_offset"] = u32(0)
 	header["worldwide_result_number"] = u8(worldwide_results)
 	header["worldwide_result_offset"] = u32(0)
 	header["worldwide_result_detailed_number"] = u16(worldwide_results*33)
 	header["worldwide_result_detailed_offset"] = u32(0)
-	header["country_name_number"] = u16(len(countries) * 7)
+	if file_type == "q" or worldwide_results == 0: header["country_name_number"] = u16(0)
+	else: header["country_name_number"] = u16(len(countries) * 7)
 	header["country_name_offset"] = u32(0)
 
 	return header
@@ -640,7 +642,7 @@ def make_national_result_table(header):
 
 	return table
 
-def make_national_result_detailed_number_table(header):
+def make_national_result_detailed_table(header):
 	table = collections.OrderedDict()
 	dictionaries.append(table)
 
