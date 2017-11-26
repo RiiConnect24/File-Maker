@@ -527,61 +527,6 @@ def make_header():
 	else:
 		header["question_version"] = u8(1)
 		header["result_version"] = u8(0)
-	header["nqen_entry_number"] = u8(national)
-	header["nqen_header_offset"] = u32(0)
-	header["worldwide_question_num"] = u8(worldwide)
-	header["worldwide_question_offset"] = u32(0)
-	header["question_entry_number"] = u8(questions)
-	header["question_table_offset"] = u32(0)
-	header["national_result_entry"] = u8(national_results)
-	header["national_result_offset"] = u32(0)
-	header["national_result_detailed"] = u16(national_results*region_number[country_code])
-	header["national_result_detailed_offset"] = u32(0)
-	header["position_entry_number"] = u16(len(position_table[country_code]))
-	header["position_header_offset"] = u32(0)
-	header["worldwide_result_entry_num"] = u8(worldwide_results)
-	header["worldwide_result_table_offset"] = u32(0)
-	header["worldwide_result_detailed_num"] = u16(worldwide_results*33)
-	header["worldwide_result_detailed_offset"] = u32(0)
-	header["country_name_entry_num"] = u16(len(countries) * 7)
-	header["country_name_header_offset"] = u32(0)
-
-	return header
-
-def make_national_question_table(header):
-	global national
-	national_question_table = collections.OrderedDict()
-	dictionaries.append(national_question_table)
-
-	question_table_count = 0
-	if national_q: header["nqen_header_offset"] = offset_count()
-
-	for q in question_data.keys():
-		if not is_worldwide(q):
-			national_question_table["poll_id_%s" % num()] = u32(q)
-			national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
-			national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
-			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
-			national_question_table["question_table_count_%s" % num()] = u8(1)
-			national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
-			question_table_count+=1
-
-	return national_question_table
-
-def make_worldwide_question_table(header):def make_header():
-	header = collections.OrderedDict()
-	dictionaries.append(header)
-
-	header["timestamp"] = u32(get_timestamp(0))
-	header["country_code"] = u8(country_code)
-	header["publicity_flag"] = u8(0)
-	if file_type == "r":
-		header["question_version"] = u8(0)
-		header["result_version"] = u8(1)
-	else:
-		header["question_version"] = u8(1)
-		header["result_version"] = u8(0)
 	header["national_question_number"] = u8(national)
 	header["national_question_offset"] = u32(0)
 	header["worldwide_question_number"] = u8(worldwide)
