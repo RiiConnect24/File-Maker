@@ -605,7 +605,7 @@ def sign_file(name, local_name, server_name):
 	file.close()
 	output("Compressing ...", "VERBOSE")
 	subprocess.call(["mv", local_name, local_name+"-1"])
-	subprocess.call(["%s/lzss" % lzss_path, "-evf", local_name+"-1"], stdout=subprocess.PIPE)
+	subprocess.call(["%s/lzss" % lzss_path, "-evf", local_name+"-1"], stdout=subprocess.PIPE) # Compress the file with the lzss program.
 	file = open(local_name + '-1', 'rb')
 	new = file.read()
 	dest = open(local_name, "w+")
