@@ -50,8 +50,6 @@ national_q = False
 file_type = None
 write_questions = False
 write_results = False
-national_results = 0
-worldwide_results = 0
 
 def time_convert(time): return int((time-946684800)/60)
 
@@ -236,7 +234,7 @@ def mysql_get_votes(days, type, index):
 
 def mysql_get_questions(count, type):
 	cursor = cnx.cursor(dictionary=True, buffered=True)
-	query = "SELECT * from EVC.questions WHERE date < CURDATE() AND type = '%s' ORDER BY questionID DESC" % type
+	query = "SELECT * from EVC.questions WHERE date <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % type
 
 	cursor.execute(query)
 
@@ -358,7 +356,7 @@ def sign_file(name):
 		if file_type == "q" or file_type == "r":
 			subprocess.call(["mkdir", "-p", "%s/%s/%s" % (file_path, str(country_code).zfill(3), get_year())]) # If folder for the year does not exist, make it.
 			path = "%s/%s/%s/%s" % (file_path, str(country_code).zfill(3), get_year(), final)
-			elif file_type == "v": path = "%s/%s/%s" % (file_path, str(country_code).zfill(3), final)
+		elif file_type == "v": path = "%s/%s/%s" % (file_path, str(country_code).zfill(3), final)
 	subprocess.call(["cp", final, path])
 	os.remove(final + '-1')
 
