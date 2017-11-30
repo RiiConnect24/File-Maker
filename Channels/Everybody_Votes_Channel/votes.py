@@ -51,6 +51,12 @@ file_type = None
 write_questions = False
 write_results = False
 
+if production:
+	client = Client(sentry_url)
+	handler = SentryHandler(client)
+	setup_logging(handler)
+	logger = logging.getLogger(__name__)
+
 def time_convert(time): return int((time-946684800)/60)
 
 def get_epoch(): return int(time.time())
