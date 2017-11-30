@@ -12,21 +12,21 @@
 import binascii
 import collections
 import datetime
+import io
 import json
-import math
 import mysql.connector
 import os
-import platform
+import rsa
 import struct
 import subprocess
 import sys
-import time
-import io
-import rsa
-import random
 import textwrap
+import time
 from config import *
 from mysql.connector import errorcode
+from raven import Client
+from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
 from voteslists import *
 
 print "Everybody Votes Channel File Generator \n"
@@ -54,8 +54,6 @@ write_results = False
 def time_convert(time): return int((time-946684800)/60)
 
 def get_epoch(): return int(time.time())
-
-def get_randint(): return random.randint(50,255)
 
 def get_timestamp(mode):
 	time = time_convert(get_epoch())
