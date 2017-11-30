@@ -14,7 +14,6 @@ import collections
 import datetime
 import io
 import json
-import logging
 import mysql.connector
 import os
 import rsa
@@ -51,12 +50,6 @@ national_q = False
 file_type = None
 write_questions = False
 write_results = False
-
-if production:
-	client = Client(sentry_url)
-	handler = SentryHandler(client)
-	setup_logging(handler)
-	logger = logging.getLogger(__name__)
 
 def time_convert(time): return int((time-946684800)/60)
 
@@ -418,7 +411,7 @@ def make_header():
 	header["national_question_offset"] = u32(0)
 	header["worldwide_question_number"] = u8(worldwide)
 	header["worldwide_question_offset"] = u32(0)
-	header["question_number"] = u8(questions)
+	header["question_number"] = u8(questions * len(country_language[country_code]))
 	header["question_offset"] = u32(0)
 	header["national_result_entry"] = u8(national_results)
 	header["national_result_offset"] = u32(0)
@@ -490,10 +483,10 @@ def make_question_text_table(header):
 		for language_code in country_language[country_code]:
 			if get_question(q, language_code) != None:
 				num = question_data.keys().index(q)
-				question_text_table["language_code_%s" % num] = u8(language_code)
-				question_text_table["question_offset_%s" % num] = u32(0)
-				question_text_table["response_1_offset_%s" % num] = u32(0)
-				question_text_table["response_2_offset_%s" % num] = u32(0)
+				question_text_table["language_code_%s_%s" % (num, language_code)] = u8(language_code)
+				question_text_table["question_offset_%s_%s" % (num, language_code)] = u32(0)
+				question_text_table["response_1_offset_%s_%s" % (num, language_code)] = u32(0)
+				question_text_table["response_2_offset_%s_%s" % (num, language_code)] = u32(0)
 
 	return question_text_table
 
@@ -546,9 +539,6 @@ def make_position_entry_table(header):
 	header["position_offset"] = offset_count()
 
 	table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
-
-	#table["response_1_%s" % num()] = u8(0)
-	#table["response_2_%s" % num()] = u8(0)
 
 def make_worldwide_result_table(header):
 	table = collections.OrderedDict()
@@ -652,12 +642,12 @@ def make_question_text(question_text_table):
 		for language_code in country_language[country_code]:
 			if get_question(q, language_code) != None:
 				num = question_data.keys().index(q)
-				question_text_table["question_offset_%s" % num] = offset_count()
-				question_text["question_%s" % num] = get_question(q, language_code).encode("utf-16be")+pad(2)
-				question_text_table["response_1_offset_%s" % num] = offset_count()
-				question_text["response_1_%s" % num] = get_response1(q, language_code).encode("utf-16be")+pad(2)
-				question_text_table["response_2_offset_%s" % num] = offset_count()
-				question_text["response_2_%s" % num] = get_response2(q, language_code).encode("utf-16be")+pad(2)
+				question_text_table["question_offset_%s_%s" % (num, language_code)] = offset_count()
+				question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode("utf-16be")+pad(2)
+				question_text_table["response_1_offset_%s_%s" % (num, language_code)] = offset_count()
+				question_text["response_1_%s_%s" % (num, language_code)] = get_response1(q, language_code).encode("utf-16be")+pad(2)
+				question_text_table["response_2_offset_%s_%s" % (num, language_code)] = offset_count()
+				question_text["response_2_%s_%s" % (num, language_code)] = get_response2(q, language_code).encode("utf-16be")+pad(2)
 
 	return question_text
 
