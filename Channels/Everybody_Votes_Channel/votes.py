@@ -55,10 +55,13 @@ def time_convert(time): return int((time-946684800)/60)
 
 def get_epoch(): return int(time.time())
 
-def get_timestamp(mode):
+def get_timestamp(mode, type):
 	time = time_convert(get_epoch())
 	if mode == 1:
-		time+=5
+		if production:
+			if type == "n": time+=10080
+			elif type == "w": time+=21600
+		else: time+=5
 	return time
 
 def get_name():
@@ -418,7 +421,7 @@ def make_header():
 	header["national_result_offset"] = u32(0)
 	header["national_result_detailed_number"] = u16(national_results*region_number[country_code])
 	header["national_result_detailed_offset"] = u32(0)
-	if file_type == "q": header["position_number"] = u16(0)
+	if file_type == "q" or national_results == 0: header["position_number"] = u16(0)
 	else: header["position_number"] = u16(len(position_table[country_code]))
 	header["position_offset"] = u32(0)
 	header["worldwide_result_number"] = u8(worldwide_results)
@@ -445,7 +448,7 @@ def make_national_question_table(header):
 			national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
 			national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
 			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
-			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
+			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1, "n"))
 			national_question_table["question_table_count_%s" % num()] = u8(len(country_language[country_code]))
 			national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
 			question_table_count+=1
@@ -466,7 +469,7 @@ def make_worldwide_question_table(header):
 			worldwide_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
 			worldwide_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
 			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
-			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
+			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1, "w"))
 			worldwide_question_table["question_table_count_%s" % num()] = u8(1)
 			worldwide_question_table["question_table_start_%s" % num()] = u32(question_table_count)
 			question_table_count+=1
@@ -654,4 +657,4 @@ def make_question_text(question_text_table):
 
 
 prepare()
-make_bin(country_code)
+for country_code in country_codes[1:]: make_bin(country_code)
