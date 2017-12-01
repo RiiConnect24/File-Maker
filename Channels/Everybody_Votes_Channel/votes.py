@@ -57,7 +57,8 @@ def get_epoch(): return int(time.time())
 
 def get_timestamp(mode):
 	time = time_convert(get_epoch())
-	if mode == 1: time+=5
+	if mode == 1:
+		time+=5
 	return time
 
 def get_name():
@@ -135,8 +136,8 @@ def automatic_votes():
 	question_count = len(question_data)
 	if question_count == 1: print "Loaded %s Question" % question_count
 	else: print "Loaded %s Questions" % question_count
-	for v in range(1, 7): results[get_poll_id()] = mysql_get_votes(0, "n", v)
-	results[get_poll_id()] = mysql_get_votes(0, "w", 1)
+	for v in range(1, 7): results[get_poll_id()] = mysql_get_votes(7, "n", v)
+	results[get_poll_id()] = mysql_get_votes(15, "w", 1)
 	try: del results[None]
 	except KeyError: pass
 
@@ -445,7 +446,7 @@ def make_national_question_table(header):
 			national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
 			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
 			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1))
-			national_question_table["question_table_count_%s" % num()] = u8(1)
+			national_question_table["question_table_count_%s" % num()] = u8(len(country_language[country_code]))
 			national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
 			question_table_count+=1
 
