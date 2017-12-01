@@ -359,7 +359,7 @@ def sign_file(name):
 			subprocess.call(["mkdir", "-p", "%s/%s/%s" % (file_path, str(country_code).zfill(3), get_year())]) # If folder for the year does not exist, make it.
 			path = "%s/%s/%s/%s" % (file_path, str(country_code).zfill(3), get_year(), final)
 		elif file_type == "v": path = "%s/%s/%s" % (file_path, str(country_code).zfill(3), final)
-	subprocess.call(["cp", final, path])
+	subprocess.call(["mv", final, path])
 	os.remove(final + '-1')
 
 def make_bin(country_code):
