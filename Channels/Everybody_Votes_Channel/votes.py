@@ -402,7 +402,7 @@ def make_header():
 	header = collections.OrderedDict()
 	dictionaries.append(header)
 
-	header["timestamp"] = u32(get_timestamp(0))
+	header["timestamp"] = u32(get_timestamp(0, None))
 	header["country_code"] = u8(country_code)
 	header["publicity_flag"] = u8(0)
 	if file_type == "r":
@@ -447,7 +447,7 @@ def make_national_question_table(header):
 			national_question_table["poll_id_%s" % num()] = u32(q)
 			national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
 			national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
+			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0, None))
 			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1, "n"))
 			national_question_table["question_table_count_%s" % num()] = u8(len(country_language[country_code]))
 			national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
@@ -468,7 +468,7 @@ def make_worldwide_question_table(header):
 			worldwide_question_table["poll_id_%s" % num()] = u32(q)
 			worldwide_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
 			worldwide_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0))
+			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(0, None))
 			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(1, "w"))
 			worldwide_question_table["question_table_count_%s" % num()] = u8(1)
 			worldwide_question_table["question_table_start_%s" % num()] = u32(question_table_count)
