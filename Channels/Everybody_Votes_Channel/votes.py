@@ -398,6 +398,11 @@ def make_bin(country_code):
 
 	print "Writing Completed"
 
+	clean_up()
+
+def clean_up():
+	for dictionary in dictionaries: dictionary.clear()
+
 def make_header():
 	header = collections.OrderedDict()
 	dictionaries.append(header)
