@@ -58,7 +58,7 @@ def get_epoch(): return int(time.time())
 def get_timestamp(mode, type, date):
 	if mode == 0: timestamp = time_convert(get_epoch())
 	elif mode == 1 or mode == 2:
-		timestamp = int(time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple()))
+		timestamp = int(time.mktime(date.timetuple()))
 		if mode == 2:
 			if production:
 				if type == "n": timestamp+=10080
