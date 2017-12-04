@@ -59,10 +59,11 @@ def get_timestamp(mode, type, date):
 	if mode == 0: time = time_convert(get_epoch())
 	elif mode == 1 or mode == 2:
 		time = int(time.mktime(datetime.strptime(date, "%Y-%m-%d").timetuple()))
-		if production:
-			if type == "n": time+=10080
-			elif type == "w": time+=21600
-		else: time+=5
+		if mode == 2:
+			if production:
+				if type == "n": time+=10080
+				elif type == "w": time+=21600
+			else: time+=5
 	return time
 
 def get_name():
@@ -269,6 +270,8 @@ def get_response2(id, language_code): return question_data[id][2][language_code]
 
 def get_category(id): return question_data[id][3]
 
+def get_date(id): return question_data[id][4]
+
 def is_worldwide(id):
 	i = True
 	if question_data[id][3] == 0: i = False
@@ -453,8 +456,8 @@ def make_national_question_table(header):
 			national_question_table["poll_id_%s" % num()] = u32(q)
 			national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
 			national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, None, q["date"]))
-			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "n", q["date"]))
+			national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, "n", get_date(q)))
+			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "n", get_date(q)))
 			national_question_table["question_table_count_%s" % num()] = u8(len(country_language[country_code]))
 			national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
 			question_table_count+=1
@@ -474,8 +477,8 @@ def make_worldwide_question_table(header):
 			worldwide_question_table["poll_id_%s" % num()] = u32(q)
 			worldwide_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
 			worldwide_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, None, q["date"]))
-			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "w", q["date"]))
+			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, "w", get_date(q)))
+			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "w", get_date(q)))
 			worldwide_question_table["question_table_count_%s" % num()] = u8(1)
 			worldwide_question_table["question_table_start_%s" % num()] = u32(question_table_count)
 			question_table_count+=1
