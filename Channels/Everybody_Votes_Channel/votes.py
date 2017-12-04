@@ -51,14 +51,15 @@ file_type = None
 write_questions = False
 write_results = False
 
-def time_convert(time): return int((time-946684800)/60)
+def time_convert(time): return int((time - 946684800) / 60)
 
 def get_epoch(): return int(time.time())
 
 def get_timestamp(mode, type, date):
-	if mode == 0: timestamp = time_convert(get_epoch())
+	if mode == 0:
+		timestamp = time_convert(get_epoch())
 	elif mode == 1 or mode == 2:
-		timestamp = int(time.mktime(date.timetuple()))
+		timestamp = time_convert(time.mktime(date.timetuple()))
 		if mode == 2:
 			if production:
 				if type == "n": timestamp+=10080
@@ -270,11 +271,11 @@ def get_response2(id, language_code): return question_data[id][2][language_code]
 
 def get_category(id): return question_data[id][3]
 
-def get_date(id): return question_data[id][4]
+def get_date(id): return question_data[id][5]
 
 def is_worldwide(id):
 	i = True
-	if question_data[id][3] == 0: i = False
+	if question_data[id][4] == "n": i = False
 	return i
 
 def add_question(row):
@@ -292,7 +293,7 @@ def add_question(row):
 										[row["choice2_japanese"], row["choice2_english"], row["choice2_german"],
 										 row["choice2_french"], row["choice2_spanish"], row["choice2_italian"],
 										 row["choice2_dutch"], row["choice2_portuguese"], row["choice2_french_canada"]],
-										row["category"], row["date"]]
+										row["category"], row["type"], row["date"]]
 
 	if row["type"] == "n":
 		national+=1
@@ -437,7 +438,7 @@ def make_header():
 	header["worldwide_result_offset"] = u32(0)
 	header["worldwide_result_detailed_number"] = u16(worldwide_results*33)
 	header["worldwide_result_detailed_offset"] = u32(0)
-	if file_type == "q" or worldwide_results == 0: header["country_name_number"] = u16(0)
+	if file_type == "q" or file_type == "r": header["country_name_number"] = u16(0)
 	else: header["country_name_number"] = u16(len(countries) * 7)
 	header["country_name_offset"] = u32(0)
 
@@ -460,7 +461,7 @@ def make_national_question_table(header):
 			national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "n", get_date(q)))
 			national_question_table["question_table_count_%s" % num()] = u8(len(country_language[country_code]))
 			national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
-			question_table_count+=1
+			question_table_count+=len(country_language[country_code])
 
 	return national_question_table
 
