@@ -56,15 +56,15 @@ def time_convert(time): return int((time-946684800)/60)
 def get_epoch(): return int(time.time())
 
 def get_timestamp(mode, type, date):
-	if mode == 0: time = time_convert(get_epoch())
+	if mode == 0: timestamp = time_convert(get_epoch())
 	elif mode == 1 or mode == 2:
-		time = int(time.mktime(datetime.strptime(date, "%Y-%m-%d").timetuple()))
+		timestamp = int(time.mktime(datetime.strptime(date, "%Y-%m-%d").timetuple()))
 		if mode == 2:
 			if production:
 				if type == "n": time+=10080
 				elif type == "w": time+=21600
-			else: time+=5
-	return time
+			else: timestamp+=5
+	return timestamp
 
 def get_name():
 	now = datetime.datetime.now()
