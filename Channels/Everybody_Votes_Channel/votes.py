@@ -61,8 +61,8 @@ def get_timestamp(mode, type, date):
 		timestamp = int(time.mktime(datetime.strptime(date, "%Y-%m-%d").timetuple()))
 		if mode == 2:
 			if production:
-				if type == "n": time+=10080
-				elif type == "w": time+=21600
+				if type == "n": timestamp+=10080
+				elif type == "w": timestamp+=21600
 			else: timestamp+=5
 	return timestamp
 
