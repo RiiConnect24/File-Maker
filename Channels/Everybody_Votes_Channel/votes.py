@@ -206,7 +206,7 @@ def mysql_get_votes(days, type, index):
 
 	for row in cursor:
 		country_index = country_codes.index(row["countryID"])
-		anscnt = row["ansCNT"]
+		anscnt = str(row["ansCNT"]).zfill(4)
 		region_id = row["regionID"] - 2
 
 		if row["typeCD"] == 0:
@@ -432,7 +432,8 @@ def make_header():
 	header["national_result_detailed_number"] = u16(national_results*region_number[country_code])
 	header["national_result_detailed_offset"] = u32(0)
 	if file_type == "q" or national_results == 0: header["position_number"] = u16(0)
-	else: header["position_number"] = u16(len(position_table[country_code]))
+	elif country_code in position_table.keys(): header["position_number"] = u16(len(position_table[country_code]))
+	else: header["position_number"] = u16(0)
 	header["position_offset"] = u32(0)
 	header["worldwide_result_number"] = u8(worldwide_results)
 	header["worldwide_result_offset"] = u32(0)
@@ -542,8 +543,10 @@ def make_national_result_detailed_table(header):
 			table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
 			table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
 			if results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0: table["position_entry_table_count_%s" % num()] = u8(0)
-			else: table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
-			table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
+			elif country_code in position_table.keys(): table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
+			else: table["position_entry_table_count_%s" % num()] = u8(0)
+			if country_code in position_table.keys(): table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
+			else: table["position_entry_table_count_%s" % num()] = u8(0)
 
 	return table
 
@@ -553,7 +556,7 @@ def make_position_entry_table(header):
 
 	header["position_offset"] = offset_count()
 
-	table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
+	if country_code in position_table.keys(): table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
 
 def make_worldwide_result_table(header):
 	table = collections.OrderedDict()
