@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.6
+# VERSION 3.7
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
@@ -37,6 +37,7 @@ from raven import Client
 from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
 
+VERSION = 3.7
 apirequests = 0 # API Request Counter
 seek_offset = 0 # Seek Offset Location
 seek_base = 0 # Base Offset Calculation Location
@@ -46,12 +47,10 @@ cities = 0 # City Counter
 retrycount = 0 # Retry Counter
 cached = 0 # Count Cached Cities
 bw_usage = 0 # Bandwidth Usage Counter
+lists = 0 # Lists Counter
+errors = 0
 file = None
 loop = None
-
-print "Forecast Channel Downloader \n"
-print "By John Pansera and Larsen Vallecillo / www.rc24.xyz \n"
-print "Preparing ..."
 
 uvindex = {}
 wind = {}
@@ -167,55 +166,84 @@ def worker():
 			q.task_done()
 		except: pass
 
-"""This is a progress bar to display how much of the forecast in a list has been downloaded."""
-"""It actually looks pretty cool."""
-
-def progress(percent,list,progcount):
-	bar = 35
-	prog = """-\|/""" # These are characters which will make a spinning effect.
-	fill = int(round(percent*bar/100))
-	if citycount/(len(list)-cached) == 1:
-		if os.name == 'nt': display = '*'
-		else: display = "✓"
-		progcount = 0
-	else: display = prog[progcount]
-	sys.stdout.write("\r%s\rProgress: %s%% [%s] (%s/%s) [%s] [%s] %s%s" % (" "*(bar+39),int(round(percent)),("="*fill)+(" "*(bar-fill)),citycount,len(list)-cached,display,10 if useMultithreaded else 1,"."*progcount," "*(4-progcount)))
-	sys.stdout.flush()
-
-def build_progress():
-	global status
-	i = 0
-	while loop:
-		sys.stdout.write("\r"+" "*74+"\r"+status+": "+"["+i*" "+"="*3+(35-i-2)*" "+"] ...")
-		sys.stdout.flush()
-		i+=1
-		if i == 34: i = 0
-		time.sleep(0.015)
-	sys.stdout.write("\r"+" "*74+"\r"+"Building Files: Complete")
-	sys.stdout.flush()
-
-def log(text):
-	if loop:
-		sys.stdout.write("\r"+" "*74+"\r"+text+"\n\n")
-		sys.stdout.flush()
-	else: print text
-
 def output(text,level):
-	if level is not "VERBOSE":
-		log(text)
-		if production:
-			if level is "WARNING": logger.warning(text)
-			if level is "CRITICAL": logger.error(text)
-	else:
-		if useVerbose: log(text)
+	global errors
+	if level is not "VERBOSE" and level is not "INFO": errors+=1
+	if production:
+		if level is "WARNING": logger.warning(text)
+		if level is "CRITICAL": logger.error(text)
 
-def display_loop(list):
+def refresh(type):
+	# Uses ANSI escape codes
+	if type == 0: print "\033[2J" # Erase display command
+	if type == 1: os.system('cls') # Clear screen
+	print "\033[F\033[K"*20 # Clear each line individually
+
+def ui():
+	prog = """-\|/""" # These are characters which will make a spinning effect.
 	progcount = 0
-	while loop:
-		progress(float(citycount)/float(len(list)-cached)*100,list,progcount)
-		progcount+=1
-		if progcount == 4: progcount = 0
-		time.sleep(0.1)
+	bar = 35 # Size of progress bars
+	i = 0 # Counter for building progress bar
+	refresh_rate = 0.1 # Refresh rate of UI
+	if os.name == 'nt':
+		display = '*'
+		os.system("title Forecast Downloader - v%s" % VERSION)
+		ver = sys.getwindowsversion()
+		if ver[0] == 6 and ver[1] == 2: refresh_type = 0
+		else: refresh_type = 1
+		os.system('cls')
+	else:
+			display = "✓"
+			refresh_type = 2
+			os.system('clear')
+	while not loop: pass # Wait for main loop to start
+	header = "="*64+"\n\n"
+	header+="--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
+	header+="By John Pansera / Larsen Vallecillo --- (C) 2015-2017\n"
+	if production: header+=" "*13+"*** Production Mode Enabled ***\n\n"
+	else: header+="\n"
+	while ui_run:
+		refresh(refresh_type)
+		# Calculate values to show on screen
+		if len(list)-cached > 0: dl = True
+		else: dl = False
+		elasped_time = int(round(time.time()-total_time))
+		bandwidth = round(float(bw_usage)/1048576,2)
+		totalpercent = int(round(float(lists)/float(len(weathercities))*100))
+		totalfill = totalpercent*35/100
+		totalprog = "["+"#"*totalfill+" "*(35-totalfill)+"]"
+		if status == "Downloading":
+			if dl: percent = int(round(float(citycount)/float(len(list)-cached)*100))
+			else: percent = 0
+			fill = int(round(percent*bar/100))
+			progbar = str(percent)+"% ["+"="*fill+" "*(bar-fill)+"]"
+		else:
+			i = (i+1)%(bar-1)
+			progbar = "["+" "*i+"="*5+(bar-i-2)*" "+"]"
+		# Build output
+		out = header
+		out+="API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (apirequests,retrycount,elasped_time)
+		out+="Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth,cities,errors)
+		out+="\nProcessing List #%s/%s (%s): %s %s\n\n" % (listid,len(weathercities),country_code,currentlist,"."*progcount)
+		if status == "Downloading" and dl: out+="Downloading Forecasts [%s] %s%%\n"%(prog[progcount],percent)
+		else: out+="Downloading Forecasts [%s] 100%%\n"%(display)
+		if status == "Parsing Data": out+="Parsing Data [%s]\n"%prog[progcount]
+		elif status == "Downloading": out+="Parsing Data [-]\n"
+		else: out+="Parsing Data [%s]"%(display)+"\n"
+		if status == "Generating Data": out+="Generating Data [%s]\n"%prog[progcount]
+		elif status == "Building Files": out+="Generating Data [%s]"%(display)+"\n"
+		else: out+="Generating Data [-]\n"
+		if status == "Building Files": out+="Building Files [%s]\n\n"%prog[progcount]
+		else: out+="Building Files [-]\n\n"
+		out+="List Progress:  %s"%progbar
+		out+="\nTotal Progress: %s%% "%(totalpercent)+totalprog
+		out+="\n\n"+"="*64
+		progcount = (progcount+1)%4
+
+		sys.stdout.write(out)
+		sys.stdout.flush()
+		time.sleep(refresh_rate)
+	print "\n"
 
 def get_icon(icon,list,key):
 	if list[key][2][1] is "Japan": return get_weatherjpnicon(icon)
@@ -957,27 +985,34 @@ if production:
 	handler = SentryHandler(client)
 	setup_logging(handler)
 	logger = logging.getLogger(__name__)
-if os.name == 'nt': os.system("title Forecast Downloader")
-print "Production Mode %s | Multithreading %s" % ("Enabled" if production else "Disabled", "Enabled" if useMultithreaded else "Disabled")
 requests.packages.urllib3.disable_warnings() # This is so we don't get some warning about SSL.
 s = requests.Session() # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
 q = Queue.Queue()
+if useMultithreaded: concurrent = 10
+else: concurrent = 1
+ui_run = True
+ui_thread = threading.Thread(target=ui)
+ui_thread.daemon = True
+ui_thread.start()
 for list in weathercities:
 	global language_code,country_code,mode,japcount,weather_data
 	threads = []
+	status = "Downloading"
 	language_code = 1
 	japcount = 0
+	listid = weathercities.index(list)+1
+	currentlist = list.values()[0][2][1]
 	weather_data = {}
-	country_code = forecastlists.bincountries[list.values()[0][2][1]]
+	loop = True
+	country_code = forecastlists.bincountries[currentlist]
 	if country_code == 0: bins = [0]
 	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
 	elif country_code >= 64 and country_code <= 110: bins = [1,2,3,4,5,6]
 	else:
 		output("Unknown country code %s - generating English only" % country_code, "WARNING")
 		bins = [1]
-	print "Processing List #%s - %s (%s)" % (weathercities.index(list) + 1, country_code, list.values()[0][2][1])
 	for k,v in forecastlists.weathercities_international.items():
 		if k not in list:
 			if v[2][1] in forecastlists.bincountries and forecastlists.bincountries[v[2][1]] is not country_code: list[k] = v
@@ -987,33 +1022,18 @@ for list in weathercities:
 	for keys in list.keys():
 		if get_loccode(list, keys)[:2] != hex(country_code)[2:].zfill(2): japcount+=1
 		if keys in cache and cache[keys] == get_all(list,keys): cached+=1
-	if len(list)-cached is not 0:
-		print "Downloading Forecast Data ...\n"
-		loop = True
-	dlthread = threading.Thread(target=display_loop,args=[list])
-	dlthread.daemon = True
-	dlthread.start()
 	for keys in list.keys():
 		if keys not in cache or cache[keys] != get_all(list,keys):
-			if useMultithreaded: q.put([list,keys])
-			else: get_data(list,keys)
-	if useMultithreaded:
-		for i in range(10):
-			t = threading.Thread(target=worker)
-			t.daemon = True
-			threads.append(t)
-			t.start()
-		q.join()
-	if len(list)-cached is not 0: progress(float(citycount)/float(len(list)-cached)*100,list,0)
+			q.put([list,keys])
+	for i in range(concurrent):
+		t = threading.Thread(target=worker)
+		t.daemon = True
+		threads.append(t)
+		t.start()
+	q.join()
 	loop = False
 	for t in threads: t.join()
-	dlthread.join()
-	loop = True
-	print "\n"
 	status = "Parsing Data"
-	buildthread = threading.Thread(target=build_progress)
-	buildthread.daemon = True
-	buildthread.start()
 	for k,v in weather_data.items():
 		try:
 			weather_data[k] = ElementTree.fromstring(v)
@@ -1031,15 +1051,11 @@ for list in weathercities:
 			language_code = j
 			make_bins(list,data)
 			reset_data(list)
-	loop = False
-	buildthread.join()
-	print "\n"
+	lists+=1
 
-print "API Requests: %s" % apirequests
-print "Request Retries: %s" % retrycount
-print "Processed Cities: %s" % cities
-print "Elapsed Time: %s Seconds" % round(time.time()-total_time)
-print "Bandwidth Usage: %s MiB\n" % round(float(bw_usage)/1048576,2)
+time.sleep(0.1)
+ui_run = False
+ui_thread.join()
 
 if production:
 	points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
