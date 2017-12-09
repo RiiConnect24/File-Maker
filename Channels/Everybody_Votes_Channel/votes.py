@@ -219,7 +219,7 @@ def mysql_get_votes(days, type, index):
 			region_response_2[country_index][region_id] += int(anscnt[2]) + int(anscnt[3])
 		elif row["typeCD"] == 1:
 			predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
-			predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[2])
+			predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[3])
 
 	print "Male Voters Response 1: %s" % male_voters_response_1
 	print "Female Voters Response 1: %s" % female_voters_response_1
