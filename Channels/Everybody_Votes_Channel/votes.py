@@ -523,8 +523,8 @@ def make_national_result_table(header):
 		table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][country_index])
 		table["predictors_response_1_num_%s" % num()] = u32(results[i][4][country_index])
 		table["predictors_response_2_num_%s" % num()] = u32(results[i][5][country_index])
-		table["show_voter_number_flag_%s" % num()] = u16(1)
-		table["detailed_results_flag_%s" % num()] = u16(1)
+		table["show_voter_number_flag_%s" % num()] = u8(1)
+		table["detailed_results_flag_%s" % num()] = u8(1)
 		table["national_result_detailed_number_number_%s" % num()] = u8(national_result_detailed_number_tables)
 		table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(national_result_detailed_number_count)
 		national_result_detailed_number_count+=national_result_detailed_number_tables
