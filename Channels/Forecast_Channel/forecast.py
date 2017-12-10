@@ -176,7 +176,7 @@ def output(text,level):
 def refresh(type):
 	# Uses ANSI escape codes
 	if type == 0: print "\033[2J" # Erase display command
-	if type == 1: os.system('cls') # Clear screen
+	elif type == 1: os.system('cls') # Clear screen
 	print "\033[F\033[K"*20 # Clear each line individually
 
 def ui():
