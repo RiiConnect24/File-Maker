@@ -199,9 +199,8 @@ def ui():
 	while not loop: pass # Wait for main loop to start
 	header = "="*64+"\n\n"
 	header+="--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
-	header+="By John Pansera / Larsen Vallecillo --- (C) 2015-2017\n"
-	if production: header+=" "*13+"*** Production Mode Enabled ***\n\n"
-	else: header+="\n"
+	header+="By John Pansera / Larsen Vallecillo --- (C) 2015-2017\n\n"
+	if production: header+=" "*13+"*** Production Mode Enabled ***\n"
 	while ui_run:
 		refresh(refresh_type)
 		# Calculate values to show on screen
