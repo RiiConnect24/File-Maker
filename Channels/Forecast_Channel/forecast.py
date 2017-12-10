@@ -171,7 +171,7 @@ def output(text,level):
 	if level is not "VERBOSE" and level is not "INFO": errors+=1
 	if production:
 		if level is "WARNING": logger.warning(text)
-		if level is "CRITICAL": logger.error(text)
+		elif level is "CRITICAL": logger.error(text)
 
 def refresh(type):
 	# Uses ANSI escape codes
