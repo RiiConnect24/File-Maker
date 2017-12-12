@@ -546,7 +546,7 @@ def make_national_result_detailed_table(header):
 			elif country_code in position_table.keys(): table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
 			else: table["position_entry_table_count_%s" % num()] = u8(0)
 			if country_code in position_table.keys(): table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
-			else: table["position_entry_table_count_%s" % num()] = u8(0)
+			else: table["starting_position_entry_table_%s" % num()] = u32(0)
 
 	return table
 
@@ -554,9 +554,9 @@ def make_position_entry_table(header):
 	table = collections.OrderedDict()
 	dictionaries.append(table)
 
-	header["position_offset"] = offset_count()
-
-	if country_code in position_table.keys(): table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
+	if country_code in position_table.keys():
+		header["position_offset"] = offset_count()
+		table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
 
 def make_worldwide_result_table(header):
 	table = collections.OrderedDict()
