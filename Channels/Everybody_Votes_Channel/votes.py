@@ -452,7 +452,7 @@ def make_national_question_table(header):
 
 	question_table_count = 0
 	if national_q: header["national_question_offset"] = offset_count()
-	if worldwide_q: question_table_count += 3
+	if worldwide_q: question_table_count += len(country_language[country_code])
 
 	for q in question_data.keys():
 		if not is_worldwide(q):
