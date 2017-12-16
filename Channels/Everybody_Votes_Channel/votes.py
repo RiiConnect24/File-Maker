@@ -501,7 +501,7 @@ def make_question_text_table(header):
 	header["question_offset"] = offset_count()
 
 	for q in question_data.keys():
-		if is_national(q): list = country_language[country_code]
+		if not is_worldwide(q): list = country_language[country_code]
 		elif is_worldwide(q):
 			if file_type == "v": list = country_language[country_code]
 			elif file_type == "q": list = range(1, 10)
