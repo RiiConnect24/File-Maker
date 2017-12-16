@@ -454,7 +454,7 @@ def make_national_question_table(header):
 	if national_q: header["national_question_offset"] = offset_count()
 	if worldwide_q:
 		if file_type == "v": question_table_count += len(country_language[country_code])
-		elif file_type == "q": question_table_count = 9 # Worldwide and national polls should not be in the same question file, but this is just in case for some reason it happens.
+		elif file_type == "q": question_table_count = 8 # Worldwide and national polls should not be in the same question file, but this is just in case for some reason it happens.
 
 	for q in question_data.keys():
 		if not is_worldwide(q):
