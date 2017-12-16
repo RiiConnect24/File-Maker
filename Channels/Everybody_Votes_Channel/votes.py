@@ -452,7 +452,9 @@ def make_national_question_table(header):
 
 	question_table_count = 0
 	if national_q: header["national_question_offset"] = offset_count()
-	if worldwide_q: question_table_count += len(country_language[country_code])
+	if worldwide_q:
+		if file_type == "v": question_table_count += len(country_language[country_code])
+		elif file_type == "q": question_table_count = 9 # Worldwide and national polls should not be in the same question file, but this is just in case for some reason it happens.
 
 	for q in question_data.keys():
 		if not is_worldwide(q):
@@ -472,8 +474,11 @@ def make_worldwide_question_table(header):
 	worldwide_question_table = collections.OrderedDict()
 	dictionaries.append(worldwide_question_table)
 
-	question_table_count = 0
+	question_table_start = 0
 	if worldwide_q: header["worldwide_question_offset"] = offset_count()
+
+	if file_type == "v": question_table_count = len(country_language[country_code])
+	elif file_type == "q": question_table_count = 9
 
 	for q in question_data.keys():
 		if is_worldwide(q):
@@ -482,8 +487,8 @@ def make_worldwide_question_table(header):
 			worldwide_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
 			worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, "w", get_date(q)))
 			worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "w", get_date(q)))
-			worldwide_question_table["question_table_count_%s" % num()] = u8(1)
-			worldwide_question_table["question_table_start_%s" % num()] = u32(question_table_count)
+			worldwide_question_table["question_table_count_%s" % num()] = u8(question_table_count)
+			worldwide_question_table["question_table_start_%s" % num()] = u32(question_table_start)
 			question_table_count+=1
 
 	return worldwide_question_table
@@ -496,7 +501,11 @@ def make_question_text_table(header):
 	header["question_offset"] = offset_count()
 
 	for q in question_data.keys():
-		for language_code in country_language[country_code]:
+		if is_national(q): list = country_language[country_code]:
+		elif is_worldwide(q):
+			if file_type == "v": list = country_language[country_code]
+			elif file_type == "q": list = range(1, 10)
+		for language_code in list:
 			if get_question(q, language_code) != None:
 				num = question_data.keys().index(q)
 				question_text_table["language_code_%s_%s" % (num, language_code)] = u8(language_code)
