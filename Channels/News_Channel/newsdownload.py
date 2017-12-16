@@ -516,6 +516,8 @@ def parsedata_reuters(language, url, title, updated):
 	html = data1.html
 	soup = BeautifulSoup(html, "lxml")
 
+	for caption in soup.find_all("span", {"class": "Image_caption_KoNH1"}): caption.decompose()
+
 	try: headline = fix_chars(soup.find("h1", {"class": "ArticleHeader_headline_2zdFM"}).get_text()) # Parse the headline.
 	except: return None
 
