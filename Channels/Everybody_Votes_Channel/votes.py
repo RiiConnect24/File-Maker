@@ -67,14 +67,19 @@ def get_timestamp(mode, type, date):
 			else: timestamp+=5
 	return timestamp
 
+def days_ago():
+	if national_results > 0: return 7
+	elif worldwide_results > 0: return 14
+	else: return = 0
+
 def get_name():
-	now = datetime.datetime.now()
+	now = datetime.datetime.now() - datetime.timedelta(days=days_ago())
 	day = str(now.day).zfill(2)
 	month = str(now.month).zfill(2)
 	return month+day
 
 def get_year():
-	now = datetime.datetime.now()
+	now = datetime.datetime.now() - datetime.timedelta(days=days_ago())
 	year = str(now.year)
 	return year
 
