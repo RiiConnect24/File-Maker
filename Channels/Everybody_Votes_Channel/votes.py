@@ -70,7 +70,7 @@ def get_timestamp(mode, type, date):
 def days_ago():
 	if national_results > 0: return 7
 	elif worldwide_results > 0: return 14
-	else: return = 0
+	else: return 0
 
 def get_name():
 	now = datetime.datetime.now() - datetime.timedelta(days=days_ago())
