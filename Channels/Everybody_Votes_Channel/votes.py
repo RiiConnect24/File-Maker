@@ -141,8 +141,8 @@ def automatic_votes():
 	global write_questions,write_results,questions,results,national,worldwide,questions
 	write_questions = True
 	write_results = True
-	mysql_get_questions(3, "n")
 	mysql_get_questions(1, "w")
+	mysql_get_questions(3, "n")
 	questions = national+worldwide
 	question_count = len(question_data)
 	if question_count == 1: print "Loaded %s Question" % question_count
