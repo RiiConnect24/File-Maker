@@ -321,8 +321,8 @@ def question_text_replace(text):
 	return text
 
 def webhook():
-	if national_results > 0: webhook_type = "national"
-	elif worldwide_results > 0: webhook_type = "worldwide"
+	if sys.argv[2] == "n": webhook_type = "national"
+	elif sys.argv[2] == "w": webhook_type = "worldwide"
 	if production: data = {"username": "Votes Bot", "content": "New %s Everybody Votes Channel question is out!" % type, "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0", "author_name": "RiiConnect24 Everybody Votes Channel Script", "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png", "text": "New %s Everybody Votes Channel question is out!" % webhook_type, "title": "Update!", "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 	for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
 
