@@ -14,6 +14,7 @@ import collections
 import datetime
 import io
 import json
+import logging
 import mysql.connector
 import os
 import rsa
@@ -90,6 +91,11 @@ def pad(amnt): return "\0"*amnt
 def prepare():
 	global country_count,countries,file_type,questions,poll_id,write_questions,write_results,results,position,national,worldwide
 	print "Preparing ..."
+	if production:
+		client = Client(sentry_url)
+		handler = SentryHandler(client)
+		setup_logging(handler)
+		logger = logging.getLogger(__name__)
 	mysql_connect()
 	if len(sys.argv) == 1: manual_run()
 	elif len(sys.argv) >= 2:
