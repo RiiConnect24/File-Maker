@@ -314,23 +314,22 @@ def question_text_replace(text):
 	text = "\\n".join(textwrap.wrap(text, 50))
 	return text
 
+def webhook():
+	if national_results > 0: webhook_type = "national"
+	elif worldwide_results > 0: webhook_type = "worldwide"
+	if production: data = {"username": "Votes Bot", "content": "New %s Everybody Votes Channel question is out!" % type, "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0", "author_name": "RiiConnect24 Everybody Votes Channel Script", "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png", "text": "New %s Everybody Votes Channel question is out!" % webhook_type, "title": "Update!", "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+	for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
+
 dictionaries = []
 
-def u8(data):
-	return struct.pack(">B", data)
-def u16(data):
-	return struct.pack(">H", data)
-def u32(data):
-	return struct.pack(">I", data)
-def s8(data):
-	return struct.pack(">b", data)
-def s16(data):
-	return struct.pack(">h", data)
-def s32(data):
-	return struct.pack(">i", data)
+def u8(data): return struct.pack(">B", data)
+def u16(data): return struct.pack(">H", data)
+def u32(data): return struct.pack(">I", data)
+def s8(data): return struct.pack(">b", data)
+def s16(data): return struct.pack(">h", data)
+def s32(data): return struct.pack(">i", data)
 
-def offset_count():
-	return u32(12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
+def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
 
 def sign_file(name):
 	final = name+'.bin'
@@ -397,14 +396,16 @@ def make_bin(country_code):
 
 	with open(question_file, 'wb') as f:
 		for dictionary in dictionaries:
-			print("Writing to %s ..." % hex(f.tell()).rstrip("L"))
+			# print("Writing to %s ..." % hex(f.tell()).rstrip("L"))
 			for values in dictionary.values():
 				f.write(values)
 		f.write(pad(16))
 		f.write('RIICONNECT24'.encode("ASCII"))
 		f.flush()
 
-	if production: sign_file(question_file)
+	if production:
+		sign_file(question_file)
+		if file_type == "q": webhook()
 
 	print "Writing Completed"
 
@@ -687,3 +688,5 @@ def make_question_text(question_text_table):
 
 prepare()
 for country_code in country_codes[1:]: make_bin(country_code)
+
+print "Completed Successfully"
