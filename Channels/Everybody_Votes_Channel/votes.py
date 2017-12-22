@@ -17,6 +17,7 @@ import json
 import logging
 import mysql.connector
 import os
+import requests
 import rsa
 import struct
 import subprocess
