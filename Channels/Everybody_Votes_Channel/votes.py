@@ -36,15 +36,14 @@ print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
 
 worldwide = 0
 national = 0
-results = 0
 national_results = 0
 worldwide_results = 0
 question_data = collections.OrderedDict()
+results = collections.OrderedDict()
 country_code = 49
 country_count = 0
 language_code = 1
 languages = {}
-results = {}
 num = 0
 number = 0
 worldwide_q = False
@@ -183,7 +182,7 @@ def mysql_get_votes(days, type, index):
 
 	while i < index:
 		row = cursor.fetchone()
-		if row == None:
+		if row is None:
 			poll_id = None
 			return None
 		i += 1
@@ -259,7 +258,7 @@ def mysql_get_questions(count, type):
 
 	while i < count:
 		row = cursor.fetchone()
-		if row == None: break
+		if row is None: break
 		add_question(row)
 		i += 1
 
@@ -294,7 +293,7 @@ def add_question(row):
 	global question_data,national,worldwide,national_q,worldwide_q
 	for r in row:
 		if "content" in r or "choice" in r:
-			if row[r] != None: row[r] = question_text_replace(row[r])
+			if row[r] is not None: row[r] = question_text_replace(row[r])
 
 	question_data[row["questionID"]] = [[row["content_japanese"], row["content_english"], row["content_german"],
 										 row["content_french"], row["content_spanish"], row["content_italian"],
@@ -519,7 +518,7 @@ def make_question_text_table(header):
 			if file_type == "v": list = country_language[country_code]
 			elif file_type == "q": list = range(1, 10)
 		for language_code in list:
-			if get_question(q, language_code) != None:
+			if get_question(q, language_code) is not None:
 				num = question_data.keys().index(q)
 				question_text_table["language_code_%s_%s" % (num, language_code)] = u8(language_code)
 				question_text_table["question_offset_%s_%s" % (num, language_code)] = u32(0)
@@ -681,7 +680,7 @@ def make_question_text(question_text_table):
 
 	for q in question_data.keys():
 		for language_code in country_language[country_code]:
-			if get_question(q, language_code) != None:
+			if get_question(q, language_code) is not None:
 				num = question_data.keys().index(q)
 				question_text_table["question_offset_%s_%s" % (num, language_code)] = offset_count()
 				question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode("utf-16be")+pad(2)
