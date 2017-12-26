@@ -324,7 +324,8 @@ def question_text_replace(text):
 def webhook():
 	if sys.argv[2] == "n": webhook_type = "national"
 	elif sys.argv[2] == "w": webhook_type = "worldwide"
-	if production: data = {"username": "Votes Bot", "content": "New %s Everybody Votes Channel question is out!" % type, "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0", "author_name": "RiiConnect24 Everybody Votes Channel Script", "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png", "text": "New %s Everybody Votes Channel question is out!" % webhook_type, "title": "Update!", "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.datetime.utcnow().timetuple()))}]}
+	webhook_text = "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)" % (webhook_type, get_question(get_poll_id(), 1), get_response1(get_poll_id(), 1), get_response2(get_poll_id(), 1))
+	if production: data = {"username": "Votes Bot", "content": "New %s Everybody Votes Channel question is out!" % type, "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0", "author_name": "RiiConnect24 Everybody Votes Channel Script", "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png", "text": webhook_text, "title": "Update!", "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.datetime.utcnow().timetuple()))}]}
 	for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
 
 dictionaries = []
@@ -412,7 +413,6 @@ def make_bin(country_code):
 
 	if production:
 		sign_file(question_file)
-		if file_type == "q": webhook()
 
 	print "Writing Completed"
 
@@ -695,5 +695,6 @@ def make_question_text(question_text_table):
 
 prepare()
 for country_code in country_codes[1:]: make_bin(country_code)
+if file_type == "q": webhook()
 
 print "Completed Successfully"
