@@ -149,9 +149,9 @@ def coord_decode(value):
 	return value*0.0054931640625
 
 def size(data):
-    total = 2
-    for k,v in data.items(): total+=len(k+v)+4
-    return total
+	total = 2
+	for k,v in data.items(): total+=len(k+v)+4
+	return total
 
 def get_bandwidth_usage(r):
 	req = len(r.request.method+r.request.path_url)+size(r.request.headers)+12
@@ -225,17 +225,17 @@ def ui():
 		out+="Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth,cities,errors)
 		out+="\nProcessing List #%s/%s (%s): %s %s\n\n" % (listid,len(weathercities),country_code,currentlist,"."*progcount)
 		if status == "Downloading" and dl: out+="Downloading Forecasts [%s] %s%%\n"%(prog[progcount],percent)
-		else: out+="Downloading Forecasts [%s] 100%%\n"%(display)
+		else: out+="Downloading Forecasts [%s] 100%%\n" % display
 		if status == "Parsing Data": out+="Parsing Data [%s]\n"%prog[progcount]
 		elif status == "Downloading": out+="Parsing Data [-]\n"
-		else: out+="Parsing Data [%s]"%(display)+"\n"
+		else: out+="Parsing Data [%s]" % display + "\n"
 		if status == "Generating Data": out+="Generating Data [%s]\n"%prog[progcount]
-		elif status == "Building Files": out+="Generating Data [%s]"%(display)+"\n"
+		elif status == "Building Files": out+="Generating Data [%s]" % display + "\n"
 		else: out+="Generating Data [-]\n"
 		if status == "Building Files": out+="Building Files [%s]\n\n"%prog[progcount]
 		else: out+="Building Files [-]\n\n"
 		out+="List Progress:  %s"%progbar
-		out+="\nTotal Progress: %s%% "%(totalpercent)+totalprog
+		out+="\nTotal Progress: %s%% " % totalpercent + totalprog
 		out+="\n\n"+"="*64
 		progcount = (progcount+1)%4
 
@@ -250,7 +250,7 @@ def get_icon(icon,list,key):
 
 """Resets bin-specific values for next generation."""
 
-def reset_data(l):
+def reset_data():
 	global seek_offset,seek_base,file,cached,citycount
 	seek_offset = 0
 	seek_base = 0
@@ -368,8 +368,8 @@ def blank_data(list, key, clear):
 def get_legacy_api(list, key):
 	apilegacy = weather_data[key]
 	forecast = apilegacy.find("{http://www.accuweather.com}forecast")
-	currentConditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
-	hourlyForecast = forecast.find("{http://www.accuweather.com}hourly")
+	current_conditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
+	hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
 	week[key][0] = int(forecast[2][5][3].text)
 	week[key][1] = int(forecast[2][5][2].text)
 	week[key][2] = int(forecast[3][5][3].text)
@@ -383,11 +383,11 @@ def get_legacy_api(list, key):
 	week[key][21] = get_icon(int(forecast[3][5][1].text),list,key)
 	week[key][22] = get_icon(int(forecast[4][5][1].text),list,key)
 	week[key][23] = get_icon(int(forecast[5][5][1].text),list,key)
-	current[key][3] = int(currentConditions[3].text)
+	current[key][3] = int(current_conditions[3].text)
 	current[key][4] = to_celsius(current[key][3])
-	weathericon[key] = get_icon(int(currentConditions[7].text),list,key)
-	current[key][0] = currentConditions[10].text
-	current[key][2] = int(currentConditions[9].text)
+	weathericon[key] = get_icon(int(current_conditions[7].text),list,key)
+	current[key][0] = current_conditions[10].text
+	current[key][2] = int(current_conditions[9].text)
 	current[key][1] = mph_kmh(current[key][2])
 	today[key][0] = int(forecast[1][5][3].text)
 	today[key][1] = int(forecast[1][5][2].text)
@@ -399,7 +399,7 @@ def get_legacy_api(list, key):
 	tomorrow[key][2] = to_celsius(tomorrow[key][0])
 	tomorrow[key][3] = to_celsius(tomorrow[key][1])
 	tomorrow[key][4] = get_icon(int(forecast[2][5][1].text),list,key)
-	try: uvval = int(currentConditions[13].attrib['index'])
+	try: uvval = int(current_conditions[13].attrib['index'])
 	except: uvval = 255
 	if uvval > 12: uvval = 12
 	uvindex[key] = uvval
@@ -430,10 +430,10 @@ def get_legacy_api(list, key):
 	hour = (datetime.utcnow()+timedelta(hours=globe[key]['offset'])).hour
 	for i in range(0,4):
 		temp = time_index[0][i]-hour
-		if -1 < temp < 24: hourly[key][i] = get_icon(int(hourlyForecast[temp][0].text),list,key)
+		if -1 < temp < 24: hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text),list,key)
 		else: hourly[key][i] = get_icon(int(-1),list,key)
 		temp = time_index[1][i]-hour
-		if -1 < temp < 24: hourly[key][i+4] = get_icon(int(hourlyForecast[temp][0].text),list,key)
+		if -1 < temp < 24: hourly[key][i+4] = get_icon(int(hourly_forecast[temp][0].text),list,key)
 		else: hourly[key][i+4] = get_icon(int(-1),list,key)
 
 """Tenki's where we're getting the laundry index for Japan."""
@@ -529,10 +529,9 @@ def make_forecast_bin(list, data):
 	if mode == 1: extension = "bin"
 	elif mode == 2: extension = "bi2"
 	file = io.BytesIO()
-	file1 = 'forecast~.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
-	file2 = 'forecast.%s~.%s+%s' % (extension, str(country_code).zfill(3), str(language_code))
-	file3 = 'forecast.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
-	file4 = 'forecast.%s' % extension
+	file1 = 'forecast.%s~.%s+%s' % (extension, str(country_code).zfill(3), str(language_code))
+	file2 = 'forecast.%s.%s_%s' % (extension, str(country_code).zfill(3), str(language_code))
+	file3 = 'forecast.%s' % extension
 	file.write(pad(20))
 	for i in dictionaries:
 		for v in i.values(): file.write(v)
@@ -596,9 +595,9 @@ def make_forecast_bin(list, data):
 		else: offset_write(0)
 		seek_offset+=12
 	file.seek(0)
-	with open(file2, 'wb') as temp: temp.write(file.read()[12:])
+	with open(file1, 'wb') as temp: temp.write(file.read()[12:])
 	file.close()
-	if production: sign_file(file2, file3, file4)
+	if production: sign_file(file1, file2, file3)
 
 def make_short_bin(list, data):
 	short_forecast_header = make_header_short(list)
@@ -1007,8 +1006,8 @@ for list in weathercities:
 	loop = True
 	country_code = forecastlists.bincountries[currentlist]
 	if country_code == 0: bins = [0]
-	elif country_code >= 8 and country_code <= 52: bins = [1,3,4]
-	elif country_code >= 64 and country_code <= 110: bins = [1,2,3,4,5,6]
+	elif 8 <= country_code <= 52: bins = [1, 3, 4]
+	elif 64 <= country_code <= 110: bins = [1, 2, 3, 4, 5, 6]
 	else:
 		output("Unknown country code %s - generating English only" % country_code, "WARNING")
 		bins = [1]
@@ -1036,9 +1035,9 @@ for list in weathercities:
 	for k,v in weather_data.items():
 		try:
 			weather_data[k] = ElementTree.fromstring(v)
-			if weather_data[k].find("{http://www.accuweather.com}failure") != None: weather_data[k] = None
+			if weather_data[k].find("{http://www.accuweather.com}failure") is not None: weather_data[k] = None
 		except: weather_data[k] = None
-		if weather_data[k] != None: get_legacy_api(list, k)
+		if weather_data[k] is not None: get_legacy_api(list, k)
 		else: output('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
 	cities+=citycount
 	status = "Generating Data"
@@ -1049,7 +1048,7 @@ for list in weathercities:
 		for j in bins:
 			language_code = j
 			make_bins(list,data)
-			reset_data(list)
+			reset_data()
 	lists+=1
 
 time.sleep(0.1)
