@@ -9,28 +9,29 @@
 # ===========================================================================
 
 import binascii
-import cachetclient.cachet
 import calendar
 import collections
 import errno
 import glob
 import json
 import logging
-import newsdownload
 import os
 import pickle
-import requests
-import rsa
 import struct
 import subprocess
 import sys
 import time
-import urllib2
-from config import *
 from datetime import timedelta, datetime, date  # Used to get time stuff.
+
+import cachetclient.cachet
+import requests
+import rsa
 from raven import Client
-from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
+from raven.handlers.logging import SentryHandler
+
+import newsdownload
+from config import *
 
 reload(sys)
 sys.setdefaultencoding('ISO-8859-1')
