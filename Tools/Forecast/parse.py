@@ -103,6 +103,6 @@ for k in names.keys():
 print "Dumping Database ..."
 if os.path.exists('locations.json'): os.remove('locations.json')
 with open('locations.json', 'wb') as file:
-    pickle.dump(names,file)
+	pickle.dump(names,file)
 
 print "Completed Sucessfully"
