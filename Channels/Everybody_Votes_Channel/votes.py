@@ -46,6 +46,7 @@ language_code = 1
 languages = {}
 num = 0
 number = 0
+nw = ""
 worldwide_q = False
 national_q = False
 file_type = None
@@ -126,17 +127,19 @@ def manual_run():
 """Automatically run the scripts. This will be what the crontab uses."""
 
 def automatic_questions():
-    global write_questions,write_results,questions
+    global write_questions,write_results,questions,nw
     write_questions = True
-    mysql_get_questions(1, sys.argv[2])
+    nw = sys.argv[2]
+    mysql_get_questions(1, nw)
     questions = 1
 
 def automatic_results():
-    global write_results,results,national,worldwide,questions,national_results,worldwide_results
+    global write_results,results,national,worldwide,questions,national_results,worldwide_results,nw
     write_results = True
-    if sys.argv[2] == "n": days = 7
-    elif sys.argv[2] == "w": days = 15
-    results[get_poll_id()] = mysql_get_votes(days, sys.argv[2], 1)
+    nw = sys.argv[2]
+    if nw == "n": days = 7
+    elif nw == "w": days = 15
+    results[get_poll_id()] = mysql_get_votes(days, nw, 1)
     try: del results[None]
     except KeyError: pass
     national = 0
@@ -321,8 +324,8 @@ def question_text_replace(text):
     return text
 
 def webhook():
-    if sys.argv[2] == "n": webhook_type = "national"
-    elif sys.argv[2] == "w": webhook_type = "worldwide"
+    if nw == "n": webhook_type = "national"
+    elif nw == "w": webhook_type = "worldwide"
     for q in question_data.keys():
         webhook_text = "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)" % (webhook_type, get_question(q, 1), get_response1(q, 1), get_response2(q, 1))
         if production: data = {"username": "Votes Bot", "content": "New %s Everybody Votes Channel question is out!" % type, "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [{"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0", "author_name": "RiiConnect24 Everybody Votes Channel Script", "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png", "text": webhook_text, "title": "Update!", "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}], "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type, "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png", "ts": int(time.mktime(datetime.datetime.utcnow().timetuple()))}]}
@@ -453,6 +456,7 @@ def make_header():
     header["worldwide_result_detailed_number"] = u16(worldwide_results*33)
     header["worldwide_result_detailed_offset"] = u32(0)
     if file_type == "q" or file_type == "r": header["country_name_number"] = u16(0)
+    elif file_type == "r" and nw == "w": header["country_name_number"] = u16(len(countries) * 7)
     else: header["country_name_number"] = u16(len(countries) * 7)
     header["country_name_offset"] = u32(0)
 
@@ -624,13 +628,17 @@ def make_worldwide_result_detailed_table(header):
 
     for i in results:
         for j in range(len(countries)): # 33
-            table["unknown_%s" % num()] = u32(0)
-            table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
-            table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][j])
-            table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][j])
-            table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][j])
-            table["country_table_count_%s" % num()] = u16(7)
-            table["starting_country_table_number_%s" % num()] = u32(country_table_count)
+            total = 0
+            for voters in range(0, 4):
+                total += results[i][voters][j]
+            if total > 0:
+                table["unknown_%s" % num()] = u32(0)
+                table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
+                table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][j])
+                table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][j])
+                table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][j])
+                table["country_table_count_%s" % num()] = u16(7)
+                table["starting_country_table_number_%s" % num()] = u32(country_table_count)
             country_table_count+=7
 
     return table
