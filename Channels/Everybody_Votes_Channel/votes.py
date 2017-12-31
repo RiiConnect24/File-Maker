@@ -249,7 +249,8 @@ def mysql_get_votes(days, type, index):
     return [male_voters_response_1, female_voters_response_1,
             male_voters_response_2, female_voters_response_2,
             predict_response_1, predict_response_2,
-            region_response_1, region_response_2]
+            region_response_1, region_response_2,
+            type]
 
 def mysql_get_questions(count, type):
     cursor = cnx.cursor(dictionary=True, buffered=True)
@@ -543,20 +544,21 @@ def make_national_result_table(header):
     header["national_result_offset"] = offset_count()
 
     for i in results:
-        country_index = country_codes.index(country_code)
+        if results[i][8] == "n":
+            country_index = country_codes.index(country_code)
 
-        table["poll_id_%s" % num()] = u32(i)
-        table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][country_index])
-        table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][country_index])
-        table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][country_index])
-        table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][country_index])
-        table["predictors_response_1_num_%s" % num()] = u32(results[i][4][country_index])
-        table["predictors_response_2_num_%s" % num()] = u32(results[i][5][country_index])
-        table["show_voter_number_flag_%s" % num()] = u8(1)
-        table["detailed_results_flag_%s" % num()] = u8(1)
-        table["national_result_detailed_number_number_%s" % num()] = u8(national_result_detailed_number_tables)
-        table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(national_result_detailed_number_count)
-        national_result_detailed_number_count+=national_result_detailed_number_tables
+            table["poll_id_%s" % num()] = u32(i)
+            table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][country_index])
+            table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][country_index])
+            table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][country_index])
+            table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][country_index])
+            table["predictors_response_1_num_%s" % num()] = u32(results[i][4][country_index])
+            table["predictors_response_2_num_%s" % num()] = u32(results[i][5][country_index])
+            table["show_voter_number_flag_%s" % num()] = u8(1)
+            table["detailed_results_flag_%s" % num()] = u8(1)
+            table["national_result_detailed_number_number_%s" % num()] = u8(national_result_detailed_number_tables)
+            table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(national_result_detailed_number_count)
+            national_result_detailed_number_count+=national_result_detailed_number_tables
 
     return table
 
@@ -567,15 +569,16 @@ def make_national_result_detailed_table(header):
     header["national_result_detailed_offset"] = offset_count()
 
     for i in results:
-        for j in range(region_number[country_code]):
-            country_index = country_codes.index(country_code)
-            table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
-            table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
-            if results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0: table["position_entry_table_count_%s" % num()] = u8(0)
-            elif country_code in position_table.keys(): table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
-            else: table["position_entry_table_count_%s" % num()] = u8(0)
-            if country_code in position_table.keys(): table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
-            else: table["starting_position_entry_table_%s" % num()] = u32(0)
+        if results[i][8] == "n":
+            for j in range(region_number[country_code]):
+                country_index = country_codes.index(country_code)
+                table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
+                table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
+                if results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0: table["position_entry_table_count_%s" % num()] = u8(0)
+                elif country_code in position_table.keys(): table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
+                else: table["position_entry_table_count_%s" % num()] = u8(0)
+                if country_code in position_table.keys(): table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
+                else: table["starting_position_entry_table_%s" % num()] = u32(0)
 
     return table
 
@@ -595,29 +598,34 @@ def make_worldwide_result_table(header):
     header["worldwide_result_offset"] = offset_count()
 
     for i in results:
-        male_resp1=sum(results[i][0])
-        female_resp1=sum(results[i][1])
-        male_resp2=sum(results[i][2])
-        female_resp2=sum(results[i][3])
-        resp1=male_resp1+female_resp1
-        resp2=male_resp2+female_resp2
-        predict1=sum(results[i][4])
-        predict2=sum(results[i][5])
+        if results[i][8] == "w":
+            for j in range(len(countries)): # 33
+                total = 0
+                for voters in range(0, 4):
+                    total += results[i][voters][j]
+            if total > 0: worldwide_detailed_table_count += 1
+            male_resp1=sum(results[i][0])
+            female_resp1=sum(results[i][1])
+            male_resp2=sum(results[i][2])
+            female_resp2=sum(results[i][3])
+            resp1=male_resp1+female_resp1
+            resp2=male_resp2+female_resp2
+            predict1=sum(results[i][4])
+            predict2=sum(results[i][5])
 
-        table["poll_id_%s" % num()] = u32(i)
-        table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
-        table["male_voters_response_2_num_%s" % num()] = u32(female_resp1)
-        table["female_voters_response_1_num_%s" % num()] = u32(male_resp2)
-        table["female_voters_response_2_num_%s" % num()] = u32(female_resp2)
-        if resp1 > resp2: # response 1 won
-            table["accurate_prediction_voters_num_%s" % num()] = u32(predict1)
-            table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict2)
-        else: # response 2 won - or tie
-            table["accurate_prediction_voters_num_%s" % num()] = u32(predict2)
-            table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict1)
-        table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
-        table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
-        worldwide_detailed_table_count+=33
+            table["poll_id_%s" % num()] = u32(i)
+            table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
+            table["male_voters_response_2_num_%s" % num()] = u32(female_resp1)
+            table["female_voters_response_1_num_%s" % num()] = u32(male_resp2)
+            table["female_voters_response_2_num_%s" % num()] = u32(female_resp2)
+            if resp1 > resp2: # response 1 won
+                table["accurate_prediction_voters_num_%s" % num()] = u32(predict1)
+                table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict2)
+            else: # response 2 won - or tie
+                table["accurate_prediction_voters_num_%s" % num()] = u32(predict2)
+                table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict1)
+            table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
+            table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
 
     return table
 
@@ -631,7 +639,7 @@ def make_worldwide_result_detailed_table(header):
     worldwide_region_number = 0
 
     for i in results:
-        if is_worldwide(i):
+        if results[i][8] == "w":
             for j in range(len(countries)): # 33
                 total = 0
                 for voters in range(0, 4):
