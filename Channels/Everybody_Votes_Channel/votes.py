@@ -524,7 +524,7 @@ def make_question_text_table(header):
         if not is_worldwide(q): list = country_language[country_code]
         elif is_worldwide(q):
             if file_type == "v": list = country_language[country_code]
-            elif file_type == "q": list = range(1, 10)
+            elif file_type == "q": list = range(1, 9)
         for language_code in list:
             if get_question(q, language_code) is not None:
                 num = question_data.keys().index(q)
