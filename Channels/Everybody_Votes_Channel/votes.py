@@ -594,11 +594,12 @@ def make_worldwide_result_table(header):
     table = collections.OrderedDict()
     dictionaries.append(table)
 
-    worldwide_detailed_table_count = 0
+    worldwide_detailed_table_count_all = 0
     header["worldwide_result_offset"] = offset_count()
 
     for i in results:
         if results[i][8] == "w":
+            worldwide_detailed_table_count = 0
             for j in range(len(countries)): # 33
                 total = 0
                 for voters in range(0, 4):
@@ -624,8 +625,9 @@ def make_worldwide_result_table(header):
             else: # response 2 won - or tie
                 table["accurate_prediction_voters_num_%s" % num()] = u32(predict2)
                 table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict1)
-            table["total_worldwide_detailed_tables_%s" % num()] = u8(33)
-            table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count)
+            table["total_worldwide_detailed_tables_%s" % num()] = u8(worldwide_detailed_table_count)
+            table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count_all)
+            worldwide_detailed_table_count_all += worldwide_detailed_table_count
 
     return table
 
