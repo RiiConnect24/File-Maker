@@ -455,7 +455,7 @@ def make_header():
     header["position_offset"] = u32(0)
     header["worldwide_result_number"] = u8(worldwide_results)
     header["worldwide_result_offset"] = u32(0)
-    header["worldwide_result_detailed_number"] = u16(worldwide_results*33)
+    header["worldwide_result_detailed_number"] = u16(0)
     header["worldwide_result_detailed_offset"] = u32(0)
     if file_type == "q" or file_type == "r": header["country_name_number"] = u16(0)
     elif file_type == "r" and nw == "w": header["country_name_number"] = u16(len(countries) * 7)
@@ -628,6 +628,8 @@ def make_worldwide_result_detailed_table(header):
     country_table_count = 0
     header["worldwide_result_detailed_offset"] = offset_count()
 
+    worldwide_region_number = 0
+
     for i in results:
         for j in range(len(countries)): # 33
             total = 0
@@ -641,7 +643,10 @@ def make_worldwide_result_detailed_table(header):
                 table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][j])
                 table["country_table_count_%s" % num()] = u16(7)
                 table["starting_country_table_number_%s" % num()] = u32(country_table_count)
+                worldwide_region_number += 1
             country_table_count+=7
+
+    header["worldwide_result_detailed_number"] = u16(worldwide_region_number)
 
     return table
 
