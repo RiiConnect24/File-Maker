@@ -709,7 +709,8 @@ def make_question_text(question_text_table):
 
 
 prepare()
-if nw != "w": for country_code in country_codes[1:]: make_bin(country_code)
+if nw != "w":
+    for country_code in country_codes[1:]: make_bin(country_code)
 else: make_bin(country_code)
 if file_type == "q": webhook()
 
