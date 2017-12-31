@@ -604,7 +604,7 @@ def make_worldwide_result_table(header):
                 total = 0
                 for voters in range(0, 4):
                     total += results[i][voters][j]
-            if total > 0: worldwide_detailed_table_count += 1
+                    if total > 0: worldwide_detailed_table_count += 1
             male_resp1=sum(results[i][0])
             female_resp1=sum(results[i][1])
             male_resp2=sum(results[i][2])
