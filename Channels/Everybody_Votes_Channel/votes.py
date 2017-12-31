@@ -376,8 +376,10 @@ def sign_file(name):
     key.close()
     if production:
         if file_type == "q" or file_type == "r":
-            subprocess.call(["mkdir", "-p", "%s/%s/%s" % (file_path, str(country_code).zfill(3), get_year())]) # If folder for the year does not exist, make it.
-            path = "%s/%s/%s/%s" % (file_path, str(country_code).zfill(3), get_year(), final)
+            folder = str(country_code).zfill(3)
+            if nw == "w": folder = "world"
+            subprocess.call(["mkdir", "-p", "%s/%s/%s" % (file_path, folder, get_year())]) # If folder for the year does not exist, make it.
+            path = "%s/%s/%s/%s" % (file_path, folder, get_year(), final)
         elif file_type == "v": path = "%s/%s/%s" % (file_path, str(country_code).zfill(3), final)
     subprocess.call(["mv", final, path])
     os.remove(final + '-1')
