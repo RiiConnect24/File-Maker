@@ -457,8 +457,8 @@ def make_header():
     header["worldwide_result_offset"] = u32(0)
     header["worldwide_result_detailed_number"] = u16(0)
     header["worldwide_result_detailed_offset"] = u32(0)
-    if file_type == "q" or file_type == "r": header["country_name_number"] = u16(0)
-    elif file_type == "r" and nw == "w": header["country_name_number"] = u16(len(countries) * 7)
+    if file_type == "r" and nw == "w": header["country_name_number"] = u16(len(countries) * 7)
+    elif file_type == "q" or file_type == "r": header["country_name_number"] = u16(0)
     else: header["country_name_number"] = u16(len(countries) * 7)
     header["country_name_offset"] = u32(0)
 
