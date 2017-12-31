@@ -6,7 +6,7 @@
 # VERSION 1.0
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
-# Copyright (c) 2015-2017 RiiConnect24, and it's (Lead) Developers
+# Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
 import binascii
