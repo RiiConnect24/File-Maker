@@ -631,20 +631,21 @@ def make_worldwide_result_detailed_table(header):
     worldwide_region_number = 0
 
     for i in results:
-        for j in range(len(countries)): # 33
-            total = 0
-            for voters in range(0, 4):
-                total += results[i][voters][j]
-            if total > 0:
-                table["unknown_%s" % num()] = u32(0)
-                table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
-                table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][j])
-                table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][j])
-                table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][j])
-                table["country_table_count_%s" % num()] = u16(7)
-                table["starting_country_table_number_%s" % num()] = u32(country_table_count)
-                worldwide_region_number += 1
-            country_table_count+=7
+        if is_worldwide(i):
+            for j in range(len(countries)): # 33
+                total = 0
+                for voters in range(0, 4):
+                    total += results[i][voters][j]
+                if total > 0:
+                    table["unknown_%s" % num()] = u32(0)
+                    table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
+                    table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][j])
+                    table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][j])
+                    table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][j])
+                    table["country_table_count_%s" % num()] = u16(7)
+                    table["starting_country_table_number_%s" % num()] = u32(country_table_count)
+                    worldwide_region_number += 1
+                country_table_count+=7
 
     header["worldwide_result_detailed_number"] = u16(worldwide_region_number)
 
