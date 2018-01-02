@@ -170,14 +170,14 @@ def copy_file(mode, console, country):
         for hours in range(0, 24):
             newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
             newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
-            path = "%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country)
+            path = "%s/%s/%s/%s" % (file_path, "v3" if console == "wii_u" else "v2", language_code, country)
             mkdir_p(path)
             path = "%s/%s" % (path, newsfilename2)
             subprocess.call(["cp", newsfilename, path])
     else:
         newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
         newsfilename2 = "news.bin.%s" % (str(datetime.utcnow().hour).zfill(2))
-        path = "%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country)
+        path = "%s/%s/%s/%s" % (file_path, "v3" if console == "wii_u" else "v2", language_code, country)
         mkdir_p(path)
         path = "%s/%s" % (path, newsfilename2)
         subprocess.call(["cp", newsfilename, path])
