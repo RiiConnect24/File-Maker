@@ -76,7 +76,7 @@ for k in names.keys():
     if names[k][1] == 0 and names[k][2] != 0:
         second = names[k][2]
     elif names[k][1] == 0 and names[k][2] == 0:
-        if next == None:
+        if next is None:
             second = int(os.path.getsize(filename))
         else:
             second = next[1][0]
@@ -101,11 +101,11 @@ for k in names.keys():
 
     print "Location ID: %s" % k.upper()
     print "City: %s" % city_string.decode('utf-16be').encode('utf-8')
-    if region_string != None:
+    if region_string is not None:
         print "Region: %s" % region_string.decode('utf-16be').encode('utf-8')
     else:
         print "No Region"
-    if country_string != None:
+    if country_string is not None:
         print "Country: %s" % country_string.decode('utf-16be').encode('utf-8')
     else:
         print "No Country"

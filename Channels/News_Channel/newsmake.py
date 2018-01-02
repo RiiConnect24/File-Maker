@@ -150,7 +150,7 @@ def download_source(name, mode, language_code, countries, data):
 
 
 def copy_file(mode, system, country, language_code):
-    if force_all == True:
+    if force_all:
         for hours in range(0, 24):
             newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
             newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))

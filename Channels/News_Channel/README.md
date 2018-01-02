@@ -104,7 +104,7 @@ Nice! You have got the hardest part out of the way if you've made it this far, n
 Find the if/else statement in `make_news_bin` and add an entry there for your news source. Like this:
 
 ```python
-elif mode == "mcnx_news":
+if mode == "mcnx_news":
 		topics_news = collections.OrderedDict()
 
 		topics_news["National News"] = "national"

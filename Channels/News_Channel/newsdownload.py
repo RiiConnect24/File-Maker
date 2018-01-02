@@ -117,7 +117,7 @@ def shrink_image(data, resize):
 	picture = requests.get(data).content
 	image = Image.open(StringIO(picture))
 
-	if resize == True: image = resizeimage.resize_width(image, 200)
+	if resize: image = resizeimage.resize_width(image, 200)
 
 	data = list(image.getdata())
 	image_without_exif = Image.new(image.mode, image.size)
