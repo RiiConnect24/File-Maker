@@ -37,6 +37,13 @@ reload(sys)
 sys.setdefaultencoding('ISO-8859-1')
 requests.packages.urllib3.disable_warnings()
 
+header = collections.OrderedDict()
+topics_table = collections.OrderedDict()
+articles_table = collections.OrderedDict()
+source_table = collections.OrderedDict()
+locations_table = collections.OrderedDict()
+pictures_table = collections.OrderedDict()
+
 """Set up Sentry for error logging."""
 
 if production:
@@ -58,32 +65,32 @@ def capture_message(text, mode):
 """This will pack the integers."""
 
 
-def u8(data):
-    if data < 0 or data > 255:
+def u8(value):
+    if value < 0 or value > 255:
         capture_message("u8 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack(">B", data)
+        return 0
+    return struct.pack(">B", value)
 
 
-def u16(data):
-    if data < 0 or data > 65535:
+def u16(value):
+    if value < 0 or value > 65535:
         capture_message("u16 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack(">H", data)
+        return 0
+    return struct.pack(">H", value)
 
 
-def u32(data):
-    if data < 0 or data > 4294967295:
+def u32(value):
+    if value < 0 or value > 4294967295:
         capture_message("u32 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack(">I", data)
+        return 0
+    return struct.pack(">I", value)
 
 
-def u32_littleendian(data):
-    if data < 0 or data > 4294967295:
+def u32_littleendian(value):
+    if value < 0 or value > 4294967295:
         capture_message("u32 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack("<I", data)
+        return 0
+    return struct.pack("<I", value)
 
 
 # http://stackoverflow.com/a/600612/3874884
@@ -91,55 +98,64 @@ def mkdir_p(path):
     try:
         os.makedirs(path)
     except OSError as exc:  # Python >2.5
-        if exc.errno == errno.EEXIST and os.path.isdir(path): pass
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
     else:
         return
 
 
-def download_source(name, mode, language_code, countries, data):
+def download_source(name, mode, language, countries, d):
     print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
     """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
+
+    global language_code, data, system
+
+    language_code = language
+    data = d
 
     i = 0
 
     for key in data.keys():
         i += 1
-        if i > 22: del data[key]
+        if i > 22:
+            del data[key]
 
-    # data = remove_duplicates(data)
+    # data = remove_duplicates()
 
-    make_news = make_news_bin(mode, "wii", data)
-    make_news = make_news_bin(mode, "wii_u", data)
+    for system in ["wii", "wii_u"]:
+        make_news_bin(mode, system)
 
     if production:
         """Tell Cachet how many news articles it downloaded."""
 
         points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
-        new_point = json.loads(points.post(id="2", value=len(data)))
+        json.loads(points.post(id="2", value=len(data)))
 
         """This will use a webhook to log that the script has been ran."""
 
         webhook = {"username": "News Bot", "content": "News Data has been updated!",
                    "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [
-                {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
-                 "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
-                 "title": "Update!",
-                 "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
-                 "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
-                 "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                 "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+                    {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
+                     "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
+                     "title": "Update!",
+                     "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
+                     "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
+                     "footer_icon": "https://rc24.xyz/images/logo-small.png",
+                     "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
-        for url in webhook_urls: requests.post(url, json=webhook, allow_redirects=True)
+        for url in webhook_urls:
+            requests.post(url, json=webhook, allow_redirects=True)
 
         filesize = sum(os.path.getsize(f) - 320 for f in
                        glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
 
-        if filesize > 3712000: capture_message("News files exceed the maximum file size amount.", "error")
+        if filesize > 3712000:
+            capture_message("News files exceed the maximum file size amount.", "error")
 
         for country in countries:
-            copy_file(mode, "wii", country, language_code)
-            copy_file(mode, "wii_u", country, language_code)
+            copy_file(mode, "wii", country)
+            copy_file(mode, "wii_u", country)
 
         newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "."
         os.remove(newsfilename + "wii")
@@ -149,17 +165,17 @@ def download_source(name, mode, language_code, countries, data):
 """Copy the temp files to the correct path that the Wii will request from the server."""
 
 
-def copy_file(mode, system, country, language_code):
+def copy_file(mode, console, country):
     if force_all:
         for hours in range(0, 24):
-            newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
+            newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
             newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
             path = "%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country)
             mkdir_p(path)
             path = "%s/%s" % (path, newsfilename2)
             subprocess.call(["cp", newsfilename, path])
     else:
-        newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
+        newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
         newsfilename2 = "news.bin.%s" % (str(datetime.utcnow().hour).zfill(2))
         path = "%s/%s/%s/%s" % (file_path, "v3" if system == "wii_u" else "v2", language_code, country)
         mkdir_p(path)
@@ -170,7 +186,9 @@ def copy_file(mode, system, country, language_code):
 """Run the functions to make the news."""
 
 
-def make_news_bin(mode, console, data):
+def make_news_bin(mode, console):
+    global system, dictionaries, topics_news, languages, make_news, data, country_code, language_code, locations_data, header, topics_table, articles_table, source_table, locations_table, pictures_table
+
     if mode == "ap_english":
         topics_news = collections.OrderedDict()
 
@@ -345,13 +363,10 @@ def make_news_bin(mode, console, data):
 
         country_code = 1
 
-    global system, dictionaries
-
-    system = console
-
     numbers = 0
 
-    if not os.path.exists("newstime"): os.mkdir("newstime")
+    if not os.path.exists("newstime"):
+        os.mkdir("newstime")
 
     for topics in topics_news.values():
         newstime = collections.OrderedDict()
@@ -363,37 +378,40 @@ def make_news_bin(mode, console, data):
                 newstime[data[keys][3]] = get_timestamp(1) + u32(numbers)
 
         pickle.dump(newstime,
-                    open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, system),
+                    open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, console),
                          "w+"))
 
     dictionaries = []
 
     locations_data = newsdownload.locations_download(language_code, data)
 
-    header = make_header(country_code, languages, language_code, 0, 30, data)
-    wiimenu_articles = make_wiimenu_articles(header, data)
-    topics_table = make_topics_table(header, topics_news, data)
-    timestamps_table = make_timestamps_table(topics_table, topics_news, mode, data)
-    articles_table = make_articles_table(header, locations_data, data)
-    source_table = make_source_table(header, articles_table, data)
-    locations_table = make_locations_table(header, locations_data)
-    pictures_table = make_pictures_table(header, data)
-    articles = make_articles(pictures_table, articles_table, data)
-    topics = make_topics(topics_table, source_table, 0, topics_news, 0)
-    source_name_copyright = make_source_name_copyright(source_table, language_code, data)
-    locations = make_locations(locations_table, locations_data)
-    source_pictures = make_source_pictures(source_table, data)
-    pictures = make_pictures(pictures_table, data)
-    riiconnect24_text = make_riiconnect24_text()
+    make_header(0, 30)
+    make_wiimenu_articles()
+    make_topics_table()
+    make_timestamps_table(mode)
+    make_articles_table()
+    make_source_table()
+    make_locations_table()
+    make_pictures_table()
+    make_articles()
+    make_topics(0, 0)
+    make_source_name_copyright()
+    make_locations()
+    make_source_pictures()
+    make_pictures()
+    make_riiconnect24_text()
 
-    write = write_dictionary(mode)
+    write_dictionary(mode)
 
     headlines = []
 
     for article in data.values():
-        if article[3].decode("utf-16be") not in headlines: headlines.append(article[3].decode("utf-16be") + "\n")
+        if article[3].decode("utf-16be") not in headlines:
+            headlines.append(article[3].decode("utf-16be") + "\n")
 
-    return "".join(headlines)
+    make_news = "".join(headlines)
+
+    return make_news
 
 
 """This is a function used to count offsets."""
@@ -407,6 +425,8 @@ def offset_count(): return u32(
 
 
 def get_timestamp(mode):
+    global seconds
+
     if system == "wii":
         seconds = 946684800
     elif system == "wii_u":
@@ -421,7 +441,7 @@ def get_timestamp(mode):
 """Make the news.bin."""
 
 
-def remove_duplicates(data):
+def remove_duplicates():
     data_dupe = collections.OrderedDict()
 
     headlines = []
@@ -442,8 +462,7 @@ def remove_duplicates(data):
 """First part of the header."""
 
 
-def make_header(country_code, languages, language_code, language_select_screen_flag, download_interval, data):
-    header = collections.OrderedDict()
+def make_header(language_select_screen_flag, download_interval):
     dictionaries.append(header)
 
     header["updated_timestamp_1"] = get_timestamp(1)  # Updated time.
@@ -508,7 +527,7 @@ def make_header(country_code, languages, language_code, language_select_screen_f
 """Headlines to display on the Wii Menu."""
 
 
-def make_wiimenu_articles(header, data):
+def make_wiimenu_articles():
     wiimenu_articles = collections.OrderedDict()
     dictionaries.append(wiimenu_articles)
 
@@ -540,8 +559,7 @@ def make_wiimenu_articles(header, data):
 """Topics table."""
 
 
-def make_topics_table(header, topics_news, data):
-    topics_table = collections.OrderedDict()
+def make_topics_table():
     dictionaries.append(topics_table)
     header["topics_offset"] = offset_count()  # Offset for the topics table.
     topics_table["new_topics_offset"] = u32(0)  # Offset for the newest topic.
@@ -550,7 +568,7 @@ def make_topics_table(header, topics_news, data):
 
     numbers = 0
 
-    for topics in topics_news.values():
+    for _ in topics_news.values():
         numbers += 1
         topics_table["topics_%s_offset" % str(numbers)] = u32(0)  # Offset for the topic.
         topics_table["topics_%s_article_number" % str(numbers)] = u32(
@@ -566,12 +584,9 @@ def make_topics_table(header, topics_news, data):
 """Timestamps table."""
 
 
-def make_timestamps_table(topics_table, topics_news, mode, data):
+def make_timestamps_table(mode):
     timestamps_table = collections.OrderedDict()
     dictionaries.append(timestamps_table)
-
-    times_list = []
-    times_files = []
 
     def timestamps_table_add(topics):
         times = collections.OrderedDict()
@@ -586,11 +601,13 @@ def make_timestamps_table(topics_table, topics_news, mode, data):
                 newstime = pickle.load(open(files, "rb"))
 
                 for keys in newstime.keys():
-                    if keys not in times: times[keys] = newstime[keys]
+                    if keys not in times:
+                        times[keys] = newstime[keys]
 
         times_list = []
 
-        for values in times.values(): times_list.append(values)
+        for values in times.values():
+            times_list.append(values)
 
         timestamps = ''.join(times_list)  # Timestamps.
 
@@ -614,8 +631,7 @@ def make_timestamps_table(topics_table, topics_news, mode, data):
 """Articles table."""
 
 
-def make_articles_table(header, locations_data, data):
-    articles_table = collections.OrderedDict()
+def make_articles_table():
     dictionaries.append(articles_table)
 
     pictures_number = 0
@@ -631,8 +647,9 @@ def make_articles_table(header, locations_data, data):
 
         for locations in locations_data.keys():
             for article_name in locations_data[locations][1]:
-                if keys == article_name: articles_table["location_%s_number" % numbers] = u32(
-                    locations_data.keys().index(locations))  # Number for the location.
+                if keys == article_name:
+                    articles_table["location_%s_number" % numbers] = u32(
+                        locations_data.keys().index(locations))  # Number for the location.
 
         if article[4] is not None:
             articles_table["term_timestamp_%s" % numbers] = get_timestamp(1)  # Timestamp for the term.
@@ -657,8 +674,7 @@ def make_articles_table(header, locations_data, data):
 """Source table."""
 
 
-def make_source_table(header, articles_table, data):
-    source_table = collections.OrderedDict()
+def make_source_table():
     dictionaries.append(source_table)
     header["source_offset"] = offset_count()  # Offset for the source table.
 
@@ -722,8 +738,7 @@ def make_source_table(header, articles_table, data):
 """Locations data table."""
 
 
-def make_locations_table(header, locations_data):
-    locations_table = collections.OrderedDict()
+def make_locations_table():
     dictionaries.append(locations_table)
     header["locations_offset"] = offset_count()  # Offset for the locations table.
 
@@ -744,8 +759,7 @@ def make_locations_table(header, locations_data):
 """Pictures table."""
 
 
-def make_pictures_table(header, data):
-    pictures_table = collections.OrderedDict()
+def make_pictures_table():
     dictionaries.append(pictures_table)
     header["pictures_offset"] = offset_count()  # Offset for the pictures table.
 
@@ -782,7 +796,7 @@ def make_pictures_table(header, data):
 """Add the articles."""
 
 
-def make_articles(pictures_table, articles_table, data):
+def make_articles():
     articles = collections.OrderedDict()
     dictionaries.append(articles)
 
@@ -812,7 +826,7 @@ def make_articles(pictures_table, articles_table, data):
 """Add the topics."""
 
 
-def make_topics(topics_table, source_table, message, topics_news, message_flag):
+def make_topics(message, message_flag):
     topics = collections.OrderedDict()
     dictionaries.append(topics)
 
@@ -831,7 +845,7 @@ def make_topics(topics_table, source_table, message, topics_news, message_flag):
     return topics
 
 
-def make_source_name_copyright(source_table, language_code, data):
+def make_source_name_copyright():
     source_name_copyright = collections.OrderedDict()
     dictionaries.append(source_name_copyright)
 
@@ -919,7 +933,7 @@ def make_source_name_copyright(source_table, language_code, data):
 """Add the locations."""
 
 
-def make_locations(locations_table, locations_data):
+def make_locations():
     locations = collections.OrderedDict()
     dictionaries.append(locations)
 
@@ -936,7 +950,7 @@ def make_locations(locations_table, locations_data):
 """Add the source pictures."""
 
 
-def make_source_pictures(source_table, data):
+def make_source_pictures():
     source_pictures = collections.OrderedDict()
     dictionaries.append(source_pictures)
 
@@ -955,8 +969,9 @@ def make_source_pictures(source_table, data):
                 source_table["pictures_size_%s" % article[8]] = u32(os.path.getsize("./logos/%s.jpg" % article[8]))
                 source_table["pictures_offset_%s" % article[8]] = offset_count()
 
-                with open("./logos/%s.jpg" % article[8], "rb") as source_file: source_pictures[
-                    "logo_%s" % article[8]] = source_file.read()
+                with open("./logos/%s.jpg" % article[8], "rb") as source_file:
+                    source_pictures[
+                        "logo_%s" % article[8]] = source_file.read()
 
     return source_pictures
 
@@ -964,7 +979,7 @@ def make_source_pictures(source_table, data):
 """Add the pictures."""
 
 
-def make_pictures(pictures_table, data):
+def make_pictures():
     pictures = collections.OrderedDict()
     dictionaries.append(pictures)
 
@@ -978,9 +993,8 @@ def make_pictures(pictures_table, data):
             pictures["nullbyte_%s_pictures" % numbers] = u8(0)  # Null byte for the pictures.
 
             for types in ["captions", "credits"]:
-                if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table[
-                    "%s_%s_size" % (types, numbers)] == u32(0): pictures_table["%s_%s_offset" % (types, numbers)] = u32(
-                    0)
+                if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table["%s_%s_size" % (types, numbers)] == u32(0):
+                    pictures_table["%s_%s_offset" % (types, numbers)] = u32(0)
 
     return pictures
 
@@ -1006,7 +1020,8 @@ def write_dictionary(mode):
 
     for dictionary in dictionaries:
         for values in dictionary.values():
-            with open(newsfilename + "-1", "a+") as dest_file: dest_file.write(values)
+            with open(newsfilename + "-1", "a+") as dest_file:
+                dest_file.write(values)
 
     with open(newsfilename + "-1", "rb") as source_file:
         read = source_file.read()
