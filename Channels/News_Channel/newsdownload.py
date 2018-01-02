@@ -216,9 +216,9 @@ def geoparser_get(article):
 		else:
 			try:
 				property = response.json()["features"][0]["properties"]
+				i += 1
 				return property["name"] + ", " + property["country"]
 			except: return None
-		i += 1
 	capture_message("Out of Geoparser requests.", "warning")
 	return None
 

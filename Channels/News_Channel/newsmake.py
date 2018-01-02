@@ -93,13 +93,13 @@ def mkdir_p(path):
     except OSError as exc:  # Python >2.5
         if exc.errno == errno.EEXIST and os.path.isdir(path): pass
     else:
-        raise
+        return
 
 
 def download_source(name, mode, language_code, countries, data):
     print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
-    """If there are more than 25 news articles, delete the rest. This is so the file doesn't get too large."""
+    """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
 
     i = 0
 
