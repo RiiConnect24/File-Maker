@@ -514,22 +514,31 @@ def parsedata_reuters(language, url, title, updated):
     soup = BeautifulSoup(html, "lxml")
 
     try:
-        caption = soup.find("span", {"class": "Image_caption_KoNH1"}).contents[0]
-        soup.find("span", {"class": "Image_caption_KoNH1"}).decompose()
+        c = soup.find("span", {"class": "Image_caption_KoNH1"})
+        caption = c.contents[0]
+        c.decompose()
     except:
         pass
 
-    try: headline = fix_chars(soup.find("h1", {"class": "ArticleHeader_headline_2zdFM"}).get_text()) # Parse the headline.
-    except: return None
+    try:
+        soup.find("div", {"class": "StandardArticleBody_trustBadgeContainer_1gqgJ"}).decompose()
+    except:
+        pass
+
+    try:
+        soup.find("div", {"class": "Slideshow_inline-container_1QqKC Slideshow_mega_19SOz"}).decompose()
+    except:
+        pass
+
+    try:
+        headline = fix_chars(soup.find("h1", {"class": "ArticleHeader_headline_2zdFM"}).get_text()) # Parse the headline.
+    except:
+        return None
 
     article_text = BeautifulSoup(str(soup.find("div", {"class": "StandardArticleBody_body_1gnLA"})).replace("</p>", "\n\n</p>"), "lxml").get_text()
 
-    try:
-        if language == "en": article = fix_chars(article_text+ "\n\n" + soup.find("p", {"class": "Attribution_content_27_rw"}).contents[0])
-        elif language == "jp": article = fix_chars("\n".join(textwrap.wrap(article_text, 25)) + "\n\n" + "\n".join(textwrap.wrap(soup.find("p", {"class": "Attribution_content_27_rw"}).contents[0]), 30))
-    except:
-        if language == "en": article = fix_chars(article_text)
-        elif language == "jp": article = fix_chars("\n".join(textwrap.wrap(article_text, 25)))
+    if language == "en": article = fix_chars(article_text)
+    elif language == "jp": article = fix_chars("\n".join(textwrap.wrap(article_text, 25)))
 
     try:
         if language == "en": location = article.decode("utf-16be").split(" (Reuters)")[0]
