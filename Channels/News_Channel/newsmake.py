@@ -383,6 +383,13 @@ def make_news_bin(mode, console):
 
     dictionaries = []
 
+    header = collections.OrderedDict()
+    topics_table = collections.OrderedDict()
+    articles_table = collections.OrderedDict()
+    source_table = collections.OrderedDict()
+    locations_table = collections.OrderedDict()
+    pictures_table = collections.OrderedDict()
+
     locations_data = newsdownload.locations_download(language_code, data)
 
     make_header(0, 30)
