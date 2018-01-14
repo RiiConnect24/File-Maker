@@ -11,6 +11,7 @@
 import binascii
 import collections
 import struct
+import sys
 import textwrap
 import time
 from datetime import datetime
@@ -30,6 +31,9 @@ from resizeimage import resizeimage
 from unidecode import unidecode
 
 from config import *
+
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 """Set up Sentry for error logging."""
 
@@ -773,6 +777,7 @@ def locations_download(language_code, data):
 
         if name not in corrections:
             try:
+                print unidecode(name)
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
                 capture_message("There was a error downlading the location data.", "warning")
