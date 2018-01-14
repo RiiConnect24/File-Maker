@@ -18,6 +18,7 @@ from StringIO import StringIO
 
 import feedparser
 import googlemaps
+import logging
 import newspaper
 import requests
 from bs4 import BeautifulSoup
