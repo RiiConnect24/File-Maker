@@ -32,9 +32,8 @@ from raven.handlers.logging import SentryHandler
 
 import newsdownload
 from config import *
+import imp
 
-reload(sys)
-sys.setdefaultencoding('ISO-8859-1')
 requests.packages.urllib3.disable_warnings()
 
 header = collections.OrderedDict()
@@ -104,7 +103,7 @@ def mkdir_p(path):
         return
 
 
-def download_source(name, mode, language, countries, d):
+def process_news(name, mode, language, countries, d):
     print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
     """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
@@ -112,7 +111,7 @@ def download_source(name, mode, language, countries, d):
     global language_code, data, system
 
     language_code = language
-    data = d
+    data = d.newsdata
 
     i = 0
 
@@ -136,13 +135,13 @@ def download_source(name, mode, language, countries, d):
 
         webhook = {"username": "News Bot", "content": "News Data has been updated!",
                    "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [
-                    {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
-                     "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
-                     "title": "Update!",
-                     "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
-                     "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
-                     "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                     "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+                {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
+                 "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
+                 "title": "Update!",
+                 "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
+                 "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
+                 "footer_icon": "https://rc24.xyz/images/logo-small.png",
+                 "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
         for url in webhook_urls:
             requests.post(url, json=webhook, allow_redirects=True)
@@ -221,24 +220,6 @@ def make_news_bin(mode, console):
 
         country_code = 49
 
-    elif mode == "reuters_america_english":
-        topics_news = collections.OrderedDict()
-
-        topics_news["World"] = "world"
-        topics_news["US"] = "us"
-        topics_news["Health"] = "health"
-        topics_news["Science"] = "science"
-        topics_news["Technology"] = "technology"
-        topics_news["Entertainment"] = "entertainment"
-        topics_news["Sports"] = "sports"
-        topics_news["Lifestyle"] = "lifestyle"
-
-        languages = [1, 3, 4]
-
-        language_code = 1
-
-        country_code = 49
-
     elif mode == "reuters_europe_english":
         topics_news = collections.OrderedDict()
 
@@ -257,43 +238,11 @@ def make_news_bin(mode, console):
 
         country_code = 110
 
-    elif mode == "expansion_spanish":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Nacional"] = "national"
-        topics_news["Mundo"] = "world"
-        topics_news["Economía"] = "economy"
-        topics_news["Empresas"] = "business"
-        topics_news["Tecnología"] = "technology"
-
-        languages = [1, 3, 4]
-
-        language_code = 4
-
-        country_code = 49
-
-    elif mode == "efe_europe_spanish":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Mundo"] = "world"
-        topics_news["Deportes"] = "sports"
-        topics_news["Economía"] = "economy"
-        topics_news["Cultura"] = "culture"
-        topics_news["Sociedad"] = "society"
-        topics_news["Gente"] = "people"
-
-        languages = [1, 2, 3, 4, 5, 6]
-
-        language_code = 4
-
-        country_code = 110
-
     elif mode == "afp_french":
         topics_news = collections.OrderedDict()
 
         topics_news["Monde"] = "world"
         topics_news["Sports"] = "sports"
-        topics_news["Société"] = "society"
         topics_news["Politique"] = "politics"
         topics_news["Top News"] = "topnews"
 
@@ -303,11 +252,12 @@ def make_news_bin(mode, console):
 
         country_code = 110
 
-    elif mode == "zeit_german":
+    elif mode == "donaukurier_german":
         topics_news = collections.OrderedDict()
 
-        topics_news["General"] = "general"
-        topics_news["Sport"] = "sports"
+        topics_news["Nachrichten"] = "world"
+        topics_news["Wirtschaft"] = "economy"
+        topics_news["Kultur"] = "culture"
 
         languages = [1, 2, 3, 4, 5, 6]
 
@@ -379,7 +329,7 @@ def make_news_bin(mode, console):
 
         pickle.dump(newstime,
                     open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, console),
-                         "w+"))
+                         "wb"))
 
     dictionaries = []
 
@@ -440,9 +390,9 @@ def get_timestamp(mode):
         seconds = 789563880
 
     if mode == 1:
-        return u32(((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60))
+        return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60))
     elif mode == 2:
-        return u32(((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60) + 1500)
+        return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60) + 1500)
 
 
 """Make the news.bin."""
@@ -613,8 +563,8 @@ def make_timestamps_table(mode):
 
         times_list = []
 
-        for values in times.values():
-            times_list.append(values)
+        for values in list(times.values()):
+            times_list.append(str(values))
 
         timestamps = ''.join(times_list)  # Timestamps.
 
@@ -690,20 +640,17 @@ def make_source_table():
     """These are the picture and position values."""
 
     sources = {
-        "ap": [0, 1],
+        "AP": [0, 1],
         "Reuters": [0, 4],
         "AFP": [4, 4],
+        "AFP_french": [4, 4],
         "ANP": [0, 5],
-        "ansa": [6, 6],
+        "ANSA": [6, 6],
         "dpa": [0, 4],
-        "DPA Hamburg": [0, 4],
         "ZEIT ONLINE": [0, 4],
         "SID": [0, 4],
         "NU.nl": [0, 5],
-        "EFE": [0, 4],
-        "Expansión": [0, 4],
-        "Notimex": [0, 4],
-        "CNN": [0, 4],
+        "Reuters_japanese": [0, 4],
     }
 
     numbers = 0
@@ -863,7 +810,7 @@ def make_source_name_copyright():
     """Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
     copyrights = {
-        "ap": (
+        "AP": (
                 "Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year).decode(
             "utf-8").encode("utf-16be"),
         "Reuters": (
@@ -878,7 +825,7 @@ def make_source_name_copyright():
         "ANP": (
                 "All reproduction and representation rights reserved. © %s B.V. Algemeen Nederlands Persbureau ANP" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
-        "ansa": (
+        "ANSA": (
                 "© %s ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma." % date.today().year).decode(
             "utf-8").encode("utf-16be"),
         "SID": (
@@ -890,20 +837,11 @@ def make_source_name_copyright():
         "dpa": (
                 "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
-        "DPA Hamburg": (
-                "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
         "NU.nl": (
                 "© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
-        "EFE": "© Agencia EFE, S.A. Avd. de Burgos, 8-B. 28036 Madrid. España Tel: +34 91 346 7100. Todos los derechos reservados".decode(
-            "utf-8").encode("utf-16be"),
-        "Expansión": ("© %s Expansión" % date.today().year).decode("utf-8").encode("utf-16be"),
-        "Notimex": (
-                "%s Derechos Reservados Notimex México - Avenida Baja California # 200, Colonia Roma Sur, Delegación Cuauhtémoc C.P. 06760, Ciudad de México, Conmutador: (5255) 5420-1100" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "CNN": (
-                "© %s Cable News Network. Turner Broadcasting System, Inc. All Rights Reserved." % date.today().year).decode(
+        "Reuters_japanese": (
+                "© Copyright Reuters %s. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 " % date.today().year).decode(
             "utf-8").encode("utf-16be"),
     }
 
@@ -919,13 +857,7 @@ def make_source_name_copyright():
                 source_name_copyright["source_name_read_%s" % article[8]] = source_name  # Read the source name.
                 source_name_copyright["padding_source_name_%s" % article[8]] = u16(0)  # Padding for the source name.
 
-            if article[8] == "AFP":
-                if language_code == 3:
-                    copyright = copyrights["AFP_french"]
-                else:
-                    copyright = copyrights[article[8]]
-            else:
-                copyright = copyrights[article[8]]
+            copyright = copyrights[article[8]]
 
             source_table["copyright_size_%s" % article[8]] = u32(len(copyright))  # Size of the copyright.
 
@@ -963,10 +895,9 @@ def make_source_pictures():
 
     source_articles = []
 
-    """These are the news sources which will get a custom news picture from them."""
+    """These are the news sources which will use a custom JPG for the logo."""
 
-    sources = ["ANP", "ap", "dpa", "DPA Hamburg", "Reuters", "SID", "ZEIT ONLINE", "news24", "NU.nl", "EFE",
-               "Expansión", "Notimex", "CNN"]
+    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_japanese"]
 
     for article in data.values():
         if article[8] not in source_articles:
@@ -1000,7 +931,8 @@ def make_pictures():
             pictures["nullbyte_%s_pictures" % numbers] = u8(0)  # Null byte for the pictures.
 
             for types in ["captions", "credits"]:
-                if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table["%s_%s_size" % (types, numbers)] == u32(0):
+                if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table[
+                    "%s_%s_size" % (types, numbers)] == u32(0):
                     pictures_table["%s_%s_offset" % (types, numbers)] = u32(0)
 
     return pictures
