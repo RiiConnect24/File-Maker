@@ -868,7 +868,7 @@ class News:
 
     def urls(self):
         if self.source == "ap_english" or self.source == "ap_spanish":
-            self.url = "http://staging.hosted.ap.org/lineups/%sHEADS-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT"
+            self.url = "http://staging.hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT"
         elif self.source == "reuters_europe_english":
             self.url = "http://feeds.reuters.com/reuters/%s.rss"
         elif self.source == "afp_french_laprovence":
@@ -890,15 +890,15 @@ class News:
 
     def categories(self):
         if self.source == "ap_english":
-            self.category["US"] = "national"
-            self.category["WORLD"] = "world"
-            self.category["SPORTS"] = "sports"
-            self.category["ENTERTAINMENT"] = "entertainment"
-            self.category["BUSINESS"] = "business"
-            self.category["SCIENCE"] = "science"
-            self.category["HEALTH"] = "science"
+            self.category["USHEADS"] = "national"
+            self.category["WORLDHEADS"] = "world"
+            self.category["SPORTSHEADS"] = "sports"
+            self.category["ENTERTAINMENTHEADS"] = "entertainment"
+            self.category["BUSINESSHEADS"] = "business"
+            self.category["SCIENCEHEADS"] = "science"
+            self.category["HEALTHHEADS"] = "science"
             self.category["TECHNOLOGY"] = "technology"
-            self.category["STRANGE"] = "oddities"
+            self.category["STRANGEHEADS"] = "oddities"
         elif self.source == "ap_spanish":
             self.category["NOTICIAS_GENERALES"] = "general"
             self.category["NOTICIAS_FINANCIERAS"] = "finance"
