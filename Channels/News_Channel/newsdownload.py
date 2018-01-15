@@ -721,16 +721,17 @@ def shrink_image(data, resize):
     picture = requests.get(data).content
     picture = Image.open(StringIO(picture))
 
-    if resize: picture = resizeimage.resize_width(picture, 200)
+    try:
+        if resize: picture = resizeimage.resize_width(picture, 200)
 
-    data = picture.getdata()
-    picture_without_exif = Image.new(picture.mode, picture.size)
-    picture_without_exif.putdata(data)
+        data = picture.getdata()
+        picture_without_exif = Image.new(picture.mode, picture.size)
+        picture_without_exif.putdata(data)
 
-    picture_number = 1
-
-    buffer = StringIO()
-    picture_without_exif.save(buffer, format='jpeg')
+        buffer = StringIO()
+        picture_without_exif.save(buffer, format='jpeg')
+    except:
+        return None
 
     return buffer.getvalue()
 
