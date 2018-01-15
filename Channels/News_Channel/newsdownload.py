@@ -969,6 +969,8 @@ class News:
         for category in self.category.keys():
             if self.source is "SID":
                 feed = feedparser.parse(self.url)
+            elif self.source is "ANSA":
+                feed = feedparser.parse(self.url % (category, category))
             else:
                 feed = feedparser.parse(self.url % category)
 
