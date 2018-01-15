@@ -868,7 +868,7 @@ class News:
 
     def urls(self):
         if self.source == "ap_english" or self.source == "ap_spanish":
-            self.url = "http://staging.hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT"
+            self.url = "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT"
         elif self.source == "reuters_europe_english":
             self.url = "http://feeds.reuters.com/reuters/%s.rss"
         elif self.source == "afp_french_laprovence":
