@@ -881,7 +881,7 @@ class News:
         elif self.source == "sid_german":
             self.url = "http://feed43.com/sid.xml"
         elif self.source == "ansa_italian":
-            self.url = None
+            self.url = "http://ansa.it/sito/notizie/%s/%s_rss.xml"
         elif self.source == "nu_dutch":
             self.url = "https://www.nu.nl/rss/%s"
         elif self.source == "reuters_japanese":
@@ -928,26 +928,6 @@ class News:
             self.category["sport"] = "sport"
         elif self.source == "ansa_italian":
             self.category["mondo"] = "world"
-            self.category["abruzzo"] = "italy"
-            self.category["basilicata"] = "italy"
-            self.category["calabria"] = "italy"
-            self.category["campania"] = "italy"
-            self.category["emiliaromagna"] = "italy"
-            self.category["friuliveneziagiulia"] = "italy"
-            self.category["lazio"] = "italy"
-            self.category["liguria"] = "italy"
-            self.category["lombardia"] = "italy"
-            self.category["marche"] = "italy"
-            self.category["molise"] = "italy"
-            self.category["piemonte"] = "italy"
-            self.category["puglia"] = "italy"
-            self.category["sardegna"] = "italy"
-            self.category["sicilia"] = "italy"
-            self.category["toscana"] = "italy"
-            self.category["trentino"] = "italy"
-            self.category["umbria"] = "italy"
-            self.category["valledaosta"] = "italy"
-            self.category["veneto"] = "italy"
             self.category["sport"] = "sports"
             self.category["economia"] = "economy"
             self.category["tecnologia"] = "technology"
@@ -989,12 +969,6 @@ class News:
         for category in self.category.keys():
             if self.source is "SID":
                 feed = feedparser.parse(self.url)
-            elif self.source is "ANSA":
-                """ANSA has a different URL for RSS feeds about Italy."""
-                if self.category[category] is "italy":
-                    feed = feedparser.parse("http://ansa.it/%s/notizie/%s_rss.xml" % (category, category))
-                else:
-                    feed = feedparser.parse("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (category, category))
             else:
                 feed = feedparser.parse(self.url % category)
 
@@ -1194,8 +1168,7 @@ class Parse(News):
 
     def parse_ansa(self):
         try:
-            self.resize = False
-            self.picture = self.picture.replace("img_457x", "img_165x110")
+            self.resize = True
             self.credits = self.soup.find("div", {"class": "news-caption hidden-phone"}).find("em").text
         except:
             pass

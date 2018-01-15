@@ -269,7 +269,6 @@ def make_news_bin(mode, console):
         topics_news = collections.OrderedDict()
 
         topics_news["Dal mondo"] = "world"
-        topics_news["Dall'Italia"] = "italy"
         topics_news["Sport"] = "sports"
         topics_news["Economia"] = "economy"
         topics_news["Tecnologia"] = "technology"
