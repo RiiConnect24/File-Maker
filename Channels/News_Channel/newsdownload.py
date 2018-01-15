@@ -1194,7 +1194,8 @@ class Parse(News):
 
     def parse_ansa(self):
         try:
-            self.resize = True
+            self.resize = False
+            self.picture = self.picture.replace("img_457x", "img_165x110")
             self.credits = self.soup.find("div", {"class": "news-caption hidden-phone"}).find("em").text
         except:
             pass
