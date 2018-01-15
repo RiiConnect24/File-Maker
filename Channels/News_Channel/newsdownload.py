@@ -1109,9 +1109,9 @@ class Parse(News):
         else:
             self.resize = False
             try:
+                self.picture += "&w=200"
                 self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
                                                                                                      " REUTERS/")
-
                 self.article = self.article.replace("\n\n" + self.caption, "")
             except:
                 pass
