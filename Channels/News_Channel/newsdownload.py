@@ -719,17 +719,17 @@ def shrink_image(data, resize):
     if data == "" or data is None: return None
 
     picture = requests.get(data).content
-    picture = Image.open(StringIO(picture))
+    image = Image.open(StringIO(picture))
 
     try:
-        if resize: picture = resizeimage.resize_width(picture, 200)
+        if resize: image = resizeimage.resize_width(image, 200)
 
-        data = picture.getdata()
-        picture_without_exif = Image.new(picture.mode, picture.size)
-        picture_without_exif.putdata(data)
+        data = list(image.getdata())
+        image_without_exif = Image.new(image.mode, image.size)
+        image_without_exif.putdata(data)
 
         buffer = StringIO()
-        picture_without_exif.save(buffer, format='jpeg')
+        image_without_exif.save(buffer, format='jpeg')
     except:
         return None
 
