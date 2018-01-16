@@ -854,6 +854,10 @@ class News:
 
         self.urls()
         self.categories()
+
+        if self.source == "afp_french_laprovence":
+            self.newsdata.copy().update(News("afp_french_lobs").newsdata)
+
         self.new_source()
 
         self.parse_feed()
@@ -861,8 +865,6 @@ class News:
         print "\n"
 
     def __dict__(self):
-        if source == "afp_news_laprovence":
-            self.newsdata = merge(self.newsdata.items() + News("afp_french_lobs").newsdata.items())
         return self.newsdata
 
     """Get the URL for the RSS feed."""
@@ -917,9 +919,6 @@ class News:
         elif self.source == "afp_french_laprovence":
             self.category["France-monde"] = "world"
             self.category["Sports"] = "sports"
-        elif self.source == "afp_french_lobs":
-            self.category["topnews"] = "topnews"
-            self.category["politique"] = "politics"
         elif self.source == "donaukurier_german":
             self.category["nachrichten"] = "world"
             self.category["wirtschaft"] = "economy"
@@ -971,6 +970,8 @@ class News:
                 feed = feedparser.parse(self.url)
             elif self.source is "ANSA":
                 feed = feedparser.parse(self.url % (category, category))
+            elif self.source is "AFP" and "nouvelobs" in self.url:
+                feed = feedparser.parse("http://www.nouvelobs.com/depeche/rss.xml")
             else:
                 feed = feedparser.parse(self.url % category)
 
@@ -994,6 +995,8 @@ class News:
                         self.source = "dpa"
                     elif self.source is "NU.nl" and entries["author"] is "ANP":
                         self.source = "ANP"
+                    elif self.source is "AFP" and "nouvelobs" in self.url:
+                        self.category[category] = entries["category"].lower()
                     elif self.source is "Reuters_japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
