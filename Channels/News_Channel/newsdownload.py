@@ -781,7 +781,7 @@ def locations_download(language_code, data):
                 print unidecode(name)
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
-                capture_message("There was a error downlading the location data.", "warning")
+                capture_message("There was a error downloading the location data.", "warning")
 
         if read is None:
             if name in corrections:
@@ -813,7 +813,7 @@ def locations_download(language_code, data):
 
                     locations_return[new_name][1].append(filenames)
             except:
-                capture_message("There was a error downlading the location data.", "warning")
+                capture_message("There was a error downloading the location data.", "warning")
 
     return locations_return
 
@@ -853,6 +853,7 @@ class News:
         self.category = collections.OrderedDict()
 
         self.urls()
+        self.languages()
         self.categories()
 
         if self.source == "afp_french_laprovence":
@@ -888,6 +889,24 @@ class News:
             self.url = "https://www.nu.nl/rss/%s"
         elif self.source == "reuters_japanese":
             self.url = "https://twitrss.me/twitter_user_to_rss/?user=%s"
+
+    """Get languages."""
+
+    def languages(self):
+        self.languages = collections.OrderedDict()
+
+        self.languages["ap_english"] = "en"
+        self.languages["ap_spanish"] = "es"
+        self.languages["reuters_europe_english"] = "en"
+        self.languages["afp_french_laprovence"] = "fr"
+        self.languages["afp_french_lobs"] = "fr"
+        self.languages["donaukurier_german"] = "de"
+        self.languages["sid_german"] = "de"
+        self.languages["ansa_italian"] = "it"
+        self.languages["nu_dutch"] = "nl"
+        self.languages["reuters_japanese"] = "en" # Unfortunately newspaper doesn't support Japanese.
+
+        self.language = self.languages[self.source]
 
     """Get a proper category name."""
 
@@ -1002,19 +1021,20 @@ class News:
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
 
                     downloaded_news = Parse(entries["link"], self.source, updated_time,
-                                                                            title).get_news()
+                                                                            title, self.language).get_news()
 
                     if downloaded_news:
                         self.newsdata[self.category[category] + str(i)] = downloaded_news
 
 
 class Parse(News):
-    def __init__(self, url, source, updated_time, headline, article=None, picture=None, credits=None, caption=None,
+    def __init__(self, url, source, updated_time, headline, language, article=None, picture=None, credits=None, caption=None,
                  location=None, resize=None, html=None, soup=None):
         self.url = url
         self.source = source
         self.updated_time = updated_time
         self.headline = headline
+        self.language = language
         self.article = article
         self.picture = picture
         self.credits = credits
@@ -1058,7 +1078,7 @@ class Parse(News):
                     self.location, self.source]
 
     def newspaper_init(self):
-        self.newsdata = newspaper.Article(self.url)
+        self.newsdata = newspaper.Article(self.url, language=self.language)
         self.newsdata.download()
         self.newsdata.parse()
 
