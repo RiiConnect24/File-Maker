@@ -1073,10 +1073,11 @@ class Parse(News):
             capture_message("Article is blank.", "warning")
             return []
         else:
-            if len(shrink_image(self.picture, self.resize)) > 100000:
-                self.picture = None
-                self.credits = None
-                self.caption = None
+            if shrink_image(self.picture, self.resize) != None:
+                if len(shrink_image(self.picture, self.resize)) > 100000:
+                    self.picture = None
+                    self.credits = None
+                    self.caption = None
             return [u32(self.updated_time), u32(self.updated_time), fix_chars(self.article), fix_chars(self.headline),
                     shrink_image(self.picture, self.resize), fix_chars(self.credits), fix_chars(self.caption),
                     self.location, self.source]
