@@ -1111,8 +1111,6 @@ class Parse(News):
         else:
             self.picture = None
 
-        if "favicon.ico" in self.picture: self.picture = None
-
         if "(AP)" in self.article:
             self.location = self.article.split(" (AP)", 1)[0]
 
