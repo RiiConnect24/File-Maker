@@ -1073,11 +1073,6 @@ class Parse(News):
             capture_message("Article is blank.", "warning")
             return []
         else:
-            if shrink_image(self.picture, self.resize) != None:
-                if len(shrink_image(self.picture, self.resize)) > 100000:
-                    self.picture = None
-                    self.credits = None
-                    self.caption = None
             return [u32(self.updated_time), u32(self.updated_time), fix_chars(self.article), fix_chars(self.headline),
                     shrink_image(self.picture, self.resize), fix_chars(self.credits), fix_chars(self.caption),
                     self.location, self.source]
@@ -1113,6 +1108,8 @@ class Parse(News):
             soup_caption = BeautifulSoup(captions_page, "lxml")
 
             self.caption = soup_caption.find("font", {"class": "photo"}).text
+        else:
+            self.picture = None
 
         if "favicon.ico" in self.picture: self.picture = None
 
