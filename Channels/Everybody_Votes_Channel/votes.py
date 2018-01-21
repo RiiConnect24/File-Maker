@@ -132,10 +132,7 @@ def prepare():
 
 def manual_run():
     question_count = len(question_data)
-    if question_count == 1:
-        print "Loaded %s Question" % question_count
-    else:
-        print "Loaded %s Questions" % question_count
+    print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
     file_type = raw_input('Enter File Type (q/r/v): ')
     if file_type == "q":
         write_questions = True
@@ -187,10 +184,7 @@ def automatic_votes():
     mysql_get_questions(3, "n")
     questions = national + worldwide
     question_count = len(question_data)
-    if question_count == 1:
-        print "Loaded %s Question" % question_count
-    else:
-        print "Loaded %s Questions" % question_count
+    print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
     for v in range(1, 7): results[get_poll_id()] = mysql_get_votes(7, "n", v)
     results[get_poll_id()] = mysql_get_votes(15, "w", 1)
     try:
@@ -209,12 +203,7 @@ def mysql_connect():
                                       charset='utf8',
                                       use_unicode=True)
     except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print "Something is wrong with your user name or password"
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print "Database does not exist"
-        else:
-            print err
+        print "Invalid credentials" if err.errno == errorcode.ER_ACCESS_DENIED_ERROR else "Database does not exist" if err.errno == errorcode.ER_BAD_DB_ERROR else err
 
 
 def mysql_get_votes(days, type, index):
