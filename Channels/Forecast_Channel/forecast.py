@@ -241,20 +241,14 @@ def ui():
     while ui_run:
         refresh(refresh_type)
         # Calculate values to show on screen
-        if len(list) - cached > 0:
-            dl = True
-        else:
-            dl = False
+        dl = len(list) - cached > 0;
         elasped_time = int(round(time.time() - total_time))
         bandwidth = round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
         totalfill = totalpercent * 35 / 100
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
         if status == "Downloading":
-            if dl:
-                percent = int(round(float(citycount) / float(len(list) - cached) * 100))
-            else:
-                percent = 0
+            percent = int(round(float(citycount) / float(len(list) - cached) * 100)) if dl else 0;
             fill = int(round(percent * bar / 100))
             progbar = str(percent) + "% [" + "=" * fill + " " * (bar - fill) + "]"
         else:
@@ -298,10 +292,7 @@ def ui():
 
 
 def get_icon(icon, list, key):
-    if list[key][2][1] is "Japan":
-        return get_weatherjpnicon(icon)
-    else:
-        return get_weathericon(icon)
+    return get_weatherjpnicon(icon) if list[key][2][1] is "Japan" else get_weathericon(icon)
 
 
 """Resets bin-specific values for next generation."""
@@ -367,11 +358,7 @@ def get_loccode(list, key):
 
 
 def zoom(list, mode, key):
-    if mode == 1:
-        value = get_index(list, key, 3)[8:][:2]
-    elif mode == 2:
-        value = get_index(list, key, 3)[10:][:2]
-    return value
+    return get_index(list, key, 3)[8:][:2] if mode == 1 else get_index(list, key, 3)[10:][:2] if mode == 2 else value;
 
 
 def get_locationcode(list):
@@ -505,15 +492,8 @@ def get_legacy_api(list, key):
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
-        if -1 < temp < 24:
-            hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key)
-        else:
-            hourly[key][i] = get_icon(int(-1), list, key)
-        temp = time_index[1][i] - hour
-        if -1 < temp < 24:
-            hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key)
-        else:
-            hourly[key][i + 4] = get_icon(int(-1), list, key)
+        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
+        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else hourly[key][i + 4] = get_icon(int(-1), list, key)
 
 
 """Tenki's where we're getting the laundry index for Japan."""
@@ -527,16 +507,13 @@ def get_tenki_data(key):
     temp_diff = []
     precip10 = []
     for line in requests.get("https://tenki.jp/forecast/%s/" % key).iter_lines():
-        if "high-temp tempdiff" in line or "low-temp tempdiff" in line: temp_diff.append(
-            line.lstrip().split("[")[1].split("]")[0].lstrip("+"))  # Temperature Difference
+        if "high-temp tempdiff" in line or "low-temp tempdiff" in line:
+            temp_diff.append(line.lstrip().split("[")[1].split("]")[0].lstrip("+"))  # Temperature Difference
         if "<td>" in line and len(precip) < 8:  # Today/Tomorrow Precipitation
-            if "---" in line:
-                precip.append(128)  # No Data
-            else:
-                precip.append(int(filter(str.isdigit, line)))
+            precip.append(128 if "---" in line else int(filter(str.isdigit, line)))
     for line in requests.get("https://tenki.jp/forecast/%s/10days.html" % key).iter_lines():
-        if "%" in line and "<th>" in line: precip10.append(
-            int(line.lstrip().lstrip("<th>").rstrip("%</th>")))  # 10-Day Precipitation Probability
+        if "%" in line and "<th>" in line:
+            precip10.append(int(line.lstrip().lstrip("<th>").rstrip("%</th>")))  # 10-Day Precipitation Probability
     if key.count("/") == 3: key = "/".join(key.split("/")[:-1])
     for line in requests.get("http://www.tenki.jp/indexes/cloth_dried/%s/" % key).iter_lines():
         if "indexes-telop-0" in line and not laundry_index: laundry_index = int(
@@ -550,8 +527,10 @@ def get_tenki_data(key):
     tomorrow[key][7] = temp_diff[3]
     tomorrow[key][6] = to_fahrenheit(temp_diff[2])
     tomorrow[key][5] = to_fahrenheit(temp_diff[3])
-    for i in range(2, 9): precipitation[key][i + 6] = precip10[i]
-    for i in range(0, 8): precipitation[key][i] = precip[i]
+    for i in range(2, 9):
+        precipitation[key][i + 6] = precip10[i]
+    for i in range(0, 8):
+        precipitation[key][i] = precip[i]
 
 
 def hex_write(loc, data):
@@ -631,7 +610,8 @@ def make_forecast_bin(list, data):
     file3 = 'forecast.%s' % extension
     file.write(pad(20))
     for i in dictionaries:
-        for v in i.values(): file.write(v)
+        for v in i.values():
+            file.write(v)
         count[constant] = file.tell()
         constant += 1
     file.write(pad(16))
@@ -642,7 +622,8 @@ def make_forecast_bin(list, data):
     hex_write(36, count[0])
     hex_write(32, int(len(list) - japcount))
     hex_write(40, japcount)
-    if japcount > 0: hex_write(44, count[1])
+    if japcount > 0:
+        hex_write(44, count[1])
     hex_write(48, len(forecastlists.weatherconditions) * 2)
     hex_write(52, count[2])
     hex_write(60, count[3])
@@ -1223,17 +1204,11 @@ def make_pollen_text_table():
 
 
 def get_weathericon(icon):
-    if icon == -1:
-        return 'FFFF'
-    else:
-        return forecastlists.weatherconditions[icon][1]
+    return 'FFFF' if icon == -1 else forecastlists.weatherconditions[icon][1]
 
 
 def get_weatherjpnicon(icon):
-    if icon == -1:
-        return 'FFFF'
-    else:
-        return forecastlists.weatherconditions[icon][3]
+    return 'FFFF' if icon == -1 else forecastlists.weatherconditions[icon][3]
 
 
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
@@ -1249,10 +1224,7 @@ s = requests.Session()  # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
 q = Queue.Queue()
-if useMultithreaded:
-    concurrent = 10
-else:
-    concurrent = 1
+concurrent = 10 if useMultithreaded else 1
 ui_run = True
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
