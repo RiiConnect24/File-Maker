@@ -515,12 +515,8 @@ def make_header():
     header["timestamp"] = u32(get_timestamp(0, None, None))
     header["country_code"] = u8(country_code)
     header["publicity_flag"] = u8(0)
-    if file_type == "r":
-        header["question_version"] = u8(0)
-        header["result_version"] = u8(1)
-    else:
-        header["question_version"] = u8(1)
-        header["result_version"] = u8(0)
+    header["question_version"] = u8(0 if file_type == "r" else 1)
+    header["result_version"] = u8(1 if file_type == "r" else 0)
     header["national_question_number"] = u8(national)
     header["national_question_offset"] = u32(0)
     header["worldwide_question_number"] = u8(worldwide)
@@ -531,23 +527,13 @@ def make_header():
     header["national_result_offset"] = u32(0)
     header["national_result_detailed_number"] = u16(national_results * region_number[country_code])
     header["national_result_detailed_offset"] = u32(0)
-    if file_type == "q" or national_results == 0:
-        header["position_number"] = u16(0)
-    elif country_code in position_table.keys():
-        header["position_number"] = u16(len(position_table[country_code]))
-    else:
-        header["position_number"] = u16(0)
+    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else len(position_table[country_code]) if country_code in position_table.keys() else 0)
     header["position_offset"] = u32(0)
     header["worldwide_result_number"] = u8(worldwide_results)
     header["worldwide_result_offset"] = u32(0)
     header["worldwide_result_detailed_number"] = u16(0)
     header["worldwide_result_detailed_offset"] = u32(0)
-    if file_type == "r" and nw == "w":
-        header["country_name_number"] = u16(len(countries) * 7)
-    elif file_type == "q" or file_type == "r":
-        header["country_name_number"] = u16(0)
-    else:
-        header["country_name_number"] = u16(len(countries) * 7)
+    header["country_name_number"] = u16(len(countries) * 7 if file_type == "r" and nw == "w" else 0 if file_type == "q" or file_type == "r" else len(countries) * 7)
     header["country_name_offset"] = u32(0)
 
     return header
@@ -672,16 +658,8 @@ def make_national_result_detailed_table(header):
                 country_index = country_codes.index(country_code)
                 table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
                 table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
-                if results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0:
-                    table["position_entry_table_count_%s" % num()] = u8(0)
-                elif country_code in position_table.keys():
-                    table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j])
-                else:
-                    table["position_entry_table_count_%s" % num()] = u8(0)
-                if country_code in position_table.keys():
-                    table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]))
-                else:
-                    table["starting_position_entry_table_%s" % num()] = u32(0)
+                table["position_entry_table_count_%s" % num()] = u8(position_table[country_code][j] if country_code in position_table.keys() else 0)
+                table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]) if country_code in position_table.keys() else 0)
 
     return table
 
@@ -834,7 +812,8 @@ def make_question_text(question_text_table):
 
 prepare()
 if nw != "w":
-    for country_code in country_codes[1:]: make_bin(country_code)
+    for country_code in country_codes[1:]:
+        make_bin(country_code)
 else:
     make_bin(country_code)
 if file_type == "q": webhook()

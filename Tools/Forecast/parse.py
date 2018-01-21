@@ -73,15 +73,7 @@ for k in names.keys():
     except:
         next = None
     first = names[k][0]
-    if names[k][1] == 0 and names[k][2] != 0:
-        second = names[k][2]
-    elif names[k][1] == 0 and names[k][2] == 0:
-        if next is None:
-            second = int(os.path.getsize(filename))
-        else:
-            second = next[1][0]
-    else:
-        second = names[k][1]
+    second = names[k][2] if names[k][1] == 0 and names[k][2] != 0 else (int(os.path.getsize(filename)) if next is None else next[1][0]) if names[k][1] == 0 and names[k][2] == 0 else names[k][1]
     file.seek(names[k][0])
     city_string = file.read(second - first)
     if names[k][1] != 0:

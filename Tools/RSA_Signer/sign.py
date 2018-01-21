@@ -23,7 +23,7 @@ def u32_littleendian(data):
     return struct.pack("<I", data)
 
 
-if (len(sys.argv) != 4):
+if len(sys.argv) != 4:
     print "Usage: sign.py <mode> <input file> <output file>"
     print "\n"
     print "Mode can either be set to dec (not-encrypted file) or enc (encrypted file)."
@@ -36,7 +36,7 @@ output_file = sys.argv[3]
 if os.path.exists(output_file):
     os.remove(output_file)
 
-if (sys.argv[1] == "dec"):
+if sys.argv[1] == "dec":
     with open(input_file, "rb") as source_file:
         crc32 = format(binascii.crc32(source_file.read()) & 0xFFFFFFFF, '08x')
 
@@ -70,7 +70,7 @@ if (sys.argv[1] == "dec"):
 
     os.remove(input_file)
 
-elif (sys.argv[1] == "enc"):
+elif sys.argv[1] == "enc":
     with open(input_file, "rb") as source_file:
         read = source_file.read()
 
