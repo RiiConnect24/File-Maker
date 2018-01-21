@@ -493,7 +493,7 @@ def get_legacy_api(list, key):
     for i in range(0, 4):
         temp = time_index[0][i] - hour
         hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
-        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else hourly[key][i + 4] = get_icon(int(-1), list, key)
+        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
 
 
 """Tenki's where we're getting the laundry index for Japan."""
