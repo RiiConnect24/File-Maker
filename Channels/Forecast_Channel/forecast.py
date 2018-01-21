@@ -241,14 +241,14 @@ def ui():
     while ui_run:
         refresh(refresh_type)
         # Calculate values to show on screen
-        dl = len(list) - cached > 0;
+        dl = len(list) - cached > 0
         elasped_time = int(round(time.time() - total_time))
         bandwidth = round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
         totalfill = totalpercent * 35 / 100
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
         if status == "Downloading":
-            percent = int(round(float(citycount) / float(len(list) - cached) * 100)) if dl else 0;
+            percent = int(round(float(citycount) / float(len(list) - cached) * 100)) if dl else 0
             fill = int(round(percent * bar / 100))
             progbar = str(percent) + "% [" + "=" * fill + " " * (bar - fill) + "]"
         else:
@@ -358,7 +358,7 @@ def get_loccode(list, key):
 
 
 def zoom(list, mode, key):
-    return get_index(list, key, 3)[8:][:2] if mode == 1 else get_index(list, key, 3)[10:][:2] if mode == 2 else value;
+    return get_index(list, key, 3)[8:][:2] if mode == 1 else get_index(list, key, 3)[10:][:2] if mode == 2 else value
 
 
 def get_locationcode(list):
