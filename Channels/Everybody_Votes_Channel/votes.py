@@ -658,7 +658,7 @@ def make_national_result_detailed_table(header):
                 country_index = country_codes.index(country_code)
                 table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
                 table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
-                table["position_entry_table_count_%s" % num()] = u8(0 if results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0 else position_table[country_code][j] if country_code in position_table.keys() else 0)
+                table["position_entry_table_count_%s" % num()] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in position_table.keys()) else position_table[country_code][j])
                 table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]) if country_code in position_table.keys() else 0)
 
     return table
