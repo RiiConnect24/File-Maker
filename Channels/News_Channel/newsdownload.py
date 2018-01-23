@@ -849,8 +849,7 @@ class News:
     def __init__(self, source):
         self.source = source
         self.url = None
-        self.newsdata = collections.OrderedDict()
-        self.category = collections.OrderedDict()
+        self.newsdata = self.category = collections.OrderedDict()
 
         self.urls()
         self.languages()
@@ -985,14 +984,7 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for category in self.category.keys():
-            if self.source is "SID":
-                feed = feedparser.parse(self.url)
-            elif self.source is "ANSA":
-                feed = feedparser.parse(self.url % (category, category))
-            elif self.source is "AFP" and "nouvelobs" in self.url:
-                feed = feedparser.parse("http://www.nouvelobs.com/depeche/rss.xml")
-            else:
-                feed = feedparser.parse(self.url % category)
+            feed = feedparser.parse(self.url) if self.source is "SID" else feedparser.parse(self.url % (category, category)) if self.source is "ANSA" else feedparser.parse("http://www.nouvelobs.com/depeche/rss.xml") if self.source is "AFP" and "nouvelobs" in self.url else feedparser.parse(self.url % category)
 
             i = 0
 
@@ -1046,22 +1038,18 @@ class Parse(News):
 
         self.newspaper_init()
 
-        if self.source is "AP":
-            self.parse_ap()
-        elif self.source is "Reuters":
-            self.parse_reuters()
-        elif self.source is "AFP_french":
-            self.parse_afp()
-        elif self.source is "AFP" or self.source is "dpa":
-            self.parse_donaukurier()
-        elif self.source is "SID":
-            self.parse_sid()
-        elif self.source is "ANSA":
-            self.parse_ansa()
-        elif self.source is "NU.nl" or self.source is "ANP":
-            self.parse_nu()
-        elif self.source is "Reuters_japanese":
-            self.parse_reuters_japanese()
+        {
+            "AP": self.parse_ap(),
+            "Reuters": self.parse_reuters(),
+            "AFP_French": self.parse_afp(),
+            "AFP": self.parse_donaukurier(),
+            "dpa": self.parse_donaukurier(),
+            "SID": self.parse_sid(),
+            "ANSA": self.parse_ansa(),
+            "NU.nl": self.parse_nu(),
+            "ANP": self.parse_nu(),
+            "Reuters_japanese": self.parse_reuters_japanese()
+        }[self.source]()
 
         self.get_news()
 
@@ -1110,9 +1098,7 @@ class Parse(News):
             try:
                 self.caption = soup_caption.find("font", {"class": "photo"}).text
             except:
-                self.picture = None
-                self.credits = None
-                self.caption = None
+                self.picture = self.credits = self.caption = None
         else:
             self.picture = None
 
