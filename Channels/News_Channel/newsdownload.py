@@ -182,9 +182,9 @@ if production:
 def capture_message(text, mode):
     if production:
         print text
-        if mode is "warning":
+        if mode == "warning":
             logger.warning(text)
-        elif mode is "error":
+        elif mode == "error":
             logger.error(text)
 
 
@@ -837,7 +837,8 @@ def fix_chars(s):
                   "FF90", "FF91", "FF92", "FF93", "FF94", "FF95", "FF96", "FF97", "FF98", "FF99", "FF9A", "FF9B",
                   "FF9C", "FF9D", "FF9E", "FF9F", "FFE0", "FFE1", "FFE2", "FFE3", "FFE4", "FFE5"]
 
-    if s is None: return None
+    if s is None:
+        return None
 
     for c in unicode(s):
         if c.encode("utf-16be").encode("hex").upper() in characters: s = s.replace(c, unidecode(c))
@@ -1001,9 +1002,9 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for key, value in sources[self.source]["cat"].items():
-            feed = feedparser.parse(self.url) if self.source is "SID" else feedparser.parse(
-                self.url % (key, key)) if self.source is "ANSA" else feedparser.parse(
-                "http://www.nouvelobs.com/depeche/rss.xml") if self.source is "AFP" and "nouvelobs" in self.url else feedparser.parse(
+            feed = feedparser.parse(self.url) if self.source == "SID" else feedparser.parse(
+                self.url % (key, key)) if self.source == "ANSA" else feedparser.parse(
+                "http://www.nouvelobs.com/depeche/rss.xml") if self.source == "AFP" and "nouvelobs" in self.url else feedparser.parse(
                 self.url % key)
 
             i = 0
@@ -1022,13 +1023,13 @@ class News:
                     title = entries["title"]
                     print title
 
-                    if self.source is "AFP" and "dpa" in entries["description"]:
+                    if self.source == "AFP" and "dpa" in entries["description"]:
                         self.source = "dpa"
-                    elif self.source is "NU.nl" and entries["author"] is "ANP":
+                    elif self.source == "NU.nl" and entries["author"] == "ANP":
                         self.source = "ANP"
-                    elif self.source is "AFP" and "nouvelobs" in self.url:
+                    elif self.source == "AFP" and "nouvelobs" in self.url:
                         value = entries["category"].lower()
-                    elif self.source is "Reuters_japanese":
+                    elif self.source == "Reuters_japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
 
@@ -1184,9 +1185,9 @@ class Parse(News):
             pass
 
         try:
-            if source is "AFP_de":
+            if self.source == "AFP_de":
                 self.location = self.soup.find("em").split(" (AFP)")[0]
-            elif source is "dpa":
+            elif self.source == "dpa":
                 self.location = self.article.split(" (dpa")[0]
         except:
             pass
