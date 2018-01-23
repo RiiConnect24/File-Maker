@@ -1107,7 +1107,12 @@ class Parse(News):
                 "http://staging.hosted.ap.org/" + self.soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
             soup_caption = BeautifulSoup(captions_page, "lxml")
 
-            self.caption = soup_caption.find("font", {"class": "photo"}).text
+            try:
+                self.caption = soup_caption.find("font", {"class": "photo"}).text
+            except:
+                self.picture = None
+                self.credits = None
+                self.caption = None
         else:
             self.picture = None
 
