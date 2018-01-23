@@ -35,6 +35,141 @@ from config import *
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+"""Define information about news sources"""
+
+sources = {
+    # urls string argument is category key
+    # for example: world on reuters_japanese would go to https://twitrss.me/twitter_user_to_rss/?user=ReutersJpWorld
+    # reference parse_feed
+
+    """  "AP": self.parse_ap(),
+            "Reuters": self.parse_reuters(),
+            "AFP_French": self.parse_afp(),
+            "AFP": self.parse_donaukurier(),
+            "dpa": self.parse_donaukurier(),
+            "SID": self.parse_sid(),
+            "ANSA": self.parse_ansa(),
+            "NU.nl": self.parse_nu(),
+            "ANP": self.parse_nu(),
+            "Reuters_japanese": self.parse_reuters_japanese()"""
+
+    "ap_english": {
+        "name": "AP",
+        "url": "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT",
+        "lang": "en",
+        "cat": collections.OrderedDict([
+            ("USHEADS", "national"),
+            ("WORLDHEADS", "world"),
+            ("SPORTSHEADS", "sports"),
+            ("ENTERTAINMENTHEADS", "entertainment"),
+            ("BUSINESSHEADS", "business"),
+            ("SCIENCEHEADS", "science"),
+            ("HEALTHHEADS", "science"),
+            ("TECHNOLOGY", "technology"),
+            ("STRANGEHEADS", "oddities")
+        ])
+    },
+    "ap_spanish": {
+        "name": "AP",
+        "url": "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT",
+        "lang": "es",
+        "cat": collections.OrderedDict([
+            ("NOTICIAS_GENERALES", "general"),
+            ("NOTICIAS_FINANCIERAS", "finance"),
+            ("NOTICIAS_DEPORTIVAS", "sports"),
+            ("NOTICIAS_ENTRETENIMIENTOS", "shows")
+        ])
+    },
+    "reuters_europe_english": {
+        "name": "Reuters",
+        "url": "http://feeds.reuters.com/reuters/%s.rss",
+        "lang": "en",
+        "cat": collections.OrderedDict([
+            ("UKWorldNews", "world"),
+            ("UKdomesticNews", "uk"),
+            ("UKHealthNews", "health"),
+            ("UKScienceNews", "science"),
+            ("technology", "technology"),
+            ("UKEntertainment", "entertainment"),
+            ("UKSportsNews", "sports"),
+            ("lifestyle", "lifestyle")
+        ])
+    },
+    "afp_french_laprovence": {
+        "name": "AFP_french",
+        "url": "http://www.laprovence.com/rss/%s.xml",
+        "lang": "fr",
+        "cat": collections.OrderedDict([
+            ("France-monde", "world"),
+            ("Sports", "sports")
+        ])
+    },
+    "afp_french_lobs": {
+        "name": "AFP_french",
+        "url": "http://www.nouvelobs.com/depeche/%s/rss.xml",
+        "lang": "fr",
+        "cat": collections.OrderedDict([
+            # ???
+        ])
+    },
+    "donaukurier_german": {
+        "name": "AFP",
+        "url": "http://www.donaukurier.de/storage/rss/rss/%s.xml",
+        "lang": "de",
+        "cat": collections.OrderedDict([
+            ("nachrichten", "world"),
+            ("wirtschaft", "economy"),
+            ("kultur", "culture")
+        ])
+    },
+    "sid_german": {
+        "name": "SID",
+        "url": "http://feed43.com/sid.xml",
+        "lang": "de",
+        "cat": collections.OrderedDict([
+            ("sport", "sport")
+        ])
+    },
+    "ansa_italian": {
+        "name": "ANSA",
+        "url": "http://ansa.it/sito/notizie/%s/%s_rss.xml",
+        "lang": "it",
+        "cat": collections.OrderedDict([
+            ("mondo", "world"),
+            ("sport", "sports"),
+            ("economia", "economy"),
+            ("tecnologia", "technology"),
+            ("cultura", "culture")
+        ])
+    },
+    "nu_dutch": {
+        "name": "NU.nl",
+        "url": "https://www.nu.nl/rss/%s",
+        "lang": "nl",
+        "cat": collections.OrderedDict([
+            ("Algemeen", "algemeen"),
+            ("Economie", "economy"),
+            ("Sport", "sports"),
+            ("Tech", "technology"),
+            ("Entertainment", "entertainment"),
+            ("Lifestyle", "lifestyle"),
+            ("Opmerkelijk", "noteworthy")
+        ])
+    },
+    "reuters_japanese": {
+        "name": "Reuters_japanese",
+        "url": "https://twitrss.me/twitter_user_to_rss/?user=%s",
+        "lang": "en",  # newspaper does not support japanese
+        "cat": collections.OrderedDict([
+            ("ReutersJpWorld", "world"),
+            ("ReutersJpBiz", "business"),
+            ("ReutersJpSports", "sports"),
+            ("ReutersJpTech", "technology"),
+            ("ReutersJpEnt", "entertainment")
+        ])
+    }
+}
+
 """Set up Sentry for error logging."""
 
 if production:
@@ -841,24 +976,19 @@ def geoparser_get(article):
     capture_message("Out of Geoparser requests.", "warning")
     return None
 
-
 """Download the news."""
-
 
 class News:
     def __init__(self, source):
         self.source = source
-        self.url = None
-        self.newsdata = self.category = collections.OrderedDict()
-
-        self.urls()
-        self.languages()
-        self.categories()
+        self.url = sources[source]["url"]
+        self.language = sources[source]["lang"]
+        self.newsdata = collections.OrderedDict()
 
         if self.source == "afp_french_laprovence":
             self.newsdata.copy().update(News("afp_french_lobs").newsdata)
 
-        self.new_source()
+        self.source = sources[source]["name"]
 
         self.parse_feed()
 
@@ -867,124 +997,14 @@ class News:
     def __dict__(self):
         return self.newsdata
 
-    """Get the URL for the RSS feed."""
-
-    def urls(self):
-        if self.source == "ap_english" or self.source == "ap_spanish":
-            self.url = "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT"
-        elif self.source == "reuters_europe_english":
-            self.url = "http://feeds.reuters.com/reuters/%s.rss"
-        elif self.source == "afp_french_laprovence":
-            self.url = "http://www.laprovence.com/rss/%s.xml"
-        elif self.source == "afp_french_lobs":
-            self.url = "http://www.nouvelobs.com/depeche/%s/rss.xml"
-        elif self.source == "donaukurier_german":
-            self.url = "http://www.donaukurier.de/storage/rss/rss/%s.xml"
-        elif self.source == "sid_german":
-            self.url = "http://feed43.com/sid.xml"
-        elif self.source == "ansa_italian":
-            self.url = "http://ansa.it/sito/notizie/%s/%s_rss.xml"
-        elif self.source == "nu_dutch":
-            self.url = "https://www.nu.nl/rss/%s"
-        elif self.source == "reuters_japanese":
-            self.url = "https://twitrss.me/twitter_user_to_rss/?user=%s"
-
-    """Get languages."""
-
-    def languages(self):
-        self.languages = collections.OrderedDict()
-
-        self.languages["ap_english"] = "en"
-        self.languages["ap_spanish"] = "es"
-        self.languages["reuters_europe_english"] = "en"
-        self.languages["afp_french_laprovence"] = "fr"
-        self.languages["afp_french_lobs"] = "fr"
-        self.languages["donaukurier_german"] = "de"
-        self.languages["sid_german"] = "de"
-        self.languages["ansa_italian"] = "it"
-        self.languages["nu_dutch"] = "nl"
-        self.languages["reuters_japanese"] = "en" # Unfortunately newspaper doesn't support Japanese.
-
-        self.language = self.languages[self.source]
-
-    """Get a proper category name."""
-
-    def categories(self):
-        if self.source == "ap_english":
-            self.category["USHEADS"] = "national"
-            self.category["WORLDHEADS"] = "world"
-            self.category["SPORTSHEADS"] = "sports"
-            self.category["ENTERTAINMENTHEADS"] = "entertainment"
-            self.category["BUSINESSHEADS"] = "business"
-            self.category["SCIENCEHEADS"] = "science"
-            self.category["HEALTHHEADS"] = "science"
-            self.category["TECHNOLOGY"] = "technology"
-            self.category["STRANGEHEADS"] = "oddities"
-        elif self.source == "ap_spanish":
-            self.category["NOTICIAS_GENERALES"] = "general"
-            self.category["NOTICIAS_FINANCIERAS"] = "finance"
-            self.category["NOTICIAS_DEPORTIVAS"] = "sports"
-            self.category["NOTICIAS_ENTRETENIMIENTOS"] = "shows"
-        elif self.source == "reuters_europe_english":
-            self.category["UKWorldNews"] = "world"
-            self.category["UKdomesticNews"] = "uk"
-            self.category["UKHealthNews"] = "health"
-            self.category["UKScienceNews"] = "science"
-            self.category["technology"] = "technology"
-            self.category["UKEntertainment"] = "entertainment"
-            self.category["UKSportsNews"] = "sports"
-            self.category["lifestyle"] = "lifestyle"
-        elif self.source == "afp_french_laprovence":
-            self.category["France-monde"] = "world"
-            self.category["Sports"] = "sports"
-        elif self.source == "donaukurier_german":
-            self.category["nachrichten"] = "world"
-            self.category["wirtschaft"] = "economy"
-            self.category["kultur"] = "culture"
-        elif self.source == "sid_german":
-            self.category["sport"] = "sport"
-        elif self.source == "ansa_italian":
-            self.category["mondo"] = "world"
-            self.category["sport"] = "sports"
-            self.category["economia"] = "economy"
-            self.category["tecnologia"] = "technology"
-            self.category["cultura"] = "culture"
-        elif self.source == "nu_dutch":
-            self.category["Algemeen"] = "algemeen"
-            self.category["Economie"] = "economy"
-            self.category["Sport"] = "sports"
-            self.category["Tech"] = "technology"
-            self.category["Entertainment"] = "entertainment"
-            self.category["Lifestyle"] = "lifestyle"
-            self.category["Opmerkelijk"] = "noteworthy"
-        elif self.source == "reuters_japanese":
-            self.category["ReutersJpWorld"] = "world"
-            self.category["ReutersJpBiz"] = "business"
-            self.category["ReutersJpSports"] = "sports"
-            self.category["ReutersJpTech"] = "technology"
-            self.category["ReutersJpEnt"] = "entertainment"
-
-    def new_source(self):
-        sources = collections.OrderedDict()
-
-        sources["ap_english"] = "AP"
-        sources["ap_spanish"] = "AP"
-        sources["reuters_europe_english"] = "Reuters"
-        sources["afp_french_laprovence"] = "AFP_french"
-        sources["afp_french_lobs"] = "AFP_french"
-        sources["donaukurier_german"] = "AFP"
-        sources["sid_german"] = "SID"
-        sources["ansa_italian"] = "ANSA"
-        sources["nu_dutch"] = "NU.nl"
-        sources["reuters_japanese"] = "Reuters_japanese"
-
-        self.source = sources[self.source]
-
     def parse_feed(self):
         print "Downloading News from " + self.source + "...\n"
 
-        for category in self.category.keys():
-            feed = feedparser.parse(self.url) if self.source is "SID" else feedparser.parse(self.url % (category, category)) if self.source is "ANSA" else feedparser.parse("http://www.nouvelobs.com/depeche/rss.xml") if self.source is "AFP" and "nouvelobs" in self.url else feedparser.parse(self.url % category)
+        for key, value in sources[self.source]["cat"].items():
+            feed = feedparser.parse(self.url) if self.source is "SID" else feedparser.parse(
+                self.url % (key, key)) if self.source is "ANSA" else feedparser.parse(
+                "http://www.nouvelobs.com/depeche/rss.xml") if self.source is "AFP" and "nouvelobs" in self.url else feedparser.parse(
+                self.url % key)
 
             i = 0
 
@@ -1007,16 +1027,17 @@ class News:
                     elif self.source is "NU.nl" and entries["author"] is "ANP":
                         self.source = "ANP"
                     elif self.source is "AFP" and "nouvelobs" in self.url:
-                        self.category[category] = entries["category"].lower()
+                        value = entries["category"].lower()
                     elif self.source is "Reuters_japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
 
                     downloaded_news = Parse(entries["link"], self.source, updated_time,
-                                                                            title, self.language).get_news()
+                                            title, self.language).get_news()
 
                     if downloaded_news:
-                        self.newsdata[self.category[category] + str(i)] = downloaded_news
+                        self.newsdata[value + str(i)] = downloaded_news
+
 
 
 class Parse(News):
