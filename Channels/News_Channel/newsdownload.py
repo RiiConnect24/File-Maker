@@ -42,17 +42,6 @@ sources = {
     # for example: world on reuters_japanese would go to https://twitrss.me/twitter_user_to_rss/?user=ReutersJpWorld
     # reference parse_feed
 
-    """  "AP": self.parse_ap(),
-            "Reuters": self.parse_reuters(),
-            "AFP_French": self.parse_afp(),
-            "AFP": self.parse_donaukurier(),
-            "dpa": self.parse_donaukurier(),
-            "SID": self.parse_sid(),
-            "ANSA": self.parse_ansa(),
-            "NU.nl": self.parse_nu(),
-            "ANP": self.parse_nu(),
-            "Reuters_japanese": self.parse_reuters_japanese()"""
-
     "ap_english": {
         "name": "AP",
         "url": "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT",
