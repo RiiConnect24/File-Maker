@@ -971,14 +971,15 @@ def geoparser_get(article):
 class News:
     def __init__(self, source):
         self.source = source
-        self.url = sources[source]["url"]
-        self.language = sources[source]["lang"]
+        self.sourceinfo = sources[self.source]
+        self.url = self.sourceinfo["url"]
+        self.language = self.sourceinfo["lang"]
         self.newsdata = collections.OrderedDict()
 
         if self.source == "afp_french_laprovence":
             self.newsdata.copy().update(News("afp_french_lobs").newsdata)
 
-        self.source = sources[source]["name"]
+        self.source = self.sourceinfo["name"]
 
         self.parse_feed()
 
@@ -990,7 +991,7 @@ class News:
     def parse_feed(self):
         print "Downloading News from " + self.source + "...\n"
 
-        for key, value in sources[self.source]["cat"].items():
+        for key, value in self.sourceinfo["cat"].items():
             feed = feedparser.parse(self.url) if self.source == "SID" else feedparser.parse(
                 self.url % (key, key)) if self.source == "ANSA" else feedparser.parse(
                 "http://www.nouvelobs.com/depeche/rss.xml") if self.source == "AFP" and "nouvelobs" in self.url else feedparser.parse(
