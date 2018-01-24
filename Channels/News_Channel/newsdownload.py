@@ -23,6 +23,7 @@ import logging
 import newspaper
 import requests
 from bs4 import BeautifulSoup
+from HTMLParser import HTMLParser
 from PIL import Image
 from raven import Client
 from raven.conf import setup_logging
@@ -83,6 +84,12 @@ def u32_littleendian(data):
         data = 0
     return struct.pack("<I", data)
 
+
+"""Encoode the text."""
+
+def enc(text):
+    if text:
+        return HTMLParser().unescape(text).encode("utf-16be", "replace")
 
 """Resize the image and strip metadata (to make the image size smaller)."""
 
@@ -158,7 +165,7 @@ def locations_download(language_code, data):
         if read is None:
             if name in corrections:
                 coordinates = binascii.unhexlify(corrections[name][0])
-                new_name = corrections[name][1].encode("utf-16be")
+                new_name = enc(corrections[name][1])
 
                 for filenames in locations[name]:
                     if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
@@ -445,8 +452,8 @@ class Parse(News):
             capture_message("Article is blank.", "warning")
             return []
         else:
-            return [u32(self.updated_time), u32(self.updated_time), self.article.encode("utf-16be"), self.headline.encode("utf-16be"),
-                    shrink_image(self.picture, self.resize), self.credits.encode("utf-16be") if self.credits else None, self.caption.encode("utf-16be") if self.caption else None,
+            return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
+                    shrink_image(self.picture, self.resize), enc(self.credits), enc(self.caption),
                     self.location, self.source]
 
     def newspaper_init(self):
