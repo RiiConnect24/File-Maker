@@ -1051,15 +1051,15 @@ class Parse(News):
         self.newspaper_init()
 
         {
-            "AP": self.parse_ap(),
-            "Reuters": self.parse_reuters(),
-            "AFP_French": self.parse_afp(),
-            "AFP": self.parse_donaukurier(),
-            "dpa": self.parse_donaukurier(),
-            "SID": self.parse_sid(),
-            "ANSA": self.parse_ansa(),
-            "NU.nl": self.parse_nu(),
-            "ANP": self.parse_nu(),
+            "AP": self.parse_ap,
+            "Reuters": self.parse_reuters,
+            "AFP_French": self.parse_afp,
+            "AFP": self.parse_donaukurier,
+            "dpa": self.parse_donaukurier,
+            "SID": self.parse_sid,
+            "ANSA": self.parse_ansa,
+            "NU.nl": self.parse_nu,
+            "ANP": self.parse_nu,
             "Reuters_japanese": self.parse_reuters_japanese()
         }[self.source]()
 
