@@ -86,7 +86,7 @@ sources = {
         ])
     },
     "afp_french_laprovence": {
-        "name": "AFP_french",
+        "name": "AFP_French",
         "url": "http://www.laprovence.com/rss/%s.xml",
         "lang": "fr",
         "cat": collections.OrderedDict([
@@ -95,7 +95,7 @@ sources = {
         ])
     },
     "afp_french_lobs": {
-        "name": "AFP_french",
+        "name": "AFP_French",
         "url": "http://www.nouvelobs.com/depeche/%s/rss.xml",
         "lang": "fr",
         "cat": collections.OrderedDict([
@@ -147,7 +147,7 @@ sources = {
         ])
     },
     "reuters_japanese": {
-        "name": "Reuters_japanese",
+        "name": "Reuters_Japanese",
         "url": "https://twitrss.me/twitter_user_to_rss/?user=%s",
         "lang": "en",  # newspaper does not support japanese
         "cat": collections.OrderedDict([
@@ -208,6 +208,13 @@ def u32_littleendian(data):
         data = 0
     return struct.pack("<I", data)
 
+"""Encode the text."""
+
+def enc(text):
+    if text:
+        return HTMLParser().unescape(text).encode("utf-16be", "replace")
+
+"""Resize the image and strip metadata (to make the image size smaller)."""
 
 def shrink_image(data, resize):
     if data == "" or data is None: return None
@@ -605,12 +612,15 @@ class Parse(News):
         if "rcom-default.png" in self.picture:
             self.picture = None
         else:
-            self.resize = False
-            self.picture += "&w=200"
-            self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
-                                                                                                 " REUTERS/")
+            try:
+                self.resize = False
+                self.picture += "&w=200"
+                self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
+                                                                                                     " REUTERS/")
 
-            self.article = self.article.replace("\n\n" + self.caption, "")
+                self.article = self.article.replace("\n\n" + self.caption, "")
+            except:
+                pass
 
         try:
             self.location = self.article.split("[")[1].split("　")[0]
