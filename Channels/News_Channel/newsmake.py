@@ -252,7 +252,7 @@ def make_news_bin(mode, console):
 
         country_code = 110
 
-    elif mode == "donaukurier_german":
+    elif mode == "AFP_german":
         topics_news = collections.OrderedDict()
 
         topics_news["Nachrichten"] = "world"
@@ -642,14 +642,13 @@ def make_source_table():
         "AP": [0, 1],
         "Reuters": [0, 4],
         "AFP": [4, 4],
-        "AFP_french": [4, 4],
+        "AFP_French": [4, 4],
         "ANP": [0, 5],
         "ANSA": [6, 6],
         "dpa": [0, 4],
-        "ZEIT ONLINE": [0, 4],
         "SID": [0, 4],
         "NU.nl": [0, 5],
-        "Reuters_japanese": [0, 4],
+        "Reuters_Japanese": [0, 4],
     }
 
     numbers = 0
@@ -818,7 +817,7 @@ def make_source_name_copyright():
         "AFP": (
                 "All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
-        "AFP_french": (
+        "AFP_French": (
                 "Tous droits de reproduction et de diffusion réservés. © %s Agence France-Presse" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
         "ANP": (
@@ -830,16 +829,13 @@ def make_source_name_copyright():
         "SID": (
                 "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s SID" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
-        "ZEIT ONLINE": (
-                "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s ZEIT ONLINE" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
         "dpa": (
                 "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
         "NU.nl": (
                 "© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode(
             "utf-8").encode("utf-16be"),
-        "Reuters_japanese": (
+        "Reuters_Japanese": (
                 "© Copyright Reuters %s. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 " % date.today().year).decode(
             "utf-8").encode("utf-16be"),
     }
@@ -896,7 +892,7 @@ def make_source_pictures():
 
     """These are the news sources which will use a custom JPG for the logo."""
 
-    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_japanese"]
+    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
 
     for article in data.values():
         if article[8] not in source_articles:

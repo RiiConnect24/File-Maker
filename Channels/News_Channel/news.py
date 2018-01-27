@@ -47,7 +47,7 @@ def download(source):
                       "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"],
                      News("afp_french_laprovence"))
     elif source == "donaukurier_german":
-        process_news("AFP German", "afp_german", 2,
+        process_news("AFP German", "donaukurier_german", 2,
                      ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095",
                       "096", "098", "105", "107", "108", "110"], News("donaukurier_german"))
     elif source == "ansa_italian":
