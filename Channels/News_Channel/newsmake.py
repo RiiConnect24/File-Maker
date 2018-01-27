@@ -252,7 +252,7 @@ def make_news_bin(mode, console):
 
         country_code = 110
 
-    elif mode == "AFP_german":
+    elif mode == "donaukurier_german":
         topics_news = collections.OrderedDict()
 
         topics_news["Nachrichten"] = "world"
