@@ -380,7 +380,6 @@ class News:
                     i += 1
 
                     title = entries["title"]
-                    print title
 
                     if self.source == "AFP_French" and key not in entries["link"]:
                         continue
@@ -391,6 +390,8 @@ class News:
                     elif self.source == "Reuters_japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
+
+                    print title
 
                     downloaded_news = Parse(entries["link"], self.source, updated_time,
                                             title, self.language).get_news()
