@@ -242,9 +242,11 @@ def make_news_bin(mode, console):
         topics_news = collections.OrderedDict()
 
         topics_news["Monde"] = "world"
-        topics_news["Sports"] = "sports"
+        topics_news["Sport"] = "sports"
+        topics_news["Societe"] = "society"
+        topics_news["Culture"] = "culture"
+        topics_news["Economie"] = "economy"
         topics_news["Politique"] = "politics"
-        topics_news["Top News"] = "topnews"
 
         languages = [1, 2, 3, 4, 5, 6]
 

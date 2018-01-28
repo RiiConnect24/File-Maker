@@ -85,21 +85,17 @@ sources = {
             ("lifestyle", "lifestyle")
         ])
     },
-    "afp_french_laprovence": {
+    "afp_french": {
         "name": "AFP_French",
-        "url": "http://www.laprovence.com/rss/%s.xml",
+        "url": "http://www.lepoint.fr/24h-infos/rss.xml",
         "lang": "fr",
         "cat": collections.OrderedDict([
-            ("France-monde", "world"),
-            ("Sports", "sports")
-        ])
-    },
-    "afp_french_lobs": {
-        "name": "AFP_French",
-        "url": "http://www.nouvelobs.com/depeche/%s/rss.xml",
-        "lang": "fr",
-        "cat": collections.OrderedDict([
-            # ???
+            ("monde", "world"),
+            ("sport", "sports"),
+            ("societe", "society"),
+            ("culture", "culture"),
+            ("economie", "economy"),
+            ("politique", "politics")
         ])
     },
     "donaukurier_german": {
@@ -352,9 +348,6 @@ class News:
         self.language = self.sourceinfo["lang"]
         self.newsdata = collections.OrderedDict()
 
-        if self.source == "afp_french_laprovence":
-            self.newsdata.copy().update(News("afp_french_lobs").newsdata)
-
         self.source = self.sourceinfo["name"]
 
         self.parse_feed()
@@ -368,10 +361,10 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for key, value in self.sourceinfo["cat"].items():
-            feed = feedparser.parse(self.url) if self.source == "SID" else feedparser.parse(
-                self.url % (key, key)) if self.source == "ANSA" else feedparser.parse(
-                "http://www.nouvelobs.com/depeche/rss.xml") if self.source == "AFP" and "nouvelobs" in self.url else feedparser.parse(
-                self.url % key)
+            feed = feedparser.parse(self.url) if self.source == "SID" \
+                    else feedparser.parse(self.url) if self.source == "AFP_French" \
+                    else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
+                    else feedparser.parse(self.url % key)
 
             i = 0
 
@@ -389,12 +382,12 @@ class News:
                     title = entries["title"]
                     print title
 
-                    if self.source == "AFP" and "dpa" in entries["description"]:
+                    if self.source == "AFP_French" and key not in entries["link"]:
+                        continue
+                    elif self.source == "AFP" and "dpa" in entries["description"]:
                         self.source = "dpa"
                     elif self.source == "NU.nl" and entries["author"] == "ANP":
                         self.source = "ANP"
-                    elif self.source == "AFP" and "nouvelobs" in self.url:
-                        value = entries["category"].lower()
                     elif self.source == "Reuters_japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
@@ -524,24 +517,21 @@ class Parse(News):
             self.location = self.article.split(" (Reuters)")[0]
 
     def parse_afp(self):
-        if self.source == "afp_french_laprovence":
-            self.soup.find("div", {"id": "id_article_corps"}).decompose()
+        try:
+            self.resize = True
+            self.caption = self.soup.find("figcaption", {"class": "art-caption"}).text
+        except:
+            pass
 
-            if "logo-lp-facebook.jpg" in self.picture:
-                self.picture = None
-            else:
-                self.resize = True
-                self.credits = self.soup.find("span", {"class": "credit"}).text
-                self.caption = self.soup.find("figcaption").text
-        elif self.source == "afp_french_lobs":
-            if "http://referentiel.nouvelobs.com/logos/og/logo-nobstr.jpg" in self.picture:
-                self.picture = None
-            else:
-                self.resize = True
-                self.caption = self.soup.find("figcaption").text
-
-        if "(AFP)" in self.article:
-            self.location = self.article.split(" (AFP)")[0]
+        try:
+            if "(AFP)" in self.article:
+                buf = StringIO(self.article)
+                line = buf.readlines()[-1]
+                buf = StringIO(self.article)
+                self.location = line.strip()[22:-19]
+                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
+        except:
+            pass
 
     def parse_donaukurier(self):
         try:
