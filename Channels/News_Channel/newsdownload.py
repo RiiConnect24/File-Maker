@@ -502,17 +502,18 @@ class Parse(News):
             str(self.soup.find("div", {"class": "StandardArticleBody_body_1gnLA"})).replace("</p>", "\n\n</p>"),
             "lxml").text
 
-        if "rcom-default.png" in self.picture:
-            self.picture = None
-        else:
-            self.resize = False
-            try:
-                self.picture += "&w=200"
-                self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
-                                                                                                     " REUTERS/")
-                self.article = self.article.replace("\n\n" + self.caption, "")
-            except:
-                pass
+        if self.picture is not None:
+            if "rcom-default.png" in self.picture:
+                self.picture = None
+            else:
+                self.resize = False
+                try:
+                    self.picture += "&w=200"
+                    self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
+                                                                                                         " REUTERS/")
+                    self.article = self.article.replace("\n\n" + self.caption, "")
+                except:
+                    pass
 
         if "(Reuters)" in self.article:
             self.location = self.article.split(" (Reuters)")[0]
