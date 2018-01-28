@@ -609,18 +609,19 @@ class Parse(News):
 
         self.article = "\n".join(textwrap.wrap(article_text, 25))
 
-        if "rcom-default.png" in self.picture:
-            self.picture = None
-        else:
-            try:
-                self.resize = False
-                self.picture += "&w=200"
-                self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
-                                                                                                     " REUTERS/")
+        if self.picture is not None:
+            if "rcom-default.png" in self.picture:
+                self.picture = None
+            else:
+                try:
+                    self.resize = False
+                    self.picture += "&w=200"
+                    self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
+                                                                                                         " REUTERS/")
 
-                self.article = self.article.replace("\n\n" + self.caption, "")
-            except:
-                pass
+                    self.article = self.article.replace("\n\n" + self.caption, "")
+                except:
+                    pass
 
         try:
             self.location = self.article.split("[")[1].split("　")[0]
