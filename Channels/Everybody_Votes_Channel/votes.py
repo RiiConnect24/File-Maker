@@ -180,7 +180,7 @@ def automatic_votes():
     questions = national + worldwide
     question_count = len(question_data)
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
-    for v in range(1, 7): results[get_poll_id()] = mysql_get_votes(7, "n", v)
+    for v in list(reversed(range(1, 7))): results[get_poll_id()] = mysql_get_votes(7, "n", v)
     results[get_poll_id()] = mysql_get_votes(15, "w", 1)
     try:
         del results[None]
