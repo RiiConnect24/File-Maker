@@ -388,7 +388,7 @@ def get_timestamp(mode):
     if system == "wii":
         seconds = 946684800
     elif system == "wii_u":
-        seconds = 789563880
+        seconds = 788940000
 
     if mode == 1:
         return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60))
