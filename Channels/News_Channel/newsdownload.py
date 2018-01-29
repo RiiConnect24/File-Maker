@@ -390,7 +390,7 @@ class News:
                     elif self.source == "Reuters_japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
-                        title = title.split(" http://bit.ly/")[0]
+                        title = title.split("http://bit.ly/")[0]
 
                     print title
 
