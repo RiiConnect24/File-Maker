@@ -430,7 +430,7 @@ class Parse(News):
             "ANSA": self.parse_ansa,
             "NU.nl": self.parse_nu,
             "ANP": self.parse_nu,
-            "Reuters_Japanese": self.parse_reuters_japanese()
+            "Reuters_Japanese": self.parse_reuters_japanese
         }[self.source]()
 
         self.get_news()
