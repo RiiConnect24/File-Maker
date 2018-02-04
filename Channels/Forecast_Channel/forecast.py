@@ -129,7 +129,7 @@ def time_convert(time):
     if mode == 1:
         return int((time - 946684800) / 60)
     elif mode == 2:
-        return int((time - 788940000) / 60)
+        return int((time - 789563880) / 60)
 
 
 def get_epoch(): return int(time.time())
