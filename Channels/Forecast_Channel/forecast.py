@@ -164,6 +164,19 @@ def matches_country_code(list, key):
     return get_locationkey(list, key)[:2] == hex(country_code)[2:].zfill(2)
 
 
+def get_bins(country_code):
+    if country_code == 0:
+            bins = [0]
+        elif 8 <= country_code <= 52:
+            bins = [1, 3, 4]
+        elif 64 <= country_code <= 110:
+            bins = [1, 2, 3, 4, 5, 6]
+        else:
+            output("Unknown country code %s - generating English only" % country_code, "WARNING")
+            bins = [1]
+    return bins
+
+
 def num():
     global number
     num1 = number
@@ -240,7 +253,7 @@ def ui():
     while not loop: pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
     header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
-    header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2017\n\n"
+    header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2018\n\n"
     if production: header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
         refresh(refresh_type)
@@ -251,7 +264,7 @@ def ui():
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
         totalfill = totalpercent * 35 / 100
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
-        if status == "Downloading":
+        if status == 1:
             percent = int(round(float(citycount) / float(len(list) - cached) * 100)) if dl else 0
             fill = int(round(percent * bar / 100))
             progbar = str(percent) + "% [" + "=" * fill + " " * (bar - fill) + "]"
@@ -264,23 +277,23 @@ def ui():
         out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth, cities, errors)
         out += "\nProcessing List #%s/%s (%s): %s %s\n\n" % (
             listid, len(weathercities), country_code, currentlist, "." * progcount)
-        if status == "Downloading" and dl:
+        if status == 1 and dl:
             out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
         else:
             out += "Downloading Forecasts [%s] 100%%\n" % display
-        if status == "Parsing Data":
+        if status == 2:
             out += "Parsing Data [%s]\n" % prog[progcount]
-        elif status == "Downloading":
+        elif status == 1:
             out += "Parsing Data [-]\n"
         else:
             out += "Parsing Data [%s]" % display + "\n"
-        if status == "Generating Data":
+        if status == 3:
             out += "Generating Data [%s]\n" % prog[progcount]
-        elif status == "Building Files":
+        elif status == 4:
             out += "Generating Data [%s]" % display + "\n"
         else:
             out += "Generating Data [-]\n"
-        if status == "Building Files":
+        if status == 4:
             out += "Building Files [%s]\n\n" % prog[progcount]
         else:
             out += "Building Files [-]\n\n"
@@ -461,12 +474,8 @@ def get_legacy_api(list, key):
     tomorrow[key][2] = to_celsius(tomorrow[key][0])
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = get_icon(int(forecast[2][5][1].text), list, key)
-    try:
-        uvval = int(current_conditions[13].attrib['index'])
-    except:
-        uvval = 255
-    if uvval > 12: uvval = 12
-    uvindex[key] = uvval
+    uvindex[key] = int(current_conditions[13].attrib['index'])
+    if uvindex[key] > 12: uvindex[key] = 12
     wind[key][0] = mph_kmh(forecast[1][5][6].text)
     wind[key][1] = int(forecast[1][5][6].text)
     wind[key][2] = forecast[1][5][7].text
@@ -1235,7 +1244,7 @@ ui_thread.start()
 for list in weathercities:
     global language_code, country_code, mode, japcount, weather_data
     threads = []
-    status = "Downloading"
+    status = 1
     language_code = 1
     japcount = 0
     listid = weathercities.index(list) + 1
@@ -1243,15 +1252,7 @@ for list in weathercities:
     weather_data = {}
     loop = True
     country_code = forecastlists.bincountries[currentlist]
-    if country_code == 0:
-        bins = [0]
-    elif 8 <= country_code <= 52:
-        bins = [1, 3, 4]
-    elif 64 <= country_code <= 110:
-        bins = [1, 2, 3, 4, 5, 6]
-    else:
-        output("Unknown country code %s - generating English only" % country_code, "WARNING")
-        bins = [1]
+    bins = get_bins(country_code)
     for k, v in forecastlists.weathercities_international.items():
         if k not in list:
             list[k] = v
@@ -1272,7 +1273,7 @@ for list in weathercities:
     q.join()
     loop = False
     for t in threads: t.join()
-    status = "Parsing Data"
+    status = 2
     for k, v in weather_data.items():
         try:
             weather_data[k] = ElementTree.fromstring(v)
@@ -1284,9 +1285,9 @@ for list in weathercities:
         else:
             output('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
     cities += citycount
-    status = "Generating Data"
+    status = 3
     data = generate_data(list, bins)
-    status = "Building Files"
+    status = 4
     for i in range(1, 3):
         mode = i
         for j in bins:
@@ -1295,7 +1296,7 @@ for list in weathercities:
             reset_data()
     lists += 1
 
-time.sleep(0.1)
+time.sleep(0.15)
 ui_run = False
 ui_thread.join()
 
