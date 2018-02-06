@@ -1260,7 +1260,7 @@ for list in weathercities:
             list[k + " 2"] = v
     generate_locationkeys(list)
     for keys in list.keys():
-        if not matches_country_code(list, keys) or get_region(list, key) == '': japcount += 1
+        if not matches_country_code(list, keys) or get_region(list, keys) == '': japcount += 1
         if keys in cache and cache[keys] == get_all(list, keys): cached += 1
     for keys in list.keys():
         if keys not in cache or cache[keys] != get_all(list, keys):
