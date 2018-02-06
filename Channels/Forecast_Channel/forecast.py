@@ -166,14 +166,14 @@ def matches_country_code(list, key):
 
 def get_bins(country_code):
     if country_code == 0:
-            bins = [0]
-        elif 8 <= country_code <= 52:
-            bins = [1, 3, 4]
-        elif 64 <= country_code <= 110:
-            bins = [1, 2, 3, 4, 5, 6]
-        else:
-            output("Unknown country code %s - generating English only" % country_code, "WARNING")
-            bins = [1]
+        bins = [0]
+    elif 8 <= country_code <= 52:
+        bins = [1, 3, 4]
+    elif 64 <= country_code <= 110:
+        bins = [1, 2, 3, 4, 5, 6]
+    else:
+        output("Unknown country code %s - generating English only" % country_code, "WARNING")
+        bins = [1]
     return bins
 
 
