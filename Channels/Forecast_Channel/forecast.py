@@ -160,6 +160,10 @@ def pad(amnt): return "\0" * amnt
 def get_index(list, key, num): return list[key][num]
 
 
+def matches_country_code(list, key):
+    return get_locationkey(list, key)[:2] == hex(country_code)[2:].zfill(2)
+
+
 def num():
     global number
     num1 = number
@@ -340,33 +344,31 @@ def timestamps(mode, key):
     return timestamp
 
 
-def get_loccode(list, key):
+def get_locationkey(list, key):
     country = get_country(list, key)
-    state = get_region(list, key)
+    region = get_region(list, key)
     city = get_city(list, key)
     listid = weathercities.index(list)
-    if state is '' and country not in forecastlists.bincountries:
+    if region is '' and country not in forecastlists.bincountries:
         a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
         b = 'FE'
         c = 'FE'
     else:
-        a = hex(weatherloc[listid][country][state][city])[2:].zfill(4)
-        b = hex(weatherloc[listid]['states'][country][state])[2:].zfill(2)
+        a = hex(weatherloc[listid][country][region][city])[2:].zfill(4)
+        b = hex(weatherloc[listid]['regions'][country][region])[2:].zfill(2)
         c = hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2)
-    string = "".join([c, b, a])
-    return string
+    return "".join([c, b, a])
 
 
 def zoom(list, mode, key):
     return get_index(list, key, 3)[8:][:2] if mode == 1 else get_index(list, key, 3)[10:][:2] if mode == 2 else value
 
 
-def get_locationcode(list):
+def generate_locationkeys(list):
     listid = weathercities.index(list)
-    output("Generating Location Keys ...", "VERBOSE")
     weatherloc[listid] = {}
     weatherloc[listid]['null'] = {}
-    weatherloc[listid]['states'] = {}
+    weatherloc[listid]['regions'] = {}
     for k, v in list.items():
         if v[1][1] is "" and v[2][1] not in forecastlists.bincountries:
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
@@ -374,8 +376,8 @@ def get_locationcode(list):
             weatherloc[listid].setdefault(v[2][1], {})
             weatherloc[listid][v[2][1]].setdefault(v[1][1], {})
             weatherloc[listid][v[2][1]][v[1][1]].setdefault(v[0][1], len(weatherloc[listid][v[2][1]][v[1][1]]) + 1)
-            weatherloc[listid]['states'].setdefault(v[2][1], {})
-            weatherloc[listid]['states'][v[2][1]].setdefault(v[1][1], len(weatherloc[listid]['states'][v[2][1]]) + 2)
+            weatherloc[listid]['regions'].setdefault(v[2][1], {})
+            weatherloc[listid]['regions'][v[2][1]].setdefault(v[1][1], len(weatherloc[listid]['regions'][v[2][1]]) + 2)
 
 
 """If the script was unable to get forecast for a city, it's filled with this blank data."""
@@ -793,10 +795,10 @@ def make_header_forecast(list):
 def make_long_forecast_table(list):
     long_forecast_table = collections.OrderedDict()
     for key in list.keys():
-        if get_loccode(list, key)[:2] == hex(country_code)[2:].zfill(2):
+        if matches_country_code(list, key) and get_region(list, key) != '':
             numbers = get_number(list, key)
             long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(
-                get_loccode(list, key))  # Wii Location Code.
+                get_locationkey(list, key))  # Wii Location Code.
             long_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # 1st timestamp.
             long_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # 2nd timestamp.
             long_forecast_table["unknown_1_%s" % numbers] = u32(0)  # Unknown. (0xC-0xF)
@@ -981,7 +983,7 @@ def make_short_forecast_table(list):
     for key in list.keys():
         numbers = get_number(list, key)
         short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(
-            get_loccode(list, key))  # Wii location code for city
+            get_locationkey(list, key))  # Wii location code for city
         short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # Timestamp 1
         short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # Timestamp 2
         short_forecast_table["current_forecast_%s" % numbers] = binascii.unhexlify(weathericon[key])  # Current forecast
@@ -1002,10 +1004,10 @@ def make_short_forecast_table(list):
 def make_forecast_short_table(list):
     short_forecast_table = collections.OrderedDict()
     for key in list.keys():
-        if get_loccode(list, key)[:2] != hex(country_code)[2:].zfill(2):
+        if not matches_country_code(list, key) or get_region(list, key) == '':
             numbers = get_number(list, key)
             short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(
-                get_loccode(list, key))  # Wii Location Code.
+                get_locationkey(list, key))  # Wii Location Code.
             short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # 1st timestamp.
             short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # 2nd timestamp.
             short_forecast_table["padding_%s" % numbers] = u32(0)
@@ -1137,7 +1139,7 @@ def make_location_table(list):
     location_table = collections.OrderedDict()
     for keys in list.keys():
         numbers = get_number(list, keys)
-        location_table["location_code_%s" % numbers] = binascii.unhexlify(get_loccode(list, keys))  # Wii Location Code.
+        location_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, keys))  # Wii Location Code.
         location_table["city_text_offset_%s" % numbers] = u32(0)  # Offset for location's city text
         location_table["region_text_offset_%s" % numbers] = u32(0)  # Offset for location's region text
         location_table["country_text_offset_%s" % numbers] = u32(0)  # Offset for location's country text
@@ -1251,15 +1253,12 @@ for list in weathercities:
         bins = [1]
     for k, v in forecastlists.weathercities_international.items():
         if k not in list:
-            if v[2][1] in forecastlists.bincountries and forecastlists.bincountries[v[2][1]] is not country_code:
-                list[k] = v
-            else:
-                list[k] = v
+            list[k] = v
         elif v[2][1] is not list[k][2][1]:
             list[k + " 2"] = v
-    get_locationcode(list)
+    generate_locationkeys(list)
     for keys in list.keys():
-        if get_loccode(list, keys)[:2] != hex(country_code)[2:].zfill(2): japcount += 1
+        if not matches_country_code(list, keys): japcount += 1
         if keys in cache and cache[keys] == get_all(list, keys): cached += 1
     for keys in list.keys():
         if keys not in cache or cache[keys] != get_all(list, keys):
