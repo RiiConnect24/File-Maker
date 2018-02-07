@@ -264,7 +264,7 @@ def ui():
         # Calculate values to show on screen
         dl = len(list) - cached > 0
         elasped_time = int(round(time.time() - total_time))
-        bandwidth = round(float(bw_usage) / 1048576, 2)
+        bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
         totalfill = totalpercent * 35 / 100
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
@@ -606,7 +606,7 @@ def generate_data(list, bins):
 
 
 def make_forecast_bin(list, data):
-    global japcount, constant, file, seek_offset, seek_base, extension
+    global shortcount, constant, file, seek_offset, seek_base, extension
     constant = 0
     count = {}
     header = make_header_forecast(list)
@@ -645,9 +645,9 @@ def make_forecast_bin(list, data):
     hex_write(12, timestamps(0, 0))
     hex_write(16, timestamps(2, 0))
     hex_write(36, count[0])
-    hex_write(32, int(len(list) - japcount))
-    hex_write(40, japcount)
-    if japcount > 0:
+    hex_write(32, int(len(list) - shortcount))
+    hex_write(40, shortcount)
+    if shortcount > 0:
         hex_write(44, count[1])
     hex_write(48, len(forecastlists.weatherconditions) * 2)
     hex_write(52, count[2])
@@ -799,7 +799,7 @@ def make_header_forecast(list):
     header["message_offset"] = u32(0)  # Offset for a message.
     header["long_forecast_number"] = u32(0)  # Number of long forecast entries.
     header["long_forecast_offset"] = u32(88)  # Offset for the long forecast entry table.
-    header["short_forecast_number"] = u32(japcount)  # Number of short forecast entries.
+    header["short_forecast_number"] = u32(shortcount)  # Number of short forecast entries.
     header["short_forecast_offset"] = u32(0)  # Offset for the short forecast entry table.
     header["weather_condition_codes_number"] = u32(0)  # Number of weather condition code entries.
     header["weather_condition_codes_offset"] = u32(0)  # Offset for the weather condition code table.
@@ -1255,11 +1255,11 @@ ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
 for list in weathercities:
-    global language_code, country_code, mode, japcount, weather_data
+    global language_code, country_code, mode, shortcount, weather_data
     threads = []
     status = 1
     language_code = 1
-    japcount = 0
+    shortcount = 0
     listid = weathercities.index(list) + 1
     currentlist = list.values()[0][2][1]
     weather_data = {}
@@ -1273,7 +1273,7 @@ for list in weathercities:
             list[k + " 2"] = v
     generate_locationkeys(list)
     for keys in list.keys():
-        if not matches_country_code(list, keys) or get_region(list, keys) == '': japcount += 1
+        if not matches_country_code(list, keys) or get_region(list, keys) == '': shortcount += 1
         if keys in cache and cache[keys] == get_all(list, keys): cached += 1
     for keys in list.keys():
         if keys not in cache or cache[keys] != get_all(list, keys):
