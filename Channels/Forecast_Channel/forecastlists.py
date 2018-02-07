@@ -7,7 +7,7 @@ weathercities008 = collections.OrderedDict()
 
 weathercities008["The Valley"] = [
     ["バレー", "The Valley", "The Valley", "The Valley", "El Valle", "The Valley", "The Valley"],
-    ["", "", "", "", "", "", ""], ["アンギラ", "Anguilla", "Anguilla", "Anguilla", "Anguila", "Anguilla", "Anguilla"],
+    ["アンギラ", "Anguilla", "Anguilla", "Anguilla", "Anguila", "Anguilla", "Anguilla"], ["アンギラ", "Anguilla", "Anguilla", "Anguilla", "Anguila", "Anguilla", "Anguilla"],
     "0cf4d32b01030000"]
 
 weathercities009 = collections.OrderedDict()

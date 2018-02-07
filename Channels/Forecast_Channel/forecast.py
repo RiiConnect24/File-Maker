@@ -161,7 +161,11 @@ def get_index(list, key, num): return list[key][num]
 
 
 def matches_country_code(list, key):
-    return get_locationkey(list, key)[:2] == hex(country_code)[2:].zfill(2)
+    v = list[key]
+    if v[2][1] in forecastlists.bincountries:
+        return hex(int(str(forecastlists.bincountries[v[2][1]])))[2:].zfill(2) == hex(country_code)[2:].zfill(2)
+    else:
+        return False
 
 
 def get_bins(country_code):
@@ -362,11 +366,11 @@ def get_locationkey(list, key):
     region = get_region(list, key)
     city = get_city(list, key)
     listid = weathercities.index(list)
-    if region is '' and country not in forecastlists.bincountries:
+    if region is '' and (country not in forecastlists.bincountries or matches_country_code(list, key)):
         a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
         b = 'FE'
         c = 'FE'
-    elif region is '' and hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2) == hex(country_code)[2:].zfill(2):
+    elif region is '' and not matches_country_code(list, key):
         a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
         b = 'FE'
         c = hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2)
@@ -388,9 +392,9 @@ def generate_locationkeys(list):
     weatherloc[listid]['no-region'] = {}
     weatherloc[listid]['regions'] = {}
     for k, v in list.items():
-        if v[1][1] is "" and v[2][1] not in forecastlists.bincountries:
+        if v[1][1] is "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(list, k)):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
-        elif v[1][1] is "" and hex(int(str(forecastlists.bincountries[v[2][1]])))[2:].zfill(2) == hex(country_code)[2:].zfill(2):
+        elif v[1][1] is "" and not matches_country_code(list, k):
             weatherloc[listid]['no-region'].setdefault(v[2][1], {})
             weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1], len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
         else:
