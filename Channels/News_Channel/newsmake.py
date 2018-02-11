@@ -23,7 +23,6 @@ import sys
 import time
 from datetime import timedelta, datetime, date  # Used to get time stuff.
 
-import cachetclient.cachet
 import requests
 import rsa
 from raven import Client
@@ -126,11 +125,6 @@ def process_news(name, mode, language, countries, d):
         make_news_bin(mode, system)
 
     if production:
-        """Tell Cachet how many news articles it downloaded."""
-
-        points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
-        json.loads(points.post(id="2", value=len(data)))
-
         """This will use a webhook to log that the script has been ran."""
 
         webhook = {"username": "News Bot", "content": "News Data has been updated!",

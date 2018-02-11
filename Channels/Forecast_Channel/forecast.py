@@ -1314,8 +1314,6 @@ ui_run = False
 ui_thread.join()
 
 if production:
-    points = cachetclient.cachet.Points(endpoint=cachet_url, api_token=cachet_key)
-    json.loads(points.post(id=cachet_elapsed_time, value=round(time.time() - total_time)))
     """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
