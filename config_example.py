@@ -5,8 +5,6 @@ key_path = "/path/to/key/in/format/of/file.pem"  # Private key to sign the file
 file_path = "/path/to/folder"  # Path to save the file to
 lzss_path = "/path/to/lzss"  # Path to lzss
 production = None  # Use production mode
-cachet_url = "http://status.domain.tld/api/v1"  # URL for Cachet
-cachet_key = "api_key"  # API Key for Cachet
 sentry_url = "http://status.domain.tld/"  # URL for Sentry
 
 """News Channel only"""
