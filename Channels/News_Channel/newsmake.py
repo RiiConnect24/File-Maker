@@ -627,7 +627,7 @@ def make_articles_table(mode):
 
     if production:
         statsd.increment("news.total_articles", numbers)
-        statsd.gauge("news.articles." + mode, numbers)
+        statsd.increment("news.articles." + mode, numbers)
 
     return articles_table
 
