@@ -7,7 +7,6 @@ mysql-connector==2.1.4
 newspaper
 numpy
 pycountry
-python-cachetclient
 python-resize-image
 pytz
 raven
