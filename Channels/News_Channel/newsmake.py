@@ -346,7 +346,7 @@ def make_news_bin(mode, console):
     make_wiimenu_articles()
     make_topics_table()
     make_timestamps_table(mode)
-    make_articles_table()
+    make_articles_table(mode)
     make_source_table()
     make_locations_table()
     make_pictures_table()
@@ -588,7 +588,7 @@ def make_timestamps_table(mode):
 """Articles table."""
 
 
-def make_articles_table():
+def make_articles_table(mode):
     dictionaries.append(articles_table)
 
     pictures_number = 0
