@@ -128,8 +128,6 @@ def process_news(name, mode, language, countries, d):
     if production:
         """Log stuff to Datadog."""
 
-        statsd.gauge("news.total_articles", len(data))
-        statsd.gauge("news.articles." + mode, len(data))
         statsd.increment("news.total_files_built")
 
         """This will use a webhook to log that the script has been ran."""
@@ -628,6 +626,7 @@ def make_articles_table():
     header["articles_number"] = u32(numbers)  # Number of entries for the articles table.
 
     statsd.increment("news.total_articles", numbers)
+    statsd.gauge("news.articles." + mode, numbers)
 
     return articles_table
 
