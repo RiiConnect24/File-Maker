@@ -625,8 +625,9 @@ def make_articles_table():
 
     header["articles_number"] = u32(numbers)  # Number of entries for the articles table.
 
-    statsd.increment("news.total_articles", numbers)
-    statsd.gauge("news.articles." + mode, numbers)
+    if production:
+        statsd.increment("news.total_articles", numbers)
+        statsd.gauge("news.articles." + mode, numbers)
 
     return articles_table
 
@@ -709,7 +710,8 @@ def make_locations_table():
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
-    statsd.increment("news.total_locations", locations_number)
+    if production:
+        statsd.increment("news.total_locations", locations_number)
 
     return locations_table
 
@@ -748,7 +750,8 @@ def make_pictures_table():
 
     header["pictures_number"] = u32(pictures_number)  # Number of entries for the pictures table.
 
-    statsd.increment("news.total_pictures", pictures_number)
+    if production:
+        statsd.increment("news.total_pictures", pictures_number)
 
     return pictures_table
 
