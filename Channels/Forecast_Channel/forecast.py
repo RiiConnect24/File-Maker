@@ -313,11 +313,11 @@ def ui():
     """Log stuff to Datadog."""
     if production:
         statsd.set("forecast.api_requests", apirequests)
-        statsd.gauge("forecast.retry_count", retrycount)
-        statsd.gauge("forecast.elapsed_time", elapsed_time)
+        statsd.set("forecast.retry_count", retrycount)
+        statsd.set("forecast.elapsed_time", elapsed_time)
         statsd.set("forecast.bandwidth_usage", bandwidth)
         statsd.set("forecast.cities", cities)
-        statsd.gauge("forecast.errors", errors)
+        statsd.set("forecast.errors", errors)
     print "\n"
 
 
