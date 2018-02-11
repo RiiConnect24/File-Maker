@@ -1,4 +1,5 @@
 bs4
+datadog
 dateparser
 feedparser
 googlemaps

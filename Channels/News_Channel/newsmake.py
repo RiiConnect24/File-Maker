@@ -25,6 +25,7 @@ from datetime import timedelta, datetime, date  # Used to get time stuff.
 
 import requests
 import rsa
+from datadog import statsd
 from raven import Client
 from raven.conf import setup_logging
 from raven.handlers.logging import SentryHandler
@@ -125,6 +126,12 @@ def process_news(name, mode, language, countries, d):
         make_news_bin(mode, system)
 
     if production:
+        """Log stuff to Datadog."""
+
+        statsd.gauge("news.total_articles", len(data))
+        statsd.gauge("news.articles." + mode, len(data))
+        statsd.increment("news.total_files_built")
+
         """This will use a webhook to log that the script has been ran."""
 
         webhook = {"username": "News Bot", "content": "News Data has been updated!",
@@ -620,6 +627,8 @@ def make_articles_table():
 
     header["articles_number"] = u32(numbers)  # Number of entries for the articles table.
 
+    statsd.increment("news.total_articles", numbers)
+
     return articles_table
 
 
@@ -701,6 +710,8 @@ def make_locations_table():
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
+    statsd.increment("news.total_locations", locations_number)
+
     return locations_table
 
 
@@ -711,7 +722,7 @@ def make_pictures_table():
     dictionaries.append(pictures_table)
     header["pictures_offset"] = offset_count()  # Offset for the pictures table.
 
-    real_numbers = 0
+    pictures_number = 0
 
     numbers = 0
 
@@ -732,11 +743,13 @@ def make_pictures_table():
                 pictures_table["captions_%s_size" % numbers] = u32(0)  # Size of the credits.
                 pictures_table["captions_%s_offset" % numbers] = u32(0)  # Offset for the captions.
 
-            real_numbers += 1
+            pictures_number += 1
             pictures_table["pictures_%s_size" % numbers] = u32(len(article[4]))  # Size of the pictures.
             pictures_table["pictures_%s_offset" % numbers] = u32(0)  # Offset for the pictures.
 
-    header["pictures_number"] = u32(real_numbers)  # Number of entries for the pictures table.
+    header["pictures_number"] = u32(pictures_number)  # Number of entries for the pictures table.
+
+    statsd.increment("news.total_pictures", pictures_number)
 
     return pictures_table
 
