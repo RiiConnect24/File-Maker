@@ -311,12 +311,13 @@ def ui():
         sys.stdout.flush()
         time.sleep(refresh_rate)
     """Log stuff to Datadog."""
-    statsd.set("forecast.api_requests", apirequests)
-    statsd.gauge("forecast.retry_count", retrycount)
-    statsd.gauge("forecast.elapsed_time", elapsed_time)
-    statsd.set("forecast.bandwidth_usage", bandwidth)
-    statsd.set("forecast.cities", cities)
-    statsd.gauge("forecast.errors", errors)
+    if production:
+        statsd.set("forecast.api_requests", apirequests)
+        statsd.gauge("forecast.retry_count", retrycount)
+        statsd.gauge("forecast.elapsed_time", elapsed_time)
+        statsd.set("forecast.bandwidth_usage", bandwidth)
+        statsd.set("forecast.cities", cities)
+        statsd.gauge("forecast.errors", errors)
     print "\n"
 
 
