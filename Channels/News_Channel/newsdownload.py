@@ -387,7 +387,7 @@ class News:
                         self.source = "dpa"
                     elif self.source == "NU.nl" and entries["author"] == "ANP":
                         self.source = "ANP"
-                    elif self.source == "Reuters_japanese":
+                    elif self.source == "Reuters_Japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
 
