@@ -379,8 +379,6 @@ class News:
                 if current_time - updated_time < 60:
                     i += 1
 
-                    title = entries["title"]
-
                     if self.source == "AFP_French" and key not in entries["link"]:
                         continue
                     elif self.source == "AFP" and "dpa" in entries["description"]:
@@ -390,6 +388,9 @@ class News:
                     elif self.source == "Reuters_Japanese":
                         entries["link"] = requests.get(
                             "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
+                        entries["title"] = entries["title"].split("  http://bit.ly/", 1)[0]
+
+                    title = entries["title"]
 
                     print title
 
