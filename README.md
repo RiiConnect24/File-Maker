@@ -4,14 +4,12 @@
 
 These scripts will create static data files for these Wii Channels:
 
-<ul>
-  <li>Everybody Votes Channel</li>
-  <li>Forecast Channel</li>
-  <li>News Channel</li>
-</ul>
+- Everybody Votes Channel
+- Forecast Channel
+- News Channel
 
 ## Installing Requirements
 
 Just run `pip install -r requirements.txt` in the root folder and it'll install. You might have to run as `sudo`.
 
-It's required to have a `config.py` for scripts in the `Channels` folder. To find what you need to put for each one, look at `config.py.example`.
+It's required to have a `config.py` for the scripts in the `Channels` folder. Fill out `config.py.template` and you'll be set
