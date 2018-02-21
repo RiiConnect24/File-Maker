@@ -10,6 +10,8 @@ These scripts will create static data files for these Wii Channels:
 
 ## Installing Requirements
 
+These scripts run on Python 2.
+
 Just run `pip install -r requirements.txt` in the root folder and it'll install. You might have to run as `sudo`.
 
 It's required to have a `config.py` for the scripts in the `Channels` folder. Fill out `config.py.template` and you'll be set
