@@ -43,6 +43,111 @@ source_table = collections.OrderedDict()
 locations_table = collections.OrderedDict()
 pictures_table = collections.OrderedDict()
 
+sources = {
+    "ap_english": {
+        "topics_news": collections.OrderedDict([
+            ("National News", "national"),
+            ("International News", "world"),
+            ("Sports", "sports"),
+            ("Arts/Entertainment", "entertainment"),
+            ("Business", "business"),
+            ("Science/Health", "science"),
+            ("Technology", "technology"),
+            ("Oddities", "oddities")
+        ]),
+        "languages": [1, 3, 4],
+        "language_code": 1,
+        "country_code": 49
+    },
+    "ap_spanish": {
+        "topics_news": collections.OrderedDict([
+            ("Generales", "general"),
+            ("Financieras", "finance"),
+            ("Deportivas", "sports"),
+            ("Espectáculos", "shows")
+        ]),
+        "languages": [1, 3, 4],
+        "language_code": 4,
+        "country_code": 49
+    },
+    "reuters_europe_english": {
+        "topics_news": collections.OrderedDict([
+            ("World", "world"),
+            ("UK", "uk"),
+            ("Health", "health"),
+            ("Science", "science"),
+            ("Technology", "technology"),
+            ("Entertainment", "entertainment"),
+            ("Sports", "sports"),
+            ("Lifestyle", "lifestyle")
+        ]),
+        "languages": [1, 2, 3, 4, 5, 6],
+        "language_code": 1,
+        "country_code": 110
+    },
+    "afp_french": {
+        "topics_news": collections.OrderedDict([
+            ("Monde", "world"),
+            ("Sport", "sports"),
+            ("Societe", "society"),
+            ("Culture", "culture"),
+            ("Economie", "economy"),
+            ("Politique", "politics")
+        ]),
+        "languages": [1, 2, 3, 4, 5, 6],
+        "language_code": 3,
+        "country_code": 110
+    },
+    "donaukurier_german": {
+        "topics_news": collections.OrderedDict([
+            ("Nachrichten", "world"),
+            ("Wirtschaft", "economy"),
+            ("Kultur", "culture")
+        ]),
+        "languages": [1, 2, 3, 4, 5, 6],
+        "language_code": 2,
+        "country_code": 110
+    },
+    "ansa_italian": {
+        "topics_news": collections.OrderedDict([
+            ("Dal mondo", "world"),
+            ("Sport", "sports"),
+            ("Economia", "economy"),
+            ("Tecnologia", "technology"),
+            ("Cultura", "culture")
+        ]),
+        "languages": [1, 2, 3, 4, 5, 6],
+        "language_code": 5,
+        "country_code": 110
+    },
+    "nu_dutch": {
+        "topics_news": collections.OrderedDict([
+            ("Algemeen", "general"),
+            ("Economie", "economy"),
+            ("Sport", "sports"),
+            ("Tech", "technology"),
+            ("Entertainment", "entertainment"),
+            ("Lifestyle", "lifestyle"),
+            ("Opmerkelijk", "noteworthy")
+        ]),
+        "languages": [1, 2, 3, 4, 5, 6],
+        "language_code": 6,
+        "country_code": 110
+    },
+    "reuters_japanese": {
+        "topics_news": collections.OrderedDict([
+            ("ワールド", "world"),
+            ("ビジネス", "business"),
+            ("スポーツ", "sports"),
+            ("テクノロジー", "technology"),
+            ("エンタテインメント", "entertainment")
+        ]),
+        "languages": [0],
+        "language_code": 0,
+        "country_code": 1
+    }
+}
+
 """Set up Sentry for error logging."""
 
 if production:
@@ -186,132 +291,16 @@ def copy_file(mode, console, country):
 
 def make_news_bin(mode, console):
     global system, dictionaries, topics_news, languages, make_news, data, country_code, language_code, locations_data, header, topics_table, articles_table, source_table, locations_table, pictures_table
+    
+    source = sources[mode]
 
-    if mode == "ap_english":
-        topics_news = collections.OrderedDict()
-
-        topics_news["National News"] = "national"
-        topics_news["International News"] = "world"
-        topics_news["Sports"] = "sports"
-        topics_news["Arts/Entertainment"] = "entertainment"
-        topics_news["Business"] = "business"
-        topics_news["Science/Health"] = "science"
-        topics_news["Technology"] = "technology"
-        topics_news["Oddities"] = "oddities"
-
-        languages = [1, 3, 4]
-
-        language_code = 1
-
-        country_code = 49
-
-    elif mode == "ap_spanish":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Generales"] = "general"
-        topics_news["Financieras"] = "finance"
-        topics_news["Deportivas"] = "sports"
-        topics_news["Espectáculos"] = "shows"
-
-        languages = [1, 3, 4]
-
-        language_code = 4
-
-        country_code = 49
-
-    elif mode == "reuters_europe_english":
-        topics_news = collections.OrderedDict()
-
-        topics_news["World"] = "world"
-        topics_news["UK"] = "uk"
-        topics_news["Health"] = "health"
-        topics_news["Science"] = "science"
-        topics_news["Technology"] = "technology"
-        topics_news["Entertainment"] = "entertainment"
-        topics_news["Sports"] = "sports"
-        topics_news["Lifestyle"] = "lifestyle"
-
-        languages = [1, 2, 3, 4, 5, 6]
-
-        language_code = 1
-
-        country_code = 110
-
-    elif mode == "afp_french":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Monde"] = "world"
-        topics_news["Sport"] = "sports"
-        topics_news["Societe"] = "society"
-        topics_news["Culture"] = "culture"
-        topics_news["Economie"] = "economy"
-        topics_news["Politique"] = "politics"
-
-        languages = [1, 2, 3, 4, 5, 6]
-
-        language_code = 3
-
-        country_code = 110
-
-    elif mode == "donaukurier_german":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Nachrichten"] = "world"
-        topics_news["Wirtschaft"] = "economy"
-        topics_news["Kultur"] = "culture"
-
-        languages = [1, 2, 3, 4, 5, 6]
-
-        language_code = 2
-
-        country_code = 110
-
-    elif mode == "ansa_italian":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Dal mondo"] = "world"
-        topics_news["Sport"] = "sports"
-        topics_news["Economia"] = "economy"
-        topics_news["Tecnologia"] = "technology"
-        topics_news["Cultura"] = "culture"
-
-        languages = [1, 2, 3, 4, 5, 6]
-
-        language_code = 5
-
-        country_code = 110
-
-    elif mode == "nu_dutch":
-        topics_news = collections.OrderedDict()
-
-        topics_news["Algemeen"] = "general"
-        topics_news["Economie"] = "economy"
-        topics_news["Sport"] = "sports"
-        topics_news["Tech"] = "technology"
-        topics_news["Entertainment"] = "entertainment"
-        topics_news["Lifestyle"] = "lifestyle"
-        topics_news["Opmerkelijk"] = "noteworthy"
-
-        languages = [1, 2, 3, 4, 5, 6]
-
-        language_code = 6
-
-        country_code = 110
-
-    elif mode == "reuters_japanese":
-        topics_news = collections.OrderedDict()
-
-        topics_news["ワールド"] = "world"
-        topics_news["ビジネス"] = "business"
-        topics_news["スポーツ"] = "sports"
-        topics_news["テクノロジー"] = "technology"
-        topics_news["エンタテインメント"] = "entertainment"
-
-        languages = [0]
-
-        language_code = 0
-
-        country_code = 1
+    if source is None:
+        print "Could not find %s in sources!"
+        
+    topics_news = source["topics_news"]
+    languages = source["languages"]
+    language_code = source["language_code"]
+    country_code = source["country_code"]
 
     numbers = 0
 
@@ -643,7 +632,7 @@ def make_source_table():
 
     """These are the picture and position values."""
 
-    sources = {
+    source_nums = {
         "AP": [0, 1],
         "Reuters": [0, 4],
         "AFP": [4, 4],
@@ -664,7 +653,7 @@ def make_source_table():
         if article[8] not in source_articles:
             source_articles.append(article[8])
 
-            source = sources[article[8]]
+            source = source_nums[article[8]]
 
             source_table["source_picture_%s" % article[8]] = u8(source[0])  # Picture for the source.
             source_table["source_position_%s" % article[8]] = u8(source[1])  # Position for the source.
