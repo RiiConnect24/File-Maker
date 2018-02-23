@@ -264,6 +264,7 @@ def ui():
         refresh(refresh_type)
         # Calculate values to show on screen
         dl = len(list) - cached > 0
+        global elapsed_time, bandwidth
         elasped_time = int(round(time.time() - total_time))
         bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
