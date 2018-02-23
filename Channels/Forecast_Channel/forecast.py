@@ -310,14 +310,6 @@ def ui():
         sys.stdout.write(out)
         sys.stdout.flush()
         time.sleep(refresh_rate)
-    """Log stuff to Datadog."""
-    if production:
-        statsd.set("forecast.api_requests", apirequests)
-        statsd.set("forecast.retry_count", retrycount)
-        statsd.set("forecast.elapsed_time", elapsed_time)
-        statsd.set("forecast.bandwidth_usage", bandwidth)
-        statsd.set("forecast.cities", cities)
-        statsd.set("forecast.errors", errors)
     print "\n"
 
 
@@ -1334,5 +1326,12 @@ if production:
              "footer_icon": "https://rc24.xyz/images/logo-small.png",
              "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
     for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
+    """Log stuff to Datadog."""
+    statsd.set("forecast.api_requests", apirequests)
+    statsd.set("forecast.retry_count", retrycount)
+    statsd.set("forecast.elapsed_time", elapsed_time)
+    statsd.set("forecast.bandwidth_usage", bandwidth)
+    statsd.set("forecast.cities", cities)
+    statsd.set("forecast.errors", errors)
 
 print "Completed Successfully"
