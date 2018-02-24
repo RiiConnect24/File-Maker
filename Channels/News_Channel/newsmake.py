@@ -599,7 +599,7 @@ def make_articles_table(mode):
 
         if article[4] is not None:
             articles_table["term_timestamp_%s" % numbers] = get_timestamp(1)  # Timestamp for the term.
-            articles_table["picture_%s_number" % numbers] = u32(pictures_number)  # Number for the picture.
+            articles_table["picture_%s_number" % numbers] = u32(p_number)  # Number for the picture.
             p_number += 1
         else:
             articles_table["term_timestamp_%s" % numbers] = u32(0)  # Timestamp for the term.
