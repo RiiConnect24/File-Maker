@@ -18,6 +18,7 @@ def setup_log(sentry_url):
     client = Client(sentry_url)
     handler = SentryHandler(client)
     setup_logging(handler)
+    global logger
     logger = logging.getLogger(__name__)
 
 def log(production, msg, level):  # TODO: Use number levels, strings are annoying
