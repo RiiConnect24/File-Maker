@@ -196,7 +196,6 @@ def refresh(type):
         os.system('cls')  # Clear screen
     print "\033[F\033[K" * 20  # Clear each line individually
 
-
 def ui():
     prog = """-\|/"""  # These are characters which will make a spinning effect.
     progcount = 0
@@ -222,7 +221,6 @@ def ui():
     header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2018\n\n"
     if config["production"]: header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
-        sys.stdout.flush()
         refresh(refresh_type)
         # Calculate values to show on screen
         dl = len(list) - cached > 0
