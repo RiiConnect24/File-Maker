@@ -15,10 +15,8 @@ import collections
 import forecastlists
 import io
 import json
-import logging
 import os
 import socket
-import struct
 import subprocess
 import sys
 import threading
@@ -26,15 +24,11 @@ import time
 import xml.etree.cElementTree as ElementTree
 from datetime import datetime, timedelta
 
-import cachetclient.cachet
 import requests
 import rsa
-from datadog import statsd
-from raven import Client
-from raven.conf import setup_logging
-from raven.handlers.logging import SentryHandler
 
 from config import *
+from utils import *
 
 VERSION = 3.7
 apirequests = 0  # API Request Counter
@@ -67,48 +61,6 @@ weatherloc = {}
 cache = {}
 laundry = {}
 duplicates = {}
-
-
-def u8(data):
-    if data < 0 or data > 255:
-        output("u8 Value Pack Failure: %s" % data, "CRITICAL")
-        data = 0
-    return struct.pack(">B", data)
-
-
-def u16(data):
-    if data < 0 or data > 65535:
-        output("u16 Value Pack Failure: %s" % data, "CRITICAL")
-        data = 0
-    return struct.pack(">H", data)
-
-
-def u32(data):
-    if data < 0 or data > 4294967295:
-        output("u32 Value Pack Failure: %s" % data, "CRITICAL")
-        data = 0
-    return struct.pack(">I", data)
-
-
-def s8(data):
-    if data < -128 or data > 128:
-        output("s8 Value Pack Failure: %s" % data, "CRITICAL")
-        data = 0
-    return struct.pack(">b", data)
-
-
-def s16(data):
-    if data < -32768 or data > 32768:
-        output("s16 Value Pack Failure: %s" % data, "CRITICAL")
-        data = 0
-    return struct.pack(">h", data)
-
-
-def s32(data):
-    if data < -2147483648 or data > 2147483648:
-        output("s32 Value Pack Failure: %s" % data, "CRITICAL")
-        data = 0
-    return struct.pack(">i", data)
 
 
 def temp(num): return num & 0xFF
@@ -1241,12 +1193,6 @@ def get_weatherjpnicon(icon):
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
 
-if production:
-    client = Client(sentry_url)
-    handler = SentryHandler(client)
-    setup_logging(handler)
-    logger = logging.getLogger(__name__)
-requests.packages.urllib3.disable_warnings()  # This is so we don't get some warning about SSL.
 s = requests.Session()  # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")

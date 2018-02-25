@@ -10,7 +10,6 @@
 
 import binascii
 import collections
-import struct
 import sys
 import textwrap
 import time
@@ -19,19 +18,15 @@ from StringIO import StringIO
 
 import feedparser
 import googlemaps
-import logging
 import newspaper
-import requests
 from bs4 import BeautifulSoup
 from HTMLParser import HTMLParser
 from PIL import Image
-from raven import Client
-from raven.conf import setup_logging
-from raven.handlers.logging import SentryHandler
 from resizeimage import resizeimage
 from unidecode import unidecode
 
 from config import *
+from utils import *
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -40,7 +35,7 @@ sys.setdefaultencoding("utf-8")
 
 sources = {
     # urls string argument is category key
-    # for example: world on reuters_japanese would go to https://twitrss.me/twitter_user_to_rss/?user=ReutersJpWorld
+    # for example: national on ap_english would go to http://hosted.ap.org/lineups/USHEADS-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT
     # reference parse_feed
 
     "ap_english": {
@@ -158,12 +153,6 @@ sources = {
 
 """Set up Sentry for error logging."""
 
-if production:
-    client = Client(sentry_url)
-    handler = SentryHandler(client)
-    setup_logging(handler)
-    logger = logging.getLogger(__name__)
-
 
 def capture_message(text, mode):
     if production:
@@ -172,37 +161,6 @@ def capture_message(text, mode):
             logger.warning(text)
         elif mode == "error":
             logger.error(text)
-
-
-"""This will pack the integers."""
-
-
-def u8(data):
-    if data < 0 or data > 255:
-        capture_message("u8 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack(">B", data)
-
-
-def u16(data):
-    if data < 0 or data > 65535:
-        capture_message("u16 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack(">H", data)
-
-
-def u32(data):
-    if data < 0 or data > 4294967295:
-        capture_message("u32 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack(">I", data)
-
-
-def u32_littleendian(data):
-    if data < 0 or data > 4294967295:
-        capture_message("u32 Value Pack Failure: %s" % data, "error")
-        data = 0
-    return struct.pack("<I", data)
 
 """Encode the text."""
 
@@ -278,7 +236,7 @@ def locations_download(language_code, data):
                 print unidecode(name)
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
-                capture_message("There was a error downloading the location data.", "warning")
+                log("There was a error downloading the location data.", "WARNING")
 
         if read is None:
             if name in corrections:
@@ -310,7 +268,7 @@ def locations_download(language_code, data):
 
                     locations_return[new_name][1].append(filenames)
             except:
-                capture_message("There was a error downloading the location data.", "warning")
+                log("There was a error downloading the location data.", "WARNING")
 
     return locations_return
 
@@ -335,7 +293,7 @@ def geoparser_get(article):
                 return property["name"] + ", " + property["country"]
             except:
                 return None
-    capture_message("Out of Geoparser requests.", "warning")
+    log("Out of Geoparser requests.", "WARNING")
     return None
 
 """Download the news."""
@@ -438,10 +396,10 @@ class Parse(News):
 
     def get_news(self):
         if self.headline == "":
-            capture_message("Headline is blank.", "warning")
+            log("Headline is blank.", "WARNING")
             return []
         elif self.article == "":
-            capture_message("Article is blank.", "warning")
+            log("Article is blank.", "warning")
             return []
         else:
             return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),

@@ -4,7 +4,7 @@
 from newsdownload import *
 from newsmake import process_news
 import sys
-
+from utils import *
 
 def main():
     if len(sys.argv) > 1:

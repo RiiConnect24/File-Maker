@@ -3,32 +3,28 @@
 
 # ===========================================================================
 # EVERYBODY VOTES CHANNEL GENERATION SCRIPT
-# VERSION 1.0
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
 import binascii
-import collections
 import datetime
-import io
-import json
 import logging
-import mysql.connector
 import os
-import requests
-import rsa
 import struct
 import subprocess
 import sys
 import textwrap
 import time
-from config import *
+
+import mysql.connector
+import requests
+import rsa
 from mysql.connector import errorcode
-from raven import Client
-from raven.handlers.logging import SentryHandler
-from raven.conf import setup_logging
+
+from config import *
+from utils import *
 from voteslists import *
 
 print "Everybody Votes Channel File Generator \n"
@@ -390,24 +386,6 @@ def webhook():
 
 
 dictionaries = []
-
-
-def u8(data): return struct.pack(">B", data)
-
-
-def u16(data): return struct.pack(">H", data)
-
-
-def u32(data): return struct.pack(">I", data)
-
-
-def s8(data): return struct.pack(">b", data)
-
-
-def s16(data): return struct.pack(">h", data)
-
-
-def s32(data): return struct.pack(">i", data)
 
 
 def offset_count(): return u32(

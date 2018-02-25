@@ -11,30 +11,21 @@
 import binascii
 import calendar
 import collections
-import errno
 import glob
 import json
-import logging
 import os
 import pickle
-import struct
 import subprocess
 import sys
 import time
+import utils
 from datetime import timedelta, datetime, date  # Used to get time stuff.
 
-import requests
 import rsa
-from datadog import statsd
-from raven import Client
-from raven.conf import setup_logging
-from raven.handlers.logging import SentryHandler
 
 import newsdownload
 from config import *
-import imp
-
-requests.packages.urllib3.disable_warnings()
+from utils import *
 
 header = collections.OrderedDict()
 topics_table = collections.OrderedDict()
@@ -147,65 +138,6 @@ sources = {
         "country_code": 1
     }
 }
-
-"""Set up Sentry for error logging."""
-
-if production:
-    client = Client(sentry_url)
-    handler = SentryHandler(client)
-    setup_logging(handler)
-    logger = logging.getLogger(__name__)
-
-
-def capture_message(text, mode):
-    if production:
-        print text
-        if mode is "warning":
-            logger.warning(text)
-        elif mode is "error":
-            logger.error(text)
-
-
-"""This will pack the integers."""
-
-
-def u8(value):
-    if value < 0 or value > 255:
-        capture_message("u8 Value Pack Failure: %s" % data, "error")
-        return 0
-    return struct.pack(">B", value)
-
-
-def u16(value):
-    if value < 0 or value > 65535:
-        capture_message("u16 Value Pack Failure: %s" % data, "error")
-        return 0
-    return struct.pack(">H", value)
-
-
-def u32(value):
-    if value < 0 or value > 4294967295:
-        capture_message("u32 Value Pack Failure: %s" % data, "error")
-        return 0
-    return struct.pack(">I", value)
-
-
-def u32_littleendian(value):
-    if value < 0 or value > 4294967295:
-        capture_message("u32 Value Pack Failure: %s" % data, "error")
-        return 0
-    return struct.pack("<I", value)
-
-
-# http://stackoverflow.com/a/600612/3874884
-def mkdir_p(path):
-    try:
-        os.makedirs(path)
-    except OSError as exc:  # Python >2.5
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-    else:
-        return
 
 
 def process_news(name, mode, language, countries, d):
@@ -899,10 +831,10 @@ def make_source_pictures():
             if article[8] in sources:
                 source_articles.append(article[8])
 
-                source_table["pictures_size_%s" % article[8]] = u32(os.path.getsize("./logos/%s.jpg" % article[8]))
+                source_table["pictures_size_%s" % article[8]] = u32(os.path.getsize("./Channels/News_Channel/logos/%s.jpg" % article[8]))
                 source_table["pictures_offset_%s" % article[8]] = offset_count()
 
-                with open("./logos/%s.jpg" % article[8], "rb") as source_file:
+                with open("./Channels/News_Channel/logos/%s.jpg" % article[8], "rb") as source_file:
                     source_pictures[
                         "logo_%s" % article[8]] = source_file.read()
 
