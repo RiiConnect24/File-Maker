@@ -4,7 +4,6 @@ import os
 import requests
 import struct
 
-from datadog import statsd
 from raven import Client
 from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
