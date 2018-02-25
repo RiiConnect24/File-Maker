@@ -28,6 +28,7 @@ import requests
 import rsa
 
 from config import *
+from datadog import statsd
 from utils import setup_log, u8, u16, u32, u32_littleendian, s8
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:

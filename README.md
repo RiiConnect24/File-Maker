@@ -38,6 +38,6 @@ These scripts run on Python 2.
 
 Just run `pip install -r requirements.txt` in the root folder and it'll install. You might have to run as `sudo`.
 
-It's required to have a `config.py` for the scripts in the `Channels` folder. Fill out `config.py.template`.
+It's required to have a `config.json` for the scripts in the `Channels` folder. Fill out `config.json.template` for the Channels you want to run this script for.
 
 Run the scripts as modules, e.g. `python -m Channels.Forecast_Channel.forecast`.
