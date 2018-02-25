@@ -32,7 +32,7 @@ from utils import setup_log, log, mkdir_p, u8, u16, u32, u32_littleendian
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-setup_log(config["sentry_url"])
+setup_log(config["sentry_url"], True)
 
 header = collections.OrderedDict()
 topics_table = collections.OrderedDict()

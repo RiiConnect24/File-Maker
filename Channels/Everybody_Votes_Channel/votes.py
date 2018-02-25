@@ -31,7 +31,7 @@ from voteslists import *
 with open("./Channels/Everybody_Votes_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-setup_log(config["sentry_url"])
+setup_log(config["sentry_url"], True)
 
 print "Everybody Votes Channel File Generator \n"
 print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"

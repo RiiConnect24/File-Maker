@@ -35,7 +35,7 @@ sys.setdefaultencoding("utf-8")
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-setup_log(config["sentry_url"])
+setup_log(config["sentry_url"], True)
 
 """Define information about news sources"""
 

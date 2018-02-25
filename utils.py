@@ -14,12 +14,15 @@ requests.packages.urllib3.disable_warnings()  # This is so we don't get some war
 
 errors = 0
 
-def setup_log(sentry_url):
+p_errors = False
+
+def setup_log(sentry_url, print_errors):
     client = Client(sentry_url)
     handler = SentryHandler(client)
     setup_logging(handler)
     global logger
     logger = logging.getLogger(__name__)
+    p_errors = print_errors
 
 def log(production, msg, level):  # TODO: Use number levels, strings are annoying
     global errors
@@ -27,7 +30,7 @@ def log(production, msg, level):  # TODO: Use number levels, strings are annoyin
     if level is not "VERBOSE" and level is not "INFO":
         errors += 1
 
-    print msg
+    if p_errors: print msg
 
     if production:
         if level is "VERBOSE":
