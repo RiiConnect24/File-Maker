@@ -44,11 +44,13 @@ seek_base = 0  # Base Offset Calculation Location
 number = 0  # Incremental Keys
 citycount = 0  # City Progress Counter
 cities = 0  # City Counter
+elapsed_time = 0  # Elapsed Time
 retrycount = 0  # Retry Counter
 cached = 0  # Count Cached Cities
 bw_usage = 0  # Bandwidth Usage Counter
 lists = 0  # Lists Counter
-errors = 0
+errors = 0  # Errors
+bandwidth = 0.0 # Bandwidth
 file = None
 loop = None
 
@@ -220,10 +222,10 @@ def ui():
     header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2018\n\n"
     if config["production"]: header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
+        sys.stdout.flush()
         refresh(refresh_type)
         # Calculate values to show on screen
         dl = len(list) - cached > 0
-        global elapsed_time, bandwidth
         elasped_time = int(round(time.time() - total_time))
         bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
