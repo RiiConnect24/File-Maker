@@ -27,14 +27,13 @@ from datetime import datetime, timedelta
 import requests
 import rsa
 
-from config import *
 from datadog import statsd
 from utils import setup_log, u8, u16, u32, u32_littleendian, s8
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-setup_log(config["sentry_url"])
+logger = setup_log(config["sentry_url"])
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
@@ -180,7 +179,7 @@ def worker():
 def output(text, level):
     global errors
     if level is not "VERBOSE" and level is not "INFO": errors += 1
-    if production:
+    if config["production"]:
         if level is "WARNING":
             logger.warning(text)
         elif level is "CRITICAL":
@@ -219,7 +218,7 @@ def ui():
     header = "=" * 64 + "\n\n"
     header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
     header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2018\n\n"
-    if production: header += " " * 13 + "*** Production Mode Enabled ***\n"
+    if config["production"]: header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
         refresh(refresh_type)
         # Calculate values to show on screen
@@ -272,7 +271,7 @@ def ui():
         sys.stdout.flush()
         time.sleep(refresh_rate)
     """Log stuff to Datadog."""
-    if production:
+    if config["production"]:
         statsd.set("forecast.api_requests", apirequests)
         statsd.set("forecast.retry_count", retrycount)
         statsd.set("forecast.elapsed_time", elapsed_time)
@@ -674,7 +673,7 @@ def make_forecast_bin(list, data):
     with open(file1, 'wb') as temp:
         temp.write(file.read()[12:])
     file.close()
-    if production: sign_file(file1, file2, file3)
+    if config["production"]: sign_file(file1, file2, file3)
 
 
 def make_short_bin(list, data):
@@ -692,7 +691,7 @@ def make_short_bin(list, data):
     with open(file1, 'wb') as temp:
         temp.write(file.read())
     file.close()
-    if production: sign_file(file1, file2, file3)
+    if config["production"]: sign_file(file1, file2, file3)
 
 
 def sign_file(name, local_name, server_name):
