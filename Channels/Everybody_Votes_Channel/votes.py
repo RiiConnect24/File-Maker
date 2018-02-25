@@ -10,6 +10,7 @@
 
 import binascii
 import datetime
+import json
 import logging
 import os
 import struct
@@ -24,8 +25,13 @@ import rsa
 from mysql.connector import errorcode
 
 from config import *
-from utils import *
+from utils import setup_log, u8, u16, u32
 from voteslists import *
+
+with open("./Channels/Everybody_Votes_Channel/config.json", "rb") as f:
+    config = json.load(f)
+
+setup_log(config["sentry_url"])
 
 print "Everybody Votes Channel File Generator \n"
 print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"

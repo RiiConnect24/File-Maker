@@ -9,22 +9,19 @@ from raven import Client
 from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
 
-from Channels.Forecast_Channel.config import production # We only need to read the production variable at this time.
-
 """Unification of utilities used by all scripts."""
 
 requests.packages.urllib3.disable_warnings()  # This is so we don't get some warning about SSL.
 
 errors = 0
 
-if production:
+def setup_log(sentry_url):
     client = Client(sentry_url)
     handler = SentryHandler(client)
     setup_logging(handler)
     logger = logging.getLogger(__name__)
 
-
-def log(msg, level):  # TODO: Use number levels, strings are annoying
+def log(production, msg, level):  # TODO: Use number levels, strings are annoying
     global errors
 
     if level is not "VERBOSE" and level is not "INFO":

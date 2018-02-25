@@ -10,6 +10,8 @@
 
 import binascii
 import collections
+import json
+import requests
 import sys
 import textwrap
 import time
@@ -25,11 +27,15 @@ from PIL import Image
 from resizeimage import resizeimage
 from unidecode import unidecode
 
-from config import *
-from utils import *
+from utils import setup_log, log, u8, u16, u32, u32_littleendian
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
+
+with open("./Channels/News_Channel/config.json", "rb") as f:
+    config = json.load(f)
+
+setup_log(config["sentry_url"])
 
 """Define information about news sources"""
 
@@ -151,16 +157,6 @@ sources = {
     }
 }
 
-"""Set up Sentry for error logging."""
-
-
-def capture_message(text, mode):
-    if production:
-        print text
-        if mode == "warning":
-            logger.warning(text)
-        elif mode == "error":
-            logger.error(text)
 
 """Encode the text."""
 
@@ -197,7 +193,7 @@ def shrink_image(data, resize):
 def locations_download(language_code, data):
     locations = collections.OrderedDict()
     locations_return = collections.OrderedDict()
-    gmaps = googlemaps.Client(key=google_maps_api_key)
+    gmaps = googlemaps.Client(key=config["google_maps_api_key"])
 
     """This dictionary is used to determine languages."""
 
@@ -236,7 +232,7 @@ def locations_download(language_code, data):
                 print unidecode(name)
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
-                log("There was a error downloading the location data.", "WARNING")
+                log(config["production"], "There was a error downloading the location data.", "WARNING")
 
         if read is None:
             if name in corrections:
@@ -268,7 +264,7 @@ def locations_download(language_code, data):
 
                     locations_return[new_name][1].append(filenames)
             except:
-                log("There was a error downloading the location data.", "WARNING")
+                log(config["production"], "There was a error downloading the location data.", "WARNING")
 
     return locations_return
 
@@ -278,7 +274,7 @@ def locations_download(language_code, data):
 
 def geoparser_get(article):
     i = 0
-    for key in geoparser_keys:
+    for key in config["geoparser_keys"]:
         url = 'https://geoparser.io/api/geoparser'
         headers = {'Authorization': "apiKey %s" % key}
         data = {'inputText': article}
@@ -293,7 +289,7 @@ def geoparser_get(article):
                 return property["name"] + ", " + property["country"]
             except:
                 return None
-    log("Out of Geoparser requests.", "WARNING")
+    log(config["production"], "Out of Geoparser requests.", "WARNING")
     return None
 
 """Download the news."""
@@ -396,10 +392,10 @@ class Parse(News):
 
     def get_news(self):
         if self.headline == "":
-            log("Headline is blank.", "WARNING")
+            log(config["production"], "Headline is blank.", "WARNING")
             return []
         elif self.article == "":
-            log("Article is blank.", "warning")
+            log(config["production"], "Article is blank.", "warning")
             return []
         else:
             return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),

@@ -28,7 +28,14 @@ import requests
 import rsa
 
 from config import *
-from utils import *
+from utils import setup_log, u8, u16, u32, u32_littleendian, s8
+
+with open("./Channels/Forecast_Channel/config.json", "rb") as f:
+    config = json.load(f)
+
+setup_log(config["sentry_url"])
+
+weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
 VERSION = 3.7
 apirequests = 0  # API Request Counter
@@ -695,12 +702,12 @@ def sign_file(name, local_name, server_name):
     file.close()
     output("Compressing ...", "VERBOSE")
     subprocess.call(["mv", local_name, local_name + "-1"])
-    subprocess.call(["%s/lzss" % lzss_path, "-evf", local_name + "-1"],
+    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name + "-1"],
                     stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(local_name + '-1', 'rb')
     new = file.read()
     dest = open(local_name, "w+")
-    key = open(key_path, 'rb')
+    key = open(config["key_path"], 'rb')
     output("RSA Signing ...", "VERBOSE")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
@@ -712,9 +719,9 @@ def sign_file(name, local_name, server_name):
     file.close()
     key.close()
     subprocess.call(["mkdir", "-p", "%s/%s/%s" % (
-        file_path, language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
+        config["file_path"], language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
     path = "%s/%s/%s/%s" % (
-        file_path, language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
+        config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
     subprocess.call(["cp", local_name, path])
     os.remove(local_name)
     os.remove(local_name + "-1")
@@ -1197,7 +1204,7 @@ s = requests.Session()  # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
 q = Queue.Queue()
-concurrent = 10 if useMultithreaded else 1
+concurrent = 10 if config["useMultithreaded"] else 1
 ui_run = True
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
@@ -1261,7 +1268,7 @@ time.sleep(0.15)
 ui_run = False
 ui_thread.join()
 
-if production:
+if config["production"]:
     """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
@@ -1272,7 +1279,7 @@ if production:
              "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
              "footer_icon": "https://rc24.xyz/images/logo-small.png",
              "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
-    for url in webhook_urls: post_webhook = requests.post(url, json=data, allow_redirects=True)
+    for url in config["webhook_urls"]: post_webhook = requests.post(url, json=data, allow_redirects=True)
     """Log stuff to Datadog."""
     statsd.set("forecast.api_requests", apirequests)
     statsd.set("forecast.retry_count", retrycount)

@@ -25,7 +25,12 @@ import rsa
 
 import newsdownload
 from config import *
-from utils import *
+from utils import setup_log, log, u8, u16, u32, u32_littleendian
+
+with open("./Channels/News_Channel/config.json", "rb") as f:
+    config = json.load(f)
+
+setup_log(config["sentry_url"])
 
 header = collections.OrderedDict()
 topics_table = collections.OrderedDict()
@@ -162,7 +167,7 @@ def process_news(name, mode, language, countries, d):
     for system in ["wii", "wii_u"]:
         make_news_bin(mode, system)
 
-    if production:
+    if config["production"]:
         """Log stuff to Datadog."""
 
         statsd.increment("news.total_files_built")
@@ -179,14 +184,14 @@ def process_news(name, mode, language, countries, d):
                  "footer_icon": "https://rc24.xyz/images/logo-small.png",
                  "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
-        for url in webhook_urls:
+        for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)
 
         filesize = sum(os.path.getsize(f) - 320 for f in
                        glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
 
         if filesize > 3712000:
-            capture_message("News files exceed the maximum file size amount.", "error")
+            log(config["production"], "News files exceed the maximum file size amount.", "error")
 
         for country in countries:
             copy_file(mode, "wii", country)
@@ -201,18 +206,18 @@ def process_news(name, mode, language, countries, d):
 
 
 def copy_file(mode, console, country):
-    if force_all:
+    if config["force_all"]:
         for hours in range(0, 24):
             newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
             newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
-            path = "%s/%s/%s/%s" % (file_path, "v3" if console == "wii_u" else "v2", language_code, country)
+            path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
             mkdir_p(path)
             path = "%s/%s" % (path, newsfilename2)
             subprocess.call(["cp", newsfilename, path])
     else:
         newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
         newsfilename2 = "news.bin.%s" % (str(datetime.utcnow().hour).zfill(2))
-        path = "%s/%s/%s/%s" % (file_path, "v3" if console == "wii_u" else "v2", language_code, country)
+        path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
         mkdir_p(path)
         path = "%s/%s" % (path, newsfilename2)
         subprocess.call(["cp", newsfilename, path])
@@ -546,7 +551,7 @@ def make_articles_table(mode):
 
     header["articles_number"] = u32(numbers)  # Number of entries for the articles table.
 
-    if production:
+    if config["production"]:
         statsd.increment("news.total_articles", numbers)
         statsd.increment("news.articles." + mode, numbers)
 
@@ -631,7 +636,7 @@ def make_locations_table():
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
-    if production:
+    if config["production"]:
         statsd.increment("news.total_locations", locations_number)
 
     return locations_table
@@ -671,7 +676,7 @@ def make_pictures_table():
 
     header["pictures_number"] = u32(pictures_number)  # Number of entries for the pictures table.
 
-    if production:
+    if config["production"]:
         statsd.increment("news.total_pictures", pictures_number)
 
     return pictures_table
@@ -898,12 +903,12 @@ def write_dictionary(mode):
         dest_file.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))
         dest_file.write(read)
 
-    subprocess.call(["%s/lzss" % lzss_path, "-evf", newsfilename], stdout=subprocess.PIPE)
+    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", newsfilename], stdout=subprocess.PIPE)
 
     with open(newsfilename, "rb") as source_file:
         read = source_file.read()
 
-    with open(key_path, "rb") as source_file:
+    with open(config["key_path"], "rb") as source_file:
         private_key_data = source_file.read()
 
     private_key = rsa.PrivateKey.load_pkcs1(private_key_data, "PEM")
