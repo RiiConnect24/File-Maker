@@ -8,7 +8,7 @@ from raven import Client
 from raven.handlers.logging import SentryHandler
 from raven.conf import setup_logging
 
-from Channels.Forecast_Channel.config import * # We only need to read the production variable at this time.
+from Channels.Forecast_Channel.config import production # We only need to read the production variable at this time.
 
 """Unification of utilities used by all scripts."""
 
