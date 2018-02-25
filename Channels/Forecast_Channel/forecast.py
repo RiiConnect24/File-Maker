@@ -28,12 +28,12 @@ import requests
 import rsa
 
 from datadog import statsd
-from utils import setup_log, u8, u16, u32
+from utils import setup_log, log, u8, u16, u32
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-logger = setup_log(config["sentry_url"])
+setup_log(config["sentry_url"], False)
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
@@ -138,7 +138,7 @@ def get_bins(country_code):
     elif 64 <= country_code <= 110:
         bins = [1, 2, 3, 4, 5, 6]
     else:
-        output("Unknown country code %s - generating English only" % country_code, "WARNING")
+        log(config["production"], "Unknown country code %s - generating English only" % country_code, "WARNING")
         bins = [1]
     return bins
 
@@ -176,16 +176,6 @@ def worker():
             q.task_done()
         except:
             pass
-
-
-def output(text, level):
-    global errors
-    if level is not "VERBOSE" and level is not "INFO": errors += 1
-    if config["production"]:
-        if level is "WARNING":
-            logger.warning(text)
-        elif level is "CRITICAL":
-            logger.error(text)
 
 
 def refresh(type):
@@ -487,7 +477,7 @@ def get_legacy_api(list, key):
 
 
 def get_tenki_data(key):
-    output("Getting Tenki Data for %s ..." % key, "VERBOSE")
+    log(config["production"], "Getting Tenki Data for %s ..." % key, "VERBOSE")
     laundry_index = None
     precip = []
     temp_diff = []
@@ -687,7 +677,7 @@ def make_short_bin(list, data):
 
 
 def sign_file(name, local_name, server_name):
-    output("Processing " + local_name + " ...", "VERBOSE")
+    log(config["production"], "Processing " + local_name + " ...", "VERBOSE")
     file = open(name, 'rb')
     copy = file.read()
     crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
@@ -700,7 +690,7 @@ def sign_file(name, local_name, server_name):
     os.remove(name)
     dest.close()
     file.close()
-    output("Compressing ...", "VERBOSE")
+    log(config["production"], "Compressing ...", "VERBOSE")
     subprocess.call(["mv", local_name, local_name + "-1"])
     subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name + "-1"],
                     stdout=subprocess.PIPE)  # Compress the file with the lzss program.
@@ -708,7 +698,7 @@ def sign_file(name, local_name, server_name):
     new = file.read()
     dest = open(local_name, "w+")
     key = open(config["key_path"], 'rb')
-    output("RSA Signing ...", "VERBOSE")
+    log(config["production"], "RSA Signing ...", "VERBOSE")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
     dest.write(binascii.unhexlify(str(0).zfill(
@@ -1251,7 +1241,7 @@ for list in weathercities:
         if weather_data[k] is not None:
             get_legacy_api(list, k)
         else:
-            output('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
+            log(config["production"], 'Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
     cities += citycount
     status = 3
     data = generate_data(list, bins)
