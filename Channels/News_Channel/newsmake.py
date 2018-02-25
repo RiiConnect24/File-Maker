@@ -512,7 +512,7 @@ def make_timestamps_table(mode):
 def make_articles_table(mode):
     dictionaries.append(articles_table)
 
-    pictures_number = 0
+    p_number = 0
     numbers = 0
 
     header["articles_offset"] = offset_count()
@@ -531,8 +531,8 @@ def make_articles_table(mode):
 
         if article[4] is not None:
             articles_table["term_timestamp_%s" % numbers] = get_timestamp(1)  # Timestamp for the term.
-            articles_table["picture_%s_number" % numbers] = u32(pictures_number)  # Number for the picture.
-            pictures_number += 1
+            articles_table["picture_%s_number" % numbers] = u32(p_number)  # Number for the picture.
+            p_number += 1
         else:
             articles_table["term_timestamp_%s" % numbers] = u32(0)  # Timestamp for the term.
             articles_table["picture_%s_number" % numbers] = u32(4294967295)  # Number for the picture.
