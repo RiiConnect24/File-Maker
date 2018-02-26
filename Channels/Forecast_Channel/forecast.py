@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.7
+# VERSION 3.8
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
@@ -16,6 +16,7 @@ import forecastlists
 import io
 import json
 import os
+import pickle
 import socket
 import subprocess
 import sys
@@ -37,7 +38,7 @@ setup_log(config["sentry_url"], False)
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
-VERSION = 3.7
+VERSION = 3.8
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
@@ -69,7 +70,6 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
-duplicates = {}
 
 
 def temp(num): return num & 0xFF
@@ -1190,6 +1190,28 @@ def get_weatherjpnicon(icon):
 def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
 
 
+def dump_db():
+    db = {}
+    db["update_time"] = time.time()
+    db["location_keys"] = weatherloc
+    db["local_times"] = times
+    db["laundry_indexes"] = laundry
+    db["pollen_indexes"] = pollen
+    db["globe_data"] = globe
+    db["wind_speed"] = wind
+    db["uvindexes"] = uvindex
+    db["current_forecast"] = current
+    db["precipitation"] = precipitation
+    db["hourly_forecast"] = hourly
+    db["tomorrow_forecast"] = tomorrow
+    db["week_forecast"] = week
+    db["today_forecast"] = today
+    db["weather_icons"] = weathericon
+    db["key_cache"] = cache
+    with open('weather.db','wb') as f:
+	    pickle.dump(db,f)
+
+
 s = requests.Session()  # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
@@ -1259,6 +1281,7 @@ ui_run = False
 ui_thread.join()
 
 if config["production"]:
+    dump_db()
     """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
