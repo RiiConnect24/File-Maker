@@ -34,13 +34,6 @@ with open("./Channels/News_Channel/config.json", "rb") as f:
 
 setup_log(config["sentry_url"], True)
 
-header = collections.OrderedDict()
-topics_table = collections.OrderedDict()
-articles_table = collections.OrderedDict()
-source_table = collections.OrderedDict()
-locations_table = collections.OrderedDict()
-pictures_table = collections.OrderedDict()
-
 sources = {
     "ap_english": {
         "topics_news": collections.OrderedDict([
@@ -152,7 +145,7 @@ def process_news(name, mode, language, countries, d):
 
     """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
 
-    global language_code, data, system
+    global language_code, system
 
     language_code = language
     data = d.newsdata
@@ -164,10 +157,10 @@ def process_news(name, mode, language, countries, d):
         if i > 22:
             del data[key]
 
-    # data = remove_duplicates()
+    # data = remove_duplicates(data)
 
     for system in ["wii", "wii_u"]:
-        make_news_bin(mode, system)
+        make_news_bin(mode, system, data)
 
     if config["production"]:
         """Log stuff to Datadog."""
@@ -228,8 +221,8 @@ def copy_file(mode, console, country):
 """Run the functions to make the news."""
 
 
-def make_news_bin(mode, console):
-    global system, dictionaries, topics_news, languages, make_news, data, country_code, language_code, locations_data, header, topics_table, articles_table, source_table, locations_table, pictures_table
+def make_news_bin(mode, console, data):
+    global system, dictionaries, languages, country_code, language_code
     
     source = sources[mode]
 
@@ -261,29 +254,22 @@ def make_news_bin(mode, console):
 
     dictionaries = []
 
-    header = collections.OrderedDict()
-    topics_table = collections.OrderedDict()
-    articles_table = collections.OrderedDict()
-    source_table = collections.OrderedDict()
-    locations_table = collections.OrderedDict()
-    pictures_table = collections.OrderedDict()
-
     locations_data = newsdownload.locations_download(language_code, data)
 
-    make_header(0, 30)
-    make_wiimenu_articles()
-    make_topics_table()
-    make_timestamps_table(mode)
-    make_articles_table(mode)
-    make_source_table()
-    make_locations_table()
-    make_pictures_table()
-    make_articles()
-    make_topics(0, 0)
-    make_source_name_copyright()
-    make_locations()
-    make_source_pictures()
-    make_pictures()
+    header = make_header(data)
+    make_wiimenu_articles(header, data)
+    topics_table = make_topics_table(header, topics_news)
+    make_timestamps_table(mode, topics_table, topics_news)
+    articles_table = make_articles_table(mode, locations_data, header, data)
+    source_table = make_source_table(header, articles_table, data)
+    locations_table = make_locations_table(header, locations_data)
+    pictures_table = make_pictures_table(header, data)
+    make_articles(articles_table, pictures_table, data)
+    make_topics(topics_table, topics_news)
+    make_source_name_copyright(source_table, data)
+    make_locations(locations_data, locations_table)
+    make_source_pictures(source_table, data)
+    make_pictures(pictures_table, data)
     make_riiconnect24_text()
 
     write_dictionary(mode)
@@ -326,7 +312,7 @@ def get_timestamp(mode):
 """Make the news.bin."""
 
 
-def remove_duplicates():
+def remove_duplicates(data):
     data_dupe = collections.OrderedDict()
 
     headlines = []
@@ -347,7 +333,8 @@ def remove_duplicates():
 """First part of the header."""
 
 
-def make_header(language_select_screen_flag, download_interval):
+def make_header(data):
+    header = collections.OrderedDict()
     dictionaries.append(header)
 
     header["updated_timestamp_1"] = get_timestamp(1)  # Updated time.
@@ -373,10 +360,8 @@ def make_header(language_select_screen_flag, download_interval):
 
     header["language_code"] = u8(language_code)  # Wii language code.
     header["goo_flag"] = u8(0)  # Flag to make the Globe display "Powered by Goo".
-    header["language_select_screen_flag"] = u8(
-        language_select_screen_flag)  # Flag to bring up the language select screen.
-    header["download_interval"] = u8(
-        download_interval)  # Interval in minutes to check for new articles to display on the Wii Menu.
+    header["language_select_screen_flag"] = u8(0)  # Flag to bring up the language select screen.
+    header["download_interval"] = u8(30)  # Interval in minutes to check for new articles to display on the Wii Menu.
     header["message_offset"] = u32(0)  # Offset for a message.
     header["topics_number"] = u32(0)  # Number of entries for the topics table.
     header["topics_offset"] = u32(0)  # Offset for the topics table.
@@ -412,7 +397,7 @@ def make_header(language_select_screen_flag, download_interval):
 """Headlines to display on the Wii Menu."""
 
 
-def make_wiimenu_articles():
+def make_wiimenu_articles(header, data):
     wiimenu_articles = collections.OrderedDict()
     dictionaries.append(wiimenu_articles)
 
@@ -444,8 +429,10 @@ def make_wiimenu_articles():
 """Topics table."""
 
 
-def make_topics_table():
+def make_topics_table(header, topics_news):
+    topics_table = collections.OrderedDict()
     dictionaries.append(topics_table)
+
     header["topics_offset"] = offset_count()  # Offset for the topics table.
     topics_table["new_topics_offset"] = u32(0)  # Offset for the newest topic.
     topics_table["new_topics_article_size"] = u32(0)  # Size for the amount of articles to choose for the newest topic.
@@ -469,7 +456,7 @@ def make_topics_table():
 """Timestamps table."""
 
 
-def make_timestamps_table(mode):
+def make_timestamps_table(mode, topics_table, topics_news):
     timestamps_table = collections.OrderedDict()
     dictionaries.append(timestamps_table)
 
@@ -516,7 +503,8 @@ def make_timestamps_table(mode):
 """Articles table."""
 
 
-def make_articles_table(mode):
+def make_articles_table(mode, locations_data, header, data):
+    articles_table = collections.OrderedDict()
     dictionaries.append(articles_table)
 
     p_number = 0
@@ -563,8 +551,10 @@ def make_articles_table(mode):
 """Source table."""
 
 
-def make_source_table():
+def make_source_table(header, articles_table, data):
+    source_table = collections.OrderedDict()
     dictionaries.append(source_table)
+
     header["source_offset"] = offset_count()  # Offset for the source table.
 
     source_articles = []
@@ -623,8 +613,10 @@ def make_source_table():
 """Locations data table."""
 
 
-def make_locations_table():
+def make_locations_table(header, locations_data):
+    locations_table = collections.OrderedDict()
     dictionaries.append(locations_table)
+
     header["locations_offset"] = offset_count()  # Offset for the locations table.
 
     locations_number = 0
@@ -647,8 +639,10 @@ def make_locations_table():
 """Pictures table."""
 
 
-def make_pictures_table():
+def make_pictures_table(header, data):
+    pictures_table = collections.OrderedDict()
     dictionaries.append(pictures_table)
+
     header["pictures_offset"] = offset_count()  # Offset for the pictures table.
 
     pictures_number = 0
@@ -687,7 +681,7 @@ def make_pictures_table():
 """Add the articles."""
 
 
-def make_articles():
+def make_articles(articles_table, pictures_table, data):
     articles = collections.OrderedDict()
     dictionaries.append(articles)
 
@@ -717,7 +711,7 @@ def make_articles():
 """Add the topics."""
 
 
-def make_topics(message, message_flag):
+def make_topics(topics_table, topics_news):
     topics = collections.OrderedDict()
     dictionaries.append(topics)
 
@@ -729,14 +723,10 @@ def make_topics(message, message_flag):
         topics["topics_%s_read" % numbers] = keys.decode("utf-8").encode("utf-16be")  # Read the topics.
         topics["padding_%s_topics" % numbers] = u16(0)  # Padding for the topics.
 
-    if message_flag == 1:
-        header["message_offset"] = offset_count()  # Offset for a message.
-        topics["message"] = message  # Message.
-
     return topics
 
 
-def make_source_name_copyright():
+def make_source_name_copyright(source_table, data):
     source_name_copyright = collections.OrderedDict()
     dictionaries.append(source_name_copyright)
 
@@ -806,7 +796,7 @@ def make_source_name_copyright():
 """Add the locations."""
 
 
-def make_locations():
+def make_locations(locations_data, locations_table):
     locations = collections.OrderedDict()
     dictionaries.append(locations)
 
@@ -823,7 +813,7 @@ def make_locations():
 """Add the source pictures."""
 
 
-def make_source_pictures():
+def make_source_pictures(source_table, data):
     source_pictures = collections.OrderedDict()
     dictionaries.append(source_pictures)
 
@@ -851,7 +841,7 @@ def make_source_pictures():
 """Add the pictures."""
 
 
-def make_pictures():
+def make_pictures(pictures_table, data):
     pictures = collections.OrderedDict()
     dictionaries.append(pictures)
 
