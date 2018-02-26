@@ -8,8 +8,8 @@
   "geoparser_keys": [
     "key"
   ],
-  "sentry_url": "http://status.domain.tld/"
+  "sentry_url": "http://status.domain.tld/",
   "webhook_urls": [
     "http://status.domain.tld/"
-  ],
+  ]
 }
