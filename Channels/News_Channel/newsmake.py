@@ -160,7 +160,7 @@ def process_news(name, mode, language, countries, d):
     # data = remove_duplicates(data)
 
     for system in ["wii", "wii_u"]:
-        make_news_bin(mode, system, data)
+        make_news = make_news_bin(mode, system, data)
 
     if config["production"]:
         """Log stuff to Datadog."""
