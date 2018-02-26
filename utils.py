@@ -42,15 +42,11 @@ def log(production, msg, level):  # TODO: Use number levels, strings are annoyin
         elif level is "CRITICAL":
             logger.error(msg)
 
-# http://stackoverflow.com/a/600612/3874884
 def mkdir_p(path):
     try:
         os.makedirs(path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-    else:
-        return
+    except:
+        pass
 
 
 """Pack integers to specific type."""
