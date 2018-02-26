@@ -279,14 +279,16 @@ def reset_data():
 
 
 def request_data(url):
-    global retrycount, apirequests, bw_usage
+    global retrycount, apirequests, bw_usage, errors
     header = {'Accept-Encoding': 'gzip, deflate',
               'Host': 'accuwxturbotablet.accu-weather.com'}  # This is to make the data download faster.
     apirequests += 1
     i = 0
     c = 0
     while c == 0:
-        if i == 3: return -1
+        if i == 3:
+            errors+=1
+            return -1
         if i > 0: retrycount += 1
         data = s.get(url, headers=header)
         bw_usage += get_bandwidth_usage(data)
