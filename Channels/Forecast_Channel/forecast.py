@@ -31,11 +31,6 @@ import rsa
 from datadog import statsd
 from utils import setup_log, log, u8, u16, u32
 
-with open("./Channels/Forecast_Channel/config.json", "rb") as f:
-    config = json.load(f)
-
-if config["production"]: setup_log(config["sentry_url"], False)
-
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
 VERSION = 3.8
@@ -1213,6 +1208,9 @@ def dump_db():
 	    pickle.dump(db,f)
 
 
+with open("./Channels/Forecast_Channel/config.json", "rb") as f:
+    config = json.load(f)
+if config["production"]: setup_log(config["sentry_url"], False)
 s = requests.Session()  # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
