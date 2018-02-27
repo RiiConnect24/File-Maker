@@ -25,7 +25,7 @@ import rsa
 from mysql.connector import errorcode
 
 from config import *
-from utils import setup_log, u8, u16, u32
+from utils import setup_log, log, u8, u16, u32
 from voteslists import *
 
 with open("./Channels/Everybody_Votes_Channel/config.json", "rb") as f:
