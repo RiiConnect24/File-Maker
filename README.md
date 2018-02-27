@@ -23,7 +23,7 @@ We use the following services for this project:
 Here are some notable Python modules used in the project:
 
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) for HTML parsing.
-- [ElementTree] (https://docs.python.org/2/library/xml.etree.elementtree.html) to parse XML.
+- [ElementTree](https://docs.python.org/2/library/xml.etree.elementtree.html) to parse XML.
 - [feedparser](https://pypi.python.org/pypi/feedparser) to parse RSS feeds.
 - [newspaper](http://newspaper.readthedocs.io/en/latest/) for article scraping.
 - [requests](http://docs.python-requests.org/en/master/) for various HTTP requests.
