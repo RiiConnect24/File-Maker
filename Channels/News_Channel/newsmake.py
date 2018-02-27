@@ -25,7 +25,6 @@ from datetime import timedelta, datetime, date  # Used to get time stuff.
 import rsa
 
 import newsdownload
-from config import *
 from datadog import statsd
 from utils import setup_log, log, mkdir_p, u8, u16, u32, u32_littleendian
 
