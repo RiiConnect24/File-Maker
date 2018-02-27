@@ -689,22 +689,20 @@ def sign_file(name, local_name, server_name):
     dest.close()
     file.close()
     log(config["production"], "Compressing ...", "VERBOSE")
-    subprocess.call(["mv", local_name, local_name + "-1"])
-    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name + "-1"],
+    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name],
                     stdout=subprocess.PIPE)  # Compress the file with the lzss program.
-    file = open(local_name + '-1', 'rb')
+    file = open(local_name, 'rb')
     new = file.read()
+    file.close()
     dest = open(local_name, "w+")
     key = open(config["key_path"], 'rb')
     log(config["production"], "RSA Signing ...", "VERBOSE")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(binascii.unhexlify(str(0).zfill(
-        128)))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    dest.write(pad(64))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
-    file.close()
     key.close()
     subprocess.call(["mkdir", "-p", "%s/%s/%s" % (
         config["file_path"], language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
