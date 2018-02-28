@@ -35,7 +35,7 @@ sys.setdefaultencoding("utf-8")
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-setup_log(config["sentry_url"], True)
+if config["production"]: setup_log(config["sentry_url"], True)
 
 """Define information about news sources"""
 
@@ -232,7 +232,7 @@ def locations_download(language_code, data):
                 print unidecode(name)
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
-                log(config["production"], "There was a error downloading the location data.", "WARNING")
+                log("There was a error downloading the location data.", "WARNING")
 
         if read is None:
             if name in corrections:
@@ -264,7 +264,7 @@ def locations_download(language_code, data):
 
                     locations_return[new_name][1].append(filenames)
             except:
-                log(config["production"], "There was a error downloading the location data.", "WARNING")
+                log("There was a error downloading the location data.", "WARNING")
 
     return locations_return
 
@@ -289,7 +289,7 @@ def geoparser_get(article):
                 return property["name"] + ", " + property["country"]
             except:
                 return None
-    log(config["production"], "Out of Geoparser requests.", "WARNING")
+    log("Out of Geoparser requests.", "WARNING")
     return None
 
 """Download the news."""
@@ -392,10 +392,10 @@ class Parse(News):
 
     def get_news(self):
         if self.headline == "":
-            log(config["production"], "Headline is blank.", "WARNING")
+            log("Headline is blank.", "WARNING")
             return []
         elif self.article == "":
-            log(config["production"], "Article is blank.", "warning")
+            log("Article is blank.", "warning")
             return []
         else:
             return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),

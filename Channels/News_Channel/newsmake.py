@@ -31,7 +31,7 @@ from utils import setup_log, log, mkdir_p, u8, u16, u32, u32_littleendian
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-setup_log(config["sentry_url"], True)
+if config["production"]: setup_log(config["sentry_url"], True)
 
 sources = {
     "ap_english": {
@@ -185,7 +185,7 @@ def process_news(name, mode, language, countries, d):
                        glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
 
         if filesize > 3712000:
-            log(config["production"], "News files exceed the maximum file size amount.", "error")
+            log("News files exceed the maximum file size amount.", "error")
 
         for country in countries:
             copy_file(mode, "wii", country)
