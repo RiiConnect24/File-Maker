@@ -133,7 +133,7 @@ def get_bins(country_code):
     elif 64 <= country_code <= 110:
         bins = [1, 2, 3, 4, 5, 6]
     else:
-        log(config["production"], "Unknown country code %s - generating English only" % country_code, "WARNING")
+        log("Unknown country code %s - generating English only" % country_code, "WARNING")
         bins = [1]
     return bins
 
@@ -475,7 +475,7 @@ def get_legacy_api(list, key):
 
 
 def get_tenki_data(key):
-    log(config["production"], "Getting Tenki Data for %s ..." % key, "VERBOSE")
+    log("Getting Tenki Data for %s ..." % key, "VERBOSE")
     laundry_index = None
     precip = []
     temp_diff = []
@@ -675,7 +675,7 @@ def make_short_bin(list, data):
 
 
 def sign_file(name, local_name, server_name):
-    log(config["production"], "Processing " + local_name + " ...", "VERBOSE")
+    log("Processing " + local_name + " ...", "VERBOSE")
     file = open(name, 'rb')
     copy = file.read()
     crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
@@ -688,7 +688,7 @@ def sign_file(name, local_name, server_name):
     os.remove(name)
     dest.close()
     file.close()
-    log(config["production"], "Compressing ...", "VERBOSE")
+    log("Compressing ...", "VERBOSE")
     subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name],
                     stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(local_name, 'rb')
@@ -696,7 +696,7 @@ def sign_file(name, local_name, server_name):
     file.close()
     dest = open(local_name, "w+")
     key = open(config["key_path"], 'rb')
-    log(config["production"], "RSA Signing ...", "VERBOSE")
+    log("RSA Signing ...", "VERBOSE")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
     dest.write(pad(64))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
@@ -1262,7 +1262,7 @@ for list in weathercities:
         if weather_data[k] is not None:
             get_legacy_api(list, k)
         else:
-            log(config["production"], 'Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
+            log('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
     cities += citycount
     status = 3
     data = generate_data(list, bins)
