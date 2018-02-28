@@ -710,7 +710,6 @@ def sign_file(name, local_name, server_name):
         config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
     subprocess.call(["cp", local_name, path])
     os.remove(local_name)
-    os.remove(local_name + "-1")
 
 
 def get_data(list, name):
