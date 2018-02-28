@@ -12,6 +12,7 @@ from raven.conf import setup_logging
 
 requests.packages.urllib3.disable_warnings()  # This is so we don't get some warning about SSL.
 
+production = False
 p_errors = False
 
 def setup_log(sentry_url, print_errors):
@@ -21,8 +22,9 @@ def setup_log(sentry_url, print_errors):
     global logger
     logger = logging.getLogger(__name__)
     p_errors = print_errors
+    production = True
 
-def log(production, msg, level):  # TODO: Use number levels, strings are annoying
+def log(msg, level):  # TODO: Use number levels, strings are annoying
     if p_errors: print msg
 
     if production:
