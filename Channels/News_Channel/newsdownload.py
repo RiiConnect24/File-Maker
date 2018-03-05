@@ -499,7 +499,7 @@ class Parse(News):
 
         try:
             if self.source == "AFP_de":
-                self.location = self.soup.find("em").split(" (AFP)")[0]
+                self.location = self.soup.find("div", {"class": "article-text"}).find("em").text.split(" (AFP)")[0]
             elif self.source == "dpa":
                 self.location = self.article.split(" (dpa")[0]
         except:
