@@ -481,6 +481,8 @@ class Parse(News):
             pass
 
         try:
+            """The location is at the end of the article, I couldn't find anything better to parse it."""
+
             if "(AFP)" in self.article:
                 buf = StringIO(self.article)
                 line = buf.readlines()[-1]
