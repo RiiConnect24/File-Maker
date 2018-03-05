@@ -499,19 +499,14 @@ class Parse(News):
         except:
             pass
 
-        try:
-            self.soup.find("div", {"class": "StandardArticleBody_trustBadgeContainer_1gqgJ"}).decompose()
-        except:
-            pass
-        
-        self.newsdata.download()
-        self.newsdata.parse()
-
-        self.article = self.newsdata.text
+        if self.caption is not None:
+            buf = StringIO(self.article)
+            self.article = "".join(buf.readlines()[1:])
+            print self.article
 
         try:
-            if self.source == "AFP_de":
-                self.location = self.soup.find("div", {"class": "article-text"}).find("em").text.split(" (AFP)")[0]
+            if self.source == "AFP":
+                self.location = self.soup.find("em").text.split(" (AFP)")[0]
             elif self.source == "dpa":
                 self.location = self.article.split(" (dpa")[0]
         except:
