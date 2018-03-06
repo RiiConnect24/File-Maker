@@ -502,7 +502,6 @@ class Parse(News):
         if self.caption is not None:
             buf = StringIO(self.article)
             self.article = "".join(buf.readlines()[1:])
-            print self.article
 
         try:
             if self.source == "AFP":
