@@ -9,10 +9,10 @@
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
-import io
-import struct
 import binascii
 import collections
+import io
+import struct
 
 bytes = 0
 
