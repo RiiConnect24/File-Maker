@@ -444,17 +444,17 @@ class Parse(News):
 
     def parse_reuters(self):
         try:
-            self.soup.find("div", {"class": "StandardArticleBody_trustBadgeContainer_1gqgJ"}).decompose()
+            self.soup.find("div", {"class": "trustBadgeContainer_1gqgJ"}).decompose()
         except:
             pass
 
         try:
-            self.soup.find("div", {"class": "Slideshow_inline-container_1QqKC Slideshow_mega_19SOz"}).decompose()
+            self.soup.find("div", {"class": "Slideshow_mega_19SOz"}).decompose()
         except:
             pass
 
         self.article = BeautifulSoup(
-            str(self.soup.find("div", {"class": "StandardArticleBody_body_1gnLA"})).replace("</p>", "\n\n</p>"),
+            str(self.soup.find("div", {"class": "body_1gnLA"})).replace("</p>", "\n\n</p>"),
             "lxml").text
 
         if self.picture is not None:
@@ -464,7 +464,7 @@ class Parse(News):
                 self.resize = False
                 try:
                     self.picture += "&w=200"
-                    self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
+                    self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
                                                                                                          " REUTERS/")
                     self.article = self.article.replace("\n\n" + self.caption, "")
                 except:
