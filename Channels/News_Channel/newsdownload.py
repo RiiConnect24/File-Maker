@@ -395,7 +395,7 @@ class Parse(News):
             log("Headline is blank.", "WARNING")
             return []
         elif self.article == "":
-            log("Article is blank.", "warning")
+            log("Article is blank.", "WARNING")
             return []
         else:
             return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
@@ -507,7 +507,7 @@ class Parse(News):
             if self.source == "AFP":
                 self.location = self.soup.find("em").text.split(" (AFP)")[0]
             elif self.source == "dpa":
-                self.location = self.article.split(" (dpa")[0]
+                self.location = self.article.split(" (dpa)")[0]
         except:
             pass
 
