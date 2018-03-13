@@ -552,12 +552,12 @@ class Parse(News):
 
     def parse_reuters_japanese(self):
         try:
-            self.headline = self.soup.find("h1", {"class": "ArticleHeader_headline_2zdFM"}).text
+            self.headline = self.soup.find("h1", {"class": "headline_2zdFM"}).text
         except:
             return None
 
         article_text = BeautifulSoup(
-            str(self.soup.find("div", {"class": "StandardArticleBody_body_1gnLA"})).replace("</p>", "\n\n</p>"),
+            str(self.soup.find("div", {"class": "body_1gnLA"})).replace("</p>", "\n\n</p>"),
             "lxml").text
 
         self.article = "\n".join(textwrap.wrap(article_text, 25))
@@ -569,7 +569,7 @@ class Parse(News):
                 try:
                     self.resize = False
                     self.picture += "&w=200"
-                    self.caption = self.soup.find("span", {"class": "Image_caption_KoNH1"}).text.replace("  REUTERS/",
+                    self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
                                                                                                          " REUTERS/")
 
                     self.article = self.article.replace("\n\n" + self.caption, "")
