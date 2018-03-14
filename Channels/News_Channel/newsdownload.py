@@ -451,7 +451,13 @@ class Parse(News):
             pass
 
         try:
-            self.soup.find("div", {"class": "Slideshow_mega_19SOz"}).decompose()
+            self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
+                                                                                           " REUTERS/")
+        except:
+            pass
+
+        try:
+            self.soup.findall("div", {"class": "caption_KoNH1"}).decompose()
         except:
             pass
 
@@ -466,9 +472,6 @@ class Parse(News):
                 self.resize = False
                 try:
                     self.picture += "&w=200"
-                    self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
-                                                                                                         " REUTERS/")
-                    self.article = self.article.replace("\n\n" + self.caption, "")
                 except:
                     pass
 
@@ -558,6 +561,17 @@ class Parse(News):
         except:
             return None
 
+        try:
+            self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
+                                                                                           " REUTERS/")
+        except:
+            pass
+
+        try:
+            self.soup.findall("div", {"class": "caption_KoNH1"}).decompose()
+        except:
+            pass
+
         article_text = BeautifulSoup(
             str(self.soup.find("div", {"class": "body_1gnLA"})).replace("</p>", "\n\n</p>"),
             "lxml").text
@@ -568,13 +582,9 @@ class Parse(News):
             if "rcom-default.png" in self.picture:
                 self.picture = None
             else:
+                self.resize = False
                 try:
-                    self.resize = False
                     self.picture += "&w=200"
-                    self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
-                                                                                                         " REUTERS/")
-
-                    self.article = self.article.replace("\n\n" + self.caption, "")
                 except:
                     pass
 
