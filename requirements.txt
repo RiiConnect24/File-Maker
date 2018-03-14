@@ -1,4 +1,4 @@
-bs4
+beautifulsoup4
 datadog
 feedparser
 ftfy==4.4.3
