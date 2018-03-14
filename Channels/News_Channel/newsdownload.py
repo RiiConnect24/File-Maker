@@ -11,19 +11,20 @@
 import binascii
 import collections
 import json
-import requests
 import sys
 import textwrap
 import time
-from datetime import datetime
+from HTMLParser import HTMLParser
 from StringIO import StringIO
+from datetime import datetime
 
 import feedparser
+import ftfy
 import googlemaps
 import newspaper
-from bs4 import BeautifulSoup
-from HTMLParser import HTMLParser
+import requests
 from PIL import Image
+from bs4 import BeautifulSoup
 from resizeimage import resizeimage
 from unidecode import unidecode
 
@@ -162,7 +163,8 @@ sources = {
 
 def enc(text):
     if text:
-        return HTMLParser().unescape(text).encode("utf-16be", "replace")
+        text = ftfy.fix_encoding(HTMLParser().unescape(text)).encode("utf-16be", "replace")
+
 
 """Resize the image and strip metadata (to make the image size smaller)."""
 
