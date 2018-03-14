@@ -163,7 +163,7 @@ sources = {
 
 def enc(text):
     if text:
-        text = ftfy.fix_encoding(HTMLParser().unescape(text)).encode("utf-16be", "replace")
+        text = ftfy.fix_encoding(HTMLParser().unescape(text).decode("utf-8")).encode("utf-16be", "replace")
 
 
 """Resize the image and strip metadata (to make the image size smaller)."""
