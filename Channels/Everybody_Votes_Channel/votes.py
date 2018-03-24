@@ -283,7 +283,7 @@ def mysql_get_votes(days, type, index):
 
 def mysql_get_questions(days, count, type):
     cursor = cnx.cursor(dictionary=True, buffered=True)
-    query = "SELECT * from EVC.questions WHERE DATE(date) > CURDATE() - %s AND type = '%s' ORDER BY questionID DESC" % (days, type)
+    query = "SELECT * from EVC.questions WHERE DATE(date) > CURDATE() - %s AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % (days, type)
 
     cursor.execute(query)
 
