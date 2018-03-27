@@ -145,11 +145,7 @@ def automatic_questions():
     global write_questions, write_results, questions, nw
     write_questions = True
     nw = sys.argv[2]
-    if nw == "n":
-        days = 7
-    elif nw == "w":
-        days = 15
-    mysql_get_questions(days, 1, nw)
+    mysql_get_questions(1, nw)
     questions = 1
 
 
@@ -175,8 +171,8 @@ def automatic_votes():
     global write_questions, write_results, questions, results, national, worldwide, questions
     write_questions = True
     write_results = True
-    mysql_get_questions(15, 1, "w")
-    mysql_get_questions(7, 3, "n")
+    mysql_get_questions(1, "w")
+    mysql_get_questions(3, "n")
     questions = national + worldwide
     question_count = len(question_data)
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
@@ -203,7 +199,8 @@ def mysql_connect():
 
 def mysql_get_votes(days, type, index):
     cursor = cnx.cursor(dictionary=True, buffered=True)
-    query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - %s AND type = '%s' ORDER BY questionID DESC" % (days, type)
+    query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - %s AND type = '%s' ORDER BY questionID DESC" % (
+        days, type)
     cursor.execute(query)
     global poll_id, poll_type
 
@@ -281,9 +278,9 @@ def mysql_get_votes(days, type, index):
             type]
 
 
-def mysql_get_questions(days, count, type):
+def mysql_get_questions(count, type):
     cursor = cnx.cursor(dictionary=True, buffered=True)
-    query = "SELECT * from EVC.questions WHERE DATE(date) > CURDATE() - %s AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID" % (days, type)
+    query = "SELECT * from EVC.questions WHERE date <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % type
 
     cursor.execute(query)
 
