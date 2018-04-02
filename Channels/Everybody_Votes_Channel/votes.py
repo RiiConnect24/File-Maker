@@ -201,10 +201,9 @@ def mysql_connect():
         print "Invalid credentials" if err.errno == errorcode.ER_ACCESS_DENIED_ERROR else "Database does not exist" if err.errno == errorcode.ER_BAD_DB_ERROR else err
 
 
-def
-    (days, type, index):
+def mysql_get_votes(days, type, index):
     cursor = cnx.cursor(dictionary=True, buffered=True)
-    query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - %s AND type = '%s' ORDER BY questionID DESC" % (days, type)
+    query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC" % (days, type)
     cursor.execute(query)
     global poll_id, poll_type
 
