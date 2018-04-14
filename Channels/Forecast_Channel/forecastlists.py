@@ -498,7 +498,7 @@ weathercities018["Halifax"] = [
 weathercities018["Yarmouth"] = [
     ["ヤーマス", "Yarmouth", "Yarmouth", "Yarmouth", "Great Yarmouth", "Yarmouth", "Great Yarmouth"],
     ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1faad2d600030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1da8ce1005030000"]
 weathercities018["Charlottetown"] = [
     ["シャーロットタウン", "Charlottetown", "Charlottetown", "Charlottetown", "Charlottetown", "Charlottetown", "Charlottetown"],
     ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"],
