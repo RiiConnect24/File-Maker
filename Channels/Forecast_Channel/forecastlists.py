@@ -471,6 +471,10 @@ weathercities018["Fredericton"] = [
     ["フレデリクトン", "Fredericton", "Fredericton", "Frédéricton", "Fredericton", "Fredericton", "Fredericton"],
     ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"],
     ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20a1d0a902030000"]
+weathercities018["Moncton"] = [
+    ["モンクトン", "Moncton", "Moncton", "Moncton", "Moncton", "Moncton", "Moncton"],
+    ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20c6d1f005030000"]
 weathercities018["Saint John"] = [
     ["セント・ジョン", "Saint John", "Saint John", "Saint-John", "Saint John", "Saint John", "Saint John"],
     ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"],
@@ -489,6 +493,10 @@ weathercities018["Bangor"] = [
     ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f68d10f05030000"]
 weathercities018["Halifax"] = [
     ["ハリファクス", "Halifax", "Halifax Regional Municipality", "Comté de Halifax", "Halifax Regional Municipality", "Contea di Halifax", "Halifax Regional Municipality"],
+    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1faad2d600030000"]
+weathercities018["Yarmouth"] = [
+    ["ヤーマス", "Yarmouth", "Yarmouth", "Yarmouth", "Great Yarmouth", "Yarmouth", "Great Yarmouth"],
     ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
     ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1faad2d600030000"]
 weathercities018["Charlottetown"] = [
