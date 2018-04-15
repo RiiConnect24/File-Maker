@@ -168,11 +168,24 @@ def enc(text):
 
 """Resize the image and strip metadata (to make the image size smaller)."""
 
-def shrink_image(data, resize):
+def shrink_image(data, resize, source):
     if data == "" or data is None: return None
 
     picture = requests.get(data).content
     image = Image.open(StringIO(picture))
+
+    """For AP news, portrait photos (usually happens with sports news) might be too large."""
+    """If that's the case, use the tiny version for the picture."""
+
+    if source == "AP":
+        height = image.size[1]
+
+        if height > 180:
+            picture2 = requests.get(data.replace("small", "tiny")).content
+            image2 = Image.open(StringIO(picture2))
+
+            if image.size > image2.size:
+                image2 = image
 
     try:
         if resize: image = resizeimage.resize_width(image, 200)
@@ -401,7 +414,7 @@ class Parse(News):
             return []
         else:
             return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
-                    shrink_image(self.picture, self.resize), enc(self.credits), enc(self.caption),
+                    shrink_image(self.picture, self.resize, self.source), enc(self.credits), enc(self.caption),
                     self.location, self.source]
 
     def newspaper_init(self):
