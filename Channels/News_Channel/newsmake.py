@@ -142,12 +142,12 @@ sources = {
 def process_news(name, mode, language, countries, d):
     print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
 
-    """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
-
     global language_code, system
 
     language_code = language
     data = d.newsdata
+
+    """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
 
     i = 0
 
@@ -157,6 +157,7 @@ def process_news(name, mode, language, countries, d):
             del data[key]
 
     # data = remove_duplicates(data)
+    data = remove_duplicates2(data)
 
     for system in ["wii", "wii_u"]:
         make_news = make_news_bin(mode, system, data)
@@ -310,6 +311,8 @@ def get_timestamp(mode):
 
 """Make the news.bin."""
 
+"""Remove duplicate entries from a file. This doesn't work correctly so it's currently not being used."""
+
 
 def remove_duplicates(data):
     data_dupe = collections.OrderedDict()
@@ -328,6 +331,18 @@ def remove_duplicates(data):
 
     return data_dupe
 
+"""Remove duplicates a different kind of way!"""
+
+def remove_duplicates2(data):
+    headlines = []
+
+    for k,v in data.items():
+        if v[3] not in headlines:
+            headlines.append(v[3])
+        elif v[3] in headlines:
+            del data[k]
+
+    return data
 
 """First part of the header."""
 
