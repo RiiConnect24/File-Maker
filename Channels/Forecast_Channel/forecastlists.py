@@ -4573,249 +4573,289 @@ weathercities052["La Guaira"] = [
 weathercities065 = collections.OrderedDict()
 
 weathercities065["Canberra"] = [
-    ["キャンベラ", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra"],
+    ["キャンベラ", "Canberra", "Canberra", "Canberra", "Camberra", "Canberra", "Canberra"],
     ["オーストラリア首都特別地域", "Australian Capital Territory", "Australisches Hauptstadtterritorium", "Territoire de la capitale australienne", "Territorio de la Capital Australiana", "Australian Capital Territory", "Australisch Hoofdstedelijk Territorium"],
     ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e6dd69fc09030000"]
 weathercities065["Sydney"] = [
     ["シドニー", "Sydney", "Sydney", "Sydney", "Sídney", "Sydney", "Sydney"],
     ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7f26b6401030000"]
-weathercities065["Albury"] = [
-    ["オルベリー", "Albury", "Albury", "Albury", "Albury", "Albury", "Albury"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e660685806030000"]
-weathercities065["Bathurst"] = [
-    ["バサースト", "Bathurst", "Bathurst", "Bathurst", "Bathurst", "Bathurst", "Bathurst"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8456a3b01030000"]
-weathercities065["Bega"] = [
-    ["ビーガ", "Bega", "Bega", "Bega", "Bega", "Bega", "Bega"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e5f56a6c06030000"]
-weathercities065["Bomaderry"] = [
-    ["ボマデリー", "Bomaderry", "Bomaderry", "Bomaderry", "Bomaderry", "Bomaderry", "Bomaderry"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7426af506030000"]
-weathercities065["Buronga"] = [
-    ["ブロンガ", "Buronga", "Buronga", "Buronga", "Buronga", "Buronga", "Buronga"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7bb64fb00030000"]
-weathercities065["Central Coast"] = [
-    ["セントラル・コースト", "Central Coast", "Central Coast", "Central Coast", "Central Coast", "Central Coast", "Central Coast"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8426b8206030000"]
-weathercities065["Coffs Harbour"] = [
-    ["コフズ・ハーバー", "Coffs Harbour", "Coffs Harbour City", "Ville de Coffs Harbour", "Coffs Harbour", "Città di Coffs Harbour", "City of Coffs Harbour"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ea7f6cc100030000"]
-weathercities065["Dubbo"] = [
-    ["ダッボー", "Dubbo", "Dubbo", "Dubbo", "Dubbo", "Dubbo", "Dubbo"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e918699009030000"]
-weathercities065["Katoomba"] = [
-    ["カトゥーンバ", "Katoomba", "Katoomba", "Katoomba", "Katoomba", "Katoomba", "Katoomba"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e80e6ac105030000"]
-weathercities065["Lismore"] = [
-    ["リズモー", "Lismore", "Lismore", "Lismore", "Lismore", "Lismore", "Lismore"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "eb8b6cdc03030000"]
-weathercities065["Maitland"] = [
-    ["メートランド", "Maitland", "Maitland", "Maitland", "Maitland", "Maitland", "Maitland"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8c16ba202030000"]
-weathercities065["Newcastle"] = [
-    ["ニューカッスル", "Newcastle", "Newcastle", "Newcastle", "Newcastle", "Newcastle", "Newcastle"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e89d6bca00030000"]
-weathercities065["Nowra"] = [
-    ["ナウラ", "Nowra", "Nowra", "Nowra-Bomaderry", "Nowra", "Nowra", "Nowra"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e73c6af701030000"]
-weathercities065["Orange"] = [
-    ["オレンジ", "Orange", "Orange City", "Ville d'Orange", "Orange", "Città di Orange", "Orange"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e85d69e306030000"]
-weathercities065["Port Macquarie"] = [
-    ["ポート・マッコリー", "Port Macquarie", "Port Macquarie", "Port Macquarie", "Port Macquarie", "Port Macquarie", "Port Macquarie"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e9ad6c9707030000"]
-weathercities065["Tamworth"] = [
-    ["タムワース", "Tamworth", "Tamworth", "Tamworth", "Tamworth", "Tamworth", "Tamworth"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e9ec6b3100030000"]
-weathercities065["Wagga Wagga"] = [
-    ["ウォガウォガ", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga"],
-    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e71268ab07030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7e76b8c07030000"]
 weathercities065["Wollongong"] = [
     ["ウロンゴン", "Wollongong", "Wollongong", "Wollongong", "Wollongong", "Wollongong", "Wollongong"],
     ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e78c6b2c05030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7856b4903030000"]
+weathercities065["Newcastle"] = [
+    ["ニューカッスル", "Newcastle", "Newcastle", "Newcastle", "Newcastle", "Newcastle", "Newcastle"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8966be703030000"]
+weathercities065["Albury"] = [
+    ["オルベリー", "Albury", "Albury", "Albury", "Albury", "Albury", "Albury"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e65b687a03030000"]
+weathercities065["Coffs Harbour"] = [
+    ["コフズ・ハーバー", "Coffs Harbour", "Coffs Harbour City", "Ville de Coffs Harbour", "Coffs Harbour", "Città di Coffs Harbour", "City of Coffs Harbour"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ea746ce203030000"]
+weathercities065["Wagga Wagga"] = [
+    ["ウォガウォガ", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga", "Wagga Wagga"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e70668c803030000"]
+weathercities065["Lismore"] = [
+    ["リズモー", "Lismore", "Lismore", "Lismore", "Lismore", "Lismore", "Lismore"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "eb836d0103030000"]
+weathercities065["Tamworth"] = [
+    ["タムワース", "Tamworth", "Tamworth", "Tamworth", "Tamworth", "Tamworth", "Tamworth"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e9e36b5203030000"]
+weathercities065["Dubbo"] = [
+    ["ダッボー", "Dubbo", "Dubbo", "Dubbo", "Dubbo", "Dubbo", "Dubbo"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e91169ac03030000"]
+weathercities065["Orange"] = [
+    ["オレンジ", "Orange", "Orange City", "Ville d'Orange", "Orange", "Città di Orange", "Orange"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8556a0703030000"]
+weathercities065["Bega"] = [
+    ["ビーガ", "Bega", "Bega", "Bega", "Bega", "Bega", "Bega"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e5eb6a8d03030000"]
+weathercities065["Griffith"] = [
+    ["グリフィス", "Griffith", "Griffith City", "Ville de Griffith", "Griffith", "Città di Griffith", "Griffith"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e79f67d903030000"]
+weathercities065["Armidale"] = [
+    ["アーミデール", "Armidale", "Armidale", "Armidale", "Armidale", "Armidale", "Armidale"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ea4d6bda03030000"]
+weathercities065["Broken Hill"] = [
+    ["ブロークンヒル", "Broken Hill", "Broken Hill", "Broken Hill", "Broken Hill", "Broken Hill", "Broken Hill"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e947649503030000"]
+weathercities065["Katoomba"] = [
+    ["カトゥーンバ", "Katoomba", "Katoomba", "Katoomba", "Katoomba", "Katoomba", "Katoomba"],
+    ["ニューサウスウェールズ州", "New South Wales", "Neusüdwales", "Nouvelle-Galles-du-Sud", "Nueva Gales del Sur", "Nuovo Galles del Sud", "Nieuw-Zuid-Wales"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8076ae503030000"]
 weathercities065["Darwin"] = [
     ["ダーウィン", "Darwin", "Darwin", "Darwin", "Darwin", "Darwin", "Darwin"],
     ["ノーザンテリトリー", "Northern Territory", "Nördliches Territorium", "Territoire du Nord", "Territorio del Norte", "Territorio del Nord", "Noordelijk Territorium"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f7275cee05030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f7295d0b08030000"]
 weathercities065["Alice Springs"] = [
     ["アリススプリングス", "Alice Springs", "Alice Springs", "Alice Springs", "Alice Springs", "Alice Springs", "Alice Springs"],
     ["ノーザンテリトリー", "Northern Territory", "Nördliches Territorium", "Territoire du Nord", "Territorio del Norte", "Territorio del Nord", "Noordelijk Territorium"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ef2b5f1500030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ef275f3203030000"]
 weathercities065["Katherine"] = [
     ["キャサリン", "Katherine", "Katherine", "Katherine", "Katherine", "Katherine", "Katherine"],
     ["ノーザンテリトリー", "Northern Territory", "Nördliches Territorium", "Territoire du Nord", "Territorio del Norte", "Territorio del Nord", "Noordelijk Territorium"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f5bb5df000030000"]
-weathercities065["Palmerston"] = [
-    ["パーマストン・シティ", "Palmerston", "Palmerston", "Palmerston", "Palmerston", "Palmerston", "Palmerston"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f5b65e0d03030000"]
+weathercities065["Tennant Creek"] = [
+    ["テナント・クリーク", "Tennant Creek", "Tennant Creek", "Tennant Creek", "Tennant Creek", "Tennant Creek", "Tennant Creek"],
     ["ノーザンテリトリー", "Northern Territory", "Nördliches Territorium", "Territoire du Nord", "Territorio del Norte", "Territorio del Nord", "Noordelijk Territorium"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f7235d0709030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f2075f6b03030000"]
+weathercities065["Uluru"] = [
+    ["ウルル", "Uluru", "Uluru", "Uluru", "Uluru", "Uluru", "Uluru"],
+    ["ノーザンテリトリー", "Northern Territory", "Nördliches Territorium", "Territoire du Nord", "Territorio del Norte", "Territorio del Nord", "Noordelijk Territorium"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "edfb5d2d07030000"]
 weathercities065["Brisbane"] = [
     ["ブリスベン", "Brisbane", "Brisbane", "Brisbane", "Brisbane", "Brisbane", "Brisbane"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ec7e6cae05030000"]
-weathercities065["Bundaberg"] = [
-    ["バンダバーグ・セントラル", "Bundaberg", "Bundaberg Central", "Bundaberg Central", "Bundaberg Central", "Bundaberg Central", "Bundaberg Central"],
-    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ee586c3301030000"]
-weathercities065["Cairns"] = [
-    ["ケアンズ", "Cairns", "Cairns", "Cairns", "Cairns", "Cairns", "Cairns"],
-    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f3fb678804030000"]
-weathercities065["Gladstone"] = [
-    ["グラッドストーン・セントラル", "Gladstone", "Gladstone Central", "Gladstone Central", "Gladstone Central", "Gladstone Central", "Gladstone Central"],
-    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ef116b6d01030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ec7b6cd107030000"]
 weathercities065["Gold Coast"] = [
-    ["ゴールドコースト", "Gold Coast", "Gold Coast", "Gold Coast", "Gold Coast", "Gold Coast", "Gold Coast"],
+    ["ゴールドコースト", "Gold Coast", "Gold Coast", "Gold Coast", "Costa Dorada", "Gold Coast", "Gold Coast"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ec1e6cf807030000"]
-weathercities065["Hervey Bay"] = [
-    ["ハーベイ・ベイ", "Hervey Bay", "Hervey Bay", "Hervey Bay", "Hervey Bay", "Hervey Bay", "Hervey Bay"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ec136d1907030000"]
+weathercities065["Sunshine Coast"] = [
+    ["サンシャイン・コースト", "Sunshine Coast", "Sunshine Coast", "Sunshine Coast", "Sunshine Coast", "Sunshine Coast", "Sunshine Coast"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ee0b6c8c04030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ed126cc603030000"]
 weathercities065["Mackay"] = [
     ["マッカイ", "Mackay", "Mackay", "Mackay", "Mackay", "Mackay", "Mackay"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f0fa69f102030000"]
-weathercities065["Rockhampton"] = [
-    ["ロックハンプトン", "Rockhampton", "Rockhampton City", "Rockhampton City", "Rockhampton City", "Rockhampton City", "Rockhampton City"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f0f66a1603030000"]
+weathercities065["Cairns"] = [
+    ["ケアンズ", "Cairns", "Cairns", "Cairns", "Cairns", "Cairns", "Cairns"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ef666ae500030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f3f867a607030000"]
 weathercities065["Toowoomba"] = [
     ["トゥーンバ", "Toowoomba", "Toowoomba", "Toowoomba", "Toowoomba", "Toowoomba", "Toowoomba"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ec6d6beb09030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ec676c0f03030000"]
 weathercities065["Townsville"] = [
-    ["タウンズビル", "Townsville", "Townsville City", "Ville de Townsville", "Townsville City", "Città di Townsville", "Townsville City"],
+    ["タウンズビル", "Townsville", "Townsville City", "Ville de Townsville", "Townsville", "Città di Townsville", "Townsville"],
     ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f253684609030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f24b686303030000"]
+weathercities065["Rockhampton"] = [
+    ["ロックハンプトン", "Rockhampton", "Rockhampton", "Rockhampton", "Rockhampton", "Rockhampton", "Rockhampton"],
+    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ef616b0703030000"]
+weathercities065["Bundaberg"] = [
+    ["バンダバーグ・セントラル", "Bundaberg", "Bundaberg", "Bundaberg", "Bundaberg", "Bundaberg Central", "Bundaberg"],
+    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ee506c5603030000"]
+weathercities065["Maryborough"] = [
+    ["メアリーバラ", "Maryborough", "Maryborough", "Maryborough", "Maryborough", "Maryborough", "Maryborough"],
+    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "edd76c9903030000"]
+weathercities065["Mount Isa"] = [
+    ["マウント・アイザ", "Mount Isa", "Mount Isa City", "Ville de Mount Isa", "Mount Isa", "Città di Mount Isa", "Mount Isa"],
+    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f142633003030000"]
+weathercities065["Longreach"] = [
+    ["ロングリーチ", "Longreach", "Longreach", "Longreach", "Longreach", "Longreach", "Longreach"],
+    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ef55669303030000"]
+weathercities065["Charleville"] = [
+    ["チャールビル", "Charleville", "Charleville", "Charleville", "Charleville", "Charleville", "Charleville"],
+    ["クィーンズランド州", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland", "Queensland"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ed3967fc03030000"]
 weathercities065["Adelaide"] = [
     ["アデレード", "Adelaide", "Adelaide", "Adélaïde", "Adelaida", "Adelaide", "Adelaide"],
     ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e732626e02030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e72c629107030000"]
+weathercities065["Maitland"] = [
+    ["メートランド", "Maitland", "Maitland", "Maitland", "Maitland", "Maitland", "Maitland"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e78f61e603030000"]
+weathercities065["Port Pirie"] = [
+    ["ポートピリー", "Port Pirie", "Port Pirie", "Port Pirie", "Port Pirie", "Port Pirie", "Port Pirie"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e866622103030000"]
 weathercities065["Mount Gambier"] = [
     ["マウント・ガンビア", "Mount Gambier", "Mount Gambier", "Mount Gambier", "Mount Gambier", "Mount Gambier", "Mount Gambier"],
     ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e52763fc00030000"]
-weathercities065["Port Augusta"] = [
-    ["ポート・オーガスタ", "Port Augusta", "Port Augusta", "Port Augusta", "Port Augusta", "Port Augusta", "Port Augusta"],
-    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8ea61db05030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e519641b03030000"]
 weathercities065["Whyalla"] = [
     ["ワイアラ", "Whyalla", "Whyalla", "Whyalla", "Whyalla", "Whyalla", "Whyalla"],
     ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e88b61b305030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e88361d303030000"]
+weathercities065["Port Lincoln"] = [
+    ["ポートリンカーン", "Port Lincoln", "Port Lincoln", "Port Lincoln", "Port Lincoln", "Port Lincoln", "Port Lincoln"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e74f609c03030000"]
+weathercities065["Renmark"] = [
+    ["レンマーク", "Renmark", "Renmark", "Renmark", "Renmark", "Renmark", "Renmark"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7b2641303030000"]
+weathercities065["Ceduna"] = [
+    ["セドゥナ", "Ceduna", "Ceduna", "Ceduna", "Ceduna", "Ceduna", "Ceduna"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e9275f0e03030000"]
+weathercities065["Coober Pedy"] = [
+    ["クーバーペディ", "Coober Pedy", "Coober Pedy", "Coober Pedy", "Coober Pedy", "Coober Pedy", "Coober Pedy"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "eb5f5fd103030000"]
+weathercities065["Clare"] = [
+    ["クレア", "Clare", "Clare", "Clare", "Clare", "Clare", "Clare"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7f0629003030000"]
+weathercities065["Keith"] = [
+    ["キース", "Keith", "Keith", "Keith", "Keith", "Keith", "Keith"],
+    ["南オーストラリア州", "South Australia", "Südaustralien", "Australie-Méridionale", "Australia Meridional", "Australia Meridionale", "Zuid-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e65463ce03030000"]
 weathercities065["Hobart"] = [
     ["ホバート", "Hobart", "Hobart", "Hobart", "Hobart", "Hobart", "Hobart"],
     ["タスマニア州", "Tasmania", "Tasmanien", "Tasmanie", "Tasmania", "Tasmania", "Tasmanië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e18c68a409030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e18868bd02030000"]
 weathercities065["Launceston"] = [
     ["ローンセストン", "Launceston", "Launceston", "Launceston", "Launceston", "Launceston", "Launceston"],
     ["タスマニア州", "Tasmania", "Tasmanien", "Tasmanie", "Tasmania", "Tasmania", "Tasmanië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e293688001030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e28868a103030000"]
+weathercities065["Devonport"] = [
+    ["デボンポート", "Devonport", "Devonport", "Devonport", "Devonport", "Devonport", "Devonport"],
+    ["タスマニア州", "Tasmania", "Tasmanien", "Tasmanie", "Tasmania", "Tasmania", "Tasmanië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e2b8681103030000"]
+weathercities065["Strahan"] = [
+    ["ストラーン", "Strahan", "Strahan", "Strahan", "Strahan", "Strahan", "Strahan"],
+    ["タスマニア州", "Tasmania", "Tasmanien", "Tasmanie", "Tasmania", "Tasmania", "Tasmanië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e206675603030000"]
 weathercities065["Melbourne"] = [
     ["メルボルン", "Melbourne", "Melbourne", "Melbourne", "Melbourne", "Melbourne", "Melbourne"],
     ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e52666f502030000"]
-weathercities065["Ballarat"] = [
-    ["バララット", "Ballarat", "Ballarat", "Ballarat", "Ballarat", "Ballarat", "Ballarat"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e553662c07030000"]
-weathercities065["Bendigo"] = [
-    ["ベンディゴ", "Bendigo", "Bendigo", "Bendigo", "Bendigo", "Bendigo", "Bendigo"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e5e6667903030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e51d671607030000"]
 weathercities065["Geelong"] = [
     ["ジーロング", "Geelong", "Geelong", "Geelong", "Geelong", "Geelong", "Geelong"],
     ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4e8668801030000"]
-weathercities065["Melton"] = [
-    ["メルトン", "Melton", "Melton", "Melton", "Melton", "Melton", "Melton"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4e166a203030000"]
+weathercities065["Ballarat"] = [
+    ["バララット", "Ballarat", "Ballarat", "Ballarat", "Ballarat", "Ballarat", "Ballarat"],
     ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e53d66b007030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e54b664a03030000"]
+weathercities065["Bendigo"] = [
+    ["ベンディゴ", "Bendigo", "Bendigo", "Bendigo", "Bendigo", "Bendigo", "Bendigo"],
+    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e5dd669903030000"]
+weathercities065["Latrobe Valley"] = [
+    ["ラットローブ", "Latrobe Valley", "Latrobe Valley", "Latrobe Valley", "Latrobe Valley", "Latrobe Valley", "Latrobe Valley"],
+    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4d4682803030000"]
 weathercities065["Mildura"] = [
     ["ミルデューラ", "Mildura", "Mildura", "Mildura", "Mildura", "Mildura", "Mildura"],
     ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7ba64f403030000"]
-weathercities065["Mooroopna"] = [
-    ["ムアオープナ", "Mooroopna", "Mooroopna", "Mooroopna", "Mooroopna", "Mooroopna", "Mooroopna"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e62b674402030000"]
-weathercities065["Pakenham"] = [
-    ["パッケナム", "Pakenham", "Pakenham", "Pakenham", "Pakenham", "Pakenham", "Pakenham"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4f8675808030000"]
-weathercities065["Shepparton"] = [
-    ["シェパートン", "Shepparton", "Shepparton", "Shepparton", "Shepparton", "Shepparton", "Shepparton"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e62b674401030000"]
-weathercities065["Sunbury"] = [
-    ["サンベリー", "Sunbury", "Sunbury", "Sunbury", "Sunbury", "Sunbury", "Sunbury"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e55066c907030000"]
-weathercities065["Traralgon"] = [
-    ["トララルゴン", "Traralgon", "Traralgon", "Traralgon", "Traralgon", "Traralgon", "Traralgon"],
-    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4e0681501030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e7b0651703030000"]
 weathercities065["Warrnambool"] = [
     ["ウォーナンブール", "Warrnambool", "Warrnambool", "Warrnambool", "Warrnambool", "Warrnambool", "Warrnambool"],
     ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4bd653200030000"]
-weathercities065["Wodonga"] = [
-    ["ウォドンガ", "Wodonga", "Wodonga", "Wodonga", "Wodonga", "Wodonga", "Wodonga"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4b5655103030000"]
+weathercities065["Wangaratta"] = [
+    ["ウォンガラッタ", "Wangaratta", "Wangaratta", "Wangaratta", "Wangaratta", "Wangaratta", "Wangaratta"],
     ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e658685207030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e625680903030000"]
+weathercities065["Horsham"] = [
+    ["ホーシャム", "Horsham", "Horsham", "Horsham", "Horsham", "Horsham", "Horsham"],
+    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e5e5651d03030000"]
+weathercities065["Sale"] = [
+    ["セール", "Sale", "Sale", "Sale", "Sale", "Sale", "Sale"],
+    ["ヴィクトリア州", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e4e6689403030000"]
 weathercities065["Perth"] = [
     ["パース", "Perth", "Perth", "Perth", "Perth", "Perth", "Perth"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e94f524906030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e94b526408030000"]
 weathercities065["Albany"] = [
     ["オールバニー", "Albany", "Albany City", "Cité d'Albany", "Albany", "Città di Albany", "City of Albany"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e72053ba07030000"]
-weathercities065["Boulder"] = [
-    ["ボールダー", "Boulder", "Boulder", "Boulder", "Boulder", "Boulder", "Boulder"],
-    ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ea29564508030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e71953d303030000"]
 weathercities065["Bunbury"] = [
     ["バンバリー", "Bunbury", "Bunbury", "Bunbury", "Bunbury", "Bunbury", "Bunbury"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e856522001030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e849523c03030000"]
+weathercities065["Kalgoorlie"] = [
+    ["カルグーリー - ボルダー", "Kalgoorlie", "Kalgoorlie-Boulder City", "Cité de Kalgoorlie-Boulder", "Kalgoorlie", "Città di Kalgoorlie-Boulder", "City of Kalgoorlie-Boulder"],
+    ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ea23566004030000"]
 weathercities065["Geraldton"] = [
     ["ジェラルトン", "Geraldton", "Geraldton", "Geraldton", "Geraldton", "Geraldton", "Geraldton"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "eb91516607030000"]
-weathercities065["Kalgoorlie"] = [
-    ["カルグーリー - ボルダー", "Kalgoorlie", "Kalgoorlie-Boulder City", "Cité de Kalgoorlie-Boulder", "Kalgoorlie - Boulder", "Città di Kalgoorlie-Boulder", "City of Kalgoorlie-Boulder"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "eb8a517e03030000"]
+weathercities065["Augusta"] = [
+    ["オーガスタ", "Augusta", "Augusta", "Augusta", "Augusta", "Augusta", "Augusta"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "ea29564505030000"]
-weathercities065["Mandurah"] = [
-    ["マンジュラ", "Mandurah", "Mandurah", "Mandurah", "Mandurah", "Mandurah", "Mandurah"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e78f51df03030000"]
+weathercities065["Broome"] = [
+    ["ブルーム", "Broome", "Broome", "Broome", "Broome", "Broome", "Broome"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e8e7523306030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f33a56ea03030000"]
 weathercities065["Port Hedland"] = [
     ["ポートヘッドランド", "Port Hedland", "Port Hedland", "Port Hedland", "Port Hedland", "Port Hedland", "Port Hedland"],
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
-    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f194543807030000"]
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f18e545707030000"]
+weathercities065["Karratha"] = [
+    ["カラサ", "Karratha", "Karratha", "Karratha", "Karratha", "Karratha", "Karratha"],
+    ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f141531603030000"]
+weathercities065["Northam"] = [
+    ["ノーサム", "Northam", "Northam", "Northam", "Northam", "Northam", "Northam"],
+    ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e97d52f603030000"]
+weathercities065["Exmouth"] = [
+    ["エクスマウス", "Exmouth", "Exmouth", "Exmouth", "Exmouth", "Exmouth", "Exmouth"],
+    ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f067512703030000"]
+weathercities065["Kununurra"] = [
+    ["カナナラ", "Kununurra", "Kununurra", "Kununurra", "Kununurra", "Kununurra", "Kununurra"],
+    ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
+    ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f4ca5b8b03030000"]
 
 weathercities066 = collections.OrderedDict()
 
