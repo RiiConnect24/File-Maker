@@ -19,6 +19,7 @@ If you would like to add your own forecast city, here are some instructions.
 We are not accepting new cities for these following countries:
 
 + Argentina
++ Australia
 + Brazil
 + Finland
 + France
