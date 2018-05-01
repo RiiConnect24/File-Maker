@@ -4573,7 +4573,7 @@ weathercities052["La Guaira"] = [
 weathercities065 = collections.OrderedDict()
 
 weathercities065["Canberra"] = [
-    ["キャンベラ", "Canberra", "Canberra", "Canberra", "Camberra", "Canberra", "Canberra"],
+    ["キャンベラ", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra"],
     ["オーストラリア首都特別地域", "Australian Capital Territory", "Australisches Hauptstadtterritorium", "Territoire de la capitale australienne", "Territorio de la Capital Australiana", "Australian Capital Territory", "Australisch Hoofdstedelijk Territorium"],
     ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e6dd69fc09030000"]
 weathercities065["Sydney"] = [
@@ -8552,7 +8552,7 @@ weathercities_international["Tirana"] = [
     ["ティラナ州", "Tirana", "Tirana", "Tirana", "Tirana", "Tirana", "Tiranë"],
     ["アルバニア", "Albania", "Albanien", "Albanie", "Albania", "Albania", "Albanië"], "1d630e1903030000"]
 weathercities_international["Canberra"] = [
-    ["キャンベラ", "Canberra", "Canberra", "Canberra", "Camberra", "Canberra", "Canberra"],
+    ["キャンベラ", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra"],
     ["オーストラリア首都特別地域", "Australian Capital Territory", "Australisches Hauptstadtterritorium", "Territoire de la capitale australienne", "Territorio de la Capital Australiana", "Australian Capital Territory", "Australisch Hoofdstedelijk Territorium"],
     ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "e6dd69fc09030000"]
 weathercities_international["Sydney"] = [
