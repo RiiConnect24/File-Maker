@@ -170,10 +170,10 @@ def enc(text):
 def shrink_image(data, resize, source):
     if data == "" or data is None: return None
 
-    picture = requests.get(data).content
-    image = Image.open(StringIO(picture))
-
     try:
+        picture = requests.get(data).content
+        image = Image.open(StringIO(picture))
+
         if resize: image = resizeimage.resize_width(image, 200)
 
         data = list(image.getdata())
