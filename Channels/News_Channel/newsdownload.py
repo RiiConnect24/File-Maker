@@ -47,29 +47,28 @@ sources = {
 
     "ap_english": {
         "name": "AP",
-        "url": "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT",
+        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "en",
         "cat": collections.OrderedDict([
-            ("USHEADS", "national"),
-            ("WORLDHEADS", "world"),
-            ("SPORTSHEADS", "sports"),
-            ("ENTERTAINMENTHEADS", "entertainment"),
-            ("BUSINESSHEADS", "business"),
-            ("SCIENCEHEADS", "science"),
-            ("HEALTHHEADS", "science"),
-            ("TECHNOLOGY", "technology"),
-            ("STRANGEHEADS", "oddities")
+            ("apf-usnews", "national"),
+            ("apf-intlnews", "world"),
+            ("apf-sports", "sports"),
+            ("apf-entertainment", "entertainment"),
+            ("apf-business", "business"),
+            ("apf-science,apf-Health", "science"),
+            ("apf-technology", "technology"),
+            ("apf-oddities", "oddities")
         ])
     },
     "ap_spanish": {
         "name": "AP",
-        "url": "http://hosted.ap.org/lineups/%s-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT",
+        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "es",
         "cat": collections.OrderedDict([
-            ("NOTICIAS_GENERALES", "general"),
-            ("NOTICIAS_FINANCIERAS", "finance"),
-            ("NOTICIAS_DEPORTIVAS", "sports"),
-            ("NOTICIAS_ENTRETENIMIENTOS", "shows")
+            ("apf-Noticias", "general"),
+            ("apf-Finanzas", "finance"),
+            ("apf-Deportes", "sports"),
+            ("apf-Entretenimiento", "shows")
         ])
     },
     "reuters_europe_english": {
@@ -173,19 +172,6 @@ def shrink_image(data, resize, source):
 
     picture = requests.get(data).content
     image = Image.open(StringIO(picture))
-
-    """For AP news, portrait photos (usually happens with sports news) might be too large."""
-    """If that's the case, use the tiny version for the picture."""
-
-    if source == "AP":
-        height = image.size[1]
-
-        if height > 180:
-            picture2 = requests.get(data.replace("small", "tiny")).content
-            image2 = Image.open(StringIO(picture2))
-
-            if image.size > image2.size:
-                image2 = image
 
     try:
         if resize: image = resizeimage.resize_width(image, 200)
@@ -330,17 +316,23 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for key, value in self.sourceinfo["cat"].items():
-            feed = feedparser.parse(self.url) if self.source == "SID" \
+            feed = requests.get(self.url % key).json() if self.source == "AP" \
+                    else feedparser.parse(self.url) if self.source == "SID" \
                     else feedparser.parse(self.url) if self.source == "AFP_French" \
                     else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
                     else feedparser.parse(self.url % key)
 
             i = 0
 
-            for entries in feed.entries:
+            entries = feed["cards"] if self.source == "AP" else feed.entries
+
+            for entry in entries:
+                if self.source == "AP":
+                    entry = entry["contents"][0]
+
                 current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
                 try:
-                    updated_time = int((time.mktime(entries["updated_parsed"]) - 946684800) / 60)
+                    updated_time = int((time.mktime(time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S") if self.source == "AP" else entry["updated_parsed"]) - 946684800) / 60)
                 except:
                     print "Failed to parse RSS feed."
                     continue
@@ -348,22 +340,22 @@ class News:
                 if current_time - updated_time < 60:
                     i += 1
 
-                    if self.source == "AFP_French" and key not in entries["link"]:
+                    if self.source == "AFP_French" and key not in entry["link"]:
                         continue
-                    elif self.source == "AFP" and "dpa" in entries["description"]:
+                    elif self.source == "AFP" and "dpa" in entry["description"]:
                         self.source = "dpa"
-                    elif self.source == "NU.nl" and entries["author"] == "ANP":
+                    elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
                     elif self.source == "Reuters_Japanese":
-                        entries["link"] = requests.get(
-                            "http://bit.ly/" + entries["description"].split("http://bit.ly/", 1)[1][:7]).url
-                        entries["title"] = entries["title"].split("  http://bit.ly/", 1)[0]
+                        entry["link"] = requests.get(
+                            "http://bit.ly/" + entry["description"].split("http://bit.ly/", 1)[1][:7]).url
+                        entry["title"] = entry["title"].split("  http://bit.ly/", 1)[0]
 
-                    title = entries["title"]
+                    title = entry["headline"] if self.source == "AP" else entry["title"]
 
                     print title
 
-                    downloaded_news = Parse(entries["link"], self.source, updated_time,
+                    downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
                                             title, self.language).get_news()
 
                     if downloaded_news:
@@ -388,7 +380,8 @@ class Parse(News):
         self.html = html
         self.soup = soup
 
-        self.newspaper_init()
+        if self.source != "AP":
+            self.newspaper_init()
 
         {
             "AP": self.parse_ap,
@@ -428,34 +421,29 @@ class Parse(News):
         self.soup = BeautifulSoup(self.html, "lxml")
 
     def parse_ap(self):
-        try:
-            self.article += "\n\n" + self.soup.find("span", {"class": "byline"}).text + ", " + self.soup.find("span", {
-                "class": "bylinetitle"}).text
-        except:
-            pass
+        self.newsdata = requests.get(self.url).json()
 
-        if "ap-smallphoto-img" in self.html:
-            self.resize = False
+        if self.newsdata["localMemberName"] != None:
+            return
 
-            self.picture = "http://staging.hosted.ap.org/" + self.soup.find("img", {"class": "ap-smallphoto-img"})[
-                                                                 "src"][:-10] + "-small.jpg"
-            self.credits = self.soup.find("span", {"class": "apCaption"}).text
+        self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").get_text(separator="\n").replace("\n\n", "\n")
 
-            """The Associated Press stores the picture caption on a different page, so we are navigating to that page."""
+        if self.newsdata["bylines"] != "":
+            self.article += "\n\n" + self.newsdata["bylines"]
 
-            captions_page = requests.get(
-                "http://staging.hosted.ap.org/" + self.soup.find("a", {"class": "ap-smallphoto-a"})['href']).text
-            soup_caption = BeautifulSoup(captions_page, "lxml")
+        if self.newsdata["mediaCount"] > 0 and self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
+            self.resize = True
 
-            try:
-                self.caption = soup_caption.find("font", {"class": "photo"}).text
-            except:
-                self.picture = self.credits = self.caption = None
+            self.picture = self.newsdata["media"][0]["gcsBaseUrl"] + "400" + self.newsdata["media"][0]["imageFileExtension"]
+
+            self.caption = self.newsdata["media"][0]["flattenedCaption"]
+
+            self.credits = self.caption.split("(")[1][:-1]
         else:
             self.picture = None
 
-        if "(AP)" in self.article:
-            self.location = self.article.split(" (AP)", 1)[0]
+        if self.newsdata["dateline"] != None:
+            self.location = self.newsdata["dateline"]
 
     def parse_reuters(self):
         try:
