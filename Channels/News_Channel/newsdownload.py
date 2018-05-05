@@ -430,6 +430,9 @@ class Parse(News):
 
         if self.newsdata["bylines"] != "":
             self.article += "\n\n" + self.newsdata["bylines"]
+            
+        if self.article == None:
+            return
 
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
             self.resize = True
