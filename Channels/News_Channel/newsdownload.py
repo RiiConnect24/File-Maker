@@ -328,7 +328,10 @@ class News:
 
             for entry in entries:
                 if self.source == "AP":
-                    entry = entry["contents"][0]
+                    try:
+                        entry = entry["contents"][0]
+                    except:
+                        continue
 
                 current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
                 try:
