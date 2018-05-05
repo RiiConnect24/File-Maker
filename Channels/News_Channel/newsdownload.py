@@ -337,7 +337,7 @@ class News:
                     print "Failed to parse RSS feed."
                     continue
 
-                if current_time - updated_time < 65:
+                if current_time - updated_time < 60:
                     i += 1
 
                     if self.source == "AFP_French" and key not in entry["link"]:
