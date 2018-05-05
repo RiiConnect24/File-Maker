@@ -435,14 +435,17 @@ class Parse(News):
         if self.article is None:
             return []
 
-        if self.newsdata["mediaCount"] > 0 and self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
-            self.resize = True
+        if self.newsdata["mediaCount"] > 0 and self.newsdata["media"] != []:
+            if self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
+                self.resize = True
 
-            self.picture = self.newsdata["media"][0]["gcsBaseUrl"] + "400" + self.newsdata["media"][0]["imageFileExtension"]
+                self.picture = self.newsdata["media"][0]["gcsBaseUrl"] + "400" + self.newsdata["media"][0]["imageFileExtension"]
 
-            self.caption = self.newsdata["media"][0]["flattenedCaption"]
+                self.caption = self.newsdata["media"][0]["flattenedCaption"]
 
-            self.credits = self.caption.split("(")[1][:-1]
+                self.credits = self.caption.split("(")[1][:-1]
+            else:
+                self.picture = None
         else:
             self.picture = None
 
