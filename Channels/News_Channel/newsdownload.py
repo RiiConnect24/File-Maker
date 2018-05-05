@@ -337,7 +337,7 @@ class News:
                     print "Failed to parse RSS feed."
                     continue
 
-                if current_time - updated_time < 60:
+                if current_time - updated_time < 65:
                     i += 1
 
                     if self.source == "AFP_French" and key not in entry["link"]:
@@ -399,11 +399,9 @@ class Parse(News):
         self.get_news()
 
     def get_news(self):
-        if self.headline == "":
-            log("Headline is blank.", "WARNING")
+        if self.headline == "" or self.headline is None:
             return []
-        elif self.article == "":
-            log("Article is blank.", "WARNING")
+        elif self.article == "" or self.article is None:
             return []
         else:
             return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
@@ -424,15 +422,15 @@ class Parse(News):
         self.newsdata = requests.get(self.url).json()
 
         if self.newsdata["localMemberName"] is not None:
-            return
+            return []
 
         self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").get_text(separator="\n").replace("\n\n", "\n")
 
         if self.newsdata["bylines"] != "":
             self.article += "\n\n" + self.newsdata["bylines"]
-            
+
         if self.article is None:
-            return
+            return []
 
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
             self.resize = True
