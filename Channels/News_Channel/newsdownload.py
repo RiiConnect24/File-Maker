@@ -423,7 +423,7 @@ class Parse(News):
     def parse_ap(self):
         self.newsdata = requests.get(self.url).json()
 
-        if self.newsdata["localMemberName"] != None:
+        if self.newsdata["localMemberName"] is not None:
             return
 
         self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").get_text(separator="\n").replace("\n\n", "\n")
@@ -431,7 +431,7 @@ class Parse(News):
         if self.newsdata["bylines"] != "":
             self.article += "\n\n" + self.newsdata["bylines"]
             
-        if self.article == None:
+        if self.article is None:
             return
 
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
