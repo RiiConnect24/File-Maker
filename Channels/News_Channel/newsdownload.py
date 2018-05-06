@@ -433,7 +433,7 @@ class Parse(News):
         self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").get_text(separator="\n").replace("\n\n", "\n")
 
         if self.newsdata["bylines"] != "":
-            self.article += "\n\n" + self.newsdata["bylines"]
+            self.article += "\n" + self.newsdata["bylines"]
 
         if self.article is None:
             return []
