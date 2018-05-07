@@ -427,7 +427,10 @@ class Parse(News):
         if self.newsdata["localMemberName"] is not None:
             return []
 
-        if "apnews.com" not in self.newsdata["localLinkUrl"]:
+        if self.newsdata["localLinkUrl"]:
+            if "apnews.com" not in self.newsdata["localLinkUrl"]:
+                return []
+        else:
             return []
 
         self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").get_text(separator="\n").replace("\n\n", "\n")
