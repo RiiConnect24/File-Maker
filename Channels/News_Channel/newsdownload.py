@@ -55,7 +55,8 @@ sources = {
             ("apf-sports", "sports"),
             ("apf-entertainment", "entertainment"),
             ("apf-business", "business"),
-            ("apf-science,apf-Health", "science"),
+            ("apf-science", "science"),
+            ("apf-Health", "science"),
             ("apf-technology", "technology"),
             ("apf-oddities", "oddities")
         ])
