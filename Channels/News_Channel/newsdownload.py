@@ -25,7 +25,6 @@ import newspaper
 import requests
 from PIL import Image
 from bs4 import BeautifulSoup
-from resizeimage import resizeimage
 from unidecode import unidecode
 
 from utils import setup_log, log, u8, u16, u32, u32_littleendian
@@ -171,20 +170,19 @@ def enc(text):
 def shrink_image(data, resize, source):
     if data == "" or data is None: return None
 
-    try:
-        picture = requests.get(data).content
-        image = Image.open(StringIO(picture))
+    picture = requests.get(data).content
+    image = Image.open(StringIO(picture))
 
-        if resize: image = resizeimage.resize_width(image, 200)
+    maxsize = (200, 200)
 
-        data = list(image.getdata())
-        image_without_exif = Image.new(image.mode, image.size)
-        image_without_exif.putdata(data)
+    if resize: image.thumbnail(maxsize, Image.ANTIALIAS)
 
-        buffer = StringIO()
-        image_without_exif.save(buffer, format='jpeg')
-    except:
-        return None
+    data = list(image.getdata())
+    image_without_exif = Image.new(image.mode, image.size)
+    image_without_exif.putdata(data)
+
+    buffer = StringIO()
+    image_without_exif.save(buffer, format='jpeg')
 
     return buffer.getvalue()
 
