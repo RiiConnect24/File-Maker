@@ -495,7 +495,7 @@ class Parse(News):
                 except:
                     pass
 
-        if "(Reuters)" in self.article:
+        if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
             self.location = self.article.split(" (Reuters)")[0]
 
     def parse_afp(self):
