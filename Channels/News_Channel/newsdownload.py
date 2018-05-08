@@ -431,7 +431,10 @@ class Parse(News):
         self.soup = BeautifulSoup(self.html, "lxml")
 
     def parse_ap(self):
-        self.newsdata = requests.get(self.url).json()
+        try:
+            self.newsdata = requests.get(self.url).json()
+        except JSONDecodeError:
+            return []
 
         if self.newsdata["localMemberName"] is not None:
             return []
