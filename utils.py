@@ -52,28 +52,28 @@ def mkdir_p(path):
 
 def u8(data):
     if data < 0 or data > 255:
-        log("u8 out of range: %s" % data, "CRITICAL")
+        log("u8 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">B", data)
 
 
 def u16(data):
     if data < 0 or data > 65535:
-        log("u16 out of range: %s" % data, "CRITICAL")
+        log("u16 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">H", data)
 
 
 def u32(data):
     if data < 0 or data > 4294967295:
-        log("u32 out of range: %s" % data, "CRITICAL")
+        log("u32 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">I", data)
 
 
 def u32_littleendian(data):
     if data < 0 or data > 4294967295:
-        log("u32 little endian out of range: %s" % data, "CRITICAL")
+        log("u32 little endian out of range: %s" % data, "INFO")
         data = 0
     return struct.pack("<I", data)
 
@@ -83,21 +83,21 @@ def u32_littleendian(data):
 
 def s8(data):
     if data < -128 or data > 128:
-        log("s8 out of range: %s" % data, "CRITICAL")
+        log("s8 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">b", data)
 
 
 def s16(data):
     if data < -32768 or data > 32768:
-        log("s16 out of range: %s" % data, "CRITICAL")
+        log("s16 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">h", data)
 
 
 def s32(data):
     if data < -2147483648 or data > 2147483648:
-        log("s32 out of range: %s" % data, "CRITICAL")
+        log("s32 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">i", data)
 
