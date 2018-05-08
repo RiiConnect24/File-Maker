@@ -274,7 +274,7 @@ def locations_download(language_code, data):
 
                     locations_return[new_name][1].append(filenames)
             except:
-                log("There was a error downloading the location data.", "WARNING")
+                log("There was a error downloading the location data.", "INFO")
 
     return locations_return
 
