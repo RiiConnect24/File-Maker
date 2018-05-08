@@ -1261,7 +1261,7 @@ for list in weathercities:
         if weather_data[k] is not None:
             get_legacy_api(list, k)
         else:
-            log('Unable to retrieve forecast data for %s - using blank data' % k, "WARNING")
+            log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
     cities += citycount
     status = 3
     data = generate_data(list, bins)
