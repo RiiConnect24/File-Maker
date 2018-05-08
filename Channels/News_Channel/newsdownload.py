@@ -175,6 +175,13 @@ def shrink_image(data, resize, source):
 
     maxsize = (200, 200)
 
+    """If for some reason the image has an alpha channel (probably a PNG), fill the background with white."""
+
+    if image.mode in ('RGBA', 'LA'):
+        background = Image.new(image.mode[:-1], image.size, fill_color)
+        background.paste(image, image.split()[-1])
+        image = background
+
     if resize: image.thumbnail(maxsize, Image.ANTIALIAS)
 
     data = list(image.getdata())

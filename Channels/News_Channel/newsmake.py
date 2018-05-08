@@ -869,8 +869,7 @@ def make_pictures(pictures_table, data):
             pictures["nullbyte_%s_pictures" % numbers] = u8(0)  # Null byte for the pictures.
 
             for types in ["captions", "credits"]:
-                if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table[
-                    "%s_%s_size" % (types, numbers)] == u32(0):
+                if pictures_table["%s_%s_offset" % (types, numbers)] != u32(0) and pictures_table["%s_%s_size" % (types, numbers)] == u32(0):
                     pictures_table["%s_%s_offset" % (types, numbers)] = u32(0)
 
     return pictures
