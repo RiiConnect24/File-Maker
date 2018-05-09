@@ -181,6 +181,7 @@ def shrink_image(data, resize, source):
     """If for some reason the image has an alpha channel (probably a PNG), fill the background with white."""
 
     if image.mode in ('RGBA', 'LA'):
+        fill_color = "white"
         background = Image.new(image.mode[:-1], image.size, fill_color)
         background.paste(image, image.split()[-1])
         image = background
