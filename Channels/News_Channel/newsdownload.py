@@ -196,6 +196,89 @@ def shrink_image(data, resize, source):
 
 """Get the location data."""
 
+cities = collections.OrderedDict()
+
+cities["AMSTERDAM"] = ["253d0379", "Amsterdam"]
+cities["ATLANTA"] = ["17ffc3fe", "Atlanta"]
+cities["BAGHDAD"] = ["17b71f95", "Baghdad"]
+cities["BALTIMORE"] = ["1bf0c986" "Baltimore"]
+cities["BANGKOK"] = ["09c7477a", "Bangkok"]
+cities["BEIJING"] = ["1c6252cc", "Beijing"]
+cities["BEIRUT"] = ["1818193e", "Beirut"]
+cities["BERLIN"] = ["25590988", "Berlin"]
+cities["BOSTON"] = ["1e1fcd78" "Boston"]
+cities["BRUSSELS"] = ["2427031b", "Brussels"]
+cities["CAIRO"] = ["155e1638", "Cairo"]
+cities["CHICAGO"] = ["1dc2c1ac", "Chicago"]
+cities["CINCINNATI"] = ["1bd9c3f2", "Cincinnati"]
+cities["CLEVELAND"] = ["1d82c5e8", "Cleveland"]
+cities["DALLAS"] = ["1750bb2b", "Dallas"]
+cities["DENVER"] = ["1c42b559", "Denver"]
+cities["DETROIT"] = ["1e1ac4f2", "Detroit"]
+cities["DJIBOUTI"] = ["083f1eaf", "Djibouti"]
+cities["DUBLIN"] = ["25e2fb8d", "Dublin"]
+cities["GENEVA"] = ["20d0045c", "Geneva"]
+cities["GIBRALTAR"] = ["19b3fc32", "Gibraltar"]
+cities["GUATEMALA CITY"] = ["0a61bfb5", "Guatemala City"]
+cities["HAVANA"] = ["1076c571", "Havana"]
+cities["HELSINKI"] = ["2ac911bb", "Helsinki"]
+cities["HONG KONG"] = ["0ff95147", "Hong Kong"]
+cities["HONOLULU"] = ["0f268fbf", "Honolulu"]
+cities["HOUSTON"] = ["152abc30", "Houston"]
+cities["INDIANAPOLIS"] = ["1c47c2bc", "Indianapolis"]
+cities["ISLAMABAD"] = ["17f63407", "Islamabad"]
+cities["ISTANBUL"] = ["1d32149f", "Istanbul"]
+cities["JERUSALEM"] = ["1696190a", "Jerusalem"]
+cities["JOHANNESBURG"] = ["ed6913f2", "Johannesburg"]
+cities["KUWAIT CITY"] = ["14e2221e", "Kuwait City"]
+cities["LAS VEGAS"] = ["19b9ae21", "Las Vegas"]
+cities["LONDON"] = ["24a0ffeb", "London"]
+cities["LOS ANGELES"] = ["1837abeb", "Los Angeles"]
+cities["LUXEMBOURG"] = ["2347045b", "Luxembourg"]
+cities["MACAU"] = ["0fcc50c8", "Macau"]
+cities["MADRID"] = ["1cb3fd62", "Madrid"]
+cities["MEXICO CITY"] = ["0dd1b981", "Mexico City"]
+cities["MIAMI"] = ["1253c6fa", "Miami"]
+cities["MILAN"] = ["20550688", "Milan"]
+cities["MILWAUKEE"] = ["1e9ac17e", "Milwaukee"]
+cities["MINNEAPOLIS"] = ["1ffcbdae", "Minneapolis"]
+cities["MONACO"] = ["1f160549", "Monaco"]
+cities["MONTREAL"] = ["2051cbbf", "Montréal"]
+cities["MOSCOW"] = ["27a81abf", "Moscow"]
+cities["MUNICH"] = ["223a0837", "Munich"]
+cities["NEW DELHI"] = ["145636e5", "New Delhi"]
+cities["NEW ORLEANS"] = ["154dbff3", "New Orleans"]
+cities["NEW YORK"] = ["1cf3cb60", "New York"]
+cities["OKLAHOMA CITY"] = ["1938baa8", "Oklahoma City"]
+cities["PANAMA CITY"] = ["0664c787", "Panama City"]
+cities["PARIS"] = ["22bd01ab", "Paris"]
+cities["PHILADELPHIA"] = ["1c69ca8d", "Philadelphia"]
+cities["PHOENIX"] = ["17c9b04e", "Phoenix"]
+cities["PITTSBURGH"] = ["1cc1c71e", "Pittsburgh"]
+cities["PRAGUE"] = ["239b0a43", "Prague"]
+cities["QUEBEC CITY"] = ["214ccd6b", "Quebec City"]
+cities["RIO DE JANEIRO"] = ["efb8e142", "Rio de Janeiro"]
+cities["ROME"] = ["1dca08e1", "Rome"]
+cities["SALT LAKE CITY"] = ["1cfcb06f", "Salt Lake City"]
+cities["SAN ANTONIO"] = ["14ecb9f6", "San Antonio"]
+cities["SAN DIEGO"] = ["1743acb1", "San Diego"]
+cities["SAN FRANCISCO"] = ["1adca8f3", "San Francisco"]
+cities["SAN MARINO"] = ["1f3d08d7", "San Marino"]
+cities["SAO PAULO"] = ["ef44deda", "São Paulo"]
+cities["SEATTLE"] = ["21daa903", "Seattle"]
+cities["SHANGHAI"] = ["16385661", "Shanghai"]
+cities["SINGAPORE"] = ["00eb49da", "Singapore"]
+cities["ST. LOUIS"] = ["1b77bfdc", "St. Louis"]
+cities["STOCKHOLM"] = ["2a200cd5", "Stockholm"]
+cities["SYDNEY"] = ["e7e76b8c", "Sydney"]
+cities["TOKYO"] = ["19606363", "Tokyo"]
+cities["TORONTO"] = ["1f13c787", "Toronto"]
+cities["UNITED NATIONS"] = ["1cf0cb78", "United Nations"]
+cities["VATICAN CITY"] = ["1dcc08db", "Vatican City"]
+cities["VIENNA"] = ["223d0ba0", "Vienna"]
+cities["WASHINGTON"] = ["1ba8c938", "Washington"]
+cities["ZURICH"] = ["21a40610", "Zürich"]
+
 
 def locations_download(language_code, data):
     locations = collections.OrderedDict()
@@ -214,13 +297,6 @@ def locations_download(language_code, data):
         6: "nl",
     }
 
-    """Small list of cities to correct."""
-
-    corrections = {
-        "UNITED NATIONS": ["1cf0cb780000000006000000", "United Nations"],
-        "WASHINGTON": ["1ba2c94a0000000006000000", "Washington"],
-    }
-
     for keys, values in data.items():
         location = values[7]
 
@@ -234,22 +310,22 @@ def locations_download(language_code, data):
 
         if name == "": continue
 
-        if name not in corrections:
+        print unidecode(name)
+
+        if name not in cities:
             try:
-                print unidecode(name)
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
-                log("There was a error downloading the location data.", "WARNING")
+                log("There was a error downloading the location data.", "INFO")
 
-        if read is None:
-            if name in corrections:
-                coordinates = binascii.unhexlify(corrections[name][0])
-                new_name = enc(corrections[name][1])
+        if read is None and name in cities:
+            coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
+            new_name = enc(cities[name][1])
 
-                for filenames in locations[name]:
-                    if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
+            for filenames in locations[name]:
+                if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
 
-                    locations_return[new_name][1].append(filenames)
+                locations_return[new_name][1].append(filenames)
 
         elif read is not None:
             try:
@@ -322,6 +398,8 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for key, value in self.sourceinfo["cat"].items():
+            print key
+
             feed = requests.get(self.url % key).json() if self.source == "AP" \
                     else feedparser.parse(self.url) if self.source == "SID" \
                     else feedparser.parse(self.url) if self.source == "AFP_French" \

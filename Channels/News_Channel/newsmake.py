@@ -159,8 +159,10 @@ def process_news(name, mode, language, countries, d):
     # data = remove_duplicates(data)
     data = remove_duplicates2(data)
 
+    locations_data = newsdownload.locations_download(language_code, data)
+
     for system in ["wii", "wii_u"]:
-        make_news = make_news_bin(mode, system, data)
+        make_news = make_news_bin(mode, system, data, locations_data)
 
     if config["production"]:
         """Log stuff to Datadog."""
@@ -221,7 +223,7 @@ def copy_file(mode, console, country):
 """Run the functions to make the news."""
 
 
-def make_news_bin(mode, console, data):
+def make_news_bin(mode, console, data, locations_data):
     global system, dictionaries, languages, country_code, language_code
     
     source = sources[mode]
@@ -253,8 +255,6 @@ def make_news_bin(mode, console, data):
                          "wb"))
 
     dictionaries = []
-
-    locations_data = newsdownload.locations_download(language_code, data)
 
     header = make_header(data)
     make_wiimenu_articles(header, data)
@@ -555,7 +555,7 @@ def make_articles_table(mode, locations_data, header, data):
 
     header["articles_number"] = u32(numbers)  # Number of entries for the articles table.
 
-    if config["production"]:
+    if config["production"] and system == "wii":
         statsd.increment("news.total_articles", numbers)
         statsd.increment("news.articles." + mode, numbers)
 
@@ -644,7 +644,7 @@ def make_locations_table(header, locations_data):
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
-    if config["production"]:
+    if config["production"] and system == "wii":
         statsd.increment("news.total_locations", locations_number)
 
     return locations_table
@@ -686,7 +686,7 @@ def make_pictures_table(header, data):
 
     header["pictures_number"] = u32(pictures_number)  # Number of entries for the pictures table.
 
-    if config["production"]:
+    if config["production"] and system == "wii":
         statsd.increment("news.total_pictures", pictures_number)
 
     return pictures_table
