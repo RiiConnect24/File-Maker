@@ -398,8 +398,6 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for key, value in self.sourceinfo["cat"].items():
-            print key
-
             feed = requests.get(self.url % key).json() if self.source == "AP" \
                     else feedparser.parse(self.url) if self.source == "SID" \
                     else feedparser.parse(self.url) if self.source == "AFP_French" \
@@ -520,10 +518,13 @@ class Parse(News):
         else:
             return []
 
-        self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").get_text(separator="\n").replace("\n\n", "\n")
+        self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").text.replace("\n", "\n\n")
+
+        if self.article[-2:] == "\n\n":
+            self.article = self.article[:-2]
 
         if self.newsdata["bylines"] != "":
-            self.article += "\n" + self.newsdata["bylines"]
+            self.article += "\n\n" + self.newsdata["bylines"]
 
         if self.article is None:
             return []
