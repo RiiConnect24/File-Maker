@@ -398,7 +398,13 @@ class News:
         print "Downloading News from " + self.source + "...\n"
 
         for key, value in self.sourceinfo["cat"].items():
-            feed = requests.get(self.url % key).json() if self.source == "AP" \
+            if self.source == "AP":
+                try:
+                    ap_json = requests.get(self.url % key).json()
+                except JSONDecodeError:
+                    continue
+
+            feed = ap_json if self.source == "AP" \
                     else feedparser.parse(self.url) if self.source == "SID" \
                     else feedparser.parse(self.url) if self.source == "AFP_French" \
                     else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
