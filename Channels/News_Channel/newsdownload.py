@@ -537,7 +537,7 @@ class Parse(News):
 
                 self.caption = self.newsdata["media"][0]["flattenedCaption"]
 
-                self.credits = None  # No credits?
+                self.credits = None
 
                 try:
                     self.credits = self.caption.rsplit("(")[1][:-1]
