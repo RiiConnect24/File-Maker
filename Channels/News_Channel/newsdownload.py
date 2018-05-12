@@ -401,7 +401,7 @@ class News:
             if self.source == "AP":
                 try:
                     ap_json = requests.get(self.url % key).json()
-                except JSONDecodeError:
+                except:
                     continue
 
             feed = ap_json if self.source == "AP" \
