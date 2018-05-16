@@ -543,12 +543,10 @@ class Parse(News):
 
                 self.caption = self.newsdata["media"][0]["flattenedCaption"]
 
-                self.credits = None
-
                 try:
                     self.credits = self.caption.rsplit("(")[1][:-1]
                 except:
-                    self.credits = self.caption.rsplit("AP Photo")[1][:-1] # Looks like there was no opening parenthesis.
+                    self.credits = None
             else:
                 self.picture = None
         else:
