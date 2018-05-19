@@ -519,7 +519,7 @@ class Parse(News):
             return []
 
         if self.newsdata["localLinkUrl"]:
-            if "apnews.com" not in self.newsdata["localLinkUrl"]:
+            if "apnews" not in self.newsdata["localLinkUrl"]:
                 return []
         else:
             return []
