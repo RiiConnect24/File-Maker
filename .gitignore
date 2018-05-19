@@ -1,6 +1,25 @@
+# General
 
 *.pem
 *.pyc
 config.py
+
+# Forecast Channel
+
+forecast.*
+short.*
+
+# News Channel
+
 newstime
 news.bin.*
+
+# Everybody Votes Channel
+
+voting.*
+*_q.*
+*_r.*
+
+# JetBrains IDE
+
+.idea/**
