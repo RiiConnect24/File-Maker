@@ -3,6 +3,737 @@
 
 import collections
 
+weathercities001 = collections.OrderedDict()
+
+weathercities001["Tokyo"] = [
+    ["東京", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
+    ["東京都", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1960636309030000"]
+weathercities001["Hachijō-jima"] = [
+    ["八丈島", "Hachijō-jima", "Hachijō-jima", "Hachijō-jima", "Hachijōjima", "Hachijō-jima", "Hachijojima"],
+    ["東京都", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "178d636503030000"]
+weathercities001["Oshima"] = [
+    ["大島", "Oshima", "Ōshima", "Oshima", "Oshima", "Ōshima", "Oshima"],
+    ["東京都", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18b5631a01030000"]
+weathercities001["Chichi-jima"] = [
+    ["父島", "Chichi-jima", "Chichi-jima", "Île Chichi", "Chichi-jima", "Chichi-jima", "Chichi-jima"],
+    ["東京都", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1343651c07030000"]
+weathercities001["Miyake Island"] = [
+    ["三宅島", "Miyake Island", "Miyake Island", "Miyake Island", "Miyake Island", "Miyake Island", "Miyake Island"],
+    ["東京都", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1843633700030000"]
+weathercities001["Sapporo"] = [
+    ["札幌市", "Sapporo", "Sapporo", "Sapporo", "Sapporo", "Sapporo", "Sapporo"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e9e648007030000"]
+weathercities001["Wakkanai"] = [
+    ["稚内市", "Wakkanai", "Wakkanai", "Wakkanai", "Wakkanai", "Wakkanai", "Wakkanai"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "204b64c003030000"]
+weathercities001["Asahikawa"] = [
+    ["旭川市", "Asahikawa", "Asahikawa", "Asahikawa", "Asahikawa", "Asahikawa", "Asahikawa"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1f1d653e01030000"]
+weathercities001["Rumoi"] = [
+    ["留萌市", "Rumoi", "Rumoi", "Rumoi", "Rumoi", "Rumoi", "Rumoi"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1f3f64b800030000"]
+weathercities001["Iwamizawa"] = [
+    ["岩見沢市", "Iwamizawa", "Iwamizawa", "Iwamizawa", "Iwamizawa", "Iwamizawa", "Iwamizawa"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1eba64d300030000"]
+weathercities001["Kutchan"] = [
+    ["倶知安町", "Kutchan", "Kutchan", "Kutchan", "Kutchan", "Kutchan", "Kutchan"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e81641800030000"]
+weathercities001["Abashiri"] = [
+    ["網走市", "Abashiri", "Abashiri", "Abashiri", "Abashiri", "Abashiri", "Abashiri"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1f4c669902030000"]
+weathercities001["Kitami"] = [
+    ["北見市", "Kitami", "Kitami", "Kitami", "Kitami", "Kitami", "Kitami"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1f27664f00030000"]
+weathercities001["Monbetsu"] = [
+    ["紋別市", "Monbetsu", "Mombetsu", "Monbetsu", "Monbetsu", "Monbetsu", "Monbetsu"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1f8865f101030000"]
+weathercities001["Nemuro"] = [
+    ["根室市", "Nemuro", "Nemuro", "Nemuro", "Nemuro", "Nemuro", "Nemuro"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1ecf678701030000"]
+weathercities001["Kushiro"] = [
+    ["釧路市", "Kushiro", "Kushiro-shi", "Kushiro", "Kushiro", "Kushiro", "Kushiro"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e9066ab02030000"]
+weathercities001["Obihiro"] = [
+    ["帯広市", "Obihiro", "Obihiro", "Obihiro", "Obihiro", "Obihiro", "Obihiro"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e8465d701030000"]
+weathercities001["Muroran"] = [
+    ["室蘭市", "Muroran", "Muroran", "Muroran", "Muroran", "Muroran", "Muroran"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e16644000030000"]
+weathercities001["Urakawa"] = [
+    ["浦河町", "Urakawa", "Urakawa", "Urakawa", "Urakawa", "Urakawa", "Urakawa"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1dfa658801030000"]
+weathercities001["Hakodate"] = [
+    ["函館市", "Hakodate", "Hakodate", "Hakodate", "Hakodate", "Hakodate", "Hakodate"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1dbc641803030000"]
+weathercities001["Esashi"] = [
+    ["江差町", "Esashi", "Esashi", "Esashi", "Esashi", "Esashi", "Esashi"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1dc563a500030000"]
+weathercities001["Esashi"] = [
+    ["枝幸町", "Esashi", "Esashi", "Esashi", "Esashi", "Esashi", "Esashi"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1ff4656500030000"]
+weathercities001["Haboro"] = [
+    ["羽幌町", "Haboro", "Haboro", "Haboro", "Haboro", "Haboro", "Haboro"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1f8b64c401030000"]
+weathercities001["Otaru"] = [
+    ["小樽市", "Otaru", "Otaru", "Otaru", "Otaru", "Otaru", "Otaru"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1eb4644700030000"]
+weathercities001["Suttsu"] = [
+    ["寿都町", "Suttsu", "Suttsu", "Suttsu", "Suttsu", "Suttsu", "Suttsu"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e6e63b701030000"]
+weathercities001["Oumu"] = [
+    ["雄武町", "Oumu", "Oumu", "Oumu", "Oumu", "Ōmu", "Oumu"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1fb365aa00030000"]
+weathercities001["Hiroo"] = [
+    ["広尾町", "Hiroo", "Hiroo", "Hiroo", "Hiroo", "Hiroo", "Hiroo"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e1365ea00030000"]
+weathercities001["Tomakomai"] = [
+    ["苫小牧市", "Tomakomai", "Tomakomai", "Tomakomai", "Tomakomai", "Tomakomai", "Tomakomai"],
+    ["北海道", "Hokkaido", "Hokkaido", "Hokkaido", "Hokaido", "Hokkaido", "Hokkaido"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1e4f64a801030000"]
+weathercities001["Aomori"] = [
+    ["青森市", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori"],
+    ["青森県", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1d06641a01030000"]
+weathercities001["Mutsu"] = [
+    ["むつ市", "Mutsu", "Mutsu", "Mutsu", "Mutsu", "Mutsu", "Mutsu"],
+    ["青森県", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1d5b646b00030000"]
+weathercities001["Hachinohe"] = [
+    ["八戸市", "Hachinohe", "Hachinohe", "Hachinohe", "Hachinohe", "Hachinohe", "Hachinohe"],
+    ["青森県", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1cd164a300030000"]
+weathercities001["Fukaura"] = [
+    ["深浦町", "Fukaura", "Fukaura", "Fukaura", "Fukaura", "Fukaura", "Fukaura"],
+    ["青森県", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori", "Aomori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1ce6638200030000"]
+weathercities001["Morioka"] = [
+    ["盛岡市", "Morioka", "Morioka", "Morioka", "Morioka", "Morioka", "Morioka"],
+    ["岩手県", "Iwate", "Iwate", "Iwate", "Iwate", "Iwate", "Iwate"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1c3a646203030000"]
+weathercities001["Miyako"] = [
+    ["宮古市", "Miyako", "Miyako", "Miyako", "Miyako", "Miyako", "Miyako"],
+    ["岩手県", "Iwate", "Iwate", "Iwate", "Iwate", "Iwate", "Iwate"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1c3164f400030000"]
+weathercities001["Ofunato"] = [
+    ["大船渡市", "Ofunato", "Ofunato", "Ofunato", "Ofunato", "Ofunato", "Ofunato"],
+    ["岩手県", "Iwate", "Iwate", "Iwate", "Iwate", "Iwate", "Iwate"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1bc764c601030000"]
+weathercities001["Sendai"] = [
+    ["仙台市", "Sendai", "Sendai", "Sendai", "Sendai", "Sendai", "Sendai"],
+    ["宮城県", "Miyagi", "Miyagi", "Miyagi", "Miyagi", "Miyagi", "Miyagi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b34643206030000"]
+weathercities001["Shiroishi"] = [
+    ["白石市", "Shiroishi", "Shiroishi", "Shiroishi", "Shiroishi", "Shiroishi", "Shiroishi"],
+    ["宮城県", "Miyagi", "Miyagi", "Miyagi", "Miyagi", "Miyagi", "Miyagi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b0763fe00030000"]
+weathercities001["Ishinomaki"] = [
+    ["石巻市", "Ishinomaki", "Ishinomaki", "Ishinomaki", "Ishinomaki", "Ishinomaki", "Ishinomaki"],
+    ["宮城県", "Miyagi", "Miyagi", "Miyagi", "Miyagi", "Miyagi", "Miyagi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b53647b00030000"]
+weathercities001["Akita"] = [
+    ["秋田市", "Akita", "Akita", "Akita", "Akita", "Akita", "Akita"],
+    ["秋田県", "Akita", "Akita", "Akita", "Akita", "Akita", "Akita"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1c3d63a001030000"]
+weathercities001["Yokote"] = [
+    ["横手市", "Yokote", "Yokote", "Yokote", "Yokote", "Yokote", "Yokote"],
+    ["秋田県", "Akita", "Akita", "Akita", "Akita", "Akita", "Akita"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1bf563f300030000"]
+weathercities001["Yamagata"] = [
+    ["山形市", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata"],
+    ["山形県", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b3363cd01030000"]
+weathercities001["Yonezawa"] = [
+    ["米沢市", "Yonezawa", "Yonezawa", "Yonezawa", "Yonezawa", "Yonezawa", "Yonezawa"],
+    ["山形県", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1af563a800030000"]
+weathercities001["Sakata"] = [
+    ["酒田市", "Sakata", "Sakata", "Sakata", "Sakata", "Sakata", "Sakata"],
+    ["山形県", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1baa637200030000"]
+weathercities001["Shinjō"] = [
+    ["新庄市", "Shinjō", "Shinjō", "Shinjō", "Shinjō", "Shinjō", "Shinjo"],
+    ["山形県", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata", "Yamagata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b8f63c701030000"]
+weathercities001["Fukushima"] = [
+    ["福島市", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima"],
+    ["福島県", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1ad963e401030000"]
+weathercities001["Onahama"] = [
+    ["小名浜", "Onahama", "Onahama", "Onahama", "Onahama", "Onahama", "Onahama"],
+    ["福島県", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a45643301030000"]
+weathercities001["Aizuwakamatsu"] = [
+    ["会津若松市", "Aizuwakamatsu", "Aizuwakamatsu", "Aizuwakamatsu", "Aizuwakamatsu", "Aizuwakamatsu", "Aizuwakamatsu"],
+    ["福島県", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1aa7637e00030000"]
+weathercities001["Shirakawa"] = [
+    ["白河市", "Shirakawa", "Shirakawa", "Shirakawa", "Shirakawa", "Shirakawa", "Shirakawa"],
+    ["福島県", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima", "Fukushima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a6663b600030000"]
+weathercities001["Mito"] = [
+    ["水戸市", "Mito", "Mito", "Mito", "Mito", "Mito", "Mito"],
+    ["茨城県", "Ibaraki", "Ibaraki", "Ibaraki", "Ibaraki", "Ibaraki", "Ibaraki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19de63e402030000"]
+weathercities001["Tsukuba"] = [
+    ["つくば市", "Tsukuba", "Tsukuba", "Tsukuba", "Tsukuba", "Tsukuba", "Tsukuba"],
+    ["茨城県", "Ibaraki", "Ibaraki", "Ibaraki", "Ibaraki", "Ibaraki", "Ibaraki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19a363a500030000"]
+weathercities001["Utsunomiya"] = [
+    ["宇都宮市", "Utsunomiya", "Utsunomiya", "Utsunomiya", "Utsunomiya", "Utsunomiya", "Utsunomiya"],
+    ["栃木県", "Tochigi", "Tochigi", "Tochigi", "Tochigi", "Tochigi", "Tochigi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19fd637601030000"]
+weathercities001["Otawara"] = [
+    ["大田原市", "Otawara", "Ōtawara", "Ōtawara", "Ōtawara", "Ōtawara", "Otawara"],
+    ["栃木県", "Tochigi", "Tochigi", "Tochigi", "Tochigi", "Tochigi", "Tochigi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a36639600030000"]
+weathercities001["Nikko"] = [
+    ["日光市", "Nikko", "Nikkō", "Nikkō", "Nikkō", "Nikkō", "Nikko"],
+    ["栃木県", "Tochigi", "Tochigi", "Tochigi", "Tochigi", "Tochigi", "Tochigi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a1f633300030000"]
+weathercities001["Maebashi"] = [
+    ["前橋市", "Maebashi", "Maebashi", "Maebashi", "Maebashi", "Maebashi", "Maebashi"],
+    ["群馬県", "Gunma", "Gunma", "Gunma", "Gunma", "Gunma", "Gunma"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19e262e401030000"]
+weathercities001["Minakami"] = [
+    ["みなかみ町", "Minakami", "Minakami", "Minakami", "Minakami", "Minakami", "Minakami"],
+    ["群馬県", "Gunma", "Gunma", "Gunma", "Gunma", "Gunma", "Gunma"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a2a62d600030000"]
+weathercities001["Saitama"] = [
+    ["さいたま市", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama"],
+    ["埼玉県", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1982634300030000"]
+weathercities001["Kumagaya"] = [
+    ["熊谷市", "Kumagaya", "Kumagaya", "Kumagaya", "Kumagaya", "Kumagaya", "Kumagaya"],
+    ["埼玉県", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19b4631d00030000"]
+weathercities001["Chichibu"] = [
+    ["秩父市", "Chichibu", "Chichibu", "Chichibu", "Chichibu", "Chichibu", "Chichibu"],
+    ["埼玉県", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama", "Saitama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "199662e600030000"]
+weathercities001["Chiba"] = [
+    ["千葉市", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba"],
+    ["千葉県", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "195063a100030000"]
+weathercities001["Choshi"] = [
+    ["銚子市", "Choshi", "Chōshi", "Chōshi", "Chōshi", "Chōshi", "Choshi"],
+    ["千葉県", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1969642b00030000"]
+weathercities001["Katsuura"] = [
+    ["勝浦市", "Katsuura", "Katsuura", "Katsuura", "Katsuura", "Katsuura", "Katsuura"],
+    ["千葉県", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18fe63c701030000"]
+weathercities001["Tateyama"] = [
+    ["館山市", "Tateyama", "Tateyama", "Tateyama", "Tateyama", "Tateyama", "Tateyama"],
+    ["千葉県", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba", "Chiba"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18e0637600030000"]
+weathercities001["Yokohama"] = [
+    ["横浜市", "Yokohama", "Yokohama", "Yokohama", "Yokohama", "Yokohama", "Yokohama"],
+    ["神奈川県", "Kanagawa", "Kanagawa", "Kanagawa", "Kanagawa", "Kanagawa", "Kanagawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1933634f00030000"]
+weathercities001["Odawara"] = [
+    ["小田原市", "Odawara", "Odawara", "Odawara", "Odawara", "Odawara", "Odawara"],
+    ["神奈川県", "Kanagawa", "Kanagawa", "Kanagawa", "Kanagawa", "Kanagawa", "Kanagawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "191162f400030000"]
+weathercities001["Toyama"] = [
+    ["富山市", "Toyama", "Toyama", "Toyama", "Toyama", "Toyama", "Toyama"],
+    ["富山県", "Toyama", "Toyama", "Toyama", "Toyama", "Toyama", "Toyama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a1a619100030000"]
+weathercities001["Fushiki"] = [
+    ["伏木", "Fushiki", "Fushiki", "Fushiki", "Fushiki", "Fushiki", "Fushiki"],
+    ["富山県", "Toyama", "Toyama", "Toyama", "Toyama", "Toyama", "Toyama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a29617600030000"]
+weathercities001["Kanazawa"] = [
+    ["金沢市", "Kanazawa", "Kanazawa", "Kanazawa", "Kanazawa", "Kanazawa", "Kanazawa"],
+    ["石川県", "Ishikawa", "Ishikawa", "Ishikawa", "Ishikawa", "Ishikawa", "Ishikawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a04612a04030000"]
+weathercities001["Wajima"] = [
+    ["輪島市", "Wajima", "Wajima", "Wajima", "Wajima", "Wajima", "Wajima"],
+    ["石川県", "Ishikawa", "Ishikawa", "Ishikawa", "Ishikawa", "Ishikawa", "Ishikawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a96615900030000"]
+weathercities001["Fukui"] = [
+    ["福井市", "Fukui", "Fukui", "Fukui", "Fukui", "Fukui", "Fukui"],
+    ["福井県", "Fukui", "Fukui", "Fukui", "Fukui", "Fukui", "Fukui"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19a360df01030000"]
+weathercities001["Tsuruga"] = [
+    ["敦賀市", "Tsuruga", "Tsuruga", "Tsuruga", "Tsuruga", "Tsuruga", "Tsuruga"],
+    ["福井県", "Fukui", "Fukui", "Fukui", "Fukui", "Fukui", "Fukui"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "195960c100030000"]
+weathercities001["Kofu"] = [
+    ["甲府市", "Kofu", "Kōfu", "Kōfu", "Kōfu", "Kōfu", "Kofu"],
+    ["山梨県", "Yamanashi", "Yamanashi", "Yamanashi", "Yamanashi", "Yamanashi", "Yamanashi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "195c628701030000"]
+weathercities001["Lake Kawaguchi"] = [
+    ["河口湖", "Lake Kawaguchi", "Kawaguchi-See", "Lac Kawaguchi", "Lake Kawaguchi", "Lago Kawaguchi", "Kawaguchimeer"],
+    ["山梨県", "Yamanashi", "Yamanashi", "Yamanashi", "Yamanashi", "Yamanashi", "Yamanashi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "193e62ad00030000"]
+weathercities001["Nagano"] = [
+    ["長野市", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano"],
+    ["長野県", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a11624501030000"]
+weathercities001["Matsumoto"] = [
+    ["松本市", "Matsumoto", "Matsumoto", "Matsumoto", "Matsumoto", "Matsumoto", "Matsumoto"],
+    ["長野県", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19c5621d00030000"]
+weathercities001["Iida"] = [
+    ["飯田市", "Iida", "Iida", "Iida", "Iida", "Iida", "Iida"],
+    ["長野県", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1942620100030000"]
+weathercities001["Karuizawa"] = [
+    ["軽井沢町", "Karuizawa", "Karuizawa", "Karuizawa", "Karuizawa", "Karuizawa", "Karuizawa"],
+    ["長野県", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19d7628600030000"]
+weathercities001["Suwa"] = [
+    ["諏訪市", "Suwa", "Suwa", "Suwa", "Suwa", "Suwa", "Suwa"],
+    ["長野県", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano", "Nagano"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19a1623600030000"]
+weathercities001["Niigata"] = [
+    ["新潟市", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
+    ["新潟県", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1af562e102030000"]
+weathercities001["Nagaoka"] = [
+    ["長岡市", "Nagaoka", "Nagaoka", "Nagaoka", "Nagaoka", "Nagaoka", "Nagaoka"],
+    ["新潟県", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1aa162b800030000"]
+weathercities001["Joetsu"] = [
+    ["上越市", "Joetsu", "Jōetsu", "Jōetsu", "Jōetsu", "Jōetsu", "Joetsu"],
+    ["新潟県", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a62624f00030000"]
+weathercities001["1305"] = [
+    ["相川", "1305", "1305", "54-6", "1305", "1305", "1305"],
+    ["新潟県", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b09624e00030000"]
+weathercities001["Gifu"] = [
+    ["岐阜市", "Gifu", "Gifu", "Gifu", "Gifu", "Gifu", "Gifu"],
+    ["岐阜県", "Gifu", "Gifu", "Gifu", "Gifu", "Gifu", "Gifu"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "192b614100030000"]
+weathercities001["Takayama"] = [
+    ["高山市", "Takayama", "Takayama", "Takayama", "Takayama", "Takayama", "Takayama"],
+    ["岐阜県", "Gifu", "Gifu", "Gifu", "Gifu", "Gifu", "Gifu"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19b5619a00030000"]
+weathercities001["Shizuoka"] = [
+    ["静岡市", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18de626c01030000"]
+weathercities001["Ajiro"] = [
+    ["網代", "Ajiro", "Ajiro", "Ajiro", "Ajiro", "Ajiro", "Ajiro"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18eb62e900030000"]
+weathercities001["Mishima"] = [
+    ["三島市", "Mishima", "Mishima", "Mishima", "Mishima", "Mishima", "Mishima"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18f862ca00030000"]
+weathercities001["Hamamatsu"] = [
+    ["浜松市", "Hamamatsu", "Hamamatsu", "Hamamatsu", "Hamamatsu", "Hamamatsu", "Hamamatsu"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18ae61ef00030000"]
+weathercities001["Mount Fuji"] = [
+    ["富士山", "Mount Fuji", "Fuji", "Mont Fuji", "Monte Fuji", "Monte Fuji", "Fuji"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "192562a602030000"]
+weathercities001["Omaezaki"] = [
+    ["御前崎市", "Omaezaki", "Omaezaki", "Omaezaki", "Omaezaki", "Omaezaki", "Omaezaki"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "189b624900030000"]
+weathercities001["Irozaki"] = [
+    ["石廊崎", "Irozaki", "Irozaki", "Irozaki", "Irozaki", "Irozaki", "Irozaki"],
+    ["静岡県", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka", "Shizuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "189a62bc00030000"]
+weathercities001["Nagoya"] = [
+    ["名古屋市", "Nagoya", "Nagoya", "Nagoya", "Nagoya", "Nagoya", "Nagoya"],
+    ["愛知県", "Aichi", "Aichi", "Aichi", "Aichi", "Aichi", "Aichi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1901616602030000"]
+weathercities001["Toyohashi"] = [
+    ["豊橋市", "Toyohashi", "Toyohashi", "Toyohashi", "Toyohashi", "Toyohashi", "Toyohashi"],
+    ["愛知県", "Aichi", "Aichi", "Aichi", "Aichi", "Aichi", "Aichi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18b661aa00030000"]
+weathercities001["Iragocho"] = [
+    ["伊良湖", "Iragocho", "Iragocho", "Iragocho", "Iragocho", "Iragocho", "Iragocho"],
+    ["愛知県", "Aichi", "Aichi", "Aichi", "Aichi", "Aichi", "Aichi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "189f617d00030000"]
+weathercities001["Tsu"] = [
+    ["津市", "Tsu", "Tsu", "Tsu", "Tsu", "Tsu", "Tsu"],
+    ["三重県", "Mie", "Mie", "Mie", "Mie", "Mie", "Mie"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18b2611501030000"]
+weathercities001["Owase"] = [
+    ["尾鷲市", "Owase", "Owase", "Owase", "Owase", "Owase", "Owase"],
+    ["三重県", "Mie", "Mie", "Mie", "Mie", "Mie", "Mie"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "183960d900030000"]
+weathercities001["Yokkaichi"] = [
+    ["四日市市", "Yokkaichi", "Yokkaichi", "Yokkaichi", "Yokkaichi", "Yokkaichi", "Yokkaichi"],
+    ["三重県", "Mie", "Mie", "Mie", "Mie", "Mie", "Mie"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18d6612100030000"]
+weathercities001["Uenocho"] = [
+    ["上野", "Uenocho", "Uenocho", "Uenocho", "Uenocho", "Uenocho", "Uenocho"],
+    ["三重県", "Mie", "Mie", "Mie", "Mie", "Mie", "Mie"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18b760cf00030000"]
+weathercities001["Otsu"] = [
+    ["大津市", "Otsu", "Ōtsu", "Ōtsu", "Ōtsu", "Ōtsu", "Otsu"],
+    ["滋賀県", "Shiga", "Shiga", "Shiga", "Shiga", "Shiga", "Shiga"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18e160a600030000"]
+weathercities001["Hikone"] = [
+    ["彦根市", "Hikone", "Hikone", "Hikone", "Hikone", "Hikone", "Hikone"],
+    ["滋賀県", "Shiga", "Shiga", "Shiga", "Shiga", "Shiga", "Shiga"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "191560e300030000"]
+weathercities001["Kyoto"] = [
+    ["京都市", "Kyoto", "Kyōto", "Kyoto", "Kioto", "Kyoto", "Kioto"],
+    ["京都府", "Kyoto", "Kyoto", "Kyoto", "Kioto", "Kyoto", "Kyoto"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18e5608501030000"]
+weathercities001["Maizuru"] = [
+    ["舞鶴市", "Maizuru", "Maizuru", "Maizuru", "Maizuru", "Maizuru", "Maizuru"],
+    ["京都府", "Kyoto", "Kyoto", "Kyoto", "Kioto", "Kyoto", "Kyoto"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1935603a00030000"]
+weathercities001["Osaka"] = [
+    ["大阪市", "Osaka", "Ōsaka", "Osaka", "Osaka", "Osaka", "Osaka"],
+    ["大阪府", "Osaka", "Osaka", "Osaka", "Osaka", "Osaka", "Osaka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18a8605f05030000"]
+weathercities001["Kobe"] = [
+    ["神戸市", "Kobe", "Kōbe", "Kobe", "Kōbe", "Kōbe", "Kobe"],
+    ["兵庫県", "Hyogo", "Hyogo", "Hyogo", "Hiogo", "Hyogo", "Hyogo"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18ab602700030000"]
+weathercities001["Toyooka"] = [
+    ["豊岡市", "Toyooka", "Toyooka", "Toyooka", "Toyooka", "Toyooka", "Toyooka"],
+    ["兵庫県", "Hyogo", "Hyogo", "Hyogo", "Hiogo", "Hyogo", "Hyogo"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19445fe000030000"]
+weathercities001["Himeji"] = [
+    ["姫路市", "Himeji", "Himeji", "Himeji", "Himeji", "Himeji", "Himeji"],
+    ["兵庫県", "Hyogo", "Hyogo", "Hyogo", "Hiogo", "Hyogo", "Hyogo"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18c55fc400030000"]
+weathercities001["Sumoto"] = [
+    ["洲本市", "Sumoto", "Sumoto", "Sumoto", "Sumoto", "Sumoto", "Sumoto"],
+    ["兵庫県", "Hyogo", "Hyogo", "Hyogo", "Hiogo", "Hyogo", "Hyogo"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "186a5fef00030000"]
+weathercities001["Nara"] = [
+    ["奈良市", "Nara", "Nara", "Nara", "Nara", "Nara", "Nara"],
+    ["奈良県", "Nara", "Nara", "Nara", "Nara", "Nara", "Nara"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18ab609700030000"]
+weathercities001["Kazeya"] = [
+    ["風屋", "Kazeya", "Kazeya", "Kazeya", "Kazeya", "Kazeya", "Kazeya"],
+    ["奈良県", "Nara", "Nara", "Nara", "Nara", "Nara", "Nara"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1835608f00030000"]
+weathercities001["Wakayama"] = [
+    ["和歌山市", "Wakayama", "Wakayama", "Wakayama", "Wakayama", "Wakayama", "Wakayama"],
+    ["和歌山県", "Wakayama", "Wakayama", "Wakayama", "Wakayama", "Wakayama", "Wakayama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1856601e01030000"]
+weathercities001["Shionomisaki Light"] = [
+    ["潮岬", "Shionomisaki Light", "Shionomisaki Light", "Shionomisaki Light", "Shionomisaki Light", "Shionomisaki Light", "Shionomisaki Light"],
+    ["和歌山県", "Wakayama", "Wakayama", "Wakayama", "Wakayama", "Wakayama", "Wakayama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17c9608a01030000"]
+weathercities001["Tottori"] = [
+    ["鳥取市", "Tottori", "Tottori", "Tottori", "Tottori", "Tottori", "Tottori"],
+    ["鳥取県", "Tottori", "Tottori", "Tottori", "Totori", "Tottori", "Tottori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "193b5f7501030000"]
+weathercities001["Yonago"] = [
+    ["米子市", "Yonago", "Yonago", "Yonago", "Yonago", "Yonago", "Yonago"],
+    ["鳥取県", "Tottori", "Tottori", "Tottori", "Totori", "Tottori", "Tottori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19325ed200030000"]
+weathercities001["Sakaiminato"] = [
+    ["境港市", "Sakaiminato", "Sakaiminato", "Sakaiminato", "Sakaiminato", "Sakaiminato", "Sakaiminato"],
+    ["鳥取県", "Tottori", "Tottori", "Tottori", "Totori", "Tottori", "Tottori"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19465ebf00030000"]
+weathercities001["Matsue"] = [
+    ["松江市", "Matsue", "Matsue", "Matsue", "Matsue", "Matsue", "Matsue"],
+    ["島根県", "Shimane", "Shimane", "Shimane", "Shimane", "Shimane", "Shimane"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19365ea003030000"]
+weathercities001["Hamada"] = [
+    ["浜田市", "Hamada", "Hamada", "Hamada", "Hamada", "Hamada", "Hamada"],
+    ["島根県", "Shimane", "Shimane", "Shimane", "Shimane", "Shimane", "Shimane"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18d05deb00030000"]
+weathercities001["Saigocho"] = [
+    ["西郷", "Saigocho", "Saigocho", "Saigocho", "Saigocho", "Saigocho", "Saigocho"],
+    ["島根県", "Shimane", "Shimane", "Shimane", "Shimane", "Shimane", "Shimane"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "19be5ed100030000"]
+weathercities001["Okayama"] = [
+    ["岡山市", "Okayama", "Okayama", "Okayama", "Okayama", "Okayama", "Okayama"],
+    ["岡山県", "Okayama", "Okayama", "Okayama", "Okayama", "Okayama", "Okayama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18a55f3b01030000"]
+weathercities001["Tsuyama"] = [
+    ["津山市", "Tsuyama", "Tsuyama", "Tsuyama", "Tsuyama", "Tsuyama", "Tsuyama"],
+    ["岡山県", "Okayama", "Okayama", "Okayama", "Okayama", "Okayama", "Okayama"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18ee5f4c00030000"]
+weathercities001["Hiroshima"] = [
+    ["広島市", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima"],
+    ["広島県", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18755e3202030000"]
+weathercities001["Shobara"] = [
+    ["庄原市", "Shobara", "Shōbara", "Shōbara", "Shōbara", "Shōbara", "Shobara"],
+    ["広島県", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18c95e9900030000"]
+weathercities001["Fukuyama"] = [
+    ["福山市", "Fukuyama", "Fukuyama", "Fukuyama", "Fukuyama", "Fukuyama", "Fukuyama"],
+    ["広島県", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "187e5ec100030000"]
+weathercities001["Kure"] = [
+    ["呉市", "Kure", "Kure", "Kure", "Kure", "Kure", "Kure"],
+    ["広島県", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima", "Hiroshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18585e4200030000"]
+weathercities001["Yamaguchi"] = [
+    ["山口市", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi"],
+    ["山口県", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "184a5d7b01030000"]
+weathercities001["Shimonoseki"] = [
+    ["下関市", "Shimonoseki", "Shimonoseki", "Shimonoseki", "Shimonoseki", "Shimonoseki", "Shimonoseki"],
+    ["山口県", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18235d1a00030000"]
+weathercities001["Yanai"] = [
+    ["柳井市", "Yanai", "Yanai", "Yanai", "Yanai", "Yanai", "Yanai"],
+    ["山口県", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18255df300030000"]
+weathercities001["Hagi"] = [
+    ["萩市", "Hagi", "Hagi", "Hagi", "Hagi", "Hagi", "Hagi"],
+    ["山口県", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18785d6f00030000"]
+weathercities001["Ube"] = [
+    ["宇部市", "Ube", "Ube", "Ube", "Ube", "Ube", "Ube"],
+    ["山口県", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi", "Yamaguchi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18205d5b00030000"]
+weathercities001["Tokushima"] = [
+    ["徳島市", "Tokushima", "Tokushima", "Tokushima", "Tokushima", "Tokushima", "Tokushima"],
+    ["徳島県", "Tokushima", "Tokushima", "Tokushima", "Tokushima", "Tokushima", "Tokushima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18395fb201030000"]
+weathercities001["Minami"] = [
+    ["美波町", "Minami", "Minami", "Minami", "Minami", "Minami", "Minami"],
+    ["徳島県", "Tokushima", "Tokushima", "Tokushima", "Tokushima", "Tokushima", "Tokushima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17fb5fac00030000"]
+weathercities001["Takamatsu"] = [
+    ["高松市", "Takamatsu", "Takamatsu", "Takamatsu", "Takamatsu", "Takamatsu", "Takamatsu"],
+    ["香川県", "Kagawa", "Kagawa", "Kagawa", "Kagawa", "Kagawa", "Kagawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18665f5401030000"]
+weathercities001["Tadotsu"] = [
+    ["多度津町", "Tadotsu", "Tadotsu", "Tadotsu", "Tadotsu", "Tadotsu", "Tadotsu"],
+    ["香川県", "Kagawa", "Kagawa", "Kagawa", "Kagawa", "Kagawa", "Kagawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "185f5f1d00030000"]
+weathercities001["Matsuyama"] = [
+    ["松山市", "Matsuyama", "Matsuyama", "Matsuyama", "Matsuyama", "Matsuyama", "Matsuyama"],
+    ["愛媛県", "Ehime", "Ehime", "Ehime", "Ehime", "Ehime", "Ehime"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18105e6b01030000"]
+weathercities001["Niihama"] = [
+    ["新居浜市", "Niihama", "Niihama", "Niihama", "Niihama", "Niihama", "Niihama"],
+    ["愛媛県", "Ehime", "Ehime", "Ehime", "Ehime", "Ehime", "Ehime"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18255ec700030000"]
+weathercities001["Uwajima"] = [
+    ["宇和島市", "Uwajima", "Uwajima", "Uwajima", "Uwajima", "Uwajima", "Uwajima"],
+    ["愛媛県", "Ehime", "Ehime", "Ehime", "Ehime", "Ehime", "Ehime"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17a05e4200030000"]
+weathercities001["Kochi"] = [
+    ["高知市", "Kochi", "Kōchi", "Kōchi", "Kōchi", "Kōchi", "Kochi"],
+    ["高知県", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17de5ef802030000"]
+weathercities001["Murotomisakicho"] = [
+    ["室戸岬", "Murotomisakicho", "Murotomisakicho", "Murotomisakicho", "Murotomisakicho", "Murotomisakicho", "Murotomisakicho"],
+    ["高知県", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17a45f6a00030000"]
+weathercities001["Sukumo"] = [
+    ["宿毛市", "Sukumo", "Sukumo", "Sukumo", "Sukumo", "Sukumo", "Sukumo"],
+    ["高知県", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17685e5c00030000"]
+weathercities001["Tosashimizu"] = [
+    ["土佐清水市", "Tosashimizu", "Tosashimizu", "Tosashimizu", "Tosashimizu", "Tosashimizu", "Tosashimizu"],
+    ["高知県", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi", "Kochi"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17445e9601030000"]
+weathercities001["Fukuoka"] = [
+    ["福岡市", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka"],
+    ["福岡県", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17e15cb606030000"]
+weathercities001["Yahatanishi Ward"] = [
+    ["八幡", "Yahatanishi Ward", "Yahatanishi Ward", "Yahatanishi Ward", "Yahatanishi Ward", "Yahatanishi Ward", "Yahatanishi Ward"],
+    ["福岡県", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18135cf900030000"]
+weathercities001["Iizuka"] = [
+    ["飯塚市", "Iizuka", "Iizuka", "Iizuka", "Iizuka", "Iizuka", "Iizuka"],
+    ["福岡県", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17ed5cf000030000"]
+weathercities001["Kurume"] = [
+    ["久留米市", "Kurume", "Kurume", "Kurume", "Kurume", "Kurume", "Kurume"],
+    ["福岡県", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka", "Fukuoka"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17ae5ccb00030000"]
+weathercities001["Saga"] = [
+    ["佐賀市", "Saga", "Saga", "Saga", "Saga", "Saga", "Saga"],
+    ["佐賀県", "Saga", "Saga", "Saga", "Saga", "Saga", "Saga"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17a35ca901030000"]
+weathercities001["Imari"] = [
+    ["伊万里市", "Imari", "Imari", "Imari", "Imari", "Imari", "Imari"],
+    ["佐賀県", "Saga", "Saga", "Saga", "Saga", "Saga", "Saga"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17a75c5c00030000"]
+weathercities001["Nagasaki"] = [
+    ["長崎市", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["長崎県", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17465c5a02030000"]
+weathercities001["Izuharamachi Miyadani"] = [
+    ["厳原", "Izuharamachi Miyadani", "Izuharamachi Miyadani", "Izuharamachi Miyadani", "Izuharamachi Miyadani", "Izuharamachi Miyadani", "Izuharamachi Miyadani"],
+    ["長崎県", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "18515bf100030000"]
+weathercities001["Fukue Island"] = [
+    ["福江", "Fukue Island", "Fukue Island", "Fukue Island", "Fukue Island", "Fukue Island", "Fukue Island"],
+    ["長崎県", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "173f5b9c00030000"]
+weathercities001["Hirado"] = [
+    ["平戸市", "Hirado", "Hirado", "Hirado", "Hirado", "Hirado", "Hirado"],
+    ["長崎県", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17b85c2000030000"]
+weathercities001["Ōmura"] = [
+    ["大村市", "Ōmura", "Ōmura", "Ōmura", "Ōmura", "Ōmura", "Ōmura"],
+    ["長崎県", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17675c6200030000"]
+weathercities001["Sasebo"] = [
+    ["佐世保市", "Sasebo", "Sasebo", "Sasebo", "Sasebo", "Sasebo", "Sasebo"],
+    ["長崎県", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki", "Nagasaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17945c4000030000"]
+weathercities001["Kumamoto"] = [
+    ["熊本市", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto"],
+    ["熊本県", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17545cf301030000"]
+weathercities001["Ushibukamachi"] = [
+    ["牛深", "Ushibukamachi", "Ushibukamachi", "Ushibukamachi", "Ushibukamachi", "Ushibukamachi", "Ushibukamachi"],
+    ["熊本県", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "16e45c7600030000"]
+weathercities001["Hitoyoshi"] = [
+    ["人吉市", "Hitoyoshi", "Hitoyoshi", "Hitoyoshi", "Hitoyoshi", "Hitoyoshi", "Hitoyoshi"],
+    ["熊本県", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "16e85cfb00030000"]
+weathercities001["Mount Aso"] = [
+    ["阿蘇山", "Mount Aso", "Aso", "Mont Aso", "Monte Aso", "Monte Aso", "Aso"],
+    ["熊本県", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto", "Kumamoto"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17615d3500030000"]
+weathercities001["Oita"] = [
+    ["大分市", "Oita", "Ōita", "Ōita", "Ōita", "Ōita", "Oita"],
+    ["大分県", "Oita", "Oita", "Oita", "Oita", "Oita", "Oita"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17a15d9801030000"]
+weathercities001["Nakatsu"] = [
+    ["中津市", "Nakatsu", "Nakatsu", "Nakatsu", "Nakatsu", "Nakatsu", "Nakatsu"],
+    ["大分県", "Oita", "Oita", "Oita", "Oita", "Oita", "Oita"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17e15d4a00030000"]
+weathercities001["Hita"] = [
+    ["日田市", "Hita", "Hita", "Hita", "Hita", "Hita", "Hita"],
+    ["大分県", "Oita", "Oita", "Oita", "Oita", "Oita", "Oita"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17b25d1a00030000"]
+weathercities001["Saiki"] = [
+    ["佐伯市", "Saiki", "Saiki", "Saiki", "Saiki", "Saiki", "Saiki"],
+    ["大分県", "Oita", "Oita", "Oita", "Oita", "Oita", "Oita"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17705dcc00030000"]
+weathercities001["Miyazaki"] = [
+    ["宮崎市", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki"],
+    ["宮崎県", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "16b55d7301030000"]
+weathercities001["Nobeoka"] = [
+    ["延岡市", "Nobeoka", "Nobeoka", "Nobeoka", "Nobeoka", "Nobeoka", "Nobeoka"],
+    ["宮崎県", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "172a5d9f01030000"]
+weathercities001["Miyakonojo"] = [
+    ["都城市", "Miyakonojo", "Miyakonojō", "Miyakonojō", "Miyakonojō", "Miyakonojō", "Miyakonojo"],
+    ["宮崎県", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "168f5d3700030000"]
+weathercities001["Takachiho"] = [
+    ["高千穂町", "Takachiho", "Takachiho", "Takachiho", "Takachiho", "Takachiho", "Takachiho"],
+    ["宮崎県", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "17435d5c00030000"]
+weathercities001["Aburatsu"] = [
+    ["油津", "Aburatsu", "Aburatsu", "Aburatsu", "Aburatsu", "Aburatsu", "Aburatsu"],
+    ["宮崎県", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki", "Miyazaki"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "16745d7200030000"]
+weathercities001["Kagoshima"] = [
+    ["鹿児島市", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "166f5cd601030000"]
+weathercities001["Amami Ōshima"] = [
+    ["名瀬", "Amami Ōshima", "Amami-Ōshima", "Amami-Ōshima", "Amami Oshima", "Amami Ōshima", "Amami Ōshima"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "142d5c1600030000"]
+weathercities001["Kanoya"] = [
+    ["鹿屋市", "Kanoya", "Kanoya", "Kanoya", "Kanoya", "Kanoya", "Kanoya"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "16525d0f00030000"]
+weathercities001["Akune"] = [
+    ["阿久根市", "Akune", "Akune", "Akune", "Akune", "Akune", "Akune"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "16c55c9601030000"]
+weathercities001["Mizobechofumoto"] = [
+    ["溝辺", "Mizobechofumoto", "Mizobechofumoto", "Mizobechofumoto", "Mizobechofumoto", "Mizobechofumoto", "Mizobechofumoto"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "169d5cf500030000"]
+weathercities001["Makurazaki"] = [
+    ["枕崎市", "Makurazaki", "Makurazaki", "Makurazaki", "Makurazaki", "Makurazaki", "Makurazaki"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "163c5ca700030000"]
+weathercities001["Tanegashima"] = [
+    ["種子島", "Tanegashima", "Tanegashima", "Tanegashima", "Tanegashima", "Tanegashima", "Tanegashima"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "15d85d2405030000"]
+weathercities001["Yakushima"] = [
+    ["屋久島", "Yakushima", "Yakushima", "Yakushima", "Yakushima", "Yakushima", "Yakushima"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "15995ce901030000"]
+weathercities001["Kikaijima Island"] = [
+    ["喜界島", "Kikaijima Island", "Kikaijima Island", "Kikaigashima", "Isla Kikai", "Kikaijima Island", "Kikaijima Island"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "14235c6500030000"]
+weathercities001["Okinoerabu Island"] = [
+    ["沖永良部", "Okinoerabu Island", "Okinoerabu Island", "Okino-erabu-jima", "Okinoerabujima", "Okinoerabujima", "Okinoerabu Island"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "13815b8602030000"]
+weathercities001["Yoron Island"] = [
+    ["与論島", "Yoron Island", "Yoron Island", "Yoron Island", "Yoron Island", "Yoron Island", "Yoron Island"],
+    ["鹿児島県", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima", "Kagoshima"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "133a5b4f01030000"]
+weathercities001["Naha"] = [
+    ["那覇市", "Naha", "Naha", "Naha", "Naha", "Naha", "Naha"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "12a25acc06030000"]
+weathercities001["Nago"] = [
+    ["名護市", "Nago", "Nago", "Nago", "Nagó", "Nago", "Nago"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "12e85aff00030000"]
+weathercities001["Kumejima"] = [
+    ["久米島町", "Kumejima", "Kumejima", "Kumejima", "Kumejima", "Kumejima", "Kumejima"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "12ba5a2b00030000"]
+weathercities001["Minamidaitōjima"] = [
+    ["南大東島", "Minamidaitōjima", "Minami-daitō", "Minamidaitō-jima", "Minami Daitō", "Minami Daitō", "Minamidaitōjima"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "125d5d5203030000"]
+weathercities001["Miyakojima"] = [
+    ["宮古島市", "Miyakojima", "Miyakojima", "Miyakojima", "Miyakojima", "Miyakojima", "Miyakojima"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "11a0591603030000"]
+weathercities001["Ishigaki"] = [
+    ["石垣島", "Ishigaki", "Ishigaki-jima", "Ishigaki-jima", "Isla Ishigaki", "Ishigaki", "Ishigaki"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "114d584b01030000"]
+weathercities001["Yonaguni"] = [
+    ["与那国島", "Yonaguni", "Yonaguni", "Yonaguni-jima", "Yonaguni", "Yonaguni", "Yonaguni"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1165577902030000"]
+weathercities001["Iriomote-jima"] = [
+    ["西表島", "Iriomote-jima", "Iriomote", "Iriomote-jima", "Isla Iriomote", "Iriomote", "Iriomote-jima"],
+    ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
+    ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "115e580300030000"]
+
 weathercities008 = collections.OrderedDict()
 
 weathercities008["The Valley"] = [
