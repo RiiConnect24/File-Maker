@@ -276,9 +276,9 @@ def make_news_bin(mode, console, data, locations_data):
 
     for article in list(data.values()):
         if article[3] not in headlines:
-            headlines.append(article[3] + "\n")
+            headlines.append(article[3] + b"\n")
 
-    make_news = "".join(headlines)
+    make_news = b"".join(headlines)
 
     return make_news
 
