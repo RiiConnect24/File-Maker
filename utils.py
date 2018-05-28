@@ -25,7 +25,7 @@ def setup_log(sentry_url, print_errors):
     production = True
 
 def log(msg, level):  # TODO: Use number levels, strings are annoying
-    if p_errors: print msg
+    if p_errors: print(msg)
 
     if production:
         if level is "VERBOSE":

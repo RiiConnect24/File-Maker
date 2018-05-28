@@ -5,11 +5,10 @@ import binascii
 import collections
 import os
 import pickle
-import sys
 
-print "Forecast Locations Parser"
-print "By John Pansera (2017) - www.rc24.xyz"
-print "Parsing ..."
+print("Forecast Locations Parser")
+print("By John Pansera (2017) - www.rc24.xyz")
+print("Parsing ...")
 
 filename = "forecast.bin"
 amnt = None
@@ -44,7 +43,7 @@ file = open(filename, "rb")
 file.seek(0)
 file.seek(80)
 amnt = int(binascii.hexlify(file.read(4)), 16)
-print "Processing %s Entries" % amnt
+print("Processing %s Entries" % amnt)
 file.seek(84)
 offset = int(binascii.hexlify(file.read(4)), 16)
 seek(offset)
@@ -67,9 +66,9 @@ for _ in range(amnt):
     seek(3)
     names[hex(loc_name)] = [dec(hex(city)), dec(hex(region)), dec(hex(country)), lat, lng, zoom1, zoom2]
 
-for k in names.keys():
+for k in list(names.keys()):
     try:
-        next = names.items()[names.keys().index(k) + 1]
+        next = list(names.items())[list(names.keys()).index(k) + 1]
     except:
         next = None
     first = names[k][0]
@@ -91,27 +90,27 @@ for k in names.keys():
     else:
         country_string = None
 
-    print "Location ID: %s" % k.upper()
-    print "City: %s" % city_string.decode('utf-16be').encode('utf-8')
+    print("Location ID: %s" % k.upper())
+    print("City: %s" % city_string)
     if region_string is not None:
-        print "Region: %s" % region_string.decode('utf-16be').encode('utf-8')
+        print("Region: %s" % region_string)
     else:
-        print "No Region"
+        print("No Region")
     if country_string is not None:
-        print "Country: %s" % country_string.decode('utf-16be').encode('utf-8')
+        print("Country: %s" % country_string)
     else:
-        print "No Country"
-    print "Latitude Coordinate: %s" % names[k][3]
-    print "Longitutde Coordinate: %s" % names[k][4]
-    print "Zoom 1: %s" % names[k][5]
+        print("No Country")
+    print("Latitude Coordinate: %s" % names[k][3])
+    print("Longitutde Coordinate: %s" % names[k][4])
+    print("Zoom 1: %s" % names[k][5])
     zoom.append(int(names[k][5]))
-    print "Zoom 2: %s" % names[k][6]
+    print("Zoom 2: %s" % names[k][6])
 
-    print "\n"
+    print("\n")
 
-print "Dumping Database ..."
+print("Dumping Database ...")
 if os.path.exists('locations.json'): os.remove('locations.json')
 with open('locations.json', 'wb') as file:
     pickle.dump(names, file)
 
-print "Completed Sucessfully"
+print("Completed Sucessfully")

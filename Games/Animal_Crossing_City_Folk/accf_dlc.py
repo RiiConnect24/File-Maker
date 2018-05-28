@@ -1,11 +1,8 @@
 import binascii
 import collections
-import locale
-import os
 import struct
 import subprocess
 import sys
-import textwrap
 
 """This will pack the integers."""
 
@@ -27,32 +24,28 @@ def u32_littleendian(data):
 
 
 def main():
-    print "Animal Crossing: City Folk DLC Maker, by Larsenv."
+    print("Animal Crossing: City Folk DLC Maker, by Larsenv.")
 
-    print "\n"
+    print("\n")
 
     item_bin = make_item_bin()
     write = write_dictionary()
 
 
 def item_name(language):
-    if (language == "Korean" or "Japanese"):
-        name = raw_input("Please enter the item name in %s: " % language).decode(
-            sys.stdin.encoding or locale.getpreferredencoding(True))
+    name = ""
 
-        return binascii.unhexlify(binascii.hexlify(name.encode("utf-16be")).ljust(68, "0"))
-    else:
-        while (name > 17):
-            name = raw_input("Please enter the item name in %s: " % language)
+    while not name:
+        name = input("Please enter the item name in %s: " % language)
 
-        return binascii.unhexlify(binascii.hexlify(name.decode("utf-8").encode("utf-16be")).ljust(68, "0"))
+    return binascii.unhexlify(binascii.hexlify(name.encode("utf-16be")).ljust(68, "0"))
 
 
 """This is a function used to count offsets."""
 
 
 def offset_count():
-    return sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values)
+    return sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values)
 
 
 dictionaries = []
@@ -66,13 +59,13 @@ def make_item_bin():
 
     item["fourcc"] = "BITM"  # FourCC.
     item["bells"] = u32(
-        int(raw_input("Please enter a number of Bells this item costs: ")))  # The number of Bells this item costs.
-    item["item_code"] = binascii.unhexlify(raw_input("Please enter an item code: "))  # Code for the item.
-    item["icon_code"] = u16(int(raw_input("Please enter an icon code: ")))  # Icon Code for the item.
+        int(input("Please enter a number of Bells this item costs: ")))  # The number of Bells this item costs.
+    item["item_code"] = binascii.unhexlify(input("Please enter an item code: "))  # Code for the item.
+    item["icon_code"] = u16(int(input("Please enter an icon code: ")))  # Icon Code for the item.
     item["unknown_1"] = u32(0)  # Unknown.
     item["unknown_2"] = u16(5889)  # Unknown.
 
-    print "\n"
+    print("\n")
 
     item["item_name_japanese"] = item_name("Japanese")  # The name of the item in Japanese.
     item["item_name_north_american_english"] = item_name(
@@ -91,9 +84,9 @@ def make_item_bin():
     item["unknown_3"] = binascii.unhexlify(
         "38D61D65100000000064002B00000000049A0000005313104213131081031042123000000000")  # Unknown.
 
-    print "\n"
+    print("\n")
 
-    file_name_brres = raw_input("Please enter the file name of the BRRES: ")
+    file_name_brres = input("Please enter the file name of the BRRES: ")
 
     compress_ash = subprocess.call(["wine", "ashcompress.exe", file_name_brres])
 
@@ -101,7 +94,7 @@ def make_item_bin():
         item["ash_compressed_brres"] = source_file.read()  # This contains the 3D model of the item.
 
     if (offset_count() > 8188):
-        print "This item file's too big."
+        print("This item file's too big.")
 
         sys.exit(1)
 
@@ -116,7 +109,7 @@ def write_dictionary():
     open("item.bin", "w+")
 
     for dictionary in dictionaries:
-        for values in dictionary.values():
+        for values in list(dictionary.values()):
             with open("item.bin", "a+") as dest_file:
                 dest_file.write(values)
 

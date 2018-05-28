@@ -3,6 +3,7 @@
 *.pem
 *.pyc
 config.py
+config.json
 
 # Forecast Channel
 

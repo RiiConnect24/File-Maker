@@ -11,11 +11,10 @@
 import binascii
 import collections
 import json
-import sys
 import textwrap
 import time
-from HTMLParser import HTMLParser
-from StringIO import StringIO
+from html.parser import HTMLParser
+from io import BytesIO
 from datetime import datetime
 
 import feedparser
@@ -29,13 +28,11 @@ from unidecode import unidecode
 
 from utils import setup_log, log, u8, u16, u32, u32_littleendian
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
-
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-if config["production"]: setup_log(config["sentry_url"], True)
+if config["production"]:
+    setup_log(config["sentry_url"], True)
 
 """Define information about news sources"""
 
@@ -162,7 +159,7 @@ sources = {
 
 def enc(text):
     if text:
-        return ftfy.fix_encoding(HTMLParser().unescape(text).decode("utf-8")).encode("utf-16be", "replace")
+        return ftfy.fix_encoding(HTMLParser().unescape(text)).encode("utf-16be", "replace")
 
 
 """Resize the image and strip metadata (to make the image size smaller)."""
@@ -172,7 +169,7 @@ def shrink_image(data, resize, source):
 
     picture = requests.get(data).content
     try:
-        image = Image.open(StringIO(picture))
+        image = Image.open(BytesIO(picture))
     except IOError:
         return None
 
@@ -188,7 +185,7 @@ def shrink_image(data, resize, source):
     image_without_exif = Image.new(image.mode, image.size)
     image_without_exif.putdata(data)
 
-    buffer = StringIO()
+    buffer = BytesIO()
     image_without_exif.save(buffer, format='jpeg')
 
     return buffer.getvalue()
@@ -297,7 +294,7 @@ def locations_download(language_code, data):
         6: "nl",
     }
 
-    for keys, values in data.items():
+    for keys, values in list(data.items()):
         location = values[7]
 
         if location is not None:
@@ -305,12 +302,12 @@ def locations_download(language_code, data):
 
             locations[location].append(keys)
 
-    for name in locations.keys():
+    for name in list(locations.keys()):
         read = None
 
         if name == "": continue
 
-        print unidecode(name)
+        print(unidecode(name))
 
         if name not in cities:
             try:
@@ -389,15 +386,15 @@ class News:
 
         self.parse_feed()
 
-        print "\n"
+        print("\n")
 
     def __dict__(self):
         return self.newsdata
 
     def parse_feed(self):
-        print "Downloading News from " + self.source + "...\n"
+        print("Downloading News from " + self.source + "...\n")
 
-        for key, value in self.sourceinfo["cat"].items():
+        for key, value in list(self.sourceinfo["cat"].items()):
             if self.source == "AP":
                 try:
                     ap_json = requests.get(self.url % key).json()
@@ -425,7 +422,7 @@ class News:
                 try:
                     updated_time = int((time.mktime(time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S") if self.source == "AP" else entry["updated_parsed"]) - 946684800) / 60)
                 except:
-                    print "Failed to parse RSS feed."
+                    print("Failed to parse RSS feed.")
                     continue
 
                 if current_time - updated_time < 60:
@@ -444,7 +441,7 @@ class News:
 
                     title = entry["headline"] if self.source == "AP" else entry["title"]
 
-                    print title
+                    print(title)
 
                     downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
                                             title, self.language).get_news()
@@ -600,9 +597,9 @@ class Parse(News):
             """The location is at the end of the article, I couldn't find anything better to parse it."""
 
             if "(AFP)" in self.article:
-                buf = StringIO(self.article)
+                buf = BytesIO(self.article)
                 line = buf.readlines()[-1]
-                buf = StringIO(self.article)
+                buf = BytesIO(self.article)
                 self.location = line.strip()[22:-19]
                 self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
         except:
@@ -616,7 +613,7 @@ class Parse(News):
             pass
 
         if self.caption is not None:
-            buf = StringIO(self.article)
+            buf = BytesIO(self.article)
             self.article = "".join(buf.readlines()[1:])
 
         try:
