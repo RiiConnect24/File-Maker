@@ -3,7 +3,6 @@ datadog
 feedparser
 ftfy
 googlemaps
-HTMLParser
 mysql-connector
 newspaper3k
 raven
