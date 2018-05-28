@@ -842,12 +842,12 @@ def make_source_pictures(source_table, data):
             if article[8] in sources:
                 source_articles.append(article[8])
 
-                source_table["pictures_size_%s" % article[8]] = u32(os.path.getsize("./Channels/News_Channel/logos/%s.jpg" % article[8]))
                 source_table["pictures_offset_%s" % article[8]] = offset_count()
 
                 with open("./Channels/News_Channel/logos/%s.jpg" % article[8], "rb") as source_file:
-                    source_pictures[
-                        "logo_%s" % article[8]] = source_file.read()
+                    image = source_pictures["logo_%s" % article[8]] = source_file.read()
+                    source_table["pictures_size_%s" % article[8]] = u32(len(image))
+                
 
     return source_pictures
 
