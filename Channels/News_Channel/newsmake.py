@@ -225,12 +225,12 @@ def copy_file(mode, console, country):
 
 def make_news_bin(mode, console, data, locations_data):
     global system, dictionaries, languages, country_code, language_code
-    
+
     source = sources[mode]
 
     if source is None:
         print "Could not find %s in sources!"
-        
+
     topics_news = source["topics_news"]
     languages = source["languages"]
     language_code = source["language_code"]
@@ -835,7 +835,7 @@ def make_source_pictures(source_table, data):
 
     """These are the news sources which will use a custom JPG for the logo."""
 
-    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
+    sources = ["anp", "ap", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
 
     for article in data.values():
         if article[8] not in source_articles:
