@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # ===========================================================================
@@ -40,7 +40,7 @@ sources = {
 
     "ap_english": {
         "name": "AP",
-        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
+        "feed": lambda key: requests.get("https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s" % key).json(),
         "lang": "en",
         "cat": collections.OrderedDict([
             ("apf-usnews", "national"),
@@ -52,11 +52,11 @@ sources = {
             ("apf-Health", "science"),
             ("apf-technology", "technology"),
             ("apf-oddities", "oddities")
-        ])
+        ]),
     },
     "ap_spanish": {
         "name": "AP",
-        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
+        "feed": lambda key: requests.get("https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s" % key).json(),
         "lang": "es",
         "cat": collections.OrderedDict([
             ("apf-Noticias", "general"),
@@ -67,7 +67,7 @@ sources = {
     },
     "reuters_europe_english": {
         "name": "Reuters",
-        "url": "http://feeds.reuters.com/reuters/%s.rss",
+        "feed": lambda key: feedparser.parse("http://feeds.reuters.com/reuters/%s.rss" % key),
         "lang": "en",
         "cat": collections.OrderedDict([
             ("UKWorldNews", "world"),
@@ -82,7 +82,7 @@ sources = {
     },
     "afp_french": {
         "name": "AFP_French",
-        "url": "http://www.lepoint.fr/24h-infos/rss.xml",
+        "feed": lambda key: feedparser.parse("http://www.lepoint.fr/24h-infos/rss.xml"),
         "lang": "fr",
         "cat": collections.OrderedDict([
             ("monde", "world"),
@@ -95,7 +95,7 @@ sources = {
     },
     "donaukurier_german": {
         "name": "AFP",
-        "url": "http://www.donaukurier.de/storage/rss/rss/%s.xml",
+        "feed": lambda key: feedparser.parse("http://www.donaukurier.de/storage/rss/rss/%s.xml" % key),
         "lang": "de",
         "cat": collections.OrderedDict([
             ("nachrichten", "world"),
@@ -105,7 +105,7 @@ sources = {
     },
     "sid_german": {
         "name": "SID",
-        "url": "http://feed43.com/sid.xml",
+        "feed": lambda key: feedparser.parse("http://feed43.com/sid.xml"),
         "lang": "de",
         "cat": collections.OrderedDict([
             ("sport", "sport")
@@ -113,7 +113,7 @@ sources = {
     },
     "ansa_italian": {
         "name": "ANSA",
-        "url": "http://ansa.it/sito/notizie/%s/%s_rss.xml",
+        "feed": lambda key: feedparser.parse("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (key, key)),
         "lang": "it",
         "cat": collections.OrderedDict([
             ("mondo", "world"),
@@ -125,7 +125,7 @@ sources = {
     },
     "nu_dutch": {
         "name": "NU.nl",
-        "url": "https://www.nu.nl/rss/%s",
+        "feed": lambda key: feedparser.parse("https://www.nu.nl/rss/%s" % key),
         "lang": "nl",
         "cat": collections.OrderedDict([
             ("Algemeen", "algemeen"),
@@ -139,7 +139,7 @@ sources = {
     },
     "reuters_japanese": {
         "name": "Reuters_Japanese",
-        "url": "https://twitrss.me/twitter_user_to_rss/?user=%s",
+        "feed": lambda key: feedparser.parse("https://twitrss.me/twitter_user_to_rss/?user=%s" % key),
         "lang": "en",  # newspaper does not support japanese
         "cat": collections.OrderedDict([
             ("ReutersJpWorld", "world"),
@@ -295,9 +295,10 @@ def locations_download(language_code, data):
     for name in list(locations.keys()):
         read = None
 
-        if name == "": continue
+        if name == "":
+            continue
 
-        print(unidecode(name))
+        #print(unidecode(name))
 
         if name not in cities:
             try:
@@ -368,34 +369,25 @@ class News:
     def __init__(self, source):
         self.source = source
         self.sourceinfo = sources[self.source]
-        self.url = self.sourceinfo["url"]
         self.language = self.sourceinfo["lang"]
         self.newsdata = collections.OrderedDict()
 
-        self.source = self.sourceinfo["name"]
+        self.source = self.sourceinfo["name"]  # TODO Remove code that depends on this value. It's not clean.
 
         self.parse_feed()
-
-        print("\n")
 
     def __dict__(self):
         return self.newsdata
 
     def parse_feed(self):
-        print("Downloading News from " + self.source + "...\n")
+        print("Downloading News from " + self.source + "...")
 
         for key, value in list(self.sourceinfo["cat"].items()):
-            if self.source == "AP":
-                try:
-                    ap_json = requests.get(self.url % key).json()
-                except:
-                    continue
-
-            feed = ap_json if self.source == "AP" \
-                    else feedparser.parse(self.url) if self.source == "SID" \
-                    else feedparser.parse(self.url) if self.source == "AFP_French" \
-                    else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
-                    else feedparser.parse(self.url % key)
+            try:
+                feed = self.sourceinfo["feed"](key)
+            except IOError:
+                print("Failed to read article")
+                continue
 
             i = 0
 
@@ -431,14 +423,13 @@ class News:
 
                     title = entry["headline"] if self.source == "AP" else entry["title"]
 
-                    print(title)
+                    #print(title)
 
                     downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
                                             title, self.language).get_news()
 
                     if downloaded_news:
                         self.newsdata[value + str(i)] = downloaded_news
-
 
 
 class Parse(News):
@@ -477,12 +468,7 @@ class Parse(News):
         self.get_news()
 
     def get_news(self):
-        if self.headline == "" or self.headline is None:
-            return []
-        elif self.article == "" or self.article is None:
-            return []
-        else:
-            return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
+        return [] if not self.headline or not self.article else [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
                     shrink_image(self.picture, self.resize, self.source), enc(self.credits), enc(self.caption),
                     self.location, self.source]
 

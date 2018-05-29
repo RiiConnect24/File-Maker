@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # ===========================================================================
@@ -25,13 +25,19 @@ from . import newsdownload
 from datadog import statsd
 from utils import setup_log, log, mkdir_p, u8, u16, u32, u32_littleendian
 
-with open("./Channels/News_Channel/config.json", "rb") as f:
-    config = json.load(f)
+try:
+    with open("./Channels/News_Channel/config.json", "rb") as f:
+        config = json.load(f)
+except IOError:
+    print("Could not load configuration. See config.json.example.")
+    exit()
 
-if config["production"]: setup_log(config["sentry_url"], True)
+if config["production"]:
+    setup_log(config["sentry_url"], True)
 
 sources = {
     "ap_english": {
+        "name": "AP English",
         "topics_news": collections.OrderedDict([
             ("National News", "national"),
             ("International News", "world"),
@@ -44,9 +50,14 @@ sources = {
         ]),
         "languages": [1, 3, 4],
         "language_code": 1,
-        "country_code": 49
+        "countries": ["008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020",
+                      "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "031", "032", "033",
+                      "034", "035", "036", "037", "038", "039", "040", "041", "042", "043", "044", "045", "046",
+                      "047", "048", "049", "050", "051", "052"],
+        "country_code": 49,
     },
     "ap_spanish": {
+        "name": "AP Spanish",
         "topics_news": collections.OrderedDict([
             ("Generales", "general"),
             ("Financieras", "finance"),
@@ -55,9 +66,15 @@ sources = {
         ]),
         "languages": [1, 3, 4],
         "language_code": 4,
+        "countries": ["008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020",
+                      "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "031", "032", "033",
+                      "034", "035", "036", "037", "038", "039", "040", "041", "042", "043", "044", "045", "046",
+                      "047", "048", "049", "050", "051", "052", "065", "066", "067", "074", "076", "077", "078",
+                      "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"],
         "country_code": 49
     },
     "reuters_europe_english": {
+        "name": "Reuters Europe English",
         "topics_news": collections.OrderedDict([
             ("World", "world"),
             ("UK", "uk"),
@@ -70,9 +87,12 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 1,
+        "countries": ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095",
+                      "096", "098", "105", "107", "108", "110"],
         "country_code": 110
     },
     "afp_french": {
+        "name": "AFP French",
         "topics_news": collections.OrderedDict([
             ("Monde", "world"),
             ("Sport", "sports"),
@@ -83,9 +103,15 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 3,
+        "countries": ["008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020",
+                      "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "031", "032", "033",
+                      "034", "035", "036", "037", "038", "039", "040", "041", "042", "043", "044", "045", "046",
+                      "047", "048", "049", "050", "051", "052", "065", "066", "067", "074", "076", "077", "078",
+                      "079", "082", "083", "088", "094", "095", "096", "098", "105", "107", "108", "110"],
         "country_code": 110
     },
     "donaukurier_german": {
+        "name": "AFP German",
         "topics_news": collections.OrderedDict([
             ("Nachrichten", "world"),
             ("Wirtschaft", "economy"),
@@ -93,9 +119,12 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 2,
-        "country_code": 110
+        "countries": ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095",
+                      "096", "098", "105", "107", "108", "110"],
+        "country_code": 110,
     },
     "ansa_italian": {
+        "name": "ANSA Italian",
         "topics_news": collections.OrderedDict([
             ("Dal mondo", "world"),
             ("Sport", "sports"),
@@ -105,9 +134,12 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 5,
+        "countries": ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095",
+                      "096", "098", "105", "107", "108", "110"],
         "country_code": 110
     },
     "nu_dutch": {
+        "name": "NU.nl Dutch",
         "topics_news": collections.OrderedDict([
             ("Algemeen", "general"),
             ("Economie", "economy"),
@@ -119,9 +151,12 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 6,
+        "countries": ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095",
+                      "096", "098", "105", "107", "108", "110"],
         "country_code": 110
     },
     "reuters_japanese": {
+        "name": "Reuters Japanese",
         "topics_news": collections.OrderedDict([
             ("ワールド", "world"),
             ("ビジネス", "business"),
@@ -131,18 +166,21 @@ sources = {
         ]),
         "languages": [0],
         "language_code": 0,
+        "countries": ["001"],
         "country_code": 1
     }
 }
 
+def process_news(mode, source):
+    name = source["name"]
 
-def process_news(name, mode, language, countries, d):
-    print("News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name)
+    print("Generating news.bin for %s..." % name)
 
     global language_code, system
 
-    language_code = language
-    data = d.newsdata
+    countries = source["countries"]
+    language_code = source["language_code"]
+    data = newsdownload.News(mode).newsdata
 
     """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
 
@@ -161,20 +199,21 @@ def process_news(name, mode, language, countries, d):
     for system in ["wii", "wii_u"]:
         make_news = make_news_bin(mode, system, data, locations_data)
 
-    if config["production"]:
+    if True:#config["production"]:
         """Log stuff to Datadog."""
 
         statsd.increment("news.total_files_built")
 
         """This will use a webhook to log that the script has been ran."""
 
-        webhook = {"username": "News Bot", "content": "News Data has been updated!",
+        webhook = {"username": "News Bot (Py3)", "content": "News Data has been updated!",
                    "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [
                 {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
                  "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
                  "title": "Update!",
                  "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
-                 "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
+                 "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode,
+                 "footer": "RiiConnect24 Script",
                  "footer_icon": "https://rc24.xyz/images/logo-small.png",
                  "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
 
@@ -271,15 +310,7 @@ def make_news_bin(mode, console, data, locations_data):
 
     write_dictionary(mode)
 
-    headlines = []
-
-    for article in list(data.values()):
-        if dnc(article[3]) not in headlines:
-            headlines.append(dnc(article[3]) + "\n")
-
-    make_news = "".join(headlines)
-
-    return make_news
+    return "\n".join([dnc(article[3]) for article in data.values()])
 
 
 """This is a function used to count offsets."""
@@ -479,19 +510,21 @@ def make_timestamps_table(mode, topics_table, topics_news):
             start_time = datetime.today() - timedelta(hours=numbers)
             times_files.append("newstime/newstime.%s-%s-%s-%s" % (str(start_time)[11:-13], str(mode), topics, system))
 
-        for files in times_files:
-            if os.path.exists(files):
+        try:
+            for files in times_files:
                 with open(files, "rb") as pickled:
-                    newstime = pickle.load(pickled, encoding='bytes')
+                    newstime = pickle.load(pickled, encoding='bytes') # TODO: Change stored encoding later
 
                     for keys in list(newstime.keys()):
                         if keys not in times:
                             times[keys] = newstime[keys]
+        except:
+            pass
 
         timestamps = b""
         counter = 0
 
-        for value in list(times.values()):
+        for value in times.values():
             timestamps = timestamps + value
             counter += 1
 
@@ -748,16 +781,16 @@ def make_source_name_copyright(source_table, data):
     """Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
     copyrights = {
-        "AP": "Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year,
-        "Reuters": "© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year,
-        "AFP": "All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year,
-        "AFP_French": "Tous droits de reproduction et de diffusion réservés. © %s Agence France-Presse" % date.today().year,
-        "ANP": "All reproduction and representation rights reserved. © %s B.V. Algemeen Nederlands Persbureau ANP" % date.today().year,
-        "ANSA": "© %s ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma." % date.today().year,
-        "SID": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s SID" % date.today().year,
-        "dpa": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year,
-        "NU.nl": "© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year,
-        "Reuters_Japanese": "© Copyright Reuters %s. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 " % date.today().year
+        "AP": "Copyright %d The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
+        "Reuters": "© %d Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies.",
+        "AFP": "All reproduction and representation rights reserved. © %d Agence France-Presse",
+        "AFP_French": "Tous droits de reproduction et de diffusion réservés. © %d Agence France-Presse",
+        "ANP": "All reproduction and representation rights reserved. © %d B.V. Algemeen Nederlands Persbureau ANP",
+        "ANSA": "© %d ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma.",
+        "SID": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %d SID",
+        "dpa": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %d dpa",
+        "NU.nl": "© %d Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group",
+        "Reuters_Japanese": "© Copyright Reuters %d. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 "
     }
 
     for article in list(data.values()):
@@ -772,7 +805,7 @@ def make_source_name_copyright(source_table, data):
                 source_name_copyright["source_name_read_%s" % article[8]] = source_name  # Read the source name.
                 source_name_copyright["padding_source_name_%s" % article[8]] = u16(0)  # Padding for the source name.
 
-            copyright = enc(copyrights[article[8]])
+            copyright = enc(copyrights[article[8]] % date.today().year)
 
             source_table["copyright_size_%s" % article[8]] = u32(len(copyright))  # Size of the copyright.
 
@@ -862,7 +895,7 @@ def make_riiconnect24_text():
     """This can be used to identify that we made this file."""
 
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
-    riiconnect24_text["text"] = enc("RIICONNECT24")  # Text.
+    riiconnect24_text["text"] = "RIICONNECT24".encode('ascii')  # Text.
 
 
 """Write everything to the file."""
@@ -905,3 +938,5 @@ def write_dictionary(mode):
     """Remove the rest of the other files."""
 
     os.remove(newsfilename + "-1")
+
+    print("Wrote " + newsfilename)
