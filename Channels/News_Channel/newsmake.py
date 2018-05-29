@@ -8,6 +8,10 @@
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
+if __name__ is not "Channels.News_Channel.newsmake":
+    print("This is a module. Go to File-Maker and run \"python3 -m Channels.News_Channel.news\".")
+    exit()
+
 import binascii
 import calendar
 import collections
@@ -206,7 +210,7 @@ def process_news(mode, source):
 
         """This will use a webhook to log that the script has been ran."""
 
-        webhook = {"username": "News Bot (Py3)", "content": "News Data has been updated!",
+        webhook = {"username": "News Bot", "content": "News Data has been updated!",
                    "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [
                 {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
                  "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
@@ -939,4 +943,5 @@ def write_dictionary(mode):
 
     os.remove(newsfilename + "-1")
 
-    print("Wrote " + newsfilename)
+    if not config["production"]:
+        print("Wrote " + newsfilename)

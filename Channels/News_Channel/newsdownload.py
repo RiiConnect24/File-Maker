@@ -8,6 +8,10 @@
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
+if __name__ is not "Channels.News_Channel.newsdownload":
+    print("This is a module. Go to File-Maker and run \"python3 -m Channels.News_Channel.news\".")
+    exit()
+
 import binascii
 import collections
 import json
