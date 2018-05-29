@@ -24,9 +24,9 @@ def u32_littleendian(data):
 
 
 if len(sys.argv) != 4:
-    print "Usage: sign.py <mode> <input file> <output file>"
-    print "\n"
-    print "Mode can either be set to dec (not-encrypted file) or enc (encrypted file)."
+    print("Usage: sign.py <mode> <input file> <output file>")
+    print("\n")
+    print("Mode can either be set to dec (not-encrypted file) or enc (encrypted file).")
     sys.exit(1)
 
 input_file = sys.argv[2]

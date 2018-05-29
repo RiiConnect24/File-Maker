@@ -35,7 +35,7 @@ def make_book():
 """This is a function used to count offsets."""
 
 def offset_count():
-    return u32(16 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
+    return u32(16 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
 
 dictionaries = []
 
@@ -117,7 +117,7 @@ def make_book_text():
     
     book_text = ""
     
-    for item in book.opf.manifest.values():
+    for item in list(book.opf.manifest.values()):
         soup = book.read_item(item)
         
         url = ""
@@ -220,7 +220,7 @@ def write_dictionary():
     open("book_001.bin", "w+")
     
     for dictionary in dictionaries:
-        for values in dictionary.values():
+        for values in list(dictionary.values()):
             with open("book_001.bin", "a+") as dest_file:
                 dest_file.write(values)
                 

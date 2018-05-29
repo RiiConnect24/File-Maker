@@ -26,14 +26,14 @@ from mysql.connector import errorcode
 
 from config import *
 from utils import setup_log, log, u8, u16, u32
-from voteslists import *
+from .voteslists import *
 
 with open("./Channels/Everybody_Votes_Channel/config.json", "rb") as f:
     config = json.load(f)
 if config["production"]: setup_log(config["sentry_url"], False)
 
-print "Everybody Votes Channel File Generator \n"
-print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
+print("Everybody Votes Channel File Generator \n")
+print("By John Pansera / Larsen Vallecillo / www.rc24.xyz \n")
 
 worldwide = 0
 national = 0
@@ -102,7 +102,7 @@ def pad(amnt): return "\0" * amnt
 
 def prepare():
     global country_count, countries, file_type, questions, poll_id, write_questions, write_results, results, position, national, worldwide
-    print "Preparing ..."
+    print("Preparing ...")
     mysql_connect()
     if len(sys.argv) == 1:
         manual_run()
@@ -123,19 +123,19 @@ def prepare():
 
 def manual_run():
     question_count = len(question_data)
-    print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
-    file_type = raw_input('Enter File Type (q/r/v): ')
+    print("Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions"))
+    file_type = input('Enter File Type (q/r/v): ')
     if file_type == "q":
         write_questions = True
     elif file_type == "r":
         write_results = True
     elif file_type == "v":
-        if raw_input('Write Questions? (y/n): ') == "y": write_questions = True
-        if raw_input('Write Results? (y/n): ') == "y": write_results = True
+        if input('Write Questions? (y/n): ') == "y": write_questions = True
+        if input('Write Results? (y/n): ') == "y": write_results = True
     else:
-        print "Error: Invalid file type selected"
+        print("Error: Invalid file type selected")
         exit()
-    if file_type == "r" or (file_type == "v" and write_results): poll_id = int(raw_input('Enter Result Poll ID: '))
+    if file_type == "r" or (file_type == "v" and write_results): poll_id = int(input('Enter Result Poll ID: '))
 
 
 """Automatically run the scripts. This will be what the crontab uses."""
@@ -179,8 +179,8 @@ def automatic_votes():
     mysql_get_questions(7, 3, "n")
     questions = national + worldwide
     question_count = len(question_data)
-    print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
-    for v in list(reversed(range(1, 7))): results[get_poll_id()] = mysql_get_votes(7, "n", v)
+    print("Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions"))
+    for v in list(reversed(list(range(1, 7)))): results[get_poll_id()] = mysql_get_votes(7, "n", v)
     results[get_poll_id()] = mysql_get_votes(15, "w", 1)
     try:
         del results[None]
@@ -189,7 +189,7 @@ def automatic_votes():
 
 
 def mysql_connect():
-    print "Connecting to MySQL ..."
+    print("Connecting to MySQL ...")
     try:
         global cnx
         cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
@@ -198,7 +198,7 @@ def mysql_connect():
                                       charset='utf8',
                                       use_unicode=True)
     except mysql.connector.Error as err:
-        print "Invalid credentials" if err.errno == errorcode.ER_ACCESS_DENIED_ERROR else "Database does not exist" if err.errno == errorcode.ER_BAD_DB_ERROR else err
+        print("Invalid credentials" if err.errno == errorcode.ER_ACCESS_DENIED_ERROR else "Database does not exist" if err.errno == errorcode.ER_BAD_DB_ERROR else err)
 
 
 def mysql_get_votes(days, type, index):
@@ -237,7 +237,7 @@ def mysql_get_votes(days, type, index):
     region_response_1 = [0] * 33
     region_response_2 = [0] * 33
 
-    for k, v in region_number.items():
+    for k, v in list(region_number.items()):
         region_response_1[country_codes.index(k)] = [0] * v
         region_response_2[country_codes.index(k)] = [0] * v
 
@@ -263,14 +263,14 @@ def mysql_get_votes(days, type, index):
             predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
             predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[3])
 
-    print "Male Voters Response 1: %s" % male_voters_response_1
-    print "Female Voters Response 1: %s" % female_voters_response_1
-    print "Male Voters Response 2: %s" % male_voters_response_2
-    print "Female Voters Response 2: %s" % female_voters_response_2
-    print "Predict Response 1: %s" % predict_response_1
-    print "Predict Response 2: %s" % predict_response_2
-    print "Region Response 1: %s" % region_response_1
-    print "Region Response 2: %s" % region_response_2
+    print("Male Voters Response 1: %s" % male_voters_response_1)
+    print("Female Voters Response 1: %s" % female_voters_response_1)
+    print("Male Voters Response 2: %s" % male_voters_response_2)
+    print("Female Voters Response 2: %s" % female_voters_response_2)
+    print("Predict Response 1: %s" % predict_response_1)
+    print("Predict Response 2: %s" % predict_response_2)
+    print("Region Response 1: %s" % region_response_1)
+    print("Region Response 2: %s" % region_response_2)
 
     cursor.close()
 
@@ -361,7 +361,7 @@ def add_question(row):
 
 
 def question_text_replace(text):
-    text = text.replace(u"\u2026", " . . .").replace("...", " . . .")
+    text = text.replace("\u2026", " . . .").replace("...", " . . .")
     text = "\\n".join(textwrap.wrap(text, 50))
     return text
 
@@ -392,17 +392,17 @@ dictionaries = []
 
 
 def offset_count(): return u32(
-    12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
+    12 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
 
 
 def sign_file(name):
     final = name + '.bin'
-    print "Processing " + final + " ..."
+    print("Processing " + final + " ...")
     file = open(name, 'rb')
     copy = file.read()
-    print "Calculating CRC32 ..."
+    print("Calculating CRC32 ...")
     crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
-    print "Calculating Size ..."
+    print("Calculating Size ...")
     size = os.path.getsize(name) + 12
     dest = open(final + '-1', 'w+')
     dest.write(u32(0))
@@ -412,14 +412,14 @@ def sign_file(name):
     os.remove(name)
     dest.close()
     file.close()
-    print "Compressing ..."
+    print("Compressing ...")
     subprocess.call(["%s/lzss" % lzss_path, "-evf", final + '-1'],
                     stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(final + '-1', 'rb')
     new = file.read()
     dest = open(final, "w+")
     key = open(key_path, 'rb')
-    print "RSA Signing ..."
+    print("RSA Signing ...")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
     dest.write(binascii.unhexlify(str(0).zfill(
@@ -444,7 +444,7 @@ def sign_file(name):
 
 def make_bin(country_code):
     global countries, file_type
-    print "Processing ..."
+    print("Processing ...")
     voting = make_header()
     if write_questions:
         make_national_question_table(voting)
@@ -466,12 +466,12 @@ def make_bin(country_code):
         question_file = get_name() + '_r'
     else:
         question_file = "voting"
-    print "Writing to %s.bin ..." % question_file
+    print("Writing to %s.bin ..." % question_file)
 
     with open(question_file, 'wb') as f:
         for dictionary in dictionaries:
             # print("Writing to %s ..." % hex(f.tell()).rstrip("L"))
-            for values in dictionary.values():
+            for values in list(dictionary.values()):
                 f.write(values)
         f.write(pad(16))
         f.write('RIICONNECT24'.encode("ASCII"))
@@ -480,7 +480,7 @@ def make_bin(country_code):
     if production:
         sign_file(question_file)
 
-    print "Writing Completed"
+    print("Writing Completed")
 
     clean_up()
 
@@ -508,7 +508,7 @@ def make_header():
     header["national_result_offset"] = u32(0)
     header["national_result_detailed_number"] = u16(national_results * region_number[country_code])
     header["national_result_detailed_offset"] = u32(0)
-    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else len(position_table[country_code]) if country_code in position_table.keys() else 0)
+    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else len(position_table[country_code]) if country_code in list(position_table.keys()) else 0)
     header["position_offset"] = u32(0)
     header["worldwide_result_number"] = u8(worldwide_results)
     header["worldwide_result_offset"] = u32(0)
@@ -586,7 +586,7 @@ def make_question_text_table(header):
             if file_type == "v":
                 list = country_language[country_code]
             elif file_type == "q":
-                list = range(1, 9)
+                list = list(range(1, 9))
         for language_code in list:
             if get_question(q, language_code) is not None:
                 num = sorted(question_data.keys()).index(q)
@@ -639,8 +639,8 @@ def make_national_result_detailed_table(header):
                 country_index = country_codes.index(country_code)
                 table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
                 table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
-                table["position_entry_table_count_%s" % num()] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in position_table.keys()) else position_table[country_code][j])
-                table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]) if country_code in position_table.keys() else 0)
+                table["position_entry_table_count_%s" % num()] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in list(position_table.keys())) else position_table[country_code][j])
+                table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]) if country_code in list(position_table.keys()) else 0)
 
     return table
 
@@ -649,7 +649,7 @@ def make_position_entry_table(header):
     table = collections.OrderedDict()
     dictionaries.append(table)
 
-    if country_code in position_table.keys():
+    if country_code in list(position_table.keys()):
         header["position_offset"] = offset_count()
         table["data_%s" % num()] = binascii.unhexlify(position_data[country_code])
 
@@ -734,8 +734,8 @@ def make_country_name_table(header):
 
     header["country_name_offset"] = offset_count()
 
-    for k in countries.keys():
-        num = countries.keys().index(k)
+    for k in list(countries.keys()):
+        num = list(countries.keys()).index(k)
         for i in range(len(languages)):
             country_name_table["language_code_%s_%s" % (num, i)] = u8(i)
             country_name_table["text_offset_%s_%s" % (num, i)] = u32(0)
@@ -759,8 +759,8 @@ def make_country_table(country_name_table):
     dictionaries.append(country_table)
 
     j = 0
-    for k in countries.keys():
-        num = countries.keys().index(k)
+    for k in list(countries.keys()):
+        num = list(countries.keys()).index(k)
         for i in range(len(languages)):
             country_name_table["text_offset_%s_%s" % (num, i)] = offset_count()
             country_table[j] = countries[k][i].decode('utf-8').encode("utf-16be") + pad(2)
@@ -799,4 +799,4 @@ else:
     make_bin(country_code)
 if file_type == "q": webhook()
 
-print "Completed Successfully"
+print("Completed Successfully")

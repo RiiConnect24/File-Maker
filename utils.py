@@ -3,6 +3,7 @@ import logging
 import os
 import requests
 import struct
+import ftfy
 
 from raven import Client
 from raven.handlers.logging import SentryHandler
@@ -25,7 +26,7 @@ def setup_log(sentry_url, print_errors):
     production = True
 
 def log(msg, level):  # TODO: Use number levels, strings are annoying
-    if p_errors: print msg
+    if p_errors: print(msg)
 
     if production:
         if level is "VERBOSE":
@@ -101,3 +102,16 @@ def s32(data):
         data = 0
     return struct.pack(">i", data)
 
+
+# Text
+
+# Encode (typically utf-8 strings because they're default in python3) strings into utf-16be bytes
+def enc(text):
+    if text:
+        return ftfy.fix_encoding(text).encode("utf-16be", "replace")
+    #    return ftfy.fix_encoding(HTMLParser().unescape(text).decode("utf-8")).encode("utf-16be", "replace")
+
+
+# Decode utf-16be encoded bytes
+def dnc(text):
+    return str(text, "utf-16be")
