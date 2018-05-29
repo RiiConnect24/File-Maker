@@ -9,3 +9,4 @@ raven
 requests
 rsa
 unidecode
+HTMLParser
