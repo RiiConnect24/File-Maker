@@ -199,7 +199,7 @@ def process_news(mode, source):
     for system in ["wii", "wii_u"]:
         make_news = make_news_bin(mode, system, data, locations_data)
 
-    if True:#config["production"]:
+    if config["production"]:
         """Log stuff to Datadog."""
 
         statsd.increment("news.total_files_built")
