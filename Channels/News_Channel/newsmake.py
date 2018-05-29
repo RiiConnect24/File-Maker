@@ -481,11 +481,12 @@ def make_timestamps_table(mode, topics_table, topics_news):
 
         for files in times_files:
             if os.path.exists(files):
-                newstime = pickle.load(open(files, "rb"))
+                with open(files, "rb") as pickled:
+                    newstime = pickle.load(pickled, encoding='bytes')
 
-                for keys in list(newstime.keys()):
-                    if keys not in times:
-                        times[keys] = newstime[keys]
+                    for keys in list(newstime.keys()):
+                        if keys not in times:
+                            times[keys] = newstime[keys]
 
         timestamps = b""
         counter = 0

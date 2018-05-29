@@ -37,7 +37,7 @@ If you want to know the format of the files used by the Channels, you can [look 
 
 ## Installing Requirements
 
-These scripts run on Python 2, however News is Python 3 (WIP).
+These scripts run on Python 3.6.5.
 
 Just run `pip install -r requirements.txt` in the root folder and it'll install. You might have to run as `sudo`.
 
