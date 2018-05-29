@@ -835,7 +835,7 @@ def make_source_pictures(source_table, data):
 
     """These are the news sources which will use a custom JPG for the logo."""
 
-    sources = ["anp", "ap", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
+    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
 
     for article in data.values():
         if article[8] not in source_articles:
