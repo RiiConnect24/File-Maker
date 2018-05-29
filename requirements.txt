@@ -1,11 +1,12 @@
 bs4
 datadog
 feedparser
-ftfy==4.4.3
+ftfy
 googlemaps
-mysql-connector==2.1.4
-newspaper
+mysql-connector
+newspaper3k
 raven
 requests
 rsa
 unidecode
+HTMLParser
