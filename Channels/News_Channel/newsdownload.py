@@ -8,10 +8,6 @@
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
 # ===========================================================================
 
-if __name__ is not "Channels.News_Channel.newsdownload":
-    print("This is a module. Go to File-Maker and run \"python3 -m Channels.News_Channel.news\".")
-    exit()
-
 import binascii
 import collections
 import json
@@ -20,140 +16,19 @@ import time
 from io import BytesIO
 from datetime import datetime
 
-import feedparser
 import googlemaps
 import newspaper
 import requests
 from PIL import Image
 from bs4 import BeautifulSoup
 from unidecode import unidecode
-
+from simplejson.errors import JSONDecodeError
 from utils import setup_log, log, u8, u16, u32, u32_littleendian, enc
 
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
 if config["production"]: setup_log(config["sentry_url"], True)
-
-"""Define information about news sources"""
-
-sources = {
-    # urls string argument is category key
-    # for example: national on ap_english would go to http://hosted.ap.org/lineups/USHEADS-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT
-    # reference parse_feed
-
-    "ap_english": {
-        "name": "AP",
-        "feed": lambda key: requests.get("https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s" % key).json(),
-        "lang": "en",
-        "cat": collections.OrderedDict([
-            ("apf-usnews", "national"),
-            ("apf-intlnews", "world"),
-            ("apf-sports", "sports"),
-            ("apf-entertainment", "entertainment"),
-            ("apf-business", "business"),
-            ("apf-science", "science"),
-            ("apf-Health", "science"),
-            ("apf-technology", "technology"),
-            ("apf-oddities", "oddities")
-        ]),
-    },
-    "ap_spanish": {
-        "name": "AP",
-        "feed": lambda key: requests.get("https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s" % key).json(),
-        "lang": "es",
-        "cat": collections.OrderedDict([
-            ("apf-Noticias", "general"),
-            ("apf-Finanzas", "finance"),
-            ("apf-Deportes", "sports"),
-            ("apf-Entretenimiento", "shows")
-        ])
-    },
-    "reuters_europe_english": {
-        "name": "Reuters",
-        "feed": lambda key: feedparser.parse("http://feeds.reuters.com/reuters/%s.rss" % key),
-        "lang": "en",
-        "cat": collections.OrderedDict([
-            ("UKWorldNews", "world"),
-            ("UKdomesticNews", "uk"),
-            ("UKHealthNews", "health"),
-            ("UKScienceNews", "science"),
-            ("technology", "technology"),
-            ("UKEntertainment", "entertainment"),
-            ("UKSportsNews", "sports"),
-            ("lifestyle", "lifestyle")
-        ])
-    },
-    "afp_french": {
-        "name": "AFP_French",
-        "feed": lambda key: feedparser.parse("http://www.lepoint.fr/24h-infos/rss.xml"),
-        "lang": "fr",
-        "cat": collections.OrderedDict([
-            ("monde", "world"),
-            ("sport", "sports"),
-            ("societe", "society"),
-            ("culture", "culture"),
-            ("economie", "economy"),
-            ("politique", "politics")
-        ])
-    },
-    "donaukurier_german": {
-        "name": "AFP",
-        "feed": lambda key: feedparser.parse("http://www.donaukurier.de/storage/rss/rss/%s.xml" % key),
-        "lang": "de",
-        "cat": collections.OrderedDict([
-            ("nachrichten", "world"),
-            ("wirtschaft", "economy"),
-            ("kultur", "culture")
-        ])
-    },
-    "sid_german": {
-        "name": "SID",
-        "feed": lambda key: feedparser.parse("http://feed43.com/sid.xml"),
-        "lang": "de",
-        "cat": collections.OrderedDict([
-            ("sport", "sport")
-        ])
-    },
-    "ansa_italian": {
-        "name": "ANSA",
-        "feed": lambda key: feedparser.parse("http://ansa.it/sito/notizie/%s/%s_rss.xml" % (key, key)),
-        "lang": "it",
-        "cat": collections.OrderedDict([
-            ("mondo", "world"),
-            ("sport", "sports"),
-            ("economia", "economy"),
-            ("tecnologia", "technology"),
-            ("cultura", "culture")
-        ])
-    },
-    "nu_dutch": {
-        "name": "NU.nl",
-        "feed": lambda key: feedparser.parse("https://www.nu.nl/rss/%s" % key),
-        "lang": "nl",
-        "cat": collections.OrderedDict([
-            ("Algemeen", "algemeen"),
-            ("Economie", "economy"),
-            ("Sport", "sports"),
-            ("Tech", "technology"),
-            ("Entertainment", "entertainment"),
-            ("Lifestyle", "lifestyle"),
-            ("Opmerkelijk", "noteworthy")
-        ])
-    },
-    "reuters_japanese": {
-        "name": "Reuters_Japanese",
-        "feed": lambda key: feedparser.parse("https://twitrss.me/twitter_user_to_rss/?user=%s" % key),
-        "lang": "en",  # newspaper does not support japanese
-        "cat": collections.OrderedDict([
-            ("ReutersJpWorld", "world"),
-            ("ReutersJpBiz", "business"),
-            ("ReutersJpSports", "sports"),
-            ("ReutersJpTech", "technology"),
-            ("ReutersJpEnt", "entertainment")
-        ])
-    }
-}
 
 
 """Resize the image and strip metadata (to make the image size smaller)."""
@@ -371,12 +246,10 @@ def geoparser_get(article):
 
 class News:
     def __init__(self, source):
-        self.source = source
-        self.sourceinfo = sources[self.source]
+        self.source = source["type"]  # TODO Remove code that depends on this value. It's not clean.
+        self.sourceinfo = source
         self.language = self.sourceinfo["lang"]
         self.newsdata = collections.OrderedDict()
-
-        self.source = self.sourceinfo["name"]  # TODO Remove code that depends on this value. It's not clean.
 
         self.parse_feed()
 
@@ -384,7 +257,7 @@ class News:
         return self.newsdata
 
     def parse_feed(self):
-        print("Downloading News from " + self.source + "...")
+        print("Downloading News from " + self.sourceinfo["name"] + "...")
 
         for key, value in list(self.sourceinfo["cat"].items()):
             try:
@@ -395,7 +268,7 @@ class News:
 
             i = 0
 
-            entries = feed["cards"] if self.source == "AP" else feed.entries
+            entries = self.sourceinfo["entries"](feed)
 
             for entry in entries:
                 if self.source == "AP":
@@ -417,9 +290,10 @@ class News:
                     if self.source == "AFP_French" and key not in entry["link"]:
                         continue
                     elif self.source == "AFP" and "dpa" in entry["description"]:
-                        self.source = "dpa"
+                        self.source = "dpa"  # TODO Thing at line 472
+                        self.sourceinfo["copyright"] = "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
-                        self.source = "ANP"
+                        self.sourceinfo["copyright"] = "All reproduction and representation rights reserved. © %d B.V. Algemeen Nederlands Persbureau ANP";
                     elif self.source == "Reuters_Japanese":
                         entry["link"] = requests.get(
                             "http://bit.ly/" + entry["description"].split("http://bit.ly/", 1)[1][:7]).url
@@ -461,11 +335,9 @@ class Parse(News):
             "Reuters": self.parse_reuters,
             "AFP_French": self.parse_afp,
             "AFP": self.parse_donaukurier,
-            "dpa": self.parse_donaukurier,
             "SID": self.parse_sid,
             "ANSA": self.parse_ansa,
             "NU.nl": self.parse_nu,
-            "ANP": self.parse_nu,
             "Reuters_Japanese": self.parse_reuters_japanese
         }[self.source]()
 
