@@ -328,6 +328,8 @@ Not fully implemented?
 """
 
 def process_news(mode, source):
+    # TODO: Stop getting the current hour multiple times, could cause trouble if script is started right before the next hour
+
     name = source["name"]
 
     print("Generating news.bin for %s..." % name)
@@ -339,6 +341,8 @@ def process_news(mode, source):
     data = newsdownload.News(source).newsdata
 
     """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
+
+    # TODO: Check size of article instead of having a set limit
 
     i = 0
 
@@ -352,43 +356,32 @@ def process_news(mode, source):
 
     locations_data = newsdownload.locations_download(language_code, data)
 
-    for system in ["wii", "wii_u"]:
-        make_news = make_news_bin(source, mode, system, data, locations_data)
+    system = "wii"
+    make_news = make_news_bin(source, mode, system, data, locations_data)
+    system = "wii_u"
+    make_news_bin(source, mode, "wii_u", data, locations_data)
 
     if config["production"]:
         """Log stuff to Datadog."""
 
         statsd.increment("news.total_files_built")
 
-        """This will use a webhook to log that the script has been ran."""
+        """filesize = sum(os.path.getsize(f) - 320 for f in
+                       glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
 
-        webhook = {"username": "News Bot", "content": "News Data has been updated!",
-                   "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [
-                {"fallback": "News Data Update", "color": "#1B691E", "author_name": "RiiConnect24 News Script",
-                 "author_icon": "https://rc24.xyz/images/webhooks/news/profile.png", "text": make_news,
-                 "title": "Update!",
-                 "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
-                 "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode,
-                 "footer": "RiiConnect24 Script",
-                 "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                 "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+        if filesize > 3712000:
+            log("News files exceed the maximum file size amount.", "error")"""
 
-        for url in config["webhook_urls"]:
-            requests.post(url, json=webhook, allow_redirects=True)
-
-        # filesize = sum(os.path.getsize(f) - 320 for f in
-                       # glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
-
-        # if filesize > 3712000:
-            # log("News files exceed the maximum file size amount.", "error")
+        newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "."
 
         for country in countries:
             copy_file(mode, "wii", country)
             copy_file(mode, "wii_u", country)
 
-        newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "."
         os.remove(newsfilename + "wii")
         os.remove(newsfilename + "wii_u")
+
+    return make_news
 
 
 """Copy the temp files to the correct path that the Wii will request from the server."""

@@ -28,10 +28,12 @@ from utils import setup_log, log, u8, u16, u32, u32_littleendian, enc
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-if config["production"]: setup_log(config["sentry_url"], True)
+if config["production"]:
+    setup_log(config["sentry_url"], True)
 
 
 """Resize the image and strip metadata (to make the image size smaller)."""
+
 
 def shrink_image(data, resize, source):
     if data == "" or data is None: return None
@@ -48,7 +50,8 @@ def shrink_image(data, resize, source):
 
     image = image.convert("RGB")
 
-    if resize: image.thumbnail(maxsize, Image.ANTIALIAS)
+    if resize:
+        image.thumbnail(maxsize, Image.ANTIALIAS)
 
     data = list(image.getdata())
     image_without_exif = Image.new(image.mode, image.size)
@@ -262,7 +265,7 @@ class News:
         for key, value in list(self.sourceinfo["cat"].items()):
             try:
                 feed = self.sourceinfo["feed"](key)
-            except IOError:
+            except:
                 print("Failed to read article")
                 continue
 
