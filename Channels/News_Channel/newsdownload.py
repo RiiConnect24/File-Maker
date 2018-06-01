@@ -529,7 +529,7 @@ class Parse(News):
         if self.article[-2:] == "\n\n":
             self.article = self.article[:-2]
 
-        if self.newsdata["bylines"] != "" or self.newsdata["bylines"] != None:
+        if self.newsdata["bylines"] != "" and self.newsdata["bylines"] != None:
             self.article += "\n\n" + self.newsdata["bylines"]
 
         if self.article is None:
