@@ -17,8 +17,6 @@ production = False
 p_errors = False
 
 def setup_log(sentry_url, print_errors):
-    return
-
     global production, logger
     client = Client(sentry_url)
     handler = SentryHandler(client)
