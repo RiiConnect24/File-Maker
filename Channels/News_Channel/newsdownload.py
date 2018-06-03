@@ -310,8 +310,6 @@ class News:
                     if downloaded_news:
                         self.newsdata[value + str(i)] = downloaded_news
 
-                    break
-
 
 class Parse(News):
     def __init__(self, url, source, updated_time, headline, language, article=None, picture=None, credits=None, caption=None,
