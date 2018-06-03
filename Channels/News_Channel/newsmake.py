@@ -346,10 +346,10 @@ def process_news(mode, source):
 
     i = 0
 
-    for key in list(data.keys()):
+    """for key in list(data.keys()):
         i += 1
         if i > 22:
-            del data[key]
+            del data[key]"""
 
     # data = remove_duplicates(data)
     data = remove_duplicates2(data)

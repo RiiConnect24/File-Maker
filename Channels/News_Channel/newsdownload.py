@@ -18,12 +18,12 @@ from datetime import datetime
 
 import googlemaps
 import newspaper
-import requests
+import re
 from PIL import Image
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 from simplejson.errors import JSONDecodeError
-from utils import setup_log, log, u8, u16, u32, u32_littleendian, enc
+from utils import *
 
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
@@ -170,7 +170,8 @@ def locations_download(language_code, data):
         location = values[7]
 
         if location is not None:
-            if location not in locations: locations[location] = []
+            if location not in locations:
+                locations[location] = []
 
             locations[location].append(keys)
 
@@ -180,12 +181,11 @@ def locations_download(language_code, data):
         if name == "":
             continue
 
-        #print(unidecode(name))
-
         if name not in cities:
             try:
                 read = gmaps.geocode(unidecode(name), language=languages[language_code])
             except:
+                print("There was a error downloading the location data. %s", languages[language_code])
                 log("There was a error downloading the location data.", "INFO")
 
         if read is None and name in cities:
@@ -311,6 +311,8 @@ class News:
 
                     if downloaded_news:
                         self.newsdata[value + str(i)] = downloaded_news
+
+                    break
 
 
 class Parse(News):
@@ -451,12 +453,17 @@ class Parse(News):
         try:
             """The location is at the end of the article, I couldn't find anything better to parse it."""
 
-            if "(AFP)" in self.article:
+            location = re.findall("\d*\/\d*\/\d* \d*\:\d*\:\d* - (.*) \(AFP\) - © \d* AFP", self.article.splitlines()[-1])
+            if location:
+                self.location = location[0]
+
+            """if "(AFP)" in self.article:
                 buf = BytesIO(self.article)
                 line = buf.readlines()[-1]
+                print(line)
                 buf = BytesIO(self.article)
                 self.location = line.strip()[22:-19]
-                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
+                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")"""
         except:
             pass
 
