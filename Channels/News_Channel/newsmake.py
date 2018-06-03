@@ -340,6 +340,8 @@ def process_news(mode, source):
     language_code = source["language_code"]
     data = newsdownload.News(source).newsdata
 
+    print("Downloaded %s articles from %s" % (len(data), name))
+
     """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
 
     # TODO: Check size of article instead of having a set limit

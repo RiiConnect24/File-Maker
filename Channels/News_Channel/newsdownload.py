@@ -304,8 +304,6 @@ class News:
 
                     title = entry["headline"] if self.source == "AP" else entry["title"]
 
-                    #print(title)
-
                     downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
                                             title, self.language).get_news()
 
