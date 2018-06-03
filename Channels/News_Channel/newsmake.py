@@ -208,7 +208,7 @@ sources = {
         "countries": ["065", "066", "067", "074", "076", "077", "078", "079", "082", "083", "088", "094", "095",
                       "096", "098", "105", "107", "108", "110"],
         "country_code": 110,
-        "picture": 0,
+        "picture": 4,
         "position": 4,
         "copyright": "All reproduction and representation rights reserved. © %d Agence France-Presse"
     },

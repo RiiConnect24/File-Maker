@@ -287,13 +287,17 @@ class News:
                     print("Failed to parse RSS feed.")
                     continue
 
+                # Some feeds have multiple sources so when we modify properties of it then remember what to go back to
+                originalsourceinfo = self.sourceinfo.copy()
+
                 if current_time - updated_time < 60:
                     i += 1
 
                     if self.source == "AFP_French" and key not in entry["link"]:
                         continue
                     elif self.source == "AFP" and "dpa" in entry["description"]:
-                        self.source = "dpa"  # TODO Thing at line 472
+                        self.source = "dpa"  # TODO Thing at line 485
+                        self.sourceinfo["picture"] = 0
                         self.sourceinfo["copyright"] = "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.sourceinfo["copyright"] = "All reproduction and representation rights reserved. © %d B.V. Algemeen Nederlands Persbureau ANP";
@@ -309,6 +313,8 @@ class News:
 
                     if downloaded_news:
                         self.newsdata[value + str(i)] = downloaded_news
+
+                self.sourceinfo = originalsourceinfo
 
 
 class Parse(News):
