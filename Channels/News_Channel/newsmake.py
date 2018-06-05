@@ -146,6 +146,15 @@ def process_news(name, mode, language, countries, d):
 
     language_code = language
     data = d.newsdata
+    
+    """If there are more than 22 news articles, delete the rest. This is so the file doesn't get too large."""
+
+    i = 0
+
+    for key in data.keys():
+        i += 1
+        if i > 22:
+            del data[key]
 
     # data = remove_duplicates(data)
     data = remove_duplicates2(data)
