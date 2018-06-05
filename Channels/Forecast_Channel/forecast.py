@@ -125,6 +125,14 @@ def matches_country_code(list, key):
         return False
 
 
+def check_coords(list,key,lat,lng):
+    global errors
+    """ Verify Location Coordinates """
+    if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
+        log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
+        errors+=1
+
+
 def get_bins(country_code):
     if country_code == 0:
         bins = [0]
@@ -447,6 +455,7 @@ def get_legacy_api(list, key):
     pollen[key] = 255
     lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
     lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
+    check_coords(list,key,lat,lng)
     globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
     globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
     globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
