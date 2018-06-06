@@ -864,7 +864,8 @@ def make_pictures(pictures_table, data):
     for article in data.values():
         numbers += 1
         if article[4] is not None:
-            pictures_table["pictures_%s_offset" % numbers] = offset_count()  # Offset for the pictures.
+            if "pictures_%s_offset" % numbers in pictures_table:
+                pictures_table["pictures_%s_offset" % numbers] = offset_count()  # Offset for the pictures.
             pictures["pictures_%s_read" % numbers] = article[4]  # Read the pictures.
             pictures["nullbyte_%s_pictures" % numbers] = u8(0)  # Null byte for the pictures.
 
