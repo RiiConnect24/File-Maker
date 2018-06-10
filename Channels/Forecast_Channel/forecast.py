@@ -31,7 +31,28 @@ import rsa
 from datadog import statsd
 from utils import setup_log, log, u8, u16, u32
 
-weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010, forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013, forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016, forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019, forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022, forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025, forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028, forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031, forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034, forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037, forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040, forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043, forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046, forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049, forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052, forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067, forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077, forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082, forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094, forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098, forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
+weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010,
+                 forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013,
+                 forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016,
+                 forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019,
+                 forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022,
+                 forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025,
+                 forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028,
+                 forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031,
+                 forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034,
+                 forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037,
+                 forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040,
+                 forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043,
+                 forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046,
+                 forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049,
+                 forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052,
+                 forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067,
+                 forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077,
+                 forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082,
+                 forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094,
+                 forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098,
+                 forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108,
+                 forecastlists.weathercities110]
 
 VERSION = 3.8
 apirequests = 0  # API Request Counter
@@ -46,7 +67,7 @@ cached = 0  # Count Cached Cities
 bw_usage = 0  # Bandwidth Usage Counter
 lists = 0  # Lists Counter
 errors = 0  # Errors
-bandwidth = 0.0 # Bandwidth
+bandwidth = 0.0  # Bandwidth
 file = None
 loop = None
 
@@ -67,19 +88,24 @@ cache = {}
 laundry = {}
 
 
-def temp(num): return num & 0xFF
+def temp(num):
+    return num & 0xFF
 
 
-def to_celsius(temp): return int((temp - 32) * 5 / 9)
+def to_celsius(temp):
+    return int((temp - 32) * 5 / 9)
 
 
-def to_fahrenheit(temp): return int((temp * 9 / 5) + 32)
+def to_fahrenheit(temp):
+    return int((temp * 9 / 5) + 32)
 
 
-def kmh_mph(wind): return int(round(wind * 0.621371))
+def kmh_mph(wind):
+    return int(round(wind * 0.621371))
 
 
-def mph_kmh(wind): return int(round(float(wind) * 1.60934))
+def mph_kmh(wind):
+    return int(round(float(wind) * 1.60934))
 
 
 def time_convert(time):
@@ -89,32 +115,40 @@ def time_convert(time):
         return int((time - 789563880) / 60)
 
 
-def get_epoch(): return int(time.time())
+def get_epoch():
+    return int(time.time())
 
 
-def get_rounded_hour(): return round(time.time() / 3600) * 3600
+def get_rounded_hour():
+    return round(time.time() / 3600) * 3600
 
 
-def get_city(list, key): return list[key][0][1]
+def get_city(list, key):
+    return list[key][0][1]
 
 
-def get_region(list, key): return list[key][1][1]
+def get_region(list, key):
+    return list[key][1][1]
 
 
-def get_country(list, key): return list[key][2][1]
+def get_country(list, key):
+    return list[key][2][1]
 
 
-def get_all(list, key): return ", ".join(
-    filter(None, [get_city(list, key), get_region(list, key), get_country(list, key)]))
+def get_all(list, key):
+    return ", ".join(filter(None, [get_city(list, key), get_region(list, key), get_country(list, key)]))
 
 
-def get_number(list, key): return list.keys().index(key)
+def get_number(list, key):
+    return list.keys().index(key)
 
 
-def pad(amnt): return "\0" * amnt
+def pad(amnt):
+    return "\0" * amnt
 
 
-def get_index(list, key, num): return list[key][num]
+def get_index(list, key, num):
+    return list[key][num]
 
 
 def matches_country_code(list, key):
@@ -155,13 +189,15 @@ def num():
 
 def coord_decode(value):
     value = int(value, 16)
-    if value >= 0x8000: value -= 0x10000
+    if value >= 0x8000:
+        value -= 0x10000
     return value * 0.0054931640625
 
 
 def size(data):
     total = 2
-    for k, v in data.items(): total += len(k + v) + 4
+    for k, v in data.items():
+        total += len(k + v) + 4
     return total
 
 
@@ -190,6 +226,7 @@ def refresh(type):
     else:
         print "\033[F\033[K" * 20  # Clear each line individually
 
+
 def ui():
     prog = """-\|/"""  # These are characters which will make a spinning effect.
     progcount = 0
@@ -209,16 +246,18 @@ def ui():
         display = "✓"
         refresh_type = 2
         os.system('clear')
-    while not loop: pass  # Wait for main loop to start
+    while not loop:
+        pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
     header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
     header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2018\n\n"
-    if config["production"]: header += " " * 13 + "*** Production Mode Enabled ***\n"
+    if config["production"]:
+        header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
         refresh(refresh_type)
         # Calculate values to show on screen
         dl = len(list) - cached > 0
-        elasped_time = int(round(time.time() - total_time))
+        elapsed_time = int(round(time.time() - total_time))
         bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
         totalfill = totalpercent * 35 / 100
@@ -232,7 +271,7 @@ def ui():
             progbar = "[" + " " * i + "=" * 5 + (bar - i - 2) * " " + "]"
         # Build output
         out = header
-        out += "API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (apirequests, retrycount, elasped_time)
+        out += "API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (apirequests, retrycount, elapsed_time)
         out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth, cities, errors)
         out += "\nProcessing List #%s/%s (%s): %s %s\n\n" % (
             listid, len(weathercities), country_code, currentlist, "." * progcount)
@@ -295,20 +334,23 @@ def request_data(url):
     c = 0
     while c == 0:
         if i == 3:
-            errors+=1
+            errors += 1
             return -1
-        if i > 0: retrycount += 1
+        if i > 0:
+            retrycount += 1
         data = s.get(url, headers=header)
         bw_usage += get_bandwidth_usage(data)
         status_code = data.status_code
-        if status_code == 200: c = 1
+        if status_code == 200:
+            c = 1
         i += 1
     return data.content
 
 
 def timestamps(mode, key):
     time = time_convert(get_epoch())
-    if key != 0: citytime = time_convert(globe[key]['time'])
+    if key != 0:
+        citytime = time_convert(globe[key]['time'])
     if mode == 0:
         timestamp = time
     elif mode == 1:
@@ -353,7 +395,8 @@ def generate_locationkeys(list):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
         elif v[1][1] is "" and not matches_country_code(list, k):
             weatherloc[listid]['no-region'].setdefault(v[2][1], {})
-            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1], len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
+            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1],
+                                                                len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
         else:
             weatherloc[listid].setdefault(v[2][1], {})
             weatherloc[listid][v[2][1]].setdefault(v[1][1], {})
@@ -392,18 +435,28 @@ def blank_data(list, key, clear):
     pollen[key] = 255
     weathericon[key] = 'FFFF'
     times[key] = get_epoch()
-    for k in range(0, 15): precipitation[key][k] = 255
-    for k in range(0, 20): week[key][k] = 128
-    for k in range(20, 25): week[key][k] = 'FFFF'
-    for k in range(25, 33): week[key][k] = 128
-    for k in range(33, 35): week[key][k] = 'FFFF'
-    for k in range(0, 8): hourly[key][k] = 'FFFF'
-    for k in range(0, 4): today[key][k] = 128
+    for k in range(0, 15):
+        precipitation[key][k] = 255
+    for k in range(0, 20):
+        week[key][k] = 128
+    for k in range(20, 25):
+        week[key][k] = 'FFFF'
+    for k in range(25, 33):
+        week[key][k] = 128
+    for k in range(33, 35):
+        week[key][k] = 'FFFF'
+    for k in range(0, 8):
+        hourly[key][k] = 'FFFF'
+    for k in range(0, 4):
+        today[key][k] = 128
     today[key][4] = 'FFFF'
-    for k in range(5, 9): today[key][k] = 128
-    for k in range(0, 4): tomorrow[key][k] = 128
+    for k in range(5, 9):
+        today[key][k] = 128
+    for k in range(0, 4):
+        tomorrow[key][k] = 128
     tomorrow[key][4] = 'FFFF'
-    for k in range(5, 9): tomorrow[key][k] = 128
+    for k in range(5, 9):
+        tomorrow[key][k] = 128
     if clear:
         globe[key]['lat'] = binascii.unhexlify(get_index(list, key, 3)[:4])
         globe[key]['lng'] = binascii.unhexlify(get_index(list, key, 3)[:8][4:])
@@ -423,7 +476,8 @@ def get_legacy_api(list, key):
     week[key][5] = int(forecast[4][5][2].text)
     week[key][6] = int(forecast[5][5][3].text)
     week[key][7] = int(forecast[5][5][2].text)
-    for i in range(0, 8): week[key][i + 10] = to_celsius(week[key][i])
+    for i in range(0, 8):
+        week[key][i + 10] = to_celsius(week[key][i])
     week[key][20] = get_icon(int(forecast[2][5][1].text), list, key)
     week[key][21] = get_icon(int(forecast[3][5][1].text), list, key)
     week[key][22] = get_icon(int(forecast[4][5][1].text), list, key)
@@ -445,7 +499,8 @@ def get_legacy_api(list, key):
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = get_icon(int(forecast[2][5][1].text), list, key)
     uvindex[key] = int(current_conditions[13].attrib['index'])
-    if uvindex[key] > 12: uvindex[key] = 12
+    if uvindex[key] > 12:
+        uvindex[key] = 12
     wind[key][0] = mph_kmh(forecast[1][5][6].text)
     wind[key][1] = int(forecast[1][5][6].text)
     wind[key][2] = forecast[1][5][7].text
@@ -474,9 +529,11 @@ def get_legacy_api(list, key):
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
-        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
+        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(
+            int(-1), list, key)
         temp = time_index[1][i] - hour
-        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
+        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(
+            int(-1), list, key)
 
 
 """Tenki's where we're getting the laundry index for Japan."""
@@ -497,10 +554,11 @@ def get_tenki_data(key):
     for line in requests.get("https://tenki.jp/forecast/%s/10days.html" % key).iter_lines():
         if "%" in line and "<th>" in line:
             precip10.append(int(line.lstrip().lstrip("<th>").rstrip("%</th>")))  # 10-Day Precipitation Probability
-    if key.count("/") == 3: key = "/".join(key.split("/")[:-1])
+    if key.count("/") == 3:
+        key = "/".join(key.split("/")[:-1])
     for line in requests.get("http://www.tenki.jp/indexes/cloth_dried/%s/" % key).iter_lines():
-        if "indexes-telop-0" in line and not laundry_index: laundry_index = int(
-            filter(str.isdigit, line.split("indexes-telop-0")[1]))  # Laundry Index
+        if "indexes-telop-0" in line and not laundry_index:
+            laundry_index = int(filter(str.isdigit, line.split("indexes-telop-0")[1]))  # Laundry Index
     laundry[key] = laundry_index
     today[key][8] = temp_diff[0]
     today[key][7] = temp_diff[1]
@@ -662,7 +720,8 @@ def make_forecast_bin(list, data):
     with open(file1, 'wb') as temp:
         temp.write(file.read()[12:])
     file.close()
-    if config["production"]: sign_file(file1, file2, file3)
+    if config["production"]:
+        sign_file(file1, file2, file3)
 
 
 def make_short_bin(list, data):
@@ -674,13 +733,16 @@ def make_short_bin(list, data):
     file = io.BytesIO()
     file.write(u32(timestamps(0, 0)))
     file.write(u32(timestamps(2, 0)))
-    for v in short_forecast_header.values(): file.write(v)
-    for v in short_forecast_table.values(): file.write(v)
+    for v in short_forecast_header.values():
+        file.write(v)
+    for v in short_forecast_table.values():
+        file.write(v)
     file.seek(0)
     with open(file1, 'wb') as temp:
         temp.write(file.read())
     file.close()
-    if config["production"]: sign_file(file1, file2, file3)
+    if config["production"]:
+        sign_file(file1, file2, file3)
 
 
 def sign_file(name, local_name, server_name):
@@ -708,7 +770,8 @@ def sign_file(name, local_name, server_name):
     log("RSA Signing ...", "VERBOSE")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(pad(64))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    dest.write(pad(
+        64))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
@@ -716,7 +779,8 @@ def sign_file(name, local_name, server_name):
     subprocess.call(["mkdir", "-p", "%s/%s/%s" % (
         config["file_path"], language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
     path = "%s/%s/%s/%s" % (
-        config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
+        config["file_path"], language_code, str(country_code).zfill(3),
+        server_name)  # Path on the server to put the file.
     subprocess.call(["cp", local_name, path])
     os.remove(local_name)
 
@@ -726,7 +790,8 @@ def get_data(list, name):
     citycount += 1
     cache[name] = get_all(list, name)
     blank_data(list, name, True)
-    if name in forecastlists.jpncities: get_tenki_data(name)
+    if name in forecastlists.jpncities:
+        get_tenki_data(name)
     weather_data[name] = request_data("http://%s/widget/accuwxturbotablet/weather-data.asp?location=%s,%s" % (
         ip, coord_decode(get_index(list, name, 3)[:4]), coord_decode(get_index(list, name, 3)[:8][4:])))
 
@@ -1117,7 +1182,8 @@ def make_location_table(list):
     location_table = collections.OrderedDict()
     for keys in list.keys():
         numbers = get_number(list, keys)
-        location_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, keys))  # Wii Location Code.
+        location_table["location_code_%s" % numbers] = binascii.unhexlify(
+            get_locationkey(list, keys))  # Wii Location Code.
         location_table["city_text_offset_%s" % numbers] = u32(0)  # Offset for location's city text
         location_table["region_text_offset_%s" % numbers] = u32(0)  # Offset for location's region text
         location_table["country_text_offset_%s" % numbers] = u32(0)  # Offset for location's country text
@@ -1136,18 +1202,18 @@ def make_location_table(list):
 
 def make_forecast_text_table(list):
     text_table = collections.OrderedDict()
-    for keys in list.keys(): text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code],
-                                                                         list[keys][1][language_code],
-                                                                         list[keys][2][language_code]])).decode(
-        "utf-8").encode("utf-16be") + pad(2)
+    for keys in list.keys():
+        text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code],
+                                                           list[keys][1][language_code],
+                                                           list[keys][2][language_code]])).decode("utf-8").encode("utf-16be") + pad(2)
     return text_table
 
 
 def make_weather_value_table():
     weathervalue_text_table = collections.OrderedDict()
     for k, v in forecastlists.weatherconditions.items():
-        for _ in range(2): weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode(
-            "utf-16be") + pad(2)
+        for _ in range(2):
+            weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be") + pad(2)
     return weathervalue_text_table
 
 
@@ -1166,20 +1232,23 @@ def make_weather_offset_table():
 def make_uvindex_text_table():
     uvindex_text_table = collections.OrderedDict()
     uvindexlist = []
-    for v in forecastlists.uvindex.values(): uvindexlist.append(v[language_code])
+    for v in forecastlists.uvindex.values():
+        uvindexlist.append(v[language_code])
     uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be") + pad(2)
     return uvindex_text_table
 
 
 def make_laundry_text_table():
     laundry = collections.OrderedDict()
-    for v in forecastlists.laundry.values(): laundry[num()] = v.decode('utf-8').encode("utf-16be") + pad(2)
+    for v in forecastlists.laundry.values():
+        laundry[num()] = v.decode('utf-8').encode("utf-16be") + pad(2)
     return laundry
 
 
 def make_pollen_text_table():
     pollen = collections.OrderedDict()
-    for v in forecastlists.pollen.values():    pollen[num()] = v.decode('utf-8').encode("utf-16be") + pad(2)
+    for v in forecastlists.pollen.values():
+        pollen[num()] = v.decode('utf-8').encode("utf-16be") + pad(2)
     return pollen
 
 
@@ -1191,34 +1260,24 @@ def get_weatherjpnicon(icon):
     return 'FFFF' if icon == -1 else forecastlists.weatherconditions[icon][3]
 
 
-def get_wind_direction(degrees): return forecastlists.winddirection[degrees]
+def get_wind_direction(degrees):
+    return forecastlists.winddirection[degrees]
 
 
 def dump_db():
-    db = {}
-    db["update_time"] = time.time()
-    db["location_keys"] = weatherloc
-    db["local_times"] = times
-    db["laundry_indexes"] = laundry
-    db["pollen_indexes"] = pollen
-    db["globe_data"] = globe
-    db["wind_speed"] = wind
-    db["uvindexes"] = uvindex
-    db["current_forecast"] = current
-    db["precipitation"] = precipitation
-    db["hourly_forecast"] = hourly
-    db["tomorrow_forecast"] = tomorrow
-    db["week_forecast"] = week
-    db["today_forecast"] = today
-    db["weather_icons"] = weathericon
-    db["key_cache"] = cache
-    with open('weather.db','wb') as f:
-	    pickle.dump(db,f)
+    db = {"update_time": time.time(), "location_keys": weatherloc, "local_times": times, "laundry_indexes": laundry,
+          "pollen_indexes": pollen, "globe_data": globe, "wind_speed": wind, "uvindexes": uvindex,
+          "current_forecast": current, "precipitation": precipitation, "hourly_forecast": hourly,
+          "tomorrow_forecast": tomorrow, "week_forecast": week, "today_forecast": today, "weather_icons": weathericon,
+          "key_cache": cache}
+    with open('weather.db', 'wb') as f:
+        pickle.dump(db, f)
 
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
-if config["production"]: setup_log(config["sentry_url"], False)
+if config["production"]:
+    setup_log(config["sentry_url"], False)
 s = requests.Session()  # Use session to speed up requests
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
@@ -1247,8 +1306,10 @@ for list in weathercities:
             list[k + " 2"] = v
     generate_locationkeys(list)
     for keys in list.keys():
-        if not matches_country_code(list, keys) or get_region(list, keys) == '': shortcount += 1
-        if keys in cache and cache[keys] == get_all(list, keys): cached += 1
+        if not matches_country_code(list, keys) or get_region(list, keys) == '':
+            shortcount += 1
+        if keys in cache and cache[keys] == get_all(list, keys):
+            cached += 1
     for keys in list.keys():
         if keys not in cache or cache[keys] != get_all(list, keys):
             q.put([list, keys])
@@ -1259,12 +1320,14 @@ for list in weathercities:
         t.start()
     q.join()
     loop = False
-    for t in threads: t.join()
+    for t in threads:
+        t.join()
     status = 2
     for k, v in weather_data.items():
         try:
             weather_data[k] = ElementTree.fromstring(v)
-            if weather_data[k].find("{http://www.accuweather.com}failure") is not None: weather_data[k] = None
+            if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
+                weather_data[k] = None
         except:
             weather_data[k] = None
         if weather_data[k] is not None:
@@ -1299,7 +1362,8 @@ if config["production"]:
              "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
              "footer_icon": "https://rc24.xyz/images/logo-small.png",
              "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
-    for url in config["webhook_urls"]: post_webhook = requests.post(url, json=data, allow_redirects=True)
+    for url in config["webhook_urls"]:
+        post_webhook = requests.post(url, json=data, allow_redirects=True)
     """Log stuff to Datadog."""
     statsd.set("forecast.api_requests", apirequests)
     statsd.set("forecast.retry_count", retrycount)
