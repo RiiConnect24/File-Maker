@@ -710,14 +710,15 @@ def make_articles(articles_table, pictures_table, data):
         articles["article_%s_read" % numbers] = article[2]  # Read the article.
         articles["padding_%s_article" % numbers] = u16(0)  # Padding for the article.
 
-        if article[6] is not None:
-            pictures_table["captions_%s_offset" % numbers] = offset_count()  # Offset for the caption.
-            articles["captions_%s_read" % numbers] = article[6]  # Read the caption.
-            articles["padding_%s_captions" % numbers] = u16(0)  # Padding for the caption.
-        if article[5] is not None:
-            pictures_table["credits_%s_offset" % numbers] = offset_count()  # Offset for the credits.
-            articles["credits_%s_read" % numbers] = article[5]  # Read the credits.
-            articles["padding_%s_credits" % numbers] = u16(0)  # Padding for the credits.
+        if article[4] is not None:
+            if article[6] is not None:
+                pictures_table["captions_%s_offset" % numbers] = offset_count()  # Offset for the caption.
+                articles["captions_%s_read" % numbers] = article[6]  # Read the caption.
+                articles["padding_%s_captions" % numbers] = u16(0)  # Padding for the caption.
+            if article[5] is not None:
+                pictures_table["credits_%s_offset" % numbers] = offset_count()  # Offset for the credits.
+                articles["credits_%s_read" % numbers] = article[5]  # Read the credits.
+                articles["padding_%s_credits" % numbers] = u16(0)  # Padding for the credits.
 
     return articles
 
