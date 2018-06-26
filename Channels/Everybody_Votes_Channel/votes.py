@@ -177,6 +177,7 @@ def automatic_votes():
     write_results = True
     mysql_get_questions(15, 1, "w")
     mysql_get_questions(7, 3, "n")
+    question_sort()
     questions = national + worldwide
     question_count = len(question_data)
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
@@ -187,6 +188,14 @@ def automatic_votes():
     except KeyError:
         pass
 
+def question_sort():
+    global question_keys
+    question_keys = sorted(question_data.keys())
+
+    for q in question_keys():
+        if is_worldwide(q):
+            del question_keys[q]
+            question_keys.append(q)
 
 def mysql_connect():
     print "Connecting to MySQL ..."
@@ -371,7 +380,7 @@ def webhook():
         webhook_type = "national"
     elif nw == "w":
         webhook_type = "worldwide"
-    for q in sorted(question_data.keys()):
+    for q in question_keys:
         webhook_text = "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)" % (
             webhook_type, get_question(q, 1), get_response1(q, 1), get_response2(q, 1))
         if production: data = {"username": "Votes Bot",
@@ -528,7 +537,7 @@ def make_national_question_table(header):
     question_table_count = 0
     if national_q: header["national_question_offset"] = offset_count()
 
-    for q in sorted(question_data.keys()):
+    for q in question_keys:
         if not is_worldwide(q):
             national_question_table["poll_id_%s" % num()] = u32(q)
             national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
@@ -558,7 +567,7 @@ def make_worldwide_question_table(header):
     elif file_type == "q":
         question_table_count = 9
 
-    for q in sorted(question_data.keys()):
+    for q in question_keys:
         if is_worldwide(q):
             worldwide_question_table["poll_id_%s" % num()] = u32(q)
             worldwide_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
@@ -579,7 +588,7 @@ def make_question_text_table(header):
 
     header["question_offset"] = offset_count()
 
-    for q in sorted(question_data.keys()):
+    for q in question_keys:
         if not is_worldwide(q):
             list = country_language[country_code]
         elif is_worldwide(q):
@@ -589,7 +598,7 @@ def make_question_text_table(header):
                 list = range(1, 9)
         for language_code in list:
             if get_question(q, language_code) is not None:
-                num = sorted(question_data.keys()).index(q)
+                num = question_keys.index(q)
                 question_text_table["language_code_%s_%s" % (num, language_code)] = u8(language_code)
                 question_text_table["question_offset_%s_%s" % (num, language_code)] = u32(0)
                 question_text_table["response_1_offset_%s_%s" % (num, language_code)] = u32(0)
@@ -774,10 +783,10 @@ def make_question_text(question_text_table):
     question_text = collections.OrderedDict()
     dictionaries.append(question_text)
 
-    for q in sorted(question_data.keys()):
+    for q in question_keys:
         for language_code in country_language[country_code]:
             if get_question(q, language_code) is not None:
-                num = sorted(question_data.keys()).index(q)
+                num = question_keys.index(q)
                 question_text_table["question_offset_%s_%s" % (num, language_code)] = offset_count()
                 question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode(
                     "utf-16be") + pad(2)
