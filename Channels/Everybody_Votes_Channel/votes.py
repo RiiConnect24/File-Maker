@@ -192,7 +192,7 @@ def question_sort():
     global question_keys
     question_keys = sorted(question_data.keys())
 
-    for q in question_keys():
+    for q in question_keys:
         if is_worldwide(q):
             del question_keys[q]
             question_keys.append(q)
