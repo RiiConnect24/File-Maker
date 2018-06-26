@@ -194,7 +194,7 @@ def question_sort():
 
     for q in question_keys:
         if is_worldwide(q):
-            del question_keys[q]
+            question_keys.remove(q)
             question_keys.append(q)
 
 def mysql_connect():
