@@ -364,11 +364,11 @@ def get_locationkey(list, key):
     region = get_region(list, key)
     city = get_city(list, key)
     listid = weathercities.index(list)
-    if region is '' and (country not in forecastlists.bincountries or matches_country_code(list, key)):
+    if region == '' and (country not in forecastlists.bincountries or matches_country_code(list, key)):
         a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
         b = 'FE'
         c = 'FE'
-    elif region is '' and not matches_country_code(list, key):
+    elif region == '' and not matches_country_code(list, key):
         a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
         b = 'FE'
         c = hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2)
