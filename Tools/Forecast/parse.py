@@ -36,7 +36,8 @@ def dec(a):
 
 def coord_decode(value):
     value = int(value, 16)
-    if value >= 0x8000: value -= 0x10000
+    if value >= 0x8000:
+        value -= 0x10000
     return value * 0.0054931640625
 
 
@@ -102,7 +103,7 @@ for k in names.keys():
     else:
         print "No Country"
     print "Latitude Coordinate: %s" % names[k][3]
-    print "Longitutde Coordinate: %s" % names[k][4]
+    print "Longitude Coordinate: %s" % names[k][4]
     print "Zoom 1: %s" % names[k][5]
     zoom.append(int(names[k][5]))
     print "Zoom 2: %s" % names[k][6]
@@ -110,7 +111,8 @@ for k in names.keys():
     print "\n"
 
 print "Dumping Database ..."
-if os.path.exists('locations.json'): os.remove('locations.json')
+if os.path.exists('locations.json'):
+    os.remove('locations.json')
 with open('locations.json', 'wb') as file:
     pickle.dump(names, file)
 

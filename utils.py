@@ -25,16 +25,17 @@ def setup_log(sentry_url, print_errors):
     production = True
 
 def log(msg, level):  # TODO: Use number levels, strings are annoying
-    if p_errors: print msg
+    if p_errors:
+        print msg
 
     if production:
-        if level is "VERBOSE":
+        if level == "VERBOSE":
             logger.debug(msg)
-        elif level is "INFO":
+        elif level == "INFO":
             logger.info(msg)
-        elif level is "WARNING":
+        elif level == "WARNING":
             logger.warning(msg)
-        elif level is "CRITICAL":
+        elif level == "CRITICAL":
             logger.error(msg)
 
 def mkdir_p(path):
@@ -46,9 +47,7 @@ def mkdir_p(path):
 
 """Pack integers to specific type."""
 
-
 # Unsigned integers
-
 
 def u8(data):
     if data < 0 or data > 255:
@@ -77,9 +76,7 @@ def u32_littleendian(data):
         data = 0
     return struct.pack("<I", data)
 
-
-# Signed integers
-
+# Signed integer
 
 def s8(data):
     if data < -128 or data > 128:
@@ -100,4 +97,3 @@ def s32(data):
         log("s32 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">i", data)
-
