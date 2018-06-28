@@ -182,7 +182,8 @@ def shrink_image(data, resize, source):
 
     image = image.convert("RGB")
 
-    if resize: image.thumbnail(maxsize, Image.ANTIALIAS)
+    if resize:
+        image.thumbnail(maxsize, Image.ANTIALIAS)
 
     data = list(image.getdata())
     image_without_exif = Image.new(image.mode, image.size)
@@ -301,14 +302,16 @@ def locations_download(language_code, data):
         location = values[7]
 
         if location is not None:
-            if location not in locations: locations[location] = []
+            if location not in locations:
+                locations[location] = []
 
             locations[location].append(keys)
 
     for name in locations.keys():
         read = None
 
-        if name == "": continue
+        if name == "":
+            continue
 
         print unidecode(name)
 
@@ -323,7 +326,8 @@ def locations_download(language_code, data):
             new_name = enc(cities[name][1])
 
             for filenames in locations[name]:
-                if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
+                if new_name not in locations_return:
+                    locations_return[new_name] = [coordinates, []]
 
                 locations_return[new_name][1].append(filenames)
 
@@ -362,7 +366,6 @@ def geoparser_get(article):
         headers = {'Authorization': "apiKey %s" % key}
         data = {'inputText': article}
         response = requests.post(url, headers=headers, data=data)
-        status_code = response.status_code
         if response.status_code == 402:
             continue
         else:
@@ -494,10 +497,9 @@ class Parse(News):
             return []
         elif self.article == "" or self.article is None:
             return []
-        else:
-            return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
-                    shrink_image(self.picture, self.resize, self.source), enc(self.credits), enc(self.caption),
-                    self.location, self.source]
+        return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
+                shrink_image(self.picture, self.resize, self.source), enc(self.credits), enc(self.caption),
+                self.location, self.source]
 
     def newspaper_init(self):
         self.newsdata = newspaper.Article(self.url, language=self.language)
