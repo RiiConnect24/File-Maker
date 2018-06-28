@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from newsdownload import *
-from newsmake import process_news
+from Channels.News_Channel.news import newsdownload, newsmake.process_news
 import sys
 from utils import *
 
