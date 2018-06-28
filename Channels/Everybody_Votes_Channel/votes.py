@@ -150,6 +150,7 @@ def automatic_questions():
     elif nw == "w":
         days = 15
     mysql_get_questions(days, 1, nw)
+    question_sort()
     questions = 1
 
 
