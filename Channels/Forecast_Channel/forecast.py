@@ -12,7 +12,6 @@
 import Queue
 import binascii
 import collections
-import forecastlists
 import io
 import json
 import os
@@ -27,8 +26,9 @@ from datetime import datetime, timedelta
 
 import requests
 import rsa
-
 from datadog import statsd
+
+from Channels.Forecast_Channel import forecastlists
 from utils import setup_log, log, u8, u16, u32
 
 weathercities = [forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010,
@@ -155,8 +155,7 @@ def matches_country_code(list, key):
     v = list[key]
     if v[2][1] in forecastlists.bincountries:
         return hex(int(str(forecastlists.bincountries[v[2][1]])))[2:].zfill(2) == hex(country_code)[2:].zfill(2)
-    else:
-        return False
+    return False
 
 
 def check_coords(list,key,lat,lng):
@@ -307,7 +306,7 @@ def ui():
 
 
 def get_icon(icon, list, key):
-    return get_weatherjpnicon(icon) if list[key][2][1] is "Japan" else get_weathericon(icon)
+    return get_weatherjpnicon(icon) if list[key][2][1] == "Japan" else get_weathericon(icon)
 
 
 """Resets bin-specific values for next generation."""
@@ -391,9 +390,9 @@ def generate_locationkeys(list):
     weatherloc[listid]['no-region'] = {}
     weatherloc[listid]['regions'] = {}
     for k, v in list.items():
-        if v[1][1] is "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(list, k)):
+        if v[1][1] == "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(list, k)):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
-        elif v[1][1] is "" and not matches_country_code(list, k):
+        elif v[1][1] == "" and not matches_country_code(list, k):
             weatherloc[listid]['no-region'].setdefault(v[2][1], {})
             weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1],
                                                                 len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
@@ -1211,7 +1210,7 @@ def make_forecast_text_table(list):
 
 def make_weather_value_table():
     weathervalue_text_table = collections.OrderedDict()
-    for k, v in forecastlists.weatherconditions.items():
+    for v in forecastlists.weatherconditions.values():
         for _ in range(2):
             weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be") + pad(2)
     return weathervalue_text_table
@@ -1219,7 +1218,7 @@ def make_weather_value_table():
 
 def make_weather_offset_table():
     weathervalue_offset_table = collections.OrderedDict()
-    for k, v in forecastlists.weatherconditions.items():
+    for v in forecastlists.weatherconditions.values():
         weathervalue_offset_table[num()] = binascii.unhexlify(v[1])
         weathervalue_offset_table[num()] = binascii.unhexlify(v[2])
         weathervalue_offset_table[num()] = u32(0)
