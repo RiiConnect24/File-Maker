@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from Channels.News_Channel import newsdownload, newsmake
+from newsdownload import News
 from newsmake import process_news
 import sys
 from utils import *
