@@ -212,7 +212,7 @@ def worker():
             item = q.get_nowait()
             get_data(item[0], item[1])
             q.task_done()
-        except:
+        except Queue.Empty:
             pass
 
 
@@ -704,12 +704,12 @@ def make_forecast_bin(list, data):
     for key in list.keys():
         offset_write(seek_base)
         seek_base += len(list[key][0][language_code].decode('utf-8').encode('utf-16be')) + 2
-        if len(list[key][1][language_code]) > 0:
+        if list[key][1][language_code] > 0:
             offset_write(seek_base)
             seek_base += len(list[key][1][language_code].decode('utf-8').encode('utf-16be')) + 2
         else:
             offset_write(0)
-        if len(list[key][2][language_code]) > 0:
+        if list[key][2][language_code] > 0:
             offset_write(seek_base)
             seek_base += len(list[key][2][language_code].decode('utf-8').encode('utf-16be')) + 2
         else:
@@ -1327,7 +1327,7 @@ for list in weathercities:
             weather_data[k] = ElementTree.fromstring(v)
             if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
                 weather_data[k] = None
-        except:
+        except cElementTree.ParseError:
             weather_data[k] = None
         if weather_data[k] is not None:
             get_legacy_api(list, k)
