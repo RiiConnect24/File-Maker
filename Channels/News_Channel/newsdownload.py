@@ -316,11 +316,13 @@ def locations_download(language_code, data):
         if name == "":
             continue
 
-        print unidecode(name)
+        uni_name = name if languages[language_code] == "ja" else unidecode(name)
+
+        print uni_name
 
         if name not in cities:
             try:
-                read = gmaps.geocode(unidecode(name), language=languages[language_code])
+                read = gmaps.geocode(uni_name, language=languages[language_code])
             except:
                 log("There was a error downloading the location data.", "INFO")
 
@@ -704,7 +706,5 @@ class Parse(News):
                 except NameError:
                     pass
 
-        try:
-            self.location = self.article.split("［")[1].decode("utf-8").split(u"\u3000")[0].encode("utf-8")
-        except:
-            pass
+        if u"\uff3b" in self.article:
+            self.location = self.article.split(u"\uff3b")[1].split(u"\u3000")[0]
