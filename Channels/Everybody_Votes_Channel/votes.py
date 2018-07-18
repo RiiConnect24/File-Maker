@@ -65,7 +65,7 @@ def get_timestamp(mode, type, date):
     if mode == 0:
         timestamp = time_convert(get_epoch())
     elif mode == 1 or mode == 2:
-        timestamp = time_convert(time.mktime(date.timetuple()) + 7200)
+        timestamp = time_convert(time.mktime(date.timetuple())) + 120
         if mode == 2:
             if production:
                 if type == "n":
