@@ -172,7 +172,7 @@ def shrink_image(data, resize, source):
 
     try:
         picture = requests.get(data).content
-    except requests.exceptions.ReadTimeout:
+    except (requests.exceptions.ReadTimeout, requests.exceptions.MissingSchema), e:
         return None
     try:
         image = Image.open(StringIO(picture))
