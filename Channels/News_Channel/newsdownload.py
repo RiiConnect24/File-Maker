@@ -601,12 +601,15 @@ class Parse(News):
 
         """The location is at the end of the article, I couldn't find anything better to parse it."""
 
-        if "(AFP)" in self.article:
-            buf = StringIO(self.article)
-            line = buf.readlines()[-1]
-            buf = StringIO(self.article)
-            self.location = line.strip()[22:-19]
-            self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
+        try:
+            if "(AFP)" in self.article:
+                buf = StringIO(self.article)
+                line = buf.readlines()[-1]
+                buf = StringIO(self.article)
+                self.location = line.strip()[22:-19]
+                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
+        except AttributeError:
+            pass
 
     def parse_donaukurier(self):
         try:
