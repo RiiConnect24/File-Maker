@@ -550,10 +550,7 @@ class Parse(News):
 
                 self.caption = self.newsdata["media"][0]["flattenedCaption"]
 
-                try:
-                    self.credits = self.caption.rsplit("(")[-1][:-1]
-                except:
-                    self.credits = None
+                self.credits = self.caption.rsplit("(")[-1][:-1]
             else:
                 self.picture = None
         else:
@@ -569,8 +566,7 @@ class Parse(News):
             pass
 
         try:
-            self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/",
-                                                                                           " REUTERS/")
+            self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/", " REUTERS/")
         except AttributeError:
             pass
 
@@ -590,7 +586,7 @@ class Parse(News):
                 self.resize = False
                 try:
                     self.picture += "&w=200"
-                except:
+                except NameError:
                     pass
 
         if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
@@ -603,17 +599,14 @@ class Parse(News):
         except AttributeError:
             pass
 
-        try:
-            """The location is at the end of the article, I couldn't find anything better to parse it."""
+        """The location is at the end of the article, I couldn't find anything better to parse it."""
 
-            if "(AFP)" in self.article:
-                buf = StringIO(self.article)
-                line = buf.readlines()[-1]
-                buf = StringIO(self.article)
-                self.location = line.strip()[22:-19]
-                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
-        except:
-            pass
+        if "(AFP)" in self.article:
+            buf = StringIO(self.article)
+            line = buf.readlines()[-1]
+            buf = StringIO(self.article)
+            self.location = line.strip()[22:-19]
+            self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
 
     def parse_donaukurier(self):
         try:
