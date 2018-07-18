@@ -562,23 +562,23 @@ class Parse(News):
 
     def parse_reuters(self):
         try:
-            self.soup.find("div", {"class": "trustBadgeContainer_1gqgJ"}).decompose()
+            self.soup.find("div", {"class": "StandardArticleBody_trustBadgeContainer"}).decompose()
         except:
             pass
 
         try:
-            self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
+            self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/",
                                                                                            " REUTERS/")
         except:
             pass
 
         try:
-            self.soup.findall("div", {"class": "caption_KoNH1"}).decompose()
+            self.soup.findall("div", {"class": "Image_caption"}).decompose()
         except:
             pass
 
         self.article = BeautifulSoup(
-            str(self.soup.find("div", {"class": "body_1gnLA"})).replace("</p>", "\n\n</p>"),
+            str(self.soup.find("div", {"class": "StandardArticleBody_body"})).replace("</p>", "\n\n</p>"),
             "lxml").text
 
         if self.picture is not None:
@@ -673,23 +673,23 @@ class Parse(News):
 
     def parse_reuters_japanese(self):
         try:
-            self.headline = self.soup.find("h1", {"class": "headline_2zdFM"}).text
+            self.headline = self.soup.find("h1", {"class": "ArticleHeader_headline"}).text
         except:
             return None
 
         try:
-            self.caption = self.soup.find("span", {"class": "caption_KoNH1"}).text.replace("  REUTERS/",
+            self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/",
                                                                                            " REUTERS/")
         except:
             pass
 
         try:
-            self.soup.findall("div", {"class": "caption_KoNH1"}).decompose()
+            self.soup.findall("div", {"class": "Image_caption"}).decompose()
         except:
             pass
 
         article_text = BeautifulSoup(
-            str(self.soup.find("div", {"class": "body_1gnLA"})).replace("</p>", "\n\n</p>"),
+            str(self.soup.find("div", {"class": "StandardArticleBody_body"})).replace("</p>", "\n\n</p>"),
             "lxml").text
 
         self.article = "\n".join(textwrap.wrap(article_text, 25))
