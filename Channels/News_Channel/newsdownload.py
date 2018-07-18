@@ -563,18 +563,18 @@ class Parse(News):
     def parse_reuters(self):
         try:
             self.soup.find("div", {"class": "StandardArticleBody_trustBadgeContainer"}).decompose()
-        except:
+        except AttributeError:
             pass
 
         try:
             self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/",
                                                                                            " REUTERS/")
-        except:
+        except AttributeError:
             pass
 
         try:
             self.soup.findall("div", {"class": "Image_caption"}).decompose()
-        except:
+        except TypeError:
             pass
 
         self.article = BeautifulSoup(
@@ -598,7 +598,7 @@ class Parse(News):
         try:
             self.resize = True
             self.caption = self.soup.find("figcaption", {"class": "art-caption"}).text
-        except:
+        except AttributeError:
             pass
 
         try:
@@ -617,7 +617,7 @@ class Parse(News):
         try:
             self.resize = True
             self.caption = self.soup.find("figcaption").text
-        except:
+        except AttributeError:
             pass
 
         if self.caption is not None:
@@ -629,14 +629,14 @@ class Parse(News):
                 self.location = self.soup.find("em").text.split(" (AFP)")[0]
             elif self.source == "dpa":
                 self.location = self.article.split(" (dpa)")[0]
-        except:
+        except AttributeError:
             pass
 
     def parse_sid(self):
         try:
             self.resize = True
             self.caption = self.soup.find("small").text
-        except:
+        except AttributeError:
             pass
 
         try:
@@ -648,12 +648,12 @@ class Parse(News):
         try:
             self.resize = True
             self.credits = self.soup.find("div", {"class": "news-caption hidden-phone"}).find("em").text
-        except:
+        except AttributeError:
             pass
 
         try:
             self.location = self.soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).text
-        except:
+        except AttributeError:
             pass
 
     def parse_nu(self):
@@ -663,7 +663,7 @@ class Parse(News):
         try:
             self.resize = True
             self.credits = self.soup.find("span", {"class": "photographer"}).text
-        except:
+        except AttributeError:
             pass
 
         try:
@@ -674,18 +674,18 @@ class Parse(News):
     def parse_reuters_japanese(self):
         try:
             self.headline = self.soup.find("h1", {"class": "ArticleHeader_headline"}).text
-        except:
+        except AttributeError:
             return None
 
         try:
             self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/",
                                                                                            " REUTERS/")
-        except:
+        except AttributeError:
             pass
 
         try:
             self.soup.findall("div", {"class": "Image_caption"}).decompose()
-        except:
+        except TypeError:
             pass
 
         article_text = BeautifulSoup(
@@ -701,10 +701,10 @@ class Parse(News):
                 self.resize = False
                 try:
                     self.picture += "&w=200"
-                except:
+                except NameError:
                     pass
 
         try:
-            self.location = self.article.split("[")[1].split("　")[0]
+            self.location = self.article.split("［")[1].decode("utf-8").split(u"\u3000")[0].encode("utf-8")
         except:
             pass
