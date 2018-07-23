@@ -145,14 +145,14 @@ sources = {
     },
     "reuters_japanese": {
         "name": "Reuters_Japanese",
-        "url": "https://twitrss.me/twitter_user_to_rss/?user=%s",
+        "url": "http://feeds.reuters.com/reuters/%s.rss",
         "lang": "en",  # newspaper does not support japanese
         "cat": collections.OrderedDict([
-            ("ReutersJpWorld", "world"),
-            ("ReutersJpBiz", "business"),
-            ("ReutersJpSports", "sports"),
-            ("ReutersJpTech", "technology"),
-            ("ReutersJpEnt", "entertainment")
+            ("JPWorldNews", "world"),
+            ("JPBusinessNews", "business"),
+            ("JPSportsNews", "sports"),
+            ("JPTechnologyNews", "technology"),
+            ("JPEntertainment", "entertainment")
         ])
     }
 }
@@ -445,10 +445,6 @@ class News:
                         self.source = "dpa"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
-                    elif self.source == "Reuters_Japanese":
-                        entry["link"] = requests.get(
-                            "http://bit.ly/" + entry["description"].split("http://bit.ly/", 1)[1][:7]).url
-                        entry["title"] = entry["title"].split("  http://bit.ly/", 1)[0]
 
                     title = entry["headline"] if self.source == "AP" else entry["title"]
 
