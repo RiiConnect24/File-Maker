@@ -69,24 +69,9 @@ bw_usage = 0  # Bandwidth Usage Counter
 lists = 0  # Lists Counter
 errors = 0  # Errors
 bandwidth = 0.0  # Bandwidth
-file = None
-loop = None
+file = loop = None
 
-uvindex = {}
-wind = {}
-weathericon = {}
-times = {}
-pollen = {}
-today = {}
-week = {}
-tomorrow = {}
-hourly = {}
-precipitation = {}
-current = {}
-globe = {}
-weatherloc = {}
-cache = {}
-laundry = {}
+uvindex = wind = weathericon = times = pollen = today = week = tomorrow = hourly = precipitation = current = globe = weatherloc = cache = laundry = {}
 
 
 def temp(num):
@@ -315,10 +300,7 @@ def get_icon(icon, list, key):
 
 def reset_data():
     global seek_offset, seek_base, file, cached, citycount
-    seek_offset = 0
-    seek_base = 0
-    cached = 0
-    citycount = 0
+    seek_offset = seek_base = cached = citycount = 0
     file = None
 
 
@@ -330,8 +312,7 @@ def request_data(url):
     header = {'Accept-Encoding': 'gzip, deflate',
               'Host': 'accuwxturbotablet.accu-weather.com'}  # This is to make the data download faster.
     apirequests += 1
-    i = 0
-    c = 0
+    i = c = 0
     while c == 0:
         if i == 3:
             errors += 1
@@ -367,8 +348,7 @@ def get_locationkey(list, key):
     listid = weathercities.index(list)
     if region == '' and (country not in forecastlists.bincountries or matches_country_code(list, key)):
         a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
-        b = 'FE'
-        c = 'FE'
+        b = c = 'FE'
     elif region == '' and not matches_country_code(list, key):
         a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
         b = 'FE'
@@ -386,17 +366,13 @@ def zoom(list, mode, key):
 
 def generate_locationkeys(list):
     listid = weathercities.index(list)
-    weatherloc[listid] = {}
-    weatherloc[listid]['null'] = {}
-    weatherloc[listid]['no-region'] = {}
-    weatherloc[listid]['regions'] = {}
+    weatherloc[listid] = weatherloc[listid]['null'] =  weatherloc[listid]['no-region'] = weatherloc[listid]['regions'] = {}
     for k, v in list.items():
         if v[1][1] == "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(list, k)):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
         elif v[1][1] == "" and not matches_country_code(list, k):
             weatherloc[listid]['no-region'].setdefault(v[2][1], {})
-            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1],
-                                                                len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
+            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1], len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
         else:
             weatherloc[listid].setdefault(v[2][1], {})
             weatherloc[listid][v[2][1]].setdefault(v[1][1], {})
@@ -410,29 +386,14 @@ def generate_locationkeys(list):
 
 
 def blank_data(list, key, clear):
-    wind[key] = {}
-    uvindex[key] = {}
-    precipitation[key] = {}
-    week[key] = {}
-    hourly[key] = {}
-    today[key] = {}
-    tomorrow[key] = {}
-    current[key] = {}
-    globe[key] = {}
-    wind[key][0] = 0
-    wind[key][1] = 0
+    wind[key] = uvindex[key] = precipitation[key] = week[key] = hourly[key] = today[key] = tomorrow[key] = current[key] = globe[key] = {}
+    wind[key][0] = wind[key][1] = 0
     wind[key][2] = 'N'
-    wind[key][3] = 0
-    wind[key][4] = 0
-    wind[key][5] = 'N'
-    current[key][0] = 'N'
-    current[key][1] = 0
-    current[key][2] = 0
-    current[key][3] = 128
-    current[key][4] = 128
-    laundry[key] = 255
-    uvindex[key] = 255
-    pollen[key] = 255
+    wind[key][3] = wind[key][4] = 0
+    wind[key][5] = current[key][0] = 'N'
+    current[key][1] = current[key][2] = 0
+    current[key][3] = current[key][4] = 128
+    laundry[key] = uvindex[key] = pollen[key] = 255
     weathericon[key] = 'FFFF'
     times[key] = get_epoch()
     for k in range(0, 15):
@@ -529,11 +490,9 @@ def get_legacy_api(list, key):
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
-        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(
-            int(-1), list, key)
+        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
         temp = time_index[1][i] - hour
-        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(
-            int(-1), list, key)
+        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
 
 
 """Tenki's where we're getting the laundry index for Japan."""
@@ -543,9 +502,7 @@ def get_legacy_api(list, key):
 def get_tenki_data(key, lat, lon):
     log("Getting Tenki Data for %s ..." % key, "VERBOSE")
     laundry_index = None
-    precip = []
-    temp_diff = []
-    precip10 = []
+    precip = temp_diff = precip10 = []
     jiscode = json.loads(requests.get("https://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon)).content)["jiscode"]
     response = json.loads(requests.get("https://static.tenki.jp/static-api/app/forecast-{}.json".format(jiscode)).content)
 
@@ -597,12 +554,8 @@ def make_bins(list, data):
 
 
 def generate_data(list, bins):
-    long_forecast_tables = dict.fromkeys([1, 2])
-    short_japan_tables = dict.fromkeys([1, 2])
-    short_forecast_tables = dict.fromkeys([1, 2])
-    uvindex_text_tables = dict.fromkeys(bins)
-    weathervalue_text_tables = dict.fromkeys(bins)
-    text_tables = dict.fromkeys(bins)
+    long_forecast_tables = short_japan_tables = short_forecast_tables = dict.fromkeys([1, 2])
+    uvindex_text_tables = weathervalue_text_tables = text_tables = dict.fromkeys(bins)
     uvindex_table = make_uvindex_table()
     pollenindex_table = make_pollenindex_table()
     pollen_text_table = make_pollen_text_table()
@@ -677,8 +630,7 @@ def make_forecast_bin(list, data):
     hex_write(84, count[6])
     seek_offset = count[2]
     seek_base = count[7]
-    for i in [forecastlists.weatherconditions.values()[j // 2] for j in
-              range(len(forecastlists.weatherconditions.values()) * 2)]:
+    for i in [forecastlists.weatherconditions.values()[j // 2] for j in range(len(forecastlists.weatherconditions.values()) * 2)]:
         offset_write(seek_base)
         seek_base += len(i[0][language_code].decode('utf-8').encode('utf-16be')) + 2
         seek_offset += 4
@@ -841,8 +793,7 @@ def make_long_forecast_table(list):
     for key in list.keys():
         if matches_country_code(list, key) and get_region(list, key) != '':
             numbers = get_number(list, key)
-            long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(
-                get_locationkey(list, key))  # Wii Location Code.
+            long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, key))  # Wii Location Code.
             long_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # 1st timestamp.
             long_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # 2nd timestamp.
             long_forecast_table["unknown_1_%s" % numbers] = u32(0)  # Unknown. (0xC-0xF)
@@ -1072,14 +1023,10 @@ def make_location_table(list):
         location_table["city_text_offset_%s" % numbers] = u32(0)  # Offset for location's city text
         location_table["region_text_offset_%s" % numbers] = u32(0)  # Offset for location's region text
         location_table["country_text_offset_%s" % numbers] = u32(0)  # Offset for location's country text
-        location_table["latitude_coordinates_%s" % numbers] = globe[keys][
-            'lat']  # Latitude coordinates for location on globe
-        location_table["longitude_coordinates_%s" % numbers] = globe[keys][
-            'lng']  # Longitude coordinates for location on globe
-        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(
-            str(zoom(list, 1, keys)))  # Location zoom for location on globe
-        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(
-            zoom(list, 2, keys))  # Location zoom for location on globe
+        location_table["latitude_coordinates_%s" % numbers] = globe[keys]['lat']  # Latitude coordinates for location on globe
+        location_table["longitude_coordinates_%s" % numbers] = globe[keys]['lng']  # Longitude coordinates for location on globe
+        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(str(zoom(list, 1, keys)))  # Location zoom for location on globe
+        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(list, 2, keys))  # Location zoom for location on globe
         location_table["padding_%s" % numbers] = u16(0)
 
     return location_table
@@ -1175,8 +1122,7 @@ ui_thread.start()
 for list in weathercities:
     global language_code, country_code, mode, shortcount, weather_data
     threads = []
-    status = 1
-    language_code = 1
+    status = language_code = 1
     shortcount = 0
     listid = weathercities.index(list) + 1
     currentlist = list.values()[0][2][1]
