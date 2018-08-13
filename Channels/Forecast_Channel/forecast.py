@@ -159,7 +159,7 @@ def matches_country_code(list, key):
     return False
 
 
-def check_coords(list,key,lat,lng):
+def check_coords(list, key, lat, lng):
     global errors
     """ Verify Location Coordinates """
     if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
@@ -233,7 +233,7 @@ def ui():
     bar = 35  # Size of progress bars
     i = 0  # Counter for building progress bar
     refresh_rate = 0.1  # Refresh rate of UI
-    if os.name == 'nt':
+    if os.name == 'nt': # Windows
         display = '*'
         os.system("title Forecast Downloader - v%s" % VERSION)
         ver = sys.getwindowsversion()
@@ -274,7 +274,7 @@ def ui():
         out += "API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (apirequests, retrycount, elapsed_time)
         out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth, cities, errors)
         out += "\nProcessing List #%s/%s (%s): %s %s\n\n" % (
-            listid, len(weathercities), country_code, currentlist, "." * progcount)
+        listid, len(weathercities), country_code, currentlist, "." * progcount)
         if status == 1 and dl:
             out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
         else:
@@ -395,8 +395,7 @@ def generate_locationkeys(list):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
         elif v[1][1] == "" and not matches_country_code(list, k):
             weatherloc[listid]['no-region'].setdefault(v[2][1], {})
-            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1],
-                                                                len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
+            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1], len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
         else:
             weatherloc[listid].setdefault(v[2][1], {})
             weatherloc[listid][v[2][1]].setdefault(v[1][1], {})
@@ -461,7 +460,6 @@ def blank_data(list, key, clear):
         globe[key]['lat'] = binascii.unhexlify(get_index(list, key, 3)[:4])
         globe[key]['lng'] = binascii.unhexlify(get_index(list, key, 3)[:8][4:])
         globe[key]['time'] = get_epoch()
-
 
 def get_legacy_api(list, key):
     apilegacy = weather_data[key]
@@ -529,11 +527,9 @@ def get_legacy_api(list, key):
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
-        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(
-            int(-1), list, key)
+        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
         temp = time_index[1][i] - hour
-        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(
-            int(-1), list, key)
+        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
 
 
 """Tenki's where we're getting the laundry index for Japan."""
@@ -543,9 +539,6 @@ def get_legacy_api(list, key):
 def get_tenki_data(key, lat, lon):
     log("Getting Tenki Data for %s ..." % key, "VERBOSE")
     laundry_index = None
-    precip = []
-    temp_diff = []
-    precip10 = []
     jiscode = json.loads(requests.get("https://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon)).content)["jiscode"]
     response = json.loads(requests.get("https://static.tenki.jp/static-api/app/forecast-{}.json".format(jiscode)).content)
 
@@ -841,8 +834,7 @@ def make_long_forecast_table(list):
     for key in list.keys():
         if matches_country_code(list, key) and get_region(list, key) != '':
             numbers = get_number(list, key)
-            long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(
-                get_locationkey(list, key))  # Wii Location Code.
+            long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, key))  # Wii Location Code.
             long_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # 1st timestamp.
             long_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # 2nd timestamp.
             long_forecast_table["unknown_1_%s" % numbers] = u32(0)  # Unknown. (0xC-0xF)
@@ -1067,19 +1059,14 @@ def make_location_table(list):
     location_table = collections.OrderedDict()
     for keys in list.keys():
         numbers = get_number(list, keys)
-        location_table["location_code_%s" % numbers] = binascii.unhexlify(
-            get_locationkey(list, keys))  # Wii Location Code.
+        location_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, keys))  # Wii Location Code.
         location_table["city_text_offset_%s" % numbers] = u32(0)  # Offset for location's city text
         location_table["region_text_offset_%s" % numbers] = u32(0)  # Offset for location's region text
         location_table["country_text_offset_%s" % numbers] = u32(0)  # Offset for location's country text
-        location_table["latitude_coordinates_%s" % numbers] = globe[keys][
-            'lat']  # Latitude coordinates for location on globe
-        location_table["longitude_coordinates_%s" % numbers] = globe[keys][
-            'lng']  # Longitude coordinates for location on globe
-        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(
-            str(zoom(list, 1, keys)))  # Location zoom for location on globe
-        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(
-            zoom(list, 2, keys))  # Location zoom for location on globe
+        location_table["latitude_coordinates_%s" % numbers] = globe[keys]['lat']  # Latitude coordinates for location on globe
+        location_table["longitude_coordinates_%s" % numbers] = globe[keys]['lng']  # Longitude coordinates for location on globe
+        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(str(zoom(list, 1, keys)))  # Location zoom for location on globe
+        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(list, 2, keys))  # Location zoom for location on globe
         location_table["padding_%s" % numbers] = u16(0)
 
     return location_table
