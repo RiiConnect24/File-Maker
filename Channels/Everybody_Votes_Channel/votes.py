@@ -394,7 +394,7 @@ def webhook():
                  "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}],
                  "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type,
                  "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                 "ts": int(time.mktime(datetime.datetime.utcnow().timetuple()))}]}
+                 "ts": int(time.mktime(datetime.datetime.utcnow().timetuple())) + 25200}]}
         for url in config["webhook_urls"]: post_webhook = requests.post(url, json=data, allow_redirects=True)
 
 
