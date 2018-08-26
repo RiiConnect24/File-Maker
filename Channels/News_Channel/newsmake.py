@@ -88,11 +88,13 @@ sources = {
         "language_code": 3,
         "country_code": 110
     },
-    "donaukurier_german": {
+    "dtoday_german": {
         "topics_news": collections.OrderedDict([
             ("Nachrichten", "world"),
+            ("Panorama", "panorama"),
+            ("Politik", "politics"),
             ("Wirtschaft", "economy"),
-            ("Kultur", "culture")
+            ("Sport", "sports")
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 2,

@@ -99,22 +99,16 @@ sources = {
             ("politique", "politics")
         ])
     },
-    "donaukurier_german": {
+    "dtoday_german": {
         "name": "AFP",
-        "url": "http://www.donaukurier.de/storage/rss/rss/%s.xml",
+        "url": "http://www.dtoday.de/feed/%s.xml",
         "lang": "de",
         "cat": collections.OrderedDict([
-            ("nachrichten", "world"),
-            ("wirtschaft", "economy"),
-            ("kultur", "culture")
-        ])
-    },
-    "sid_german": {
-        "name": "SID",
-        "url": "http://feed43.com/sid.xml",
-        "lang": "de",
-        "cat": collections.OrderedDict([
-            ("sport", "sport")
+            ("16-nachrichten-ueberregional", "world"),
+            ("12-panorama-ueberregional", "panorama"),
+            ("14-politik-ueberregional", "politics"),
+            ("13-wirtschaft-ueberregional", "economy"),
+            ("15-sport-ueberregional", "sports")
         ])
     },
     "ansa_italian": {
@@ -413,7 +407,6 @@ class News:
                     continue
 
             feed = ap_json if self.source == "AP" \
-                    else feedparser.parse(self.url) if self.source == "SID" \
                     else feedparser.parse(self.url) if self.source == "AFP_French" \
                     else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
                     else feedparser.parse(self.url % key)
@@ -441,8 +434,8 @@ class News:
 
                     if self.source == "AFP_French" and key not in entry["link"]:
                         continue
-                    elif self.source == "AFP" and "dpa" in entry["description"]:
-                        self.source = "dpa"
+                    elif self.source == "AFP" and "SID" in entry["description"]:
+                        self.source = "SID"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
 
@@ -482,9 +475,8 @@ class Parse(News):
             "AP": self.parse_ap,
             "Reuters": self.parse_reuters,
             "AFP_French": self.parse_afp,
-            "AFP": self.parse_donaukurier,
-            "dpa": self.parse_donaukurier,
-            "SID": self.parse_sid,
+            "AFP": self.parse_dtoday,
+            "SID": self.parse_dtoday,
             "ANSA": self.parse_ansa,
             "NU.nl": self.parse_nu,
             "ANP": self.parse_nu,
@@ -607,35 +599,31 @@ class Parse(News):
         except AttributeError:
             pass
 
-    def parse_donaukurier(self):
+    def parse_dtoday(self):
+        if " (AFP)" in self.article.split("\n")[4] or " (SID)" in self.article.split("\n")[2]:
+            split = self.article.split("\n")
+            for s in split:
+                if "© AFP" in s or "© SID" in s:
+                    del split[split.index(s) - 1]
+                    del split[split.index(s)]
+            if self.source == "AFP":
+                self.article = "\n".join(split[4:])
+            elif self.source == "SID":
+                self.article = "\n".join(split[2:])
+
         try:
             self.resize = True
-            self.caption = self.soup.find("figcaption").text
+            self.caption = self.soup.find("div", {"class": "articleimg_full"}).find("span").text
+            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find("img")["src"]
         except AttributeError:
             pass
-
-        if self.caption is not None:
-            buf = StringIO(self.article)
-            self.article = "".join(buf.readlines()[1:])
 
         try:
             if self.source == "AFP":
-                self.location = self.soup.find("em").text.split(" (AFP)")[0]
-            elif self.source == "dpa":
-                self.location = self.article.split(" (dpa)")[0]
+                self.location = self.article.split(" (AFP)")[0]
+            elif self.source == "SID":
+                self.location = self.article.split(" (SID)")[0]
         except AttributeError:
-            pass
-
-    def parse_sid(self):
-        try:
-            self.resize = True
-            self.caption = self.soup.find("small").text
-        except AttributeError:
-            pass
-
-        try:
-            self.location = geoparser_get(self.article)
-        except:
             pass
 
     def parse_ansa(self):
