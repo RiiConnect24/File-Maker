@@ -181,7 +181,7 @@ def process_news(name, mode, language, countries, d):
                  "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
                  "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
                  "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                 "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+                 "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
 
         for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)

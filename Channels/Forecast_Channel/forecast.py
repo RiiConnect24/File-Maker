@@ -1233,7 +1233,7 @@ if config["production"]:
              "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}],
              "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
              "footer_icon": "https://rc24.xyz/images/logo-small.png",
-             "ts": int(time.mktime(datetime.utcnow().timetuple()))}]}
+             "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
     for url in config["webhook_urls"]:
         post_webhook = requests.post(url, json=data, allow_redirects=True)
     """Log stuff to Datadog."""
