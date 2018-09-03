@@ -213,8 +213,10 @@ def worker():
             item = q.get_nowait()
             get_data(item[0], item[1])
             q.task_done()
-        except:
+        except Queue.Empty:
             pass
+        except Exception as e:
+            log(e, "WARNING")
 
 
 def refresh(type):
@@ -1200,7 +1202,8 @@ for list in weathercities:
             weather_data[k] = ElementTree.fromstring(v)
             if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
                 weather_data[k] = None
-        except:
+        except Exception as e:
+            log(e, "WARNING")
             weather_data[k] = None
         if weather_data[k] is not None:
             get_legacy_api(list, k)
