@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 3.8
+# VERSION 4.0
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
@@ -55,7 +55,7 @@ weathercities = [forecastlists.weathercities001, forecastlists.weathercities008,
                  forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108,
                  forecastlists.weathercities110]
 
-VERSION = 3.8
+VERSION = 4.0
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
@@ -71,6 +71,7 @@ errors = 0  # Errors
 bandwidth = 0.0  # Bandwidth
 file = None
 loop = None
+tenki_db = None
 
 uvindex = {}
 wind = {}
@@ -87,6 +88,7 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
+tenki = {}
 
 
 def temp(num):
@@ -151,6 +153,8 @@ def pad(amnt):
 def get_index(list, key, num):
     return list[key][num]
 
+def isJapan(list,key):
+    return list[key][2][1] == "Japan"
 
 def matches_country_code(list, key):
     v = list[key]
@@ -309,7 +313,7 @@ def ui():
 
 
 def get_icon(icon, list, key):
-    return get_weatherjpnicon(icon) if list[key][2][1] == "Japan" else get_weathericon(icon)
+    return get_weatherjpnicon(icon) if isJapan(list,key) else get_weathericon(icon)
 
 
 """Resets bin-specific values for next generation."""
@@ -329,8 +333,6 @@ def reset_data():
 
 def request_data(url):
     global retrycount, apirequests, bw_usage, errors
-    header = {'Accept-Encoding': 'gzip, deflate',
-              'Host': 'accuwxturbotablet.accu-weather.com'}  # This is to make the data download faster.
     apirequests += 1
     i = 0
     c = 0
@@ -340,8 +342,10 @@ def request_data(url):
             return -1
         if i > 0:
             retrycount += 1
-        data = s.get(url, headers=header)
-        bw_usage += get_bandwidth_usage(data)
+        if "tenki" in url: data = requests.get(url)
+        else:
+            data = s.get(url)
+            bw_usage += get_bandwidth_usage(data)
         status_code = data.status_code
         if status_code == 200:
             c = 1
@@ -537,40 +541,40 @@ def get_legacy_api(list, key):
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
 
-
 def get_tenki_data(key, lat, lon):
     log("Getting Tenki Data for %s ..." % key, "VERBOSE")
-    laundry_index = None
-    jiscode = json.loads(requests.get("https://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon)).content)["jiscode"]
-    response = json.loads(requests.get("https://static.tenki.jp/static-api/app/forecast-{}.json".format(jiscode)).content)
+    if not tenki_db:
+        tenkiapi = json.loads(request_data("http://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon)))
+        if "jiscode" in tenkiapi: tenki[key] = tenkiapi["jiscode"]
+        else: tenki[key] = None
+    else: tenki[key] = tenki_db[key]
+    if tenki[key]:
+        response = json.loads(request_data("http://static.tenki.jp/static-api/app/forecast-{}.json".format(tenki[key])))
+        laundry_url = request_data(response["indexes"]["cloth_dried"]["url"])
+        soup = BeautifulSoup(laundry_url, "lxml")
+        laundry[key] = int(soup.find("span", {"class": "indexes-telop"}).contents[0])
+        tendays = request_data(response["indexes"]["cloth_dried"]["url"].replace("indexes/cloth_dried", "forecast").replace(".html", "/" + tenki[key] + "/10days.html"))
+        soup = BeautifulSoup(tendays, "lxml")
 
-    laundry_url = requests.get(response["indexes"]["cloth_dried"]["url"]).content
-    soup = BeautifulSoup(laundry_url, "lxml")
+        for i in range(1, 8):
+            precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
 
-    laundry[key] = int(soup.find("span", {"class": "indexes-telop"}).contents[0])
-
-    tendays = requests.get(response["indexes"]["cloth_dried"]["url"].replace("indexes/cloth_dried", "forecast").replace(".html", "/" + jiscode + "/10days.html")).content
-    soup = BeautifulSoup(tendays, "lxml")
-
-    for i in range(1, 8):
-        precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
-
-    today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", ""))
-    today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", ""))
-    today[key][6] = to_fahrenheit(today[key][8])
-    today[key][5] = to_fahrenheit(today[key][9])
-    tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", ""))
-    tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", ""))
-    tomorrow[key][6] = to_fahrenheit(tomorrow[key][8])
-    tomorrow[key][5] = to_fahrenheit(tomorrow[key][9])
-    precipitation[key][0] = int(response["days"]["entries"][0]["p_zero"])
-    precipitation[key][1] = int(response["days"]["entries"][0]["p_six"])
-    precipitation[key][2] = int(response["days"]["entries"][0]["p_twelve"])
-    precipitation[key][3] = int(response["days"]["entries"][0]["p_eighteen"])
-    precipitation[key][4] = int(response["days"]["entries"][1]["p_zero"])
-    precipitation[key][5] = int(response["days"]["entries"][1]["p_six"])
-    precipitation[key][6] = int(response["days"]["entries"][1]["p_twelve"])
-    precipitation[key][7] = int(response["days"]["entries"][1]["p_eighteen"])
+        today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", ""))
+        today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", ""))
+        today[key][6] = to_fahrenheit(today[key][8])
+        today[key][5] = to_fahrenheit(today[key][9])
+        tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", ""))
+        tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", ""))
+        tomorrow[key][6] = to_fahrenheit(tomorrow[key][8])
+        tomorrow[key][5] = to_fahrenheit(tomorrow[key][9])
+        if response["days"]["entries"][0]["p_zero"] != "---": precipitation[key][0] = int(response["days"]["entries"][0]["p_zero"])
+        if response["days"]["entries"][0]["p_six"] != "---": precipitation[key][1] = int(response["days"]["entries"][0]["p_six"])
+        if response["days"]["entries"][0]["p_twelve"] != "---": precipitation[key][2] = int(response["days"]["entries"][0]["p_twelve"])
+        if response["days"]["entries"][0]["p_eighteen"] != "---": precipitation[key][3] = int(response["days"]["entries"][0]["p_eighteen"])
+        if response["days"]["entries"][1]["p_zero"] != "---": precipitation[key][4] = int(response["days"]["entries"][1]["p_zero"])
+        if response["days"]["entries"][1]["p_six"] != "---": precipitation[key][5] = int(response["days"]["entries"][1]["p_six"])
+        if response["days"]["entries"][1]["p_twelve"] != "---": precipitation[key][6] = int(response["days"]["entries"][1]["p_twelve"])
+        if response["days"]["entries"][1]["p_eighteen"] != "---": precipitation[key][7] = int(response["days"]["entries"][1]["p_eighteen"])
 
 
 def hex_write(loc, data):
@@ -786,9 +790,7 @@ def get_data(list, name):
     blank_data(list, name, True)
     lat = coord_decode(get_index(list, name, 3)[:4])
     lon = coord_decode(get_index(list, name, 3)[:8][4:])
-    # Tenki parsing is kind of broken right now
-    #  if name in forecastlists.weathercities001:
-    #    get_tenki_data(name, lat, lon)
+    if config["enableTenki"] and isJapan(list,name): get_tenki_data(name, lat, lon)
     weather_data[name] = request_data("http://{}/widget/accuwxturbotablet/weather-data.asp?location={},{}".format(ip, lat, lon))
 
 
@@ -1152,7 +1154,11 @@ with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
 if config["production"]:
     setup_log(config["sentry_url"], False)
+if config["enableTenki"] and os.path.exists("tenki.db"):
+    with open("tenki.db",'rb') as f:
+        tenki_db = pickle.loads(f.read())
 s = requests.Session()  # Use session to speed up requests
+s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxturbotablet.accu-weather.com'})
 total_time = time.time()
 ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
 q = Queue.Queue()
@@ -1224,6 +1230,11 @@ for list in weathercities:
 time.sleep(0.15)
 ui_run = False
 ui_thread.join()
+
+if config["enableTenki"] and not tenki_db:
+    log("Writing Tenki Database ...", "VERBOSE")
+    with open('tenki.db', 'wb') as f:
+            pickle.dump(tenki, f)
 
 if config["production"]:
     dump_db()
