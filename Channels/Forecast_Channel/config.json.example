@@ -4,6 +4,7 @@
   "lzss_path": "/path/to/lzss",
   "production": true,
   "useMultithreaded": true,
+  "enableTenki": true,
   "sentry_url": "http://status.domain.tld/",
   "webhook_urls": [
     "http://status.domain.tld/"
