@@ -226,6 +226,7 @@ def worker():
             pass
         except Exception as e:
             log(e, "WARNING")
+            continue
 
 
 def refresh(type):
@@ -1309,6 +1310,7 @@ for list in weathercities:
         except Exception as e:
             log(e, "WARNING")
             weather_data[k] = None
+            continue
         if weather_data[k] is not None:
             if isJapan(list, k): get_japan_api(list, k)
             else: get_legacy_api(list, k)
