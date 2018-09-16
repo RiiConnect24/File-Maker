@@ -348,11 +348,10 @@ def request_data(url, type):
             return -1
         if i > 0:
             retrycount += 1
-        if type == 1: data = s.get(url)
-        elif type == 2: data = s1.get(url)
+        if type == 0:
+            data = s.get(url)
+            bw_usage += get_bandwidth_usage(data)
         else: data = requests.get(url)
-        if type < 3: bw_usage += get_bandwidth_usage(data)
-		
         status_code = data.status_code
         if status_code == 200:
             c = 1
@@ -476,83 +475,13 @@ def blank_data(list, key, clear):
         globe[key]['lng'] = binascii.unhexlify(get_index(list, key, 3)[:8][4:])
         globe[key]['time'] = get_epoch()
 
-def get_legacy_api(list, key):
-    apilegacy = weather_data[key]
-    forecast = apilegacy.find("{http://www.accuweather.com}forecast")
-    current_conditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
-    hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
-    current[key][3] = int(current_conditions[3].text)
-    current[key][4] = to_celsius(current[key][3])
-    weathericon[key] = get_icon(int(current_conditions[7].text), list, key)
-    current[key][0] = current_conditions[10].text
-    current[key][2] = int(current_conditions[9].text)
-    current[key][1] = mph_kmh(current[key][2])
-    today[key][0] = int(forecast[1][5][3].text)
-    today[key][1] = int(forecast[1][5][2].text)
-    today[key][2] = to_celsius(today[key][0])
-    today[key][3] = to_celsius(today[key][1])
-    today[key][4] = get_icon(int(forecast[1][5][1].text), list, key)
-    tomorrow[key][0] = int(forecast[2][5][3].text)
-    tomorrow[key][1] = int(forecast[2][5][2].text)
-    tomorrow[key][2] = to_celsius(tomorrow[key][0])
-    tomorrow[key][3] = to_celsius(tomorrow[key][1])
-    tomorrow[key][4] = get_icon(int(forecast[2][5][1].text), list, key)
-    uvindex[key] = int(current_conditions[13].attrib['index'])
-    if uvindex[key] > 12:
-        uvindex[key] = 12
-    wind[key][0] = mph_kmh(forecast[1][5][6].text)
-    wind[key][1] = int(forecast[1][5][6].text)
-    wind[key][2] = forecast[1][5][7].text
-    wind[key][3] = mph_kmh(forecast[2][5][6].text)
-    wind[key][4] = int(forecast[2][5][6].text)
-    wind[key][5] = forecast[2][5][7].text
-    pollen[key] = 255
-    lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
-    check_coords(list,key,lat,lng)
-    globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
-    globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-    globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
-    globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
-    week[key][0] = int(forecast[2][5][3].text)
-    week[key][1] = int(forecast[2][5][2].text)
-    week[key][2] = int(forecast[3][5][3].text)
-    week[key][3] = int(forecast[3][5][2].text)
-    week[key][4] = int(forecast[4][5][3].text)
-    week[key][5] = int(forecast[4][5][2].text)
-    week[key][6] = int(forecast[5][5][3].text)
-    week[key][7] = int(forecast[5][5][2].text)
-    for i in range(0, 8):
-        week[key][i + 10] = to_celsius(week[key][i])
-    week[key][25] = int(forecast[6][5][2].text)
-    week[key][26] = int(forecast[6][5][3].text)
-    week[key][27] = int(forecast[7][5][2].text)
-    week[key][28] = int(forecast[7][5][3].text)
-    week[key][29] = int(to_celsius(week[key][25]))
-    week[key][30] = int(to_celsius(week[key][26]))
-    week[key][31] = int(to_celsius(week[key][27]))
-    week[key][32] = int(to_celsius(week[key][28]))
-    week[key][20] = get_icon(int(forecast[2][5][1].text), list, key)
-    week[key][21] = get_icon(int(forecast[3][5][1].text), list, key)
-    week[key][22] = get_icon(int(forecast[4][5][1].text), list, key)
-    week[key][23] = get_icon(int(forecast[5][5][1].text), list, key)
-    week[key][33] = get_icon(int(forecast[6][5][1].text), list, key)
-    week[key][34] = get_icon(int(forecast[7][5][1].text), list, key)
-    time_index = [[3, 9, 15, 21], [27, 33, 39, 45]]
-    hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
-    for i in range(0, 4):
-        temp = time_index[0][i] - hour
-        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
-        temp = time_index[1][i] - hour
-        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
 
-
-def get_japan_api(list, key):
-    apijapan = weather_data[key]
-    forecast = apijapan.find("{http://www.accuweather.com}forecast")
-    current_conditions = apijapan.find("{http://www.accuweather.com}currentconditions")
+def get_accuweather_api(list, key):
+    accuapi = weather_data[key]
+    forecast = accuapi.find("{http://www.accuweather.com}forecast")
+    current_conditions = accuapi.find("{http://www.accuweather.com}currentconditions")
     hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
-    airandpollen = apijapan.find("{http://www.accuweather.com}airandpollen")
+    airandpollen = accuapi.find("{http://www.accuweather.com}airandpollen")
     current[key][3] = int(current_conditions[4].text)
     current[key][4] = to_celsius(current[key][3])
     weathericon[key] = get_icon(int(current_conditions[8].text), list, key)
@@ -591,12 +520,12 @@ def get_japan_api(list, key):
     precipitation[key][12] = int(forecast[7][6][19].text)
     precipitation[key][13] = int(forecast[8][6][19].text)
     precipitation[key][14] = int(forecast[9][6][19].text)
-    lat = float(apijapan[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(apijapan[1].find("{http://www.accuweather.com}lon").text)
+    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
+    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
     check_coords(list,key,lat,lng)
     globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
     globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-    globe[key]['offset'] = float(apijapan[1].find("{http://www.accuweather.com}currentGmtOffset").text)
+    globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
     week[key][20] = get_icon(int(forecast[3][6][2].text), list, key)
     week[key][21] = get_icon(int(forecast[4][6][2].text), list, key)
@@ -628,11 +557,22 @@ def get_japan_api(list, key):
     week[key][38] = int(to_celsius(week[key][36]))
     week[key][39] = int(to_celsius(week[key][37]))
     time_index = [[3, 9, 15, 21], [27, 33, 39, 45]]
+    hourlyAvg = [-3,-2,-1,0,1,2,3]
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
         hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
+        if not isJapan(list, key):
+            precip = []
+            for j in hourlyAvg:
+                if -1 < temp+j < 24: precip.append(int(hourly_forecast[temp+j][12].text))
+            if len(precip) > 0: precipitation[key][i] = round(sum(precip)/len(precip))
         temp = time_index[1][i] - hour
+        if not isJapan(list, key):
+            precip = []
+            for j in hourlyAvg:
+                if -1 < temp+j < 24: precip.append(int(hourly_forecast[temp+j][12].text))
+            if len(precip) > 0: precipitation[key][i + 4] = round(sum(precip)/len(precip))
         hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
 
 """Tenki's where we're getting the laundry index for Japan."""
@@ -641,16 +581,16 @@ def get_japan_api(list, key):
 def get_tenki_data(key, lat, lon):
     log("Getting Tenki Data for %s ..." % key, "VERBOSE")
     if not tenki_db:
-        tenkiapi = json.loads(request_data("http://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon), 3))
+        tenkiapi = json.loads(request_data("http://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon), 1))
         if "jiscode" in tenkiapi: tenki[key] = tenkiapi["jiscode"]
         else: tenki[key] = None
     else: tenki[key] = tenki_db[key]
     if tenki[key]:
-        response = json.loads(request_data("http://static.tenki.jp/static-api/app/forecast-{}.json".format(tenki[key]), 3))
-        laundry_url = request_data(response["indexes"]["cloth_dried"]["url"], 3)
+        response = json.loads(request_data("http://static.tenki.jp/static-api/app/forecast-{}.json".format(tenki[key]), 1))
+        laundry_url = request_data(response["indexes"]["cloth_dried"]["url"], 1)
         soup = BeautifulSoup(laundry_url, "lxml")
         laundry[key] = int(soup.find("span", {"class": "indexes-telop"}).contents[0])
-        tendays = request_data(response["indexes"]["cloth_dried"]["url"].replace("indexes/cloth_dried", "forecast").replace(".html", "/" + tenki[key] + "/10days.html"), 3)
+        tendays = request_data(response["indexes"]["cloth_dried"]["url"].replace("indexes/cloth_dried", "forecast").replace(".html", "/" + tenki[key] + "/10days.html"), 1)
         soup = BeautifulSoup(tendays, "lxml")
         for i in range(1, 8):
             precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
@@ -886,8 +826,7 @@ def get_data(list, name):
     lat = coord_decode(get_index(list, name, 3)[:4])
     lon = coord_decode(get_index(list, name, 3)[:8][4:])
     if config["enableTenki"] and isJapan(list,name): get_tenki_data(name, lat, lon)
-    if isJapan(list,name): weather_data[name] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(japip, lat, lon), 2)
-    else: weather_data[name] = request_data("http://{}/widget/accuwxturbotablet/weather-data.asp?location={},{}".format(ip, lat, lon), 1)
+    weather_data[name] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
 
 
 def make_header_short(list):
@@ -1253,12 +1192,9 @@ if config["production"]:
 if config["enableTenki"] and os.path.exists("tenki.db"):
     with open("tenki.db",'rb') as f:
         tenki_db = pickle.loads(f.read())
-s = requests.Session()  # Use sessions to speed up requests
-s1 = requests.Session()
-s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxturbotablet.accu-weather.com'})
-s1.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
-ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
-japip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
+s = requests.Session()  # Use session to speed up requests
+s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
+ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
 total_time = time.time()
 q = Queue.Queue()
 concurrent = 10 if config["useMultithreaded"] else 1
@@ -1312,8 +1248,7 @@ for list in weathercities:
             weather_data[k] = None
             continue
         if weather_data[k] is not None:
-            if isJapan(list, k): get_japan_api(list, k)
-            else: get_legacy_api(list, k)
+            get_accuweather_api(list, k)
         else:
             log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
     cities += citycount
