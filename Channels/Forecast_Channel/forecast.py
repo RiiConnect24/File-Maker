@@ -99,8 +99,8 @@ def to_celsius(temp):
     return int((temp - 32) * 5 / 9)
 
 
-def to_fahrenheit(temp):
-    return int((temp * 9 / 5) + 32)
+def to_fahrenheit(temp, sub):
+    return int((temp * 9 / 5) + 32 if sub is True else 0)
 
 
 def kmh_mph(wind):
@@ -594,14 +594,14 @@ def get_tenki_data(key, lat, lon):
         soup = BeautifulSoup(tendays, "lxml")
         for i in range(1, 8):
             precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
-        today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", ""))
-        today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", ""))
-        today[key][6] = to_fahrenheit(today[key][8])
-        today[key][5] = to_fahrenheit(today[key][9])
-        tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", ""))
-        tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", ""))
-        tomorrow[key][6] = to_fahrenheit(tomorrow[key][8])
-        tomorrow[key][5] = to_fahrenheit(tomorrow[key][9])
+        today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", "").replace("-", ""))
+        today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", "").replace("-", ""))
+        today[key][6] = to_fahrenheit(today[key][8], False)
+        today[key][5] = to_fahrenheit(today[key][9], False)
+        tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", "").replace("-", ""))
+        tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", "").replace("-", ""))
+        tomorrow[key][6] = to_fahrenheit(tomorrow[key][8], False)
+        tomorrow[key][5] = to_fahrenheit(tomorrow[key][9], False)
         if response["days"]["entries"][0]["p_zero"] != "---": precipitation[key][0] = int(response["days"]["entries"][0]["p_zero"])
         if response["days"]["entries"][0]["p_six"] != "---": precipitation[key][1] = int(response["days"]["entries"][0]["p_six"])
         if response["days"]["entries"][0]["p_twelve"] != "---": precipitation[key][2] = int(response["days"]["entries"][0]["p_twelve"])
