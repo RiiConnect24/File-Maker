@@ -594,12 +594,12 @@ def get_tenki_data(key, lat, lon):
         soup = BeautifulSoup(tendays, "lxml")
         for i in range(1, 8):
             precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
-        today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", "").replace("-", ""))
-        today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", "").replace("-", ""))
+        today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", ""))
+        today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", ""))
         today[key][6] = to_fahrenheit(today[key][8], False)
         today[key][5] = to_fahrenheit(today[key][9], False)
-        tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", "").replace("-", ""))
-        tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", "").replace("-", ""))
+        tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", ""))
+        tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", ""))
         tomorrow[key][6] = to_fahrenheit(tomorrow[key][8], False)
         tomorrow[key][5] = to_fahrenheit(tomorrow[key][9], False)
         if response["days"]["entries"][0]["p_zero"] != "---": precipitation[key][0] = int(response["days"]["entries"][0]["p_zero"])
@@ -883,13 +883,13 @@ def make_long_forecast_table(list):
             long_forecast_table["today_hourly_forecast_12pm_6pm_%s" % numbers] = binascii.unhexlify(hourly[key][2])  # Today's hourly forecast from 12pm to 6pm.
             long_forecast_table["today_hourly_forecast_6pm_12am_%s" % numbers] = binascii.unhexlify(hourly[key][3])  # Today's hourly forecast from 6pm to 12am.
             long_forecast_table["today_tempc_high_%s" % numbers] = u8(temp(today[key][3]))  # Today's high temperature in Celsius
-            long_forecast_table["today_tempc_high_difference_%s" % numbers] = u8(temp(today[key][8]))  # Today's high temperature difference in Celsius
+            long_forecast_table["today_tempc_high_difference_%s" % numbers] = s8(temp(today[key][8]))  # Today's high temperature difference in Celsius
             long_forecast_table["today_tempc_low_%s" % numbers] = u8(temp(today[key][2]))  # Today's low temperature in Celsius
-            long_forecast_table["today_tempc_low_difference_%s" % numbers] = u8(temp(today[key][7]))  # Today's low temperature difference in Celsius
+            long_forecast_table["today_tempc_low_difference_%s" % numbers] = s8(temp(today[key][7]))  # Today's low temperature difference in Celsius
             long_forecast_table["today_tempf_high_%s" % numbers] = u8(temp(today[key][1]))  # Today's high temperature in Fahrenheit
-            long_forecast_table["today_tempf_difference_%s" % numbers] = u8(temp(today[key][6]))  # Today's high Fahrenheit difference
+            long_forecast_table["today_tempf_high_difference_%s" % numbers] = s8(temp(today[key][6]))  # Today's high Fahrenheit difference
             long_forecast_table["today_tempf_low_%s" % numbers] = u8(temp(today[key][0]))  # Today's low temperature in Fahrenheit
-            long_forecast_table["today_tempf_low_difference_%s" % numbers] = u8(temp(today[key][5]))  # Today's low Fahrenheit difference
+            long_forecast_table["today_tempf_low_difference_%s" % numbers] = s8(temp(today[key][5]))  # Today's low Fahrenheit difference
             long_forecast_table["today_precipitation_1_%s" % numbers] = u8(precipitation[key][0])  # Today's precipitation 1
             long_forecast_table["today_precipitation_2_%s" % numbers] = u8(precipitation[key][1])  # Today's precipitation 2
             long_forecast_table["today_precipitation_3_%s" % numbers] = u8(precipitation[key][2])  # Today's precipitation 3
@@ -1011,13 +1011,13 @@ def make_forecast_short_table(list):
             short_forecast_table["today_hourly_forecast_12pm_6pm_%s" % numbers] = binascii.unhexlify(hourly[key][2])  # Today's hourly forecast from 12pm to 6pm.
             short_forecast_table["today_hourly_forecast_6pm_12am_%s" % numbers] = binascii.unhexlify(hourly[key][3])  # Today's hourly forecast from 6pm to 12am.
             short_forecast_table["today_tempc_high_%s" % numbers] = u8(temp(today[key][3]))  # Today's high temperature in Celsius
-            short_forecast_table["today_tempc_high_difference_%s" % numbers] = u8(temp(today[key][8]))  # Today's high temperature difference in Celsius
+            short_forecast_table["today_tempc_high_difference_%s" % numbers] = s8(temp(today[key][8]))  # Today's high temperature difference in Celsius
             short_forecast_table["today_tempc_low_%s" % numbers] = u8(temp(today[key][2]))  # Today's low temperature in Celsius
-            short_forecast_table["today_tempc_low_difference_%s" % numbers] = u8(temp(today[key][7]))  # Today's low temperature difference in Celsius
+            short_forecast_table["today_tempc_low_difference_%s" % numbers] = s8(temp(today[key][7]))  # Today's low temperature difference in Celsius
             short_forecast_table["today_tempf_high_%s" % numbers] = u8(temp(today[key][1]))  # Today's high temperature in Fahrenheit
-            short_forecast_table["today_tempf_difference_%s" % numbers] = u8(temp(today[key][6]))  # Today's high Fahrenheit difference
+            short_forecast_table["today_tempf_high_difference_%s" % numbers] = s8(temp(today[key][6]))  # Today's high Fahrenheit difference
             short_forecast_table["today_tempf_low_%s" % numbers] = u8(temp(today[key][0]))  # Today's low temperature in Fahrenheit
-            short_forecast_table["today_tempf_low_difference_%s" % numbers] = u8(temp(today[key][5]))  # Today's low Fahrenheit difference
+            short_forecast_table["today_tempf_low_difference_%s" % numbers] = s8(temp(today[key][5]))  # Today's low Fahrenheit difference
             short_forecast_table["today_precipitation_1_%s" % numbers] = u8(precipitation[key][0])  # Today's precipitation 1
             short_forecast_table["today_precipitation_2_%s" % numbers] = u8(precipitation[key][1])  # Today's precipitation 2
             short_forecast_table["today_precipitation_3_%s" % numbers] = u8(precipitation[key][2])  # Today's precipitation 3
