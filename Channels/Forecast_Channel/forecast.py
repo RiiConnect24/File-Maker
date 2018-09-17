@@ -266,7 +266,6 @@ def ui():
     if config["production"]:
         header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
-        refresh(refresh_type)
         # Calculate values to show on screen
         dl = len(list) - cached > 0
         elapsed_time = int(round(time.time() - total_time))
@@ -312,6 +311,7 @@ def ui():
         out += "\n\n" + "=" * 64
         progcount = (progcount + 1) % 4
 
+        refresh(refresh_type)
         sys.stdout.write(out)
         sys.stdout.flush()
         time.sleep(refresh_rate)
