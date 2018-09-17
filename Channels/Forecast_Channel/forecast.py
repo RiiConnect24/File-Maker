@@ -99,7 +99,7 @@ def to_celsius(temp):
     return int((temp - 32) * 5 / 9)
 
 
-def to_fahrenheit(temp, sub):
+def to_fahrenheit(temp, sub=True):
     return int((temp * 9 / 5) + 32 if sub is True else 0)
 
 
