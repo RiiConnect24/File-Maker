@@ -6,7 +6,7 @@
 # VERSION 4.1
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
-# Copyright (c) 2015-2018 RiiConnect24, and it's (Lead) Developers
+# Copyright (c) 2015-2018 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
 import Queue
