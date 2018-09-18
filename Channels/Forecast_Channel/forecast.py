@@ -189,6 +189,15 @@ def get_bins(country_code):
     return bins
 
 
+def get_region_flag(country_code):
+    if country_code == 1:
+        return 0
+    elif country_code in [8,9,12,14,17,19,37,43,48,49,51]:
+        return 1
+    else:
+        return 2
+
+
 def num():
     global number
     num1 = number
@@ -833,7 +842,7 @@ def make_header_short(list):
     header = collections.OrderedDict()
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
-    header["unknown_1"] = u8(0)  # Unknown.
+    header["region_flag"] = u8(region_flag)  # Region Flag.
     header["unknown_2"] = u8(0)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["short_forecast_number"] = u32(int(len(list)))  # Number of short forecast entries.
@@ -846,7 +855,7 @@ def make_header_forecast(list):
     header = collections.OrderedDict()
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
-    header["unknown_1"] = u8(1)  # Unknown.
+    header["region_flag"] = u8(region_flag)  # Region Flag.
     header["unknown_2"] = u8(1)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["message_offset"] = u32(0)  # Offset for a message.
@@ -1203,7 +1212,7 @@ ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
 for list in weathercities:
-    global language_code, country_code, mode, shortcount, weather_data
+    global language_code, country_code, mode, shortcount, weather_data, region_flag
     threads = []
     status = 1
     language_code = 1
@@ -1213,6 +1222,7 @@ for list in weathercities:
     weather_data = {}
     loop = True
     country_code = forecastlists.bincountries[currentlist]
+    region_flag = get_region_flag(country_code)
     bins = get_bins(country_code)
     for k, v in forecastlists.weathercities_international.items():
         if k not in list:
