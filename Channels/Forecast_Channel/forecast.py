@@ -30,7 +30,7 @@ from bs4 import BeautifulSoup
 from datadog import statsd
 
 from Channels.Forecast_Channel import forecastlists
-from utils import setup_log, log, u8, u16, u32
+from utils import setup_log, log, u8, u16, u32, s8
 
 weathercities = [forecastlists.weathercities001, forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010,
                  forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013,
