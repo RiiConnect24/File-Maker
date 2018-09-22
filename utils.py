@@ -50,28 +50,28 @@ def mkdir_p(path):
 # Unsigned integers
 
 def u8(data):
-    if data < 0 or data > 255:
+    if not 0 <= data <= 255:
         log("u8 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">B", data)
 
 
 def u16(data):
-    if data < 0 or data > 65535:
+    if not 0 <= data <= 65535:
         log("u16 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">H", data)
 
 
 def u32(data):
-    if data < 0 or data > 4294967295:
+    if not 0 <= data <= 4294967295:
         log("u32 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">I", data)
 
 
 def u32_littleendian(data):
-    if data < 0 or data > 4294967295:
+    if not 0 <= data <= 4294967295:
         log("u32 little endian out of range: %s" % data, "INFO")
         data = 0
     return struct.pack("<I", data)
@@ -79,21 +79,21 @@ def u32_littleendian(data):
 # Signed integer
 
 def s8(data):
-    if data < -128 or data > 128:
+    if not -128 <= data <= 127:
         log("s8 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">b", data)
 
 
 def s16(data):
-    if data < -32768 or data > 32768:
+    if not -32768 <= data <= 32767:
         log("s16 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">h", data)
 
 
 def s32(data):
-    if data < -2147483648 or data > 2147483648:
+    if not -2147483648 <= data <= 2147483647:
         log("s32 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">i", data)
