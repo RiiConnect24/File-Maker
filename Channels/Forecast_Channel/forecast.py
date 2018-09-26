@@ -596,11 +596,15 @@ def get_tenki_data(key, lat, lon):
     else: tenki[key] = tenki_db[key]
     if tenki[key]:
         response = json.loads(request_data("http://static.tenki.jp/static-api/app/forecast-{}.json".format(tenki[key]), 1))
-        laundry_url = request_data(response["indexes"]["cloth_dried"]["url"], 1)
+        tenki_laundry_url = response["indexes"]["cloth_dried"]["url"]
+        tenki_id = tenki_laundry_url.replace(".html","")[42:]
+        tenki_forecast_url = "https://tenki.jp/lite/forecast/%s/%s/10days.html" % (tenki_id, tenki[key])
+        laundry_url = request_data(tenki_laundry_url, 1)
         soup = BeautifulSoup(laundry_url, "lxml")
         laundry[key] = int(soup.find("span", {"class": "indexes-telop"}).contents[0])
-        tendays = request_data(response["indexes"]["cloth_dried"]["url"].replace("indexes/cloth_dried", "forecast").replace(".html", "/" + tenki[key] + "/10days.html"), 1)
+        tendays = request_data(tenki_forecast_url, 1)
         soup = BeautifulSoup(tendays, "lxml")
+        
         for i in range(1, 8):
             precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
         today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", ""))
