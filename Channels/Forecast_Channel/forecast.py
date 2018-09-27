@@ -1202,9 +1202,15 @@ with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
 if config["production"]:
     setup_log(config["sentry_url"], False)
+
 if config["enableTenki"] and os.path.exists("tenki.db"):
     with open("tenki.db",'rb') as f:
         tenki_db = pickle.loads(f.read())
+        if time.time() > tenki_db["expiration"]:
+            log("Tenki database expired, invalidating", "VERBOSE")
+            os.remove("tenki.db")
+            tenki_db = None
+
 s = requests.Session()  # Use session to speed up requests
 s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
 ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
@@ -1284,7 +1290,8 @@ ui_thread.join()
 if config["enableTenki"] and not tenki_db:
     log("Writing Tenki Database ...", "VERBOSE")
     with open('tenki.db', 'wb') as f:
-            pickle.dump(tenki, f)
+        tenki["expiration"] = time.time()+604800
+        pickle.dump(tenki, f)
 
 if config["production"]:
     dump_db()
