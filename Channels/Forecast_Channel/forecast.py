@@ -1206,10 +1206,10 @@ if config["production"]:
 if config["enableTenki"] and os.path.exists("tenki.db"):
     with open("tenki.db",'rb') as f:
         tenki_db = pickle.loads(f.read())
-        if time.time() > tenki_db["expiration"]:
-            log("Tenki database expired, invalidating", "VERBOSE")
-            os.remove("tenki.db")
-            tenki_db = None
+    if time.time() > tenki_db["expiration"]:
+        log("Tenki database expired, invalidating", "VERBOSE")
+        os.remove("tenki.db")
+        tenki_db = None
 
 s = requests.Session()  # Use session to speed up requests
 s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
