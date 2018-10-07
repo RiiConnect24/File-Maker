@@ -518,7 +518,7 @@ def make_header():
     header["national_result_offset"] = u32(0)
     header["national_result_detailed_number"] = u16(national_results * region_number[country_code])
     header["national_result_detailed_offset"] = u32(0)
-    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else len(position_table[country_code]) if country_code in position_table.keys() else 0)
+    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else 22 if country_code == 77 else len(position_table[country_code]) if country_code in position_table.keys() else 0)
     header["position_offset"] = u32(0)
     header["worldwide_result_number"] = u8(worldwide_results)
     header["worldwide_result_offset"] = u32(0)
