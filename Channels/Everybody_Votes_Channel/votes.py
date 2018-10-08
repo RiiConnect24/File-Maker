@@ -679,26 +679,14 @@ def make_worldwide_result_table(header):
                 for voters in range(0, 4):
                     total += results[i][voters][j]
                 if total > 0: worldwide_detailed_table_count += 1
-            male_resp1 = sum(results[i][0])
-            female_resp1 = sum(results[i][1])
-            male_resp2 = sum(results[i][2])
-            female_resp2 = sum(results[i][3])
-            resp1 = male_resp1 + female_resp1
-            resp2 = male_resp2 + female_resp2
-            predict1 = sum(results[i][4])
-            predict2 = sum(results[i][5])
 
             table["poll_id_%s" % num()] = u32(i)
-            table["male_voters_response_1_num_%s" % num()] = u32(male_resp1)
-            table["male_voters_response_2_num_%s" % num()] = u32(female_resp1)
-            table["female_voters_response_1_num_%s" % num()] = u32(male_resp2)
-            table["female_voters_response_2_num_%s" % num()] = u32(female_resp2)
-            if resp1 > resp2:  # response 1 won
-                table["accurate_prediction_voters_num_%s" % num()] = u32(predict1)
-                table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict2)
-            else:  # response 2 won - or tie
-                table["accurate_prediction_voters_num_%s" % num()] = u32(predict2)
-                table["inaccurate_prediction_voters_num_%s" % num()] = u32(predict1)
+            table["male_voters_response_1_num_%s" % num()] = u32(sum(results[i][0]))
+            table["male_voters_response_2_num_%s" % num()] = u32(sum(results[i][2]))
+            table["female_voters_response_1_num_%s" % num()] = u32(sum(results[i][1]))
+            table["female_voters_response_2_num_%s" % num()] = u32(sum(results[i][3]))
+            table["predictors_response_1_num_%s" % num()] = u32(sum(results[i][4]))
+            table["predictors_response_2_num_%s" % num()] = u32(sum(results[i][5]))
             table["total_worldwide_detailed_tables_%s" % num()] = u8(worldwide_detailed_table_count)
             table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count_all)
             worldwide_detailed_table_count_all += worldwide_detailed_table_count
