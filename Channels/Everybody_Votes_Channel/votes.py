@@ -130,8 +130,10 @@ def manual_run():
     elif file_type == "r":
         write_results = True
     elif file_type == "v":
-        if raw_input('Write Questions? (y/n): ') == "y": write_questions = True
-        if raw_input('Write Results? (y/n): ') == "y": write_results = True
+        if raw_input('Write Questions? (y/n): ') == "y":
+            write_questions = True
+        if raw_input('Write Results? (y/n): ') == "y":
+            write_results = True
     else:
         print "Error: Invalid file type selected"
         exit()
@@ -401,8 +403,7 @@ def webhook():
 dictionaries = []
 
 
-def offset_count(): return u32(
-    12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
+def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
 
 
 def sign_file(name):
@@ -423,8 +424,7 @@ def sign_file(name):
     dest.close()
     file.close()
     print "Compressing ..."
-    subprocess.call(["%s/lzss" % lzss_path, "-evf", final + '-1'],
-                    stdout=subprocess.PIPE)  # Compress the file with the lzss program.
+    subprocess.call(["%s/lzss" % lzss_path, "-evf", final + '-1'],stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(final + '-1', 'rb')
     new = file.read()
     dest = open(final, "w+")
@@ -467,9 +467,12 @@ def make_bin(country_code):
     if write_results and worldwide_results > 0:
         make_worldwide_result_table(voting)
         make_worldwide_result_detailed_table(voting)
-    if file_type == "v" or file_type == "r" and national_results == 0: country_table = make_country_name_table(voting)
-    if write_questions: make_question_text(question_text_table)
-    if file_type == "v" or file_type == "r" and national_results == 0: make_country_table(country_table)
+    if file_type == "v" or file_type == "r" and national_results == 0:
+        country_table = make_country_name_table(voting)
+    if write_questions:
+        make_question_text(question_text_table)
+    if file_type == "v" or file_type == "r" and national_results == 0:
+        make_country_table(country_table)
     if file_type == "q":
         question_file = get_name() + '_q'
     elif file_type == "r":
@@ -536,7 +539,8 @@ def make_national_question_table(header):
     dictionaries.append(national_question_table)
 
     question_table_count = 0
-    if national_q: header["national_question_offset"] = offset_count()
+    if national_q:
+        header["national_question_offset"] = offset_count()
 
     for q in question_keys:
         if not is_worldwide(q):
@@ -630,8 +634,7 @@ def make_national_result_table(header):
             table["show_voter_number_flag_%s" % num()] = u8(1)
             table["detailed_results_flag_%s" % num()] = u8(1)
             table["national_result_detailed_number_number_%s" % num()] = u8(national_result_detailed_number_tables)
-            table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(
-                national_result_detailed_number_count)
+            table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(national_result_detailed_number_count)
             national_result_detailed_number_count += national_result_detailed_number_tables
 
     return table
@@ -777,14 +780,11 @@ def make_question_text(question_text_table):
             if get_question(q, language_code) is not None:
                 num = question_keys.index(q)
                 question_text_table["question_offset_%s_%s" % (num, language_code)] = offset_count()
-                question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode(
-                    "utf-16be") + pad(2)
+                question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode("utf-16be") + pad(2)
                 question_text_table["response_1_offset_%s_%s" % (num, language_code)] = offset_count()
-                question_text["response_1_%s_%s" % (num, language_code)] = get_response1(q, language_code).encode(
-                    "utf-16be") + pad(2)
+                question_text["response_1_%s_%s" % (num, language_code)] = get_response1(q, language_code).encode("utf-16be") + pad(2)
                 question_text_table["response_2_offset_%s_%s" % (num, language_code)] = offset_count()
-                question_text["response_2_%s_%s" % (num, language_code)] = get_response2(q, language_code).encode(
-                    "utf-16be") + pad(2)
+                question_text["response_2_%s_%s" % (num, language_code)] = get_response2(q, language_code).encode("utf-16be") + pad(2)
 
     return question_text
 
@@ -795,6 +795,7 @@ if nw != "w":
         make_bin(country_code)
 else:
     make_bin(country_code)
-if file_type == "q": webhook()
+if file_type == "q":
+    webhook()
 
 print "Completed Successfully"
