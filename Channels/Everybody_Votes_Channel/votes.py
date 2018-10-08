@@ -30,7 +30,8 @@ from voteslists import *
 
 with open("./Channels/Everybody_Votes_Channel/config.json", "rb") as f:
     config = json.load(f)
-if config["production"]: setup_log(config["sentry_url"], False)
+if config["production"]:
+    setup_log(config["sentry_url"], False)
 
 print "Everybody Votes Channel File Generator \n"
 print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
@@ -184,7 +185,8 @@ def automatic_votes():
     questions = national + worldwide
     question_count = len(question_data)
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
-    for v in list(reversed(range(1, 7))): results[get_poll_id()] = mysql_get_votes(7, "n", v)
+    for v in list(reversed(range(1, 7))):
+        results[get_poll_id()] = mysql_get_votes(7, "n", v)
     results[get_poll_id()] = mysql_get_votes(15, "w", 1)
     try:
         del results[None]
@@ -340,7 +342,8 @@ def get_date(id): return question_data[id][5]
 
 def is_worldwide(id):
     i = True
-    if question_data[id][4] == "n": i = False
+    if question_data[id][4] == "n":
+        i = False
     return i
 
 
@@ -348,7 +351,8 @@ def add_question(row):
     global question_data, national, worldwide, national_q, worldwide_q
     for r in row:
         if "content" in r or "choice" in r:
-            if row[r] is not None: row[r] = question_text_replace(row[r])
+            if row[r] is not None:
+                row[r] = question_text_replace(row[r])
 
     question_data[row["questionID"]] = [[row["content_japanese"], row["content_english"], row["content_german"],
                                          row["content_french"], row["content_spanish"], row["content_italian"],
@@ -432,8 +436,7 @@ def sign_file(name):
     print "RSA Signing ..."
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(binascii.unhexlify(str(0).zfill(
-        128)))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    dest.write(binascii.unhexlify(str(0).zfill(128)))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
