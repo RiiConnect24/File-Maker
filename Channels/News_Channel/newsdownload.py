@@ -600,7 +600,7 @@ class Parse(News):
             pass
 
     def parse_dtoday(self):
-        if " (AFP)" in self.article.split("\n")[4] or " (SID)" in self.article.split("\n")[2]:
+        if " (SID)" in self.article.split("\n")[2] or " (AFP)" in self.article.split("\n")[4]:
             split = self.article.split("\n")
             for s in split:
                 if "© AFP" in s or "© SID" in s:
@@ -613,8 +613,8 @@ class Parse(News):
 
         try:
             self.resize = True
-            self.caption = self.soup.find("div", {"class": "articleimg_full"}).find("a").find("span").text
-            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find("a").find("img")["src"]
+            self.caption = self.soup.find("div", {"class": "articleimg_full"}).find("span").text
+            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find("img")["src"]
         except AttributeError:
             pass
 
