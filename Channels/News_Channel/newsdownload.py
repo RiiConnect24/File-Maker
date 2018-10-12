@@ -613,8 +613,8 @@ class Parse(News):
 
         try:
             self.resize = True
-            self.caption = self.soup.find("div", {"class": "articleimg_full"}).find("span").text
-            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find("img")["src"]
+            self.caption = self.soup.find("div", {"class": "articleimg_full"}).find("a").find("span").text
+            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find("a").find("img")["src"]
         except AttributeError:
             pass
 
