@@ -88,7 +88,7 @@ sources = {
     },
     "afp_french": {
         "name": "AFP_French",
-        "url": "http://www.lepoint.fr/24h-infos/rss.xml",
+        "url": "https://www.lepoint.fr/24h-infos/rss.xml",
         "lang": "fr",
         "cat": collections.OrderedDict([
             ("monde", "world"),
