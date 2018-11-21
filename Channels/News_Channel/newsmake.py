@@ -158,8 +158,7 @@ def process_news(name, mode, language, countries, d):
         if i > 25:
             del data[key]
 
-    # data = remove_duplicates(data)
-    data = remove_duplicates2(data)
+    data = remove_duplicates(data)
 
     locations_data = newsdownload.locations_download(language_code, data)
 
@@ -311,31 +310,7 @@ def get_timestamp(mode):
         return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60) + 1500)
 
 
-"""Make the news.bin."""
-
-"""Remove duplicate entries from a file. This doesn't work correctly so it's currently not being used."""
-
-
 def remove_duplicates(data):
-    data_dupe = collections.OrderedDict()
-
-    headlines = []
-
-    for k, v in data.items():
-        if v[3] not in headlines:
-            headlines.append(v[3])
-            data_dupe[k] = v
-        elif v[3] in headlines:
-            for k2, v2 in data_dupe.items():
-                if v[3] == v2[3]:
-                    del data_dupe[k2]
-                    data_dupe[k + k2] = v2
-
-    return data_dupe
-
-"""Remove duplicates a different kind of way!"""
-
-def remove_duplicates2(data):
     headlines = []
 
     for k,v in data.items():
@@ -345,6 +320,8 @@ def remove_duplicates2(data):
             del data[k]
 
     return data
+
+"""Make the news.bin."""
 
 """First part of the header."""
 
@@ -754,36 +731,16 @@ def make_source_name_copyright(source_table, data):
     """Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
 
     copyrights = {
-        "AP": (
-                "Copyright %s The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed." % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "Reuters": (
-                "© %s Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies." % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "AFP": (
-                "All reproduction and representation rights reserved. © %s Agence France-Presse" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "AFP_French": (
-                "Tous droits de reproduction et de diffusion réservés. © %s Agence France-Presse" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "ANP": (
-                "All reproduction and representation rights reserved. © %s B.V. Algemeen Nederlands Persbureau ANP" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "ANSA": (
-                "© %s ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma." % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "SID": (
-                "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s SID" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "dpa": (
-                "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © %s dpa" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "NU.nl": (
-                "© %s Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group" % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
-        "Reuters_Japanese": (
-                "© Copyright Reuters %s. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 " % date.today().year).decode(
-            "utf-8").encode("utf-16be"),
+        "AP": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
+        "Reuters": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies.",
+        "AFP": "All reproduction and representation rights reserved. © {} Agence France-Presse",
+        "AFP_French": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
+        "ANP": "All reproduction and representation rights reserved. © {} B.V. Algemeen Nederlands Persbureau ANP",
+        "ANSA": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma.",
+        "SID": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} SID",
+        "dpa": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} dpa",
+        "NU.nl": "© {} Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group",
+        "Reuters_Japanese": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 ",
     }
 
     for article in data.values():
@@ -798,7 +755,7 @@ def make_source_name_copyright(source_table, data):
                 source_name_copyright["source_name_read_%s" % article[8]] = source_name  # Read the source name.
                 source_name_copyright["padding_source_name_%s" % article[8]] = u16(0)  # Padding for the source name.
 
-            copyright = copyrights[article[8]]
+            copyright = copyrights[article[8]].format(date.today().year).decode("utf-8").encode("utf-16be")
 
             source_table["copyright_size_%s" % article[8]] = u32(len(copyright))  # Size of the copyright.
 
