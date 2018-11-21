@@ -5,6 +5,7 @@ ftfy==4.4.3
 googlemaps
 mysql-connector==2.1.4
 newspaper
+pyaes
 raven
 requests
 rsa
