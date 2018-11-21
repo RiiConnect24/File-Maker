@@ -86,6 +86,19 @@ sources = {
             ("lifestyle", "lifestyle")
         ])
     },
+    "afp_spanish": {
+        "name": "AFP_Spanish",
+        "url": "http://newspaperon.com/category/%s/feed/",
+        "lang": "es",
+        "cat": collections.OrderedDict([
+            ("mundo", "world"),
+            ("deportes", "sports"),
+            ("economia", "economy"),
+            ("cultura", "culture"),
+            ("gente", "people"),
+            ("ciencia_y_technologia", "science_technology")
+        ])
+    },
     "afp_french": {
         "name": "AFP_French",
         "url": "https://www.lepoint.fr/24h-infos/rss.xml",
@@ -474,6 +487,7 @@ class Parse(News):
         {
             "AP": self.parse_ap,
             "Reuters": self.parse_reuters,
+            "AFP_Spanish": self.parse_newspaperon,
             "AFP_French": self.parse_afp,
             "AFP": self.parse_dtoday,
             "SID": self.parse_dtoday,
@@ -579,6 +593,17 @@ class Parse(News):
 
         if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
             self.location = self.article.split(" (Reuters)")[0]
+
+    def parse_newspaperon(self):
+        try:
+            self.resize = True
+            self.caption = self.article.split("\n")[0]
+            self.article = "\n".join(self.article.split("\n")[2:])
+        except AttributeError:
+            pass
+
+        if "(AFP)" in self.article:
+            self.location = self.article.split("(AFP)")[0]
 
     def parse_afp(self):
         try:

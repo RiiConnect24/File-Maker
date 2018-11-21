@@ -14,6 +14,7 @@ def main():
         download("ap_english")
         download("ap_spanish")
         download("reuters_europe_english")
+        download("afp_spanish")
         download("afp_french")
         download("dtoday_german")
         download("ansa_italian")
@@ -37,9 +38,11 @@ def download(source):
     if source == "ap_english":
         process_news("AP English", "ap_english", 1, america, News("ap_english"))
     elif source == "ap_spanish":
-        process_news("AP Spanish", "ap_spanish", 4, international, News("ap_spanish"))
+        process_news("AP Spanish", "ap_spanish", 4, america, News("ap_spanish"))
     elif source == "reuters_europe_english":
         process_news("Reuters Europe English", "reuters_europe_english", 1, europe, News("reuters_europe_english"))
+    elif source == "afp_spanish":
+        process_news("AFP Spanish", "afp_spanish", 4, europe, News("afp_spanish"))
     elif source == "afp_french":
         process_news("AFP French", "afp_french", 3, international, News("afp_french"))
     elif source == "dtoday_german":

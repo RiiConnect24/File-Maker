@@ -75,6 +75,19 @@ sources = {
         "language_code": 1,
         "country_code": 110
     },
+    "afp_spanish": {
+        "topics_news": collections.OrderedDict([
+            ("Mundo", "world"),
+            ("Deportes", "sports"),
+            ("Economia", "economy"),
+            ("Cultura", "culture"),
+            ("Gente", "people"),
+            ("Ciencia y Technologia", "science_technology"),
+        ]),
+        "languages": [1, 2, 3, 4, 5, 6],
+        "language_code": 4,
+        "country_code": 110
+    },
     "afp_french": {
         "topics_news": collections.OrderedDict([
             ("Monde", "world"),
@@ -559,6 +572,7 @@ def make_source_table(header, articles_table, data):
         "Reuters": [0, 4],
         "AFP": [4, 4],
         "AFP_French": [4, 4],
+        "AFP_Spanish": [4, 4],
         "ANP": [0, 5],
         "ANSA": [6, 6],
         "dpa": [0, 4],
@@ -735,6 +749,7 @@ def make_source_name_copyright(source_table, data):
         "Reuters": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies.",
         "AFP": "All reproduction and representation rights reserved. © {} Agence France-Presse",
         "AFP_French": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
+        "AFP_Spanish": "All reproduction and representation rights reserved. © {} Agence France-Presse",
         "ANP": "All reproduction and representation rights reserved. © {} B.V. Algemeen Nederlands Persbureau ANP",
         "ANSA": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma.",
         "SID": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} SID",
