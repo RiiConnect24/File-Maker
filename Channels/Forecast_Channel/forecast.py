@@ -1275,7 +1275,7 @@ for list in weathercities:
     status = 3
     data = generate_data(list, bins)
     status = 4
-    for i in range(1, 3):
+    for i in range(1, 2):
         mode = i
         for j in bins:
             language_code = j
