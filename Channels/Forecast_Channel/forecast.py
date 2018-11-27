@@ -1217,6 +1217,7 @@ ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
 total_time = time.time()
 q = Queue.Queue()
 concurrent = 10 if config["useMultithreaded"] else 1
+file_gen = 3 if config["enableWiiUGeneration"] else 2
 ui_run = True
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
@@ -1275,7 +1276,7 @@ for list in weathercities:
     status = 3
     data = generate_data(list, bins)
     status = 4
-    for i in range(1, 2):
+    for i in range(1, file_gen):
         mode = i
         for j in bins:
             language_code = j
