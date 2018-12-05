@@ -75,7 +75,6 @@ tenki_db = None
 
 uvindex = {}
 wind = {}
-weathericon = {}
 times = {}
 pollen = {}
 today = {}
@@ -453,7 +452,7 @@ def blank_data(list, key, clear):
     laundry[key] = 255
     uvindex[key] = 255
     pollen[key] = 255
-    weathericon[key] = 'FFFF'
+    current[key][5] = 'FFFF'
     times[key] = get_epoch()
     for k in range(0, 15):
         precipitation[key][k] = 255
@@ -483,7 +482,7 @@ def get_accuweather_api(list, key):
     airandpollen = accuapi.find("{http://www.accuweather.com}airandpollen")
     current[key][3] = int(current_conditions[4].text)
     current[key][4] = to_celsius(current[key][3])
-    weathericon[key] = get_icon(int(current_conditions[8].text), list, key)
+    current[key][5] = get_icon(int(current_conditions[8].text), list, key)
     current[key][0] = current_conditions[11].text
     current[key][2] = int(current_conditions[10].text)
     current[key][1] = mph_kmh(current[key][2])
@@ -986,7 +985,7 @@ def make_short_forecast_table(list):
         short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, key))  # Wii location code for city
         short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # Timestamp 1
         short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # Timestamp 2
-        short_forecast_table["current_forecast_%s" % numbers] = binascii.unhexlify(weathericon[key])  # Current forecast
+        short_forecast_table["current_forecast_%s" % numbers] = binascii.unhexlify(current[key][5])  # Current forecast
         short_forecast_table["unknown_%s" % numbers] = u8(0)  # 0xE unknown
         short_forecast_table["current_tempc_%s" % numbers] = s8(current[key][4])  # Current temperature in Celsius
         short_forecast_table["current_tempf_%s" % numbers] = s8(current[key][3])  # Current temperature in Fahrenheit
