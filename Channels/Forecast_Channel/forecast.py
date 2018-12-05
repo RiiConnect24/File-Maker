@@ -457,28 +457,18 @@ def blank_data(list, key, clear):
     times[key] = get_epoch()
     for k in range(0, 15):
         precipitation[key][k] = 255
-    for k in range(0, 20):
-        week[key][k] = -128
-    for k in range(20, 25):
-        week[key][k] = 'FFFF'
-    for k in range(25, 33):
-        week[key][k] = -128
-    for k in range(36, 40):
-        week[key][k] = -128
-    for k in range(33, 36):
-        week[key][k] = 'FFFF'
+    for k in range(0, 20) + range(25, 33) + range(36, 40):
+        week[key][k] = -128 # Week Temperature Values
+    for k in range(20, 25) + range(33, 36):
+        week[key][k] = 'FFFF' # Week Forecast Icons
     for k in range(0, 8):
-        hourly[key][k] = 'FFFF'
-    for k in range(0, 4):
-        today[key][k] = -128
+        hourly[key][k] = 'FFFF' # Hourly Weather Icons
+    for k in range(0, 4) + range(5, 9):
+        today[key][k] = -128 # Today Temperature Values
+    for k in range(0, 4) + range(5, 9):
+        tomorrow[key][k] = -128 # Tomorrow Temperature Values
     today[key][4] = 'FFFF'
-    for k in range(5, 9):
-        today[key][k] = -128
-    for k in range(0, 4):
-        tomorrow[key][k] = -128
     tomorrow[key][4] = 'FFFF'
-    for k in range(5, 9):
-        tomorrow[key][k] = -128
     if clear:
         globe[key]['lat'] = binascii.unhexlify(get_index(list, key, 3)[:4])
         globe[key]['lng'] = binascii.unhexlify(get_index(list, key, 3)[:8][4:])
