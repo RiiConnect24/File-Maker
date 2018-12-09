@@ -828,7 +828,7 @@ def get_data(list, name):
     lat = coord_decode(get_index(list, name, 3)[:4])
     lon = coord_decode(get_index(list, name, 3)[:8][4:])
     if config["enableTenki"] and isJapan(list,name): get_tenki_data(name, lat, lon)
-    weather_data[name] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
+    weather_data[name] = request_data("http://{}/widget/accuwxturbotablet/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
 
 
 def make_header_short(list):
