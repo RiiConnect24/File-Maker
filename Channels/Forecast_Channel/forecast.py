@@ -475,11 +475,25 @@ def blank_data(list, key, clear):
         globe[key]['time'] = get_epoch()
 
 
-def get_accuweather_api(list, key):
-    accuapi = weather_data[key]
-    forecast = accuapi.find("{http://www.accuweather.com}forecast")
-    current_conditions = accuapi.find("{http://www.accuweather.com}currentconditions")
+def get_legacy_api(list, key):
+    apilegacy = weather_data[key]
+    forecast = apilegacy.find("{http://www.accuweather.com}forecast")
+    current_conditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
     hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
+    week[key][0] = int(forecast[2][5][3].text)
+    week[key][1] = int(forecast[2][5][2].text)
+    week[key][2] = int(forecast[3][5][3].text)
+    week[key][3] = int(forecast[3][5][2].text)
+    week[key][4] = int(forecast[4][5][3].text)
+    week[key][5] = int(forecast[4][5][2].text)
+    week[key][6] = int(forecast[5][5][3].text)
+    week[key][7] = int(forecast[5][5][2].text)
+    for i in range(0, 8):
+        week[key][i + 10] = to_celsius(week[key][i])
+    week[key][20] = get_icon(int(forecast[2][5][1].text), list, key)
+    week[key][21] = get_icon(int(forecast[3][5][1].text), list, key)
+    week[key][22] = get_icon(int(forecast[4][5][1].text), list, key)
+    week[key][23] = get_icon(int(forecast[5][5][1].text), list, key)
     current[key][3] = int(current_conditions[3].text)
     current[key][4] = to_celsius(current[key][3])
     weathericon[key] = get_icon(int(current_conditions[7].text), list, key)
@@ -506,23 +520,13 @@ def get_accuweather_api(list, key):
     wind[key][4] = int(forecast[2][5][6].text)
     wind[key][5] = forecast[2][5][7].text
     pollen[key] = 255
-    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
+    lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
+    lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
     check_coords(list,key,lat,lng)
     globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
     globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-    globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
+    globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
-    week[key][0] = int(forecast[2][5][3].text)
-    week[key][1] = int(forecast[2][5][2].text)
-    week[key][2] = int(forecast[3][5][3].text)
-    week[key][3] = int(forecast[3][5][2].text)
-    week[key][4] = int(forecast[4][5][3].text)
-    week[key][5] = int(forecast[4][5][2].text)
-    week[key][6] = int(forecast[5][5][3].text)
-    week[key][7] = int(forecast[5][5][2].text)
-    for i in range(0, 8):
-        week[key][i + 10] = to_celsius(week[key][i])
     week[key][25] = int(forecast[6][5][2].text)
     week[key][26] = int(forecast[6][5][3].text)
     week[key][27] = int(forecast[7][5][2].text)
@@ -531,26 +535,16 @@ def get_accuweather_api(list, key):
     week[key][30] = int(to_celsius(week[key][26]))
     week[key][31] = int(to_celsius(week[key][27]))
     week[key][32] = int(to_celsius(week[key][28]))
-    week[key][20] = get_icon(int(forecast[2][5][1].text), list, key)
-    week[key][21] = get_icon(int(forecast[3][5][1].text), list, key)
-    week[key][22] = get_icon(int(forecast[4][5][1].text), list, key)
-    week[key][23] = get_icon(int(forecast[5][5][1].text), list, key)
     week[key][33] = get_icon(int(forecast[6][5][1].text), list, key)
     week[key][34] = get_icon(int(forecast[7][5][1].text), list, key)
     time_index = [[3, 9, 15, 21], [27, 33, 39, 45]]
-    hourlyAvg = [-3,-2,-1,0,1,2,3]
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
         hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
-        if not isJapan(list, key):
-            precip = []
-            precipitation[key][i] = 0
         temp = time_index[1][i] - hour
-        if not isJapan(list, key):
-            precip = []
-            precipitation[key][i + 4] = 0
         hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
+
 
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
