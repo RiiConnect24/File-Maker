@@ -1201,8 +1201,8 @@ if config["enableTenki"] and os.path.exists("tenki.db"):
         tenki_db = None
 
 s = requests.Session()  # Use session to speed up requests
-s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
-ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
+s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxturbotablet.accu-weather.com'})
+ip = socket.gethostbyname("accuwxturbotablet.accu-weather.com")
 total_time = time.time()
 q = Queue.Queue()
 concurrent = 10 if config["useMultithreaded"] else 1
