@@ -476,7 +476,7 @@ def blank_data(list, key, clear):
 
 def get_accuweather_api(list, key):
     accuapi = weather_data[key]
-     forecast = apilegacy.find("{http://www.accuweather.com}forecast")
+    forecast = apilegacy.find("{http://www.accuweather.com}forecast")
     current_conditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
     hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
     current[key][3] = int(current_conditions[3].text)
