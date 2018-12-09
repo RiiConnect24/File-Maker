@@ -170,7 +170,7 @@ country_language[95] = [1]
 country_language[96] = [1]
 country_language[98] = [1, 4, 7]
 country_language[105] = [4]
-country_language[107] = [4]
+country_language[107] = [1]
 country_language[108] = [2, 3, 5, 6]
 country_language[110] = [1]
 
