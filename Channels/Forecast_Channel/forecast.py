@@ -549,8 +549,6 @@ def get_accuweather_api(list, key):
         temp = time_index[1][i] - hour
         if not isJapan(list, key):
             precip = []
-            for j in hourlyAvg:
-                if -1 < temp+j < 24: precip.append(int(hourly_forecast[temp+j][12].text))
             precipitation[key][i + 4] = 0
         hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
 
