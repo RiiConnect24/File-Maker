@@ -476,8 +476,8 @@ def blank_data(list, key, clear):
 
 def get_accuweather_api(list, key):
     accuapi = weather_data[key]
-    forecast = apilegacy.find("{http://www.accuweather.com}forecast")
-    current_conditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
+    forecast = accuapi.find("{http://www.accuweather.com}forecast")
+    current_conditions = accuapi.find("{http://www.accuweather.com}currentconditions")
     hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
     current[key][3] = int(current_conditions[3].text)
     current[key][4] = to_celsius(current[key][3])
@@ -505,12 +505,12 @@ def get_accuweather_api(list, key):
     wind[key][4] = int(forecast[2][5][6].text)
     wind[key][5] = forecast[2][5][7].text
     pollen[key] = 255
-    lat = float(apilegacy[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(apilegacy[1].find("{http://www.accuweather.com}lon").text)
+    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
+    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
     check_coords(list,key,lat,lng)
     globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
     globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
-    globe[key]['offset'] = float(apilegacy[1].find("{http://www.accuweather.com}currentGmtOffset").text)
+    globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
     week[key][0] = int(forecast[2][5][3].text)
     week[key][1] = int(forecast[2][5][2].text)
