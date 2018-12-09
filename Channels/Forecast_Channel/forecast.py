@@ -475,7 +475,7 @@ def blank_data(list, key, clear):
         globe[key]['time'] = get_epoch()
 
 
-def get_legacy_api(list, key):
+def get_accuweather_api(list, key):
     apilegacy = weather_data[key]
     forecast = apilegacy.find("{http://www.accuweather.com}forecast")
     current_conditions = apilegacy.find("{http://www.accuweather.com}currentconditions")
