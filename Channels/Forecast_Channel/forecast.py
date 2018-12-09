@@ -76,6 +76,7 @@ tenki_db = None
 uvindex = {}
 wind = {}
 times = {}
+weathericon = {}
 pollen = {}
 today = {}
 week = {}
