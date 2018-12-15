@@ -24,7 +24,6 @@ import requests
 import rsa
 from mysql.connector import errorcode
 
-from config import *
 from utils import setup_log, log, u8, u16, u32
 from voteslists import *
 
@@ -68,7 +67,7 @@ def get_timestamp(mode, type, date):
     elif mode == 1 or mode == 2:
         timestamp = time_convert(time.mktime(date.timetuple())) + 120
         if mode == 2:
-            if production:
+            if config["production"]:
                 if type == "n":
                     timestamp += 10080
                 elif type == "w":
@@ -206,9 +205,9 @@ def mysql_connect():
     print "Connecting to MySQL ..."
     try:
         global cnx
-        cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
+        cnx = mysql.connector.connect(user=config["mysql_user"], password=config["mysql_password"],
                                       host='127.0.0.1',
-                                      database=mysql_database,
+                                      database=config["mysql_database"],
                                       charset='utf8',
                                       use_unicode=True)
     except mysql.connector.Error as err:
@@ -390,7 +389,7 @@ def webhook():
     for q in question_keys:
         webhook_text = "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)" % (
             webhook_type, get_question(q, 1), get_response1(q, 1), get_response2(q, 1))
-        if production: data = {"username": "Votes Bot",
+        if config["production"]: data = {"username": "Votes Bot",
                                "content": "New %s Everybody Votes Channel question is out!" % type,
                                "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
                 {"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0",
@@ -428,11 +427,11 @@ def sign_file(name):
     dest.close()
     file.close()
     print "Compressing ..."
-    subprocess.call(["%s/lzss" % lzss_path, "-evf", final + '-1'],stdout=subprocess.PIPE)  # Compress the file with the lzss program.
+    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", final + '-1'],stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(final + '-1', 'rb')
     new = file.read()
     dest = open(final, "w+")
-    key = open(key_path, 'rb')
+    key = open(config["key_path"], 'rb')
     print "RSA Signing ..."
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
@@ -442,15 +441,14 @@ def sign_file(name):
     dest.close()
     file.close()
     key.close()
-    if production:
+    if config["production"]:
         if file_type == "q" or file_type == "r":
             folder = str(country_code).zfill(3)
             if nw == "w": folder = "world"
-            subprocess.call(["mkdir", "-p", "%s/%s/%s" % (
-                file_path, folder, get_year())])  # If folder for the year does not exist, make it.
-            path = "%s/%s/%s/%s" % (file_path, folder, get_year(), final)
+            subprocess.call(["mkdir", "-p", "%s/%s/%s" % (config["file_path"], folder, get_year())])  # If folder for the year does not exist, make it.
+            path = "%s/%s/%s/%s" % (config["file_path"], folder, get_year(), final)
         elif file_type == "v":
-            path = "%s/%s/%s" % (file_path, str(country_code).zfill(3), final)
+            path = "%s/%s/%s" % (config["file_path"], str(country_code).zfill(3), final)
     subprocess.call(["mv", final, path])
     os.remove(final + '-1')
 
@@ -493,7 +491,7 @@ def make_bin(country_code):
         f.write('RIICONNECT24'.encode("ASCII"))
         f.flush()
 
-    if production:
+    if config["production"]:
         sign_file(question_file)
 
     print "Writing Completed"
