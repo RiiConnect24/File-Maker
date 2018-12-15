@@ -76,7 +76,6 @@ tenki_db = None
 uvindex = {}
 wind = {}
 times = {}
-weathericon = {}
 pollen = {}
 today = {}
 week = {}
@@ -496,7 +495,7 @@ def get_accuweather_api(list, key):
     week[key][23] = get_icon(int(forecast[5][5][1].text), list, key)
     current[key][3] = int(current_conditions[3].text)
     current[key][4] = to_celsius(current[key][3])
-    weathericon[key] = get_icon(int(current_conditions[7].text), list, key)
+    current[key][5] = get_icon(int(current_conditions[7].text), list, key)
     current[key][0] = current_conditions[10].text
     current[key][2] = int(current_conditions[9].text)
     current[key][1] = mph_kmh(current[key][2])
