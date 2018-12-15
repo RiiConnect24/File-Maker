@@ -101,11 +101,12 @@ def prepare():
     global country_count, countries, file_type, questions, poll_id, write_questions, write_results, results, position, national, worldwide
     print "Preparing ..."
     mysql_connect()
-    if sys.argv[1] == "q":
+    file_type = sys.argv[1]
+    if file_type == "q":
         automatic_questions()
-    elif sys.argv[1] == "r":
+    elif file_type == "r":
         automatic_results()
-    elif sys.argv[1] == "v":
+    elif file_type == "v":
         automatic_votes()
     cnx.close()
     make_language_table()
