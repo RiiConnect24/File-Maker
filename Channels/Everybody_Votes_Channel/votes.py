@@ -440,7 +440,7 @@ def make_bin(country_code):
         filename = "{}_{}".format(get_name(), file_type)
     else:
         filename = "voting"
-    print "Writing to {}.bin ...".format(question_file)
+    print "Writing to {}.bin ...".format(filename)
 
     with open(filename, 'wb') as f:
         for dictionary in dictionaries:
