@@ -241,11 +241,11 @@ def mysql_get_votes(days, type, index):
             male_voters_response_2[country_index] += int(anscnt[2])
             female_voters_response_2[country_index] += int(anscnt[3])
 
-            region_response_1[country_index][region_id] += sum(int(anscnt[0:2]))
-            region_response_2[country_index][region_id] += sum(int(anscnt[2:4]))
+            region_response_1[country_index][region_id] += int(anscnt[0]) + int(anscnt[1])
+            region_response_2[country_index][region_id] += int(anscnt[2]) + int(anscnt[3])
         elif row["typeCD"] == 1:
-            predict_response_1[country_index] += sum(int(anscnt[0:2]))
-            predict_response_2[country_index] += sum(int(anscnt[2:4]))
+            predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
+            predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[3])
 
     print "Male Voters Response 1: {}".format(male_voters_response_1)
     print "Female Voters Response 1: {}".format(male_voters_response_1)
