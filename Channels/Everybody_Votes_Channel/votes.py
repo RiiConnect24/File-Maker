@@ -247,14 +247,14 @@ def mysql_get_votes(days, type, index):
             predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
             predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[3])
 
-    print "Male Voters Response 1: {}".format(male_voters_response_1)
-    print "Female Voters Response 1: {}".format(male_voters_response_1)
-    print "Male Voters Response 2: {}".format(male_voters_response_2)
-    print "Female Voters Response 2: {}".format(female_voters_response_2)
-    print "Predict Response 1: {}".format(predict_response_1)
-    print "Predict Response 2: {}".format(predict_response_2)
-    print "Region Response 1: {}".format(region_response_1)
-    print "Region Response 2: {}".format(region_response_2)
+    # print "Male Voters Response 1: {}".format(male_voters_response_1)
+    # print "Female Voters Response 1: {}".format(male_voters_response_1)
+    # print "Male Voters Response 2: {}".format(male_voters_response_2)
+    # print "Female Voters Response 2: {}".format(female_voters_response_2)
+    # print "Predict Response 1: {}".format(predict_response_1)
+    # print "Predict Response 2: {}".format(predict_response_2)
+    # print "Region Response 1: {}".format(region_response_1)
+    # print "Region Response 2: {}".format(region_response_2)
 
     cursor.close()
 
