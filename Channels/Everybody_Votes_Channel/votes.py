@@ -500,13 +500,13 @@ def make_national_question_table(header):
 
     for q in question_keys:
         if not is_worldwide(q):
-            national_question_table["poll_id_" + num()] = u32(q)
-            national_question_table["poll_category_1_" + num()] = u8(get_category(q))
-            national_question_table["poll_category_2_" + num()] = u8(categories[get_category(q)])
-            national_question_table["opening_timestamp_" + num()] = u32(get_timestamp(1, "n", get_date(q)))
-            national_question_table["closing_timestamp_" + num()] = u32(get_timestamp(2, "n", get_date(q)))
-            national_question_table["question_table_count_" + num()] = u8(len(country_language[country_code]))
-            national_question_table["question_table_start_" + num()] = u32(question_table_count)
+            national_question_table["poll_id_" + str(num())] = u32(q)
+            national_question_table["poll_category_1_" + str(num())] = u8(get_category(q))
+            national_question_table["poll_category_2_" + str(num())] = u8(categories[get_category(q)])
+            national_question_table["opening_timestamp_" + str(num())] = u32(get_timestamp(1, "n", get_date(q)))
+            national_question_table["closing_timestamp_" + str(num())] = u32(get_timestamp(2, "n", get_date(q)))
+            national_question_table["question_table_count_" + str(num())] = u8(len(country_language[country_code]))
+            national_question_table["question_table_start_" + str(num())] = u32(question_table_count)
             question_table_count += len(country_language[country_code])
 
     return national_question_table
@@ -530,13 +530,13 @@ def make_worldwide_question_table(header):
 
     for q in question_keys:
         if is_worldwide(q):
-            worldwide_question_table["poll_id_" + num()] = u32(q)
-            worldwide_question_table["poll_category_1_" + num()] = u8(get_category(q))
-            worldwide_question_table["poll_category_2_" + num()] = u8(categories[get_category(q)])
-            worldwide_question_table["opening_timestamp_" + num()] = u32(get_timestamp(1, "w", get_date(q)))
-            worldwide_question_table["closing_timestamp_" + num()] = u32(get_timestamp(2, "w", get_date(q)))
-            worldwide_question_table["question_table_count_" + num()] = u8(question_table_count)
-            worldwide_question_table["question_table_start_" + num()] = u32(question_table_start)
+            worldwide_question_table["poll_id_" + str(num())] = u32(q)
+            worldwide_question_table["poll_category_1_" + str(num())] = u8(get_category(q))
+            worldwide_question_table["poll_category_2_" + str(num())] = u8(categories[get_category(q)])
+            worldwide_question_table["opening_timestamp_" + str(num())] = u32(get_timestamp(1, "w", get_date(q)))
+            worldwide_question_table["closing_timestamp_" + str(num())] = u32(get_timestamp(2, "w", get_date(q)))
+            worldwide_question_table["question_table_count_" + str(num())] = u8(question_table_count)
+            worldwide_question_table["question_table_start_" + str(num())] = u32(question_table_start)
             question_table_count += 1
 
     return worldwide_question_table
@@ -580,17 +580,17 @@ def make_national_result_table(header):
         if results[i][8] == "n":
             country_index = country_codes.index(country_code)
 
-            table["poll_id_" + num()] = u32(i)
-            table["male_voters_response_1_num_" + num()] = u32(results[i][0][country_index])
-            table["male_voters_response_2_num_" + num()] = u32(results[i][2][country_index])
-            table["female_voters_response_1_num_" + num()] = u32(results[i][1][country_index])
-            table["female_voters_response_2_num_" + num()] = u32(results[i][3][country_index])
-            table["predictors_response_1_num_" + num()] = u32(results[i][4][country_index])
-            table["predictors_response_2_num_" + num()] = u32(results[i][5][country_index])
-            table["show_voter_number_flag_" + num()] = u8(1)
-            table["detailed_results_flag_" + num()] = u8(1)
-            table["national_result_detailed_number_number_" + num()] = u8(national_result_detailed_number_tables)
-            table["starting_national_result_detailed_number_table_number_" + num()] = u32(national_result_detailed_number_count)
+            table["poll_id_" + str(num())] = u32(i)
+            table["male_voters_response_1_num_" + str(num())] = u32(results[i][0][country_index])
+            table["male_voters_response_2_num_" + str(num())] = u32(results[i][2][country_index])
+            table["female_voters_response_1_num_" + str(num())] = u32(results[i][1][country_index])
+            table["female_voters_response_2_num_" + str(num())] = u32(results[i][3][country_index])
+            table["predictors_response_1_num_" + str(num())] = u32(results[i][4][country_index])
+            table["predictors_response_2_num_" + str(num())] = u32(results[i][5][country_index])
+            table["show_voter_number_flag_" + str(num())] = u8(1)
+            table["detailed_results_flag_" + str(num())] = u8(1)
+            table["national_result_detailed_number_number_" + str(num())] = u8(national_result_detailed_number_tables)
+            table["starting_national_result_detailed_number_table_number_" + str(num())] = u32(national_result_detailed_number_count)
             national_result_detailed_number_count += national_result_detailed_number_tables
 
     return table
@@ -606,10 +606,10 @@ def make_national_result_detailed_table(header):
         if results[i][8] == "n":
             for j in range(region_number[country_code]):
                 country_index = country_codes.index(country_code)
-                table["voters_response_1_num_" + num()] = u32(results[i][6][country_index][j])
-                table["voters_response_2_num_" + num()] = u32(results[i][7][country_index][j])
-                table["position_entry_table_count_" + num()] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in position_table.keys()) else position_table[country_code][j])
-                table["starting_position_entry_table_" + num()] = u32(sum(position_table[country_code][:j]) if country_code in position_table.keys() else 0)
+                table["voters_response_1_num_" + str(num())] = u32(results[i][6][country_index][j])
+                table["voters_response_2_num_" + str(num())] = u32(results[i][7][country_index][j])
+                table["position_entry_table_count_" + str(num())] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in position_table.keys()) else position_table[country_code][j])
+                table["starting_position_entry_table_" + str(num())] = u32(sum(position_table[country_code][:j]) if country_code in position_table.keys() else 0)
 
     return table
 
@@ -620,7 +620,7 @@ def make_position_entry_table(header):
 
     if country_code in position_table.keys():
         header["position_offset"] = offset_count()
-        table["data_" + num()] = binascii.unhexlify(position_data[country_code])
+        table["data_" + str(num())] = binascii.unhexlify(position_data[country_code])
 
 
 def make_worldwide_result_table(header):
@@ -639,15 +639,15 @@ def make_worldwide_result_table(header):
                     total += results[i][voters][j]
                 if total > 0: worldwide_detailed_table_count += 1
 
-            table["poll_id_" + num()] = u32(i)
-            table["male_voters_response_1_num_" + num()] = u32(sum(results[i][0]))
-            table["male_voters_response_2_num_" + num()] = u32(sum(results[i][2]))
-            table["female_voters_response_1_num_" + num()] = u32(sum(results[i][1]))
-            table["female_voters_response_2_num_" + num()] = u32(sum(results[i][3]))
-            table["predictors_response_1_num_" + num()] = u32(sum(results[i][4]))
-            table["predictors_response_2_num_" + num()] = u32(sum(results[i][5]))
-            table["total_worldwide_detailed_tables_" + num()] = u8(worldwide_detailed_table_count)
-            table["starting_worldwide_detailed_table_number_" + num()] = u32(worldwide_detailed_table_count_all)
+            table["poll_id_" + str(num())] = u32(i)
+            table["male_voters_response_1_num_" + str(num())] = u32(sum(results[i][0]))
+            table["male_voters_response_2_num_" + str(num())] = u32(sum(results[i][2]))
+            table["female_voters_response_1_num_" + str(num())] = u32(sum(results[i][1]))
+            table["female_voters_response_2_num_" + str(num())] = u32(sum(results[i][3]))
+            table["predictors_response_1_num_" + str(num())] = u32(sum(results[i][4]))
+            table["predictors_response_2_num_" + str(num())] = u32(sum(results[i][5]))
+            table["total_worldwide_detailed_tables_" + str(num())] = u8(worldwide_detailed_table_count)
+            table["starting_worldwide_detailed_table_number_" + str(num())] = u32(worldwide_detailed_table_count_all)
             worldwide_detailed_table_count_all += worldwide_detailed_table_count
 
     return table
@@ -669,13 +669,13 @@ def make_worldwide_result_detailed_table(header):
                 for voters in range(0, 4):
                     total += results[i][voters][j]
                 if total > 0:
-                    table["unknown_" + num()] = u32(0)
-                    table["male_voters_response_1_num_" + num()] = u32(results[i][0][j])
-                    table["male_voters_response_2_num_" + num()] = u32(results[i][2][j])
-                    table["female_voters_response_1_num_" + num()] = u32(results[i][1][j])
-                    table["female_voters_response_2_num_" + num()] = u32(results[i][3][j])
-                    table["country_table_count_" + num()] = u16(7)
-                    table["starting_country_table_number_" + num()] = u32(country_table_count)
+                    table["unknown_" + str(num())] = u32(0)
+                    table["male_voters_response_1_num_" + str(num())] = u32(results[i][0][j])
+                    table["male_voters_response_2_num_" + str(num())] = u32(results[i][2][j])
+                    table["female_voters_response_1_num_" + str(num())] = u32(results[i][1][j])
+                    table["female_voters_response_2_num_" + str(num())] = u32(results[i][3][j])
+                    table["country_table_count_" + str(num())] = u16(7)
+                    table["starting_country_table_number_" + str(num())] = u32(country_table_count)
                     worldwide_region_number += 1
                 country_table_count += 7
 
