@@ -1175,8 +1175,7 @@ def dump_db():
     db = {"update_time": time.time(), "location_keys": weatherloc, "local_times": times, "laundry_indexes": laundry,
           "pollen_indexes": pollen, "globe_data": globe, "wind_speed": wind, "uvindexes": uvindex,
           "current_forecast": current, "precipitation": precipitation, "hourly_forecast": hourly,
-          "tomorrow_forecast": tomorrow, "week_forecast": week, "today_forecast": today, "weather_icons": weathericon,
-          "key_cache": cache}
+          "tomorrow_forecast": tomorrow, "week_forecast": week, "today_forecast": today, "key_cache": cache}
     with open('weather.db', 'wb') as f:
         pickle.dump(db, f)
 
