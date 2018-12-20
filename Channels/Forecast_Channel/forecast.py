@@ -541,13 +541,13 @@ def get_accuweather_api(list, key):
     week[key][13] = int(forecast[9][6][4].text)
     for i in range(0, 14):
         week[key][i+14] = to_celsius(week[key][i])
-    week[key][30] = get_icon(int(forecast[3][6][1].text), list, key)
-    week[key][31] = get_icon(int(forecast[4][6][1].text), list, key)
-    week[key][32] = get_icon(int(forecast[5][6][1].text), list, key)
-    week[key][33] = get_icon(int(forecast[6][6][1].text), list, key)
-    week[key][34] = get_icon(int(forecast[7][6][1].text), list, key)
-    week[key][35] = get_icon(int(forecast[8][6][1].text), list, key)
-    week[key][36] = get_icon(int(forecast[9][6][1].text), list, key)
+    week[key][30] = get_icon(int(forecast[3][6][2].text), list, key)
+    week[key][31] = get_icon(int(forecast[4][6][2].text), list, key)
+    week[key][32] = get_icon(int(forecast[5][6][2].text), list, key)
+    week[key][33] = get_icon(int(forecast[6][6][2].text), list, key)
+    week[key][34] = get_icon(int(forecast[7][6][2].text), list, key)
+    week[key][35] = get_icon(int(forecast[8][6][2].text), list, key)
+    week[key][36] = get_icon(int(forecast[9][6][2].text), list, key)
     time_index = [[3, 9, 15, 21], [27, 33, 39, 45]]
     hourlyAvg = [-3,-2,-1,0,1,2,3]
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
