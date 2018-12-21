@@ -210,6 +210,31 @@ def coord_decode(value):
         value -= 0x10000
     return value * 0.0054931640625
 
+def validHour(hour):
+    return True if -1 < hour < 24 else False
+
+def mode_calc(list):
+    if not list: return
+    temp = {}
+    for i in list:
+        if i not in temp: temp[i] = 1
+        else: temp[i] += 1
+
+    largestValue = 0
+    largestIndex = 0
+    currentIndex = 0
+    duplicate = False
+    for i in temp.keys():
+        if temp[i] > largestValue:
+            largestValue = temp[i]
+            largestIndex = currentIndex
+            duplicate = False
+        elif temp[i] == largestValue: duplicate = True
+        currentIndex+=1
+
+    if not duplicate: return temp.keys()[largestIndex]
+    else: return
+
 
 def size(data):
     total = 2
@@ -553,19 +578,29 @@ def get_accuweather_api(list, key):
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
-        hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
-        if not isJapan(list, key):
-            precip = []
-            for j in hourlyAvg:
-                if -1 < temp+j < 24: precip.append(int(hourly_forecast[temp+j][12].text))
-            if len(precip) > 0: precipitation[key][i] = round(sum(precip)/len(precip))
+        precip = []
+        hourlyAvgIcons = []
+        for j in hourlyAvg:
+            if validHour(temp+j):
+                precip.append(int(hourly_forecast[temp+j][12].text))
+                hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+j][0].text), list, key))
+        if len(precip) > 0 and not isJapan(list, key): precipitation[key][i] = round(sum(precip)/len(precip))
+        modeValue = mode_calc(hourlyAvgIcons)
+        if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][i] = modeValue
+        elif validHour(temp): hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key)
+        else: hourly[key][i] = get_icon(int(-1), list, key)
         temp = time_index[1][i] - hour
-        if not isJapan(list, key):
-            precip = []
-            for j in hourlyAvg:
-                if -1 < temp+j < 24: precip.append(int(hourly_forecast[temp+j][12].text))
-            if len(precip) > 0: precipitation[key][i + 4] = round(sum(precip)/len(precip))
-        hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key) if -1 < temp < 24 else get_icon(int(-1), list, key)
+        precip = []
+        hourlyAvgIcons = []
+        for j in hourlyAvg:
+            if validHour(temp+j):
+                precip.append(int(hourly_forecast[temp+j][12].text))
+                hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+j][0].text), list, key))
+        if len(precip) > 0 and not isJapan(list, key): precipitation[key][i + 4] = round(sum(precip)/len(precip))
+        modeValue = mode_calc(hourlyAvgIcons)
+        if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][i + 4] = modeValue
+        elif validHour(temp): hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key)
+        else: hourly[key][i + 4] = get_icon(int(-1), list, key)
 
 """Tenki's where we're getting the laundry index for Japan."""
 """Currently, it's getting it from the webpage itself, but we might look for an API they use."""
