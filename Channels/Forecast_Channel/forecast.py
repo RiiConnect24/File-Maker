@@ -574,7 +574,7 @@ def get_accuweather_api(list, key):
     week[key][35] = get_icon(int(forecast[8][6][2].text), list, key)
     week[key][36] = get_icon(int(forecast[9][6][2].text), list, key)
     time_index = [[3, 9, 15, 21], [27, 33, 39, 45]]
-    hourlyAvg = [-3,-2,-1,0,1,2,3]
+    hourlyAvg = [-3,-2,-1,0,1,2]
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
     for i in range(0, 4):
         temp = time_index[0][i] - hour
