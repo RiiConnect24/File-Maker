@@ -221,19 +221,16 @@ def mode_calc(list):
         else: temp[i] += 1
 
     largestValue = 0
-    largestIndex = 0
-    currentIndex = 0
+    largestKey = None
     duplicate = False
-    for i in temp.keys():
-        if temp[i] > largestValue:
-            largestValue = temp[i]
-            largestIndex = currentIndex
+    for k,v in temp.items():
+        if v > largestValue:
+            largestValue = v
+            largestKey = k
             duplicate = False
-        elif temp[i] == largestValue: duplicate = True
-        currentIndex+=1
+        elif v == largestValue: duplicate = True
 
-    if not duplicate: return temp.keys()[largestIndex]
-    else: return
+    if not duplicate: return largestKey
 
 
 def size(data):
@@ -649,11 +646,12 @@ def hex_write(loc, data):
     file.write(u32(data))
 
 
-def offset_write(value):
+def offset_write(value, post=True):
     global file, seek_offset
     seek_offset += 4
     file.seek(seek_offset)
     file.write(u32(value))
+    if post: seek_offset += 4
 
 
 def make_bins(list, data):
@@ -746,44 +744,40 @@ def make_forecast_bin(list, data):
               range(len(forecastlists.weatherconditions.values()) * 2)]:
         offset_write(seek_base)
         seek_base += len(i[0][language_code].decode('utf-8').encode('utf-16be')) + 2
-        seek_offset += 4
     """UV Index"""
     seek_offset = count[3]
     seek_base = count[8]
     for i in forecastlists.uvindex.values():
         offset_write(seek_base)
         seek_base += len(i[language_code].decode('utf-8').encode('utf-16be')) + 2
-        seek_offset += 4
     """Laundry Table"""
     seek_offset = count[4]
     seek_base = count[9]
     for i in forecastlists.laundry.values():
         offset_write(seek_base)
         seek_base += len(i.decode('utf-8').encode('utf-16be')) + 2
-        seek_offset += 4
     """Pollen Table"""
     seek_offset = count[5]
     seek_base = count[10]
     for i in forecastlists.pollen.values():
         offset_write(seek_base)
         seek_base += len(i.decode('utf-8').encode('utf-16be')) + 2
-        seek_offset += 4
     """Location Text"""
     seek_offset = count[6]
     seek_base = count[11]
     for key in list.keys():
-        offset_write(seek_base)
+        offset_write(seek_base, False)
         seek_base += len(list[key][0][language_code].decode('utf-8').encode('utf-16be')) + 2
         if len(list[key][1][language_code]) > 0:
-            offset_write(seek_base)
+            offset_write(seek_base, False)
             seek_base += len(list[key][1][language_code].decode('utf-8').encode('utf-16be')) + 2
         else:
-            offset_write(0)
+            offset_write(0, False)
         if len(list[key][2][language_code]) > 0:
             offset_write(seek_base)
             seek_base += len(list[key][2][language_code].decode('utf-8').encode('utf-16be')) + 2
         else:
-            offset_write(0)
+            offset_write(0, False)
         seek_offset += 12
     file.seek(0)
     with open(file1, 'wb') as temp:
@@ -804,8 +798,11 @@ def make_short_bin(list, data):
     file.write(u32(timestamps(2, 0)))
     for v in short_forecast_header.values():
         file.write(v)
+    count = file.tell()
     for v in short_forecast_table.values():
         file.write(v)
+    file.seek(20)
+    file.write(u32(count+12))
     file.seek(0)
     with open(file1, 'wb') as temp:
         temp.write(file.read())
@@ -868,7 +865,7 @@ def make_header_short(list):
     header["unknown_2"] = u8(0)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["short_forecast_number"] = u32(int(len(list)))  # Number of short forecast entries.
-    header["start_offset"] = u32(36)
+    header["start_offset"] = u32(0)
 
     return header
 
@@ -882,7 +879,7 @@ def make_header_forecast(list):
     header["padding_1"] = u8(0)  # Padding.
     header["message_offset"] = u32(0)  # Offset for a message.
     header["long_forecast_number"] = u32(0)  # Number of long forecast entries.
-    header["long_forecast_offset"] = u32(88)  # Offset for the long forecast entry table.
+    header["long_forecast_offset"] = u32(0)  # Offset for the long forecast entry table.
     header["short_forecast_number"] = u32(shortcount)  # Number of short forecast entries.
     header["short_forecast_offset"] = u32(0)  # Offset for the short forecast entry table.
     header["weather_condition_codes_number"] = u32(0)  # Number of weather condition code entries.
