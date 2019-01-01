@@ -6,7 +6,7 @@
 # VERSION 4.1
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
-# Copyright (c) 2015-2018 RiiConnect24, and its (Lead) Developers
+# Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
 import Queue
@@ -292,7 +292,7 @@ def ui():
         pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
     header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
-    header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2018\n\n"
+    header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2019\n\n"
     if config["production"]:
         header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:

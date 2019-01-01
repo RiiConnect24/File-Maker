@@ -5,7 +5,7 @@
 # NEWS CHANNEL GENERATION SCRIPT
 # AUTHORS: LARSEN VALLECILLO
 # ****************************************************************************
-# Copyright (c) 2015-2018 RiiConnect24, and its (Lead) Developers
+# Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
 import binascii
