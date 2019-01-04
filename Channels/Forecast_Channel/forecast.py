@@ -1271,7 +1271,10 @@ for list in weathercities:
     q.join()
     loop = False
     for t in threads:
-        t.join()
+        t.join(60)
+        if t.isAlive():
+            log("Stalled thread detected", "CRITICAL")
+            exit()
     status = 2
     for k, v in weather_data.items():
         try:
