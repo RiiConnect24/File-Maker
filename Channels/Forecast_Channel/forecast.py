@@ -581,7 +581,7 @@ def get_accuweather_api(list, key):
             if validHour(temp+j):
                 precip.append(int(hourly_forecast[temp+j][12].text))
                 hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+j][0].text), list, key))
-        if len(precip) > 0 and not isJapan(list, key): precipitation[key][i] = round(sum(precip)/len(precip))
+        if len(precip) > 0 and not (config["enableTenki"] and isJapan(list, key)): precipitation[key][i] = round(sum(precip)/len(precip))
         modeValue = mode_calc(hourlyAvgIcons)
         if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][i] = modeValue
         elif validHour(temp): hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key)
@@ -593,7 +593,7 @@ def get_accuweather_api(list, key):
             if validHour(temp+j):
                 precip.append(int(hourly_forecast[temp+j][12].text))
                 hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+j][0].text), list, key))
-        if len(precip) > 0 and not isJapan(list, key): precipitation[key][i + 4] = round(sum(precip)/len(precip))
+        if len(precip) > 0 and not (config["enableTenki"] and isJapan(list, key)): precipitation[key][i + 4] = round(sum(precip)/len(precip))
         modeValue = mode_calc(hourlyAvgIcons)
         if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][i + 4] = modeValue
         elif validHour(temp): hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key)
