@@ -798,11 +798,8 @@ def make_short_bin(list, data):
     file.write(u32(timestamps(2, 0)))
     for v in short_forecast_header.values():
         file.write(v)
-    count = file.tell()
     for v in short_forecast_table.values():
         file.write(v)
-    file.seek(20)
-    file.write(u32(count+12))
     file.seek(0)
     with open(file1, 'wb') as temp:
         temp.write(file.read())
@@ -865,7 +862,7 @@ def make_header_short(list):
     header["unknown_2"] = u8(0)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["short_forecast_number"] = u32(int(len(list)))  # Number of short forecast entries.
-    header["start_offset"] = u32(0)
+    header["start_offset"] = u32(36)
 
     return header
 
