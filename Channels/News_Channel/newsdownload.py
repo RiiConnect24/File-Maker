@@ -585,11 +585,7 @@ class Parse(News):
             if "rcom-default.png" in self.picture:
                 self.picture = None
             else:
-                self.resize = False
-                try:
-                    self.picture += "&w=200"
-                except NameError:
-                    pass
+                self.resize = True
 
         if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
             self.location = self.article.split(" (Reuters)")[0]
