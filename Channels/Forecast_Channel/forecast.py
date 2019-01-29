@@ -1301,6 +1301,7 @@ for list in weathercities:
 time.sleep(0.15)
 ui_run = False
 ui_thread.join()
+dump_db()
 
 if config["enableTenki"] and not tenki_db:
     log("Writing Tenki Database ...", "VERBOSE")
@@ -1309,7 +1310,6 @@ if config["enableTenki"] and not tenki_db:
         pickle.dump(tenki, f)
 
 if config["production"]:
-    dump_db()
     """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
