@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 4.1
+# VERSION 4.2
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
@@ -55,7 +55,7 @@ weathercities = [forecastlists.weathercities001, forecastlists.weathercities008,
                  forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108,
                  forecastlists.weathercities110]
 
-VERSION = 4.1
+VERSION = 4.2
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
@@ -716,7 +716,9 @@ def make_forecast_bin(list, data):
     file1 = 'forecast.{}~.{}+{}'.format(extension, str(country_code).zfill(3), str(language_code))
     file2 = 'forecast.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
     file3 = 'forecast.{}'.format(extension)
-    file.write(pad(20))
+    file.write(pad(12))
+    file.write(u32(timestamps(0, 0)))
+    file.write(u32(timestamps(2, 0)))
     for i in dictionaries:
         for v in i.values():
             file.write(v)
@@ -725,14 +727,9 @@ def make_forecast_bin(list, data):
     file.write(pad(16))
     file.write('RIICONNECT24'.encode('ASCII'))  # This can be used to identify that we made this file.
     file.seek(0)
-    hex_write(12, timestamps(0, 0))
-    hex_write(16, timestamps(2, 0))
     hex_write(36, count[0])
-    hex_write(32, int(len(list) - shortcount))
-    hex_write(40, shortcount)
     if shortcount > 0:
         hex_write(44, count[1])
-    hex_write(48, len(forecastlists.weatherconditions) * 2)
     hex_write(52, count[2])
     hex_write(60, count[3])
     hex_write(68, count[4])
@@ -798,8 +795,11 @@ def make_short_bin(list, data):
     file.write(u32(timestamps(2, 0)))
     for v in short_forecast_header.values():
         file.write(v)
+    count = file.tell()
     for v in short_forecast_table.values():
         file.write(v)
+    file.seek(count-4)
+    file.write(u32(count+12))
     file.seek(0)
     with open(file1, 'wb') as temp:
         temp.write(file.read())
@@ -861,8 +861,8 @@ def make_header_short(list):
     header["region_flag"] = u8(region_flag)  # Region Flag.
     header["unknown_2"] = u8(0)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
-    header["short_forecast_number"] = u32(int(len(list)))  # Number of short forecast entries.
-    header["start_offset"] = u32(36)
+    header["short_forecast_number"] = u32(len(list))  # Number of short forecast entries.
+    header["start_offset"] = u32(0)
 
     return header
 
@@ -875,17 +875,17 @@ def make_header_forecast(list):
     header["unknown_2"] = u8(1)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["message_offset"] = u32(0)  # Offset for a message.
-    header["long_forecast_number"] = u32(0)  # Number of long forecast entries.
+    header["long_forecast_number"] = u32(len(list) - shortcount)  # Number of long forecast entries.
     header["long_forecast_offset"] = u32(0)  # Offset for the long forecast entry table.
     header["short_forecast_number"] = u32(shortcount)  # Number of short forecast entries.
     header["short_forecast_offset"] = u32(0)  # Offset for the short forecast entry table.
-    header["weather_condition_codes_number"] = u32(0)  # Number of weather condition code entries.
+    header["weather_condition_codes_number"] = u32(len(forecastlists.weatherconditions) * 2)  # Number of weather condition code entries.
     header["weather_condition_codes_offset"] = u32(0)  # Offset for the weather condition code table.
-    header["uv_index_number"] = u32(13)  # Number of UV Index entries.
+    header["uv_index_number"] = u32(len(forecastlists.uvindex))  # Number of UV Index entries.
     header["uv_index_offset"] = u32(0)  # Offset for the UV Index table.
-    header["laundry_index_number"] = u32(12)  # Number of Laundry Index entries.
+    header["laundry_index_number"] = u32(len(forecastlists.laundry))  # Number of Laundry Index entries.
     header["laundry_index_offset"] = u32(0)  # Offset for the Laundry Index table.
-    header["pollen_count_number"] = u32(5)  # Number of Pollen Count entries.
+    header["pollen_count_number"] = u32(len(forecastlists.pollen))  # Number of Pollen Count entries.
     header["pollen_count_offset"] = u32(0)  # Offset for the Pollen Count table.
     header["location_number"] = u32(len(list))  # Number of location entries.
     header["location_offset"] = u32(0)  # Offset for the location table.
