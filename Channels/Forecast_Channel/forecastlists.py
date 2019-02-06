@@ -7582,8 +7582,8 @@ weathercities097["Rzeszów"] = [
     ["マウォポルスカ", "Podkarpackie", "Podkarpackie", "Podkarpackie",  "Podkarpackie", "Podkarpackie", "Podkarpackie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23940fa405030000"]
 weathercities097["Bialystok"] = [
-    ["ビャリストク", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie"],
-    ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne", "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"],
+    ["ビャリストク", "Bialystok", "Bialystok", "Bialystok", "Bialystok", "Bialystok", "Bialystok"],
+    ["マウォポルスカ", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25c5107605030000"]
 weathercities097["Radom"] = [
     ["ラドム", "Radom", "Radom", "Radom", "Radom", "Radom", "Radom"],
@@ -9536,11 +9536,11 @@ weathercities_international["Oslo"] = [
     ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"], "2a9f079d07030000"]
 weathercities_international["Warsaw"] = [
     ["ワルシャワ", "Warsaw", "Warschau", "Varsovie", "Varsovia", "Varsavia", "Warschau"],
-    ["マゾフシェ", "Masovia", "Masowien", "Mazovie", "Mazovia", "Masovia", "Mazovië"],
+    ["マゾフシェ", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25260ef005030000"]
 weathercities_international["Kraków"] = [
     ["クラクフ", "Kraków", "Krakau", "Cracovie", "Cracovia", "Cracovia", "Kraków"],
-    ["マウォポルスカ", "Lesser Poland", "Kleinpolen", "Petite-Pologne",  "Pequeña Polonia", "Piccola Polonia", "Klein-Polen"],
+    ["マウォポルスカ", "Malopolskie", "Malopolskie", "Malopolskie",  "Malopolskie", "Malopolskie", "Malopolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23980e2e01030000"]
 weathercities_international["Lisbon"] = [
     ["リスボン", "Lisbon", "Lissabon", "Lisbonne", "Lisboa", "Lisbona", "Lissabon"],
