@@ -7527,195 +7527,195 @@ weathercities097 = collections.OrderedDict()
 
 weathercities097["Sosnowiec"] = [
     ["ソスノヴィエツ", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23c40da105030000"]
 weathercities097["Poznan"] = [
     ["ポズナン", "Poznan", "Poznan", "Poznan", "Poznan", "Poznan", "Poznan"],
-    ["マウォポルスカ", "Wielkopolskie", "Wielkopolskie", "Wielkopolskie", "Wielkopolskie", "Wielkopolskie", "Wielkopolskie"],
+    ["マウォポルスカ", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25430c0705030000"]
 weathercities097["Czestochowa"] = [
     ["チェンストホーバ", "Czestochowa", "Czestochowa", "Czestochowa", "Czestochowa", "Czestochowa", "Czestochowa"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "241f0d9805030000"]
 weathercities097["Katowice"] = [
     ["カトヴィツェ", "Katowice", "Katowice", "Katowice", "Katowice", "Katowice", "Katowice"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23bb0d8205030000"]
 weathercities097["Gdynia"] = [
     ["グディニャ", "Gdynia", "Gdynia", "Gdynia", "Gdynia", "Gdynia", "Gdynia"],
-    ["マウォポルスカ", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie"],
+    ["マウォポルスカ", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "26c10d2d05030000"]
 weathercities097["Gdansk"] = [
     ["グダニスク", "Gdansk", "Gdansk", "Gdansk", "Gdansk", "Gdansk", "Gdansk"],
-    ["マウォポルスカ", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie"],
+    ["マウォポルスカ", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "26a90d4005030000"]
 weathercities097["Szczecin"] = [
     ["シュチェチン", "Szczecin", "Szczecin", "Szczecin", "Szczecin", "Szczecin", "Szczecin"],
-    ["マウォポルスカ", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie"],
+    ["マウォポルスカ", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25ff0a5805030000"]
 weathercities097["Lódz"] = [
     ["ウッチ", "Lódz", "Lódz", "Lódz", "Lódz", "Lódz", "Lódz"],
-    ["マウォポルスカ", "Lódzkie", "Lódzkie", "Lódzkie", "Lódzkie", "Lódzkie", "Lódzkie"],
+    ["マウォポルスカ", "Woj. lódzkie", "Woj. lódzkie", "Woj. lódzkie", "Woj. lódzkie", "Woj. lódzkie", "Woj. lódzkie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "24d20dd705030000"]
 weathercities097["Lublin"] = [
     ["ルブリン", "Lublin", "Lublin", "Lublin", "Lublin", "Lublin", "Lublin"],
-    ["マウォポルスカ", "Lubelskie", "Lubelskie", "Lubelskie", "Lubelskie", "Lubelskie", "Lubelskie"],
+    ["マウォポルスカ", "Woj. lubelskie", "Woj. lubelskie", "Woj. lubelskie", "Woj. lubelskie", "Woj. lubelskie", "Woj. lubelskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "2471100c05030000"]
 weathercities097["Wroclaw"] = [
     ["ブロツラフ", "Wroclaw", "Wroclaw", "Wroclaw", "Wroclaw", "Wroclaw", "Wroclaw"],
-    ["マウォポルスカ", "Dolnoslaskie", "Dolnoslaskie", "Dolnoslaskie",  "Dolnoslaskie", "Dolnoslaskie", "Dolnoslaskie"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie",  "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "24560c1c05030000"]
 weathercities097["Bydgoszcz"] = [
     ["ブィドゴシュチュ", "Bydgoszcz", "Bydgoszcz", "Bydgoszcz", "Bydgoszcz", "Bydgoszcz", "Bydgoszcz"],
-    ["マウォポルスカ", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie"],
+    ["マウォポルスカ", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25c50ccc05030000"]
 weathercities097["Koszalin"] = [
     ["コシャリン", "Koszalin", "Koszalin", "Koszalin", "Koszalin", "Koszalin", "Koszalin"],
-    ["マウォポルスカ", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie", "Zachodniopomorskie"],
+    ["マウォポルスカ", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie", "Woj. zachodniopomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "268a0b8205030000"]
 weathercities097["Kielce"] = [
     ["キェルツェ", "Kielce", "Kielce", "Kielce", "Kielce", "Kielce", "Kielce"],
-    ["マウォポルスカ", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie"],
+    ["マウォポルスカ", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "242f0ea905030000"]
 weathercities097["Rzeszów"] = [
     ["ジェシュフ", "Rzeszów", "Rzeszów", "Rzeszów", "Rzeszów", "Rzeszów", "Rzeszów"],
-    ["マウォポルスカ", "Podkarpackie", "Podkarpackie", "Podkarpackie",  "Podkarpackie", "Podkarpackie", "Podkarpackie"],
+    ["マウォポルスカ", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie",  "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23940fa405030000"]
 weathercities097["Bialystok"] = [
     ["ビャリストク", "Bialystok", "Bialystok", "Bialystok", "Bialystok", "Bialystok", "Bialystok"],
-    ["マウォポルスカ", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie", "Podlaskie"],
+    ["マウォポルスカ", "Woj. podlaskie", "Woj. podlaskie", "Woj. podlaskie", "Woj. podlaskie", "Woj. podlaskie", "Woj. podlaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25c5107605030000"]
 weathercities097["Radom"] = [
     ["ラドム", "Radom", "Radom", "Radom", "Radom", "Radom", "Radom"],
-    ["マウォポルスカ", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie"],
+    ["マウォポルスカ", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "248d0f0d05030000"]
 weathercities097["Torun"] = [
     ["トルン", "Torun", "Torun", "Torun", "Torun", "Torun", "Torun"],
-    ["マウォポルスカ", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie"],
+    ["マウォポルスカ", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25b60d3d05030000"]
 weathercities097["Gliwice"] = [
     ["グリヴィツェ", "Gliwice", "Gliwice", "Gliwice", "Gliwice", "Gliwice", "Gliwice"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23c10d4605030000"]
 weathercities097["Zabrze"] = [
     ["ザブジェ", "Zabrze", "Zabrze", "Zabrze", "Zabrze", "Zabrze", "Zabrze"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23c40d5b05030000"]
 weathercities097["Olsztyn"] = [
     ["オルシュティン", "Olsztyn", "Olsztyn", "Olsztyn", "Olsztyn", "Olsztyn", "Olsztyn"],
-    ["マウォポルスカ", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie"],
+    ["マウォポルスカ", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "263e0e9305030000"]
 weathercities097["Bielsko-Biala"] = [
     ["ビェルスコ＝ビャワ", "Bielsko-Biala", "Bielsko-Biala", "Bielsko-Biala", "Bielsko-Biala", "Bielsko-Biala", "Bielsko-Biala"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "236d0d8a05030000"]
 weathercities097["Bytom"] = [
     ["ビトム", "Bytom", "Bytom", "Bytom", "Bytom", "Bytom", "Bytom"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23d40d7005030000"]
 weathercities097["Zielona Góra"] = [
     ["ジェロナ・グラ", "Zielona Góra", "Zielona Góra", "Zielona Góra", "Zielona Góra", "Zielona Góra", "Zielona Góra"],
-    ["マウォポルスカ", "Lubuskie", "Lubuskie", "Lubuskie", "Lubuskie", "Lubuskie", "Lubuskie"],
+    ["マウォポルスカ", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "24ee0b0505030000"]
 weathercities097["Rybnik"] = [
     ["リブニク", "Rybnik", "Rybnik", "Rybnik", "Rybnik", "Rybnik", "Rybnik"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Klein-Polen"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "239d0d3005030000"]
 weathercities097["Ruda Slaska"] = [
     ["ルダ・シロンスカ", "Ruda Slaska", "Ruda Slaska", "Ruda Slaska", "Ruda Slaska", "Ruda Slaska", "Ruda Slaska"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23be0d4c05030000"]
 weathercities097["Tychy"] = [
     ["ティヒ", "Tychy", "Tychy", "Tychy", "Tychy", "Tychy", "Tychy"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23a60d7f05030000"]
 weathercities097["Gorzów Wielkopolski"] = [
     ["ゴジュフ・ヴィエルコポルスキ", "Gorzów Wielkopolski", "Gorzów Wielkopolski", "Gorzów Wielkopolski", "Gorzów Wielkopolski", "Gorzów Wielkopolski", "Gorzów Wielkopolski"],
-    ["マウォポルスカ", "Lubuskie", "Lubuskie", "Lubuskie", "Lubuskie", "Lubuskie", "Lubuskie"],
+    ["マウォポルスカ", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie", "Woj. lubuskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "257f0ad805030000"]
 weathercities097["Dabrowa Górnicza"] = [
     ["ドンブロヴァ・グルニチャ", "Dabrowa Górnicza", "Dabrowa Górnicza", "Dabrowa Górnicza", "Dabrowa Górnicza", "Dabrowa Górnicza", "Dabrowa Górnicza"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23c70db305030000"]
 weathercities097["Plock"] = [
     ["プウォツク", "Plock", "Plock", "Plock", "Plock", "Plock", "Plock"],
-    ["マウォポルスカ", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie"],
+    ["マウォポルスカ", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "255e0e0205030000"]
 weathercities097["Elblag"] = [
     ["エルブロンク", "Elblag", "Elblag", "Elblag", "Elblag", "Elblag", "Elblag"],
-    ["マウォポルスカ", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie", "Warminsko-mazurskie"],
+    ["マウォポルスカ", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie", "Woj. warminsko-mazurskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "26840dcb05030000"]
 weathercities097["Opole"] = [
     ["オポーレ", "Opole", "Opole", "Opole", "Opole", "Opole", "Opole"],
-    ["マウォポルスカ", "Opolskie", "Opolskie", "Opolskie", "Opolskie", "Opolskie", "Opolskie"],
+    ["マウォポルスカ", "Woj. opolskie", "Woj. opolskie", "Woj. opolskie", "Woj. opolskie", "Woj. opolskie", "Woj. opolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "24070cc005030000"]
 weathercities097["Walbrzych"] = [
     ["ヴァウブジフ", "Walbrzych", "Walbrzych", "Walbrzych", "Walbrzych", "Walbrzych", "Walbrzych"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "24190b9405030000"]
 weathercities097["Wloclawek"] = [
     ["ヴウォツワヴェク", "Wloclawek", "Wloclawek", "Wloclawek", "Wloclawek", "Wloclawek", "Wloclawek"],
-    ["マウォポルスカ", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie"],
+    ["マウォポルスカ", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25720d8f05030000"]
 weathercities097["Tarnów"] = [
     ["タルヌフ", "Tarnów", "Tarnów", "Tarnów", "Tarnów", "Tarnów", "Tarnów"],
-    ["マウォポルスカ", "Malopolskie", "Malopolskie", "Malopolskie", "Malopolskie", "Malopolskie", "Malopolskie"],
+    ["マウォポルスカ", "Woj. malopolskie", "Woj. malopolskie", "Woj. malopolskie", "Woj. malopolskie", "Woj. malopolskie", "Woj. malopolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23900eec05030000"]
 weathercities097["Chorzów"] = [
     ["ジュフ", "Chorzów", "Chorzów", "Chorzów", "Chorzów", "Chorzów", "Chorzów"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23c40d7905030000"]
 weathercities097["Kalisz"] = [
     ["カリシュ", "Kalisz", "Kalisz", "Kalisz", "Kalisz", "Kalisz", "Kalisz"],
-    ["マウォポルスカ", "Wielkopolski", "Wielkopolski", "Wielkopolski", "Wielkopolski", "Wielkopolski", "Wielkopolski"],
+    ["マウォポルスカ", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "24ce0cdb05030000"]
 weathercities097["Legnica"] = [
     ["レグニツァ", "Legnica", "Legnica", "Legnica", "Legnica", "Legnica", "Legnica"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask",  "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie",  "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "246a0b7d05030000"]
 weathercities097["Grudziadz"] = [
     ["グルジョンツ", "Grudzadz", "Grudzadz", "Grudzadz", "Grudzadz", "Grudzadz", "Grudzadz"],
-    ["マウォポルスカ", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie", "Kujawsko-pomorskie"],
+    ["マウォポルスカ", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie", "Woj. kujawsko-pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "260a0d5a05030000"]
 weathercities097["Slupsk"] = [
     ["スウプスク", "Slupsk", "Slupsk", "Slupsk", "Slupsk", "Slupsk", "Slupsk"],
-    ["マウォポルスカ", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie", "Pomorskie"],
+    ["マウォポルスカ", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie", "Woj. pomorskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "26bb0c1c05030000"]
 weathercities097["Jaworzno"] = [
     ["ヤヴォジュノ", "Jaworzno", "Jaworzno", "Jaworzno", "Jaworzno", "Jaworzno", "Jaworzno"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23a60db305030000"]
 weathercities097["Jastrzebie Zdrój"] = [
     ["タルヌフ", "Jastrzebie Zdrój", "Jastrzebie Zdrój", "Jastrzebie Zdrój", "Jastrzebie Zdrój", "Jastrzebie Zdrój", "Jastrzebie Zdrój"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23850d3605030000"]
 weathercities097["Gniezno"] = [
     ["グニェズノ", "Gniezno", "Gniezno", "Gniezno", "Gniezno", "Gniezno", "Gniezno"],
-    ["マウォポルスカ", "Wielkopolskie", "Wielkopolskie", "Wielkopolskie",  "Wielkopolskie", "Wielkopolskie", "Wielkopolskie"],
+    ["マウォポルスカ", "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie",  "Woj. wielkopolskie", "Woj. wielkopolskie", "Woj. wielkopolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "255b0c8305030000"]
 weathercities097["Tarnowskie Góry"] = [
     ["タルノフスキェ・グルィ", "Tarnowskie Góry", "Tarnowskie Góry", "Tarnowskie Góry", "Tarnowskie Góry", "Tarnowskie Góry", "Tarnowskie Góry"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23e00d6a05030000"]
 weathercities097["Piekary Slaskie"] = [
     ["ピェカルィ・シロンスキェ", "Piekary Slaskie", "Piekary Slaskie", "Piekary Slaskie", "Piekary Slaskie", "Piekary Slaskie", "Piekary Slaskie"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23d40d7905030000"]
 weathercities097["Bedzin"] = [
     ["ベンジン郡", "Bedzin", "Bedzin", "Bedzin", "Bedzin", "Bedzin", "Bedzin"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23ca0d9805030000"]
 weathercities097["Zawiercie"] = [
     ["ザヴィエルチェ郡", "Zawiercie", "Zawiercie", "Zawiercie", "Zawiercie", "Zawiercie", "Zawiercie"],
-    ["マウォポルスカ", "Slask", "Slask", "Slask", "Slask", "Slask", "Slask"],
+    ["マウォポルスカ", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie", "Woj. slaskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23e90dce05030000"]
 weathercities097["Starachowice"] = [
     ["スタラホウィツェ", "Starachowice", "Starachowice", "Starachowice", "Starachowice", "Starachowice", "Starachowice"],
-    ["マウォポルスカ", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie", "Swietokrzyskie"],
+    ["マウォポルスカ", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie", "Woj. swietokrzyskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "244d0efb05030000"]
 weathercities097["Tarnobrzeg"] = [
     ["タルノブジェク", "Tarnobrzeg", "Tarnobrzeg", "Tarnobrzeg", "Tarnobrzeg", "Tarnobrzeg", "Tarnobrzeg"],
-    ["マウォポルスカ", "Podkarpackie", "Podkarpackie", "Podkarpackie", "Podkarpackie", "Podkarpackie", "Podkarpackie"],
+    ["マウォポルスカ", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23f80f6b05030000"]
 
 weathercities098 = collections.OrderedDict()
@@ -9536,11 +9536,11 @@ weathercities_international["Oslo"] = [
     ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"], "2a9f079d07030000"]
 weathercities_international["Warsaw"] = [
     ["ワルシャワ", "Warsaw", "Warschau", "Varsovie", "Varsovia", "Varsavia", "Warschau"],
-    ["マゾフシェ", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie", "Mazowieckie"],
+    ["マゾフシェ", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie", "Woj. mazowieckie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "25260ef005030000"]
 weathercities_international["Kraków"] = [
     ["クラクフ", "Kraków", "Krakau", "Cracovie", "Cracovia", "Cracovia", "Kraków"],
-    ["マウォポルスカ", "Malopolskie", "Malopolskie", "Malopolskie",  "Malopolskie", "Malopolskie", "Malopolskie"],
+    ["マウォポルスカ", "Woj. malopolskie", "Woj. malopolskie", "Woj. malopolskie",  "Woj. malopolskie", "Woj. malopolskie", "Woj. malopolskie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23980e2e01030000"]
 weathercities_international["Lisbon"] = [
     ["リスボン", "Lisbon", "Lissabon", "Lisbonne", "Lisboa", "Lisbona", "Lissabon"],
