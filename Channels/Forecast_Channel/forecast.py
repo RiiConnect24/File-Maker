@@ -771,7 +771,7 @@ def make_forecast_bin(list, data):
         else:
             offset_write(0, False)
         if len(list[key][2][language_code]) > 0:
-            offset_write(seek_base)
+            offset_write(seek_base, False)
             seek_base += len(list[key][2][language_code].decode('utf-8').encode('utf-16be')) + 2
         else:
             offset_write(0, False)
