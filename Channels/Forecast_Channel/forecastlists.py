@@ -7957,6 +7957,161 @@ weathercities098["Ribeira Grande"] = [
     ["アソレス自治州", "Azores", "Azoren", "Açores", "Azores", "Azzorre", "Azoren"],
     ["ポルトガル", "Portugal", "Portugal", "Portugal", "Portugal", "Portogallo", "Portugal"], "1ae4eddb01030000"]
 
+weathercities099 = collections.OrderedDict()
+
+weathercities099["Satu Mare"] = [
+    ["サトゥ・マーレ", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare"],
+    ["サトゥ・マーレ", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "21fb104605030000"]
+weathercities099["Baia Mare"] = [
+    ["バイア・マーレ", "Baia Mare", "Baia Mare", "Baia Mare", "Baia Mare", "Baia Mare", "Baia Mare"],
+    ["バイア・マーレ", "Maramures", "Maramures", "Maramures", "Maramures", "Maramures", "Maramures"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "21e510c505030000"]
+weathercities099["Zalau"] = [
+    ["ザラウ", "Zalau", "Zalau", "Zalau", "Zalau", "Zalau", "Zalau"],
+    ["サラヤルとう", "Salaj", "Salaj", "Salaj", "Salaj", "Salaj", "Salaj"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "218e106505030000"]
+weathercities099["Oradea"] = [
+    ["オラデア", "Oradea", "Oradea", "Oradea", "Oradea", "Oradea", "Oradea"],
+    ["ビホル県", "Bihor", "Bihor", "Bihor", "Bihor", "Bihor", "Bihor"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "21790f9605030000"]
+weathercities099["Arad"] = [
+    ["アラド", "Arad", "Arad", "Arad", "Arad", "Arad", "Arad"],
+    ["アラド", "Arad", "Arad", "Arad", "Arad", "Arad", "Arad"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "20d40f2805030000"]
+weathercities099["Timisoara"] = [
+    ["ティミショアラ", "Timisoara", "Timisoara", "Timisoara", "Timisoara", "Timisoara", "Timisoara"],
+    ["ティミショアラ", "Timis", "Timis", "Timis", "Timis", "Timis", "Timis"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "208a0f1805030000"]
+weathercities099["Resita"] = [
+    ["レシツァ", "Resita", "Resita", "Resita", "Resita", "Resita", "Resita"],
+    ["Caras-Severin", "Caras-Severin", "Caras-Severin", "Caras-Severin", "Caras-Severin", "Caras-Severin", "Caras-Severin"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "20360f9105030000"]
+weathercities099["Targu Jiu"] = [
+    ["Targu Jiu", "Targu Jiu", "Targu Jiu", "Targu Jiu", "Targu Jiu", "Targu Jiu", "Targu Jiu"],
+    ["ゴルジュ県", "Gorj", "Gorj", "Gorj", "Gorj", "Gorj", "Gorj"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2006108d05030000"]
+weathercities099["Deva"] = [
+    ["天部", "Deva", "Deva", "Deva", "Deva", "Deva", "Deva"],
+    ["フネドアラ県", "Hunedoara", "Hunedoara", "Hunedoara", "Hunedoara", "Hunedoara", "Hunedoara"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "209f104b05030000"]
+weathercities099["Alba Iulia"] = [
+    ["アルバ・ユリア", "Alba Iulia", "Alba Iulia", "Alba Iulia", "Alba Iulia", "Alba Iulia", "Alba Iulia"],
+    ["白線", "Alba", "Alba", "Alba", "Alba", "Alba", "Alba"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "20c210c205030000"]
+weathercities099["Drobeta-Turnu Severin"] = [
+    ["ドロベタ＝トゥルヌ・セヴェリン", "Drobeta-Turnu Severin", "Drobeta-Turnu Severin", "Drobeta-Turnu Severin", "Drobeta-Turnu Severin", "Drobeta-Turnu Severin", "Drobeta-Turnu Severin"],
+    ["メへぢんち", "Mehedinti", "Mehedinti", "Mehedinti", "Mehedinti", "Mehedinti", "Mehedinti"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1fb1101e05030000"]
+weathercities099["Craiova"] = [
+    ["クラヨーヴァ", "Craiova", "Craiova", "Craiova", "Craiova", "Craiova", "Craiova"],
+    ["ドルジュ県", "Dolj", "Dolj", "Dolj", "Dolj", "Dolj", "Dolj"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f8610ef05030000"]
+weathercities099["Slatina"] = [
+    ["スラティナ", "Slatina", "Slatina", "Slatina", "Slatina", "Slatina", "Slatina"],
+    ["オルト川", "Olt", "Olt", "Olt", "Olt", "Olt", "Olt"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f98115305030000"]
+weathercities099["Pitesti"] = [
+    ["ピテシュチ", "Pitesti", "Pitesti", "Pitesti", "Pitesti", "Pitesti", "Pitesti"],
+    ["アルジェシがわ", "Arges", "Arges", "Arges", "Arges", "Arges", "Arges"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1fe611af05030000"]
+weathercities099["Ramnicu Valcea"] = [
+    ["Ramnicu Valcea", "Ramnicu Valcea", "Ramnicu Valcea", "Ramnicu Valcea", "Ramnicu Valcea", "Ramnicu Valcea", "Ramnicu Valcea"],
+    ["Valcea", "Valcea", "Valcea", "Valcea", "Valcea", "Valcea", "Valcea"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2013115505030000"]
+weathercities099["Sibiu"] = [
+    ["シビウ", "Sibiu", "Sibiu", "Sibiu", "Sibiu", "Sibiu", "Sibiu"],
+    ["シビウ", "Sibiu", "Sibiu", "Sibiu", "Sibiu", "Sibiu", "Sibiu"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2090112c05030000"]
+weathercities099["Sighisoara"] = [
+    ["シギショアラ", "Sighisoara", "Sighisoara", "Sighisoara", "Sighisoara", "Sighisoara", "Sighisoara"],
+    ["チルグムレシ", "Mures", "Mures", "Mures", "Mures", "Mures", "Mures"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "20dd11a105030000"]
+weathercities099["Tirgu Mures"] = [
+    ["チルグムレシ", "Tirgu Mures", "Tirgu Mures", "Tirgu Mures", "Tirgu Mures", "Tirgu Mures", "Tirgu Mures"],
+    ["ムレシがわ", "Mures", "Mures", "Mures", "Mures", "Mures", "Mures"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2119117705030000"]
+weathercities099["Bistrita"] = [
+    ["ビストリツァがわ", "Bistrita", "Bistrita", "Bistrita", "Bistrita", "Bistrita", "Bistrita"],
+    ["Bistrita-Nasaud", "Bistrita-Nasaud", "Bistrita-Nasaud", "Bistrita-Nasaud", "Bistrita-Nasaud", "Bistrita-Nasaud", "Bistrita-Nasaud"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2184116c05030000"]
+weathercities099["Cluj-Napoca"] = [
+    ["クルージュ＝ナポカ", "Cluj-Napoca", "Cluj-Napoca", "Cluj-Napoca", "Cluj-Napoca", "Cluj-Napoca", "Cluj-Napoca"],
+    ["クルージュ県", "Cluj", "Cluj", "Cluj", "Cluj", "Cluj", "Cluj"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "214110c505030000"]
+weathercities099["Vatra Dornei"] = [
+    ["ヴァトラ・ドルネイ", "Vatra Dornei", "Vatra Dornei", "Vatra Dornei", "Vatra Dornei", "Vatra Dornei", "Vatra Dornei"],
+    ["スチャヴァ", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "21ab120805030000"]
+weathercities099["Radauti"] = [
+    ["ルダウチ", "Radauti", "Radauti", "Radauti", "Radauti", "Radauti", "Radauti"],
+    ["スチャヴァ", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2205126e05030000"]
+weathercities099["Suceava"] = [
+    ["スチャヴァ", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava"],
+    ["スチャヴァ", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava", "Suceava"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "21e212ab05030000"]
+weathercities099["Botosani"] = [
+    ["ボトシャニ", "Botosani", "Botosani", "Botosani", "Botosani", "Botosani", "Botosani"],
+    ["ボトシャニ", "Botosani", "Botosani", "Botosani", "Botosani", "Botosani", "Botosani"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "21f412f705030000"]
+weathercities099["Iasi"] = [
+    ["ヤシ", "Iasi", "Iasi", "Iasi", "Iasi", "Iasi", "Iasi"],
+    ["ヤシ", "Iasi", "Iasi", "Iasi", "Iasi", "Iasi", "Iasi"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2188139e05030000"]
+weathercities099["Vaslui"] = [
+    ["ヴァスルイ", "Vaslui", "Vaslui", "Vaslui", "Vaslui", "Vaslui", "Vaslui"],
+    ["ヴァスルイ", "Vaslui", "Vaslui", "Vaslui", "Vaslui", "Vaslui", "Vaslui"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "212a13b705030000"]
+weathercities099["Bacau"] = [
+    ["バカウ", "Bacau", "Bacau", "Bacau", "Bacau", "Bacau", "Bacau"],
+    ["バカウ", "Bacau", "Bacau", "Bacau", "Bacau", "Bacau", "Bacau"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2120132405030000"]
+weathercities099["Onesti"] = [
+    ["オネスティ", "Onesti", "Onesti", "Onesti", "Onesti", "Onesti", "Onesti"],
+    ["バカウ", "Bacau", "Bacau", "Bacau", "Bacau", "Bacau", "Bacau"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "20e5130905030000"]
+weathercities099["Focsani"] = [
+    ["フォクシャニ", "Focsani", "Focsani", "Focsani", "Focsani", "Focsani", "Focsani"],
+    ["ヴランチャ県", "Vrancea", "Vrancea", "Vrancea", "Vrancea", "Vrancea", "Vrancea"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "207f135305030000"]
+weathercities099["Buzau"] = [
+    ["ブザウ", "Buzau", "Buzau", "Buzau", "Buzau", "Buzau", "Buzau"],
+    ["ブザウ", "Buzau", "Buzau", "Buzau", "Buzau", "Buzau", "Buzau"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "201e131105030000"]
+weathercities099["Ploiesti"] = [
+    ["プロイエシュチ", "Ploiesti", "Ploiesti", "Ploiesti", "Ploiesti", "Ploiesti", "Ploiesti"],
+    ["プラホヴァ県", "Prahova", "Prahova", "Prahova", "Prahova", "Prahova", "Prahova"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1ff3128305030000"]
+weathercities099["Calarasi"] = [
+    ["クルラシ", "Calarasi", "Calarasi", "Calarasi", "Calarasi", "Calarasi", "Calarasi"],
+    ["クルラシ", "Calarasi", "Calarasi", "Calarasi", "Calarasi", "Calarasi", "Calarasi"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f6e136f05030000"]
+weathercities099["Tulcea"] = [
+    ["トゥルチャ", "Tulcea", "Tulcea", "Tulcea", "Tulcea", "Tulcea", "Tulcea"],
+    ["トゥルチャ", "Tulcea", "Tulcea", "Tulcea", "Tulcea", "Tulcea", "Tulcea"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "2022147a05030000"]
+weathercities099["Turnu Magurele"] = [
+    ["ツルヌムグレレ", "Turnu Magurele", "Turnu Magurele", "Turnu Magurele", "Turnu Magurele", "Turnu Magurele", "Turnu Magurele"],
+    ["テレオルマン県", "Teleorman", "Teleorman", "Teleorman", "Teleorman", "Teleorman", "Teleorman"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f1c11af05030000"]
+weathercities099["Rosiorii de Vede"] = [
+    ["Rosiorii de Vede", "Rosiorii de Vede", "Rosiorii de Vede", "Rosiorii de Vede", "Rosiorii de Vede", "Rosiorii de Vede", "Rosiorii de Vede"],
+    ["テレオルマン県", "Teleorman", "Teleorman", "Teleorman", "Teleorman", "Teleorman", "Teleorman"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f5e11c605030000"]
+weathercities099["Slobozia"] = [
+    ["スロボジア", "Slobozia", "Slobozia", "Slobozia", "Slobozia", "Slobozia", "Slobozia"],
+    ["ラろみた", "Lalomita", "Lalomita", "Lalomita", "Lalomita", "Lalomita", "Lalomita"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1fb0137505030000"]
+weathercities099["Fetesti"] = [
+    ["Fetesti", "Fetesti", "Fetesti", "Fetesti", "Fetesti", "Fetesti", "Fetesti"],
+    ["ラろみた", "Lalomita", "Lalomita", "Lalomita", "Lalomita", "Lalomita", "Lalomita"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f9513c905030000"]
+weathercities099["Giurgiu"] = [
+    ["ジュルジュ", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu"],
+    ["ジュルジュ", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu"],
+    ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f37127805030000"]
+	
 weathercities100 = collections.OrderedDict()
 
 weathercities100["Moscow"] = [
