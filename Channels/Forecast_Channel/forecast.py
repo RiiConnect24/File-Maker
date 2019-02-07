@@ -51,9 +51,9 @@ weathercities = [forecastlists.weathercities001, forecastlists.weathercities008,
                  forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077,
                  forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082,
                  forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094,
-                 forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities098,
-                 forecastlists.weathercities105, forecastlists.weathercities107, forecastlists.weathercities108,
-                 forecastlists.weathercities110]
+                 forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities097,
+                 forecastlists.weathercities098, forecastlists.weathercities099, forecastlists.weathercities105,
+                 forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
 VERSION = 4.2
 apirequests = 0  # API Request Counter
