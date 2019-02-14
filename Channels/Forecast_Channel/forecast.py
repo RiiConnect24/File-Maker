@@ -121,10 +121,6 @@ def get_epoch():
     return int(time.time())
 
 
-def get_rounded_hour():
-    return round(time.time() / 3600) * 3600
-
-
 def get_city(list, key):
     return list[key][0][1]
 
@@ -149,8 +145,12 @@ def pad(amnt):
     return "\0" * amnt
 
 
-def get_index(list, key, num):
-    return list[key][num]
+def get_lat(list, key):
+    return list[key][3][:4]
+
+def get_lng(list, key):
+    return list[key][3][:8][4:]
+
 
 def isJapan(list,key):
     return list[key][2][1] == "Japan"
@@ -414,16 +414,19 @@ def get_locationkey(list, key):
     elif region == '' and not matches_country_code(list, key):
         a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
         b = 'FE'
-        c = hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2)
+        c = hex(forecastlists.bincountries[country])[2:].zfill(2)
     else:
         a = hex(weatherloc[listid][country][region][city])[2:].zfill(4)
         b = hex(weatherloc[listid]['regions'][country][region])[2:].zfill(2)
-        c = hex(int(str(forecastlists.bincountries[country])))[2:].zfill(2)
+        c = hex(forecastlists.bincountries[country])[2:].zfill(2)
     return "".join([c, b, a])
 
 
-def zoom(list, mode, key):
-    return get_index(list, key, 3)[8:][:2] if mode == 1 else get_index(list, key, 3)[10:][:2] if mode == 2 else value
+def zoom(list, key, mode):
+    if mode == 1:
+        return list[key][3][8:][:2]
+    if mode == 2:
+        return list[key][3][10:][:2]
 
 
 def generate_locationkeys(list):
@@ -491,8 +494,8 @@ def blank_data(list, key, clear):
     today[key][4] = 'FFFF'
     tomorrow[key][4] = 'FFFF'
     if clear:
-        globe[key]['lat'] = binascii.unhexlify(get_index(list, key, 3)[:4])
-        globe[key]['lng'] = binascii.unhexlify(get_index(list, key, 3)[:8][4:])
+        globe[key]['lat'] = binascii.unhexlify(get_lat(list, key))
+        globe[key]['lng'] = binascii.unhexlify(get_lng(list, key))
         globe[key]['time'] = get_epoch()
 
 
@@ -848,8 +851,8 @@ def get_data(list, name):
     citycount += 1
     cache[name] = get_all(list, name)
     blank_data(list, name, True)
-    lat = coord_decode(get_index(list, name, 3)[:4])
-    lon = coord_decode(get_index(list, name, 3)[:8][4:])
+    lat = coord_decode(get_lat(list, name))
+    lon = coord_decode(get_lng(list, name))
     if config["enableTenki"] and isJapan(list,name): get_tenki_data(name, lat, lon)
     weather_data[name] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
 
@@ -1129,8 +1132,8 @@ def make_location_table(list):
         location_table["country_text_offset_%s" % numbers] = u32(0)  # Offset for location's country text
         location_table["latitude_coordinates_%s" % numbers] = globe[keys]['lat']  # Latitude coordinates for location on globe
         location_table["longitude_coordinates_%s" % numbers] = globe[keys]['lng']  # Longitude coordinates for location on globe
-        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(str(zoom(list, 1, keys)))  # Location zoom for location on globe
-        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(list, 2, keys))  # Location zoom for location on globe
+        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(zoom(list, keys, 1))  # Location zoom for location on globe
+        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(list, keys, 2))  # Location zoom for location on globe
         location_table["padding_%s" % numbers] = u16(0)
 
     return location_table
