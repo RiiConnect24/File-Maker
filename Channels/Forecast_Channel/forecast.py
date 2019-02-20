@@ -26,7 +26,6 @@ from datetime import datetime, timedelta
 
 import requests
 import rsa
-from bs4 import BeautifulSoup
 from datadog import statsd
 
 from Channels.Forecast_Channel import forecastlists
