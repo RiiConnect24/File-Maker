@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 4.2
+# VERSION 4.3
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
@@ -55,7 +55,7 @@ weathercities = [forecastlists.weathercities001, forecastlists.weathercities008,
                  forecastlists.weathercities098, forecastlists.weathercities099, forecastlists.weathercities105,
                  forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
 
-VERSION = 4.2
+VERSION = 4.3
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
@@ -233,6 +233,14 @@ def mode_calc(list):
     if not duplicate: return largestKey
 
 
+def populate_international(list):
+    for k, v in forecastlists.weathercities_international.items():
+            if k not in list:
+                list[k] = v
+            elif v[2][1] is not list[k][2][1]:
+                list[k + " 2"] = v
+
+
 def size(data):
     total = 2
     for k, v in data.items():
@@ -257,6 +265,22 @@ def worker():
         except Exception as e:
             log(e, "WARNING")
             continue
+
+
+def spawn_threads():
+    global threads
+    for i in range(concurrent):
+            t = threading.Thread(target=worker)
+            t.daemon = True
+            threads.append(t)
+            t.start()
+
+def close_threads():
+    for t in threads:
+        t.join(60)
+        if t.isAlive():
+            log("Stalled thread detected", "CRITICAL")
+            exit()
 
 
 def refresh(type):
@@ -367,12 +391,12 @@ def reset_data():
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 
-def request_data(url, type):
+def request_data(url, type=1):
     global retrycount, apirequests, bw_usage, errors
     apirequests += 1
     i = 0
-    c = 0
-    while c == 0:
+    c = False
+    while not c:
         if i == 3:
             errors += 1
             return -1
@@ -384,15 +408,14 @@ def request_data(url, type):
         else: data = requests.get(url)
         status_code = data.status_code
         if status_code == 200:
-            c = 1
+            c = True
         i += 1
     return data.content
 
 
-def timestamps(mode, key):
+def timestamps(mode, key=None):
     time = time_convert(get_epoch())
-    if key != 0:
-        citytime = time_convert(globe[key]['time'])
+    if key: citytime = time_convert(globe[key]['time'])
     if mode == 0:
         timestamp = time
     elif mode == 1:
@@ -453,7 +476,7 @@ def generate_locationkeys(list):
 """If the script was unable to get forecast for a city, it's filled with this blank data."""
 
 
-def blank_data(list, key, clear):
+def blank_data(list, key):
     wind[key] = {}
     uvindex[key] = {}
     precipitation[key] = {}
@@ -493,10 +516,9 @@ def blank_data(list, key, clear):
         tomorrow[key][k] = -128 # Tomorrow Temperature Values
     today[key][4] = 'FFFF'
     tomorrow[key][4] = 'FFFF'
-    if clear:
-        globe[key]['lat'] = binascii.unhexlify(get_lat(list, key))
-        globe[key]['lng'] = binascii.unhexlify(get_lng(list, key))
-        globe[key]['time'] = get_epoch()
+    globe[key]['lat'] = binascii.unhexlify(get_lat(list, key))
+    globe[key]['lng'] = binascii.unhexlify(get_lng(list, key))
+    globe[key]['time'] = get_epoch()
 
 
 def get_accuweather_api(list, key):
@@ -573,74 +595,42 @@ def get_accuweather_api(list, key):
     week[key][34] = get_icon(int(forecast[7][6][2].text), list, key)
     week[key][35] = get_icon(int(forecast[8][6][2].text), list, key)
     week[key][36] = get_icon(int(forecast[9][6][2].text), list, key)
-    time_index = [[3, 9, 15, 21], [27, 33, 39, 45]]
+    
+    time_index = [[3,9,15,21], [27,33,39,45]]
     hourlyAvg = [-3,-2,-1,0,1,2]
     hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
-    for i in range(0, 4):
-        temp = time_index[0][i] - hour
-        precip = []
-        hourlyAvgIcons = []
-        for j in hourlyAvg:
-            if validHour(temp+j):
-                precip.append(int(hourly_forecast[temp+j][12].text))
-                hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+j][0].text), list, key))
-        if len(precip) > 0 and not (config["enableTenki"] and isJapan(list, key)): precipitation[key][i] = int(round(sum(precip)/len(precip), -1))
-        modeValue = mode_calc(hourlyAvgIcons)
-        if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][i] = modeValue
-        elif validHour(temp): hourly[key][i] = get_icon(int(hourly_forecast[temp][0].text), list, key)
-        else: hourly[key][i] = get_icon(int(-1), list, key)
-        temp = time_index[1][i] - hour
-        precip = []
-        hourlyAvgIcons = []
-        for j in hourlyAvg:
-            if validHour(temp+j):
-                precip.append(int(hourly_forecast[temp+j][12].text))
-                hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+j][0].text), list, key))
-        if len(precip) > 0 and not (config["enableTenki"] and isJapan(list, key)): precipitation[key][i + 4] = int(round(sum(precip)/len(precip), -1))
-        modeValue = mode_calc(hourlyAvgIcons)
-        if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][i + 4] = modeValue
-        elif validHour(temp): hourly[key][i + 4] = get_icon(int(hourly_forecast[temp][0].text), list, key)
-        else: hourly[key][i + 4] = get_icon(int(-1), list, key)
+    for i in [0,1]:
+        index_offset = 0 if i == 0 else 4
+        for j in range(0,4):
+            temp = time_index[i][j] - hour
+            precip = []
+            hourlyAvgIcons = []
+            for k in hourlyAvg:
+                if validHour(temp+k):
+                    precip.append(int(hourly_forecast[temp+k][12].text))
+                    hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+k][0].text), list, key))
+            if len(precip) > 0 and isJapan(list, key): precipitation[key][j + index_offset] = int(round(sum(precip)/len(precip), -1))
+            modeValue = mode_calc(hourlyAvgIcons)
+            if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][j + index_offset] = modeValue
+            elif validHour(temp): hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp][0].text), list, key)
+            else: hourly[key][j + index_offset] = get_icon(int(-1), list, key)
 
-"""Tenki's where we're getting the laundry index for Japan."""
-"""Currently, it's getting it from the webpage itself, but we might look for an API they use."""
 
-def get_tenki_data(key, lat, lon):
-    log("Getting Tenki Data for %s ..." % key, "VERBOSE")
-    if not tenki_db:
-        tenkiapi = json.loads(request_data("http://static.tenki.jp/api/inapp/location.html?lat={}&lon={}".format(lat, lon), 1))
-        if "jiscode" in tenkiapi: tenki[key] = tenkiapi["jiscode"]
-        else: tenki[key] = None
-    else: tenki[key] = tenki_db[key]
-    if tenki[key]:
-        response = json.loads(request_data("http://static.tenki.jp/static-api/app/forecast-{}.json".format(tenki[key]), 1))
-        tenki_laundry_url = response["indexes"]["cloth_dried"]["url"]
-        tenki_id = tenki_laundry_url.replace(".html","")[42:]
-        tenki_forecast_url = "https://tenki.jp/lite/forecast/%s/%s/10days.html" % (tenki_id, tenki[key])
-        laundry_url = request_data(tenki_laundry_url, 1)
-        soup = BeautifulSoup(laundry_url, "lxml")
-        laundry[key] = int(soup.find("span", {"class": "indexes-telop"}).contents[0])
-        tendays = request_data(tenki_forecast_url, 1)
-        soup = BeautifulSoup(tendays, "lxml")
-        
-        for i in range(1, 8):
-            precipitation[key][i + 7] = int(soup.find_all("span", {"class": "prob-precip-icon"})[i].text.replace("%", ""))
-        today[key][8] = int(response["days"]["entries"][0]["max_t_d"].replace("+", ""))
-        today[key][9] = int(response["days"]["entries"][0]["min_t_d"].replace("+", ""))
-        today[key][6] = to_fahrenheit(today[key][8], False)
-        today[key][5] = to_fahrenheit(today[key][9], False)
-        tomorrow[key][8] = int(response["days"]["entries"][1]["max_t_d"].replace("+", ""))
-        tomorrow[key][9] = int(response["days"]["entries"][1]["min_t_d"].replace("+", ""))
-        tomorrow[key][6] = to_fahrenheit(tomorrow[key][8], False)
-        tomorrow[key][5] = to_fahrenheit(tomorrow[key][9], False)
-        if response["days"]["entries"][0]["p_zero"] != "---": precipitation[key][0] = int(response["days"]["entries"][0]["p_zero"])
-        if response["days"]["entries"][0]["p_six"] != "---": precipitation[key][1] = int(response["days"]["entries"][0]["p_six"])
-        if response["days"]["entries"][0]["p_twelve"] != "---": precipitation[key][2] = int(response["days"]["entries"][0]["p_twelve"])
-        if response["days"]["entries"][0]["p_eighteen"] != "---": precipitation[key][3] = int(response["days"]["entries"][0]["p_eighteen"])
-        if response["days"]["entries"][1]["p_zero"] != "---": precipitation[key][4] = int(response["days"]["entries"][1]["p_zero"])
-        if response["days"]["entries"][1]["p_six"] != "---": precipitation[key][5] = int(response["days"]["entries"][1]["p_six"])
-        if response["days"]["entries"][1]["p_twelve"] != "---": precipitation[key][6] = int(response["days"]["entries"][1]["p_twelve"])
-        if response["days"]["entries"][1]["p_eighteen"] != "---": precipitation[key][7] = int(response["days"]["entries"][1]["p_eighteen"])
+def parse_data(list):
+    global weather_data
+    for k, v in weather_data.items():
+        try:
+            weather_data[k] = ElementTree.fromstring(v)
+            if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
+                weather_data[k] = None
+        except Exception as e:
+            log(e, "WARNING")
+            weather_data[k] = None
+            continue
+        if weather_data[k] is not None:
+            get_accuweather_api(list, k)
+        else:
+            log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
 
 
 def hex_write(loc, data):
@@ -720,8 +710,8 @@ def make_forecast_bin(list, data):
     file2 = 'forecast.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
     file3 = 'forecast.{}'.format(extension)
     file.write(pad(12))
-    file.write(u32(timestamps(0, 0)))
-    file.write(u32(timestamps(2, 0)))
+    file.write(u32(timestamps(0)))
+    file.write(u32(timestamps(2)))
     for i in dictionaries:
         for v in i.values():
             file.write(v)
@@ -794,8 +784,8 @@ def make_short_bin(list, data):
     file2 = 'short.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
     file3 = 'short.{}'.format(extension)
     file = io.BytesIO()
-    file.write(u32(timestamps(0, 0)))
-    file.write(u32(timestamps(2, 0)))
+    file.write(u32(timestamps(0)))
+    file.write(u32(timestamps(2)))
     for v in short_forecast_header.values():
         file.write(v)
     count = file.tell()
@@ -846,15 +836,14 @@ def sign_file(name, local_name, server_name):
     os.remove(local_name)
 
 
-def get_data(list, name):
+def get_data(list, key):
     global citycount, cache, weather_data
     citycount += 1
-    cache[name] = get_all(list, name)
-    blank_data(list, name, True)
-    lat = coord_decode(get_lat(list, name))
-    lon = coord_decode(get_lng(list, name))
-    if config["enableTenki"] and isJapan(list,name): get_tenki_data(name, lat, lon)
-    weather_data[name] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
+    cache[key] = get_all(list, key)
+    blank_data(list, key)
+    lat = coord_decode(get_lat(list, key))
+    lon = coord_decode(get_lng(list, key))
+    weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
 
 
 def make_header_short(list):
@@ -1217,14 +1206,6 @@ with open("./Channels/Forecast_Channel/config.json", "rb") as f:
 if config["production"]:
     setup_log(config["sentry_url"], False)
 
-if config["enableTenki"] and os.path.exists("tenki.db"):
-    with open("tenki.db",'rb') as f:
-        tenki_db = pickle.loads(f.read())
-    if time.time() > tenki_db["expiration"]:
-        log("Tenki database expired, invalidating", "VERBOSE")
-        os.remove("tenki.db")
-        tenki_db = None
-
 s = requests.Session()  # Use session to speed up requests
 s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
 ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
@@ -1236,8 +1217,8 @@ ui_run = True
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
+
 for list in weathercities:
-    global language_code, country_code, mode, shortcount, weather_data, region_flag
     threads = []
     status = 1
     language_code = 1
@@ -1249,46 +1230,21 @@ for list in weathercities:
     country_code = forecastlists.bincountries[currentlist]
     region_flag = get_region_flag(country_code)
     bins = get_bins(country_code)
-    for k, v in forecastlists.weathercities_international.items():
-        if k not in list:
-            list[k] = v
-        elif v[2][1] is not list[k][2][1]:
-            list[k + " 2"] = v
+    populate_international(list)
     generate_locationkeys(list)
     for keys in list.keys():
         if not matches_country_code(list, keys) or get_region(list, keys) == '':
             shortcount += 1
         if keys in cache and cache[keys] == get_all(list, keys):
             cached += 1
-    for keys in list.keys():
-        if keys not in cache or cache[keys] != get_all(list, keys):
+        else:
             q.put([list, keys])
-    for i in range(concurrent):
-        t = threading.Thread(target=worker)
-        t.daemon = True
-        threads.append(t)
-        t.start()
+    spawn_threads()
     q.join()
     loop = False
-    for t in threads:
-        t.join(60)
-        if t.isAlive():
-            log("Stalled thread detected", "CRITICAL")
-            exit()
+    close_threads()
     status = 2
-    for k, v in weather_data.items():
-        try:
-            weather_data[k] = ElementTree.fromstring(v)
-            if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
-                weather_data[k] = None
-        except Exception as e:
-            log(e, "WARNING")
-            weather_data[k] = None
-            continue
-        if weather_data[k] is not None:
-            get_accuweather_api(list, k)
-        else:
-            log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
+    parse_data(list)
     cities += citycount
     status = 3
     data = generate_data(list, bins)
@@ -1305,12 +1261,6 @@ time.sleep(0.15)
 ui_run = False
 ui_thread.join()
 dump_db()
-
-if config["enableTenki"] and not tenki_db:
-    log("Writing Tenki Database ...", "VERBOSE")
-    with open('tenki.db', 'wb') as f:
-        tenki["expiration"] = time.time()+604800
-        pickle.dump(tenki, f)
 
 if config["production"]:
     """This will use a webhook to log that the script has been ran."""
