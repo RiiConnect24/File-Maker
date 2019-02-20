@@ -532,8 +532,8 @@ class Parse(News):
                 return []
         else:
             return []
-
-        self.article = BeautifulSoup(self.newsdata["storyHTML"], "lxml").text.replace("\n", "\n\n")
+        
+        self.article = BeautifulSoup(self.newsdata["storyHTML"].replace("</p>", "\n\n</p>"), "lxml").text.replace("\n", "\n\n")
 
         if self.article[-2:] == "\n\n":
             self.article = self.article[:-2]
