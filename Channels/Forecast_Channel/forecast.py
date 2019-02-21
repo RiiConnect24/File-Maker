@@ -70,7 +70,6 @@ errors = 0  # Errors
 bandwidth = 0.0  # Bandwidth
 file = None
 loop = None
-tenki_db = None
 
 uvindex = {}
 wind = {}
@@ -86,7 +85,6 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
-tenki = {}
 
 
 def temp(num):
