@@ -70,7 +70,6 @@ errors = 0  # Errors
 bandwidth = 0.0  # Bandwidth
 file = None
 loop = None
-tenki_db = None
 
 uvindex = {}
 wind = {}
@@ -86,7 +85,6 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
-tenki = {}
 
 
 def temp(num):
@@ -339,26 +337,16 @@ def ui():
         out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth, cities, errors)
         out += "\nProcessing List #%s/%s (%s): %s %s\n\n" % (
         listid, len(weathercities), country_code, currentlist, "." * progcount)
-        if status == 1 and dl:
-            out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
-        else:
-            out += "Downloading Forecasts [%s] 100%%\n" % display
-        if status == 2:
-            out += "Parsing Data [%s]\n" % prog[progcount]
-        elif status == 1:
-            out += "Parsing Data [-]\n"
-        else:
-            out += "Parsing Data [%s]" % display + "\n"
-        if status == 3:
-            out += "Generating Data [%s]\n" % prog[progcount]
-        elif status == 4:
-            out += "Generating Data [%s]" % display + "\n"
-        else:
-            out += "Generating Data [-]\n"
-        if status == 4:
-            out += "Building Files [%s]\n\n" % prog[progcount]
-        else:
-            out += "Building Files [-]\n\n"
+        if status == 1 and dl: out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
+        else: out += "Downloading Forecasts [%s] 100%%\n" % display
+        if status == 2: out += "Parsing Data [%s]\n" % prog[progcount]
+        elif status == 1: out += "Parsing Data [-]\n"
+        else: out += "Parsing Data [%s]" % display + "\n"
+        if status == 3: out += "Generating Data [%s]\n" % prog[progcount]
+        elif status == 4: out += "Generating Data [%s]" % display + "\n"
+        else: out += "Generating Data [-]\n"
+        if status == 4: out += "Building Files [%s]\n\n" % prog[progcount]
+        else: out += "Building Files [-]\n\n"
         out += "List Progress:  %s" % progbar
         out += "\nTotal Progress: %s%% " % totalpercent + totalprog
         out += "\n\n" + "=" * 64
