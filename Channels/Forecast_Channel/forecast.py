@@ -640,6 +640,7 @@ def make_bins(list, data):
 
 
 def generate_data(list, bins):
+    global mode, language_code
     long_forecast_tables = dict.fromkeys([1, 2])
     short_japan_tables = dict.fromkeys([1, 2])
     short_forecast_tables = dict.fromkeys([1, 2])
@@ -653,13 +654,13 @@ def generate_data(list, bins):
     laundry_text_table = make_laundry_text_table()
     location_table = make_location_table(list)
     weathervalue_offset_table = make_weather_offset_table()
-    for mode in [1, 2]:
-        globals()['mode'] = mode
-        long_forecast_tables[mode] = make_long_forecast_table(list)
-        short_japan_tables[mode] = make_forecast_short_table(list)
-        short_forecast_tables[mode] = make_short_forecast_table(list)
+    for i in [1, 2]:
+        mode = i
+        long_forecast_tables[i] = make_long_forecast_table(list)
+        short_japan_tables[i] = make_forecast_short_table(list)
+        short_forecast_tables[i] = make_short_forecast_table(list)
     for language in bins:
-        globals()['language_code'] = language
+        language_code = language
         uvindex_text_tables[language] = make_uvindex_text_table()
         text_tables[language] = make_forecast_text_table(list)
         weathervalue_text_tables[language] = make_weather_value_table()
@@ -1220,12 +1221,9 @@ for list in weathercities:
     populate_international(list)
     generate_locationkeys(list)
     for keys in list.keys():
-        if not matches_country_code(list, keys) or get_region(list, keys) == '':
-            shortcount += 1
-        if keys in cache and cache[keys] == get_all(list, keys):
-            cached += 1
-        else:
-            q.put([list, keys])
+        if not matches_country_code(list, keys) or get_region(list, keys) == '': shortcount += 1
+        if keys in cache and cache[keys] == get_all(list, keys): cached += 1
+        else: q.put([list, keys])
     spawn_threads()
     q.join()
     loop = False
