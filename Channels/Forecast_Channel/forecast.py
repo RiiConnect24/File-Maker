@@ -92,15 +92,15 @@ def temp(num):
 
 
 def to_celsius(temp):
-    return int((temp - 32) * 5 / 9)
+    return int(round((float(temp) - 32) * 5 / 9))
 
 
 def to_fahrenheit(temp, sub=True):
-    return int((temp * 9 / 5) + 32 if sub is True else 0)
+    return int(round(float(temp) * 9 / 5)) + (32 if sub is True else 0)
 
 
 def kmh_mph(wind):
-    return int(round(wind * 0.621371))
+    return int(round(float(wind) * 0.621371))
 
 
 def mph_kmh(wind):
