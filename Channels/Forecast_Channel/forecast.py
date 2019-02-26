@@ -1242,7 +1242,7 @@ for list in weathercities:
             reset_data()
     lists += 1
 
-time.sleep(0.15)
+time.sleep(0.1)
 ui_run = False
 ui_thread.join()
 dump_db()
