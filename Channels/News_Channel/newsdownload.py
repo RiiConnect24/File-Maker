@@ -611,9 +611,9 @@ class Parse(News):
 
         try:
             if "(AFP)" in self.article:
-                buf = StringIO(self.article)
+                buf = BytesIO(self.article)
                 line = buf.readlines()[-1]
-                buf = StringIO(self.article)
+                buf = BytesIO(self.article)
                 self.location = line.strip()[22:-19]
                 self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
         except AttributeError:
