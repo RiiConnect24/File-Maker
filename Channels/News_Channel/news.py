@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from Channels.News_Channel import newsdownload, newsmake
-from newsdownload import News
-from newsmake import process_news
+from .newsdownload import News
+from .newsmake import process_news
 import sys
 from utils import *
 
@@ -54,7 +54,7 @@ def download(source):
     elif source == "reuters_japanese":
         process_news("Reuters Japanese", "reuters_japanese", 0, japan, News("reuters_japanese"))
     else:
-        print "Invalid source specified."
+        print("Invalid source specified.")
         exit()
 
 
