@@ -15,7 +15,7 @@ import sys
 import textwrap
 import time
 from html.parser import HTMLParser
-from io import BytesIO
+from io import BytesIO, StringIO
 from datetime import datetime
 
 import feedparser
@@ -611,9 +611,9 @@ class Parse(News):
 
         try:
             if "(AFP)" in self.article:
-                buf = BytesIO(self.article)
+                buf = StringIO(self.article)
                 line = buf.readlines()[-1]
-                buf = BytesIO(self.article)
+                buf = StringIO(self.article)
                 self.location = line.strip()[22:-19]
                 self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
         except AttributeError:
