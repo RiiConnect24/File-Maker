@@ -24,7 +24,7 @@ from datetime import timedelta, datetime, date  # Used to get time stuff.
 
 import rsa
 
-import newsdownload
+from . import newsdownload
 from datadog import statsd
 from utils import setup_log, log, mkdir_p, u8, u16, u32, u32_littleendian
 
@@ -47,7 +47,8 @@ sources = {
         ]),
         "languages": [1, 3, 4],
         "language_code": 1,
-        "country_code": 49
+        "country_code": 49,
+        "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed."
     },
     "ap_spanish": {
         "topics_news": collections.OrderedDict([
@@ -58,7 +59,8 @@ sources = {
         ]),
         "languages": [1, 3, 4],
         "language_code": 4,
-        "country_code": 49
+        "country_code": 49,
+        "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed."
     },
     "reuters_europe_english": {
         "topics_news": collections.OrderedDict([
@@ -73,7 +75,8 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 1,
-        "country_code": 110
+        "country_code": 110,
+        "copyright": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies."
     },
     "afp_spanish": {
         "topics_news": collections.OrderedDict([
@@ -86,7 +89,8 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 4,
-        "country_code": 110
+        "country_code": 110,
+        "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse",
     },
     "afp_french": {
         "topics_news": collections.OrderedDict([
@@ -99,7 +103,8 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 3,
-        "country_code": 110
+        "country_code": 110,
+        "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
     },
     "dtoday_german": {
         "topics_news": collections.OrderedDict([
@@ -111,7 +116,8 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 2,
-        "country_code": 110
+        "country_code": 110,
+        "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse"
     },
     "ansa_italian": {
         "topics_news": collections.OrderedDict([
@@ -123,7 +129,8 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 5,
-        "country_code": 110
+        "country_code": 110,
+        "copyright": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma."
     },
     "nu_dutch": {
         "topics_news": collections.OrderedDict([
@@ -137,7 +144,8 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 6,
-        "country_code": 110
+        "country_code": 110,
+        "copyright": "© {} Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group"
     },
     "reuters_japanese": {
         "topics_news": collections.OrderedDict([
@@ -149,13 +157,14 @@ sources = {
         ]),
         "languages": [0],
         "language_code": 0,
-        "country_code": 1
+        "country_code": 1,
+        "copyright": "© Copyright Reuters %d. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 "
     }
 }
 
 
 def process_news(name, mode, language, countries, d):
-    print "News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name
+    print("News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name)
 
     global language_code, system
 
@@ -166,7 +175,7 @@ def process_news(name, mode, language, countries, d):
 
     i = 0
 
-    for key in data.keys():
+    for key in list(data.keys()):
         i += 1
         if i > 25:
             del data[key]
@@ -243,7 +252,7 @@ def make_news_bin(mode, console, data, locations_data):
     source = sources[mode]
 
     if source is None:
-        print "Could not find %s in sources!"
+        print("Could not find %s in sources!")
 
     topics_news = source["topics_news"]
     languages = source["languages"]
@@ -255,10 +264,10 @@ def make_news_bin(mode, console, data, locations_data):
     if not os.path.exists("newstime"):
         os.mkdir("newstime")
 
-    for topics in topics_news.values():
+    for topics in list(topics_news.values()):
         newstime = collections.OrderedDict()
 
-        for keys in data.keys():
+        for keys in list(data.keys()):
             if topics in keys:
                 numbers += 1
 
@@ -280,7 +289,7 @@ def make_news_bin(mode, console, data, locations_data):
     pictures_table = make_pictures_table(header, data)
     make_articles(articles_table, pictures_table, data)
     make_topics(topics_table, topics_news)
-    make_source_name_copyright(source_table, data)
+    make_source_name_copyright(source_table, source, data)
     make_locations(locations_data, locations_table)
     make_source_pictures(source_table, data)
     make_pictures(pictures_table, data)
@@ -290,7 +299,7 @@ def make_news_bin(mode, console, data, locations_data):
 
     headlines = []
 
-    for article in data.values():
+    for article in list(data.values()):
         if article[3].decode("utf-16be") not in headlines:
             headlines.append(article[3].decode("utf-16be") + "\n")
 
@@ -303,7 +312,7 @@ def make_news_bin(mode, console, data, locations_data):
 
 
 def offset_count(): return u32(
-    12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
+    12 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
 
 
 """Return a timestamp."""
@@ -326,7 +335,7 @@ def get_timestamp(mode):
 def remove_duplicates(data):
     headlines = []
 
-    for k,v in data.items():
+    for k,v in list(data.items()):
         if v[3] not in headlines:
             headlines.append(v[3])
         elif v[3] in headlines:
@@ -389,7 +398,7 @@ def make_header(data):
 
     headlines = []
 
-    for article in data.values():
+    for article in list(data.values()):
         if numbers < 11:
             if article[3] not in headlines:
                 numbers += 1
@@ -411,7 +420,7 @@ def make_wiimenu_articles(header, data):
 
     headlines = []
 
-    for article in data.values():
+    for article in list(data.values()):
         if numbers < 11:
             if article[3] not in headlines:
                 numbers += 1
@@ -446,7 +455,7 @@ def make_topics_table(header, topics_news):
 
     numbers = 0
 
-    for _ in topics_news.values():
+    for _ in list(topics_news.values()):
         numbers += 1
         topics_table["topics_%s_offset" % str(numbers)] = u32(0)  # Offset for the topic.
         topics_table["topics_%s_article_number" % str(numbers)] = u32(
@@ -474,34 +483,35 @@ def make_timestamps_table(mode, topics_table, topics_news):
             start_time = datetime.today() - timedelta(hours=numbers)
             times_files.append("newstime/newstime.%s-%s-%s-%s" % (str(start_time)[11:-13], str(mode), topics, system))
 
-        for files in times_files:
-            if os.path.exists(files):
-                newstime = pickle.load(open(files, "rb"))
+        try:
+            for files in times_files:
+                with open(files, "rb") as pickled:
+                    newstime = pickle.load(pickled, encoding='bytes') # TODO: Change stored encoding later
 
-                for keys in newstime.keys():
-                    if keys not in times:
-                        times[keys] = newstime[keys]
+                    for keys in list(newstime.keys()):
+                        if keys not in times:
+                            times[keys] = newstime[keys]
+        except:
+            pass
 
-        times_list = []
+        timestamps = b""
+        counter = 0
 
-        for values in list(times.values()):
-            times_list.append(str(values))
+        for value in times.values():
+            timestamps = timestamps + value
+            counter += 1
 
-        timestamps = ''.join(times_list)  # Timestamps.
-
-        return timestamps
+        return timestamps, counter
 
     numbers = 0
 
-    for topics in topics_news.values():
+    for topics in list(topics_news.values()):
         numbers += 1
-        timestamps_add = timestamps_table_add(topics)
-        if timestamps_add != 0:
-            topics_table["topics_%s_article_number" % numbers] = u32(len(
-                timestamps_add) / 8)  # Number of articles that will be in a certain topic. Also, I don't like how it divides the thing by 8 but whatever.
-            topics_table[
-                "topics_%s_article_offset" % numbers] = offset_count()  # Offset for the articles to choose for the topic.
-            timestamps_table["timestamps_%s" % numbers] = timestamps_add  # Timestamps.
+        timestamps = timestamps_table_add(topics)
+        if timestamps[1] != 0:
+            topics_table["topics_%s_article_number" % numbers] = u32(timestamps[1])
+            topics_table["topics_%s_article_offset" % numbers] = offset_count()  # Offset for the articles to choose for the topic.
+            timestamps_table["timestamps_%s" % numbers] = timestamps[0]  # Timestamps.
 
     return timestamps_table
 
@@ -518,17 +528,17 @@ def make_articles_table(mode, locations_data, header, data):
 
     header["articles_offset"] = offset_count()
 
-    for keys, article in data.items():
+    for keys, article in list(data.items()):
         numbers += 1
         articles_table["article_%s_number" % numbers] = u32(numbers)  # Number for the article.
         articles_table["source_%s_number" % numbers] = u32(0)  # Number for the source.
         articles_table["location_%s_number" % numbers] = u32(4294967295)  # Number for the location.
 
-        for locations in locations_data.keys():
+        for locations in list(locations_data.keys()):
             for article_name in locations_data[locations][1]:
                 if keys == article_name:
                     articles_table["location_%s_number" % numbers] = u32(
-                        locations_data.keys().index(locations))  # Number for the location.
+                        list(locations_data.keys()).index(locations))  # Number for the location.
 
         if article[4] is not None:
             articles_table["term_timestamp_%s" % numbers] = get_timestamp(1)  # Timestamp for the term.
@@ -585,7 +595,7 @@ def make_source_table(header, articles_table, data):
 
     numbers_article = 0
 
-    for article in data.values():
+    for article in list(data.values()):
         if article[8] not in source_articles:
             source_articles.append(article[8])
 
@@ -606,7 +616,7 @@ def make_source_table(header, articles_table, data):
 
             numbers += 1
 
-    for article in data.values():
+    for article in list(data.values()):
         numbers_article += 1
 
         articles_table["source_%s_number" % numbers_article] = u32(
@@ -628,12 +638,11 @@ def make_locations_table(header, locations_data):
 
     locations_number = 0
 
-    for locations_coordinates in locations_data.keys():
+    for locations_coordinates in list(locations_data.keys()):
         locations_number += 1
-        numbers = locations_data.keys().index(locations_coordinates)
+        numbers = list(locations_data.keys()).index(locations_coordinates)
         locations_table["location_%s_offset" % numbers] = u32(0)  # Offset for the locations.
-        locations_table["location_%s_coordinates" % numbers] = locations_data[locations_coordinates][
-            0]  # Coordinates of the locations.
+        locations_table["location_%s_coordinates" % numbers] = locations_data[locations_coordinates][0]  # Coordinates of the locations.
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
@@ -656,7 +665,7 @@ def make_pictures_table(header, data):
 
     numbers = 0
 
-    for article in data.values():
+    for article in list(data.values()):
         numbers += 1
         if article[4] is not None:
             if article[5] is not None:
@@ -694,7 +703,7 @@ def make_articles(articles_table, pictures_table, data):
 
     numbers = 0
 
-    for article in data.values():
+    for article in list(data.values()):
         numbers += 1
         articles_table["headline_%s_offset" % numbers] = offset_count()  # Offset for the headline.
         articles["headline_%s_read" % numbers] = article[3]  # Read the headline.
@@ -725,16 +734,16 @@ def make_topics(topics_table, topics_news):
 
     numbers = 0
 
-    for keys in topics_news.keys():
+    for keys in list(topics_news.keys()):
         numbers += 1
         topics_table["topics_%s_offset" % str(numbers)] = offset_count()  # Offset for the topics.
-        topics["topics_%s_read" % numbers] = keys.decode("utf-8").encode("utf-16be")  # Read the topics.
+        topics["topics_%s_read" % numbers] = newsdownload.enc(keys)  # Read the topics.
         topics["padding_%s_topics" % numbers] = u16(0)  # Padding for the topics.
 
     return topics
 
 
-def make_source_name_copyright(source_table, data):
+def make_source_name_copyright(source_table, source, data):
     source_name_copyright = collections.OrderedDict()
     dictionaries.append(source_name_copyright)
 
@@ -742,23 +751,7 @@ def make_source_name_copyright(source_table, data):
 
     source_names = {}
 
-    """Text for the copyright. Some of these I had to make up, because if you don't specify a copyright there will be a line that will be in the way in the news article."""
-
-    copyrights = {
-        "AP": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
-        "Reuters": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies.",
-        "AFP": "All reproduction and representation rights reserved. © {} Agence France-Presse",
-        "AFP_French": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
-        "AFP_Spanish": "All reproduction and representation rights reserved. © {} Agence France-Presse",
-        "ANP": "All reproduction and representation rights reserved. © {} B.V. Algemeen Nederlands Persbureau ANP",
-        "ANSA": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma.",
-        "SID": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} SID",
-        "dpa": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} dpa",
-        "NU.nl": "© {} Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group",
-        "Reuters_Japanese": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 ",
-    }
-
-    for article in data.values():
+    for article in list(data.values()):
         if article[8] not in sources:
             if article[8] in source_names:
                 source_name = source_names[article[8]]
@@ -770,8 +763,8 @@ def make_source_name_copyright(source_table, data):
                 source_name_copyright["source_name_read_%s" % article[8]] = source_name  # Read the source name.
                 source_name_copyright["padding_source_name_%s" % article[8]] = u16(0)  # Padding for the source name.
 
-            copyright = copyrights[article[8]].format(date.today().year).decode("utf-8").encode("utf-16be")
-
+            copyright = newsdownload.enc(source["copyright"].format(date.today().year))
+            
             source_table["copyright_size_%s" % article[8]] = u32(len(copyright))  # Size of the copyright.
 
             source_table["copyright_offset_%s" % article[8]] = offset_count()  # Offset for the copyright.
@@ -789,8 +782,8 @@ def make_locations(locations_data, locations_table):
     locations = collections.OrderedDict()
     dictionaries.append(locations)
 
-    for locations_strings in locations_data.keys():
-        numbers = locations_data.keys().index(locations_strings)
+    for locations_strings in list(locations_data.keys()):
+        numbers = list(locations_data.keys()).index(locations_strings)
         locations_table["location_%s_offset" % numbers] = offset_count()  # Offset for the locations.
 
         locations["location_%s_read" % numbers] = locations_strings  # Read the locations.
@@ -812,7 +805,7 @@ def make_source_pictures(source_table, data):
 
     sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
 
-    for article in data.values():
+    for article in list(data.values()):
         if article[8] not in source_articles:
             if article[8] in sources:
                 source_articles.append(article[8])
@@ -836,7 +829,7 @@ def make_pictures(pictures_table, data):
 
     numbers = 0
 
-    for article in data.values():
+    for article in list(data.values()):
         numbers += 1
         if article[4] is not None:
             if "pictures_%s_offset" % numbers in pictures_table:
@@ -861,7 +854,7 @@ def make_riiconnect24_text():
     """This can be used to identify that we made this file."""
 
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
-    riiconnect24_text["text"] = "RIICONNECT24"  # Text.
+    riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
 
 """Write everything to the file."""
@@ -871,14 +864,14 @@ def write_dictionary(mode):
     newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
 
     for dictionary in dictionaries:
-        for values in dictionary.values():
-            with open(newsfilename + "-1", "a+") as dest_file:
-                dest_file.write(values)
+        for name, value in dictionary.items():
+            with open(newsfilename + "-1", "ba+") as dest_file:
+                dest_file.write(value)
 
     with open(newsfilename + "-1", "rb") as source_file:
         read = source_file.read()
 
-    with open(newsfilename, "w+") as dest_file:
+    with open(newsfilename, "bw+") as dest_file:
         dest_file.write(u32(512))
         dest_file.write(u32(len(read) + 12))
         dest_file.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))
@@ -904,3 +897,6 @@ def write_dictionary(mode):
     """Remove the rest of the other files."""
 
     os.remove(newsfilename + "-1")
+
+    if not config["production"]:
+        print("Wrote " + newsfilename)

@@ -14,8 +14,8 @@ import json
 import sys
 import textwrap
 import time
-from HTMLParser import HTMLParser
-from StringIO import StringIO
+from html.parser import HTMLParser
+from io import BytesIO
 from datetime import datetime
 
 import feedparser
@@ -28,9 +28,7 @@ from bs4 import BeautifulSoup
 from unidecode import unidecode
 
 from utils import setup_log, log, u8, u16, u32, u32_littleendian
-
-reload(sys)
-sys.setdefaultencoding("utf-8")
+import importlib
 
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
@@ -169,7 +167,7 @@ sources = {
 
 def enc(text):
     if text:
-        return ftfy.fix_encoding(HTMLParser().unescape(text).decode("utf-8")).encode("utf-16be", "replace")
+        return ftfy.fix_encoding(HTMLParser().unescape(text)).encode("utf-16be", "replace")
 
 
 """Resize the image and strip metadata (to make the image size smaller)."""
@@ -179,10 +177,12 @@ def shrink_image(data, resize, source):
 
     try:
         picture = requests.get(data).content
-    except (requests.exceptions.ReadTimeout, requests.exceptions.MissingSchema), e:
+    except requests.exceptions.ReadTimeout:
+        return None
+    except requests.exceptions.MissingSchema:
         return None
     try:
-        image = Image.open(StringIO(picture))
+        image = Image.open(BytesIO(picture))
     except IOError:
         return None
 
@@ -199,11 +199,10 @@ def shrink_image(data, resize, source):
     image_without_exif = Image.new(image.mode, image.size)
     image_without_exif.putdata(data)
 
-    buffer = StringIO()
+    buffer = BytesIO()
     image_without_exif.save(buffer, format='jpeg')
 
     return buffer.getvalue()
-
 
 """Get the location data."""
 
@@ -308,7 +307,7 @@ def locations_download(language_code, data):
         6: "nl",
     }
 
-    for keys, values in data.items():
+    for keys, values in list(data.items()):
         location = values[7]
 
         if location is not None:
@@ -317,7 +316,7 @@ def locations_download(language_code, data):
 
             locations[location].append(keys)
 
-    for name in locations.keys():
+    for name in list(locations.keys()):
         read = None
 
         if name == "":
@@ -325,7 +324,7 @@ def locations_download(language_code, data):
 
         uni_name = name if languages[language_code] == "ja" else unidecode(name)
 
-        print uni_name
+        print(uni_name)
 
         if name not in cities:
             try:
@@ -404,15 +403,15 @@ class News:
 
         self.parse_feed()
 
-        print "\n"
+        print("\n")
 
     def __dict__(self):
         return self.newsdata
 
     def parse_feed(self):
-        print "Downloading News from " + self.source + "...\n"
+        print("Downloading News from " + self.source + "...\n")
 
-        for key, value in self.sourceinfo["cat"].items():
+        for key, value in list(self.sourceinfo["cat"].items()):
             if self.source == "AP":
                 try:
                     ap_json = requests.get(self.url % key).json()
@@ -439,7 +438,7 @@ class News:
                 try:
                     updated_time = int((time.mktime(time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S") if self.source == "AP" else entry["updated_parsed"]) - 946684800) / 60)
                 except:
-                    print "Failed to parse RSS feed."
+                    print("Failed to parse RSS feed.")
                     continue
 
                 if current_time - updated_time < 60:
@@ -454,7 +453,7 @@ class News:
 
                     title = entry["headline"] if self.source == "AP" else entry["title"]
 
-                    print title
+                    print(title)
 
                     downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
                                             title, self.language).get_news()
@@ -707,5 +706,5 @@ class Parse(News):
                 except NameError:
                     pass
 
-        if u"\uff3b" in self.article:
-            self.location = self.article.split(u"\uff3b")[1].split(u"\u3000")[0]
+        if "\uff3b" in self.article:
+            self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
