@@ -242,9 +242,9 @@ def process_news(name, mode, language, countries, d):
 
 """Copy the temp files to the correct path that the Wii will request from the server."""
 
-def copy(mode, console, country):
+def copy(mode, console, country, hour):
     newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
-    newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
+    newsfilename2 = "news.bin.%s" % (str(hour).zfill(2))
     path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
     mkdir_p(path)
     path = "%s/%s" % (path, newsfilename2)
@@ -253,9 +253,9 @@ def copy(mode, console, country):
 def copy_file(mode, console, country):
     if config["force_all"]:
         for hours in range(0, 24):
-            copy(mode, console, country)
+            copy(mode, console, country, hour)
     else:
-        copy(mode, console, country)
+        copy(mode, console, country, datetime.utcnow().hour)
 
 
 """Run the functions to make the news."""
