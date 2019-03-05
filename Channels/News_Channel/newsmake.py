@@ -48,6 +48,8 @@ sources = {
         "languages": [1, 3, 4],
         "language_code": 1,
         "country_code": 49,
+        "picture": 0,
+        "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed."
     },
     "ap_spanish": {
@@ -60,6 +62,8 @@ sources = {
         "languages": [1, 3, 4],
         "language_code": 4,
         "country_code": 49,
+        "picture": 0,
+        "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed."
     },
     "reuters_europe_english": {
@@ -76,6 +80,8 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 1,
         "country_code": 110,
+        "picture": 0,
+        "position": 4,
         "copyright": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies."
     },
     "afp_spanish": {
@@ -90,6 +96,8 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 4,
         "country_code": 110,
+        "picture": 4,
+        "position": 4,
         "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse",
     },
     "afp_french": {
@@ -104,6 +112,8 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 3,
         "country_code": 110,
+        "picture": 4,
+        "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
     },
     "dtoday_german": {
@@ -117,6 +127,8 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 2,
         "country_code": 110,
+        "picture": 4,
+        "position": 4,
         "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse"
     },
     "ansa_italian": {
@@ -130,6 +142,8 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 5,
         "country_code": 110,
+        "picture": 6,
+        "position": 6,
         "copyright": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma."
     },
     "nu_dutch": {
@@ -145,6 +159,8 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 6,
         "country_code": 110,
+        "picture": 0,
+        "position": 5,
         "copyright": "© {} Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group"
     },
     "reuters_japanese": {
@@ -158,7 +174,9 @@ sources = {
         "languages": [0],
         "language_code": 0,
         "country_code": 1,
-        "copyright": "© Copyright Reuters %d. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 "
+        "picture": 0,
+        "position": 4,
+        "copyright": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 "
     }
 }
 
@@ -224,23 +242,20 @@ def process_news(name, mode, language, countries, d):
 
 """Copy the temp files to the correct path that the Wii will request from the server."""
 
+def copy(mode, console, country):
+    newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
+    newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
+    path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
+    mkdir_p(path)
+    path = "%s/%s" % (path, newsfilename2)
+    subprocess.call(["cp", newsfilename, path])
 
 def copy_file(mode, console, country):
     if config["force_all"]:
         for hours in range(0, 24):
-            newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
-            newsfilename2 = "news.bin.%s" % (str(hours).zfill(2))
-            path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
-            mkdir_p(path)
-            path = "%s/%s" % (path, newsfilename2)
-            subprocess.call(["cp", newsfilename, path])
+            copy(mode, console, country)
     else:
-        newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
-        newsfilename2 = "news.bin.%s" % (str(datetime.utcnow().hour).zfill(2))
-        path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
-        mkdir_p(path)
-        path = "%s/%s" % (path, newsfilename2)
-        subprocess.call(["cp", newsfilename, path])
+        copy(mode, console, country)
 
 
 """Run the functions to make the news."""
@@ -273,9 +288,7 @@ def make_news_bin(mode, console, data, locations_data):
 
                 newstime[data[keys][3]] = get_timestamp(1) + u32(numbers)
 
-        pickle.dump(newstime,
-                    open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, console),
-                         "wb"))
+        pickle.dump(newstime, open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, console), "wb"))
 
     dictionaries = []
 
@@ -284,7 +297,7 @@ def make_news_bin(mode, console, data, locations_data):
     topics_table = make_topics_table(header, topics_news)
     make_timestamps_table(mode, topics_table, topics_news)
     articles_table = make_articles_table(mode, locations_data, header, data)
-    source_table = make_source_table(header, articles_table, data)
+    source_table = make_source_table(header, articles_table, source, data)
     locations_table = make_locations_table(header, locations_data)
     pictures_table = make_pictures_table(header, data)
     make_articles(articles_table, pictures_table, data)
@@ -311,8 +324,7 @@ def make_news_bin(mode, console, data, locations_data):
 """This is a function used to count offsets."""
 
 
-def offset_count(): return u32(
-    12 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
+def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
 
 
 """Return a timestamp."""
@@ -458,10 +470,8 @@ def make_topics_table(header, topics_news):
     for _ in list(topics_news.values()):
         numbers += 1
         topics_table["topics_%s_offset" % str(numbers)] = u32(0)  # Offset for the topic.
-        topics_table["topics_%s_article_number" % str(numbers)] = u32(
-            0)  # Number of articles that will be in a certain topic.
-        topics_table["topics_%s_article_offset" % str(numbers)] = u32(
-            0)  # Offset for the articles to choose for the topic.
+        topics_table["topics_%s_article_number" % str(numbers)] = u32(0)  # Number of articles that will be in a certain topic.
+        topics_table["topics_%s_article_offset" % str(numbers)] = u32(0)  # Offset for the articles to choose for the topic.
 
     header["topics_number"] = u32(numbers + 1)  # Number of entries for the topics table.
 
@@ -537,8 +547,7 @@ def make_articles_table(mode, locations_data, header, data):
         for locations in list(locations_data.keys()):
             for article_name in locations_data[locations][1]:
                 if keys == article_name:
-                    articles_table["location_%s_number" % numbers] = u32(
-                        list(locations_data.keys()).index(locations))  # Number for the location.
+                    articles_table["location_%s_number" % numbers] = u32(list(locations_data.keys()).index(locations))  # Number for the location.
 
         if article[4] is not None:
             articles_table["term_timestamp_%s" % numbers] = get_timestamp(1)  # Timestamp for the term.
@@ -567,7 +576,7 @@ def make_articles_table(mode, locations_data, header, data):
 """Source table."""
 
 
-def make_source_table(header, articles_table, data):
+def make_source_table(header, articles_table, source, data):
     source_table = collections.OrderedDict()
     dictionaries.append(source_table)
 
@@ -577,19 +586,6 @@ def make_source_table(header, articles_table, data):
 
     """These are the picture and position values."""
 
-    source_nums = {
-        "AP": [0, 1],
-        "Reuters": [0, 4],
-        "AFP": [4, 4],
-        "AFP_French": [4, 4],
-        "AFP_Spanish": [4, 4],
-        "ANP": [0, 5],
-        "ANSA": [6, 6],
-        "dpa": [0, 4],
-        "SID": [0, 4],
-        "NU.nl": [0, 5],
-        "Reuters_Japanese": [0, 4],
-    }
 
     numbers = 0
 
@@ -599,10 +595,8 @@ def make_source_table(header, articles_table, data):
         if article[8] not in source_articles:
             source_articles.append(article[8])
 
-            source = source_nums[article[8]]
-
-            source_table["source_picture_%s" % article[8]] = u8(source[0])  # Picture for the source.
-            source_table["source_position_%s" % article[8]] = u8(source[1])  # Position for the source.
+            source_table["source_picture_%s" % article[8]] = u8(source["picture"])  # Picture for the source.
+            source_table["source_position_%s" % article[8]] = u8(source["position"])  # Position for the source.
             source_table["padding_%s" % article[8]] = u16(0)  # Padding.
 
             source_table["pictures_size_%s" % article[8]] = u32(0)  # Size of the source picture.
@@ -619,8 +613,7 @@ def make_source_table(header, articles_table, data):
     for article in list(data.values()):
         numbers_article += 1
 
-        articles_table["source_%s_number" % numbers_article] = u32(
-            source_articles.index(article[8]))  # Number for the source.
+        articles_table["source_%s_number" % numbers_article] = u32(source_articles.index(article[8]))  # Number for the source.
 
     header["source_number"] = u32(numbers)  # Number of entries for the source table.
 

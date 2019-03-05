@@ -5,7 +5,7 @@ ftfy==4.4.3
 googlemaps
 lxml
 mysql-connector==2.1.4
-newspaper
+newspaper3k
 pyaes
 raven
 requests
