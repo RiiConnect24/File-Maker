@@ -1121,7 +1121,7 @@ def make_forecast_text_table(list):
     for keys in list.keys():
         text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code],
                                                            list[keys][1][language_code],
-                                                           list[keys][2][language_code]])).decode("utf-8").encode("utf-16be") + pad(2)
+                                                           list[keys][2][language_code]])).encode("utf-16be") + pad(2)
     return text_table
 
 
