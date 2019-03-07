@@ -283,11 +283,11 @@ def close_threads():
 def refresh(type):
     # Uses ANSI escape codes
     if type == 0:
-        print "\033[2J"  # Erase display command
+        print("\033[2J")  # Erase display command
     elif type == 1:
         os.system('cls')  # Clear screen
     else:
-        print "\033[F\033[K" * 20  # Clear each line individually
+        print("\033[F\033[K" * 20)  # Clear each line individually
 
 
 def ui():
@@ -356,7 +356,7 @@ def ui():
         sys.stdout.write(out)
         sys.stdout.flush()
         time.sleep(refresh_rate)
-    print "\n"
+    print("\n")
 
 
 def get_icon(icon, list, key):
@@ -1268,4 +1268,4 @@ if config["production"]:
     statsd.set("forecast.cities", cities)
     statsd.set("forecast.errors", errors)
 
-print "Completed Successfully"
+print("Completed Successfully")
