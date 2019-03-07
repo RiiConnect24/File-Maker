@@ -718,7 +718,7 @@ def make_forecast_bin(forecast_list, data):
     hex_write(84, count[6])
     seek_offset = count[2]
     seek_base = count[7]
-    for i in [forecastlists.weatherconditions.values()[j // 2] for j in
+    for i in [list(forecastlists.weatherconditions.values())[j // 2] for j in
               range(len(forecastlists.weatherconditions.values()) * 2)]:
         offset_write(seek_base)
         seek_base += len(i[0][language_code].encode('utf-16be')) + 2
