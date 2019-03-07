@@ -721,39 +721,39 @@ def make_forecast_bin(list, data):
     for i in [forecastlists.weatherconditions.values()[j // 2] for j in
               range(len(forecastlists.weatherconditions.values()) * 2)]:
         offset_write(seek_base)
-        seek_base += len(i[0][language_code].decode('utf-8').encode('utf-16be')) + 2
+        seek_base += len(i[0][language_code].encode('utf-16be')) + 2
     """UV Index"""
     seek_offset = count[3]
     seek_base = count[8]
     for i in forecastlists.uvindex.values():
         offset_write(seek_base)
-        seek_base += len(i[language_code].decode('utf-8').encode('utf-16be')) + 2
+        seek_base += len(i[language_code].encode('utf-16be')) + 2
     """Laundry Table"""
     seek_offset = count[4]
     seek_base = count[9]
     for i in forecastlists.laundry.values():
         offset_write(seek_base)
-        seek_base += len(i.decode('utf-8').encode('utf-16be')) + 2
+        seek_base += len(i.encode('utf-16be')) + 2
     """Pollen Table"""
     seek_offset = count[5]
     seek_base = count[10]
     for i in forecastlists.pollen.values():
         offset_write(seek_base)
-        seek_base += len(i.decode('utf-8').encode('utf-16be')) + 2
+        seek_base += len(i.encode('utf-16be')) + 2
     """Location Text"""
     seek_offset = count[6]
     seek_base = count[11]
     for key in list.keys():
         offset_write(seek_base, False)
-        seek_base += len(list[key][0][language_code].decode('utf-8').encode('utf-16be')) + 2
+        seek_base += len(list[key][0][language_code].encode('utf-16be')) + 2
         if len(list[key][1][language_code]) > 0:
             offset_write(seek_base, False)
-            seek_base += len(list[key][1][language_code].decode('utf-8').encode('utf-16be')) + 2
+            seek_base += len(list[key][1][language_code].encode('utf-16be')) + 2
         else:
             offset_write(0, False)
         if len(list[key][2][language_code]) > 0:
             offset_write(seek_base, False)
-            seek_base += len(list[key][2][language_code].decode('utf-8').encode('utf-16be')) + 2
+            seek_base += len(list[key][2][language_code].encode('utf-16be')) + 2
         else:
             offset_write(0, False)
         seek_offset += 12
@@ -1129,7 +1129,7 @@ def make_weather_value_table():
     weathervalue_text_table = collections.OrderedDict()
     for v in forecastlists.weatherconditions.values():
         for _ in range(2):
-            weathervalue_text_table[num()] = v[0][language_code].decode('utf-8').encode("utf-16be") + pad(2)
+            weathervalue_text_table[num()] = v[0][language_code].encode("utf-16be") + pad(2)
     return weathervalue_text_table
 
 
@@ -1150,21 +1150,21 @@ def make_uvindex_text_table():
     uvindexlist = []
     for v in forecastlists.uvindex.values():
         uvindexlist.append(v[language_code])
-    uvindex_text_table[0] = "\0".join(uvindexlist).decode('utf-8').encode("utf-16be") + pad(2)
+    uvindex_text_table[0] = "\0".join(uvindexlist).encode("utf-16be") + pad(2)
     return uvindex_text_table
 
 
 def make_laundry_text_table():
     laundry = collections.OrderedDict()
     for v in forecastlists.laundry.values():
-        laundry[num()] = v.decode('utf-8').encode("utf-16be") + pad(2)
+        laundry[num()] = v.encode("utf-16be") + pad(2)
     return laundry
 
 
 def make_pollen_text_table():
     pollen = collections.OrderedDict()
     for v in forecastlists.pollen.values():
-        pollen[num()] = v.decode('utf-8').encode("utf-16be") + pad(2)
+        pollen[num()] = v.encode("utf-16be") + pad(2)
     return pollen
 
 
