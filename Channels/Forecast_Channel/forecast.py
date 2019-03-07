@@ -118,48 +118,48 @@ def get_epoch():
     return int(time.time())
 
 
-def get_city(list, key):
-    return list[key][0][1]
+def get_city(forecast_list, key):
+    return forecast_list[key][0][1]
 
 
-def get_region(list, key):
-    return list[key][1][1]
+def get_region(forecast_list, key):
+    return forecast_list[key][1][1]
 
 
-def get_country(list, key):
-    return list[key][2][1]
+def get_country(forecast_list):
+    return forecast_list[key][2][1]
 
 
-def get_all(list, key):
-    return ", ".join(filter(None, [get_city(list, key), get_region(list, key), get_country(list, key)]))
+def get_all(forecast_list, key):
+    return ", ".join(filter(None, [get_city(forecast_list, key), get_region(forecast_list, key), get_country(forecast_list, key)]))
 
 
-def get_number(list, key):
-    return list.keys().index(key)
+def get_number(forecast_list, key):
+    return forecast_list.keys().index(key)
 
 
 def pad(amnt):
     return ("\0" * amnt).encode()
 
 
-def get_lat(list, key):
-    return list[key][3][:4]
+def get_lat(forecast_list, key):
+    return forecast_list[key][3][:4]
 
-def get_lng(list, key):
-    return list[key][3][:8][4:]
+def get_lng(forecast_list, key):
+    return forecast_list[key][3][:8][4:]
 
 
-def isJapan(list,key):
-    return list[key][2][1] == "Japan"
+def isJapan(forecast_list,key):
+    return forecast_list[key][2][1] == "Japan"
 
-def matches_country_code(list, key):
-    v = list[key]
+def matches_country_code(forecast_list, key):
+    v = forecast_list[key]
     if v[2][1] in forecastlists.bincountries:
         return hex(int(str(forecastlists.bincountries[v[2][1]])))[2:].zfill(2) == hex(country_code)[2:].zfill(2)
     return False
 
 
-def check_coords(list, key, lat, lng):
+def check_coords(forecast_list, key, lat, lng):
     global errors
     """ Verify Location Coordinates """
     if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
@@ -210,10 +210,10 @@ def coord_decode(value):
 def validHour(hour):
     return True if -1 < hour < 24 else False
 
-def mode_calc(list):
-    if not list: return
+def mode_calc(forecast_list):
+    if not forecast_list: return
     temp = {}
-    for i in list:
+    for i in forecast_list:
         if i not in temp: temp[i] = 1
         else: temp[i] += 1
 
@@ -230,12 +230,12 @@ def mode_calc(list):
     if not duplicate: return largestKey
 
 
-def populate_international(list):
+def populate_international(forecast_list):
     for k, v in forecastlists.weathercities_international.items():
-            if k not in list:
-                list[k] = v
-            elif v[2][1] is not list[k][2][1]:
-                list[k + " 2"] = v
+            if k not in forecast_list:
+                forecast_list[k] = v
+            elif v[2][1] is not forecast_list[k][2][1]:
+                forecast_list[k + " 2"] = v
 
 
 def size(data):
@@ -318,14 +318,14 @@ def ui():
         header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
         # Calculate values to show on screen
-        dl = len(list) - cached > 0
+        dl = len(forecast_list) - cached > 0
         elapsed_time = int(round(time.time() - total_time))
         bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
         totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
         totalfill = totalpercent * 35 / 100
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
         if status == 1:
-            percent = int(round(float(citycount) / float(len(list) - cached) * 100)) if dl else 0
+            percent = int(round(float(citycount) / float(len(forecast_list) - cached) * 100)) if dl else 0
             fill = int(round(percent * bar / 100))
             progbar = str(percent) + "% [" + "=" * fill + " " * (bar - fill) + "]"
         else:
@@ -359,8 +359,8 @@ def ui():
     print("\n")
 
 
-def get_icon(icon, list, key):
-    return get_weatherjpnicon(icon) if isJapan(list,key) else get_weathericon(icon)
+def get_icon(icon, forecast_list, key):
+    return get_weatherjpnicon(icon) if isJapan(forecast_list,key) else get_weathericon(icon)
 
 
 """Resets bin-specific values for next generation."""
@@ -412,16 +412,16 @@ def timestamps(mode, key=None):
     return timestamp
 
 
-def get_locationkey(list, key):
-    country = get_country(list, key)
-    region = get_region(list, key)
-    city = get_city(list, key)
-    listid = weathercities.index(list)
-    if region == '' and (country not in forecastlists.bincountries or matches_country_code(list, key)):
+def get_locationkey(forecast_list, key):
+    country = get_country(forecast_list, key)
+    region = get_region(forecast_list, key)
+    city = get_city(forecast_list, key)
+    listid = weathercities.index(forecast_list)
+    if region == '' and (country not in forecastlists.bincountries or matches_country_code(forecast_list, key)):
         a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
         b = 'FE'
         c = 'FE'
-    elif region == '' and not matches_country_code(list, key):
+    elif region == '' and not matches_country_code(forecast_list, key):
         a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
         b = 'FE'
         c = hex(forecastlists.bincountries[country])[2:].zfill(2)
@@ -432,23 +432,23 @@ def get_locationkey(list, key):
     return "".join([c, b, a])
 
 
-def zoom(list, key, mode):
+def zoom(forecast_list, key, mode):
     if mode == 1:
-        return list[key][3][8:][:2]
+        return forecast_list[key][3][8:][:2]
     if mode == 2:
-        return list[key][3][10:][:2]
+        return forecast_list[key][3][10:][:2]
 
 
-def generate_locationkeys(list):
-    listid = weathercities.index(list)
+def generate_locationkeys(forecast_list):
+    listid = weathercities.index(forecast_list)
     weatherloc[listid] = {}
     weatherloc[listid]['null'] = {}
     weatherloc[listid]['no-region'] = {}
     weatherloc[listid]['regions'] = {}
-    for k, v in list.items():
-        if v[1][1] == "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(list, k)):
+    for k, v in forecast_list.items():
+        if v[1][1] == "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(forecast_list, k)):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
-        elif v[1][1] == "" and not matches_country_code(list, k):
+        elif v[1][1] == "" and not matches_country_code(forecast_list, k):
             weatherloc[listid]['no-region'].setdefault(v[2][1], {})
             weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1], len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
         else:
@@ -463,7 +463,7 @@ def generate_locationkeys(list):
 """If the script was unable to get forecast for a city, it's filled with this blank data."""
 
 
-def blank_data(list, key):
+def blank_data(forecast_list, key):
     wind[key] = {}
     uvindex[key] = {}
     precipitation[key] = {}
@@ -503,12 +503,12 @@ def blank_data(list, key):
         tomorrow[key][k] = -128 # Tomorrow Temperature Values
     today[key][4] = 'FFFF'
     tomorrow[key][4] = 'FFFF'
-    globe[key]['lat'] = binascii.unhexlify(get_lat(list, key))
-    globe[key]['lng'] = binascii.unhexlify(get_lng(list, key))
+    globe[key]['lat'] = binascii.unhexlify(get_lat(forecast_list, key))
+    globe[key]['lng'] = binascii.unhexlify(get_lng(forecast_list, key))
     globe[key]['time'] = get_epoch()
 
 
-def get_accuweather_api(list, key):
+def get_accuweather_api(forecast_list, key):
     accuapi = weather_data[key]
     forecast = accuapi.find("{http://www.accuweather.com}forecast")
     current_conditions = accuapi.find("{http://www.accuweather.com}currentconditions")
@@ -516,7 +516,7 @@ def get_accuweather_api(list, key):
     airandpollen = accuapi.find("{http://www.accuweather.com}airandpollen")
     current[key][3] = int(current_conditions[4].text)
     current[key][4] = to_celsius(current[key][3])
-    current[key][5] = get_icon(int(current_conditions[8].text), list, key)
+    current[key][5] = get_icon(int(current_conditions[8].text), forecast_list, key)
     current[key][0] = current_conditions[11].text
     current[key][2] = int(current_conditions[10].text)
     current[key][1] = mph_kmh(current[key][2])
@@ -524,12 +524,12 @@ def get_accuweather_api(list, key):
     today[key][1] = int(forecast[2][6][3].text)
     today[key][2] = to_celsius(today[key][0])
     today[key][3] = to_celsius(today[key][1])
-    today[key][4] = get_icon(int(forecast[2][6][2].text), list, key)
+    today[key][4] = get_icon(int(forecast[2][6][2].text), forecast_list, key)
     tomorrow[key][0] = int(forecast[3][6][4].text)
     tomorrow[key][1] = int(forecast[3][6][3].text)
     tomorrow[key][2] = to_celsius(tomorrow[key][0])
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
-    tomorrow[key][4] = get_icon(int(forecast[3][6][2].text), list, key)
+    tomorrow[key][4] = get_icon(int(forecast[3][6][2].text), forecast_list, key)
     uvindex[key] = int(current_conditions[14].attrib['index'])
     if uvindex[key] > 12:
         uvindex[key] = 12
@@ -554,7 +554,7 @@ def get_accuweather_api(list, key):
     precipitation[key][14] = int(forecast[9][6][19].text)
     lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
     lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
-    check_coords(list,key,lat,lng)
+    check_coords(forecast_list,key,lat,lng)
     globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
     globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
     globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
@@ -575,13 +575,13 @@ def get_accuweather_api(list, key):
     week[key][13] = int(forecast[9][6][4].text)
     for i in range(0, 14):
         week[key][i+14] = to_celsius(week[key][i])
-    week[key][30] = get_icon(int(forecast[3][6][2].text), list, key)
-    week[key][31] = get_icon(int(forecast[4][6][2].text), list, key)
-    week[key][32] = get_icon(int(forecast[5][6][2].text), list, key)
-    week[key][33] = get_icon(int(forecast[6][6][2].text), list, key)
-    week[key][34] = get_icon(int(forecast[7][6][2].text), list, key)
-    week[key][35] = get_icon(int(forecast[8][6][2].text), list, key)
-    week[key][36] = get_icon(int(forecast[9][6][2].text), list, key)
+    week[key][30] = get_icon(int(forecast[3][6][2].text), forecast_list, key)
+    week[key][31] = get_icon(int(forecast[4][6][2].text), forecast_list, key)
+    week[key][32] = get_icon(int(forecast[5][6][2].text), forecast_list, key)
+    week[key][33] = get_icon(int(forecast[6][6][2].text), forecast_list, key)
+    week[key][34] = get_icon(int(forecast[7][6][2].text), forecast_list, key)
+    week[key][35] = get_icon(int(forecast[8][6][2].text), forecast_list, key)
+    week[key][36] = get_icon(int(forecast[9][6][2].text), forecast_list, key)
     
     time_index = [[3,9,15,21], [27,33,39,45]]
     hourlyAvg = [-3,-2,-1,0,1,2]
@@ -595,15 +595,15 @@ def get_accuweather_api(list, key):
             for k in hourlyAvg:
                 if validHour(temp+k):
                     precip.append(int(hourly_forecast[temp+k][12].text))
-                    hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+k][0].text), list, key))
-            if len(precip) > 0 and isJapan(list, key): precipitation[key][j + index_offset] = int(round(sum(precip)/len(precip), -1))
+                    hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+k][0].text), forecast_list, key))
+            if len(precip) > 0 and isJapan(forecast_list, key): precipitation[key][j + index_offset] = int(round(sum(precip)/len(precip), -1))
             modeValue = mode_calc(hourlyAvgIcons)
             if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][j + index_offset] = modeValue
-            elif validHour(temp): hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp][0].text), list, key)
-            else: hourly[key][j + index_offset] = get_icon(int(-1), list, key)
+            elif validHour(temp): hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp][0].text), forecast_list, key)
+            else: hourly[key][j + index_offset] = get_icon(int(-1), forecast_list, key)
 
 
-def parse_data(list):
+def parse_data(forecast_list):
     global weather_data
     for k, v in weather_data.items():
         try:
@@ -615,7 +615,7 @@ def parse_data(list):
             weather_data[k] = None
             continue
         if weather_data[k] is not None:
-            get_accuweather_api(list, k)
+            get_accuweather_api(forecast_list, k)
         else:
             log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
 
@@ -634,12 +634,12 @@ def offset_write(value, post=True):
     if post: seek_offset += 4
 
 
-def make_bins(list, data):
-    make_forecast_bin(list, data)
-    make_short_bin(list, data)
+def make_bins(forecast_list, data):
+    make_forecast_bin(forecast_list, data)
+    make_short_bin(forecast_list, data)
 
 
-def generate_data(list, bins):
+def generate_data(forecast_list, bins):
     global mode, language_code
     long_forecast_tables = dict.fromkeys([1, 2])
     short_japan_tables = dict.fromkeys([1, 2])
@@ -652,28 +652,28 @@ def generate_data(list, bins):
     pollen_text_table = make_pollen_text_table()
     laundryindex_table = make_laundryindex_table()
     laundry_text_table = make_laundry_text_table()
-    location_table = make_location_table(list)
+    location_table = make_location_table(forecast_list)
     weathervalue_offset_table = make_weather_offset_table()
     for i in [1, 2]:
         mode = i
-        long_forecast_tables[i] = make_long_forecast_table(list)
-        short_japan_tables[i] = make_forecast_short_table(list)
-        short_forecast_tables[i] = make_short_forecast_table(list)
+        long_forecast_tables[i] = make_long_forecast_table(forecast_list)
+        short_japan_tables[i] = make_forecast_short_table(forecast_list)
+        short_forecast_tables[i] = make_short_forecast_table(forecast_list)
     for language in bins:
         language_code = language
         uvindex_text_tables[language] = make_uvindex_text_table()
-        text_tables[language] = make_forecast_text_table(list)
+        text_tables[language] = make_forecast_text_table(forecast_list)
         weathervalue_text_tables[language] = make_weather_value_table()
     return [long_forecast_tables, uvindex_table, uvindex_text_tables, short_japan_tables, pollenindex_table,
             pollen_text_table, laundryindex_table, laundry_text_table, location_table, text_tables,
             weathervalue_offset_table, weathervalue_text_tables, short_forecast_tables]
 
 
-def make_forecast_bin(list, data):
+def make_forecast_bin(forecast_list, data):
     global shortcount, constant, file, seek_offset, seek_base, extension
     constant = 0
     count = {}
-    header = make_header_forecast(list)
+    header = make_header_forecast(forecast_list)
     long_forecast_table = data[0][mode]
     uvindex_table = data[1]
     uvindex_text_table = data[2][language_code]
@@ -743,17 +743,17 @@ def make_forecast_bin(list, data):
     """Location Text"""
     seek_offset = count[6]
     seek_base = count[11]
-    for key in list.keys():
+    for key in forecast_list.keys():
         offset_write(seek_base, False)
-        seek_base += len(list[key][0][language_code].encode('utf-16be')) + 2
-        if len(list[key][1][language_code]) > 0:
+        seek_base += len(forecast_list[key][0][language_code].encode('utf-16be')) + 2
+        if len(forecast_list[key][1][language_code]) > 0:
             offset_write(seek_base, False)
-            seek_base += len(list[key][1][language_code].encode('utf-16be')) + 2
+            seek_base += len(forecast_list[key][1][language_code].encode('utf-16be')) + 2
         else:
             offset_write(0, False)
-        if len(list[key][2][language_code]) > 0:
+        if len(forecast_list[key][2][language_code]) > 0:
             offset_write(seek_base, False)
-            seek_base += len(list[key][2][language_code].encode('utf-16be')) + 2
+            seek_base += len(forecast_list[key][2][language_code].encode('utf-16be')) + 2
         else:
             offset_write(0, False)
         seek_offset += 12
@@ -765,8 +765,8 @@ def make_forecast_bin(list, data):
         sign_file(file1, file2, file3)
 
 
-def make_short_bin(list, data):
-    short_forecast_header = make_header_short(list)
+def make_short_bin(forecast_list, data):
+    short_forecast_header = make_header_short(forecast_list)
     short_forecast_table = data[12][mode]
     file1 = 'short.{}~.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
     file2 = 'short.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
@@ -824,30 +824,30 @@ def sign_file(name, local_name, server_name):
     os.remove(local_name)
 
 
-def get_data(list, key):
+def get_data(forecast_list, key):
     global citycount, cache, weather_data
     citycount += 1
-    cache[key] = get_all(list, key)
-    blank_data(list, key)
-    lat = coord_decode(get_lat(list, key))
-    lon = coord_decode(get_lng(list, key))
+    cache[key] = get_all(forecast_list, key)
+    blank_data(forecast_list, key)
+    lat = coord_decode(get_lat(forecast_list, key))
+    lon = coord_decode(get_lng(forecast_list, key))
     weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
 
 
-def make_header_short(list):
+def make_header_short(forecast_list):
     header = collections.OrderedDict()
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
     header["region_flag"] = u8(region_flag)  # Region Flag.
     header["unknown_2"] = u8(0)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
-    header["short_forecast_number"] = u32(len(list))  # Number of short forecast entries.
+    header["short_forecast_number"] = u32(len(forecast_list))  # Number of short forecast entries.
     header["start_offset"] = u32(0)
 
     return header
 
 
-def make_header_forecast(list):
+def make_header_forecast(forecast_list):
     header = collections.OrderedDict()
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
@@ -855,7 +855,7 @@ def make_header_forecast(list):
     header["unknown_2"] = u8(1)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["message_offset"] = u32(0)  # Offset for a message.
-    header["long_forecast_number"] = u32(len(list) - shortcount)  # Number of long forecast entries.
+    header["long_forecast_number"] = u32(len(forecast_list) - shortcount)  # Number of long forecast entries.
     header["long_forecast_offset"] = u32(0)  # Offset for the long forecast entry table.
     header["short_forecast_number"] = u32(shortcount)  # Number of short forecast entries.
     header["short_forecast_offset"] = u32(0)  # Offset for the short forecast entry table.
@@ -867,18 +867,18 @@ def make_header_forecast(list):
     header["laundry_index_offset"] = u32(0)  # Offset for the Laundry Index table.
     header["pollen_count_number"] = u32(len(forecastlists.pollen))  # Number of Pollen Count entries.
     header["pollen_count_offset"] = u32(0)  # Offset for the Pollen Count table.
-    header["location_number"] = u32(len(list))  # Number of location entries.
+    header["location_number"] = u32(len(forecast_list))  # Number of location entries.
     header["location_offset"] = u32(0)  # Offset for the location table.
 
     return header
 
 
-def make_long_forecast_table(list):
+def make_long_forecast_table(forecast_list):
     long_forecast_table = collections.OrderedDict()
-    for key in list.keys():
-        if matches_country_code(list, key) and get_region(list, key) != '':
-            numbers = get_number(list, key)
-            long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, key))  # Wii Location Code.
+    for key in forecast_list.keys():
+        if matches_country_code(forecast_list, key) and get_region(forecast_list, key) != '':
+            numbers = get_number(forecast_list, key)
+            long_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii Location Code.
             long_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # 1st timestamp.
             long_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # 2nd timestamp.
             long_forecast_table["unknown_1_%s" % numbers] = u32(0)  # Unknown. (0xC-0xF)
@@ -981,11 +981,11 @@ def make_long_forecast_table(list):
     return long_forecast_table
 
 
-def make_short_forecast_table(list):
+def make_short_forecast_table(forecast_list):
     short_forecast_table = collections.OrderedDict()
-    for key in list.keys():
-        numbers = get_number(list, key)
-        short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, key))  # Wii location code for city
+    for key in forecast_list.keys():
+        numbers = get_number(forecast_list, key)
+        short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii location code for city
         short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # Timestamp 1
         short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # Timestamp 2
         short_forecast_table["current_forecast_%s" % numbers] = binascii.unhexlify(current[key][5])  # Current forecast
@@ -1001,12 +1001,12 @@ def make_short_forecast_table(list):
     return short_forecast_table
 
 
-def make_forecast_short_table(list):
+def make_forecast_short_table(forecast_list):
     short_forecast_table = collections.OrderedDict()
-    for key in list.keys():
-        if not matches_country_code(list, key) or get_region(list, key) == '':
-            numbers = get_number(list, key)
-            short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, key))  # Wii Location Code.
+    for key in forecast_list.keys():
+        if not matches_country_code(forecast_list, key) or get_region(forecast_list, key) == '':
+            numbers = get_number(forecast_list, key)
+            short_forecast_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii Location Code.
             short_forecast_table["timestamp_1_%s" % numbers] = u32(timestamps(1, key))  # 1st timestamp.
             short_forecast_table["timestamp_2_%s" % numbers] = u32(timestamps(0, key))  # 2nd timestamp.
             short_forecast_table["padding_%s" % numbers] = u32(0)
@@ -1099,29 +1099,29 @@ def make_pollenindex_table():
     return pollen
 
 
-def make_location_table(list):
+def make_location_table(forecast_list):
     location_table = collections.OrderedDict()
-    for keys in list.keys():
-        numbers = get_number(list, keys)
-        location_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(list, keys))  # Wii Location Code.
+    for keys in forecast_list.keys():
+        numbers = get_number(forecast_list, keys)
+        location_table["location_code_%s" % numbers] = binascii.unhexlify(get_locationkey(forecast_list, keys))  # Wii Location Code.
         location_table["city_text_offset_%s" % numbers] = u32(0)  # Offset for location's city text
         location_table["region_text_offset_%s" % numbers] = u32(0)  # Offset for location's region text
         location_table["country_text_offset_%s" % numbers] = u32(0)  # Offset for location's country text
         location_table["latitude_coordinates_%s" % numbers] = globe[keys]['lat']  # Latitude coordinates for location on globe
         location_table["longitude_coordinates_%s" % numbers] = globe[keys]['lng']  # Longitude coordinates for location on globe
-        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(zoom(list, keys, 1))  # Location zoom for location on globe
-        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(list, keys, 2))  # Location zoom for location on globe
+        location_table["location_zoom_1_%s" % numbers] = binascii.unhexlify(zoom(forecast_list, keys, 1))  # Location zoom for location on globe
+        location_table["location_zoom_2_%s" % numbers] = binascii.unhexlify(zoom(forecast_list, keys, 2))  # Location zoom for location on globe
         location_table["padding_%s" % numbers] = u16(0)
 
     return location_table
 
 
-def make_forecast_text_table(list):
+def make_forecast_text_table(forecast_list):
     text_table = collections.OrderedDict()
-    for keys in list.keys():
-        text_table[num()] = "\0".join(filter(None, [list[keys][0][language_code],
-                                                           list[keys][1][language_code],
-                                                           list[keys][2][language_code]])).encode("utf-16be") + pad(2)
+    for keys in forecast_list.keys():
+        text_table[num()] = "\0".join(filter(None, [forecast_list[keys][0][language_code],
+                                                           forecast_list[keys][1][language_code],
+                                                           forecast_list[keys][2][language_code]])).encode("utf-16be") + pad(2)
     return text_table
 
 
@@ -1206,24 +1206,24 @@ file_gen = 3 if config["enableWiiUGeneration"] else 2
 #ui_thread.daemon = True
 #ui_thread.start()
 
-for list in weathercities:
+for forecast_list in weathercities:
     threads = []
     status = 1
     language_code = 1
     shortcount = 0
-    listid = weathercities.index(list) + 1
-    currentlist = list.values()[0][2][1]
+    listid = weathercities.index(forecast_list) + 1
+    currentlist = forecast_list.values()[0][2][1]
     weather_data = {}
     loop = True
     country_code = forecastlists.bincountries[currentlist]
     region_flag = get_region_flag(country_code)
     bins = get_bins(country_code)
-    populate_international(list)
-    generate_locationkeys(list)
-    for keys in list.keys():
-        if not matches_country_code(list, keys) or get_region(list, keys) == '': shortcount += 1
-        if keys in cache and cache[keys] == get_all(list, keys): cached += 1
-        else: q.put([list, keys])
+    populate_international(forecast_list)
+    generate_locationkeys(forecast_list)
+    for keys in forecast_list.keys():
+        if not matches_country_code(forecast_list, keys) or get_region(forecast_list, keys) == '': shortcount += 1
+        if keys in cache and cache[keys] == get_all(forecast_list, keys): cached += 1
+        else: q.put([forecast_list, keys])
     spawn_threads()
     print("Downloading ...")
     q.join()
@@ -1231,18 +1231,18 @@ for list in weathercities:
     close_threads()
     status = 2
     print("Parsing API Data ...")
-    parse_data(list)
+    parse_data(forecast_list)
     cities += citycount
     status = 3
     print("Generating data ...")
-    data = generate_data(list, bins)
+    data = generate_data(forecast_list, bins)
     status = 4
     print("Making bin files ...")
     for i in range(1, file_gen):
         mode = i
         for j in bins:
             language_code = j
-            make_bins(list, data)
+            make_bins(forecast_list, data)
             reset_data()
     lists += 1
 
