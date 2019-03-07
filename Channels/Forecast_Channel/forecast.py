@@ -139,7 +139,7 @@ def get_number(list, key):
 
 
 def pad(amnt):
-    return "\0" * amnt
+    return ("\0" * amnt).encode()
 
 
 def get_lat(list, key):
