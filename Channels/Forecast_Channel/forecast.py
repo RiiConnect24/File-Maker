@@ -9,7 +9,7 @@
 # Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
-import Queue
+import queue
 import binascii
 import collections
 import io
@@ -1198,7 +1198,7 @@ s = requests.Session()  # Use session to speed up requests
 s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
 ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
 total_time = time.time()
-q = Queue.Queue()
+q = queue.Queue()
 concurrent = 10 if config["useMultithreaded"] else 1
 file_gen = 3 if config["enableWiiUGeneration"] else 2
 ui_run = True
