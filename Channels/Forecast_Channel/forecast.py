@@ -1201,10 +1201,10 @@ total_time = time.time()
 q = queue.Queue()
 concurrent = 10 if config["useMultithreaded"] else 1
 file_gen = 3 if config["enableWiiUGeneration"] else 2
-ui_run = True
-ui_thread = threading.Thread(target=ui)
-ui_thread.daemon = True
-ui_thread.start()
+#ui_run = True
+#ui_thread = threading.Thread(target=ui)
+#ui_thread.daemon = True
+#ui_thread.start()
 
 for list in weathercities:
     threads = []
@@ -1225,15 +1225,19 @@ for list in weathercities:
         if keys in cache and cache[keys] == get_all(list, keys): cached += 1
         else: q.put([list, keys])
     spawn_threads()
+    print("Downloading ...")
     q.join()
     loop = False
     close_threads()
     status = 2
+    print("Parsing API Data ...")
     parse_data(list)
     cities += citycount
     status = 3
+    print("Generating data ...")
     data = generate_data(list, bins)
     status = 4
+    print("Making bin files ...")
     for i in range(1, file_gen):
         mode = i
         for j in bins:
@@ -1242,10 +1246,10 @@ for list in weathercities:
             reset_data()
     lists += 1
 
-time.sleep(0.1)
-ui_run = False
-ui_thread.join()
-dump_db()
+#time.sleep(0.1)
+#ui_run = False
+#ui_thread.join()
+#dump_db()
 
 if config["production"]:
     """This will use a webhook to log that the script has been ran."""
