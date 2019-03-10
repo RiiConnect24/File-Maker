@@ -481,7 +481,10 @@ class Parse(News):
         self.soup = soup
 
         if self.source != "AP":
-            self.newspaper_init()
+            init = self.newspaper_init()
+            if init == []:
+                return None
+                
 
         {
             "AP": self.parse_ap,
@@ -510,7 +513,12 @@ class Parse(News):
     def newspaper_init(self):
         self.newsdata = newspaper.Article(self.url, language=self.language)
         self.newsdata.download()
-        self.newsdata.parse()
+        try:
+            self.newsdata.parse()
+        except ArticleException:
+            self.newsdata.parse()
+        except ArticleException:
+            return []
 
         self.article = self.newsdata.text
         self.picture = self.newsdata.top_image
