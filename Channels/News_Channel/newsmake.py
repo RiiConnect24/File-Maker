@@ -225,8 +225,7 @@ def process_news(name, mode, language, region, d):
         for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)
 
-        filesize = sum(os.path.getsize(f) - 320 for f in
-                       glob.glob("/var/www/wapp.wii.com/news/v2/%s/%s/news.bin.*" % (language_code, countries[0])))
+        filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/%s_%s/news.bin.*".format(language_code, region)))
 
         if filesize > 3712000:
             log("News files exceed the maximum file size amount.", "error")
