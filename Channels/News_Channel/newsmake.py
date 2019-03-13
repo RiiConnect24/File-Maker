@@ -181,7 +181,7 @@ sources = {
 }
 
 
-def process_news(name, mode, language, countries, d):
+def process_news(name, mode, language, region, d):
     print("News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name)
 
     global language_code, system
@@ -231,9 +231,8 @@ def process_news(name, mode, language, countries, d):
         if filesize > 3712000:
             log("News files exceed the maximum file size amount.", "error")
 
-        for country in countries:
-            copy_file(mode, "wii", country)
-            copy_file(mode, "wii_u", country)
+        copy_file(mode, "wii", region)
+        copy_file(mode, "wii_u", region)
 
         newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "."
         os.remove(newsfilename + "wii")
@@ -242,20 +241,20 @@ def process_news(name, mode, language, countries, d):
 
 """Copy the temp files to the correct path that the Wii will request from the server."""
 
-def copy(mode, console, country, hour):
-    newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, console)
-    newsfilename2 = "news.bin.%s" % (str(hour).zfill(2))
-    path = "%s/%s/%s/%s" % (config["file_path"], "v3" if console == "wii_u" else "v2", language_code, country)
+def copy(mode, console, region, hour):
+    newsfilename = "news.bin.{}.{}.{}".format(str(datetime.utcnow().hour).zfill(2), mode, console)
+    newsfilename2 = "news.bin.{}".format(str(hour).zfill(2))
+    path = "{}/{}/{}_{}".format(config["file_path"], "v3" if console == "wii_u" else "v2", language_code, region)
     mkdir_p(path)
-    path = "%s/%s" % (path, newsfilename2)
+    path = "{}/{}".format(path, newsfilename2)
     subprocess.call(["cp", newsfilename, path])
 
-def copy_file(mode, console, country):
+def copy_file(mode, console, region):
     if config["force_all"]:
         for hours in range(0, 24):
-            copy(mode, console, country, hour)
+            copy(mode, console, region, hour)
     else:
-        copy(mode, console, country, datetime.utcnow().hour)
+        copy(mode, console, region, datetime.utcnow().hour)
 
 
 """Run the functions to make the news."""
