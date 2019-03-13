@@ -32,14 +32,7 @@ def download(source):
         "ansa_italian": process_news("ANSA Italian", "ansa_italian", 5, "Europe", News("ansa_italian")),
         "nu_dutch": process_news("NU.nl Dutch", "nu_dutch", 6, "Europe", News("nu_dutch")),
         "reuters_japanese": process_news("Reuters Japanese", "reuters_japanese", 0, "Japan", News("reuters_japanese"))
-    }
-
-    if source in news_list:
-        news_list[source]
-    else:
-        print("Invalid source specified.")
-        exit()
-
+    }[source]
 
 if __name__ == "__main__":
     main()
