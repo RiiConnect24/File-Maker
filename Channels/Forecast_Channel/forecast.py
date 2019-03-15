@@ -484,9 +484,13 @@ def blank_data(list, key):
     current[key][2] = 0
     current[key][3] = -128
     current[key][4] = -128
-    laundry[key] = 231 # Missing/No Data
     uvindex[key] = 255
-    pollen[key] = 231 # Missing/No Data
+    if isJapan(list, key):
+        pollen[key] = 231 # Missing/No Data
+        laundry[key] = 231 # Missing/No Data
+    else:
+        pollen[key] = 255
+        laundry[key] = 255
     current[key][5] = 'FFFF'
     times[key] = get_epoch()
     for k in range(0, 15):
