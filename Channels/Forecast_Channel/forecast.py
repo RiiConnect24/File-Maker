@@ -167,8 +167,8 @@ def check_coords(list, key, lat, lng):
         errors+=1
 
 
-def pollen_level(input):
-    responses = {'None' : 0, 'Low' : 1, 'Moderate' : 2, 'High' : 3, 'Very High' : 4, 'Extreme' : 5}
+def pollen_level(input): # Values modified from API to fit the range 2-5
+    responses = {'None' : 2, 'Low' : 2, 'Moderate' : 3, 'High' : 4, 'Very High' : 5, 'Extreme' : 5}
     return responses[input]
 
 
@@ -484,9 +484,9 @@ def blank_data(list, key):
     current[key][2] = 0
     current[key][3] = -128
     current[key][4] = -128
-    laundry[key] = 255
+    laundry[key] = 231 # Missing/No Data
     uvindex[key] = 255
-    pollen[key] = 255
+    pollen[key] = 231 # Missing/No Data
     current[key][5] = 'FFFF'
     times[key] = get_epoch()
     for k in range(0, 15):
@@ -637,6 +637,7 @@ def offset_write(value, post=True):
 def make_bins(list, data):
     make_forecast_bin(list, data)
     make_short_bin(list, data)
+    reset_data()
 
 
 def generate_data(list, bins):
@@ -1239,7 +1240,6 @@ for list in weathercities:
         for j in bins:
             language_code = j
             make_bins(list, data)
-            reset_data()
     lists += 1
 
 time.sleep(0.1)
