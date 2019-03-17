@@ -31,29 +31,6 @@ from datadog import statsd
 from Channels.Forecast_Channel import forecastlists
 from utils import setup_log, log, u8, u16, u32, s8
 
-weathercities = [forecastlists.weathercities001, forecastlists.weathercities008, forecastlists.weathercities009, forecastlists.weathercities010,
-                 forecastlists.weathercities011, forecastlists.weathercities012, forecastlists.weathercities013,
-                 forecastlists.weathercities014, forecastlists.weathercities015, forecastlists.weathercities016,
-                 forecastlists.weathercities017, forecastlists.weathercities018, forecastlists.weathercities019,
-                 forecastlists.weathercities020, forecastlists.weathercities021, forecastlists.weathercities022,
-                 forecastlists.weathercities023, forecastlists.weathercities024, forecastlists.weathercities025,
-                 forecastlists.weathercities026, forecastlists.weathercities027, forecastlists.weathercities028,
-                 forecastlists.weathercities029, forecastlists.weathercities030, forecastlists.weathercities031,
-                 forecastlists.weathercities032, forecastlists.weathercities033, forecastlists.weathercities034,
-                 forecastlists.weathercities035, forecastlists.weathercities036, forecastlists.weathercities037,
-                 forecastlists.weathercities038, forecastlists.weathercities039, forecastlists.weathercities040,
-                 forecastlists.weathercities041, forecastlists.weathercities042, forecastlists.weathercities043,
-                 forecastlists.weathercities044, forecastlists.weathercities045, forecastlists.weathercities046,
-                 forecastlists.weathercities047, forecastlists.weathercities048, forecastlists.weathercities049,
-                 forecastlists.weathercities050, forecastlists.weathercities051, forecastlists.weathercities052,
-                 forecastlists.weathercities065, forecastlists.weathercities066, forecastlists.weathercities067,
-                 forecastlists.weathercities074, forecastlists.weathercities076, forecastlists.weathercities077,
-                 forecastlists.weathercities078, forecastlists.weathercities079, forecastlists.weathercities082,
-                 forecastlists.weathercities083, forecastlists.weathercities088, forecastlists.weathercities094,
-                 forecastlists.weathercities095, forecastlists.weathercities096, forecastlists.weathercities097,
-                 forecastlists.weathercities098, forecastlists.weathercities099, forecastlists.weathercities105,
-                 forecastlists.weathercities107, forecastlists.weathercities108, forecastlists.weathercities110]
-
 VERSION = 4.3
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
@@ -317,7 +294,7 @@ def ui():
         dl = len(forecast_list) - cached > 0
         elapsed_time = int(round(time.time() - total_time))
         bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
-        totalpercent = int(round(float(lists) / float(len(weathercities)) * 100))
+        totalpercent = int(round(float(lists) / float(len(forecastlists.weathercities)) * 100))
         totalfill = int(totalpercent * 35 / 100)
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
         if status == 1:
@@ -332,7 +309,7 @@ def ui():
         out += "API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (apirequests, retrycount, elapsed_time)
         out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth, cities, errors)
         out += "\nProcessing List #%s/%s (%s): %s %s\n\n" % (
-        listid, len(weathercities), country_code, currentlist, "." * progcount)
+        listid, len(forecastlists.weathercities), country_code, currentlist, "." * progcount)
         if status == 1 and dl: out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
         else: out += "Downloading Forecasts [%s] 100%%\n" % display
         if status == 2: out += "Parsing Data [%s]\n" % prog[progcount]
@@ -412,7 +389,7 @@ def get_locationkey(forecast_list, key):
     country = get_country(forecast_list, key)
     region = get_region(forecast_list, key)
     city = get_city(forecast_list, key)
-    listid = weathercities.index(forecast_list)
+    listid = forecastlists.weathercities.index(forecast_list)
     if region == '' and (country not in forecastlists.bincountries or matches_country_code(forecast_list, key)):
         a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
         b = 'FE'
@@ -436,7 +413,7 @@ def zoom(forecast_list, key, mode):
 
 
 def generate_locationkeys(forecast_list):
-    listid = weathercities.index(forecast_list)
+    listid = forecastlists.weathercities.index(forecast_list)
     weatherloc[listid] = {}
     weatherloc[listid]['null'] = {}
     weatherloc[listid]['no-region'] = {}
@@ -543,7 +520,6 @@ def get_accuweather_api(forecast_list, key):
     tree = pollen_level(airandpollen[1].text)
     ragweed = pollen_level(airandpollen[2].text)
     avg = int(round((grass+tree+ragweed)/3))
-    if avg < 2: avg = 2
     pollen[key] = avg
     precipitation[key][8] = int(forecast[3][6][19].text)
     precipitation[key][9] = int(forecast[4][6][19].text)
@@ -1202,12 +1178,12 @@ ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
 
-for forecast_list in weathercities:
+for forecast_list in forecastlists.weathercities:
     threads = []
     status = 1
     language_code = 1
     shortcount = 0
-    listid = weathercities.index(forecast_list) + 1
+    listid = forecastlists.weathercities.index(forecast_list) + 1
     currentlist = list(forecast_list.values())[0][2][1]
     weather_data = {}
     loop = True
