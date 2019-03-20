@@ -45,8 +45,7 @@ bw_usage = 0  # Bandwidth Usage Counter
 lists = 0  # Lists Counter
 errors = 0  # Errors
 bandwidth = 0.0  # Bandwidth
-file = None
-loop = None
+file = None # Forecast file which is currently open
 
 uvindex = {}
 wind = {}
@@ -457,9 +456,13 @@ def blank_data(forecast_list, key):
     current[key][2] = 0
     current[key][3] = -128
     current[key][4] = -128
-    laundry[key] = 255
     uvindex[key] = 255
-    pollen[key] = 255
+    if isJapan(list, key):
+        pollen[key] = 231 # Missing/No Data
+        laundry[key] = 231 # Missing/No Data
+    else:
+        pollen[key] = 255
+        laundry[key] = 255
     current[key][5] = 'FFFF'
     times[key] = get_epoch()
     for k in range(0, 15):
@@ -1170,6 +1173,7 @@ total_time = time.time()
 q = queue.Queue()
 concurrent = 10 if config["useMultithreaded"] else 1
 file_gen = 3 if config["enableWiiUGeneration"] else 2
+loop = None
 ui_run = True
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
