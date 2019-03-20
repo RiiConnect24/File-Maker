@@ -497,12 +497,12 @@ def get_accuweather_api(forecast_list, key):
     today[key][2] = int(forecast[2][6][3].text)
     today[key][3] = to_celsius(today[key][1])
     today[key][4] = to_celsius(today[key][2])
-    today[key][5] = get_icon(int(forecast[2][6][2].text), forecast_list, key)
+    today[key][0] = get_icon(int(forecast[2][6][2].text), forecast_list, key)
     tomorrow[key][1] = int(forecast[3][6][4].text)
     tomorrow[key][2] = int(forecast[3][6][3].text)
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = to_celsius(tomorrow[key][2])
-    tomorrow[key][5] = get_icon(int(forecast[3][6][2].text), forecast_list, key)
+    tomorrow[key][0] = get_icon(int(forecast[3][6][2].text), forecast_list, key)
     uvindex[key] = int(current_conditions[14].attrib['index'])
     if uvindex[key] > 12:
         uvindex[key] = 12
@@ -512,9 +512,9 @@ def get_accuweather_api(forecast_list, key):
     wind[key][3] = mph_kmh(forecast[3][6][7].text)
     wind[key][4] = int(forecast[3][6][7].text)
     wind[key][5] = forecast[3][6][8].text
-    grass = pollen_level(airandpollen[0].text)
-    tree = pollen_level(airandpollen[1].text)
-    ragweed = pollen_level(airandpollen[2].text)
+    grass = forecastlists.pollen_api[airandpollen[0].text]
+    tree = forecastlists.pollen_api[airandpollen[1].text]
+    ragweed = forecastlists.pollen_api[airandpollen[2].text]
     avg = int(round((grass+tree+ragweed)/3))
     pollen[key] = avg
     precipitation[key][8] = int(forecast[3][6][19].text)

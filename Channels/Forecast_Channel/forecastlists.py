@@ -10626,6 +10626,15 @@ laundry[90] = "乾き非常によし：\n2・3時間干せばおおむね乾く"
 laundry[100] = "乾き非常によし：\n2・3時間干せば十分よく乾く"
 laundry[231] = "欠測（データなし）"
 
+pollen_api = {}
+
+pollen_api['None'] = 2
+pollen_api['Low'] = 2
+pollen_api['Moderate'] = 3
+pollen_api['High'] = 4
+pollen_api['Very High'] = 5
+pollen_api['Extreme'] = 5
+
 weathercities = [weathercities001, weathercities008, weathercities009, weathercities010,
                  weathercities011, weathercities012, weathercities013,
                  weathercities014, weathercities015, weathercities016,
