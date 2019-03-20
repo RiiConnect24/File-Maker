@@ -792,9 +792,7 @@ def make_source_pictures(source_table, data):
 
     source_articles = []
 
-    """These are the news sources which will use a custom JPG for the logo."""
-
-    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"]
+    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"] # These are the news sources which will use a custom JPG for the logo.
 
     for article in list(data.values()):
         if article[8] not in source_articles:
@@ -806,6 +804,9 @@ def make_source_pictures(source_table, data):
                 with open("./Channels/News_Channel/logos/%s.jpg" % article[8], "rb") as source_file:
                     image = source_pictures["logo_%s" % article[8]] = source_file.read()
                     source_table["pictures_size_%s" % article[8]] = u32(len(image))
+                    
+                if source_table["source_picture_%s"] != u32(0):
+                    source_table["source_picture_%s"] = u32(0)
                 
 
     return source_pictures
