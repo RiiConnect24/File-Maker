@@ -3,7 +3,7 @@
 
 # ===========================================================================
 # FORECAST CHANNEL GENERATION SCRIPT
-# VERSION 4.3
+# VERSION 5.0
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
 # Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
@@ -31,7 +31,7 @@ from datadog import statsd
 from Channels.Forecast_Channel import forecastlists
 from utils import setup_log, log, u8, u16, u32, s8
 
-VERSION = 4.3
+VERSION = 5.0
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
