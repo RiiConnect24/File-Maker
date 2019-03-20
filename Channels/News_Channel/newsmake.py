@@ -805,8 +805,8 @@ def make_source_pictures(source_table, data):
                     image = source_pictures["logo_%s" % article[8]] = source_file.read()
                     source_table["pictures_size_%s" % article[8]] = u32(len(image))
                     
-                if source_table["source_picture_%s" % article[8]] != u32(0):
-                    source_table["source_picture_%s" % article[8]] = u32(0)
+                if source_table["source_picture_%s" % article[8]] != u8(0):
+                    source_table["source_picture_%s" % article[8]] = u8(0)
                 
 
     return source_pictures
