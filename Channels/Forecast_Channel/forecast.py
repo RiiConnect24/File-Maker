@@ -1095,7 +1095,8 @@ def make_location_table(forecast_list):
 def make_forecast_text_table(forecast_list):
     text_table = collections.OrderedDict()
     for key in forecast_list.keys():
-        text_table[num()] = "\0".join(list(filter(None, [forecast_list[key][0][language_code],
+        keyIndex = list(forecast_list).index(keys)
+        text_table[keyIndex] = "\0".join(list(filter(None, [forecast_list[key][0][language_code],
                                                            forecast_list[key][1][language_code],
                                                            forecast_list[key][2][language_code]]))).encode("utf-16be") + pad(2)
     return text_table
@@ -1218,7 +1219,7 @@ for forecast_list in forecastlists.weathercities:
             make_bins(forecast_list, data)
     lists += 1
 
-time.sleep(0.1)
+time.sleep(0.15)
 ui_run = False
 ui_thread.join()
 dump_db()
