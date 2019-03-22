@@ -457,7 +457,7 @@ def blank_data(forecast_list, key):
     current[key][3] = -128
     current[key][4] = -128
     uvindex[key] = 255
-    if isJapan(list, key):
+    if isJapan(forecast_list, key):
         pollen[key] = 231 # Missing/No Data
         laundry[key] = 231 # Missing/No Data
     else:
