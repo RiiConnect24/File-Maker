@@ -107,7 +107,7 @@ def get_country(forecast_list, key):
 
 
 def get_all(forecast_list, key):
-    return ", ".join(filter(None, [get_city(forecast_list, key), get_region(forecast_list, key), get_country(forecast_list, key)]))
+    return ", ".join(list(filter(None, [get_city(forecast_list, key), get_region(forecast_list, key), get_country(forecast_list, key)])))
 
 
 def pad(amnt):
@@ -1091,9 +1091,9 @@ def make_location_table(forecast_list):
 def make_forecast_text_table(forecast_list):
     text_table = collections.OrderedDict()
     for keys in forecast_list.keys():
-        text_table[num()] = "\0".join(filter(None, [forecast_list[keys][0][language_code],
+        text_table[num()] = "\0".join(list(filter(None, [forecast_list[keys][0][language_code],
                                                            forecast_list[keys][1][language_code],
-                                                           forecast_list[keys][2][language_code]])).encode("utf-16be") + pad(2)
+                                                           forecast_list[keys][2][language_code]]))).encode("utf-16be") + pad(2)
     return text_table
 
 
