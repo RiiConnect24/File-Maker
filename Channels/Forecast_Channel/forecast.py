@@ -139,11 +139,6 @@ def check_coords(forecast_list, key, lat, lng):
         errors+=1
 
 
-def pollen_level(input):
-    responses = {'None' : 0, 'Low' : 1, 'Moderate' : 2, 'High' : 3, 'Very High' : 4, 'Extreme' : 5}
-    return responses[input]
-
-
 def get_bins(country_code):
     if country_code == 1:
         bins = [0]
