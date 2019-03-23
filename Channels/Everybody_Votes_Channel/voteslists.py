@@ -34,7 +34,7 @@ countries["Italy"] = ["イタリア", "Italy", "Italien", "Italie", "Italia", "I
 countries["Luxembourg"] = ["ルクセンブルク", "Luxembourg", "Luxemburg", "Luxembourg", "Luxemburgo", "Lussemburgo", "Luxemburg"]
 countries["Netherlands"] = ["オランダ", "Netherlands", "Niederlande", "Pays-Bas", "Países Bajos", "Paesi Bassi", "Nederland"]
 countries["New Zealand"] = ["ニュージーランド", "New Zealand", "Neuseeland", "Nouvelle-Zélande", "Nueva Zelanda", "Nuova Zelanda", "Nieuw-Zeeland"]
-countries["Norway"] = ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "
+countries["Norway"] = ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"]
 countries["Poland"] = ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"]
 countries["Portugal"] = ["ポルトガル", "Portugal", "Portugal", "Portugal", "Portugal", "Portogallo", "Portugal"]
 countries["Spain"] = ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"]
@@ -44,7 +44,7 @@ countries["United Kingdom"] = ["イギリス", "United Kingdom", "Großbritannie
 
 """List of country codes."""
 
-country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 98, 105, 107, 108, 110]
+country_codes = [1, 10, 16, 18, 20, 21, 22, 25, 30, 36, 40, 42, 49, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110]
 
 """These lists tell the script how many entries are used for the position tables."""
 """(if it's more than 1, that must mean the region is split up into multiple parts)"""
@@ -116,7 +116,7 @@ region_number[88] = 3
 region_number[94] = 12
 region_number[95] = 13
 region_number[96] = 5
-# region_number[97] = 16
+region_number[97] = 16
 region_number[98] = 7
 region_number[105] = 17
 region_number[107] = 21
@@ -167,6 +167,7 @@ country_language[88] = [2, 3, 5, 6]
 country_language[94] = [6]
 country_language[95] = [1]
 country_language[96] = [1]
+country_language[97] = [1]
 country_language[98] = [1, 4, 7]
 country_language[105] = [4]
 country_language[107] = [1]
