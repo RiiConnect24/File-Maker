@@ -243,20 +243,20 @@ def mysql_get_votes(days, type, index):
 
     """Initialize blank lists to store votes in."""
 
-    male_voters_response_1 = [0] * 33
-    female_voters_response_1 = [0] * 33
-    male_voters_response_2 = [0] * 33
-    female_voters_response_2 = [0] * 33
+    male_voters_response_1 = [0] * 34
+    female_voters_response_1 = [0] * 34
+    male_voters_response_2 = [0] * 34
+    female_voters_response_2 = [0] * 34
 
-    region_response_1 = [0] * 33
-    region_response_2 = [0] * 33
+    region_response_1 = [0] * 34
+    region_response_2 = [0] * 34
 
     for k, v in region_number.items():
         region_response_1[country_codes.index(k)] = [0] * v
         region_response_2[country_codes.index(k)] = [0] * v
 
-    predict_response_1 = [0] * 33
-    predict_response_2 = [0] * 33
+    predict_response_1 = [0] * 34
+    predict_response_2 = [0] * 34
 
     """Grab the votes from the database."""
 
