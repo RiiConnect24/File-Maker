@@ -219,7 +219,7 @@ def get_bandwidth_usage(r):
 
 
 def worker():
-    while loop:
+    while threads_run:
         try:
             item = q.get_nowait()
             get_data(item[0], item[1])
@@ -240,11 +240,16 @@ def spawn_threads():
             t.start()
 
 def close_threads():
+    global threads_run, ui_run
+    threads_run = False
     for t in threads:
         t.join(60)
         if t.isAlive():
             log("Stalled thread detected", "CRITICAL")
             exit()
+
+    ui_run = False
+    ui_thread.join()
 
 
 def refresh(type):
@@ -276,7 +281,7 @@ def ui():
         display = "✓"
         refresh_type = 2
         os.system('clear')
-    while not loop:
+    while not ui_run:
         pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
     header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
@@ -1090,7 +1095,7 @@ def make_location_table(forecast_list):
 def make_forecast_text_table(forecast_list):
     text_table = collections.OrderedDict()
     for key in forecast_list.keys():
-        keyIndex = list(forecast_list).index(keys)
+        keyIndex = list(forecast_list).index(key)
         text_table[keyIndex] = "\0".join(list(filter(None, [forecast_list[key][0][language_code],
                                                            forecast_list[key][1][language_code],
                                                            forecast_list[key][2][language_code]]))).encode("utf-16be") + pad(2)
@@ -1171,23 +1176,25 @@ s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.a
 ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
 total_time = time.time()
 q = queue.Queue()
+threads = []
 concurrent = 10 if config["useMultithreaded"] else 1
 file_gen = 3 if config["enableWiiUGeneration"] else 2
-loop = None
-ui_run = True
+ui_run = None
+threads_run = True
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
+spawn_threads()
+
 
 for forecast_list in forecastlists.weathercities:
-    threads = []
     status = 1
     language_code = 1
     shortcount = 0
     listid = forecastlists.weathercities.index(forecast_list) + 1
     currentlist = list(forecast_list.values())[0][2][1]
+    ui_run = True
     weather_data = {}
-    loop = True
     country_code = forecastlists.bincountries[currentlist]
     region_flag = get_region_flag(country_code)
     bins = get_bins(country_code)
@@ -1197,10 +1204,7 @@ for forecast_list in forecastlists.weathercities:
         if not matches_country_code(forecast_list, key) or get_region(forecast_list, key) == '': shortcount += 1
         if key in cache and cache[key] == get_all(forecast_list, key): cached += 1
         else: q.put([forecast_list, key])
-    spawn_threads()
     q.join()
-    loop = False
-    close_threads()
     status = 2
     parse_data(forecast_list)
     cities += citycount
@@ -1214,9 +1218,8 @@ for forecast_list in forecastlists.weathercities:
             make_bins(forecast_list, data)
     lists += 1
 
-time.sleep(0.15)
-ui_run = False
-ui_thread.join()
+time.sleep(0.1)
+close_threads()
 dump_db()
 
 if config["production"]:
