@@ -528,7 +528,7 @@ class Parse(News):
     def parse_ap(self):
         try:
             self.newsdata = requests.get(self.url).json()
-        except JSONDecodeError:
+        except:
             return []
 
         if self.newsdata["localMemberName"] is not None:
