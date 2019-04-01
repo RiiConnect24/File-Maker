@@ -515,9 +515,9 @@ class Parse(News):
         self.newsdata.download()
         try:
             self.newsdata.parse()
-        except ArticleException:
+        except newspaper.article.ArticleException:
             self.newsdata.parse()
-        except ArticleException:
+        except newspaper.article.ArticleException:
             return []
 
         self.article = self.newsdata.text
