@@ -84,22 +84,6 @@ sources = {
         "position": 4,
         "copyright": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies."
     },
-    "afp_spanish": {
-        "topics_news": collections.OrderedDict([
-            ("Mundo", "world"),
-            ("Deportes", "sports"),
-            ("Economia", "economy"),
-            ("Cultura", "culture"),
-            ("Gente", "people"),
-            ("Ciencia y Technologia", "science_technology"),
-        ]),
-        "languages": [1, 2, 3, 4, 5, 6],
-        "language_code": 4,
-        "country_code": 110,
-        "picture": 4,
-        "position": 4,
-        "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse",
-    },
     "afp_french": {
         "topics_news": collections.OrderedDict([
             ("Monde", "world"),
