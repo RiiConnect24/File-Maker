@@ -27,7 +27,7 @@ from PIL import Image
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 
-from utils import setup_log, log, u8, u16, u32, u32_littleendian
+from utils import setup_log, log, u8, u16, u32, u32_littleendian, s16
 import importlib
 
 with open("./Channels/News_Channel/config.json", "rb") as f:
@@ -340,9 +340,7 @@ def locations_download(language_code, data):
                 location = u16(0)
                 zoom_factor = u32_littleendian(6)
 
-                coordinates = u16(int(read[0]["geometry"]["location"]["lat"] / 0.0054931640625) & 0xFFFF) + u16(int(
-                    read[0]["geometry"]["location"][
-                        "lng"] / 0.0054931640625) & 0xFFFF) + country + region + location + zoom_factor
+                coordinates = s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536))) + s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + country + region + location + zoom_factor
 
                 for filenames in locations[name]:
                     if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
