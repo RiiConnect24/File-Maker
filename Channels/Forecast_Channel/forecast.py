@@ -172,7 +172,7 @@ def coord_decode(value):
     value = int(value, 16)
     if value >= 0x8000:
         value -= 0x10000
-    return value * 0.0054931640625
+    return value * (360 / 65536)
 
 def validHour(hour):
     return True if -1 < hour < 24 else False
@@ -530,8 +530,8 @@ def get_accuweather_api(forecast_list, key):
     lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
     lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
     check_coords(forecast_list,key,lat,lng)
-    globe[key]['lat'] = u16(int(lat / 0.0054931640625) & 0xFFFF)
-    globe[key]['lng'] = u16(int(lng / 0.0054931640625) & 0xFFFF)
+    globe[key]['lat'] = s16(int(lat / (360 / 65536)))
+    globe[key]['lng'] = s16(int(lng / (360 / 65536)))
     globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
     week[key][0] = int(forecast[3][6][3].text)
