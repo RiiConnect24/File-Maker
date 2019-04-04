@@ -767,7 +767,7 @@ def sign_file(name, local_name, server_name):
     copy = file.read()
     crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
     size = os.path.getsize(name) + 12
-    dest = open(local_name, 'w+')
+    dest = open(local_name, 'wb')
     dest.write(u32(0))
     dest.write(u32(size))
     dest.write(binascii.unhexlify(crc32))
@@ -780,7 +780,7 @@ def sign_file(name, local_name, server_name):
     file = open(local_name, 'rb')
     new = file.read()
     file.close()
-    dest = open(local_name, "w+")
+    dest = open(local_name, 'wb')
     key = open(config["key_path"], 'rb')
     log("RSA Signing ...", "VERBOSE")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
