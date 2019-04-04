@@ -29,7 +29,7 @@ import rsa
 from datadog import statsd
 
 from Channels.Forecast_Channel import forecastlists
-from utils import setup_log, log, u8, u16, u32, s8
+from utils import setup_log, log, u8, u16, u32, s8, s16
 
 VERSION = 5.0
 apirequests = 0  # API Request Counter
@@ -61,10 +61,6 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
-
-
-def temp(num):
-    return num & 0xFF
 
 
 def to_celsius(temp):
