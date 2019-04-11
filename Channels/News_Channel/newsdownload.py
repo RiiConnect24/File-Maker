@@ -395,6 +395,8 @@ class News:
 
     def parse_feed(self):
         print("Downloading News from " + self.source + "...\n")
+        
+        i = 0
 
         for key, value in list(self.sourceinfo["cat"].items()):
             if self.source == "AP":
@@ -408,7 +410,7 @@ class News:
                     else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
                     else feedparser.parse(self.url % key)
 
-            i = 0
+            j = 0
 
             entries = feed["cards"] if self.source == "AP" else feed.entries
 
@@ -427,7 +429,7 @@ class News:
                     continue
 
                 if current_time - updated_time < 60:
-                    i += 1
+                    i, j += 1
                     
                     if i > 25:
                         break
@@ -447,7 +449,7 @@ class News:
                                             title, self.language).get_news()
 
                     if downloaded_news:
-                        self.newsdata[value + str(i)] = downloaded_news
+                        self.newsdata[value + str(j)] = downloaded_news
 
 
 
