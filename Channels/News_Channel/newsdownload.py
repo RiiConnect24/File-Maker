@@ -428,6 +428,9 @@ class News:
 
                 if current_time - updated_time < 60:
                     i += 1
+                    
+                    if i > 25:
+                        break
 
                     if self.source == "AFP_French" and key not in entry["link"]:
                         continue
