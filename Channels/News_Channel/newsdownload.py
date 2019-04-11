@@ -429,7 +429,8 @@ class News:
                     continue
 
                 if current_time - updated_time < 60:
-                    i, j += 1
+                    i += 1
+                    j += 1
                     
                     if i > 25:
                         break
