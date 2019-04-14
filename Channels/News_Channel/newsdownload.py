@@ -530,7 +530,9 @@ class Parse(News):
         else:
             return []
         
-        self.article = BeautifulSoup(self.newsdata["storyHTML"].replace("</p>", "\n\n</p>"), "lxml").text
+        self.article = newspaper.fulltext(self.newsdata["storyHTML"])
+
+        self.article = self.article.replace("\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.", "")
 
         if self.article[-2:] == "\n\n":
             self.article = self.article[:-2]
