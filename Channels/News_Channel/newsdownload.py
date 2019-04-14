@@ -563,6 +563,9 @@ class Parse(News):
     def parse_reuters(self):
         try:
             self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/", " REUTERS/")
+            
+            if self.caption in self.article:
+                self.article = self.article.replace(self.caption + "\n\n", "")
         except AttributeError:
             pass
 
