@@ -39,7 +39,6 @@ if config["production"]: setup_log(config["sentry_url"], True)
 
 sources = {
     # urls string argument is category key
-    # for example: national on ap_english would go to http://hosted.ap.org/lineups/USHEADS-rss_2.0.xml?SITE=AP&SECTION=HOME&TEMPLATE=DEFAULT
     # reference parse_feed
 
     "ap_english": {
