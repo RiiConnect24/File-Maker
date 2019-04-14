@@ -534,7 +534,7 @@ class Parse(News):
 
         self.article = self.article.replace("\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.", "")
 
-        if self.article[-2:] == "\n\n":
+        if self.article[-2:] == "\n":
             self.article = self.article[:-2]
 
         if self.newsdata["bylines"] != "" and self.newsdata["bylines"] != None:
@@ -562,23 +562,9 @@ class Parse(News):
 
     def parse_reuters(self):
         try:
-            self.soup.find("div", {"class": "StandardArticleBody_trustBadgeContainer"}).decompose()
-        except AttributeError:
-            pass
-
-        try:
             self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/", " REUTERS/")
         except AttributeError:
             pass
-
-        try:
-            self.soup.findall("div", {"class": "Image_caption"}).decompose()
-        except TypeError:
-            pass
-
-        self.article = BeautifulSoup(
-            str(self.soup.find("div", {"class": "StandardArticleBody_body"})).replace("</p>", "\n\n</p>"),
-            "lxml").text
 
         if self.picture is not None:
             if "rcom-default.png" in self.picture:
