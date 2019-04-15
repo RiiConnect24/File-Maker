@@ -529,10 +529,7 @@ class Parse(News):
         else:
             return []
         
-        self.article = newspaper.Article(url="")
-        self.article.set_html(self.newsdata["storyHTML"])
-        self.article.parse()
-        self.article = self.article.text
+        self.article = newspaper.fulltext(self.newsdata["storyHTML"], language=self.language)
 
         self.article = self.article.replace("\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.", "")
 
@@ -544,7 +541,7 @@ class Parse(News):
 
         if self.article is None:
             return []
-
+        
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"] != []:
             if self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
                 self.resize = True
