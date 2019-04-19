@@ -32,6 +32,7 @@ from Channels.Forecast_Channel import forecastlists
 from utils import setup_log, log, u8, u16, u32, s8, s16
 
 VERSION = 5.0
+GLOBE_CONSTANT = (360 / 65536)
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
@@ -168,7 +169,7 @@ def coord_decode(value):
     value = int(value, 16)
     if value >= 0x8000:
         value -= 0x10000
-    return value * (360 / 65536)
+    return value * GLOBE_CONSTANT
 
 def validHour(hour):
     return True if -1 < hour < 24 else False
@@ -223,7 +224,7 @@ def worker():
         except queue.Empty:
             pass
         except Exception as e:
-            log(e, "WARNING")
+            log("A thread exception has occurred: %s" % e, "WARNING")
             continue
 
 
@@ -526,8 +527,8 @@ def get_accuweather_api(forecast_list, key):
     lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
     lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
     check_coords(forecast_list,key,lat,lng)
-    globe[key]['lat'] = s16(int(lat / (360 / 65536)))
-    globe[key]['lng'] = s16(int(lng / (360 / 65536)))
+    globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
+    globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
     globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
     week[key][0] = int(forecast[3][6][3].text)
@@ -582,7 +583,7 @@ def parse_data(forecast_list):
             if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
                 weather_data[k] = None
         except Exception as e:
-            log(e, "WARNING")
+            log("An API parsing exception has occurred: %s" % e, "WARNING")
             weather_data[k] = None
             continue
         if weather_data[k] is not None:
