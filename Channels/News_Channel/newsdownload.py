@@ -135,9 +135,9 @@ sources = {
         ])
     },
     "reuters_japanese": {
-        "name": "Reuters_Japanese",
+        "name": "Reuters",
         "url": "http://feeds.reuters.com/reuters/%s.rss",
-        "lang": "en",  # newspaper does not support japanese
+        "lang": "ja",
         "cat": collections.OrderedDict([
             ("JPWorldNews", "world"),
             ("JPBusinessNews", "business"),
@@ -308,7 +308,7 @@ def locations_download(language_code, data):
         if name == "":
             continue
 
-        uni_name = name if languages[language_code] == "ja" else unidecode(name)
+        uni_name = name if languages[language_code] == "ja" else unidecode(name) # If using unidecode with Japanese, it'll translate all the characters to English
 
         print(uni_name)
 
@@ -485,7 +485,6 @@ class Parse(News):
             "ANSA": self.parse_ansa,
             "NU.nl": self.parse_nu,
             "ANP": self.parse_nu,
-            "Reuters_Japanese": self.parse_reuters_japanese
         }[self.source]()
 
         self.get_news()
@@ -569,13 +568,15 @@ class Parse(News):
             pass
 
         if self.picture is not None:
-            if "rcom-default.png" in self.picture:
+            if "rcom-default.png" in self.picture: # Default picture
                 self.picture = None
             else:
                 self.resize = True
 
         if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
             self.location = self.article.split(" (Reuters)")[0]
+        elif "\uff3b" in self.article:
+            self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
 
     def parse_afp(self):
         try:
@@ -649,39 +650,3 @@ class Parse(News):
             self.location = geoparser_get(self.article)
         except:
             pass
-
-    def parse_reuters_japanese(self):
-        try:
-            self.headline = self.soup.find("h1", {"class": "ArticleHeader_headline"}).text
-        except AttributeError:
-            return None
-
-        try:
-            self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/",
-                                                                                           " REUTERS/")
-        except AttributeError:
-            pass
-
-        try:
-            self.soup.findall("div", {"class": "Image_caption"}).decompose()
-        except TypeError:
-            pass
-
-        article_text = BeautifulSoup(
-            str(self.soup.find("div", {"class": "StandardArticleBody_body"})).replace("</p>", "\n\n</p>"),
-            "lxml").text
-
-        self.article = "\n".join(textwrap.wrap(article_text, 25))
-
-        if self.picture is not None:
-            if "rcom-default.png" in self.picture:
-                self.picture = None
-            else:
-                self.resize = False
-                try:
-                    self.picture += "&w=200"
-                except NameError:
-                    pass
-
-        if "\uff3b" in self.article:
-            self.location = self.article.split("\uff3b")[1].split("\u3000")[0]

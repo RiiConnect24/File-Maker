@@ -776,7 +776,7 @@ def make_source_pictures(source_table, data):
 
     source_articles = []
 
-    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl", "Reuters_Japanese"] # These are the news sources which will use a custom JPG for the logo.
+    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl"] # These are the news sources which will use a custom JPG for the logo.
 
     for article in list(data.values()):
         if article[8] not in source_articles:
