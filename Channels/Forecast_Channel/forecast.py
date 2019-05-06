@@ -773,9 +773,9 @@ def sign_file(name, local_name, server_name):
     dest.write(u32(size))
     dest.write(binascii.unhexlify(crc32))
     dest.write(copy)
-    os.remove(name)
     dest.close()
     file.close()
+    os.remove(name)
     log("Compressing ...", "VERBOSE")
     subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name], stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(local_name, 'rb')
