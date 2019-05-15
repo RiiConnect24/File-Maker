@@ -47,7 +47,6 @@ results = collections.OrderedDict()
 country_code = 49
 country_count = 0
 language_code = 1
-languages = {}
 num = 0
 number = 0
 nw = ""
@@ -312,6 +311,25 @@ def num():
     return num1
 
 
+def get_country_number():
+    if file_type == "r" and nw == "w": return len(countries) * 7
+    elif file_type == "q" or file_type == "r": return 0
+    return len(countries) * 7
+
+
+def get_position_number():
+    if file_type == "q" or national_results == 0: return 0
+    elif country_code == 77: return 22
+    elif country_code in position_table.keys(): return len(position_table[country_code])
+    return 0
+
+
+def get_file_name():
+    if file_type == "q": return get_name() + '_q'
+    elif file_type == "r": return get_name() + '_r'
+    else: return 'voting'
+
+
 def dec(data): return int(data, 16)
 
 
@@ -465,17 +483,11 @@ def make_bin(country_code):
         make_question_text(question_text_table)
     if file_type == "v" or file_type == "r" and national_results == 0:
         make_country_table(country_table)
-    if file_type == "q":
-        question_file = get_name() + '_q'
-    elif file_type == "r":
-        question_file = get_name() + '_r'
-    else:
-        question_file = "voting"
+    question_file = get_file_name()
     print "Writing to %s.bin ..." % question_file
 
     with open(question_file, 'wb') as f:
         for dictionary in dictionaries:
-            # print("Writing to %s ..." % hex(f.tell()).rstrip("L"))
             for values in dictionary.values():
                 f.write(values)
         f.write(pad(16))
@@ -513,13 +525,13 @@ def make_header():
     header["national_result_offset"] = u32(0)
     header["national_result_detailed_number"] = u16(national_results * region_number[country_code])
     header["national_result_detailed_offset"] = u32(0)
-    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else 22 if country_code == 77 else len(position_table[country_code]) if country_code in position_table.keys() else 0)
+    header["position_number"] = u16(get_position_number())
     header["position_offset"] = u32(0)
     header["worldwide_result_number"] = u8(worldwide_results)
     header["worldwide_result_offset"] = u32(0)
     header["worldwide_result_detailed_number"] = u16(0)
     header["worldwide_result_detailed_offset"] = u32(0)
-    header["country_name_number"] = u16(len(countries) * 7 if file_type == "r" and nw == "w" else 0 if file_type == "q" or file_type == "r" else len(countries) * 7)
+    header["country_name_number"] = u16(get_country_number())
     header["country_name_offset"] = u32(0)
 
     return header
@@ -766,7 +778,7 @@ def make_question_text(question_text_table):
 
 
 prepare()
-if nw != "w":
+if nw == "n":
     for country_code in country_codes[1:]:
         make_bin(country_code)
 else:
