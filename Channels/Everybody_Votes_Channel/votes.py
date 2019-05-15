@@ -36,6 +36,8 @@ if config["production"]:
 print "Everybody Votes Channel File Generator \n"
 print "By John Pansera / Larsen Vallecillo / www.rc24.xyz \n"
 
+languages = {"Japanese" : 0, "English" : 1, "German" : 2, "French" : 3, "Spanish" : 4, "Italian" : 5, "Dutch" : 6}
+
 worldwide = 0
 national = 0
 national_results = 0
@@ -739,17 +741,6 @@ def make_country_name_table(header):
             country_name_table["text_offset_%s_%s" % (num, i)] = u32(0)
 
     return country_name_table
-
-
-def make_language_table():  # Default channel language table
-    global languages
-    languages["Japanese"] = 0
-    languages["English"] = 1
-    languages["German"] = 2
-    languages["French"] = 3
-    languages["Spanish"] = 4
-    languages["Italian"] = 5
-    languages["Dutch"] = 6
 
 
 def make_country_table(country_name_table):
