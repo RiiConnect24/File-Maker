@@ -104,7 +104,7 @@ def pad(amnt): return "\0" * amnt
 
 
 def prepare():
-    global country_count, countries, file_type, questions, poll_id, write_questions, write_results, results, position, national, worldwide
+    global file_type
     print "Preparing ..."
     mysql_connect()
     if len(sys.argv) == 1:
@@ -147,7 +147,7 @@ def manual_run():
 
 
 def automatic_questions():
-    global write_questions, write_results, questions, nw
+    global write_questions, questions, nw
     write_questions = True
     nw = sys.argv[2]
     mysql_get_questions(1, nw)
@@ -156,7 +156,7 @@ def automatic_questions():
 
 
 def automatic_results():
-    global write_results, results, national, worldwide, questions, national_results, worldwide_results, nw
+    global write_results, results, national, worldwide, questions, nw
     write_results = True
     nw = sys.argv[2]
     results[get_poll_id()] = mysql_get_votes(nw, 1)
@@ -170,7 +170,7 @@ def automatic_results():
 
 
 def automatic_votes():
-    global write_questions, write_results, questions, results, national, worldwide, questions
+    global write_questions, write_results, questions, results, questions
     write_questions = True
     write_results = True
     mysql_get_questions(1, "w")
@@ -452,7 +452,6 @@ def sign_file(name):
 
 
 def make_bin(country_code):
-    global countries, file_type
     print "Processing ..."
     voting = make_header()
     if write_questions:
@@ -533,7 +532,6 @@ def make_header():
 
 
 def make_national_question_table(header):
-    global national
     national_question_table = collections.OrderedDict()
     dictionaries.append(national_question_table)
 
@@ -556,7 +554,6 @@ def make_national_question_table(header):
 
 
 def make_worldwide_question_table(header):
-    global worldwide
     worldwide_question_table = collections.OrderedDict()
     dictionaries.append(worldwide_question_table)
 
@@ -586,7 +583,6 @@ def make_worldwide_question_table(header):
 
 
 def make_question_text_table(header):
-    global questions
     question_text_table = collections.OrderedDict()
     dictionaries.append(question_text_table)
 
@@ -728,7 +724,6 @@ def make_worldwide_result_detailed_table(header):
 
 
 def make_country_name_table(header):
-    global countries
     country_name_table = collections.OrderedDict()
     dictionaries.append(country_name_table)
 
@@ -759,7 +754,6 @@ def make_country_table(country_name_table):
 
 
 def make_question_text(question_text_table):
-    global question_data
     question_text = collections.OrderedDict()
     dictionaries.append(question_text)
 
