@@ -159,11 +159,7 @@ def automatic_results():
     global write_results, results, national, worldwide, questions, nw
     write_results = True
     nw = sys.argv[2]
-    results[get_poll_id()] = mysql_get_votes(nw, 1)
-    try:
-        del results[None]
-    except KeyError:
-        pass
+    if get_poll_id(): results[get_poll_id()] = mysql_get_votes(nw, 1)
     national = 0
     worldwide = 0
     questions = 0
@@ -181,11 +177,7 @@ def automatic_votes():
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
     for v in list(reversed(range(1, 7))):
         results[get_poll_id()] = mysql_get_votes("n", v)
-    results[get_poll_id()] = mysql_get_votes("w", 1)
-    try:
-        del results[None]
-    except KeyError:
-        pass
+    if get_poll_id(): results[get_poll_id()] = mysql_get_votes("w", 1)
 
 def question_sort():
     global question_keys
@@ -222,9 +214,9 @@ def mysql_get_votes(type, index):
     while i < index and row:
 		row = cursor.fetchone()
 		i += 1
-	cursor.close()
 	if not row:
 		poll_id = None
+		cursor.close()
 		return
 
     poll_id = row["questionID"]
