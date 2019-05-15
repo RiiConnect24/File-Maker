@@ -64,7 +64,7 @@ def time_convert(time): return int((time - 946684800) / 60)
 def get_epoch(): return int(time.time())
 
 
-def get_timestamp(mode, type, date):
+def get_timestamp(mode, type=None, date=None):
     if mode == 0:
         timestamp = time_convert(get_epoch())
     elif mode == 1 or mode == 2:
@@ -504,7 +504,7 @@ def make_header():
     header = collections.OrderedDict()
     dictionaries.append(header)
 
-    header["timestamp"] = u32(get_timestamp(0, None, None))
+    header["timestamp"] = u32(get_timestamp(0))
     header["country_code"] = u8(country_code)
     header["publicity_flag"] = u8(0)
     header["question_version"] = u8(0 if file_type == "r" else 1)
