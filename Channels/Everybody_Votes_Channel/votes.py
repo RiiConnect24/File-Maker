@@ -148,11 +148,7 @@ def automatic_questions():
     global write_questions, write_results, questions, nw
     write_questions = True
     nw = sys.argv[2]
-    if nw == "n":
-        days = 7
-    elif nw == "w":
-        days = 15
-    mysql_get_questions(days, 1, nw)
+    mysql_get_questions(1, nw)
     question_sort()
     questions = 1
 
@@ -161,11 +157,7 @@ def automatic_results():
     global write_results, results, national, worldwide, questions, national_results, worldwide_results, nw
     write_results = True
     nw = sys.argv[2]
-    if nw == "n":
-        days = 7
-    elif nw == "w":
-        days = 15
-    results[get_poll_id()] = mysql_get_votes(days, nw, 1)
+    results[get_poll_id()] = mysql_get_votes(nw, 1)
     try:
         del results[None]
     except KeyError:
@@ -179,15 +171,15 @@ def automatic_votes():
     global write_questions, write_results, questions, results, national, worldwide, questions
     write_questions = True
     write_results = True
-    mysql_get_questions(15, 1, "w")
-    mysql_get_questions(7, 3, "n")
+    mysql_get_questions(1, "w")
+    mysql_get_questions(3, "n")
     question_sort()
     questions = national + worldwide
     question_count = len(question_data)
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
     for v in list(reversed(range(1, 7))):
-        results[get_poll_id()] = mysql_get_votes(7, "n", v)
-    results[get_poll_id()] = mysql_get_votes(15, "w", 1)
+        results[get_poll_id()] = mysql_get_votes("n", v)
+    results[get_poll_id()] = mysql_get_votes("w", 1)
     try:
         del results[None]
     except KeyError:
@@ -215,8 +207,9 @@ def mysql_connect():
         print "Invalid credentials" if err.errno == errorcode.ER_ACCESS_DENIED_ERROR else "Database does not exist" if err.errno == errorcode.ER_BAD_DB_ERROR else err
 
 
-def mysql_get_votes(days, type, index):
+def mysql_get_votes(type, index):
     cursor = cnx.cursor(dictionary=True, buffered=True)
+    days = 15 if type == "w" else 7 if type == "n"
     query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC" % (days, type)
     cursor.execute(query)
     global poll_id, poll_type
@@ -295,8 +288,9 @@ def mysql_get_votes(days, type, index):
             type]
 
 
-def mysql_get_questions(days, count, type):
+def mysql_get_questions(count, type):
     cursor = cnx.cursor(dictionary=True, buffered=True)
+    days = 15 if type == "w" else 7 if type == "n"
     query = "SELECT * from EVC.questions WHERE DATE(date) > CURDATE() - INTERVAL %s DAY AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % (days, type)
 
     cursor.execute(query)

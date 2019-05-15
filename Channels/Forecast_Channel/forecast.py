@@ -777,7 +777,7 @@ def sign_file(name, local_name, server_name):
     file.close()
     os.remove(name)
     log("Compressing ...", "VERBOSE")
-    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name], stdout=subprocess.PIPE)  # Compress the file with the lzss program.
+    subprocess.call(["%s" % config["lzss_path"], "-evf", local_name], stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(local_name, 'rb')
     new = file.read()
     file.close()
@@ -791,10 +791,10 @@ def sign_file(name, local_name, server_name):
     dest.write(new)
     dest.close()
     key.close()
-    subprocess.call(["mkdir", "-p", "{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
-    path = "{}/{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
-    subprocess.call(["cp", local_name, path])
-    os.remove(local_name)
+    #subprocess.call(["mkdir", "-p", "{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
+    #path = "{}/{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
+    #subprocess.call(["cp", local_name, path])
+    #os.remove(local_name)
 
 
 def get_data(forecast_list, key):
@@ -1165,8 +1165,8 @@ def dump_db():
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
-if config["production"]:
-    setup_log(config["sentry_url"], False)
+#if config["production"]:
+#    setup_log(config["sentry_url"], False)
 
 s = requests.Session()  # Use session to speed up requests
 s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
@@ -1219,8 +1219,8 @@ time.sleep(0.1)
 close_threads()
 dump_db()
 
+"""
 if config["production"]:
-    """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
             {"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script",
@@ -1232,12 +1232,12 @@ if config["production"]:
              "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
     for url in config["webhook_urls"]:
         post_webhook = requests.post(url, json=data, allow_redirects=True)
-    """Log stuff to Datadog."""
     statsd.set("forecast.api_requests", apirequests)
     statsd.set("forecast.retry_count", retrycount)
     statsd.set("forecast.elapsed_time", elapsed_time)
     statsd.set("forecast.bandwidth_usage", bandwidth)
     statsd.set("forecast.cities", cities)
     statsd.set("forecast.errors", errors)
+"""
 
 print("Completed Successfully")
