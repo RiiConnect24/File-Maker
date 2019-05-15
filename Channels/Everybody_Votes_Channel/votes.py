@@ -330,6 +330,13 @@ def get_file_name():
     else: return 'voting'
 
 
+def has_voters(i, j, results):
+    total = 0
+    for voters in range(0, 4):
+        total += results[i][voters][j]
+    return total > 0
+
+
 def dec(data): return int(data, 16)
 
 
@@ -679,10 +686,7 @@ def make_worldwide_result_table(header):
         if results[i][8] == "w":
             worldwide_detailed_table_count = 0
             for j in range(len(countries)):  # 33
-                total = 0
-                for voters in range(0, 4):
-                    total += results[i][voters][j]
-                if total > 0: worldwide_detailed_table_count += 1
+                if has_voters(i,j,results): worldwide_detailed_table_count += 1
 
             table["poll_id_%s" % num()] = u32(i)
             table["male_voters_response_1_num_%s" % num()] = u32(sum(results[i][0]))
@@ -710,10 +714,7 @@ def make_worldwide_result_detailed_table(header):
     for i in results:
         if results[i][8] == "w":
             for j in range(len(countries)):  # 33
-                total = 0
-                for voters in range(0, 4):
-                    total += results[i][voters][j]
-                if total > 0:
+                if has_voters(i,j,results):
                     table["unknown_%s" % num()] = u32(0)
                     table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
                     table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][j])
@@ -765,7 +766,7 @@ def make_question_text(question_text_table):
 
     for q in question_keys:
         for language_code in country_language[country_code]:
-            if get_question(q, language_code) is not None:
+            if get_question(q, language_code):
                 num = question_keys.index(q)
                 question_text_table["question_offset_%s_%s" % (num, language_code)] = offset_count()
                 question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode("utf-16be") + pad(2)
