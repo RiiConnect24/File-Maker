@@ -218,12 +218,14 @@ def mysql_get_votes(type, index):
 
     i = 0
 
-    while i < index:
-        row = cursor.fetchone()
-        if row is None:
-            poll_id = None
-            return None
-        i += 1
+    row = cursor.fetchone()
+    while i < index and row:
+		row = cursor.fetchone()
+		i += 1
+	cursor.close()
+	if not row:
+		poll_id = None
+		return
 
     poll_id = row["questionID"]
     query = "SELECT * from EVC.votes WHERE questionID = %s" % poll_id
@@ -299,9 +301,9 @@ def mysql_get_questions(count, type):
 
     i = 0
 
-    while i < count:
+    row = cursor.fetchone()
+    while i < count and row:
         row = cursor.fetchone()
-        if row is None: break
         add_question(row)
         i += 1
 
