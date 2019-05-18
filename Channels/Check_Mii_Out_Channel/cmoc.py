@@ -3,13 +3,10 @@ import hashlib
 import hmac
 import json
 import os
+import pyaes
 import struct
 import subprocess
 import sys
-import pyaes
-import collections
-
-dictionaries = []
 
 with open("./Channels/Check_Mii_Out_Channel/config.json", "rb") as f:
     config = json.load(f)
@@ -105,8 +102,7 @@ class First():
         Write(filename, self.first)
 
     def build(self):
-        self.first = collections.OrderedDict()
-        dictionaries.append(self.first)
+        self.first = {}
 
         self.first["type"] = b'FD'
         self.first["padding1"] = u8(0) * 2
