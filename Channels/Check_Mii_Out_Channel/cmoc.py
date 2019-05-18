@@ -52,13 +52,13 @@ class Addition():
     def build(self):
         self.addition = {}
 
-        self.addition["type"] = "AD"
+        self.addition["type"] = b'AD'
         self.addition["padding1"] = u8(0) * 2
         self.addition["id1"] = u32(0)
         self.addition["id2"] = u32(201)
         self.addition["padding2"] = u8(0) * 12
         self.addition["padding3"] = u8(255) * 8
-        self.addition["adtag"] = "AD"
+        self.addition["adtag"] = b'AD'
         self.addition["adtagsize"] = u8(48)
         self.addition["unk1"] = u32(1)
         self.addition["unk2"] = u32(1)
@@ -80,13 +80,13 @@ class ConDetail():
     def build(self):
         self.condetail = {}
 
-        self.condetail["type"] = "CD"
+        self.condetail["type"] = b'CD'
         self.condetail["padding1"] = u8(0) * 2
         self.condetail["id1"] = u32(4294967295)
         self.condetail["id2"] = u8(0)
         self.condetail["padding2"] = u8(0) * 12
         self.condetail["padding3"] = u8(255) * 8
-        self.condetail["cdtag"] = "CD"
+        self.condetail["cdtag"] = b'CD'
         self.condetail["cdtagsize"] = u16(64)
         self.condetail["activecontest"] = u32(1)
         self.condetail["endtime"] = u32(4294967295)
@@ -108,13 +108,13 @@ class First():
         self.first = collections.OrderedDict()
         dictionaries.append(self.first)
 
-        self.first["type"] = "FD"
+        self.first["type"] = b'FD'
         self.first["padding1"] = u8(0) * 2
         self.first["id1"] = u32(49) # country code
         self.first["id2"] = u32(0)
         self.first["padding2"] = u8(0) * 12
         self.first["padding3"] = u8(0xFF) * 8
-        self.first["fdtag"] = "FD"
+        self.first["fdtag"] = b'FD'
         self.first["fdtagsize"] = u16(32)
         self.first["serveractive"] = u32(1)
         self.first["unk1"] = u32(0x96000001)
@@ -125,9 +125,9 @@ class First():
         self.first["unk6"] = u32(0x41004100)
 
 class Write():
-    def __init__(self, filename, values):
+    def __init__(self, filename, data):
         self.filename = filename
-        self.values = values
+        self.data = data
 
         self.compress()
         self.encrypt()
@@ -135,9 +135,9 @@ class Write():
         self.write()
 
     def compress(self):
-        self.writef = open((self.filename), "w")
+        self.writef = open(self.filename, "wb")
 
-        for v in self.values:
+        for v in self.data.values():
             self.writef.write(v)
 
         self.writef.close()
@@ -151,11 +151,13 @@ class Write():
         self.data = open(self.filename, "rb").read()
         
         self.aes = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
-        subprocess.call(("openssl " + "enc -aes-128-cbc -e -in " + "{}".format(self.filename) + " -out " + "{}enc ".format(self.filename) + "-K 8D22A3D808D5D072027436B6303C5B50 -iv BE5E548925ACDD3CD5342E08FB8ABFEC").split())
-        
-        self.readf = open((self.filename+"enc"), "rb")
+        #self.processed = self.aes.encrypt(b'TextMustBe16Byte')
+        subprocess.call(["openssl", "enc", "-aes-128-cbc", "-e", "-in", self.filename, "-out", self.filename + "1", "-K", "8D22A3D808D5D072027436B6303C5B50", "-iv", "BE5E548925ACDD3CD5342E08FB8ABFEC"])
+
+        self.readf = open(self.filename + "1", "rb")
         self.processed = self.readf.read()
         self.readf.close()
+        os.remove(self.filename + "1")
 		
     def hmac(self):
         self.sign = binascii.unhexlify("4CC08FA141DE2537AAA52B8DACD9B56335AFE467")
@@ -174,4 +176,5 @@ class Write():
         self.writef.write(self.processed)
 
         self.writef.close()
+
 First()
