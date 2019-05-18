@@ -1,7 +1,10 @@
 import binascii
 import collections
+import requests
 import struct
 import sys
+import xml.etree.cElementTree as ElementTree
+import zipfile
 
 def u8(data):
     if not 0 <= data <= 255:
@@ -49,7 +52,7 @@ class make_rom():
         self.header["unknown"] = u16(0)
         self.header["version"] = u8(6)
         self.header["unknown_region"] = u8(2)
-        self.header["filesize"] = u32(332 + len(self.rom))
+        self.header["filesize"] = u32(0)
         self.header["crc32"] = u32(0)
         self.header["dllistid"] = u32(0)
         self.header["country_code"] = u32(49)
@@ -140,4 +143,25 @@ class make_rom():
 
         self.writef.close()
 
+class gametdb():
+    def __init__():
+        self.databases = {
+            "Wii": ["wii", None],
+            "3DS": ["3ds", None],
+            "NDS": ["ds", None]
+        }
+    
+    def download(self):
+        for k,v in databases.items():
+            print("Downloading {} Database from GameTDB...".format(k))
+            requests.get("https://www.gametdb.com/{}tdb.zip".format(v[0]))
+            self.zip = zipfile.ZipFile("{}tdb.zip".format(v[0]))
+            self.zip.extractall(".")
+            self.zip.close()
+
+    def parse(self):
+        for k,v in database.items():
+            v[1] = ElementTree.parse("{}tdb.xml".format(v[0]))
+
+gametdb()
 make_rom()
