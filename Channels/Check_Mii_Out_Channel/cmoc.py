@@ -6,6 +6,10 @@ import os
 import struct
 import subprocess
 import sys
+import pyaes
+import collections
+
+dictionaries = []
 
 with open("./Channels/Check_Mii_Out_Channel/config.json", "rb") as f:
     config = json.load(f)
@@ -38,7 +42,7 @@ def u32_littleendian(data):
     return struct.pack("<I", data)
 
 class Addition():
-    def __init__():
+    def __init__(self):
         self.build()
         
         filename = "{}/addition/201.ces".format(config["file_path"])
@@ -66,7 +70,7 @@ class Addition():
 
 
 class ConDetail():
-    def __init__():
+    def __init__(self):
         self.build()
         
         filename = "{}/contest/4294967295/con_detail0.ces".format(config["file_path"])
@@ -93,35 +97,37 @@ class ConDetail():
         self.condetail["unk7"] = 0x19191919
 
 class First():
-    def __init__():
+    def __init__(self):
         self.build()
         
         filename = "{}/first/49.ces".format(config["file_path"])
         
-        Write(filename)
+        Write(filename, self.first)
 
     def build(self):
-        self.first = {}
+        self.first = collections.OrderedDict()
+        dictionaries.append(self.first)
 
         self.first["type"] = "FD"
         self.first["padding1"] = u8(0) * 2
         self.first["id1"] = u32(49) # country code
         self.first["id2"] = u32(0)
         self.first["padding2"] = u8(0) * 12
-        self.first["padding3"] = u8(0) * 8
+        self.first["padding3"] = u8(0xFF) * 8
         self.first["fdtag"] = "FD"
-        self.first["fdtagsize"] = u8(32)
+        self.first["fdtagsize"] = u16(32)
         self.first["serveractive"] = u32(1)
-        self.first["unk1"] = 0x96000001
-        self.first["unk2"] = 0x41004100
-        self.first["unk3"] = 0x41004100
-        self.first["unk4"] = 0x41004100
-        self.first["unk5"] = 0x41004100
-        self.first["unk6"] = 0x41004100
+        self.first["unk1"] = u32(0x96000001)
+        self.first["unk2"] = u32(0x41004100)
+        self.first["unk3"] = u32(0x41004100)
+        self.first["unk4"] = u32(0x41004100)
+        self.first["unk5"] = u32(0x41004100)
+        self.first["unk6"] = u32(0x41004100)
 
-class Write(filename):
-    def __init__(filename):
+class Write():
+    def __init__(self, filename, values):
         self.filename = filename
+        self.values = values
 
         self.compress()
         self.encrypt()
@@ -129,17 +135,15 @@ class Write(filename):
         self.write()
 
     def compress(self):
-        self.writef = open(self.filename + "1"), "wb")
+        self.writef = open((self.filename), "wb")
 
-        for v in self.addition.values():
-            self.writef.write(v)
+        for v in self.values.iteritems():
+            print v
+            self.writef.write(v[1])
 
         self.writef.close()
-
-        subprocess.call(["{}/lzss".format(config["lzss_path"]), "-evf", self.filename + "1", self.filename + "2")
         
-        os.remove(self.filename + "1")
-        os.remove(self.filename + "2")
+        subprocess.call(["{}/lzss".format(config["lzss_path"]), "-evf", self.filename])
 
     def encrypt(self):
         self.key = binascii.unhexlify("8D22A3D808D5D072027436B6303C5B50")
@@ -148,22 +152,27 @@ class Write(filename):
         self.data = open(self.filename, "rb").read()
         
         self.aes = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
-        self.processed = self.aes.encrypt(self.data)
+        subprocess.call(("openssl " + "enc -aes-128-cbc -e -in " + "{}".format(self.filename) + " -out " + "{}enc ".format(self.filename) + "-K 8D22A3D808D5D072027436B6303C5B50 -iv BE5E548925ACDD3CD5342E08FB8ABFEC").split())
         
+        self.readf = open((self.filename+"enc"), "rb")
+        self.processed = self.readf.read()
+        self.readf.close()
+		
     def hmac(self):
         self.sign = binascii.unhexlify("4CC08FA141DE2537AAA52B8DACD9B56335AFE467")
 
         self.digester = hmac.new(self.sign, self.processed, hashlib.sha1)
-        self.hmacsha1 = digester.hexdigest()
+        self.hmacsha1 = self.digester.hexdigest()
 
     def write(self):
-        self.filename = self.filename[:-1]
+        self.filename = self.filename
 
-        self.writef = open(self.filename, "wb").read()
+        self.writef = open(self.filename, "wb")
 
         self.writef.write("MC")
         self.writef.write(u16(1))
-        self.writef.write(self.hmacsha1)
+        self.writef.write(self.hmacsha1.decode("hex"))
         self.writef.write(self.processed)
 
         self.writef.close()
+First()
