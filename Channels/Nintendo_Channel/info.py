@@ -152,7 +152,7 @@ class gametdb():
         }
     
     def download(self):
-        for k,v in databases.items():
+        for k,v in self.databases.items():
             print("Downloading {} Database from GameTDB...".format(k))
             requests.get("https://www.gametdb.com/{}tdb.zip".format(v[0]))
             self.zip = zipfile.ZipFile("{}tdb.zip".format(v[0]))
@@ -160,7 +160,7 @@ class gametdb():
             self.zip.close()
 
     def parse(self):
-        for k,v in database.items():
+        for k,v in self.databases.items():
             v[1] = ElementTree.parse("{}tdb.xml".format(v[0]))
 
 gametdb()

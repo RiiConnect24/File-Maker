@@ -1,0 +1,5 @@
+{
+  "file_path": "/path/to/save/file",
+  "lzss_path": "/path/to/lzss",
+  "production": true,
+}
