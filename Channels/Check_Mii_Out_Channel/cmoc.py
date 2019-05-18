@@ -135,11 +135,10 @@ class Write():
         self.write()
 
     def compress(self):
-        self.writef = open((self.filename), "wb")
+        self.writef = open((self.filename), "w")
 
-        for v in self.values.iteritems():
-            print v
-            self.writef.write(v[1])
+        for v in self.values:
+            self.writef.write(v)
 
         self.writef.close()
         
@@ -162,16 +161,16 @@ class Write():
         self.sign = binascii.unhexlify("4CC08FA141DE2537AAA52B8DACD9B56335AFE467")
 
         self.digester = hmac.new(self.sign, self.processed, hashlib.sha1)
-        self.hmacsha1 = self.digester.hexdigest()
+        self.hmacsha1 = self.digester.digest()
 
     def write(self):
         self.filename = self.filename
 
         self.writef = open(self.filename, "wb")
 
-        self.writef.write("MC")
+        self.writef.write(b'MC')
         self.writef.write(u16(1))
-        self.writef.write(self.hmacsha1.decode("hex"))
+        self.writef.write(self.hmacsha1)
         self.writef.write(self.processed)
 
         self.writef.close()
