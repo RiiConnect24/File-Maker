@@ -1,0 +1,23 @@
+The first 2 bytes are what I call the "header tag".
+Every type of file that CMOC requests has one of these, and they are all unique.
+For example, the first/<regionID>.ces file has the header tag of FD.
+
+Next, there are 2 different 4 byte identifiers
+CMOC has certain values it expects for each request.
+For example, if the region ID for a FD tag was 49, the first one of these would
+be 0x00000031 (49 in hexadecimal, big-endian)
+The second one for a FD tag is 0x00000000
+
+Before we continue, we need to talk about parallel universes /s
+
+After that, there's 12 bytes of 0x00 unknown bytes, and 8 bytes of 0xFF
+unknown bytes.
+
+Then, there comes file specific tags.
+
+There can be multiple file specific tags in each file
+FD files only have 1 (FD again), but there are some files multiple (For example,
+the popular Mii list files have PN, PC, and PM)
+
+These vary between files, so documenting it here would be pointless.
+
