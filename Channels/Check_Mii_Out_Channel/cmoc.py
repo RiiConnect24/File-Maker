@@ -3,7 +3,6 @@ import hashlib
 import hmac
 import json
 import os
-import pyaes
 import struct
 import subprocess
 import sys
@@ -141,13 +140,6 @@ class Write():
         subprocess.call(["{}/lzss".format(config["lzss_path"]), "-evf", self.filename])
 
     def encrypt(self):
-        self.key = binascii.unhexlify("8D22A3D808D5D072027436B6303C5B50")
-        self.iv = binascii.unhexlify("BE5E548925ACDD3CD5342E08FB8ABFEC")
-
-        self.data = open(self.filename, "rb").read()
-        
-        self.aes = pyaes.AESModeOfOperationCBC(self.key, iv=self.iv)
-        #self.processed = self.aes.encrypt(b'TextMustBe16Byte')
         subprocess.call(["openssl", "enc", "-aes-128-cbc", "-e", "-in", self.filename, "-out", self.filename + "1", "-K", "8D22A3D808D5D072027436B6303C5B50", "-iv", "BE5E548925ACDD3CD5342E08FB8ABFEC"])
 
         self.readf = open(self.filename + "1", "rb")
