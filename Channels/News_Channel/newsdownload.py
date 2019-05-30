@@ -555,8 +555,8 @@ class Parse(News):
         else:
             self.picture = None
 
-        if self.newsdata["dateline"] != None:
-            self.location = self.newsdata["dateline"]
+        if "(AP)" in self.article:
+            self.location = self.article.split("(AP)")[0]
 
     def parse_reuters(self):
         try:
