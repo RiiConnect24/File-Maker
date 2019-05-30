@@ -7,6 +7,7 @@ These scripts will create static data files for these Wii Channels:
 - Everybody Votes Channel
 - Forecast Channel
 - News Channel
+- Nintendo Channel
 
 These files are downloaded on the Wii, and contain news, weather info, etc that the Channel(s) display, as well as influencing some games' environments.
 
