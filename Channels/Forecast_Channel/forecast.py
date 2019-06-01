@@ -392,7 +392,10 @@ def get_locationkey(forecast_list, key):
         c = 'FE'
     elif region == '' and not matches_country_code(forecast_list, key):
         a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
-        b = 'FE'
+        if weatherloc[listid]['count'][country][region] > 1:
+            b = 'FE'
+        else:
+            b = '01'
         c = hex(forecastlists.bincountries[country])[2:].zfill(2)
     else:
         a = hex(weatherloc[listid][country][region][city])[2:].zfill(4)
@@ -414,6 +417,7 @@ def generate_locationkeys(forecast_list):
     weatherloc[listid]['null'] = {}
     weatherloc[listid]['no-region'] = {}
     weatherloc[listid]['regions'] = {}
+    weatherloc[listid]['count'] = {}
     for k, v in forecast_list.items():
         if v[1][1] == "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(forecast_list, k)):
             weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
@@ -427,6 +431,9 @@ def generate_locationkeys(forecast_list):
             weatherloc[listid]['regions'].setdefault(v[2][1], {})
             weatherloc[listid]['regions'][v[2][1]].setdefault('', 1)
             weatherloc[listid]['regions'][v[2][1]].setdefault(v[1][1], len(weatherloc[listid]['regions'][v[2][1]]) + 1)
+        weatherloc[listid]['count'].setdefault(v[2][1], {})
+        weatherloc[listid]['count'][v[2][1]].setdefault(v[1][1], 0)
+        weatherloc[listid]['count'][v[2][1]][v[1][1]] += 1
 
 
 """If the script was unable to get forecast for a city, it's filled with this blank data."""
