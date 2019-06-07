@@ -8,6 +8,7 @@ These scripts will create static data files for these Wii Channels:
 - Forecast Channel
 - News Channel
 - Nintendo Channel
+- Check Mii Out Channel/ Mii Contest Channel
 
 These files are downloaded on the Wii, and contain news, weather info, etc that the Channel(s) display, as well as influencing some games' environments.
 
