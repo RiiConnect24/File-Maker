@@ -3,8 +3,8 @@ import collections
 import requests
 import struct
 import sys
-import xml.etree.cElementTree as ElementTree
 import zipfile
+from bs4 import BeautifulSoup
 
 def u8(data):
     if not 0 <= data <= 255:
@@ -33,21 +33,51 @@ def u32_littleendian(data):
         data = 0
     return struct.pack("<I", data)
 
-if len(sys.argv) != 2:
-    print("Usage: info.py <title id>")
-    if len(sys.argv[1]) != 4:
+if len(sys.argv) != 3:
+    print("Usage: info.py <platform> <title id>")
+    if len(sys.argv[2]) != 4:
         print("Error: Title ID must be 4 characters.")
     sys.exit(1)
 
-class make_rom():
+class gametdb():
     def __init__(self):
+        self.databases = {
+            "Wii": ["wii", None],
+            "3DS": ["3ds", None],
+            "NDS": ["ds", None]
+        }
+
+        self.download()
+        return self.parse()
+    
+    def download(self):
+        for k,v in self.databases.items():
+            print("Downloading {} Database from GameTDB...".format(k))
+            zip_filename = "{}tdb.zip".format(v[0])
+            url = "https://www.gametdb.com/{}".format(zip_filename)
+            r = requests.get(url, headers={"User-Agent": "Nintendo Channel Info Downloader"}) # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
+            open(zip_filename, 'wb').write(r.content)
+            """self.zip = zipfile.ZipFile(zip_filename)
+            self.zip.extractall(".")
+            self.zip.close()"""
+
+    def parse(self):
+        for k,v in self.databases.items():
+            print("Parsing {}...".format(k))
+            v[1] = BeautifulSoup(open("{}tdb.xml", "r").read().format(v[0]), "lxml")
+
+        return self.databases
+
+class make_info(gametdb):
+    def __init__(self, databases):
         self.make_header()
+        self.write_gametdb_info()
         self.write_file()
 
-        print "Completed Successfully"
+        print("Completed Successfully")
         
     def make_header(self):
-        self.header = collections.OrderedDict()
+        self.header = {}
 
         self.header["unknown"] = u16(0)
         self.header["version"] = u8(6)
@@ -129,6 +159,11 @@ class make_rom():
         self.header["wii_points_text"] = "\0" * 41
         for i in range(1, 11):
             self.header["custom_field_text_%s" % i] = "\0" * 41
+
+    def write_gametdb_info(self):
+        for s in databases[sys.argv[1]].find("datafile").find_all("game"):
+            if s.find("id").text[:4] == sys.argv[2]:
+                print("Found {}!".format(sys.argv[2]))
     
     def write_file(self):
         self.writef = open(sys.argv[1] + "-output.info", "wb")
@@ -143,25 +178,4 @@ class make_rom():
 
         self.writef.close()
 
-class gametdb():
-    def __init__():
-        self.databases = {
-            "Wii": ["wii", None],
-            "3DS": ["3ds", None],
-            "NDS": ["ds", None]
-        }
-    
-    def download(self):
-        for k,v in self.databases.items():
-            print("Downloading {} Database from GameTDB...".format(k))
-            requests.get("https://www.gametdb.com/{}tdb.zip".format(v[0]))
-            self.zip = zipfile.ZipFile("{}tdb.zip".format(v[0]))
-            self.zip.extractall(".")
-            self.zip.close()
-
-    def parse(self):
-        for k,v in self.databases.items():
-            v[1] = ElementTree.parse("{}tdb.xml".format(v[0]))
-
 gametdb()
-make_rom()
