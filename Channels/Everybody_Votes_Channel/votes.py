@@ -201,11 +201,11 @@ def mysql_connect():
 
 
 def mysql_get_votes(type, index):
+    global poll_id, poll_type, national_results, worldwide_results
     cursor = cnx.cursor(dictionary=True, buffered=True)
     days = 15 if type == "w" else 7 if type == "n"
     query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC" % (days, type)
     cursor.execute(query)
-    global poll_id, poll_type
 
     i = 0
 
@@ -221,8 +221,6 @@ def mysql_get_votes(type, index):
     poll_id = row["questionID"]
     query = "SELECT * from EVC.votes WHERE questionID = %s" % poll_id
     cursor.execute(query)
-
-    global national_results, worldwide_results
 
     if type == "n":
         national_results += 1
@@ -366,7 +364,7 @@ def add_question(row):
     global question_data, national, worldwide, national_q, worldwide_q
     for r in row:
         if "content" in r or "choice" in r:
-            if row[r] is not None:
+            if row[r]:
                 row[r] = question_text_replace(row[r])
 
     question_data[row["questionID"]] = [[row["content_japanese"], row["content_english"], row["content_german"],
@@ -610,7 +608,7 @@ def make_question_text_table(header):
             elif file_type == "q":
                 list = range(1, 9)
         for language_code in list:
-            if get_question(q, language_code) is not None:
+            if get_question(q, language_code):
                 num = question_keys.index(q)
                 question_text_table["language_code_%s_%s" % (num, language_code)] = u8(language_code)
                 question_text_table["question_offset_%s_%s" % (num, language_code)] = u32(0)
