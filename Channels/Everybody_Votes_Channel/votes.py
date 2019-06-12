@@ -188,16 +188,18 @@ def question_sort():
             question_keys.append(q)
 
 def mysql_connect():
+    global cnx
     print "Connecting to MySQL ..."
     try:
-        global cnx
         cnx = mysql.connector.connect(user=mysql_user, password=mysql_password,
                                       host='127.0.0.1',
                                       database=mysql_database,
                                       charset='utf8',
                                       use_unicode=True)
     except mysql.connector.Error as err:
-        print "Invalid credentials" if err.errno == errorcode.ER_ACCESS_DENIED_ERROR else "Database does not exist" if err.errno == errorcode.ER_BAD_DB_ERROR else err
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: print "Invalid credentials"
+        elif err.errno == errorcode.ER_BAD_DB_ERROR: print "Database does not exist"
+        else: print err
 
 
 def mysql_get_votes(type, index):
@@ -335,22 +337,24 @@ def has_voters(i, j, results):
     return total > 0
 
 
-def dec(data): return int(data, 16)
+def get_question(id, language_code):
+    return question_data[id][0][language_code]
 
 
-def get_question(id, language_code): return question_data[id][0][language_code]
+def get_response1(id, language_code):
+    return question_data[id][1][language_code]
 
 
-def get_response1(id, language_code): return question_data[id][1][language_code]
+def get_response2(id, language_code):
+    return question_data[id][2][language_code]
 
 
-def get_response2(id, language_code): return question_data[id][2][language_code]
+def get_category(id):
+    return question_data[id][3]
 
 
-def get_category(id): return question_data[id][3]
-
-
-def get_date(id): return question_data[id][5]
+def get_date(id):
+    return question_data[id][5]
 
 
 def is_worldwide(id):
@@ -649,6 +653,12 @@ def make_national_result_table(header):
 def make_national_result_detailed_table(header):
     table = collections.OrderedDict()
     dictionaries.append(table)
+    
+    if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or country_code not in position_table.keys(): position_table_entry_count = 0
+    else: position_table_entry_count = position_table[country_code][j]
+	
+    if country_code in position_table.keys(): starting_position_entry_table = sum(position_table[country_code][:j])
+    else: starting_position_entry_table = 0
 
     header["national_result_detailed_offset"] = offset_count()
 
@@ -658,8 +668,8 @@ def make_national_result_detailed_table(header):
                 country_index = country_codes.index(country_code)
                 table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
                 table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
-                table["position_entry_table_count_%s" % num()] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in position_table.keys()) else position_table[country_code][j])
-                table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]) if country_code in position_table.keys() else 0)
+                table["position_entry_table_count_%s" % num()] = u8(position_table_entry_count)
+                table["starting_position_entry_table_%s" % num()] = u32(starting_position_entry_table)
 
     return table
 
