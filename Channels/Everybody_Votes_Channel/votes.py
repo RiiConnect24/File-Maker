@@ -50,6 +50,7 @@ language_code = 1
 num = 0
 number = 0
 nw = ""
+dictionaries = []
 worldwide_q = False
 national_q = False
 file_type = None
@@ -80,7 +81,9 @@ def get_timestamp(mode, type=None, date=None):
 
 
 def days_ago():
-    return 7 if national_results > 0 else 14 if worldwide_results > 0 else 0
+    if national_results > 0: return 7
+    elif worldwide_results > 0: return 14
+    return 0
 
 
 def get_name():
@@ -94,9 +97,6 @@ def get_year():
     now = datetime.datetime.now() - datetime.timedelta(days=days_ago())
     year = str(now.year)
     return year
-
-
-def get_poll_id(): return poll_id
 
 
 def pad(amnt): return "\0" * amnt
@@ -116,7 +116,7 @@ def prepare():
             automatic_results()
         elif file_type == "v":
             automatic_votes()
-    mysql_close()
+    cnx.close()
     make_language_table()
 
 
@@ -158,7 +158,7 @@ def automatic_results():
     global write_results, results, national, worldwide, questions, nw
     write_results = True
     nw = sys.argv[2]
-    if get_poll_id(): results[get_poll_id()] = mysql_get_votes(nw, 1)
+    if poll_id: results[poll_id] = mysql_get_votes(nw, 1)
     national = 0
     worldwide = 0
     questions = 0
@@ -175,8 +175,8 @@ def automatic_votes():
     question_count = len(question_data)
     print "Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions")
     for v in list(reversed(range(1, 7))):
-        results[get_poll_id()] = mysql_get_votes("n", v)
-    if get_poll_id(): results[get_poll_id()] = mysql_get_votes("w", 1)
+        results[poll_id] = mysql_get_votes("n", v)
+    if poll_id: results[poll_id] = mysql_get_votes("w", 1)
 
 def question_sort():
     global question_keys
@@ -301,9 +301,6 @@ def mysql_get_questions(count, type):
     cursor.close()
 
 
-def mysql_close(): cnx.close()
-
-
 def num():
     global number
     num1 = number
@@ -400,14 +397,10 @@ def question_text_replace(text):
 
 
 def webhook():
-    if nw == "n":
-        webhook_type = "national"
-    elif nw == "w":
-        webhook_type = "worldwide"
     for q in question_keys:
         webhook_text = "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)" % (
             webhook_type, get_question(q, 1), get_response1(q, 1), get_response2(q, 1))
-        if production: data = {"username": "Votes Bot",
+        data = {"username": "Votes Bot",
                                "content": "New %s Everybody Votes Channel question is out!" % type,
                                "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
                 {"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0",
@@ -419,9 +412,6 @@ def webhook():
                  "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png",
                  "ts": int(time.mktime(datetime.datetime.utcnow().timetuple())) + 25200}]}
         for url in config["webhook_urls"]: post_webhook = requests.post(url, json=data, allow_redirects=True)
-
-
-dictionaries = []
 
 
 def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in dictionary.values() if values))
@@ -790,9 +780,11 @@ prepare()
 if nw == "n":
     for country_code in country_codes[1:]:
         make_bin(country_code)
+    webhook_type = "national"
 else:
     make_bin(country_code)
-if file_type == "q":
+    webhook_type = "worldwide"
+if production and file_type == "q":
     webhook()
 
 print "Completed Successfully"
