@@ -321,7 +321,11 @@ def ui():
 
 
 def get_icon(icon, forecast_list, key):
-    return get_weatherjpnicon(icon) if isJapan(forecast_list,key) else get_weathericon(icon)
+    if icon == -1: return 'FFFF'
+    if isJapan(forecast_list,key):
+        return forecastlists.weatherconditions[icon][3]
+    else:
+        return forecastlists.weatherconditions[icon][1]
 
 
 """Resets bin-specific values for next generation."""
@@ -1143,14 +1147,6 @@ def make_pollen_text_table():
         keyIndex = list(forecastlists.pollen).index(k)
         pollen[keyIndex] = v.encode("utf-16be") + pad(2)
     return pollen
-
-
-def get_weathericon(icon):
-    return 'FFFF' if icon == -1 else forecastlists.weatherconditions[icon][1]
-
-
-def get_weatherjpnicon(icon):
-    return 'FFFF' if icon == -1 else forecastlists.weatherconditions[icon][3]
 
 
 def get_wind_direction(degrees):
