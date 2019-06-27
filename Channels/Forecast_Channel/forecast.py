@@ -36,7 +36,6 @@ GLOBE_CONSTANT = (360 / 65536)
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
-number = 0  # Incremental Keys
 citycount = 0  # City Progress Counter
 cities = 0  # City Counter
 elapsed_time = 0  # Elapsed Time
@@ -156,13 +155,6 @@ def get_region_flag(country_code):
         return 1
     else:
         return 2
-
-
-def num():
-    global number
-    num1 = number
-    number += 1
-    return num1
 
 
 def coord_decode(value):
@@ -1108,21 +1100,23 @@ def make_forecast_text_table(forecast_list):
 
 def make_weather_value_table():
     weathervalue_text_table = collections.OrderedDict()
-    for v in forecastlists.weatherconditions.values():
-        for _ in range(2):
-            weathervalue_text_table[num()] = v[0][language_code].encode("utf-16be") + pad(2)
+    for k,v in forecastlists.weatherconditions.items():
+        keyIndex = list(forecastlists.weatherconditions).index(k)
+        for i in range(2):
+            weathervalue_text_table["weather_text_%s_%s" % (keyIndex, i)] = v[0][language_code].encode("utf-16be") + pad(2)
     return weathervalue_text_table
 
 
 def make_weather_offset_table():
     weathervalue_offset_table = collections.OrderedDict()
-    for v in forecastlists.weatherconditions.values():
-        weathervalue_offset_table[num()] = binascii.unhexlify(v[1])
-        weathervalue_offset_table[num()] = binascii.unhexlify(v[2])
-        weathervalue_offset_table[num()] = u32(0)
-        weathervalue_offset_table[num()] = binascii.unhexlify(v[3])
-        weathervalue_offset_table[num()] = binascii.unhexlify(v[4])
-        weathervalue_offset_table[num()] = u32(0)
+    for k,v in forecastlists.weatherconditions.items():
+        keyIndex = list(forecastlists.weatherconditions).index(k)
+        weathervalue_offset_table["condition_code_1_international_%s" % keyIndex] = binascii.unhexlify(v[1])
+        weathervalue_offset_table["condition_code_2_international_%s" % keyIndex] = binascii.unhexlify(v[2])
+        weathervalue_offset_table["padding_1_%s" % keyIndex] = u32(0)
+        weathervalue_offset_table["condition_code_1_japan_%s" % keyIndex] = binascii.unhexlify(v[3])
+        weathervalue_offset_table["condition_code_2_japan_%s" % keyIndex] = binascii.unhexlify(v[4])
+        weathervalue_offset_table["padding_2_%s" % keyIndex] = u32(0)
     return weathervalue_offset_table
 
 
@@ -1137,15 +1131,17 @@ def make_uvindex_text_table():
 
 def make_laundry_text_table():
     laundry = collections.OrderedDict()
-    for v in forecastlists.laundry.values():
-        laundry[num()] = v.encode("utf-16be") + pad(2)
+    for k,v in forecastlists.laundry.items():
+        keyIndex = list(forecastlists.laundry).index(k)
+        laundry[keyIndex] = v.encode("utf-16be") + pad(2)
     return laundry
 
 
 def make_pollen_text_table():
     pollen = collections.OrderedDict()
-    for v in forecastlists.pollen.values():
-        pollen[num()] = v.encode("utf-16be") + pad(2)
+    for k,v in forecastlists.pollen.items():
+        keyIndex = list(forecastlists.pollen).index(k)
+        pollen[keyIndex] = v.encode("utf-16be") + pad(2)
     return pollen
 
 
