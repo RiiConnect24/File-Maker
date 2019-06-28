@@ -20,12 +20,6 @@ names = collections.OrderedDict()
 zoom = []
 
 
-def seek(value):
-    global current, file
-    current += value
-    file.seek(current)
-
-
 def hex(data):
     return binascii.hexlify(data)
 
@@ -42,30 +36,29 @@ def coord_decode(value):
 
 
 file = open(filename, "rb")
-file.seek(0)
 file.seek(80)
 amnt = int(binascii.hexlify(file.read(4)), 16)
 print "Processing %s Entries" % amnt
 file.seek(84)
 offset = int(binascii.hexlify(file.read(4)), 16)
-seek(offset)
+file.seek(offset, 1) # Relative to current position
 for _ in range(amnt):
     loc_name = file.read(4)
-    seek(4)
+    file.seek(4, 1)
     city = file.read(4)
-    seek(4)
+    file.seek(4, 1)
     region = file.read(4)
-    seek(4)
+    file.seek(4, 1)
     country = file.read(4)
-    seek(4)
+    file.seek(4, 1)
     lat = coord_decode(hex(file.read(2)))
-    seek(2)
+    file.seek(2, 1)
     lng = coord_decode(hex(file.read(2)))
-    seek(2)
+    file.seek(2, 1)
     zoom1 = dec(hex(file.read(1)))
-    seek(1)
+    file.seek(1, 1)
     zoom2 = dec(hex(file.read(1)))
-    seek(3)
+    file.seek(3, 1)
     names[hex(loc_name)] = [dec(hex(city)), dec(hex(region)), dec(hex(country)), lat, lng, zoom1, zoom2]
 
 for k in names.keys():
