@@ -7,15 +7,14 @@ import os
 import pickle
 import sys
 
-print "Forecast Locations Parser"
-print "By John Pansera (2017) - www.rc24.xyz"
-print "Parsing ..."
+print "Forecast File Parser"
+print "By John Pansera (2017-2019) - www.rc24.xyz"
+print "Parsing ...\n"
 
 filename = "forecast.bin"
 amnt = None
 offset = None
 file = None
-current = 0
 names = collections.OrderedDict()
 zoom = []
 
@@ -24,8 +23,8 @@ def hex(data):
     return binascii.hexlify(data)
 
 
-def dec(a):
-    return int(a, 16)
+def read_int(x):
+    return int(binascii.hexlify(file.read(x)), 16)
 
 
 def coord_decode(value):
@@ -36,30 +35,70 @@ def coord_decode(value):
 
 
 file = open(filename, "rb")
-file.seek(80)
-amnt = int(binascii.hexlify(file.read(4)), 16)
-print "Processing %s Entries" % amnt
-file.seek(84)
-offset = int(binascii.hexlify(file.read(4)), 16)
-file.seek(offset, 1) # Relative to current position
+
+# Print file header information
+
+file.seek(28) # Message Offset
+message_offset = read_int(4)
+if message_offset == 0: print "No Message in file"
+else: print "Message exists in file"
+
+file.seek(32) # Long Forecast Entry Number
+long_count = read_int(4)
+file.seek(36) # Long Forecast Table Offset
+long_offset = read_int(4)
+print "%s long forecast table entries @ %s" % (long_count, long_offset)
+
+file.seek(40) # Short Forecast Entry Number
+short_count = read_int(4)
+file.seek(44) # Short Forecast Table Offset
+short_offset = read_int(4)
+print "%s short forecast table entries @ %s" % (short_count, short_offset)
+
+file.seek(48) # Weather Condition Codes Entry Number
+weatherconditions_count = read_int(4)
+file.seek(52) # Weather Condition Codes Table Offset
+weatherconditions_offset = read_int(4)
+print "%s weather condition entries @ %s" % (weatherconditions_count, weatherconditions_offset)
+
+file.seek(56) # UV Index Entry Number
+uvindex_count = read_int(4)
+file.seek(60) # UV Index Table Offset
+uvindex_offset = read_int(4)
+print "%s uv index entries @ %s" % (uvindex_count, uvindex_offset)
+
+file.seek(64) # Laundry Index Entry Number
+laundry_count = read_int(4)
+file.seek(68) # Laundry Index Table Offset
+laundry_offset = read_int(4)
+print "%s laundry index entries @ %s" % (laundry_count, laundry_offset)
+
+file.seek(72) # Pollen Count Entry Number
+pollen_count = read_int(4)
+file.seek(76) # Pollen Count Entry Offset
+pollen_offset = read_int(4)
+print "%s pollen index entries @ %s" % (pollen_count, pollen_offset)
+
+file.seek(80) # Location Entry Number
+amnt = read_int(4)
+file.seek(84) # Location Table Offset
+offset = read_int(4)
+print "%s location entries @ %s" % (amnt, offset)
+
+raw_input("\nReading location entries, press enter to continue:")
+
+file.seek(offset)
 for _ in range(amnt):
     loc_name = file.read(4)
-    file.seek(4, 1)
-    city = file.read(4)
-    file.seek(4, 1)
-    region = file.read(4)
-    file.seek(4, 1)
-    country = file.read(4)
-    file.seek(4, 1)
+    city = read_int(4)
+    region = read_int(4)
+    country = read_int(4)
     lat = coord_decode(hex(file.read(2)))
-    file.seek(2, 1)
     lng = coord_decode(hex(file.read(2)))
+    zoom1 = read_int(1)
+    zoom2 = read_int(1)
     file.seek(2, 1)
-    zoom1 = dec(hex(file.read(1)))
-    file.seek(1, 1)
-    zoom2 = dec(hex(file.read(1)))
-    file.seek(3, 1)
-    names[hex(loc_name)] = [dec(hex(city)), dec(hex(region)), dec(hex(country)), lat, lng, zoom1, zoom2]
+    names[hex(loc_name)] = [city, region, country, lat, lng, zoom1, zoom2]
 
 for k in names.keys():
     try:
@@ -101,9 +140,8 @@ for k in names.keys():
     zoom.append(int(names[k][5]))
     print "Zoom 2: %s" % names[k][6]
 
-    print "\n"
 
-print "Dumping Database ..."
+print "Dumping Locations Database ..."
 if os.path.exists('locations.json'):
     os.remove('locations.json')
 with open('locations.json', 'wb') as file:
