@@ -38,6 +38,25 @@ file = open(filename, "rb")
 
 # Print file header information
 
+version = read_int(4)
+print "Version: %s" % version
+file_size = read_int(4)
+print "File Size: %s" % file_size
+crc32 = hex(file.read(4))
+print "CRC32: %s" % crc32
+timestamp_1 = read_int(4)
+timestamp_2 = read_int(4)
+print "Valid until: %s (for %s minutes)" % (timestamp_1,int(timestamp_1-timestamp_2))
+print "Generated at: %s" % timestamp_2
+
+file.seek(20) # Country Code
+country_code = hex(file.read(1))
+print "Country Code: %s (%s)" % (country_code, str(int(country_code, 16)).zfill(3))
+
+file.seek(21) # Language Code
+language_code = read_int(4)
+print "Language Code: %s" % language_code
+
 file.seek(28) # Message Offset
 message_offset = read_int(4)
 if message_offset == 0: print "No Message in file"
@@ -87,6 +106,7 @@ print "%s location entries @ %s" % (amnt, offset)
 
 raw_input("\nReading location entries, press enter to continue:")
 
+# Parse location entries
 file.seek(offset)
 for _ in range(amnt):
     loc_name = file.read(4)
