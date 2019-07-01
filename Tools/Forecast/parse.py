@@ -6,6 +6,7 @@ import collections
 import os
 import pickle
 import sys
+import collections
 
 print "Forecast File Parser"
 print "By John Pansera (2017-2019) - www.rc24.xyz"
@@ -32,6 +33,44 @@ def coord_decode(value):
     if value >= 0x8000:
         value -= 0x10000
     return value * 0.0054931640625
+
+
+def parse_offsets(dict, count, offset):
+    file.seek(offset)
+    for i in range(count):
+        code = read_int(1)
+        padding = read_int(3)
+        offset = read_int(4)
+        dict[i] = [code, offset]
+
+
+def get_text_by_offset(dict):
+    ref = dict[0][1]
+    file.seek(ref)
+    for i in dict:
+        try: next = dict[i + 1]
+        except: next = None
+        if next: dict[i][1] = next[1] - dict[i][1]
+        else: dict[i][1] = 0
+        data = file.read(dict[i][1])
+        try: data = data.decode('utf-16be')
+        except: pass
+
+
+def get_text():
+    str = ""
+    null_last = False
+    while True:
+        char = file.read(1)
+        str += char
+        if char == '\00':
+            if not null_last:
+                null_last = True
+            else:
+                null_last = False
+                break
+        else: null_last = False
+    return str
 
 
 file = open(filename, "rb")
@@ -104,7 +143,37 @@ file.seek(84) # Location Table Offset
 offset = read_int(4)
 print "%s location entries @ %s" % (amnt, offset)
 
-raw_input("\nReading location entries, press enter to continue:")
+# Parse Entries
+uvindex = collections.OrderedDict()
+laundry = collections.OrderedDict()
+pollen = collections.OrderedDict()
+weather = collections.OrderedDict()
+parse_offsets(uvindex, uvindex_count, uvindex_offset)
+parse_offsets(laundry, laundry_count, laundry_offset)
+parse_offsets(pollen, pollen_count, pollen_offset)
+parse_offsets(weather, weatherconditions_count, weatherconditions_offset)
+
+file.seek(uvindex[0][1])
+print "\nUV Index Entries:"
+for i in range(uvindex_count):
+    uvindex[i] = get_text()
+    print "    %s" % uvindex[i].decode('utf-16be')
+
+file.seek(laundry[0][1])
+for i in range(laundry_count):
+    laundry[i] = get_text()
+
+file.seek(pollen[0][1])
+for i in range(pollen_count):
+    pollen[i] = get_text()
+
+print "\nWeather Conditions:"
+file.seek(weather[0][1])
+for i in range(weatherconditions_count / 2):
+    weather[i] = get_text()
+    print "    %s" % weather[i].decode('utf-16be').replace('\n', ' ')
+
+raw_input("\nParsing location entries:")
 
 # Parse location entries
 file.seek(offset)
@@ -161,7 +230,7 @@ for k in names.keys():
     print "Zoom 2: %s" % names[k][6]
 
 
-print "Dumping Locations Database ..."
+print "\nDumping Locations Database ..."
 if os.path.exists('locations.json'):
     os.remove('locations.json')
 with open('locations.json', 'wb') as file:
