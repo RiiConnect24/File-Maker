@@ -17,11 +17,6 @@ amnt = None
 offset = None
 file = None
 names = collections.OrderedDict()
-zoom = []
-
-
-def hex(data):
-    return binascii.hexlify(data)
 
 
 def read_int(x):
@@ -42,19 +37,6 @@ def parse_offsets(dict, count, offset):
         padding = read_int(3)
         offset = read_int(4)
         dict[i] = [code, offset]
-
-
-def get_text_by_offset(dict):
-    ref = dict[0][1]
-    file.seek(ref)
-    for i in dict:
-        try: next = dict[i + 1]
-        except: next = None
-        if next: dict[i][1] = next[1] - dict[i][1]
-        else: dict[i][1] = 0
-        data = file.read(dict[i][1])
-        try: data = data.decode('utf-16be')
-        except: pass
 
 
 def get_text():
@@ -81,7 +63,7 @@ version = read_int(4)
 print "Version: %s" % version
 file_size = read_int(4)
 print "File Size: %s" % file_size
-crc32 = hex(file.read(4))
+crc32 = binascii.hexlify(file.read(4))
 print "CRC32: %s" % crc32
 timestamp_1 = read_int(4)
 timestamp_2 = read_int(4)
@@ -89,7 +71,7 @@ print "Valid until: %s (for %s minutes)" % (timestamp_1,int(timestamp_1-timestam
 print "Generated at: %s" % timestamp_2
 
 file.seek(20) # Country Code
-country_code = hex(file.read(1))
+country_code = binascii.hexlify(file.read(1))
 print "Country Code: %s (%s)" % (country_code, str(int(country_code, 16)).zfill(3))
 
 file.seek(21) # Language Code
@@ -105,43 +87,43 @@ file.seek(32) # Long Forecast Entry Number
 long_count = read_int(4)
 file.seek(36) # Long Forecast Table Offset
 long_offset = read_int(4)
-print "%s long forecast table entries @ %s" % (long_count, long_offset)
+print "%s long forecast table entries @ %s" % (long_count, hex(long_offset))
 
 file.seek(40) # Short Forecast Entry Number
 short_count = read_int(4)
 file.seek(44) # Short Forecast Table Offset
 short_offset = read_int(4)
-print "%s short forecast table entries @ %s" % (short_count, short_offset)
+print "%s short forecast table entries @ %s" % (short_count, hex(short_offset))
 
 file.seek(48) # Weather Condition Codes Entry Number
 weatherconditions_count = read_int(4)
 file.seek(52) # Weather Condition Codes Table Offset
 weatherconditions_offset = read_int(4)
-print "%s weather condition entries @ %s" % (weatherconditions_count, weatherconditions_offset)
+print "%s weather condition entries @ %s" % (weatherconditions_count, hex(weatherconditions_offset))
 
 file.seek(56) # UV Index Entry Number
 uvindex_count = read_int(4)
 file.seek(60) # UV Index Table Offset
 uvindex_offset = read_int(4)
-print "%s uv index entries @ %s" % (uvindex_count, uvindex_offset)
+print "%s uv index entries @ %s" % (uvindex_count, hex(uvindex_offset))
 
 file.seek(64) # Laundry Index Entry Number
 laundry_count = read_int(4)
 file.seek(68) # Laundry Index Table Offset
 laundry_offset = read_int(4)
-print "%s laundry index entries @ %s" % (laundry_count, laundry_offset)
+print "%s laundry index entries @ %s" % (laundry_count, hex(laundry_offset))
 
 file.seek(72) # Pollen Count Entry Number
 pollen_count = read_int(4)
 file.seek(76) # Pollen Count Entry Offset
 pollen_offset = read_int(4)
-print "%s pollen index entries @ %s" % (pollen_count, pollen_offset)
+print "%s pollen index entries @ %s" % (pollen_count, hex(pollen_offset))
 
 file.seek(80) # Location Entry Number
 amnt = read_int(4)
 file.seek(84) # Location Table Offset
 offset = read_int(4)
-print "%s location entries @ %s" % (amnt, offset)
+print "%s location entries @ %s" % (amnt, hex(offset))
 
 # Parse Entries
 uvindex = collections.OrderedDict()
@@ -177,63 +159,39 @@ raw_input("\nParsing location entries:")
 
 # Parse location entries
 file.seek(offset)
-for _ in range(amnt):
-    loc_name = file.read(4)
+for i in range(amnt):
+    loc_name = binascii.hexlify(file.read(4))
     city = read_int(4)
     region = read_int(4)
     country = read_int(4)
-    lat = coord_decode(hex(file.read(2)))
-    lng = coord_decode(hex(file.read(2)))
+    lat = coord_decode(binascii.hexlify(file.read(2)))
+    lng = coord_decode(binascii.hexlify(file.read(2)))
     zoom1 = read_int(1)
     zoom2 = read_int(1)
     file.seek(2, 1)
-    names[hex(loc_name)] = [city, region, country, lat, lng, zoom1, zoom2]
+    names[i] = [loc_name, city, region, country, lat, lng, zoom1, zoom2]
 
+
+file.seek(names[0][1])
 for k in names.keys():
-    try:
-        next = names.items()[names.keys().index(k) + 1]
-    except:
-        next = None
-    first = names[k][0]
-    second = names[k][2] if names[k][1] == 0 and names[k][2] != 0 else (int(os.path.getsize(filename)) if next is None else next[1][0]) if names[k][1] == 0 and names[k][2] == 0 else names[k][1]
-    file.seek(names[k][0])
-    city_string = file.read(second - first)
-    if names[k][1] != 0:
-        first = names[k][1]
-        second = names[k][2]
-        file.seek(names[k][1])
-        region_string = file.read(second - first)
-    else:
-        region_string = None
-    if names[k][2] != 0:
-        first = names[k][2]
-        second = next[1][0]
-        file.seek(names[k][2])
-        country_string = file.read(second - first)
-    else:
-        country_string = None
+    names[k][1] = get_text()
+    if names[k][2] != 0: names[k][2] = get_text()
+    if names[k][3] != 0: names[k][3] = get_text()
 
-    print "Location ID: %s" % k.upper()
-    print "City: %s" % city_string.decode('utf-16be').encode('utf-8')
-    if region_string is not None:
-        print "Region: %s" % region_string.decode('utf-16be').encode('utf-8')
-    else:
-        print "No Region"
-    if country_string is not None:
-        print "Country: %s" % country_string.decode('utf-16be').encode('utf-8')
-    else:
-        print "No Country"
-    print "Latitude Coordinate: %s" % names[k][3]
-    print "Longitude Coordinate: %s" % names[k][4]
-    print "Zoom 1: %s" % names[k][5]
-    zoom.append(int(names[k][5]))
-    print "Zoom 2: %s" % names[k][6]
+    print "Location ID: %s" % names[k][0].upper()
+    print "City: %s" % names[k][1].decode('utf-16be').encode('utf-8')
+    if names[k][2] != 0: print "Region: %s" % names[k][2].decode('utf-16be').encode('utf-8')
+    else: print "No Region"
+    if names[k][3] != 0: print "Country: %s" % names[k][3].decode('utf-16be').encode('utf-8')
+    else: print "No Country"
+    print "Latitude Coordinate: %s" % names[k][4]
+    print "Longitude Coordinate: %s" % names[k][5]
+    print "Zoom 1: %s" % names[k][6]
+    print "Zoom 2: %s" % names[k][7]
 
 
 print "\nDumping Locations Database ..."
-if os.path.exists('locations.json'):
-    os.remove('locations.json')
-with open('locations.json', 'wb') as file:
+with open('locations.db', 'wb') as file:
     pickle.dump(names, file)
 
 print "Completed Sucessfully"
