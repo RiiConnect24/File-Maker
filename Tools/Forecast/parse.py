@@ -153,7 +153,7 @@ print "\nWeather Conditions:"
 file.seek(weather[0][1])
 for i in range(weatherconditions_count / 2):
     weather[i] = get_text()
-    print "    %s" % weather[i].decode('utf-16be').replace('\n', ' ')
+    if i % 2 == 0: print "    %s" % weather[i].decode('utf-16be').replace('\n', ' ')
 
 raw_input("\nParsing location entries:")
 
@@ -174,15 +174,16 @@ for i in range(amnt):
 
 file.seek(names[0][1])
 for k in names.keys():
-    names[k][1] = get_text()
-    if names[k][2] != 0: names[k][2] = get_text()
-    if names[k][3] != 0: names[k][3] = get_text()
-
     print "Location ID: %s" % names[k][0].upper()
+    names[k][1] = get_text()
     print "City: %s" % names[k][1].decode('utf-16be').encode('utf-8')
-    if names[k][2] != 0: print "Region: %s" % names[k][2].decode('utf-16be').encode('utf-8')
+    if names[k][2] != 0:
+        names[k][2] = get_text()
+        print "Region: %s" % names[k][2].decode('utf-16be').encode('utf-8')
     else: print "No Region"
-    if names[k][3] != 0: print "Country: %s" % names[k][3].decode('utf-16be').encode('utf-8')
+    if names[k][3] != 0:
+        names[k][3] = get_text()
+        print "Country: %s" % names[k][3].decode('utf-16be').encode('utf-8')
     else: print "No Country"
     print "Latitude Coordinate: %s" % names[k][4]
     print "Longitude Coordinate: %s" % names[k][5]
