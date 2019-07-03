@@ -611,9 +611,14 @@ def offset_write(value, post=True):
 
 
 def make_bins(forecast_list, data):
-    make_forecast_bin(forecast_list, data)
-    make_short_bin(forecast_list, data)
-    reset_data()
+    global mode, language_code
+    for i in range(1, file_gen):
+        mode = i
+        for j in bins:
+            language_code = j
+            make_forecast_bin(forecast_list, data)
+            make_short_bin(forecast_list, data)
+            reset_data()
 
 
 def generate_data(forecast_list, bins):
@@ -1208,11 +1213,7 @@ for forecast_list in forecastlists.weathercities:
     status = 3
     data = generate_data(forecast_list, bins)
     status = 4
-    for i in range(1, file_gen):
-        mode = i
-        for j in bins:
-            language_code = j
-            make_bins(forecast_list, data)
+    make_bins(forecast_list, data)
     lists += 1
 
 time.sleep(0.1)
