@@ -142,13 +142,19 @@ for i in range(uvindex_count):
     uvindex[i][1] = get_text()
     print "    %s : %s" % (uvindex[i][0], uvindex[i][1].decode('utf-16be'))
 
+laundry_str = ""
 file.seek(laundry[0][1])
 for i in range(laundry_count):
     laundry[i][1] = get_text()
+    laundry_str += str(laundry[i][0]) + " "
+print "\nLaundry Index Entries: " + laundry_str
 
+pollen_str = ""
 file.seek(pollen[0][1])
 for i in range(pollen_count):
     pollen[i][1] = get_text()
+    pollen_str += str(pollen[i][0]) + " "
+print "\nPollen Index Entries: " + pollen_str
 
 print "\nWeather Conditions:"
 print "Code 1 / Code 2 (International) / Code 1 / Code 2 (Japan)\n"
