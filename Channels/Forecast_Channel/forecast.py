@@ -130,9 +130,10 @@ def matches_country_code(forecast_list, key):
 def check_coords(forecast_list, key, lat, lng):
     global errors
     """ Verify Location Coordinates """
-    if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
-        log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
-        errors+=1
+    if config["check_coordinates"]:
+        if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
+            log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
+            errors+=1
 
 
 def get_bins(country_code):
@@ -1173,8 +1174,8 @@ ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 10 if config["useMultithreaded"] else 1
-file_gen = 3 if config["enableWiiUGeneration"] else 2
+concurrent = 10 if config["multithreaded"] else 1
+file_gen = 3 if config["wii_u_generation"] else 2
 ui_run = None
 threads_run = True
 ui_thread = threading.Thread(target=ui)
