@@ -38,6 +38,17 @@ def parse_offsets(dict, count, offset):
         offset = read_int(4)
         dict[i] = [code, offset]
 
+def parse_weather_offsets(dict, count, offset):
+    file.seek(offset)
+    for i in range(count):
+        international_code_1 = binascii.hexlify(file.read(2))
+        international_code_2 = binascii.hexlify(file.read(2))
+        international_offset = read_int(4)
+        japan_code_1 = binascii.hexlify(file.read(2))
+        japan_code_2 = binascii.hexlify(file.read(2))
+        japan_offset = read_int(4)
+        dict[i] = [international_code_1.upper(), international_code_2.upper(), international_offset, japan_code_1.upper(), japan_code_2.upper(), japan_offset]
+
 
 def get_text():
     str = ""
@@ -69,56 +80,46 @@ timestamp_1 = read_int(4)
 timestamp_2 = read_int(4)
 print "Valid until: %s (for %s minutes)" % (timestamp_1,int(timestamp_1-timestamp_2))
 print "Generated at: %s" % timestamp_2
-
 file.seek(20) # Country Code
 country_code = binascii.hexlify(file.read(1))
 print "Country Code: %s (%s)" % (country_code, str(int(country_code, 16)).zfill(3))
-
 file.seek(21) # Language Code
 language_code = read_int(4)
 print "Language Code: %s" % language_code
-
 file.seek(28) # Message Offset
 message_offset = read_int(4)
 if message_offset == 0: print "No Message in file"
 else: print "Message exists in file"
-
 file.seek(32) # Long Forecast Entry Number
 long_count = read_int(4)
 file.seek(36) # Long Forecast Table Offset
 long_offset = read_int(4)
 print "%s long forecast table entries @ %s" % (long_count, hex(long_offset))
-
 file.seek(40) # Short Forecast Entry Number
 short_count = read_int(4)
 file.seek(44) # Short Forecast Table Offset
 short_offset = read_int(4)
 print "%s short forecast table entries @ %s" % (short_count, hex(short_offset))
-
 file.seek(48) # Weather Condition Codes Entry Number
 weatherconditions_count = read_int(4)
 file.seek(52) # Weather Condition Codes Table Offset
 weatherconditions_offset = read_int(4)
 print "%s weather condition entries @ %s" % (weatherconditions_count, hex(weatherconditions_offset))
-
 file.seek(56) # UV Index Entry Number
 uvindex_count = read_int(4)
 file.seek(60) # UV Index Table Offset
 uvindex_offset = read_int(4)
 print "%s uv index entries @ %s" % (uvindex_count, hex(uvindex_offset))
-
 file.seek(64) # Laundry Index Entry Number
 laundry_count = read_int(4)
 file.seek(68) # Laundry Index Table Offset
 laundry_offset = read_int(4)
 print "%s laundry index entries @ %s" % (laundry_count, hex(laundry_offset))
-
 file.seek(72) # Pollen Count Entry Number
 pollen_count = read_int(4)
 file.seek(76) # Pollen Count Entry Offset
 pollen_offset = read_int(4)
 print "%s pollen index entries @ %s" % (pollen_count, hex(pollen_offset))
-
 file.seek(80) # Location Entry Number
 amnt = read_int(4)
 file.seek(84) # Location Table Offset
@@ -133,27 +134,29 @@ weather = collections.OrderedDict()
 parse_offsets(uvindex, uvindex_count, uvindex_offset)
 parse_offsets(laundry, laundry_count, laundry_offset)
 parse_offsets(pollen, pollen_count, pollen_offset)
-parse_offsets(weather, weatherconditions_count, weatherconditions_offset)
+parse_weather_offsets(weather, weatherconditions_count / 2, weatherconditions_offset)
 
 file.seek(uvindex[0][1])
 print "\nUV Index Entries:"
 for i in range(uvindex_count):
-    uvindex[i] = get_text()
-    print "    %s" % uvindex[i].decode('utf-16be')
+    uvindex[i][1] = get_text()
+    print "    %s : %s" % (uvindex[i][0], uvindex[i][1].decode('utf-16be'))
 
 file.seek(laundry[0][1])
 for i in range(laundry_count):
-    laundry[i] = get_text()
+    laundry[i][1] = get_text()
 
 file.seek(pollen[0][1])
 for i in range(pollen_count):
-    pollen[i] = get_text()
+    pollen[i][1] = get_text()
 
 print "\nWeather Conditions:"
-file.seek(weather[0][1])
+print "Code 1 / Code 2 (International) / Code 1 / Code 2 (Japan)\n"
+file.seek(weather[0][2])
 for i in range(weatherconditions_count / 2):
-    weather[i] = get_text()
-    if i % 2 == 0: print "    %s" % weather[i].decode('utf-16be').replace('\n', ' ')
+    weather[i][2] = get_text()
+    weather[i][5] = get_text()
+    print "    %s/%s/%s/%s : %s" % (weather[i][0], weather[i][1], weather[i][3], weather[i][4], weather[i][2].decode('utf-16be').replace('\n', ' '))
 
 raw_input("\nParsing location entries:")
 
