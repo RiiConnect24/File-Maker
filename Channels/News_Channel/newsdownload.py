@@ -528,7 +528,10 @@ class Parse(News):
         else:
             return []
         
-        self.article = newspaper.fulltext(self.newsdata["storyHTML"], language=self.language)
+        try:
+            self.article = newspaper.fulltext(self.newsdata["storyHTML"], language=self.language)
+        except AttributeError:
+            return []
 
         self.article = self.article.replace("\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.", "")
 
