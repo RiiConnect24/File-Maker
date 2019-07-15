@@ -1170,7 +1170,7 @@ def dump_db():
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
-if config["production"]:
+if config["production"] and config["send_stats"]:
     setup_log(config["sentry_url"], False)
 
 s = requests.Session()  # Use session to speed up requests
@@ -1220,7 +1220,7 @@ time.sleep(0.1)
 close_threads()
 dump_db()
 
-if config["production"]:
+if config["production"] and config["send_stats"]:
     """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
