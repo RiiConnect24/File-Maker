@@ -319,6 +319,14 @@ def ui():
         sys.stdout.flush()
         time.sleep(refresh_rate)
     print("\n")
+    """Log stuff to Datadog."""
+    if config["production"] and config["send_stats"]:    
+        statsd.increment("forecast.api_requests", apirequests)
+        statsd.increment("forecast.retry_count", retrycount)
+        statsd.increment("forecast.elapsed_time", elapsed_time)
+        statsd.increment("forecast.bandwidth_usage", bandwidth)
+        statsd.increment("forecast.cities", cities)
+        statsd.increment("forecast.errors", errors)
 
 
 def get_icon(icon, forecast_list, key):
@@ -1170,7 +1178,7 @@ def dump_db():
 
 with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
-if config["production"] and config["send_stats"]:
+if config["production"] and config["send_logs"]:
     setup_log(config["sentry_url"], False)
 
 s = requests.Session()  # Use session to speed up requests
@@ -1220,7 +1228,7 @@ time.sleep(0.1)
 close_threads()
 dump_db()
 
-if config["production"] and config["send_stats"]:
+if config["production"] and config["send_webhooks"]:
     """This will use a webhook to log that the script has been ran."""
     data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
             "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
@@ -1233,12 +1241,5 @@ if config["production"] and config["send_stats"]:
              "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
     for url in config["webhook_urls"]:
         post_webhook = requests.post(url, json=data, allow_redirects=True)
-    """Log stuff to Datadog."""
-    statsd.set("forecast.api_requests", apirequests)
-    statsd.set("forecast.retry_count", retrycount)
-    statsd.set("forecast.elapsed_time", elapsed_time)
-    statsd.set("forecast.bandwidth_usage", bandwidth)
-    statsd.set("forecast.cities", cities)
-    statsd.set("forecast.errors", errors)
 
 print("Completed Successfully")
