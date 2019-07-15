@@ -6,7 +6,7 @@
   "multithreaded": true,
   "wii_u_generation": false,
   "check_coordinates": false,
-  "send_stats" : true,
+  "send_stats": true,
   "sentry_url": "http://status.domain.tld/",
   "webhook_urls": [
     "http://status.domain.tld/"
