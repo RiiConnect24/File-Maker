@@ -592,13 +592,13 @@ def parse_data(forecast_list):
     for k, v in weather_data.items():
         try:
             weather_data[k] = ElementTree.fromstring(v)
-            if weather_data[k].find("{http://www.accuweather.com}failure") is not None:
+            if weather_data[k].find("{http://www.accuweather.com}failure"):
                 weather_data[k] = None
         except Exception as e:
             log("An API parsing exception has occurred: %s" % e, "WARNING")
             weather_data[k] = None
             continue
-        if weather_data[k] is not None:
+        if weather_data[k]:
             get_accuweather_api(forecast_list, k)
         else:
             log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
