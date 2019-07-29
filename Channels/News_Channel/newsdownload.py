@@ -278,7 +278,6 @@ cities["ZURICH"] = ["21a40610", "Zürich"]
 
 def locations_download(language_code, data):
     locations = collections.OrderedDict()
-    locations_return = collections.OrderedDict()
     gmaps = googlemaps.Client(key=config["google_maps_api_key"])
 
     """This dictionary is used to determine languages."""
@@ -298,13 +297,11 @@ def locations_download(language_code, data):
 
         if location is not None:
             if location not in locations:
-                locations[location] = []
+                locations[location] = [None, None, []]
 
-            locations[location].append(keys)
+            locations[location][2].append(keys)
 
     for name in list(locations.keys()):
-        read = None
-
         if name == "":
             continue
 
@@ -315,40 +312,37 @@ def locations_download(language_code, data):
         if name not in cities:
             try:
                 read = gmaps.geocode(uni_name, language=languages[language_code])
-            except:
-                log("There was a error downloading the location data.", "INFO")
+                loc_name = read[0]["address_components"][0]["long_name"]
 
-        if read is None and name in cities:
-            coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
-            new_name = enc(cities[name][1])
+                if languages[language_code] == "ja":
+                    loc_name = enc(loc_name)
+                else:
+                    loc_name = enc(unidecode(loc_name))
 
-            for filenames in locations[name]:
-                if new_name not in locations_return:
-                    locations_return[new_name] = [coordinates, []]
-
-                locations_return[new_name][1].append(filenames)
-
-        elif read is not None:
-            try:
-                new_name = read[0]["address_components"][0]["long_name"].encode("utf-16be")
-
-                """Not doing anything with these at this time."""
+                """Not doing anything with these."""
 
                 country = u8(0)
                 region = u8(0)
                 location = u16(0)
                 zoom_factor = u32_littleendian(6)
 
-                coordinates = s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536))) + s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + country + region + location + zoom_factor
-
-                for filenames in locations[name]:
-                    if new_name not in locations_return: locations_return[new_name] = [coordinates, []]
-
-                    locations_return[new_name][1].append(filenames)
+                coordinates = s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536))) + \
+                                s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + \
+                                country + region + location + zoom_factor
             except:
                 log("There was a error downloading the location data.", "INFO")
 
-    return locations_return
+        else:
+            coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
+            loc_name = enc(cities[name][1])
+
+        if locations[name][0] is None:
+            locations[name][0] = coordinates
+        
+        if locations[name][1] is None:
+            locations[name][1] = loc_name
+
+    return locations
 
 
 """Get location from Geoparser."""
@@ -558,8 +552,8 @@ class Parse(News):
         else:
             self.picture = None
 
-        if "(AP)" in self.article:
-            self.location = self.article.split("(AP)")[0]
+        if " (AP)" in self.article:
+            self.location = self.article.split(" (AP)")[0]
 
     def parse_reuters(self):
         try:
