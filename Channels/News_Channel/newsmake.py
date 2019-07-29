@@ -527,7 +527,7 @@ def make_articles_table(mode, locations_data, header, data):
         articles_table["location_%s_number" % numbers] = u32(4294967295)  # Number for the location.
 
         for locations in list(locations_data.keys()):
-            for article_name in locations_data[locations][1]:
+            for article_name in locations_data[locations][2]:
                 if keys == article_name:
                     articles_table["location_%s_number" % numbers] = u32(list(locations_data.keys()).index(locations))  # Number for the location.
 
@@ -613,11 +613,10 @@ def make_locations_table(header, locations_data):
 
     locations_number = 0
 
-    for locations_coordinates in list(locations_data.keys()):
+    for loc_coord in list(locations_data.values()):
+        locations_table["location_%s_offset" % locations_number] = u32(0)  # Offset for the locations.
+        locations_table["location_%s_coordinates" % locations_number] = loc_coord[0]  # Coordinates of the locations.
         locations_number += 1
-        numbers = list(locations_data.keys()).index(locations_coordinates)
-        locations_table["location_%s_offset" % numbers] = u32(0)  # Offset for the locations.
-        locations_table["location_%s_coordinates" % numbers] = locations_data[locations_coordinates][0]  # Coordinates of the locations.
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
@@ -757,12 +756,15 @@ def make_locations(locations_data, locations_table):
     locations = collections.OrderedDict()
     dictionaries.append(locations)
 
-    for locations_strings in list(locations_data.keys()):
-        numbers = list(locations_data.keys()).index(locations_strings)
+    numbers = 0
+
+    for loc_text in list(locations_data.values()):
         locations_table["location_%s_offset" % numbers] = offset_count()  # Offset for the locations.
 
-        locations["location_%s_read" % numbers] = locations_strings  # Read the locations.
+        locations["location_%s_read" % numbers] = loc_text[1]  # Read the locations.
         locations["nullbyte_%s_locations" % numbers] = u16(0)  # Null byte for the locations.
+
+        numbers += 1
 
     return locations
 
