@@ -272,7 +272,7 @@ cities["TORONTO"] = ["1f13c787", "Toronto"]
 cities["UNITED NATIONS"] = ["1cf0cb78", "United Nations"]
 cities["VATICAN CITY"] = ["1dcc08db", "Vatican City"]
 cities["VIENNA"] = ["223d0ba0", "Vienna"]
-cities["WASHINGTON"] = ["1ba8c938", "Washington"]
+cities["WASHINGTON"] = ["1ba8c938", "Washington D.C."]
 cities["ZURICH"] = ["21a40610", "Zürich"]
 
 
