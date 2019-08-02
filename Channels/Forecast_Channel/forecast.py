@@ -135,6 +135,9 @@ def check_coords(forecast_list, key, lat, lng):
             log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
         errors+=1
         blank_data(forecast_list, key)
+        return
+
+    return True
 
 
 def get_bins(country_code):
@@ -584,9 +587,9 @@ def get_accuweather_api(forecast_list, key):
 
     lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
     lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
-    check_coords(forecast_list,key,lat,lng)
-    globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
-    globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
+    if check_coords(forecast_list,key,lat,lng):
+        globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
+        globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
 
 
 def parse_data(forecast_list):
