@@ -130,10 +130,11 @@ def matches_country_code(forecast_list, key):
 def check_coords(forecast_list, key, lat, lng):
     global errors
     """ Verify Location Coordinates """
-    if config["check_coordinates"]:
-        if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
+    if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
+        if config["check_coordinates"]:
             log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
-            errors+=1
+        errors+=1
+        blank_data(forecast_list, key)
 
 
 def get_bins(country_code):
@@ -536,11 +537,6 @@ def get_accuweather_api(forecast_list, key):
     precipitation[key][12] = int(forecast[7][6][19].text)
     precipitation[key][13] = int(forecast[8][6][19].text)
     precipitation[key][14] = int(forecast[9][6][19].text)
-    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
-    check_coords(forecast_list,key,lat,lng)
-    globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
-    globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
     globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
     week[key][0] = int(forecast[3][6][3].text)
@@ -585,6 +581,12 @@ def get_accuweather_api(forecast_list, key):
             if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][j + index_offset] = modeValue
             elif validHour(temp): hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp][0].text), forecast_list, key)
             else: hourly[key][j + index_offset] = get_icon(int(-1), forecast_list, key)
+
+    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
+    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
+    check_coords(forecast_list,key,lat,lng)
+    globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
+    globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
 
 
 def parse_data(forecast_list):
