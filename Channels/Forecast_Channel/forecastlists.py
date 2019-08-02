@@ -325,8 +325,8 @@ weathercities001["Joetsu"] = [
     ["上越市", "Joetsu", "Jōetsu", "Jōetsu", "Jōetsu", "Jōetsu", "Joetsu"],
     ["新潟県", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
     ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1a62624f00030000"]
-weathercities001["1305"] = [
-    ["相川", "1305", "1305", "54-6", "1305", "1305", "1305"],
+weathercities001["Aikawa"] = [
+    ["相川", "Aikawa", "Aikawa", "Aikawa", "Aikawa", "Aikawa", "Aikawa"],
     ["新潟県", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata", "Niigata"],
     ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "1b09624e00030000"]
 weathercities001["Gifu"] = [
