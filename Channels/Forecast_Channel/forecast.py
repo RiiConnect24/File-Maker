@@ -540,6 +540,8 @@ def get_accuweather_api(forecast_list, key):
     precipitation[key][12] = int(forecast[7][6][19].text)
     precipitation[key][13] = int(forecast[8][6][19].text)
     precipitation[key][14] = int(forecast[9][6][19].text)
+    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
+    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
     globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
     week[key][0] = int(forecast[3][6][3].text)
@@ -585,8 +587,6 @@ def get_accuweather_api(forecast_list, key):
             elif validHour(temp): hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp][0].text), forecast_list, key)
             else: hourly[key][j + index_offset] = get_icon(int(-1), forecast_list, key)
 
-    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
     if check_coords(forecast_list,key,lat,lng):
         globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
         globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
