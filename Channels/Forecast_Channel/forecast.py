@@ -157,9 +157,9 @@ def get_region_flag(country_code):
     if country_code == 1:
         return 0
     elif country_code in [8,9,12,14,17,19,37,43,48,49,51]:
-        return 1
+        return 1 # Fahrenheit
     else:
-        return 2
+        return 2 # Celsius
 
 
 def coord_decode(value):
@@ -257,7 +257,7 @@ def refresh(type):
 
 
 def ui():
-    prog = """-\|/"""  # These are characters which will make a spinning effect.
+    prog = """-\|/"""  # These are characters which will make a spinning effect
     progcount = 0
     bar = 35  # Size of progress bars
     i = 0  # Counter for building progress bar
