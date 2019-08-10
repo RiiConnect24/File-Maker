@@ -826,7 +826,7 @@ def get_data(forecast_list, key):
     blank_data(forecast_list, key)
     lat = coord_decode(get_lat(forecast_list, key))
     lon = coord_decode(get_lng(forecast_list, key))
-    weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?location={},{}".format(ip, lat, lon), 0)
+    weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?slat={}&slon={}".format(ip, lat, lon), 0)
 
 
 def make_header_short(forecast_list):
