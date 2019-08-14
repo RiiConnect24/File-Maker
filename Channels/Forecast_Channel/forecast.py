@@ -130,7 +130,7 @@ def matches_country_code(forecast_list, key):
 def check_coords(forecast_list, key, lat, lng):
     global errors
     """ Verify Location Coordinates """
-    if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 1 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 1:
+    if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 2 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 2:
         if config["check_coordinates"]:
             log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
         errors+=1
