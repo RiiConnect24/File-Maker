@@ -358,14 +358,14 @@ def make_header(data):
     for language in languages:
         numbers += 1
 
-        header[numbers] = u8(language)
+        header["language_select_" + numbers] = u8(language)
 
     """Fills the rest of the languages as null."""
 
     while numbers < 16:
         numbers += 1
 
-        header[numbers] = u8(255)
+        header["language_select_" + numbers] = u8(255)
 
     header["language_code"] = u8(language_code)  # Wii language code.
     header["goo_flag"] = u8(0)  # Flag to make the Globe display "Powered by Goo".
