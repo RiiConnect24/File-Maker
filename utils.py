@@ -13,7 +13,7 @@ production = False
 p_errors = False
 
 def setup_log(sentry_url, print_errors):
-    global production
+    global logger,production
     sentry_sdk.init(sentry_url)
     logger = logging.getLogger(__name__)
     p_errors = print_errors
