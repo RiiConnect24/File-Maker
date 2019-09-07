@@ -23,14 +23,16 @@ def log(msg, level):  # TODO: Use number levels, strings are annoying
         print(msg)
 
     if production:
-        if level == "VERBOSE":
-            logging.debug(msg)
-        elif level == "INFO":
-            logging.info(msg)
-        elif level == "WARNING":
-            logging.warning(msg)
-        elif level == "CRITICAL":
-            logging.error(msg)
+        with sentry_sdk.push_scope() as scope:
+            if level == "VERBOSE":
+                scope.level = "debug"
+            elif level == "INFO":
+                scope.level = "info"
+            elif level == "WARNING":
+                scope.level = "warning"
+            elif level == "CRITICAL":
+                scope.level = "error"
+            sentry_sdk.capture_message(msg)
 
 def mkdir_p(path):
     try:
