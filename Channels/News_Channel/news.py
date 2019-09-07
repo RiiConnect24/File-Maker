@@ -42,8 +42,7 @@ def download(source):
             print("Invalid source specified.")
             exit()
     except:
-        client = Client('___DSN___')
-        client.captureException()
+        sentry_sdk.capture_exception()
         return
 
 if __name__ == "__main__":
