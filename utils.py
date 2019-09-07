@@ -4,6 +4,7 @@ import os
 import requests
 import sentry_sdk
 import struct
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 """Unification of utilities used by all scripts."""
 
@@ -13,8 +14,12 @@ production = False
 p_errors = False
 
 def setup_log(sentry_url, print_errors):
-    global logger,production
-    sentry_sdk.init(sentry_url)
+    global logger, production
+    sentry_logging = LoggingIntegration(
+        level=logging.INFO,
+        event_level=logging.INFO
+    )
+    sentry_sdk.init(dsn=sentry_url, integrations=[sentry_logging])
     logger = logging.getLogger(__name__)
     p_errors = print_errors
     production = True
