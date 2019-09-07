@@ -42,6 +42,7 @@ def download(source):
             print("Invalid source specified.")
             exit()
     except:
+        client = Client('___DSN___')
         client.captureException()
         return
 
