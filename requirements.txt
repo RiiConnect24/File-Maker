@@ -7,7 +7,7 @@ lxml
 mysql-connector==2.1.4
 newspaper3k
 pyaes
-raven
 requests
 rsa
+sentry_sdk
 unidecode

@@ -2,11 +2,8 @@ import errno
 import logging
 import os
 import requests
+import sentry_sdk
 import struct
-
-from raven import Client
-from raven.handlers.logging import SentryHandler
-from raven.conf import setup_logging
 
 """Unification of utilities used by all scripts."""
 
@@ -16,11 +13,8 @@ production = False
 p_errors = False
 
 def setup_log(sentry_url, print_errors):
-    global production, logger
-    client = Client(sentry_url)
-    handler = SentryHandler(client)
-    setup_logging(handler)
-    logger = logging.getLogger(__name__)
+    global production
+    sentry_sdk.init(sentry_url)
     p_errors = print_errors
     production = True
 
@@ -30,13 +24,13 @@ def log(msg, level):  # TODO: Use number levels, strings are annoying
 
     if production:
         if level == "VERBOSE":
-            logger.debug(msg)
+            logging.debug(msg)
         elif level == "INFO":
-            logger.info(msg)
+            logging.info(msg)
         elif level == "WARNING":
-            logger.warning(msg)
+            logging.warning(msg)
         elif level == "CRITICAL":
-            logger.error(msg)
+            logging.error(msg)
 
 def mkdir_p(path):
     try:
