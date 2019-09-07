@@ -1,4 +1,5 @@
 import errno
+import logging
 import os
 import requests
 import sentry_sdk
@@ -14,6 +15,7 @@ p_errors = False
 def setup_log(sentry_url, print_errors):
     global production
     sentry_sdk.init(sentry_url)
+    logger = logging.getLogger(__name__)
     p_errors = print_errors
     production = True
 
@@ -22,16 +24,14 @@ def log(msg, level):  # TODO: Use number levels, strings are annoying
         print(msg)
 
     if production:
-        with sentry_sdk.push_scope() as scope:
-            if level == "VERBOSE":
-                scope.level = "debug"
-            elif level == "INFO":
-                scope.level = "info"
-            elif level == "WARNING":
-                scope.level = "warning"
-            elif level == "CRITICAL":
-                scope.level = "error"
-            sentry_sdk.capture_message(msg)
+        if level == "VERBOSE":
+            logger.debug(msg)
+        elif level == "INFO":
+            logger.info(msg)
+        elif level == "WARNING":
+            logger.warning(msg)
+        elif level == "CRITICAL":
+            logger.error(msg)
 
 def mkdir_p(path):
     try:
