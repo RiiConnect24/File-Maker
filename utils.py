@@ -31,7 +31,7 @@ def log(msg, level):  # TODO: Use number levels, strings are annoying
         elif level == "WARNING":
             logger.warning(msg)
         elif level == "CRITICAL":
-            logger.error(msg)
+            logger.critical(msg)
 
 def mkdir_p(path):
     try:
