@@ -168,18 +168,36 @@ sources = {
 def process_news(name, mode, language, region, d):
     print("News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name)
 
-    global language_code, system
+    global language_code, system # I don't like global variables.
 
     language_code = language
     data = d.newsdata
     
-    """If there are more than 25 news articles, delete the rest. This is so the file doesn't get too large."""
+    """This is where we do some checks so that the file doesn't get too large."""
+    """There's a limit on how much news we can have in total."""
+    """The maximum we can have is 25, but if the whole directory of news files is too large,"""
+    """multiple news articles will be removed."""
 
     i = 0
+    limit = 25
+
+    if config["production"]:
+        path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
+        size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
+        if size == "3.9M":
+            limit -= 15
+        elif size == "3.8M":
+            limit -= 10
+        elif size == "3.7M":
+            limit -= 5
+        elif size == "3.6M":
+            limit -= 4
+        elif size == "3.5M":
+            limit -= 3
 
     for key in list(data.keys()):
         i += 1
-        if i > 25:
+        if i > limit:
             del data[key]
 
     data = remove_duplicates(data)
