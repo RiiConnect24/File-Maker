@@ -42,6 +42,7 @@ def download(source):
             print("Invalid source specified.")
             exit()
     except:
+        client.captureException()
         return
 
 if __name__ == "__main__":
