@@ -1,5 +1,4 @@
 import errno
-import logging
 import os
 import requests
 import sentry_sdk
