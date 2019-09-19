@@ -305,7 +305,7 @@ def locations_download(language_code, data):
         if name == "":
             continue
 
-        uni_name = name if languages[language_code] == "ja" else unidecode(name) # If using unidecode with Japanese, it'll translate all the characters to English
+        uni_name = name if languages[language_code] == "ja" else unidecode(name) # If using unidecode with Japanese, it'll translate all the characters to English.
 
         print(uni_name)
 
@@ -337,7 +337,10 @@ def locations_download(language_code, data):
             loc_name = enc(cities[name][1])
 
         if locations[name][0] is None:
-            locations[name][0] = coordinates
+            try:
+                locations[name][0] = coordinates
+            except UnboundLocalError:
+                continue
         
         if locations[name][1] is None:
             locations[name][1] = loc_name
@@ -572,8 +575,10 @@ class Parse(News):
 
         if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
             self.location = self.article.split(" (Reuters)")[0]
-        elif "\uff3b" in self.article:
+        elif "\uff3b" in self.article and "\u3000" in self.article:
             self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
+        elif "\uff3b" in self.article and "\u0020" in self.article:
+            self.location = self.article.split("\uff3b")[1].split("\u0020")[0]
 
     def parse_afp(self):
         try:
