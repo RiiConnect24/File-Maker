@@ -252,7 +252,7 @@ def copy(mode, console, region, hour):
 
 def copy_file(mode, console, region):
     if config["force_all"]:
-        for hours in range(0, 24):
+        for hour in range(0, 24):
             copy(mode, console, region, hour)
     else:
         copy(mode, console, region, datetime.utcnow().hour)
