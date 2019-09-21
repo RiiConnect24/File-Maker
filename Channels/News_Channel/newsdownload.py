@@ -331,15 +331,17 @@ def locations_download(language_code, data):
                                 country + region + location + zoom_factor
             except:
                 log("There was a error downloading the location data.", "INFO")
+                coordinates = None
 
         else:
             coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
             loc_name = enc(cities[name][1])
 
         if locations[name][0] is None:
-            try:
+            if coordinates is not None:
                 locations[name][0] = coordinates
-            except UnboundLocalError:
+            else:
+                del locations[name]
                 continue
         
         if locations[name][1] is None:
