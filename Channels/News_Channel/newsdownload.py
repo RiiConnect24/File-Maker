@@ -295,7 +295,7 @@ def locations_download(language_code, data):
     for keys, values in list(data.items()):
         location = values[7]
 
-        if location is not None:
+        if location is not None and location is not "":
             if location not in locations:
                 locations[location] = [None, None, []]
 
@@ -331,18 +331,13 @@ def locations_download(language_code, data):
                                 country + region + location + zoom_factor
             except:
                 log("There was a error downloading the location data.", "INFO")
-                coordinates = None
 
         else:
             coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
             loc_name = enc(cities[name][1])
 
         if locations[name][0] is None:
-            if coordinates is not None:
-                locations[name][0] = coordinates
-            else:
-                del locations[name]
-                continue
+            locations[name][0] = coordinates
         
         if locations[name][1] is None:
             locations[name][1] = loc_name
