@@ -309,6 +309,8 @@ def locations_download(language_code, data):
 
         print(uni_name)
 
+        coordinates = None
+
         if name not in cities:
             try:
                 read = gmaps.geocode(uni_name, language=languages[language_code])
@@ -336,8 +338,11 @@ def locations_download(language_code, data):
             coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
             loc_name = enc(cities[name][1])
 
-        if locations[name][0] is None:
+        if locations[name][0] is None and coordinates is not None:
             locations[name][0] = coordinates
+        else:
+            del locations[name]
+            continue
         
         if locations[name][1] is None:
             locations[name][1] = loc_name
