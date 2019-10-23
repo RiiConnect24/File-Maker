@@ -194,10 +194,10 @@ def mode_calc(forecast_list):
 
 def populate_international(forecast_list):
     for k, v in forecastlists.weathercities_international.items():
-            if k not in forecast_list:
-                forecast_list[k] = v
-            elif v[2][1] is not forecast_list[k][2][1]:
-                forecast_list[k + " 2"] = v
+        if k not in forecast_list:
+            forecast_list[k] = v
+        elif v[2][1] is not forecast_list[k][2][1]:
+            forecast_list[k + " 2"] = v
 
 
 def size(data):
