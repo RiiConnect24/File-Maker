@@ -33,6 +33,7 @@ from utils import setup_log, log, u8, u16, u32, s8, s16
 
 VERSION = 5.0
 GLOBE_CONSTANT = (360 / 65536)
+REFRESH_RATE = 0.15
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
 seek_base = 0  # Base Offset Calculation Location
@@ -261,7 +262,6 @@ def ui():
     progcount = 0
     bar = 35  # Size of progress bars
     i = 0  # Counter for building progress bar
-    refresh_rate = 0.1  # Refresh rate of UI
     if os.name == 'nt': # Windows
         display = '*'
         os.system("title Forecast Downloader - v%s" % VERSION)
@@ -321,7 +321,7 @@ def ui():
         refresh(refresh_type)
         sys.stdout.write(out)
         sys.stdout.flush()
-        time.sleep(refresh_rate)
+        time.sleep(REFRESH_RATE)
     print("\n")
     """Log stuff to Datadog."""
     if config["production"] and config["send_stats"]:    
@@ -1229,7 +1229,7 @@ for forecast_list in forecastlists.weathercities:
     make_bins(forecast_list, data)
     lists += 1
 
-time.sleep(0.1)
+time.sleep(REFRESH_RATE)
 close_threads()
 dump_db()
 
