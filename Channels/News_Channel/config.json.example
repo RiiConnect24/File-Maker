@@ -5,9 +5,7 @@
   "force_all": false,
   "google_maps_api_key": "key",
   "production": true,
-  "geoparser_keys": [
-    "key"
-  ],
+  "geocode_key": "key",
   "sentry_url": "http://status.domain.tld/",
   "webhook_urls": [
     "http://status.domain.tld/"
