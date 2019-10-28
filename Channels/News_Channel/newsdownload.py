@@ -356,7 +356,7 @@ def locations_download(language_code, data):
 def geoparse(article):
     location = requests.post("https://geocode.xyz/",
                 data={
-                    "scantext": article.text.split("\n")[0],
+                    "scantext": article.split("\n")[0],
                     "json": "1",
                     "auth": config["geocode_key"]
                 }).json()
