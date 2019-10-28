@@ -353,24 +353,17 @@ def locations_download(language_code, data):
 """Get location from Geoparser."""
 
 
-def geoparser_get(article):
-    i = 0
-    for key in config["geoparser_keys"]:
-        url = 'https://geoparser.io/api/geoparser'
-        headers = {'Authorization': "apiKey %s" % key}
-        data = {'inputText': article}
-        response = requests.post(url, headers=headers, data=data)
-        if response.status_code == 402:
-            continue
-        else:
-            try:
-                property = response.json()["features"][0]["properties"]
-                i += 1
-                return property["name"] + ", " + property["country"]
-            except:
-                return None
-    log("Out of Geoparser requests.", "WARNING")
-    return None
+def geoparse(article):
+    location = requests.post("https://geocode.xyz/",
+                data={
+                    "scantext": article.text.split("\n")[0],
+                    "json": "1",
+                    "auth": config["geocode_key"]
+                }).json()
+    try:
+        return location["match"][0]["location"])
+    except:
+        return None
 
 """Download the news."""
 
