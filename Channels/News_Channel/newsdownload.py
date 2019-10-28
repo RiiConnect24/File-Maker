@@ -644,6 +644,6 @@ class Parse(News):
             pass
 
         try:
-            self.location = geoparser_get(self.article)
+            self.location = geoparse(self.article)
         except:
             pass
