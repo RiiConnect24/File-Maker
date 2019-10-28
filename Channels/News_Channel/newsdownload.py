@@ -361,7 +361,7 @@ def geoparse(article):
                     "auth": config["geocode_key"]
                 }).json()
     try:
-        return location["match"][0]["location"])
+        return location["match"][0]["location"]
     except:
         return None
 
