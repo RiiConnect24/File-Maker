@@ -8,9 +8,10 @@ import sys
 from json import load
 from crc16 import crc16xmodem
 from base64 import b64decode
+from random import randint
 
-with open("./config.json", "rb") as f:
-	config = load(f)
+with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
+        config = load(f)
 
 def u8(data):
 	if not 0 <= data <= 255:
@@ -276,7 +277,9 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 
 	def popcraftsBuild(self, artisans): #same as above but formatted for popcrafts_list
 		#artisans must be 2 dimensional array containing craftsno, artisandata, master artisan flag, and popularity
-
+		from datetime import datetime
+		month = int(datetime.now().month)
+		day = int(datetime.now().day)
 		count = int(len(artisans))
 		list_type = b'CL'
 		countrytag = u32(150)
@@ -298,9 +301,12 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 			self.artisan['country'] = u16(entry[4])
 			self.artisan['unk3'] = u16(0)
 			self.artisan['rk_tag'] = b'RK'
-			self.artisan['rk_size'] = u16(12)
+			self.artisan['rk_size'] = u16(16)
 			self.artisan['unk4'] = u32(1)
 			self.artisan['rk_index'] = u32(artisans.index(entry) + 1)
+			self.artisan['day'] = u16(day)
+			self.artisan['month'] = u8(month)
+			self.artisan['unk5'] = u8(0)
 
 			self.artisanlist += self.artisan.values()
 
@@ -503,7 +509,7 @@ class Write():
 class Prepare(): #this is only used to compress and encrypt data by external scripts. any data can be used with this
 
 	def __init__(self):
-		self.filename = 'TMP.ces'
+		self.filename = '/tmp/TMP{}.ces'.format(str(randint(1, 1000000)))
 
 	def prepare(self, data): #takes only data and doesn't write it anywhere. returns the final data
 		prepared = b''
@@ -545,5 +551,3 @@ class Prepare(): #this is only used to compress and encrypt data by external scr
 			writef.write(u16(1))
 			writef.write(self.hmacsha1)
 			writef.write(self.processed)
-
-
