@@ -6,9 +6,10 @@ import struct
 import subprocess
 import sys
 from json import load
-from crc16 import crc16xmodem
 from base64 import b64decode
 from random import randint
+from datetime import datetime
+from time import mktime
 
 with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
         config = load(f)
@@ -321,7 +322,6 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 
 	def popcraftsBuild(self, artisans): #same as above but formatted for popcrafts_list
 		#artisans must be 2 dimensional array containing craftsno, artisandata, master artisan flag, and popularity
-		from datetime import datetime
 		month = int(datetime.now().month)
 		day = int(datetime.now().day)
 		count = int(len(artisans))
@@ -423,6 +423,44 @@ class NumberedList(): #returns a temporary unencrypted mii list for new_list and
 			data += entry
 
 		return data #returns the formatted data, ready to be compressed and encrypted for CMOC
+
+class WSR(): #returns an unencrypted mii list for wii sports resort
+	def __init__(self):
+		self.miilist = []
+
+	def build(self, miis): #requires 2 dimensional array containing initials, miidata, and artisan data
+		timestamp = int(mktime(datetime.utcnow().timetuple())) - 946512000 #current time in seconds + 48 hours
+		self.header = bytes.fromhex('01E187E0') + u32(timestamp) + bytes.fromhex('000041A0000000A864000000000000000000000000000000') #opening timestamp is just 1/1/2019
+
+		for entry in miis:
+			if len(entry[1]) == 1:
+				initial = entry[0].encode() + b'\x00' #add 0x00 to 1 letter initials
+			else:
+				initial = entry[0].encode()		
+
+			miidata = b64decode(entry[1]) #mii data is base64 encoded when retrieved from the SQL database
+			artisan = b64decode(entry[2])
+
+			self.mii = {}
+			self.mii['index'] = u8(miis.index(entry) + 1)
+			self.mii['initials'] = initial
+			self.mii['country_code'] = u8(49) #country code doesn't matter or change anything
+			self.mii['unk1'] = u32(0)
+			self.mii['entry_number1'] = u32(0) #this is actually a u64 for the 12 digit code
+			self.mii['entry_number2'] = u32(0) #except nobody knows how to convert it
+			self.mii['miidata'] = miidata
+			self.mii['mii_artisan'] = artisan
+
+			self.miilist += self.mii.values()
+
+		self.miilist.insert(0, self.header) #inserts the header before all the miis
+
+		data = b''
+		for entry in self.miilist:
+			data += entry
+
+		return(data)
+
 
 class Addition():
 	def __init__(self):

@@ -12,7 +12,7 @@ with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
 ql = QuickList()
 pr = Prepare()
 
-db = MySQLdb.connect('localhost', config['dbuser'], config['dbpass'], 'cmoc')
+db = MySQLdb.connect('localhost', config['dbuser'], config['dbpass'], 'cmoc', charset='utf8mb4')
 cursor = db.cursor()
 
 cursor.execute('SELECT craftsno FROM artisan ORDER BY votes DESC LIMIT 100')
