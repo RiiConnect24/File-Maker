@@ -27,7 +27,7 @@ for i in range(len(list)):
 	mii_filename = "/var/www/wapp.wii.com/miicontest/public_html/render/crafts-{}.mii".format(list[i][0])
 	if not os.path.exists(mii_filename):
 		with open(mii_filename, "wb") as f:
-			f.write(base64.b64decode(list[i][1]))
+			f.write(base64.b64decode(list[i][1])[:2])
 		subprocess.call(["mono", "MiiRender.exe", mii_filename])
 	if int(list[i][3]) >= 1000:
 		master = "<img src=\"/images/master.png\" /><br>"
