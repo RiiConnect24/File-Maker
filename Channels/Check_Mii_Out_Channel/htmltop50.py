@@ -27,7 +27,8 @@ for i in range(len(list)):
 	mii_filename = "/var/www/wapp.wii.com/miicontest/public_html/render/entry-{}.mii".format(list[i][0])
 	if not os.path.exists(mii_filename):
 		with open(mii_filename, "wb") as f:
-			f.write(base64.b64decode(list[i][3])[:2])
+			f.write(base64.b64decode(list[i][3])[:-2])
+		import binascii
 		subprocess.call(["mono", "MiiRender.exe", mii_filename])
 	tables += "\t<tr>\n"
 	tables += "\t\t<td>{}</td>\n".format("<a href=\"/render/entry-{}.mii\"><img width=\"75\" src=\"/render/entry-{}.mii.png\"/></a>".format(list[i][0], list[i][0]))
