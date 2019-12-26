@@ -20,7 +20,7 @@ list = cursor.fetchall()
 
 if len(list) < 25: #if less than 25 miis have received at least 1 like, order by permlikes but don't show super popular miis
 	with open('./logs/popular.log', 'a') as log:
-		log.write('Popular list has only {} miis. Ordering by permlikes instead.\n'.format(len(numbers)))
+		log.write('Popular list has only {} miis. Ordering by permlikes instead.\n'.format(len(list)))
 	cursor.execute('SELECT entryno,initial,permlikes,miidata FROM mii WHERE permlikes<25 ORDER BY permlikes DESC LIMIT 100')
 	list = cursor.fetchall()
 
