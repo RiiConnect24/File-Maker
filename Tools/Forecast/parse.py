@@ -9,7 +9,7 @@ import sys
 import collections
 
 print "Forecast File Parser"
-print "By John Pansera (2017-2019) - www.rc24.xyz"
+print "By John Pansera (2017-2020) - www.rc24.xyz"
 print "Parsing ...\n"
 
 filename = "forecast.bin"

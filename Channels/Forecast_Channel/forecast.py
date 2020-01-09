@@ -6,7 +6,7 @@
 # VERSION 5.0
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
-# Copyright (c) 2015-2019 RiiConnect24, and its (Lead) Developers
+# Copyright (c) 2015-2020 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
 import queue
