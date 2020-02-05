@@ -34,6 +34,6 @@ for i in range(len(numbers)): #add the artisan data to each mii based on their c
 		miilist.append(mii + artisan)
 
 data = ql.build('PL', miilist)
-sleep(30)
+sleep(15)
 with open('{}/150/pop_list.ces'.format(config['miicontest_path']), 'wb') as file:
 	file.write(pr.prepare(data))

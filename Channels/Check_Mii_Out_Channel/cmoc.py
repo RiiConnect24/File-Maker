@@ -10,6 +10,8 @@ from base64 import b64decode
 from random import randint
 from datetime import datetime
 from time import mktime
+import sentry_sdk
+sentry_sdk.init("https://d3e72292cdba41b8ac005d6ca9f607b1@sentry.io/1860434")
 
 with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
         config = load(f)
@@ -96,6 +98,7 @@ class AddMii(): #adds mii to specified list_type. used for static .ces lists
 		self.index = index #used for mii count in PN section. mii and its artisan must have this same number
 		self.entryno = entryno #unique entry number per mii. if two or more miis on the list have the same entry number, none of them will show
 		self.miidata = miidata #mii binary data WITHOUT its crc16 at the end
+		if popularity > 28: popularity = 28 #28 is the max popularity value possible on the client's side
 		self.popularity = popularity #must be a binary hexadecimal with the popularity value
 		self.initials = initials #if it doesn't have a second initial, replace it with 0x00
 		self.country = country
@@ -157,7 +160,12 @@ class OwnSearch(): #creates an ownsearch response given a craftsno
 			self.mii['entry_number'] = u32(entry[0]) 
 			self.mii['mii'] = miidata
 			self.mii['unk2'] = u16(0)
-			self.mii['popularity'] = u8(entry[2])
+
+			if entry[2] > 28: #28 is the max popularity value possible on the client's side
+				self.mii['popularity'] = u8(28)
+			else:
+				self.mii['popularity'] = u8(entry[2])
+
 			self.mii['unk3'] = u8(0)
 			self.mii['skill'] = u16(entry[3])
 			self.mii['initials'] = initial
@@ -196,7 +204,12 @@ class Search(): #creates a search or namesearch response given an entryno
 			self.mii['entry_number'] = u32(entry[0]) 
 			self.mii['mii'] = miidata
 			self.mii['unk2'] = u16(0)
-			self.mii['popularity'] = u8(entry[2])
+
+			if entry[2] > 28: #28 is the max popularity value possible on the client's side
+				self.mii['popularity'] = u8(28)
+			else:
+				self.mii['popularity'] = u8(entry[2])
+
 			self.mii['unk3'] = u8(0)
 			self.mii['skill'] = u16(entry[3])
 			self.mii['initials'] = initial
@@ -252,7 +265,12 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 			self.mii['entry_number'] = u32(entry[0]) 
 			self.mii['mii'] = miidata
 			self.mii['unk2'] = u16(0)
-			self.mii['popularity'] = u8(entry[2])
+
+			if entry[2] > 28: #28 is the max popularity value possible on the client's side
+				self.mii['popularity'] = u8(28)
+			else:
+				self.mii['popularity'] = u8(entry[2])
+
 			self.mii['unk3'] = u8(0)
 			self.mii['skill'] = u16(entry[3])
 			self.mii['initials'] = initial
@@ -285,6 +303,8 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 			initial = initial.encode() + b'\x00' #add 0x00 to 1 letter initials
 		else:
 			initial = initial.encode()
+
+		if int(popularity) > 28: popularity = 28 #28 is the max popularity value possible on the client's side
 
 		self.mii = {}
 		self.mii['header'] = self.header
@@ -322,6 +342,7 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 
 	def popcraftsBuild(self, artisans): #same as above but formatted for popcrafts_list
 		#artisans must be 2 dimensional array containing craftsno, artisandata, master artisan flag, and popularity
+		#master artisan also stores the new mii flag: 0 - no master artisan, 1 - master artisan, 2 - new mii, 3 - new mii and master artisan
 		month = int(datetime.now().month)
 		day = int(datetime.now().day)
 		count = int(len(artisans))
@@ -340,7 +361,10 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 			self.artisan['artisan'] = b64decode(entry[1])
 			self.artisan['unk1'] = u8(0)
 			self.artisan['master_artisan'] = u8(entry[2])
-			self.artisan['popularity'] = u8(entry[3])
+			if entry[3] > 28: #28 is the max popularity value possible on the client's side
+				self.artisan['popularity'] = u8(28)
+			else:
+				self.artisan['popularity'] = u8(entry[3])
 			self.artisan['unk2'] = u8(0)
 			self.artisan['country'] = u16(entry[4])
 			self.artisan['unk3'] = u16(0)
@@ -399,7 +423,10 @@ class NumberedList(): #returns a temporary unencrypted mii list for new_list and
 			self.mii['entry_number'] = u32(entry[0]) 
 			self.mii['mii'] = miidata
 			self.mii['unk2'] = u16(0)
-			self.mii['popularity'] = u8(entry[2])
+			if entry[2] > 28: #28 is the max popularity value possible on the client's side
+				self.mii['popularity'] = u8(28)
+			else:
+				self.mii['popularity'] = u8(entry[2])
 			self.mii['unk3'] = u8(0)
 			self.mii['skill'] = u16(entry[3])
 			self.mii['initials'] = initial
@@ -429,14 +456,14 @@ class WSR(): #returns an unencrypted mii list for wii sports resort
 		self.miilist = []
 
 	def build(self, miis): #requires 2 dimensional array containing initials, miidata, and artisan data
-		timestamp = int(mktime(datetime.utcnow().timetuple())) - 946512000 #current time in seconds + 48 hours
-		self.header = bytes.fromhex('01E187E0') + u32(timestamp) + bytes.fromhex('000041A0000000A864000000000000000000000000000000') #opening timestamp is just 1/1/2019
-
+		open = int(mktime(datetime.utcnow().timetuple())) - 946684800 #current time since 1/1/2000 in seconds
+		close = int(mktime(datetime.utcnow().timetuple())) - 946512000 #current time since 1/1/2000 in seconds + 48 hours
+		self.header = u32(open) + u32(close) + bytes.fromhex('000041A0000000A864000000000000000000000000000000')
 		for entry in miis:
-			if len(entry[1]) == 1:
+			if len(entry[0]) == 1:
 				initial = entry[0].encode() + b'\x00' #add 0x00 to 1 letter initials
 			else:
-				initial = entry[0].encode()		
+				initial = entry[0].encode()
 
 			miidata = b64decode(entry[1]) #mii data is base64 encoded when retrieved from the SQL database
 			artisan = b64decode(entry[2])
@@ -458,7 +485,7 @@ class WSR(): #returns an unencrypted mii list for wii sports resort
 		data = b''
 		for entry in self.miilist:
 			data += entry
-
+		print(len(data))
 		return(data)
 
 
