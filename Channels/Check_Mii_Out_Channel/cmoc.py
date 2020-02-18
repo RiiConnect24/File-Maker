@@ -6,14 +6,15 @@ import struct
 import subprocess
 import sys
 from json import load
-from base64 import b64decode
+from base64 import b64encode, b64decode
+import lz4.block
 from random import randint
 from datetime import datetime
 from time import mktime
 import sentry_sdk
 sentry_sdk.init("https://d3e72292cdba41b8ac005d6ca9f607b1@sentry.io/1860434")
 
-with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
+with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
         config = load(f)
 
 def u8(data):
@@ -42,6 +43,12 @@ def u32_littleendian(data):
 		log("u32 little endian out of range: %s" % data, "INFO")
 		data = 0
 	return struct.pack("<I", data)
+	
+def decodeMii(data): #takes compressed and b64 encoded data, returns binary mii data
+	return(lz4.block.decompress(b64decode(data), uncompressed_size = 76))
+
+def encodeMii(data): #takes binary mii data, returns compressed and b64 encoded data
+	return(b64encode(lz4.block.compress(data, store_size=False)).decode())
 
 class ResetList(): #removes all miis from a list
 	def __init__(self, list_type):
@@ -151,7 +158,7 @@ class OwnSearch(): #creates an ownsearch response given a craftsno
 			else:
 				initial = entry[1].encode()
 
-			miidata = b64decode(entry[5]) #mii data is base64 encoded when retrieved from the SQL database
+			miidata = decodeMii(entry[5]) #mii data is lz4 compressed and base64 encoded when retrieved from the SQL database
 
 			self.mii = {}
 			self.mii['pm_tag'] = b'PM'
@@ -193,8 +200,8 @@ class Search(): #creates a search or namesearch response given an entryno
 			else:
 				initial = entry[1].encode()
 
-			miidata = b64decode(entry[5]) #mii data is base64 encoded when retrieved from the SQL database
-			artisan = b64decode(entry[6])
+			miidata = decodeMii(entry[5]) #mii data is lz4 compressed and base64 encoded when retrieved from the SQL database
+			artisan = decodeMii(entry[6])
 			craftsno = entry[7]
 
 			self.mii = {}
@@ -255,8 +262,8 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 			else:
 				initial = entry[1].encode()
 
-			miidata = b64decode(entry[5]) #mii data is base64 encoded when retrieved from the SQL database
-			artisan = b64decode(entry[6])
+			miidata = decodeMii(entry[5]) #mii data is lz4 compressed and base64 encoded when retrieved from the SQL database
+			artisan = decodeMii(entry[6])
 
 			self.mii = {}
 			self.mii['pm_tag'] = b'PM'
@@ -298,7 +305,7 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 	def infoBuild(self, craftsno, entryno, miidata, initial, master, popularity, ranking): #must be sent craftsno, entryno, most popular mii, initials, master artisan flag, popularity and ranking
 
 		self.header = bytes.fromhex('494E000000000000') + u32(int(craftsno)) + bytes.fromhex('000000000000000000000000FFFFFFFFFFFFFFFF')
-		miidata = b64decode(miidata)
+		miidata = decodeMii(miidata)
 		if len(initial) == 1:
 			initial = initial.encode() + b'\x00' #add 0x00 to 1 letter initials
 		else:
@@ -358,7 +365,7 @@ class QuickList(): #returns a temporary unencrypted mii list for CGI scripts lik
 			self.artisan['pm_size'] = u16(96)
 			self.artisan['artisan_index'] = u32(artisans.index(entry) + 1)
 			self.artisan['craftsno'] = u32(entry[0]) 
-			self.artisan['artisan'] = b64decode(entry[1])
+			self.artisan['artisan'] = decodeMii(entry[1])
 			self.artisan['unk1'] = u8(0)
 			self.artisan['master_artisan'] = u8(entry[2])
 			if entry[3] > 28: #28 is the max popularity value possible on the client's side
@@ -413,8 +420,8 @@ class NumberedList(): #returns a temporary unencrypted mii list for new_list and
 			else:
 				initial = entry[1].encode()
 
-			miidata = b64decode(entry[5]) #mii data is base64 encoded when retrieved from the SQL database
-			artisan = b64decode(entry[6])
+			miidata = decodeMii(entry[5]) #mii data is lz4 compressed and base64 encoded when retrieved from the SQL database
+			artisan = decodeMii(entry[6])
 
 			self.mii = {}
 			self.mii['pm_tag'] = b'PM'
@@ -465,8 +472,8 @@ class WSR(): #returns an unencrypted mii list for wii sports resort
 			else:
 				initial = entry[0].encode()
 
-			miidata = b64decode(entry[1]) #mii data is base64 encoded when retrieved from the SQL database
-			artisan = b64decode(entry[2])
+			miidata = decodeMii(entry[1]) #mii data is lz4 compressed and base64 encoded when retrieved from the SQL database
+			artisan = decodeMii(entry[2])
 
 			self.mii = {}
 			self.mii['index'] = u8(miis.index(entry) + 1)
@@ -489,87 +496,182 @@ class WSR(): #returns an unencrypted mii list for wii sports resort
 		return(data)
 
 
-class Addition():
-	def __init__(self):
-		self.build()
-		
-		filename = "{}/addition/201.ces".format(config["file_path"])
-		
-		Write('write', filename, self.addition)
-	
-	def build(self):
-		self.addition = {}
-
-		self.addition["type"] = b'AD'
-		self.addition["padding1"] = u8(0) * 2
-		self.addition["id1"] = u32(0)
-		self.addition["id2"] = u32(201)
-		self.addition["padding2"] = u8(0) * 12
-		self.addition["padding3"] = u8(255) * 8
-		self.addition["adtag"] = b'AD'
-		self.addition["adtagsize"] = u8(48)
-		self.addition["unk1"] = u32(1)
-		self.addition["unk2"] = u32(1)
-		self.addition["unk3"] = u32(1)
-		self.addition["unk4"] = u32(1)
-		self.addition["unk5"] = u32(1)
-		self.addition["unk6"] = u32(1)
-		self.addition["unk7"] = u32(1)
-
-
 class ConDetail():
-	def __init__(self):
-		self.build()
-		
-		filename = "{}/contest/4294967295/con_detail0.ces".format(config["file_path"])
-		
-		Write('write', filename, self.condetail)
-	
-	def build(self):
-		self.condetail = {}
+	def build(self, id, start, end, status, entrycount, topic, description):
+		def conStatus(status): #the status flag in condetail is strange and requires a number that determines whether its open, judging, or showing results
+			if status == 'open':
+				return(2)
 
+			elif status == 'judging':
+				return(8)
+
+			elif status == 'results':
+				return(32)
+
+			else:
+				print('Invalid status:', status)
+				exit()
+
+		self.condetail = {}
 		self.condetail["type"] = b'CD'
 		self.condetail["padding1"] = u8(0) * 2
-		self.condetail["id1"] = u32(4294967295)
-		self.condetail["id2"] = u8(0)
-		self.condetail["padding2"] = u8(0) * 12
-		self.condetail["padding3"] = u8(255) * 8
+		self.condetail["id1"] = u32(id)
+		self.condetail["id2"] = u32(1)
+		self.condetail["padding2"] = u32(0) * 2
+		self.condetail["start"] = u32(start)
+		self.condetail["end"] = u32(end)
+		self.condetail["padding3"] = bytes.fromhex('FFFFFFFF')
 		self.condetail["cdtag"] = b'CD'
-		self.condetail["cdtagsize"] = u16(64)
-		self.condetail["activecontest"] = u32(1)
-		self.condetail["endtime"] = u32(4294967295)
-		self.condetail["flags"] = 0x22000000
-		self.condetail["unk4"] = 0x19191919
-		self.condetail["unk5"] = 0x19191919
-		self.condetail["unk6"] = 0x19191919
-		self.condetail["unk7"] = 0x19191919
+		self.condetail["cdtagsize"] = u16(136)
+		self.condetail["id3"] = u32(1)
+		self.condetail["id4"] = u32(id)
+		self.condetail["status"] = u8(conStatus(status))
+		self.condetail["worldwide"] = u8(1)
+		self.condetail["padding4"] = u16(0)
+		self.condetail["entrycount"] = u32(entrycount)
+		self.condetail["padding5"] = u32(0) * 5
+		self.condetail["topic"] = topic[:16].encode()
+		self.condetail["padding6"] = u8(0) * (32 - len(topic))
+		self.condetail["description"] = description[:64].encode()
+		self.condetail["padding7"] = u8(0) * (64 - len(description))
 
-class First():
-	def __init__(self, code):
-		self.build()
-		code = self.code
-		filename = "{}/first/" + str(code) + ".ces".format(config["file_path"])
+		data = b''
+		for entry in self.condetail.values():
+			data += entry
+		return(data)
+
+class ConInfo():
+	def __init__(self):
+		self.conlist = []
+
+	def build(self, contests): #must be sent a 2 DIMENSIONAL array with each entry containing contest id and status
+		def conStatus(status): #the status flag in condetail is strange and requires a number that determines whether its open, judging, or showing results
+			if status == 'open':
+				return(2)
+
+			elif status == 'judging':
+				return(8)
+
+			elif status == 'results':
+				return(32)
+
+			else:
+				print('Invalid status:', status)
+				exit()
 		
-		Write('write', filename, self.first)
+		
+		self.header = bytes.fromhex('434900000000009600000000000000000000000000000000FFFFFFFFFFFFFFFF')
 
-	def build(self):
-		self.first = {}
+		for entry in contests:
+			self.contest = {}
+			self.contest['ci_tag'] = b'CI'
+			self.contest['ci_size'] = u16(32)
+			self.contest['contest_index'] = u32(contests.index(entry) + 1)
+			self.contest['contest_id'] = u32(entry[0]) 
+			self.contest['status'] = u8(conStatus(entry[1]))
+			self.contest['worldwide'] = u8(1)
+			self.contest['padding1'] = u8(0) * 18
+			self.conlist += self.contest.values()
 
-		self.first["type"] = b'FD'
-		self.first["padding1"] = u8(0) * 2
-		self.first["id1"] = u32(code) # country code
-		self.first["id2"] = u32(0)
-		self.first["padding2"] = u8(0) * 12
-		self.first["padding3"] = u8(0xFF) * 8
-		self.first["fdtag"] = b'FD'
-		self.first["fdtagsize"] = u16(32)
-		self.first["serveractive"] = u32(1)
-		self.first["unk1"] = u32(0x96000001)
-		self.first["unk2"] = u32(0x41004100)
-		self.first["unk3"] = u32(0x41004100)
-		self.first["unk4"] = u32(0x41004100)
-		self.first["unk5"] = u32(0x41004100)
-		self.first["unk6"] = u32(0x41004100)
+		self.conlist.insert(0, self.header) #inserts the header before all the contests
+
+		data = b''
+		for entry in self.conlist:
+			data += entry
+
+		return data #returns the formatted data, ready to be compressed and encrypted for CMOC
+
+class EntryList(): #EntryList has no PN tag. each entry_list file has exactly 10 miis
+	def build(self, id, miis): #must be sent contest ID and a 2 DIMENSIONAL array with each entry containing craftsno and miidata
+		pages = []
+		total = (len(miis) - len(miis)%10)//10 #removes the remainder to give each list exactly 10 miis (make sure to return randomized query from the database)
+		for listNumber in range(total): 
+			self.header = bytes.fromhex('454C0000') + u32(id) + u32(listNumber + 1) + bytes.fromhex('00000000000000000000000000000000FFFFFFFF')
+			self.miilist = []
+
+			for entry in range(1, 11):
+				miidata = decodeMii(miis[entry + (listNumber * 10) - 1][1]) #600 IQ
+				self.mii = {}
+				self.mii['cm_tag'] = b'CM'
+				self.mii['cm_size'] = u16(88)
+				self.mii['mii_index'] = u32(entry + (listNumber * 10))
+				self.mii['craftsno'] = u32(miis[entry + (listNumber * 10) - 1][0])
+				self.mii['mii'] = miidata
+				self.miilist += self.mii.values()
+			
+			self.miilist.insert(0, self.header) #inserts the header before all the miis
+			
+			data = b''
+			for entry in self.miilist:
+				data += entry
+
+			pages.append((data))
+
+		return pages #returns 2 dimensional array with the individual entry_list pages
+
+class BestList(): #similar to a regular CMOC list, but miis have no initials, skill, or popularity
+	def build(self, id, miis): #must be sent contest ID and a 2 DIMENSIONAL array with each entry containing entryno, craftsno, miidata, artisandata, country, and master artisan flag
+		
+		header = bytes.fromhex('424C0000') + u32(id) + bytes.fromhex('0000000000000000000000000000000000000000FFFFFFFF')
+		cntag = bytes.fromhex('434E000C00000001') + u32(len(miis))
+		self.header = header + cntag
+		self.miilist = []
+
+		for entry in miis:
+			miidata = decodeMii(entry[2]) #mii data is base64 encoded when retrieved from the SQL database
+			artisan = decodeMii(entry[3])
+
+			self.mii = {}
+			self.mii['cm_tag'] = b'CM'
+			self.mii['cm_size'] = u16(88)
+			self.mii['mii_index'] = u32(miis.index(entry) + 1)
+			self.mii['entry_number'] = u32(entry[0]) 
+			self.mii['mii'] = miidata
+			self.mii['cc_tag'] = b'CC'
+			self.mii['cc_size'] = u16(96)
+			self.mii['creator_index'] = u32(miis.index(entry) + 1)
+			self.mii['creator_number'] = u32(entry[1])
+			self.mii['mii_artisan'] = artisan
+			self.mii['unk4'] = u8(0)
+			self.mii['master_artisan'] = u8(entry[5])
+			self.mii['unk5'] = u8(0)
+			self.mii['unk6'] = u16(0)
+			self.mii['country_code'] = u8(entry[4])
+			self.mii['unk7'] = u16(miis.index(entry) + 1) #dookie
+			self.miilist += self.mii.values()
+
+		self.miilist.insert(0, self.header) #inserts the header before all the miis
+
+		data = b''
+		for entry in self.miilist:
+			data += entry
+
+		return data #returns the formatted data, ready to be compressed and encrypted for CMOC
+
+class ConResult(): #returns unencrypted list for conresult.cgi
+	def __init__(self):
+		self.miilist = []
+	
+	def build(self, id, miis): #must be sent contest ID and a 2 dimensional array containing craftsno and ranking
+		self.header = bytes.fromhex('43520000') + u32(id) + bytes.fromhex('00000000000000000000000000000000FFFFFFFFFFFFFFFF')
+		
+		for entry in miis:
+			self.mii = {}
+			self.mii['cc_tag'] = b'CC'
+			self.mii['cc_size'] = u16(96)
+			self.mii['cc_index'] = u32(miis.index(entry) + 1) #add 1 to the index because it can't start at 0
+			self.mii['craftsno'] = u32(entry[0]) 
+			self.mii['padding1'] = u8(0) * 82 #mii data can go here, but it isn't even needed
+			self.mii['ranking'] = u8(entry[1] * 10)
+			self.mii['unk1'] = u8(0)
+			self.miilist += self.mii.values()
+
+		self.miilist.insert(0, self.header) #inserts the header before all the miis
+		data = b''
+		for entry in self.miilist:
+			data += entry
+
+		return data
 
 class Write():
 	def __init__(self, mode, filename, data):

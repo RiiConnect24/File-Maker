@@ -13,41 +13,31 @@ pr = Prepare()
 db = MySQLdb.connect('localhost', config['dbuser'], config['dbpass'], 'cmoc')
 cursor = db.cursor()
 
+cursor.execute('SELECT COUNT(*) FROM mii WHERE likes > 0')
+count = int(cursor.fetchone()[0])
+print('Popular Count:', count)
 
-cursor.execute('SELECT craftsno,entryno FROM mii WHERE likes>0 ORDER BY likes DESC LIMIT 100')
-numbers = cursor.fetchall()
+#popular is always sorted by volatile likes first, but we combine miis ordered by permlikes to fill in the rest to equal 100 total miis
+if count >= 100:
+	extraCount = 0
+	count = 100
 
-if len(numbers) < 25: #if less than 25 miis have received at least 1 like, order by permlikes but don't show super popular miis
-	with open('./logs/popular.log', 'a') as log:
-		log.write('Popular list has only {} miis. Ordering by permlikes instead.\n'.format(len(numbers)))
-	cursor.execute('SELECT craftsno,entryno FROM mii WHERE permlikes<25 ORDER BY permlikes DESC LIMIT 100')
-	numbers = cursor.fetchall()
+else:
+	extraCount = 100 - count
 
-miilist = []
+cursor.execute('SELECT mii.entryno, mii.initial, mii.permlikes, mii.skill, mii.country, mii.miidata, artisan.miidata, artisan.craftsno, artisan.master FROM mii, artisan WHERE mii.craftsno=artisan.craftsno ORDER BY mii.likes DESC LIMIT %s', [count])
+popularMiis = cursor.fetchall()
 
-for i in range(len(numbers)): #add the artisan data to each mii based on their craftsno
-	cursor.execute('SELECT entryno,initial,permlikes,skill,country,miidata FROM mii WHERE craftsno = %s AND entryno = %s', (numbers[i][0], numbers[i][1]))
-	mii = cursor.fetchone()
-	cursor.execute('SELECT miidata,craftsno,master FROM artisan WHERE craftsno = %s', [numbers[i][0]])
-	artisan = cursor.fetchone()
-	if artisan == None:
-		with open('./logs/popular.log', 'a') as log:
-			log.write('ERROR: ENTRYNO {} HAS NO EXISTING ARTISAN WITH CRAFTSNO {}\n'.format(numbers[i][1], numbers[i][0]))
-
-		print('ERROR: ENTRYNO {} HAS NO EXISTING ARTISAN WITH CRAFTSNO {}\n'.format(numbers[i][1], numbers[i][0]))
-		pass
-
-	else:
-		miilist.append(mii + artisan)
+cursor.execute('SELECT mii.entryno, mii.initial, mii.permlikes, mii.skill, mii.country, mii.miidata, artisan.miidata, artisan.craftsno, artisan.master FROM mii, artisan WHERE mii.permlikes < 25 AND mii.craftsno=artisan.craftsno ORDER BY mii.permlikes DESC LIMIT %s', [extraCount])
+extraMiis = cursor.fetchall()
 
 cursor.execute('UPDATE mii SET likes = 0') #reset everyone's likes, but not their permlikes
 
 db.commit()
 db.close()
 
-data = ql.build('SL', miilist)
+data = ql.build('SL', (popularMiis + extraMiis))
 
-sleep(5) #5 seconds for the other scripts to finish
 with open('{}/150/spot_list.ces'.format(config['miicontest_path']), 'wb') as file:
 	file.write(pr.prepare(data))
 
