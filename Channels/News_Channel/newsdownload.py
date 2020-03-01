@@ -392,7 +392,6 @@ class News:
 
         for key, value in list(self.sourceinfo["cat"].items()):
             if isinstance(value, list):
-                print(random.sample(value, len(value)))
                 for v in random.sample(value, len(value)): # reverse and mix up the list
                     i = self.parse_feed(v, key, i)
             else:
