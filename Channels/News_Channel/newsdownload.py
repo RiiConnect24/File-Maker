@@ -11,6 +11,7 @@
 import binascii
 import collections
 import json
+import random
 import sys
 import textwrap
 import time
@@ -35,7 +36,7 @@ with open("./Channels/News_Channel/config.json", "rb") as f:
 
 if config["production"]: setup_log(config["sentry_url"], True)
 
-"""Define information about news sources"""
+# define information about news sources
 
 sources = {
     # urls string argument is category key
@@ -111,13 +112,16 @@ sources = {
     "ansa_italian": {
         "name": "ANSA",
         "url": "http://ansa.it/sito/notizie/%s/%s_rss.xml",
+        "url2": "http://ansa.it/%s/notizie/%s_rss.xml",
         "lang": "it",
         "cat": collections.OrderedDict([
             ("mondo", "world"),
             ("sport", "sports"),
             ("economia", "economy"),
             ("tecnologia", "technology"),
-            ("cultura", "culture")
+            # yeah this is a mess, shame on ANSA for seemingly not having an all-Italian feed
+            ("italy", ["abruzzo", "basilicata", "calabria", "campania", "emiliaromagna", "friuliveneziagiulia", "lazio", "liguria", "lombardia",
+              "marche", "molise", "piemonte", "puglia", "sardegna", "sicilia", "toscana", "trentino", "umbria", "valledaosta", "veneto"])
         ])
     },
     "nu_dutch": {
@@ -148,17 +152,15 @@ sources = {
     }
 }
 
-
-"""Encode the text."""
+# encode the text
 
 def enc(text):
     if text:
         return ftfy.fix_encoding(HTMLParser().unescape(text)).encode("utf-16be", "replace")
 
+# resize the image and strip metadata (to make the image size smaller)
 
-"""Resize the image and strip metadata (to make the image size smaller)."""
-
-def shrink_image(data, resize, source):
+def shrink_image(data, resize, source): # Resize the image and strip metadata (to make the image size smaller).
     if data == "" or data is None: return None
 
     try:
@@ -167,6 +169,7 @@ def shrink_image(data, resize, source):
         return None
     except requests.exceptions.MissingSchema:
         return None
+    
     try:
         image = Image.open(BytesIO(picture))
     except IOError:
@@ -174,7 +177,7 @@ def shrink_image(data, resize, source):
 
     maxsize = (200, 200)
 
-    """If for some reason the image has an alpha channel (probably a PNG), fill the background with white."""
+    # if for some reason the image has an alpha channel (probably a PNG), fill the background with white
 
     image = image.convert("RGB")
 
@@ -190,9 +193,9 @@ def shrink_image(data, resize, source):
 
     return buffer.getvalue()
 
-"""Get the location data."""
+# these are common locations for cities so we don't have to waste API calls if they're used a lot
 
-cities = collections.OrderedDict()
+cities = collections.OrderedDict() 
 
 cities["AMSTERDAM"] = ["253d0379", "Amsterdam"]
 cities["ATLANTA"] = ["17ffc3fe", "Atlanta"]
@@ -269,20 +272,18 @@ cities["STOCKHOLM"] = ["2a200cd5", "Stockholm"]
 cities["SYDNEY"] = ["e7e76b8c", "Sydney"]
 cities["TOKYO"] = ["19606363", "Tokyo"]
 cities["TORONTO"] = ["1f13c787", "Toronto"]
-cities["UNITED NATIONS"] = ["1cf0cb78", "United Nations"]
+cities["UNITED NATIONS"] = ["1cf0cb78", "United Nations"] # maps to the UN offices in New York
 cities["VATICAN CITY"] = ["1dcc08db", "Vatican City"]
 cities["VIENNA"] = ["223d0ba0", "Vienna"]
 cities["WASHINGTON"] = ["1ba8c938", "Washington D.C."]
 cities["ZURICH"] = ["21a40610", "Zürich"]
 
 
-def locations_download(language_code, data):
+def locations_download(language_code, data): # using Google Maps API is so much better than the crap Nintendo used for say, AP news.
     locations = collections.OrderedDict()
     gmaps = googlemaps.Client(key=config["google_maps_api_key"])
 
-    """This dictionary is used to determine languages."""
-
-    languages = {
+    languages = {  # corresponds to the Wii's language codes
         0: "ja",
         1: "en",
         2: "de",
@@ -305,7 +306,7 @@ def locations_download(language_code, data):
         if name == "":
             continue
 
-        uni_name = name if languages[language_code] == "ja" else unidecode(name) # If using unidecode with Japanese, it'll translate all the characters to English.
+        uni_name = name if languages[language_code] == "ja" else unidecode(name) # if using unidecode with Japanese, it'll translate all the characters to English
 
         print(uni_name)
 
@@ -326,11 +327,11 @@ def locations_download(language_code, data):
                 country = u8(0)
                 region = u8(0)
                 location = u16(0)
-                zoom_factor = u32_littleendian(6)
+                zoom_factor = u32_littleendian(6) # Nintendo used the value of 3 for states and countries but we probably don't have any articles that are just states or countries
 
                 coordinates = s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536))) + \
                                 s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + \
-                                country + region + location + zoom_factor
+                                country + region + location + zoom_factor # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max int for a 16-bit int
             except:
                 log("There was a error downloading the location data.", "INFO")
 
@@ -350,8 +351,8 @@ def locations_download(language_code, data):
     return locations
 
 
-"""Get location from Geoparser."""
-
+# get location from geocode
+# geocode sucks and it doesn't seem to be working right now
 
 def geoparse(article):
     location = requests.post("https://geocode.xyz/",
@@ -365,7 +366,7 @@ def geoparse(article):
     except:
         return None
 
-"""Download the news."""
+# download the news
 
 class News:
     def __init__(self, source):
@@ -377,71 +378,82 @@ class News:
 
         self.source = self.sourceinfo["name"]
 
-        self.parse_feed()
+        self.feed()
 
         print("\n")
 
     def __dict__(self):
         return self.newsdata
 
-    def parse_feed(self):
-        print("Downloading News from " + self.source + "...\n")
+    def feed(self):
+        print("Downloading News from {}...\n".format(self.source))
         
         i = 0
 
         for key, value in list(self.sourceinfo["cat"].items()):
+            if isinstance(value, list):
+                print(random.sample(value, len(value)))
+                for v in random.sample(value, len(value)): # reverse and mix up the list
+                    i = self.parse_feed(v, key, i)
+            else:
+                i = self.parse_feed(key, value, i)
+            
+    def parse_feed(self, key, value, i):
+        if self.source == "AP":
+            try:
+                ap_json = requests.get(self.url % key).json() # we use AP's API to download their news, it's epic and it uses JSON
+            except:
+                return i
+
+        feed = ap_json if self.source == "AP" \
+                else feedparser.parse(self.url) if self.source == "AFP_French" \
+                else feedparser.parse(self.sourceinfo["url2"] % (key, key)) if self.source == "ANSA" and value == "italy" \
+                else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
+                else feedparser.parse(self.url % key) # I know this is a mess
+
+        j = 0
+
+        entries = feed["cards"] if self.source == "AP" else feed.entries
+
+        for entry in entries:
             if self.source == "AP":
                 try:
-                    ap_json = requests.get(self.url % key).json()
+                    entry = entry["contents"][0]
                 except:
                     continue
 
-            feed = ap_json if self.source == "AP" \
-                    else feedparser.parse(self.url) if self.source == "AFP_French" \
-                    else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
-                    else feedparser.parse(self.url % key)
+            current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
+            try:
+                updated_time = int((time.mktime(time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S") if self.source == "AP" else entry["updated_parsed"]) - 946684800) / 60)
+            except:
+                print("Failed to parse RSS feed.")
+                continue
 
-            j = 0
+            if current_time - updated_time < 60: # if it's a new article since the last hour
+                i += 1
+                j += 1
+                
+                if i > 25: # in case we have too many articles, we don't want the news file to get too big, there's a limit
+                    break
 
-            entries = feed["cards"] if self.source == "AP" else feed.entries
-
-            for entry in entries:
-                if self.source == "AP":
-                    try:
-                        entry = entry["contents"][0]
-                    except:
-                        continue
-
-                current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
-                try:
-                    updated_time = int((time.mktime(time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S") if self.source == "AP" else entry["updated_parsed"]) - 946684800) / 60)
-                except:
-                    print("Failed to parse RSS feed.")
+                if self.source == "AFP_French" and key not in entry["link"]:
                     continue
+                elif self.source == "AFP" and "SID" in entry["description"]:
+                    self.source = "SID"
+                elif self.source == "NU.nl" and entry["author"] == "ANP":
+                    self.source = "ANP"
 
-                if current_time - updated_time < 60:
-                    i += 1
-                    j += 1
-                    
-                    if i > 25:
-                        break
+                title = entry["headline"] if self.source == "AP" else entry["title"]
 
-                    if self.source == "AFP_French" and key not in entry["link"]:
-                        continue
-                    elif self.source == "AFP" and "SID" in entry["description"]:
-                        self.source = "SID"
-                    elif self.source == "NU.nl" and entry["author"] == "ANP":
-                        self.source = "ANP"
+                print(title)
 
-                    title = entry["headline"] if self.source == "AP" else entry["title"]
+                downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
+                                        title, self.language).get_news()
 
-                    print(title)
-
-                    downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
-                                            title, self.language).get_news()
-
-                    if downloaded_news:
-                        self.newsdata[value + str(j)] = downloaded_news
+                if downloaded_news:
+                    self.newsdata[value + str(j)] = downloaded_news
+                
+        return i
 
 
 
@@ -466,7 +478,6 @@ class Parse(News):
             init = self.newspaper_init()
             if init == []:
                 return None
-                
 
         {
             "AP": self.parse_ap,
@@ -495,7 +506,7 @@ class Parse(News):
         self.newsdata.download()
         try:
             self.newsdata.parse()
-        except newspaper.article.ArticleException:
+        except newspaper.article.ArticleException: # trying again
             self.newsdata.parse()
         except newspaper.article.ArticleException:
             return []
@@ -556,7 +567,7 @@ class Parse(News):
     def parse_reuters(self):
         try:
             self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/", " REUTERS/")
-            
+             
             if self.caption in self.article:
                 self.article = self.article.replace(self.caption + "\n\n", "")
         except AttributeError:
@@ -582,7 +593,7 @@ class Parse(News):
         except AttributeError:
             pass
 
-        """The location is at the end of the article, I couldn't find anything better to parse it."""
+        # the location is at the end of the article
 
         try:
             if "(AFP)" in self.article:
@@ -597,7 +608,7 @@ class Parse(News):
     def parse_dtoday(self):
         if " (SID)" in self.article.split("\n")[2] or " (AFP)" in self.article.split("\n")[4]:
             split = self.article.split("\n")
-            for s in split:
+            for s in split: # remove caption text from being the first paragraph of the article
                 if "© AFP" in s or "© SID" in s:
                     del split[split.index(s) - 1]
                     del split[split.index(s)]
@@ -634,7 +645,7 @@ class Parse(News):
             pass
 
     def parse_nu(self):
-        if "Video" in self.headline or "Liveblog" in self.headline:
+        if "Video" in self.headline or "Liveblog" in self.headline: # not an article
             return None
 
         try:

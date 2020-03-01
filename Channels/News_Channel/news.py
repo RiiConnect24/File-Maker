@@ -8,6 +8,7 @@ import sys
 from utils import *
 
 def main():
+    print("News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\n")
     if len(sys.argv) > 1:
         download(sys.argv[1])
     else:

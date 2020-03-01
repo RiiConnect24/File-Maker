@@ -20,7 +20,7 @@ import subprocess
 import sys
 import time
 import utils
-from datetime import timedelta, datetime, date  # Used to get time stuff.
+from datetime import timedelta, datetime, date
 
 import rsa
 
@@ -29,9 +29,9 @@ from datadog import statsd
 from utils import setup_log, log, mkdir_p, u8, u16, u32, u32_littleendian
 
 with open("./Channels/News_Channel/config.json", "rb") as f:
-    config = json.load(f)
+    config = json.load(f) # load config
 
-if config["production"]: setup_log(config["sentry_url"], True)
+if config["production"]: setup_log(config["sentry_url"], True) # error logging
 
 sources = {
     "ap_english": {
@@ -47,7 +47,7 @@ sources = {
         ]),
         "languages": [1, 3, 4],
         "language_code": 1,
-        "country_code": 49,
+        "country_code": 49, # USA
         "picture": 0,
         "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed."
@@ -61,7 +61,7 @@ sources = {
         ]),
         "languages": [1, 3, 4],
         "language_code": 4,
-        "country_code": 49,
+        "country_code": 49, # USA
         "picture": 0,
         "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed."
@@ -79,7 +79,7 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 1,
-        "country_code": 110,
+        "country_code": 110, # UK
         "picture": 0,
         "position": 4,
         "copyright": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies."
@@ -95,7 +95,7 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 3,
-        "country_code": 110,
+        "country_code": 110, # UK
         "picture": 4,
         "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
@@ -110,7 +110,7 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 2,
-        "country_code": 110,
+        "country_code": 110, # UK
         "picture": 4,
         "position": 4,
         "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse"
@@ -118,6 +118,7 @@ sources = {
     "ansa_italian": {
         "topics_news": collections.OrderedDict([
             ("Dal mondo", "world"),
+            ("Dall'Italia", "italy"),
             ("Sport", "sports"),
             ("Economia", "economy"),
             ("Tecnologia", "technology"),
@@ -125,7 +126,7 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 5,
-        "country_code": 110,
+        "country_code": 110, # UK
         "picture": 6,
         "position": 6,
         "copyright": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma."
@@ -142,7 +143,7 @@ sources = {
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 6,
-        "country_code": 110,
+        "country_code": 110, # Uk
         "picture": 0,
         "position": 5,
         "copyright": "© {} Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group"
@@ -157,7 +158,7 @@ sources = {
         ]),
         "languages": [0],
         "language_code": 0,
-        "country_code": 1,
+        "country_code": 1, # Japan
         "picture": 0,
         "position": 4,
         "copyright": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 "
@@ -166,34 +167,41 @@ sources = {
 
 
 def process_news(name, mode, language, region, d):
-    print("News Channel File Generator \nBy Larsen Vallecillo / www.rc24.xyz\n\nMaking news.bin for %s...\n" % name)
-
-    global language_code, system # I don't like global variables.
+    print("Making news.bin for {}...\n".format(name))
+    global language_code, newsfilename # I don't like global variables but we're still using them for now
 
     language_code = language
     data = d.newsdata
+    newsfilename = "news.bin.{}.{}".format(
+        str(datetime.utcnow().hour).zfill(2), mode)
     
-    """This is where we do some checks so that the file doesn't get too large."""
-    """There's a limit on how much news we can have in total."""
-    """The maximum we can have is 25, but if the whole directory of news files is too large,"""
-    """multiple news articles will be removed."""
+    # This is where we do some checks so that the file doesn't get too large 
+    # There's a limit on how much news we can have in total 
+    # The maximum we can have is 25, but if the whole directory of news files is too large,
+    # multiple news articles will be removed 
 
     i = 0
     limit = 25
 
-    if config["production"]:
+    if config["production"]: # brilliant way to keep the news flowing when it's close to or over the file size limit, surprisingly seems to work?
         path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
         size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-        if size == "3.9M":
+        if size == "3.9M": # over the limit
             limit -= 15
-        elif size == "3.8M":
+        elif size == "3.8M": # hitting the limit
             limit -= 10
-        elif size == "3.7M":
+        elif size == "3.7M": # close to the limit
             limit -= 5
         elif size == "3.6M":
             limit -= 4
         elif size == "3.5M":
             limit -= 3
+
+        filesize = sum(os.path.getsize(f) - 320 for f in glob.glob(
+            "/var/www/wapp.wii.com/news/v2/%s_%s/news.bin.*".format(language_code, region))) # let's do one more check to see if the filesize is ok
+
+        if filesize > 3712000:
+            log("News files exceed the maximum file size amount.", "error")
 
     for key in list(data.keys()):
         i += 1
@@ -204,15 +212,14 @@ def process_news(name, mode, language, region, d):
 
     locations_data = newsdownload.locations_download(language_code, data)
 
-    for system in ["wii", "wii_u"]:
-        make_news = make_news_bin(mode, system, data, locations_data)
+    make_news = make_news_bin(mode, data, locations_data)
 
     if config["production"]:
-        """Log stuff to Datadog."""
+        # Log stuff to Datadog 
 
         statsd.increment("news.total_files_built")
 
-        """This will use a webhook to log that the script has been ran."""
+        # This will use a webhook to log that the script has been ran 
 
         webhook = {"username": "News Bot", "content": "News Data has been updated!",
                    "avatar_url": "https://rc24.xyz/images/logo-small.png", "attachments": [
@@ -227,47 +234,38 @@ def process_news(name, mode, language, region, d):
         for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)
 
-        filesize = sum(os.path.getsize(f) - 320 for f in glob.glob("/var/www/wapp.wii.com/news/v2/%s_%s/news.bin.*".format(language_code, region)))
+        copy_file(mode, region)
 
-        if filesize > 3712000:
-            log("News files exceed the maximum file size amount.", "error")
-
-        copy_file(mode, "wii", region)
-        copy_file(mode, "wii_u", region)
-
-        newsfilename = "news.bin." + str(datetime.utcnow().hour).zfill(2) + "." + mode + "."
-        os.remove(newsfilename + "wii")
-        os.remove(newsfilename + "wii_u")
+        os.remove(newsfilename)
 
 
-"""Copy the temp files to the correct path that the Wii will request from the server."""
+# copy the temp files to the correct path that the Wii will request from the server 
 
-def copy(mode, console, region, hour):
-    newsfilename = "news.bin.{}.{}.{}".format(str(datetime.utcnow().hour).zfill(2), mode, console)
-    newsfilename2 = "news.bin.{}".format(str(hour).zfill(2))
-    path = "{}/{}/{}_{}".format(config["file_path"], "v3" if console == "wii_u" else "v2", language_code, region)
+def copy(mode, region, hour):
+    newsfilename2 = "news.bin.{}".format(str(datetime.utcnow().hour).zfill(2))
+    path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
     mkdir_p(path)
     path = "{}/{}".format(path, newsfilename2)
     subprocess.call(["cp", newsfilename, path])
 
-def copy_file(mode, console, region):
+def copy_file(mode, region):
     if config["force_all"]:
         for hour in range(0, 24):
-            copy(mode, console, region, hour)
+            copy(mode, region, hour) # copy to all 24 files
     else:
-        copy(mode, console, region, datetime.utcnow().hour)
+        copy(mode, region, datetime.utcnow().hour)
 
 
-"""Run the functions to make the news."""
+# Run the functions to make the news 
 
 
-def make_news_bin(mode, console, data, locations_data):
-    global system, dictionaries, languages, country_code, language_code
+def make_news_bin(mode, data, locations_data):
+    global dictionaries, languages, country_code, language_code
 
     source = sources[mode]
 
     if source is None:
-        print("Could not find %s in sources!")
+        print("Could not find %s in sources.")
 
     topics_news = source["topics_news"]
     languages = source["languages"]
@@ -288,9 +286,11 @@ def make_news_bin(mode, console, data, locations_data):
 
                 newstime[data[keys][3]] = get_timestamp(1) + u32(numbers)
 
-        pickle.dump(newstime, open("newstime/newstime.%s-%s-%s-%s" % (str(datetime.now().hour).zfill(2), mode, topics, console), "wb"))
+        pickle.dump(newstime, open("newstime/newstime.%s-%s-%s-wii" % (str(datetime.now().hour).zfill(2), mode, topics), "wb"))
 
     dictionaries = []
+
+    # ton of functions to make news
 
     header = make_header(data)
     make_wiimenu_articles(header, data)
@@ -321,28 +321,22 @@ def make_news_bin(mode, console, data, locations_data):
     return make_news
 
 
-"""This is a function used to count offsets."""
+# This is a function used to count offsets 
 
 
 def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
 
 
-"""Return a timestamp."""
+# Return a timestamp 
 
 
 def get_timestamp(mode):
-    global seconds
-
-    if system == "wii":
-        seconds = 946684800
-    elif system == "wii_u":
-        seconds = 781095800
-
     if mode == 1:
-        return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60))
+        return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - 946684800) / 60))
     elif mode == 2:
-        return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - seconds) / 60) + 1500)
+        return u32(int((calendar.timegm(datetime.utcnow().timetuple()) - 946684800) / 60) + 1500)
 
+# Remove duplicate articles
 
 def remove_duplicates(data):
     headlines = []
@@ -355,9 +349,9 @@ def remove_duplicates(data):
 
     return data
 
-"""Make the news.bin."""
+# Make the news.bin 
 
-"""First part of the header."""
+# First part of the header 
 
 
 def make_header(data):
@@ -369,7 +363,7 @@ def make_header(data):
     header["country_code"] = u32_littleendian(country_code)  # Wii Country Code.
     header["updated_timestamp_2"] = get_timestamp(1)  # 3rd timestamp.
 
-    """List of languages that appear on the language select screen."""
+    # List of languages that appear on the language select screen 
 
     numbers = 0
 
@@ -378,7 +372,7 @@ def make_header(data):
 
         header["language_select_%s" % numbers] = u8(language)
 
-    """Fills the rest of the languages as null."""
+    # Fills the rest of the languages as null 
 
     while numbers < 16:
         numbers += 1
@@ -421,7 +415,7 @@ def make_header(data):
     return header
 
 
-"""Headlines to display on the Wii Menu."""
+# Headlines to display on the Wii Menu 
 
 
 def make_wiimenu_articles(header, data):
@@ -441,7 +435,7 @@ def make_wiimenu_articles(header, data):
                 header["headline_%s_offset" % numbers] = offset_count()  # Offset for the headline.
                 wiimenu_articles["headline_%s" % numbers] = article[3]  # Headline.
 
-                """For some reason, the News Channel uses this padding to separate news articles."""
+                # for some reason, the News Channel uses this padding to separate news articles
 
                 if (int(binascii.hexlify(offset_count()), 16) + 2) % 4 == 0:
                     wiimenu_articles["padding_%s" % numbers] = u16(0)  # Padding.
@@ -453,7 +447,7 @@ def make_wiimenu_articles(header, data):
     return wiimenu_articles
 
 
-"""Topics table."""
+# Topics table 
 
 
 def make_topics_table(header, topics_news):
@@ -478,7 +472,7 @@ def make_topics_table(header, topics_news):
     return topics_table
 
 
-"""Timestamps table."""
+# Timestamps table 
 
 
 def make_timestamps_table(mode, topics_table, topics_news):
@@ -491,7 +485,7 @@ def make_timestamps_table(mode, topics_table, topics_news):
 
         for numbers in range(0, 24):
             start_time = datetime.today() - timedelta(hours=numbers)
-            times_files.append("newstime/newstime.%s-%s-%s-%s" % (str(start_time)[11:-13], str(mode), topics, system))
+            times_files.append("newstime/newstime.%s-%s-%s-wii" % (str(start_time)[11:-13], str(mode), topics))
 
         try:
             for files in times_files:
@@ -526,7 +520,7 @@ def make_timestamps_table(mode, topics_table, topics_news):
     return timestamps_table
 
 
-"""Articles table."""
+# Articles table 
 
 
 def make_articles_table(mode, locations_data, header, data):
@@ -566,14 +560,14 @@ def make_articles_table(mode, locations_data, header, data):
 
     header["articles_number"] = u32(numbers)  # Number of entries for the articles table.
 
-    if config["production"] and system == "wii":
+    if config["production"]:
         statsd.increment("news.total_articles", numbers)
         statsd.increment("news.articles." + mode, numbers)
 
     return articles_table
 
 
-"""Source table."""
+# Source table 
 
 
 def make_source_table(header, articles_table, source, data):
@@ -583,9 +577,6 @@ def make_source_table(header, articles_table, source, data):
     header["source_offset"] = offset_count()  # Offset for the source table.
 
     source_articles = []
-
-    """These are the picture and position values."""
-
 
     numbers = 0
 
@@ -620,7 +611,7 @@ def make_source_table(header, articles_table, source, data):
     return source_table
 
 
-"""Locations data table."""
+# Locations data table 
 
 
 def make_locations_table(header, locations_data):
@@ -638,13 +629,13 @@ def make_locations_table(header, locations_data):
 
     header["locations_number"] = u32(locations_number)  # Number of entries for the locations.
 
-    if config["production"] and system == "wii":
+    if config["production"]:
         statsd.increment("news.total_locations", locations_number)
 
     return locations_table
 
 
-"""Pictures table."""
+# Pictures table 
 
 
 def make_pictures_table(header, data):
@@ -680,13 +671,13 @@ def make_pictures_table(header, data):
 
     header["pictures_number"] = u32(pictures_number)  # Number of entries for the pictures table.
 
-    if config["production"] and system == "wii":
+    if config["production"]:
         statsd.increment("news.total_pictures", pictures_number)
 
     return pictures_table
 
 
-"""Add the articles."""
+# Add the articles 
 
 
 def make_articles(articles_table, pictures_table, data):
@@ -717,7 +708,7 @@ def make_articles(articles_table, pictures_table, data):
     return articles
 
 
-"""Add the topics."""
+# Add the topics 
 
 
 def make_topics(topics_table, topics_news):
@@ -767,7 +758,7 @@ def make_source_name_copyright(source_table, source, data):
             sources.append(article[8])
 
 
-"""Add the locations."""
+# Add the locations 
 
 
 def make_locations(locations_data, locations_table):
@@ -787,7 +778,7 @@ def make_locations(locations_data, locations_table):
     return locations
 
 
-"""Add the source pictures."""
+# Add the source pictures 
 
 
 def make_source_pictures(source_table, data):
@@ -796,7 +787,7 @@ def make_source_pictures(source_table, data):
 
     source_articles = []
 
-    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl"] # These are the news sources which will use a custom JPG for the logo.
+    sources = ["ANP", "AP", "dpa", "Reuters", "SID", "NU.nl"] # these are the news sources which will use a custom JPG for the logo
 
     for article in list(data.values()):
         if article[8] not in source_articles:
@@ -816,7 +807,7 @@ def make_source_pictures(source_table, data):
     return source_pictures
 
 
-"""Add the pictures."""
+# Add the pictures 
 
 
 def make_pictures(pictures_table, data):
@@ -840,25 +831,23 @@ def make_pictures(pictures_table, data):
     return pictures
 
 
-"""Add RiiConnect24 text."""
+# Add RiiConnect24 text 
 
 
 def make_riiconnect24_text():
     riiconnect24_text = collections.OrderedDict()
     dictionaries.append(riiconnect24_text)
 
-    """This can be used to identify that we made this file."""
+    # This can be used to identify that we made this file 
 
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
     riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
 
-"""Write everything to the file."""
+# Write everything to the file 
 
 
 def write_dictionary(mode):
-    newsfilename = "news.bin.%s.%s.%s" % (str(datetime.utcnow().hour).zfill(2), mode, system)
-
     for dictionary in dictionaries:
         for name, value in dictionary.items():
             with open(newsfilename + "-1", "ba+") as dest_file:
@@ -873,26 +862,27 @@ def write_dictionary(mode):
         dest_file.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))
         dest_file.write(read)
 
-    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", newsfilename], stdout=subprocess.PIPE)
+    if config["production"]:
+        subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", newsfilename], stdout=subprocess.PIPE)
 
-    with open(newsfilename, "rb") as source_file:
-        read = source_file.read()
+        with open(newsfilename, "rb") as source_file:
+            read = source_file.read()
 
-    with open(config["key_path"], "rb") as source_file:
-        private_key_data = source_file.read()
+        with open(config["key_path"], "rb") as source_file:
+            private_key_data = source_file.read()
 
-    private_key = rsa.PrivateKey.load_pkcs1(private_key_data, "PEM")
+        private_key = rsa.PrivateKey.load_pkcs1(private_key_data, "PEM")
 
-    signature = rsa.sign(read, private_key, "SHA-1")
+        signature = rsa.sign(read, private_key, "SHA-1")
 
-    with open(newsfilename, "wb") as dest_file:
-        dest_file.write(binascii.unhexlify("0".zfill(128)))
-        dest_file.write(signature)
-        dest_file.write(read)
+        with open(newsfilename, "wb") as dest_file:
+            dest_file.write(binascii.unhexlify("0".zfill(128)))
+            dest_file.write(signature)
+            dest_file.write(read)
 
-    """Remove the rest of the other files."""
+    # Remove the rest of the other files 
 
     os.remove(newsfilename + "-1")
 
-    if not config["production"]:
-        print("Wrote " + newsfilename)
+    print("\n")
+    print("Wrote " + newsfilename)
