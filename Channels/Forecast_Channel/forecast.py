@@ -631,6 +631,7 @@ def make_bins(forecast_list, data):
             language_code = j
             make_forecast_bin(forecast_list, data)
             make_short_bin(forecast_list, data)
+            if config["production"] and config["packVFF"]: packVFF(j, country_code)
             reset_data()
 
 
@@ -817,6 +818,21 @@ def sign_file(name, local_name, server_name):
     path = "{}/{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
     subprocess.call(["cp", local_name, path])
     os.remove(local_name)
+
+def packVFF(language_code, country_code):
+    log("Packing VFF ...", "VERBOSE")
+    path = "{}/{}/{}/".format(config["file_path"], language_code, str(country_code).zfill(3))
+    subprocess.call(["mkdir", "-p", path+"wc24dl"]) # Create vff directory
+    with open(path+"forecast.bin", 'rb') as source:
+        with open(path+"wc24dl/3.BIN", 'wb') as dest:
+            dest.write(source.read()[320:])
+    with open(path+"short.bin", 'rb') as source:
+        with open(path+"wc24dl/4.BIN", 'wb') as dest:
+            dest.write(source.read()[320:])
+    subprocess.call([config["winePath"], config["prfArcPath"], "-v", "200", path+"wc24dl", path+"wc24dl.vff"], stdout=subprocess.DEVNULL) # Pack VFF
+    os.remove(path+"wc24dl/3.BIN")
+    os.remove(path+"wc24dl/4.BIN")
+    subprocess.call(["rmdir", path+"wc24dl"])
 
 
 def get_data(forecast_list, key):
