@@ -431,7 +431,7 @@ def make_wiimenu_articles(header, data):
             if article[3] not in headlines:
                 numbers += 1
                 headlines.append(article[3])
-                header["headline_%s_size" % numbers] = u32(len(article[3],replace("\n", "")))  # Size of the headline.
+                header["headline_%s_size" % numbers] = u32(len(article[3].replace("\n", "")))  # Size of the headline.
                 header["headline_%s_offset" % numbers] = offset_count()  # Offset for the headline.
                 wiimenu_articles["headline_%s" % numbers] = article[3].replace(b'\n', b'')  # Headline.
 
