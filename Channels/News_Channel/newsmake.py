@@ -313,8 +313,8 @@ def make_news_bin(mode, data, locations_data):
     headlines = []
 
     for article in list(data.values()):
-        if article[3].decode("utf-16be") not in headlines:
-            headlines.append(article[3].decode("utf-16be") + "\n")
+        if article[3].replace("\n", "").decode("utf-16be") not in headlines:
+            headlines.append(article[3].replace("\n", "").decode("utf-16be") + "\n")
 
     make_news = "".join(headlines)
 
@@ -406,7 +406,7 @@ def make_header(data):
 
     for article in list(data.values()):
         if numbers < 11:
-            if article[3] not in headlines:
+            if article[3].replace("\n", "") not in headlines:
                 numbers += 1
                 headlines.append(article[3])
                 header["headline_%s_size" % numbers] = u32(0)  # Size of the headline.
@@ -431,9 +431,9 @@ def make_wiimenu_articles(header, data):
             if article[3] not in headlines:
                 numbers += 1
                 headlines.append(article[3])
-                header["headline_%s_size" % numbers] = u32(len(article[3]))  # Size of the headline.
+                header["headline_%s_size" % numbers] = u32(len(article[3],replace("\n", "")))  # Size of the headline.
                 header["headline_%s_offset" % numbers] = offset_count()  # Offset for the headline.
-                wiimenu_articles["headline_%s" % numbers] = article[3]  # Headline.
+                wiimenu_articles["headline_%s" % numbers] = article[3].replace("\n", "")  # Headline.
 
                 # for some reason, the News Channel uses this padding to separate news articles
 
@@ -553,7 +553,7 @@ def make_articles_table(mode, locations_data, header, data):
 
         articles_table["published_time_%s" % numbers] = article[0]  # Published time.
         articles_table["updated_time_%s" % numbers] = get_timestamp(1)  # Updated time.
-        articles_table["headline_%s_size" % numbers] = u32(len(article[3]))  # Size of the headline.
+        articles_table["headline_%s_size" % numbers] = u32(len(article[3].replace("\n", "")))  # Size of the headline.
         articles_table["headline_%s_offset" % numbers] = u32(0)  # Offset for the headline.
         articles_table["article_%s_size" % numbers] = u32(len(article[2]))  # Size of the article.
         articles_table["article_%s_offset" % numbers] = u32(0)  # Offset for the article.
@@ -689,7 +689,7 @@ def make_articles(articles_table, pictures_table, data):
     for article in list(data.values()):
         numbers += 1
         articles_table["headline_%s_offset" % numbers] = offset_count()  # Offset for the headline.
-        articles["headline_%s_read" % numbers] = article[3]  # Read the headline.
+        articles["headline_%s_read" % numbers] = article[3].replace("\n", "")  # Read the headline.
         articles["padding_%s_headline" % numbers] = u16(0)  # Padding for the headline.
         articles_table["article_%s_offset" % numbers] = offset_count()  # Offset for the article.
         articles["article_%s_read" % numbers] = article[2]  # Read the article.
