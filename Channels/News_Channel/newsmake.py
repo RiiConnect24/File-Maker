@@ -185,16 +185,16 @@ def process_news(name, mode, language, region, d):
 
     if config["production"]: # brilliant way to keep the news flowing when it's close to or over the file size limit, surprisingly seems to work?
         path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
-        size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-        if size == "3.9M": # over the limit
+        size = float(subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8').replace("M", "")) - 3.7
+        if size >= 3.9: # over the limit
             limit -= 15
-        elif size == "3.8M": # hitting the limit
+        elif size > 3.8: # hitting the limit
             limit -= 10
-        elif size == "3.7M": # close to the limit
+        elif size == 3.7: # close to the limit
             limit -= 5
-        elif size == "3.6M":
+        elif size == 3.6:
             limit -= 4
-        elif size == "3.5M":
+        elif size == 3.5:
             limit -= 3
 
         filesize = sum(os.path.getsize(f) - 320 for f in glob.glob(
