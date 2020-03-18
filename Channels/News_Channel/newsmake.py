@@ -188,7 +188,7 @@ def process_news(name, mode, language, region, d):
         size = float(subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8').replace("M", "")) - 3.7
         if size >= 3.9: # over the limit
             limit -= 15
-        elif size > 3.8: # hitting the limit
+        elif size == 3.8: # hitting the limit
             limit -= 10
         elif size == 3.7: # close to the limit
             limit -= 5
