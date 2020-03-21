@@ -10655,5 +10655,6 @@ weathercities = [weathercities001, weathercities008, weathercities009, weatherci
                  weathercities078, weathercities079, weathercities082,
                  weathercities083, weathercities088, weathercities094,
                  weathercities095, weathercities096, weathercities097,
-                 weathercities098, weathercities099, weathercities105,
-                 weathercities107, weathercities108, weathercities110]
+                 weathercities098, weathercities099, weathercities100,
+		 weathercities105, weathercities107, weathercities108,
+		 weathercities110]
