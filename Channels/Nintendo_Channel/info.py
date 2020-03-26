@@ -1,8 +1,10 @@
 import binascii
 import collections
+import os
 import requests
 import struct
 import sys
+import textwrap
 import zipfile
 from bs4 import BeautifulSoup
 
@@ -43,33 +45,39 @@ class gametdb():
     def __init__(self):
         self.databases = {
             "Wii": ["wii", None],
-            "3DS": ["3ds", None],
-            "NDS": ["ds", None]
+            # "3DS": ["3ds", None],
+            # "NDS": ["ds", None]
         }
 
         self.download()
-        return self.parse()
+        make_info(self.parse())
     
     def download(self):
         for k,v in self.databases.items():
             print("Downloading {} Database from GameTDB...".format(k))
             zip_filename = "{}tdb.zip".format(v[0])
-            url = "https://www.gametdb.com/{}".format(zip_filename)
-            r = requests.get(url, headers={"User-Agent": "Nintendo Channel Info Downloader"}) # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
-            open(zip_filename, 'wb').write(r.content)
-            """self.zip = zipfile.ZipFile(zip_filename)
-            self.zip.extractall(".")
-            self.zip.close()"""
+            if not os.path.exists(zip_filename):
+                url = "https://www.gametdb.com/{}".format(zip_filename)
+                r = requests.get(url, headers={"User-Agent": "Nintendo Channel Info Downloader"}) # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
+                open(zip_filename, 'wb').write(r.content)
+                self.zip = zipfile.ZipFile(zip_filename)
+                self.zip.extractall(".")
+                self.zip.close()
 
     def parse(self):
         for k,v in self.databases.items():
             print("Parsing {}...".format(k))
-            v[1] = BeautifulSoup(open("{}tdb.xml", "r").read().format(v[0]), "lxml")
+            v[1] = BeautifulSoup(open("{}tdb.xml".format(v[0]), "r").read(), "lxml")
 
         return self.databases
 
+def enc(text, length):
+    return text.encode("utf-16be").ljust(length, b'\0')[:length]
+
 class make_info(gametdb):
     def __init__(self, databases):
+        self.databases = databases
+
         self.make_header()
         self.write_gametdb_info()
         self.write_file()
@@ -104,7 +112,8 @@ class make_info(gametdb):
         self.header["rating_picture_offset"] = u32(0)
         self.header["rating_picture_size"] = u32(0)
         for i in range(1, 8):
-            self.header["rating_detail_picture_%s" % i] = u32(0)
+            self.header["rating_detail_picture_%s_size" % i] = u32(0)
+            self.header["rating_detail_picture_%s_offset" % i] = u32(0)
         self.header["unknown_4"] = u32(0) * 2
         self.header["soft_id"] = u32(0)
         self.header["game_id"] = sys.argv[1].encode("utf-8")
@@ -144,29 +153,102 @@ class make_info(gametdb):
         self.header["language_dutch_flag"] = u8(0)
         for i in range(1, 11):
             self.header["unknown_9_%s" % i] = u8(0)
-        self.header["title"] = "\0" * 31
-        self.header["subtitle"] = "\0" * 31
-        self.header["short_title"] = "\0" * 31
+        self.header["title"] = b'\0' * 62
+        self.header["subtitle"] = b'\0' * 62
+        self.header["short_title"] = b'\0' * 62
         for i in range(1, 4):
-            self.header["description_text_%s" % i] = "\0" * 41
-        self.header["genre_text"] = "\0" * 29
-        self.header["players_text"] = "\0" * 41
-        self.header["peripherals_text"] = "\0" * 44
-        self.header["unknown_10"] = "\0" * 40
-        self.header["disclaimer_text"] = "\0" * 2400
+            self.header["description_text_%s" % i] = b'\0' * 82
+        self.header["genre_text"] = b'\0' * 58
+        self.header["players_text"] = b'\0' * 82
+        self.header["peripherals_text"] = b'\0' * 88
+        self.header["unknown_10"] = b'\0' * 80
+        self.header["disclaimer_text"] = b'\0' * 4800
         self.header["unknown_11"] = u8(0)
-        self.header["distribution_date_text"] = "\0" * 41
-        self.header["wii_points_text"] = "\0" * 41
+        self.header["distribution_date_text"] = b'\0' * 82
+        self.header["wii_points_text"] = b'\0' * 82
         for i in range(1, 11):
-            self.header["custom_field_text_%s" % i] = "\0" * 41
+            self.header["custom_field_text_%s" % i] = b'\0' * 82
 
     def write_gametdb_info(self):
-        for s in databases[sys.argv[1]].find("datafile").find_all("game"):
+        for s in self.databases[sys.argv[1]][1].datafile.find_all("game"):
             if s.find("id").text[:4] == sys.argv[2]:
                 print("Found {}!".format(sys.argv[2]))
+
+                self.header["purchase_button_flag"] = u8(1) # we'll make it go to gametdb
+                self.header["release_year"] = u16(int(s.date["year"]))
+                self.header["release_month"] = u8(int(s.date["month"]) - 1)
+                self.header["release_day"] = u8(int(s.date["day"]))
+
+                controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller", "gamecube": "gamecube_controller"}
+
+                for controller in s.find_all("controller"):
+                    if controller["type"] in controllers:
+                        self.header["{}_flag".format(controllers[controller["type"]])] = u8(1)
+                
+                for feature in s.find_all("feature"):
+                    if online in feature.text:
+                        self.header["online_flag"] = u8(1)
+                        self.header["nintendo_wifi_connection_flag"] = u8(1)
+
+                # what languages does this game apparently support? (not sure how accurate the db is)
+                
+                languages = {"ZHCN": "chinese", "KO": "korean", "JA": "japanese", "EN": "english", "FR": "french", "ES": "spanish", "DE": "german", "IT": "italian", "NL": "dutch"}
+                languages_list = s.languages.text.split(",")
+
+                for l in languages.keys():
+                    if l in languages_list:
+                        self.header["language_{}_flag".format(l)] = u8(1)
+
+                wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).synopsis.text, 41)
+
+                text_type = None
+
+                if len(wrap) <= 4:
+                    text_type = "description" # put the synoppsis at the top of the page
+                elif len(wrap) <= 11:
+                    text_type = "custom_field" # put the synopsis in the middle of the page
+                else:
+                    # let's shorten the synopsis until it fits
+
+                    synopsis_text = s.find("locale", {"lang": "EN"}).synopsis.text.split(". ")
+
+                    i = len(textwrap.wrap(". ".join(synopsis_text), 41)) + 1
+                    j = len(synopsis_text)
+
+                    while i > 11:
+                        j -= 1
+                        sentences = ". ".join(synopsis_text[:j])
+                        if len(sentences) != 0:
+                            sentences += "."
+                        wrap = textwrap.wrap(sentences, 41)
+                        i = len(wrap)
+
+                    text_type = "custom_field"
+
+                i = 1
+                
+                for w in wrap:
+                    self.header["{}_field_text_{}".format(text_type, i)] = enc(w, 82)
+                    i += 1
+
+                self.header["title"] = s.find("locale", {"lang": "EN"}).title.text
+
+                # make separator in game name have a subtitle too
+                
+                if ": " in self.header["title"] or " - " in self.header["title"]:
+                    self.header["title"] = self.header["title"].split(": ")[0].split(" - ")[0]
+                    self.header["subtitle"] = enc(self.header["title"].split(": ")[1].split(" - ")[1], 62)
+                
+                self.header["short_title"] = self.header["title"] = enc(self.header["title"], 62)
+                
+                self.header["genre_text"]= enc(s.genre.text.title().replace(",", ", "), 58)
+                self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 2400)
+
+                break
+
     
     def write_file(self):
-        self.writef = open(sys.argv[1] + "-output.info", "wb")
+        self.writef = open(sys.argv[1] + "-output.info", "ab")
 
         for values in self.header.values():
             self.writef.write(values)
