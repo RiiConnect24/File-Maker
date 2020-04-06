@@ -1,12 +1,16 @@
-import base64
+import lz4.block
+from base64 import b64encode, b64decode
 import MySQLdb
 import os
 import subprocess
 from json import load
 from datetime import datetime
 
-with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
+with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
         config = load(f)
+
+def decodeMii(data): #takes compressed and b64 encoded data, returns binary mii data
+	return(lz4.block.decompress(b64decode(data.encode()), uncompressed_size = 76))
 
 date = str(datetime.today().strftime("%B %d, %Y"))
 
@@ -27,7 +31,7 @@ for i in range(len(list)):
 	mii_filename = "/var/www/wapp.wii.com/miicontest/public_html/render/entry-{}.mii".format(list[i][0])
 	if not os.path.exists(mii_filename):
 		with open(mii_filename, "wb") as f:
-			f.write(base64.b64decode(list[i][3])[:-2])
+			f.write(decodeMii(list[i][3])[:-2])
 		import binascii
 		subprocess.call(["mono", "MiiRender.exe", mii_filename])
 	tables += "\t<tr>\n"

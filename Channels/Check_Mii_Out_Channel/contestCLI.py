@@ -3,7 +3,7 @@ from datetime import date, datetime
 import MySQLdb
 from json import load
 
-with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
+with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
         config = load(f)
         
 db = MySQLdb.connect('localhost', config['dbuser'], config['dbpass'], 'cmoc', charset='utf8mb4')
@@ -58,7 +58,7 @@ if entry == 1:
 
 		if len(month) == 0:
 			currentTime = int(mktime(datetime.utcnow().timetuple())) - 946684800
-			cursor.execute('SELECT end, status, description FROM contests WHERE end > %s ORDER BY end DESC LIMIT 1', [currentTime])
+			cursor.execute('SELECT end, status, description FROM contests WHERE end > %s AND status != \'closed\' ORDER BY end ASC LIMIT 1', [currentTime])
 			nextContest = cursor.fetchone()
 
 			if len(nextContest) == 0:
@@ -68,7 +68,7 @@ if entry == 1:
 			start = int(nextContest[0]) #set start time to next contest's end time
 			startDate = datetime.fromtimestamp(start + 946684800).date()
 
-			end = int(start + (15 * 24 * 60 * 60)) #change status every 15 days until closure
+			end = int(start + (7 * 24 * 60 * 60)) #change status every 7 days until closure
 			endDate = datetime.fromtimestamp(end + 946684800).date()
 
 			if nextContest[1] == 'waiting':		nextStatus = 'open'
@@ -110,14 +110,14 @@ if entry == 1:
 			start = int(mktime(d.timetuple()) - 946684800)
 			startDate = datetime.fromtimestamp(start + 946684800).date()
 
-			end = int(start + (15 * 24 * 60 * 60))
+			end = int(start + (7 * 24 * 60 * 60))
 			endDate = datetime.fromtimestamp(end + 946684800).date()
 			break
 
 	while True:
 		topic = str(input('-> Enter topic: '))
-		if len(topic) > 16:
-			print('The contest topic cannot be longer than 16 characters. That topic is', len(topic), 'characters.')
+		if len(topic) > 10:
+			print('The contest topic cannot be longer than 10 characters. That topic is', len(topic), 'characters.')
 
 		else:
 			break
@@ -174,8 +174,8 @@ elif entry == 2:
 			if editSelection == 1:
 				while True:
 					topic = str(input('-> Enter a new topic for the contest: '))
-					if len(topic) > 16:
-						print('The contest topic cannot be longer than 16 characters. That topic is', len(topic), 'characters.')
+					if len(topic) > 10:
+						print('The contest topic cannot be longer than 10 characters. That topic is', len(topic), 'characters.')
 					else:
 						break
 

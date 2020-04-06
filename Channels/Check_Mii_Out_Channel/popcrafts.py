@@ -3,7 +3,7 @@ from datetime import timezone, datetime
 import MySQLdb
 from json import load
 
-with open("/var/rc24/File-Maker/Tools/CMOC/config.json", "r") as f:
+with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
         config = load(f)
 
 #get the top 99 artisans and adds them to popcrafts_list
