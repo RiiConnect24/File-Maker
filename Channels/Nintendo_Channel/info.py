@@ -116,7 +116,7 @@ class make_info(gametdb):
             self.header["rating_detail_picture_%s_offset" % i] = u32(0)
         self.header["unknown_4"] = u32(0) * 2
         self.header["soft_id"] = u32(0)
-        self.header["game_id"] = sys.argv[1].encode("utf-8")
+        self.header["game_id"] = u32(0)
         self.header["platform_flag"] = u8(0)
         self.header["company_id"] = u32(0)
         self.header["unknown_5"] = u16(0)
@@ -174,6 +174,8 @@ class make_info(gametdb):
             if s.find("id").text[:4] == sys.argv[2]:
                 print("Found {}!".format(sys.argv[2]))
 
+                self.header["game_id"] = sys.argv[2].encode("utf-8")
+
                 self.header["purchase_button_flag"] = u8(1) # we'll make it go to gametdb
                 self.header["release_year"] = u16(int(s.date["year"]))
                 self.header["release_month"] = u8(int(s.date["month"]) - 1)
@@ -181,12 +183,12 @@ class make_info(gametdb):
 
                 controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller", "gamecube": "gamecube_controller"}
 
-                for controller in s.find_all("controller"):
+                for controller in s.find_all("control"):
                     if controller["type"] in controllers:
                         self.header["{}_flag".format(controllers[controller["type"]])] = u8(1)
                 
                 for feature in s.find_all("feature"):
-                    if online in feature.text:
+                    if "online" in feature.text:
                         self.header["online_flag"] = u8(1)
                         self.header["nintendo_wifi_connection_flag"] = u8(1)
 
@@ -197,7 +199,7 @@ class make_info(gametdb):
 
                 for l in languages.keys():
                     if l in languages_list:
-                        self.header["language_{}_flag".format(l)] = u8(1)
+                        self.header["language_{}_flag".format(languages[l])] = u8(1)
 
                 wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).synopsis.text, 41)
 
@@ -208,6 +210,8 @@ class make_info(gametdb):
                 elif len(wrap) <= 11:
                     text_type = "custom_field" # put the synopsis in the middle of the page
                 else:
+                    text_type = "custom_field"  # put the synopsis in the middle of the page
+
                     # let's shorten the synopsis until it fits
 
                     synopsis_text = s.find("locale", {"lang": "EN"}).synopsis.text.split(". ")
@@ -223,12 +227,12 @@ class make_info(gametdb):
                         wrap = textwrap.wrap(sentences, 41)
                         i = len(wrap)
 
-                    text_type = "custom_field"
-
                 i = 1
+
+                print(wrap)
                 
                 for w in wrap:
-                    self.header["{}_field_text_{}".format(text_type, i)] = enc(w, 82)
+                    self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
                     i += 1
 
                 self.header["title"] = s.find("locale", {"lang": "EN"}).title.text
@@ -239,25 +243,43 @@ class make_info(gametdb):
                     self.header["title"] = self.header["title"].split(": ")[0].split(" - ")[0]
                     self.header["subtitle"] = enc(self.header["title"].split(": ")[1].split(" - ")[1], 62)
                 
-                self.header["short_title"] = self.header["title"] = enc(self.header["title"], 62)
+                self.header["title"] = enc(self.header["title"], 62)
                 
-                self.header["genre_text"]= enc(s.genre.text.title().replace(",", ", "), 58)
-                self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 2400)
+                self.header["genre_text"] = enc(s.genre.text.title().replace(",", ", "), 58)
+                self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 4800)
 
-                break
+                print(self.header)
 
     
     def write_file(self):
-        self.writef = open(sys.argv[1] + "-output.info", "ab")
+        filename = sys.argv[2] + "-output.info"
+
+        if os.path.exists(filename + "-1"):
+            os.remove(filename + "-1")
+
+        if os.path.exists(filename):
+            os.remove(filename)
+
+        self.writef = open(filename + "-1", "ab")
 
         for values in self.header.values():
             self.writef.write(values)
-        
-        self.readf = open(sys.argv[1] + "-output.info", "rb")
-
-        self.writef.seek(8)
-        self.writef.write(binascii.unhexlify(format(binascii.crc32(self.readf.read()) & 0xFFFFFFFF, '08x')))  
 
         self.writef.close()
+        
+        self.readf = open(filename + "-1", "rb")
+
+        read = self.readf.read()
+
+        self.writef2 = open(filename, "wb")
+
+        self.writef2.write(read)
+        self.writef2.seek(4)
+        self.writef2.write(u32(len(read)))
+        self.writef2.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))  
+
+        os.remove(filename + "-1")
+
+        self.writef2.close()
 
 gametdb()
