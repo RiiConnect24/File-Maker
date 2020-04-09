@@ -370,7 +370,7 @@ def sign_file(name):
     crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
     print("Calculating Size ...")
     size = os.path.getsize(name) + 12
-    dest = open(final + '-1', 'w+')
+    dest = open(final + '-1', 'wb+')
     dest.write(u32(0))
     dest.write(u32(size))
     dest.write(binascii.unhexlify(crc32))
@@ -382,12 +382,12 @@ def sign_file(name):
     subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", final + '-1'],stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(final + '-1', 'rb')
     new = file.read()
-    dest = open(final, "w+")
+    dest = open(final, "wb+")
     key = open(config["key_path"], 'rb')
     print("RSA Signing ...")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(binascii.unhexlify(str(0).zfill(128)))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    dest.write(b"\0" * 128)  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
@@ -401,9 +401,9 @@ def sign_file(name):
                 folder = "world"
             subprocess.call(["mkdir", "-p", "%s/%s/%s" % (
                 config["file_path"], folder, get_year())])  # If folder for the year does not exist, make it.
-            path = "/".join(config["file_path"], folder, get_year(), final)
+            path = "/".join([config["file_path"], folder, get_year(), final])
         elif file_type == "v":
-            path = "/".join(config["file_path"], str(country_code).zfill(3), final)
+            path = "/".join([config["file_path"], str(country_code).zfill(3), final])
     subprocess.call(["mv", final, path])
     os.remove(final + '-1')
 
