@@ -366,6 +366,7 @@ def sign_file(name):
     print("Processing " + final + " ...")
     file = open(name, 'rb')
     copy = file.read()
+    file.close()
     print("Calculating CRC32 ...")
     crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
     print("Calculating Size ...")
@@ -377,7 +378,6 @@ def sign_file(name):
     dest.write(copy)
     os.remove(name)
     dest.close()
-    file.close()
     print("Compressing ...")
     subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", final + '-1'],stdout=subprocess.PIPE)  # Compress the file with the lzss program.
     file = open(final + '-1', 'rb')
@@ -387,7 +387,7 @@ def sign_file(name):
     print("RSA Signing ...")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(b"\0" * 128)  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    dest.write(b"\0" * 64)  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
