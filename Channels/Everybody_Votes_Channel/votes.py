@@ -328,6 +328,8 @@ def add_question(row):
 def question_text_replace(text):
     text = text.replace("\u2026", " . . .").replace("...", " . . .")
     text = "\\n".join(textwrap.wrap(text, 50))
+    for i in range(1, 4):
+        text = text.replace(" .\\n", "\\n .")
     return text
 
 
