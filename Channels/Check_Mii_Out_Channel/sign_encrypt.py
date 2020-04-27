@@ -34,10 +34,10 @@ parser.add_argument("-c", "--compress",
                         help="If set, this will compress the file before signing.")
 parser.add_argument("-key", "--aes-key",
                         type=str, nargs="+",
-                        help="AES key in hex.")
+                        help="AES key in hex or a path.")
 parser.add_argument("-iv", "--iv-key",
                         type=str, nargs="+",
-                        help="AES IV in hex. If not specified, it will generate a random one.")
+                        help="AES IV in hex or a path.")
 parser.add_argument("-rsa", "--rsa-key-path",
                         type=str, nargs="+",
                         help="RSA private key path. If not specified, it will use the private key in Private.pem if it exists.")
@@ -72,11 +72,17 @@ signature = rsa.sign(data, private_key, "SHA-1")
 
 if args.type[0] == "enc":
     if args.iv_key is not None:
-        iv = binascii.unhexlify(args.iv_key[0])
+        try:
+            iv = binascii.unhexlify(args.iv_key[0])
+        except:
+            iv = open(args.iv_key[0], "rb").read()
     else:
         iv = os.urandom(16)
 
-    key = binascii.unhexlify(args.aes_key[0])
+    try:
+        key = binascii.unhexlify(args.aes_key[0])
+    except:
+        key = open(args.aes_key[0], "rb").read()
 
     aes = pyaes.AESModeOfOperationOFB(key, iv=iv)
     processed = aes.encrypt(data)
