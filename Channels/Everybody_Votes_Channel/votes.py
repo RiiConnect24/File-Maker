@@ -458,9 +458,6 @@ def make_bin(country_code):
     if config["production"]:
         sign_file(question_file)
 
-        if file_type == "q":
-            webhook()
-
     print("Writing Completed")
 
     for dictionary in dictionaries:
@@ -765,5 +762,8 @@ if arg != "w":
         make_bin(country_code)
 else:
     make_bin(country_code)
+
+if file_type == "q":
+    webhook()
 
 print("Completed Successfully")
