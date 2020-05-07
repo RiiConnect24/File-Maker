@@ -222,7 +222,9 @@ def worker():
         except queue.Empty:
             pass
         except Exception as e:
-            log("A thread exception has occurred: %s" % e, "WARNING")
+            log("A thread exception has occurred: %s" % e, "CRITICAL")
+            blank_data(item[0], item[1]) # Since item data is in an unknown state, reset it
+            q.task_done()
             continue
 
 
@@ -237,11 +239,7 @@ def spawn_threads():
 def close_threads():
     global threads_run, ui_run
     threads_run = False
-    for t in threads:
-        t.join(60)
-        if t.isAlive():
-            log("Stalled thread detected", "CRITICAL")
-            exit()
+    for t in threads: t.join()
 
     ui_run = False
     ui_thread.join()
@@ -356,7 +354,7 @@ def reset_data():
 """This requests data from AccuWeather's API. It also retries the request if it fails."""
 
 
-def request_data(url, type=1):
+def request_data(url):
     global retrycount, apirequests, bw_usage, errors
     apirequests += 1
     i = 0
@@ -367,14 +365,14 @@ def request_data(url, type=1):
             return -1
         if i > 0:
             retrycount += 1
-        if type == 0:
+        try:
             data = s.get(url)
             bw_usage += get_bandwidth_usage(data)
-        else: data = requests.get(url)
-        status_code = data.status_code
-        if status_code == 200:
-            c = True
-        i += 1
+            status_code = data.status_code
+            if status_code == 200:
+                c = True
+            i += 1
+        except: i += 1
     return data.content
 
 
@@ -842,7 +840,7 @@ def get_data(forecast_list, key):
     blank_data(forecast_list, key)
     lat = coord_decode(get_lat(forecast_list, key))
     lon = coord_decode(get_lng(forecast_list, key))
-    weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?slat={}&slon={}".format(ip, lat, lon), 0)
+    weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?slat={}&slon={}".format(ip, lat, lon))
 
 
 def make_header_short(forecast_list):
