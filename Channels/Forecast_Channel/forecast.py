@@ -277,7 +277,7 @@ def ui():
         pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
     header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % VERSION
-    header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2019\n\n"
+    header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2020\n\n"
     if config["production"]:
         header += " " * 13 + "*** Production Mode Enabled ***\n"
     while ui_run:
