@@ -68,7 +68,7 @@ for c in contests:
 
 contest_id = max(sorted_contests)
 
-decfilename = "decfiles/contests/{}/con_detail1.dec".format(str(contest_id))
+decfilename = "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/decfiles/contests/{}/con_detail1.dec".format(str(contest_id))
 
 if path.exists(decfilename):
     boundary2 = "----=_CMOC_Contest_Icon"
@@ -137,6 +137,7 @@ for c in contests:
             'Content-Type: multipart/mixed; boundary="{}"\r\n'.format(boundary2) + \
             "Content-Transfer-Encoding: base64\r\n" + \
             "X-Wii-AltName: AEMAaABlAGMAawAgAE0AaQBpACAATwB1AHQAIABDAGgAYQBuAG4AZQBs=\r\n" + \
+            "X-Wii-MB-OptOut: 1\r\n" + \
             "X-Wii-MB-NoReply: 1\r\n" + \
             "X-Wii-AppID: 3-48415041-3031\r\n\r\n" + \
             "--" + boundary2 + "\r\n" + \
