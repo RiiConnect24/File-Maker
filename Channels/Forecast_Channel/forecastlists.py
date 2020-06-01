@@ -1078,214 +1078,477 @@ weathercities017["Road Town"] = [
 
 weathercities018 = collections.OrderedDict()
 
-weathercities018["Toronto"] = [
-    ["トロント", "Toronto", "Toronto", "Toronto", "Toronto", "Toronto", "Toronto"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario",  "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1efdc7a409030000"]
-weathercities018["Burlington"] = [
-    ["バーリントン", "Burlington", "Burlington", "Burlington", "Burlington", "Burlington", "Burlington"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1ec1c75402030000"]
-weathercities018["Greater Sudbury"] = [
-    ["サドベリー", "Greater Sudbury", "Greater Sudbury", "Grand Sudbury", "Gran Sudbury", "Greater Sudbury", "Greater Sudbury"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2105c67b03030000"]
-weathercities018["Hamilton"] = [
-    ["ハミルトン", "Hamilton", "Hamilton", "Hamilton", "Hamilton", "Hamilton", "Hamilton"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1eb9c74e05030000"]
-weathercities018["Kenora"] = [
-    ["ケノラ", "Kenora", "Kenora", "Kenora", "Kenora", "Kenora", "Kenora"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2357bce806030000"]
-weathercities018["Kitchener"] = [
-    ["キッチナー", "Kitchener", "Kitchener", "Kitchener", "Kitchener", "Kitchener", "Kitchener"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1ed2c6e106030000"]
-weathercities018["Oshawa"] = [
-    ["オシャワ", "Oshawa", "Oshawa", "Oshawa", "Oshawa", "Oshawa", "Oshawa"],
-    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f35c7fe06030000"]
 weathercities018["Ottawa"] = [
     ["オタワ", "Ottawa", "Ottawa", "Ottawa", "Ottawa", "Ottawa", "Ottawa"],
     ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "203fca3905030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2030ca2307030000"]
+weathercities018["Greater Sudbury"] = [
+    ["サドベリー", "Greater Sudbury", "Greater Sudbury", "Grand Sudbury", "Gran Sudbury", "Greater Sudbury", "Greater Sudbury"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2117c65801030000"]
+weathercities018["Hamilton"] = [
+    ["ハミルトン", "Hamilton", "Hamilton", "Hamilton", "Hamilton", "Hamilton", "Hamilton"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1ebec72601030000"]
+weathercities018["Kenora"] = [
+    ["ケノラ", "Kenora", "Kenora", "Kenora", "Kenora", "Kenora", "Kenora"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "236cbcd900030000"]
+weathercities018["Kingston"] = [
+    ["", "Kingston", "Kingston", "Kingston", "Kingston", "Kingston", "Kingston"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f73c99e01030000"]
+weathercities018["Kitchener"] = [
+    ["キッチナー", "Kitchener", "Kitchener", "Kitchener", "Kitchener", "Kitchener", "Kitchener"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1ee5c6c502030000"]
+weathercities018["London"] = [
+    ["ロンドン", "London", "London", "London", "London", "London", "London"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1e90c63c02030000"]
+weathercities018["Oshawa"] = [
+    ["オシャワ", "Oshawa", "Oshawa", "Oshawa", "Oshawa", "Oshawa", "Oshawa"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f37c7ee00030000"]
 weathercities018["Parry Sound"] = [
     ["パリー・サウンド", "Parry Sound", "Parry Sound", "Parry Sound", "Parry Sound", "Parry Sound", "Parry Sound"],
     ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2035c72808030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "203fc71700030000"]
+weathercities018["Sault Ste. Marie"] = [
+    ["スーセント マリー", "Sault Ste. Marie", "Sault Ste. Marie", "Sault Ste. Marie", "Sault Ste. Marie", "Sault Ste. Marie", "Sault Ste. Marie"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2114c40800030000"]
 weathercities018["St. Catharines"] = [
     ["セント・キャサリンズ", "St. Catharines", "St. Catharines", "Saint Catharines", "St. Catharines", "St. Catharines", "Sint Catharines"],
     ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1eb3c7bf03030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1eb2c7a600030000"]
 weathercities018["Thunder Bay"] = [
     ["サンダー・ベイ", "Thunder Bay", "Thunder Bay", "Thunder Bay", "Thunder Bay", "Thunder Bay", "Thunder Bay"],
     ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2264c09b05030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "226ac07d06030000"]
+weathercities018["Timmins"] = [
+    ["ティミンズ", "Timmins", "Timmins", "Timmins", "Timmins", "Timmins", "Timmins"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2277c62a00030000"]
+weathercities018["Windsor"] = [
+    ["ウィンザー", "Windsor", "Windsor", "Windsor", "Windsor", "Windsor", "Windsor"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1e14c4f800030000"]
+weathercities018["Toronto"] = [
+    ["トロント", "Toronto", "Toronto", "Toronto", "Toronto", "Toronto", "Toronto"],
+    ["オンタリオ州", "Ontario", "Ontario", "Ontario", "Ontario", "Ontario",  "Ontario"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f13c78703030000"]
 weathercities018["Edmonton"] = [
     ["エドモントン", "Edmonton", "Edmonton", "Edmonton", "Edmonton", "Edmonton", "Edmonton"],
     ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25f1af6904030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2614af5009030000"]
 weathercities018["Banff"] = [
     ["バンフ", "Banff", "Banff", "Banff", "Banff", "Banff", "Banff"],
     ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "245aadf006030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2462add200030000"]
 weathercities018["Calgary"] = [
     ["カルガリー", "Calgary", "Calgary", "Calgary", "Calgary", "Calgary", "Calgary"],
     ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta",  "Alberta"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2452aef303030000"]
-weathercities018["Fort McMurray"] = [
-    ["フォート・マクマレー", "Fort McMurray", "Fort McMurray", "Fort McMurray", "Fort McMurray", "Fort McMurray", "Fort McMurray"],
-    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2847b0e608030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "244daee006030000"]
+weathercities018["Grande Prairie"] = [
+    ["グランドプレーリー", "Grande Prairie", "Grande Prairie", "Grande Prairie", "Grande Prairie", "Grande Prairie", "Grande Prairie"],
+    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta",  "Alberta"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "273aab8500030000"]
+weathercities018["Jasper"] = [
+    ["碧玉", "Jasper", "Jasper", "Jasper", "Jasper", "Jasper", "Jasper"],
+    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta",  "Alberta"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "259cabf700030000"]
+weathercities018["Lethbridge"] = [
+    ["レスブリッジ", "Lethbridge", "Lethbridge", "Lethbridge", "Lethbridge", "Lethbridge", "Lethbridge"],
+    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta",  "Alberta"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2357afc700030000"]
+weathercities018["Lloydminster"] = [
+    ["ロイドミンスター", "Lloydminster", "Lloydminster", "Lethbridge", "Lloydminster", "Lloydminster", "Lloydminster"],
+    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta",  "Alberta"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25e3b1c700030000"]
 weathercities018["Medicine Hat"] = [
     ["メディシン・ハット", "Medicine Hat", "Medicine Hat", "Medicine Hat", "Medicine Hat", "Medicine Hat", "Medicine Hat"],
     ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2384b15c06030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2397b14e00030000"]
+weathercities018["Red Deer"] = [
+    ["レッドディアー", "Red Deer", "Red Deer", "Red Deer", "Red Deer", "Red Deer", "Red Deer"],
+    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta",  "Alberta"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "252aaf1300030000"]
+weathercities018["Fort McMurray"] = [
+    ["フォート・マクマレー", "Fort McMurray", "Fort McMurray", "Fort McMurray", "Fort McMurray", "Fort McMurray", "Fort McMurray"],
+    ["アルバータ州", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta", "Alberta"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2858b0cb05030000"]
 weathercities018["Victoria"] = [
     ["ビクトリア", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria", "Victoria"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2267a86802030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2270a84601030000"]
+weathercities018["Campbell River"] = [
+    ["キャンベルリバー", "Campbell River", "Campbell River", "Campbell River", "Campbell River", "Campbell River", "Campbell River"],
+    ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2391a6f000030000"]
 weathercities018["Fort Nelson"] = [
     ["フォート・ネルソン", "Fort Nelson", "Fort Nelson", "Fort Nelson", "Fort Nelson", "Fort Nelson", "Fort Nelson"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "29c3a8d803030000"]
-weathercities018["Grand Forks"] = [
-    ["グランド・フォークス", "Grand Forks", "Grand Forks", "Grand Forks", "Grand Forks", "Grand Forks", "Grand Forks"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "29d1a8c007030000"]
+weathercities018["Kamloops"] = [
+    ["カムループス", "Kamloops", "Kamloops", "Kamloops", "Kamloops", "Kamloops", "Kamloops"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22d2abe006030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2407aa7100030000"]
 weathercities018["Kelowna"] = [
     ["ケロウナ", "Kelowna", "Kelowna", "Kelowna", "Kelowna", "Kelowna", "Kelowna"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien",  "Colombie-Britannique", "Columbia Británica", "Columbia Britannica",  "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2367ab2401030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2378ab0901030000"]
 weathercities018["Nanaimo"] = [
     ["ナナイモ", "Nanaimo", "Nanaimo", "Nanaimo", "Nanaimo", "Nanaimo", "Nanaimo"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien",  "Colombie-Britannique", "Columbia Británica", "Columbia Britannica",  "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22e7a7fc06030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22f6a7df00030000"]
 weathercities018["Prince George"] = [
     ["プリンス・ジョージ", "Prince George", "Prince George", "Prince George", "Prince George", "Prince George", "Prince George"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2649a8cd00030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2657a8b606030000"]
 weathercities018["Prince Rupert"] = [
     ["プリンス・ルパート", "Prince Rupert", "Prince Rupert", "Prince Rupert", "Prince Rupert", "Prince Rupert", "Prince Rupert"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2694a37700030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "269fa35405030000"]
+weathercities018["Smithers"] = [
+    ["鍛冶屋", "Smithers", "Smithers", "Smithers", "Smithers", "Smithers", "Smithers"],
+    ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "26f4a59100030000"]
 weathercities018["Vancouver"] = [
     ["バンクーバー", "Vancouver", "Vancouver", "Vancouver", "Vancouver", "Vancouver", "Vancouver"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22faa89d09030000"]
-weathercities018["Squamish"] = [
-    ["スカーミッシュ", "Squamish", "Squamish", "Squamish", "Squamish", "Squamish", "Squamish"],
-    ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "235fa87005030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2305a87306030000"]
 weathercities018["Whistler"] = [
     ["ウィスラー", "Whistler", "Whistler", "Whistler", "Whistler", "Whistler", "Whistler"],
     ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2398a8ad05030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "23a3a88f00030000"]
+weathercities018["Dease Lake"] = [
+    ["病気の湖", "Dease Lake", "Dease Lake", "Dease Lake",
+        "Dease Lake", "Dease Lake", "Dease Lake"],
+    ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "298da38b00030000"]
 weathercities018["Winnipeg"] = [
     ["ウィニペグ", "Winnipeg", "Winnipeg", "Winnipeg", "Winnipeg", "Winnipeg", "Winnipeg"],
     ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2372bafe01030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2379baeb07030000"]
+weathercities018["Brandon"] = [
+    ["ブランドン", "Brandon", "Brandon", "Brandon", "Brandon", "Brandon", "Brandon"],
+    ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2372b8ed00030000"]
 weathercities018["Churchill"] = [
     ["チャーチル", "Churchill", "Churchill", "Churchill", "Churchill", "Churchill", "Churchill"],
     ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "29bdbd1e01030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "29c2bd1306030000"]
+weathercities018["Dauphin"] = [
+    ["ドーフィン", "Dauphin", "Dauphin", "Dauphin", "Dauphin", "Dauphin", "Dauphin"],
+    ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "245fb8db00030000"]
+weathercities018["Flin Flon"] = [
+    ["フリンフロン", "Flin Flon", "Flin Flon", "Flin Flon",
+        "Flin Flon", "Flin Flon", "Flin Flon"],
+    ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "26f2b79100030000"]
 weathercities018["The Pas"] = [
     ["ザ・パース", "The Pas", "The Pas", "Le Pas", "The Pas", "The Pas", "The Pas"],
     ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba",  "Manitoba"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "263ab81700030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2646b80005030000"]
 weathercities018["Thompson"] = [
     ["トンプソン", "Thompson", "Thompson", "Thompson", "Thompson", "Thompson", "Thompson"],
     ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "27a4ba6905030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "27a3ba6a05030000"]
 weathercities018["Fredericton"] = [
     ["フレデリクトン", "Fredericton", "Fredericton", "Frédéricton", "Fredericton", "Fredericton", "Fredericton"],
     ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20a1d0a902030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20acd09803030000"]
+weathercities018["Bathurst"] = [
+    ["バサースト", "Bathurst", "Bathurst", "Bathurst", "Bathurst", "Bathurst", "Bathurst"],
+    ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "21d9d13600030000"]
+weathercities018["Edmundston"] = [
+    ["エドマンズトン", "Edmundston", "Edmundston", "Edmundston", "Edmundston", "Edmundston", "Edmundston"],
+    ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "21b3cf7400030000"]
+weathercities018["Miramichi"] = [
+    ["みらみち", "Miramichi", "Miramichi", "Miramichi",
+        "Miramichi", "Miramichi", "Miramichi"],
+    ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "216cd17300030000"]
 weathercities018["Moncton"] = [
     ["モンクトン", "Moncton", "Moncton", "Moncton", "Moncton", "Moncton", "Moncton"],
     ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20c6d1f005030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20cbd1ec00030000"]
 weathercities018["Saint John"] = [
     ["セント・ジョン", "Saint John", "Saint John", "Saint-John", "Saint John", "Saint John", "Saint John"],
     ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2023d12608030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "202fd10b00030000"]
+weathercities018["St. John's"] = [
+    ["セントジョンズ", "St. John's", "St. John's", "St. John's", "St. John's", "St. John's", "St. John's"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "21d3da8107030000"]
+weathercities018["Argentia"] = [
+    ["アルゼンチン", "Argentia", "Argentia", "Argentia", "Argentia", "Argentia", "Argentia"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "21a2d99d00030000"]
+weathercities018["Channel-Port aux Basques"] = [
+    ["チャンネルポートオバスク", "Channel-Port aux Basques", "Channel-Port aux Basques", "Channel-Port aux Basques", "Channel-Port aux Basques", "Channel-Port aux Basques", "Channel-Port aux Basques"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "21d3d5f100030000"]
 weathercities018["Churchill Falls"] = [
     ["チャーチル滝", "Churchill Falls", "Churchill Falls", "Churchill Falls", "Churchill Falls", "Churchill Falls", "Churchill Falls"],
     ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2603d28b06030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2614d27b05030000"]
+weathercities018["Corner Brook"] = [
+    ["コーナーブルック", "Corner Brook", "Corner Brook", "Corner Brook", "Corner Brook", "Corner Brook", "Corner Brook"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22d2d6cb00030000"]
+weathercities018["Gander"] = [
+    ["ガンダー", "Gander", "Gander", "Gander", "Gander", "Gander", "Gander"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22d2d92f00030000"]
 weathercities018["Happy Valley-Goose Bay"] = [
     ["グース・ベイ", "Happy Valley-Goose Bay", "Happy Valley-Goose Bay", "Happy Valley-Goose Bay", "Happy Valley-Goose Bay", "Happy Valley-Goose Bay", "Happy Valley-Goose Bay"],
     ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25dbd52802030000"]
-weathercities018["Bangor"] = [
-    ["バンゴア", "Bangor", "Bangor", "Bangor", "Bangor", "Bangor", "Bangor"],
-    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f68d10f05030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25ead51900030000"]
+weathercities018["Labrador City"] = [
+    ["ラブラドール市", "Labrador City", "Labrador City", "Labrador City", "Labrador City", "Labrador City", "Labrador City"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25a7d06b00030000"]
+weathercities018["Nain"] = [
+    ["ない", "Nain", "Nain", "Nain", "Nain", "Nain", "Nain"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "282dd42000030000"]
 weathercities018["Halifax"] = [
     ["ハリファクス", "Halifax", "Halifax Regional Municipality", "Comté de Halifax", "Halifax Regional Municipality", "Contea di Halifax", "Halifax Regional Municipality"],
     ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1faad2d600030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1fedd2d903030000"]
+weathercities018["Amherst"] = [
+    ["アマースト", "Amherst", "Amherst", "Amherst", "Amherst", "Amherst", "Amherst"],
+    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2097d25900030000"]
+weathercities018["Digby"] = [
+    ["ディグビー", "Digby", "Digby", "Digby", "Digby", "Digby", "Digby"],
+    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1fbad13c00030000"]
+weathercities018["Lunenburg"] = [
+    ["ルネンバーグ", "Lunenburg", "Lunenburg", "Lunenburg", "Lunenburg", "Lunenburg", "Lunenburg"],
+    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1fbad13c00030000"]
+weathercities018["Malay Falls"] = [
+    ["マレー滝", "Malay Falls", "Malay Falls", "Malay Falls", "Malay Falls", "Malay Falls", "Malay Falls"],
+    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1ffcd39200030000"]
+weathercities018["Sydney"] = [
+    ["シドニー", "Sydney", "Sydney", "Sydney", "Sydney", "Sydney", "Sydney"],
+    ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20d1d53500030000"]
+weathercities018["Truro"] = [
+    ["トロ", "Truro", "Truro", "Truro", "Truro", "Truro", "Truro"],
+    ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2042d30300030000"]
 weathercities018["Yarmouth"] = [
     ["ヤーマス", "Yarmouth", "Yarmouth", "Yarmouth", "Yarmouth", "Yarmouth", "Yarmouth"],
     ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f2cd0fc05030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "1f2bd0fd00030000"]
 weathercities018["Charlottetown"] = [
     ["シャーロットタウン", "Charlottetown", "Charlottetown", "Charlottetown", "Charlottetown", "Charlottetown", "Charlottetown"],
     ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20dcd32409030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20e1d31b07030000"]
+weathercities018["East Point"] = [
+    ["イーストポイント", "East Point", "East Point", "East Point", "East Point", "East Point", "East Point"],
+    ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2107d3ea00030000"]
+weathercities018["Maple Plains"] = [
+    ["メープルプレーンズ", "Maple Plains", "Maple Plains", "Maple Plains", "Maple Plains", "Maple Plains", "Maple Plains"],
+    ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20e9d2cd00030000"]
+weathercities018["North Cape"] = [
+    ["ノースケープ", "North Cape", "North Cape", "North Cape", "North Cape", "North Cape", "North Cape"],
+    ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2178d27e00030000"]
+weathercities018["Summerside"] = [
+    ["サマーサイド", "Summerside", "Summerside", "Summerside", "Summerside", "Summerside", "Summerside"],
+    ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20fed2a400030000"]
 weathercities018["Quebec"] = [
     ["ケベック・シティー", "Quebec", "Québec", "Ville de Québec", "Quebec", "Québec", "Quebec"],
     ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "214ccd6b03030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2148cd5d09030000"]
+weathercities018["Chibougamau"] = [
+    ["チボウガマウ", "Chibougamau", "Chibougamau", "Chibougamau", "Chibougamau", "Chibougamau", "Chibougamau"],
+    ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "237fcb1f00030000"]
+weathercities018["Gaspé"] = [
+    ["ガスペ", "Gaspé", "Gaspé", "Gaspé", "Gaspé", "Gaspé", "Gaspé"],
+    ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "22b9d22600030000"]
 weathercities018["Kuujjuaq"] = [
     ["クージュアク", "Kuujjuaq", "Kuujjuaq", "Kuujjuaq", "Kuujjuaq", "Kuujjuaq", "Kuujjuaq"],
     ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2946cf6c07030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2950cf5d00030000"]
 weathercities018["Kuujjuarapik"] = [
     ["クジュジュアラピック", "Kuujjuarapik", "Kuujjuarapik", "Kuujjuarapik", "Kuujjuarapik", "Kuujjuarapik", "Kuujjuarapik"],
     ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2742c8c605030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2750c8b705030000"]
 weathercities018["Montréal"] = [
     ["モントリオール", "Montréal", "Montreal", "Montréal", "Montreal", "Montréal", "Montreal"],
     ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2051cbbf05030000"]
-weathercities018["Shawinigan"] = [
-    ["シャウィニガン", "Shawinigan", "Shawinigan", "Shawinigan", "Shawinigan", "Shawinigan", "Shawinigan"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "205ecba106030000"]
+weathercities018["Salluit"] = [
+    ["サルート", "Salluit", "Salluit", "Salluit", "Salluit", "Salluit", "Salluit"],
     ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "211ccc4605030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2c3bca3800030000"]
+weathercities018["Sept-Îles"] = [
+    ["セプティル", "Sept-Îles", "Sept-Îles", "Sept-Îles", "Sept-Îles", "Sept-Îles", "Sept-Îles"],
+    ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "23b2d0cc00030000"]
+weathercities018["Sherbrooke"] = [
+    ["シャーブルック", "Sherbrooke", "Sherbrooke", "Sherbrooke", "Sherbrooke", "Sherbrooke", "Sherbrooke"],
+    ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2048cce001030000"]
+weathercities018["Trois-Rivières"] = [
+    ["トロワリビエール", "Trois-Rivières", "Trois-Rivières", "Trois-Rivières", "Trois-Rivières", "Trois-Rivières", "Trois-Rivières"],
+    ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "20f5cc6901030000"]
+weathercities018["Saguenay"] = [
+    ["サグネ", "Saguenay", "Saguenay", "Saguenay", "Saguenay", "Saguenay", "Saguenay"],
+    ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "226ecd7701030000"]
 weathercities018["Regina"] = [
     ["レジャイナ", "Regina", "Regina", "Regina", "Regina", "Regina", "Regina"],
     ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "23cdb5b700030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "23e0b59b03030000"]
+weathercities018["Lloydminster 2"] = [
+    ["ロイドミンスター", "Lloydminster", "Lloydminster", "Lloydminster", "Lloydminster", "Lloydminster", "Lloydminster"],
+    ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25e3b1c700030000"]
+weathercities018["North Battleford"] = [
+    ["ノースバトルフォード", "North Battleford", "North Battleford", "North Battleford", "North Battleford", "North Battleford", "North Battleford"],
+    ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2588b30000030000"]
 weathercities018["Saskatoon"] = [
     ["サスカトゥーン", "Saskatoon", "Saskatoon", "Saskatoon", "Saskatoon", "Saskatoon", "Saskatoon"],
     ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2504b43f01030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "250fb42c06030000"]
+weathercities018["Swift Current"] = [
+    ["スイフトカレント", "Swift Current", "Swift Current", "Swift Current", "Swift Current", "Swift Current", "Swift Current"],
+    ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "23c1b35800030000"]
+weathercities018["Yorkton"] = [
+    ["ヨークトン", "Yorkton", "Yorkton", "Yorkton", "Yorkton", "Yorkton", "Yorkton"],
+    ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "246bb72300030000"]
+weathercities018["Prince Albert"] = [
+    ["アルバート王子", "Prince Albert", "Prince Albert", "Prince Albert", "Prince Albert", "Prince Albert", "Prince Albert"],
+    ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "25d4b4ca00030000"]
+weathercities018["Whitehorse"] = [
+    ["白馬", "Whitehorse", "Whitehorse", "Whitehorse", "Whitehorse", "Whitehorse", "Whitehorse"],
+    ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2b2d9ff707030000"]
+weathercities018["Burwash Landing"] = [
+    ["バーウォッシュランディング", "Burwash Landing", "Burwash Landing", "Burwash Landing", "Burwash Landing", "Burwash Landing", "Burwash Landing"],
+    ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2ba19d2900030000"]
 weathercities018["Dawson"] = [
     ["ドーソン", "Dawson", "Dawson", "Dawson City", "Dawson City", "Dawson City", "Dawson City"],
     ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2d7f9cfa07030000"]
-weathercities018["Whitehorse"] = [
-    ["ホワイトホース", "Whitehorse", "Whitehorse", "Whitehorse", "Whitehorse", "Whitehorse", "Whitehorse"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2d8e9cd905030000"]
+weathercities018["Haines Junction"] = [
+    ["ヘインズジャンクション", "Haines Junction", "Haines Junction", "Haines Junction", "Haines Junction", "Haines Junction", "Haines Junction"],
     ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2b1ea01607030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2b339e3700030000"]
+weathercities018["Mayo"] = [
+    ["マヨ", "Mayo", "Mayo", "Mayo", "Mayo", "Mayo", "Mayo"],
+    ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2d389f5d00030000"]
+weathercities018["Old Crow"] = [
+    ["オールドクロウ", "Old Crow", "Old Crow", "Old Crow", "Old Crow", "Old Crow", "Old Crow"],
+    ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "300c9c9000030000"]
+weathercities018["Teslin"] = [
+    ["テスリン", "Teslin", "Teslin", "Teslin", "Teslin", "Teslin", "Teslin"],
+    ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2ac8a19f00030000"]
+weathercities018["Watson Lake"] = [
+    ["ワトソン湖", "Watson Lake", "Watson Lake", "Watson Lake", "Watson Lake", "Watson Lake", "Watson Lake"],
+    ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2ab6a47a00030000"]
 weathercities018["Yellowknife"] = [
     ["イエローナイフ", "Yellowknife", "Yellowknife", "Yellowknife", "Yellowknife", "Yellowknife", "Yellowknife"],
     ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2c69aeaf08030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2c69aeaf07030000"]
+weathercities018["Fort Simpson"] = [
+    ["フォートシンプソン", "Fort Simpson", "Fort Simpson", "Fort Simpson", "Fort Simpson", "Fort Simpson", "Fort Simpson"],
+    ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2bfda9b505030000"]
+weathercities018["Fort Smith"] = [
+    ["フォートスミス", "Fort Smith", "Fort Smith", "Fort Smith", "Fort Smith", "Fort Smith", "Fort Smith"],
+    ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2aaab07000030000"]
+weathercities018["Hay River"] = [
+    ["ヘイ川", "Hay River", "Hay River", "Hay River", "Hay River", "Hay River", "Hay River"],
+    ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2b3fada800030000"]
 weathercities018["Inuvik"] = [
     ["イヌビク", "Inuvik", "Inuvik", "Inuvik", "Inuvik", "Inuvik", "Inuvik"],
     ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "308ca10705030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "309aa0e905030000"]
+weathercities018["Norman Wells"] = [
+    ["ノーマンウェルズ", "Norman Wells", "Norman Wells", "Norman Wells", "Norman Wells", "Norman Wells", "Norman Wells"],
+    ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2e6ca5cf00030000"]
+weathercities018["Sachs Harbour"] = [
+    ["サックスハーバー", "Sachs Harbour", "Sachs Harbour", "Sachs Harbour", "Sachs Harbour", "Sachs Harbour", "Sachs Harbour"],
+    ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "3330a6f000030000"]
+weathercities018["Tuktoyaktuk"] = [
+    ["トゥクトヤクトゥク", "Tuktoyaktuk", "Tuktoyaktuk", "Tuktoyaktuk", "Tuktoyaktuk", "Tuktoyaktuk", "Tuktoyaktuk"],
+    ["ノースウェスト準州", "Northwest Territories", "Nordwest-Territorien", "Territoires du Nord-Ouest", "Territorios del Noroeste", "Territori del Nord-Ovest", "Northwest Territories"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "3163a16600030000"]
 weathercities018["Iqaluit"] = [
     ["イカルイト", "Iqaluit", "Iqaluit", "Iqaluit", "Iqaluit", "Iqaluit", "Iqaluit"],
     ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2d46cf5600030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2d55cf4807030000"]
+weathercities018["Arviat"] = [
+    ["アルビアット", "Arviat", "Arviat", "Arviat", "Arviat", "Arviat", "Arviat"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2b74bd1e00030000"]
+weathercities018["Cambridge Bay"] = [
+    ["ケンブリッジベイ", "Cambridge Bay", "Cambridge Bay", "Cambridge Bay", "Cambridge Bay", "Cambridge Bay", "Cambridge Bay"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "3125b54c00030000"]
+weathercities018["Cape Dorset"] = [
+    ["ケープドーセット", "Cape Dorset", "Cape Dorset", "Cape Dorset", "Cape Dorset", "Cape Dorset", "Cape Dorset"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2dadc99305030000"]
+weathercities018["Grise Fiord"] = [
+    ["グライズ・フィヨルド", "Grise Fiord", "Grise Fiord", "Grise Fiord", "Grise Fiord", "Grise Fiord", "Grise Fiord"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "3657c50e00030000"]
+weathercities018["Hall Beach"] = [
+    ["ホールビーチ", "Hall Beach", "Hall Beach", "Hall Beach", "Hall Beach", "Hall Beach", "Hall Beach"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "30ebc63c00030000"]
+weathercities018["Kugluktuk"] = [
+    ["クグルクトゥク", "Kugluktuk", "Kugluktuk", "Kugluktuk", "Kugluktuk", "Kugluktuk", "Kugluktuk"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "303bae2800030000"]
+weathercities018["Pangnirtung"] = [
+    ["パンナータング", "Pangnirtung", "Pangnirtung", "Pangnirtung", "Pangnirtung", "Pangnirtung", "Pangnirtung"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2f09d14600030000"]
+weathercities018["Pond Inlet"] = [
+    ["池の入口", "Pond Inlet", "Pond Inlet", "Pond Inlet", "Pond Inlet", "Pond Inlet", "Pond Inlet"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut",  "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "33b2c89000030000"]
 weathercities018["Rankin Inlet"] = [
     ["ランキン・インレット", "Rankin Inlet", "Rankin Inlet", "Rankin Inlet", "Rankin Inlet", "Rankin Inlet", "Rankin Inlet"],
     ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut", "Nunavut", "Nunavut"],
-    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2c9cbe9a00030000"]
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2cabbe8505030000"]
+weathercities018["Sanikiluaq"] = [
+    ["サニキラック", "Sanikiluaq", "Sanikiluaq", "Sanikiluaq", "Sanikiluaq", "Sanikiluaq", "Sanikiluaq"],
+    ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut", "Nunavut", "Nunavut"],
+    ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2833c7a900030000"]
 
 weathercities019 = collections.OrderedDict()
 
