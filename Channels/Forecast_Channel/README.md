@@ -21,6 +21,7 @@ We are not accepting new cities for these following countries:
 + Argentina
 + Australia
 + Brazil
++ Canada
 + Finland
 + France
 + Germany
