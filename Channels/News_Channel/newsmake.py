@@ -13,6 +13,7 @@ import calendar
 import collections
 import glob
 import json
+import nlzss
 import os
 import pickle
 import requests
@@ -229,7 +230,7 @@ def process_news(name, mode, language, region, d):
                  "fields": [{"title": "Script", "value": "News Channel (" + name + ")", "short": "false"}],
                  "thumb_url": "https://rc24.xyz/images/webhooks/news/%s.png" % mode, "footer": "RiiConnect24 Script",
                  "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                 "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
+                 "ts": int(calendar.timegm(datetime.utcnow().timetuple()))}]}
 
         for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)
@@ -863,7 +864,7 @@ def write_dictionary(mode):
         dest_file.write(read)
 
     if config["production"]:
-        subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", newsfilename], stdout=subprocess.PIPE)
+        nlzss.encode_file(newsfilename, newsfilename)
 
         with open(newsfilename, "rb") as source_file:
             read = source_file.read()

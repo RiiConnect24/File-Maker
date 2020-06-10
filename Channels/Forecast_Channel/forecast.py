@@ -11,9 +11,11 @@
 
 import queue
 import binascii
+import calendar
 import collections
 import io
 import json
+import nlzss
 import os
 import pickle
 import socket
@@ -798,7 +800,7 @@ def sign_file(name, local_name, server_name):
     file.close()
     os.remove(name)
     log("Compressing ...", "VERBOSE")
-    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", local_name], stdout=subprocess.PIPE)  # Compress the file with the lzss program.
+    nlzss.encode_file(local_name, local_name)
     file = open(local_name, 'rb')
     new = file.read()
     file.close()
@@ -1257,7 +1259,7 @@ if config["production"] and config["send_webhooks"]:
              "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}],
              "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
              "footer_icon": "https://rc24.xyz/images/logo-small.png",
-             "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
+             "ts": int(calendar.timegm(datetime.utcnow().timetuple()))}]}
     for url in config["webhook_urls"]:
         post_webhook = requests.post(url, json=data, allow_redirects=True)
 

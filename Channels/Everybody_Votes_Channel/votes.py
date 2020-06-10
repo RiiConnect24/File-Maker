@@ -12,6 +12,7 @@ import binascii
 import datetime
 import json
 import logging
+import nlzss
 import os
 import struct
 import subprocess
@@ -381,7 +382,7 @@ def sign_file(name):
     os.remove(name)
     dest.close()
     print("Compressing ...")
-    subprocess.call(["%s/lzss" % config["lzss_path"], "-evf", final + '-1'],stdout=subprocess.PIPE)  # Compress the file with the lzss program.
+    nlzss.encode_file(final + '-1', final + '-1')
     file = open(final + '-1', 'rb')
     new = file.read()
     dest = open(final, "wb+")

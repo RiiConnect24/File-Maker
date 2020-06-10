@@ -5,6 +5,7 @@ ftfy==4.4.3
 googlemaps
 lxml
 newspaper3k
+nlzss
 pyaes
 requests
 rsa
