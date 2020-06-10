@@ -77,6 +77,8 @@ class NintendoChannel:
         self.dictionaries.append(self.make_demos_table())
         self.dictionaries.append(self.make_recommendations_table())
         self.dictionaries.append(self.make_recent_recommendations_table())
+        self.dictionaries.append(self.make_popular_videos_table())
+        self.dictionaries.append(self.make_detailed_ratings_table())
 
     def write(self):
         filename = "434968893.LZ"
@@ -359,5 +361,47 @@ class NintendoChannel:
             recent_recommendations_table["unknown_" + str(i)] = u16(r["unknown"])
             
         return recent_recommendations_table
+
+    def make_popular_videos_table(self):
+        popular_videos_table = {}
+
+        i = 0
+
+        for p in self.ninfile["popular_videos_table"]:
+            p = self.ninfile["popular_videos_table"][p]
+
+            i += 1
+
+            popular_videos_table["id_" + str(i)] = u32(p["id"])
+            popular_videos_table["time_length_" + str(i)] = u16(p["time_length"])
+            popular_videos_table["title_id_" + str(i)] = u32(p["title_id"])
+            popular_videos_table["bar_color_" + str(i)] = u8(p["bar_color"])
+            
+            for j in range(0, 15):
+                popular_videos_table["unknown2_" + str(i) + "_" + str(j)] = u8(p["unknown_2"][j])
+                
+            popular_videos_table["rating_id_" + str(i)] = u8(p["rating_id"])
+            popular_videos_table["unknown3_" + str(i)] = u8(p["unknown_3"])
+            popular_videos_table["video_rank_" + str(i)] = u8(p["video_rank"])
+            popular_videos_table["unknown4_" + str(i)] = u8(p["unknown_4"])
+            popular_videos_table["title_" + str(i)] = p["title"].encode("utf-16be").rjust(204, b"\x00")
+            
+        return popular_videos_table
+
+    def make_detailed_ratings_table(self):
+        detailed_ratings_table = {}
+
+        i = 0
+
+        for d in self.ninfile["detailed_ratings_table"]:
+            d = self.ninfile["detailed_ratings_table"][d]
+
+            i += 1
+
+            detailed_ratings_table["rating_group_" + str(i)] = u8(d["rating_group"])
+            detailed_ratings_table["rating_id_" + str(i)] = u8(d["rating_id"])
+            detailed_ratings_table["title_" + str(i)] = d["title"].encode("utf-16be").rjust(204, b"\x00")
+
+        return detailed_ratings_table
 
 NintendoChannel(ninfile1.nintendo_channel_file)
