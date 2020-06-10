@@ -154,6 +154,7 @@ for f in file.new_video_table:
     nintendo_channel_file["new_video_table"][i]["unknown"] = f.unknown
     nintendo_channel_file["new_video_table"][i]["title_id"] = f.title_id
     nintendo_channel_file["new_video_table"][i]["unknown_2"] = f.unknown_2
+    nintendo_channel_file["new_video_table"][i]["title"] = f.title
 
     i += 1
 
@@ -180,6 +181,14 @@ for f in file.demos_table:
     i += 1
 
 i = 0
+
+nintendo_channel_file["recommendations_table"] = {}
+
+for f in file.recommendations_table:
+    nintendo_channel_file["recommendations_table"][i] = {}
+    nintendo_channel_file["recommendations_table"][i]["recommendation_title_offset"] = f.recommendation_title_offset
+
+    i += 1
 
 nintendo_channel_file["recent_recommendations_table"] = {}
 

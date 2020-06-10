@@ -72,6 +72,11 @@ class NintendoChannel:
         self.dictionaries.append(self.make_company_table())
         self.dictionaries.append(self.make_title_table())
         self.dictionaries.append(self.make_new_title_table())
+        self.dictionaries.append(self.make_videos_1_table())
+        self.dictionaries.append(self.make_new_video_table())
+        self.dictionaries.append(self.make_demos_table())
+        self.dictionaries.append(self.make_recommendations_table())
+        self.dictionaries.append(self.make_recent_recommendations_table())
 
     def write(self):
         filename = "434968893.LZ"
@@ -246,5 +251,113 @@ class NintendoChannel:
             new_title_table["new_title_offset_" + str(i)] = u32(n["new_title_offset"])
 
         return new_title_table
+
+    def make_videos_1_table(self):
+        videos_1_table = {}
+
+        i = 0
+
+        for v in self.ninfile["videos_1_table"]:
+            v = self.ninfile["videos_1_table"][v]
+
+            i += 1
+
+            videos_1_table["id_" + str(i)] = u32(v["id"])
+            videos_1_table["time_length_" + str(i)] = u16(v["time_length"])
+            videos_1_table["title_id_" + str(i)] = u32(v["title_id"])
+
+            for j in range(0, 15):
+                videos_1_table["unknown_" + str(i) + "_" + str(j)] = u8(v["unknown"][j])
+
+            videos_1_table["unknown2_" + str(i)] = u8(v["unknown_2"])
+            videos_1_table["rating_id_" + str(i)] = u8(v["rating_id"])
+            videos_1_table["unknown3_" + str(i)] = u8(v["unknown_3"])
+            videos_1_table["new_tag_" + str(i)] = u8(v["new_tag"])
+            videos_1_table["video_index_" + str(i)] = u8(v["video_index"])
+
+            for j in range(0, 2):
+                videos_1_table["unknown4_" + str(i) + "_" + str(j)] = u8(v["unknown_4"][j])
+
+            videos_1_table["title_" + str(i)] = v["title"].encode("utf-16be").rjust(246, b"\x00")
+
+        return videos_1_table
+
+    def make_new_video_table(self):
+        new_video_table = {}
+
+        i = 0
+
+        for n in self.ninfile["new_video_table"]:
+            n = self.ninfile["new_video_table"][n]
+
+            i += 1
+
+            new_video_table["id_" + str(i)] = u32(n["id"])
+            new_video_table["unknown_" + str(i)] = u16(n["unknown"])
+            new_video_table["title_id_" + str(i)] = u32(n["title_id"])
+
+            for j in range(0, 18):
+                new_video_table["unknown2_" + str(i) + "_" + str(j)] = u8(n["unknown_2"][j])
+                
+            new_video_table["title_" + str(i)] = n["title"].encode("utf-16be").rjust(204, b"\x00")
+
+        return new_video_table
+
+    def make_demos_table(self):
+        demos_table = {}
+
+        i = 0
+
+        for d in self.ninfile["demos_table"]:
+            d = self.ninfile["demos_table"][d]
+
+            i += 1
+
+            demos_table["id_" + str(i)] = u32(d["id"])
+            demos_table["title_" + str(i)] = d["title"].encode("utf-16be").rjust(62, b"\x00")
+            demos_table["subtitle_" + str(i)] = d["subtitle"].encode("utf-16be").rjust(62, b"\x00")
+            demos_table["titleid_" + str(i)] = u32(d["titleid"])
+            demos_table["company_offset_" + str(i)] = u32(d["company_offset"])
+            demos_table["removal_year_" + str(i)] = u16(d["removal_year"])
+            demos_table["removal_month_" + str(i)] = u8(d["removal_month"])
+            demos_table["removal_day_" + str(i)] = u8(d["removal_day"])
+            demos_table["unknown_" + str(i)] = u32(d["unknown"])
+            demos_table["rating_id_" + str(i)] = u8(d["rating_id"])
+            demos_table["new_tag_" + str(i)] = u8(d["new_tag"])
+            demos_table["new_tag_index_" + str(i)] = u8(d["new_tag_index"])
+            
+            for j in range(0, 205):
+                demos_table["unknown2_" + str(i) + "_" + str(j)] = u8(d["unknown_2"][j])
+
+        return demos_table
+
+    def make_recommendations_table(self):
+        recommendations_table = {}
+
+        i = 0
+
+        for r in self.ninfile["recommendations_table"]:
+            r = self.ninfile["recommendations_table"][r]
+
+            i += 1
+
+            recommendations_table["recommendation_table_offset_" + str(i)] = u32(r["recommendation_title_offset"])
+            
+        return recommendations_table
+
+    def make_recent_recommendations_table(self):
+        recent_recommendations_table = {}
+
+        i = 0
+
+        for r in self.ninfile["recent_recommendations_table"]:
+            r = self.ninfile["recent_recommendations_table"][r]
+
+            i += 1
+
+            recent_recommendations_table["recent_recommendation_title_offset_" + str(i)] = u32(r["recent_recommendation_title_offset"])
+            recent_recommendations_table["unknown_" + str(i)] = u16(r["unknown"])
+            
+        return recent_recommendations_table
 
 NintendoChannel(ninfile1.nintendo_channel_file)
