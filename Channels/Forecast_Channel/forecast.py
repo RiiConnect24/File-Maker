@@ -17,7 +17,9 @@ import io
 import json
 import nlzss
 import os
+import pathlib
 import pickle
+import shutil
 import socket
 import subprocess
 import sys
@@ -690,9 +692,8 @@ def make_forecast_bin(forecast_list, data):
     elif mode == 2:
         extension = "bi2"
     file = io.BytesIO()
-    file1 = 'forecast.{}~.{}+{}'.format(extension, str(country_code).zfill(3), str(language_code))
-    file2 = 'forecast.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
-    file3 = 'forecast.{}'.format(extension)
+    file1 = 'forecast.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
+    file2 = 'forecast.{}'.format(extension)
     file.write(pad(12))
     file.write(u32(timestamps(0)))
     file.write(u32(timestamps(2)))
@@ -754,19 +755,17 @@ def make_forecast_bin(forecast_list, data):
             offset_write(0, False)
         seek_offset += 12
     file.seek(0)
-    with open(file1, 'wb') as temp:
-        temp.write(file.read()[12:])
+    f = file.read()[12:]
     file.close()
     if config["production"]:
-        sign_file(file1, file2, file3)
+        sign_file(f, file1, file2)
 
 
 def make_short_bin(forecast_list, data):
     short_forecast_header = make_header_short(forecast_list)
     short_forecast_table = data[12][mode]
-    file1 = 'short.{}~.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
-    file2 = 'short.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
-    file3 = 'short.{}'.format(extension)
+    file1 = 'short.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
+    file2 = 'short.{}'.format(extension)
     file = io.BytesIO()
     file.write(u32(timestamps(0)))
     file.write(u32(timestamps(2)))
@@ -778,51 +777,44 @@ def make_short_bin(forecast_list, data):
     file.seek(count-4)
     file.write(u32(count+12))
     file.seek(0)
-    with open(file1, 'wb') as temp:
-        temp.write(file.read())
+    f = file.read()
     file.close()
     if config["production"]:
-        sign_file(file1, file2, file3)
+        sign_file(f, file1, file2)
 
 
-def sign_file(name, local_name, server_name):
+def sign_file(file, local_name, server_name):
     log("Processing " + local_name + " ...", "VERBOSE")
-    file = open(name, 'rb')
-    copy = file.read()
-    crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
-    size = os.path.getsize(name) + 12
+    crc32 = format(binascii.crc32(file) & 0xFFFFFFFF, '08x')
+    size = len(file) + 12
     dest = open(local_name, 'wb')
     dest.write(u32(0))
     dest.write(u32(size))
     dest.write(binascii.unhexlify(crc32))
-    dest.write(copy)
+    dest.write(file)
     dest.close()
-    file.close()
-    os.remove(name)
     log("Compressing ...", "VERBOSE")
     nlzss.encode_file(local_name, local_name)
     file = open(local_name, 'rb')
     new = file.read()
     file.close()
     dest = open(local_name, 'wb')
-    key = open(config["key_path"], 'rb')
     log("RSA Signing ...", "VERBOSE")
-    private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
     signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
     dest.write(pad(64))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
-    key.close()
-    subprocess.call(["mkdir", "-p", "{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3))])  # Create directory if it does not exist
-    path = "{}/{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3), server_name)  # Path on the server to put the file.
-    subprocess.call(["cp", local_name, path])
+    # Create directory if it does not exist
+    path = "{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3))
+    pathlib.Path(path).mkdir(parents=True, exist_ok=True)
+    shutil.copy2(local_name, path+"/"+server_name)
     os.remove(local_name)
 
 def packVFF(language_code, country_code):
     log("Packing VFF ...", "VERBOSE")
     path = "{}/{}/{}/".format(config["file_path"], language_code, str(country_code).zfill(3))
-    subprocess.call(["mkdir", "-p", path+"wc24dl"]) # Create vff directory
+    pathlib.Path(path+"wc24dl").mkdir(parents=True, exist_ok=True)
     with open(path+"forecast.bin", 'rb') as source:
         with open(path+"wc24dl/3.BIN", 'wb') as dest:
             dest.write(source.read()[320:])
@@ -832,7 +824,7 @@ def packVFF(language_code, country_code):
     subprocess.call([config["winePath"], config["prfArcPath"], "-v", "200", path+"wc24dl", path+"wc24dl.vff"], stdout=subprocess.DEVNULL) # Pack VFF
     os.remove(path+"wc24dl/3.BIN")
     os.remove(path+"wc24dl/4.BIN")
-    subprocess.call(["rmdir", path+"wc24dl"])
+    os.rmdir(path+"wc24dl")
 
 
 def get_data(forecast_list, key):
@@ -1212,6 +1204,9 @@ concurrent = 10 if config["multithreaded"] else 1
 file_gen = 3 if config["wii_u_generation"] else 2
 ui_run = None
 threads_run = True
+key = open(config["key_path"], 'rb') # Loads the RSA key.
+private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")
+key.close()
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
