@@ -1,3 +1,4 @@
+import calendar
 import MySQLdb
 import time
 from base64 import encodebytes
@@ -176,7 +177,7 @@ for c in contests:
                 "fields": [{"title": "Script", "value": "Check Mii Out Channel", "short": "false"}],
                 "thumb_url": "https://miicontest.wii.rc24.xyz/photo/{}.jpg".format(contest_id), "footer": "RiiConnect24 Script",
                 "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                "ts": int(time.mktime(datetime.utcnow().timetuple())) + 25200}]}
+                "ts": int(calendar.timegm(datetime.utcnow().timetuple()))}]}
 
         for url in config["webhook_urls"]:
             post_webhook = post(url, json=data, allow_redirects=True)
