@@ -138,7 +138,7 @@ class NinchDllist(KaitaiStruct):
             return self._m_new_title_entry if hasattr(self, '_m_new_title_entry') else None
 
 
-    class 20(KaitaiStruct):
+    class DetailedRatingsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
