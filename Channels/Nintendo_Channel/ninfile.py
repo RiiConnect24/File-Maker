@@ -5,7 +5,9 @@ from kaitaistruct import __version__ as ks_version, KaitaiStruct, KaitaiStream, 
 
 
 if parse_version(ks_version) < parse_version('0.7'):
-    raise Exception("Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s" % (ks_version))
+    raise Exception(
+        "Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s" % (ks_version))
+
 
 class NinchDllist(KaitaiStruct):
     def __init__(self, _io, _parent=None, _root=None):
@@ -75,7 +77,6 @@ class NinchDllist(KaitaiStruct):
         for i in range(4):
             self.unknown_10[i] = self._io.read_u1()
 
-
     class NewVideoTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -92,7 +93,6 @@ class NinchDllist(KaitaiStruct):
                 self.unknown_2[i] = self._io.read_u1()
 
             self.title = (self._io.read_bytes(204)).decode(u"utf-16be")
-
 
     class RecommendationsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -111,10 +111,10 @@ class NinchDllist(KaitaiStruct):
 
             _pos = self._io.pos()
             self._io.seek(self.recommendation_title_offset)
-            self._m_recommendation_title_entry = self._root.TitleTable(self._io, self, self._root)
+            self._m_recommendation_title_entry = self._root.TitleTable(
+                self._io, self, self._root)
             self._io.seek(_pos)
             return self._m_recommendation_title_entry if hasattr(self, '_m_recommendation_title_entry') else None
-
 
     class NewTitleTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -133,10 +133,10 @@ class NinchDllist(KaitaiStruct):
 
             _pos = self._io.pos()
             self._io.seek(self.new_title_offset)
-            self._m_new_title_entry = self._root.TitleTable(self._io, self, self._root)
+            self._m_new_title_entry = self._root.TitleTable(
+                self._io, self, self._root)
             self._io.seek(_pos)
             return self._m_new_title_entry if hasattr(self, '_m_new_title_entry') else None
-
 
     class DetailedRatingsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -150,7 +150,6 @@ class NinchDllist(KaitaiStruct):
             self.rating_id = self._io.read_u1()
             self.title = (self._io.read_bytes(204)).decode(u"utf-16be")
 
-
     class CompanyTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -162,7 +161,6 @@ class NinchDllist(KaitaiStruct):
             self.id = self._io.read_u4be()
             self.dev_title = (self._io.read_bytes(62)).decode(u"utf-16be")
             self.pub_title = (self._io.read_bytes(62)).decode(u"utf-16be")
-
 
     class PopularVideosTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -186,7 +184,6 @@ class NinchDllist(KaitaiStruct):
             self.unknown_4 = self._io.read_u1()
             self.title = (self._io.read_bytes(204)).decode(u"utf-16be")
 
-
     class RecentRecommendationsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -205,10 +202,10 @@ class NinchDllist(KaitaiStruct):
 
             _pos = self._io.pos()
             self._io.seek(self.recent_recommendation_title_offset)
-            self._m_recent_recommendation_title_entry = self._root.TitleTable(self._io, self, self._root)
+            self._m_recent_recommendation_title_entry = self._root.TitleTable(
+                self._io, self, self._root)
             self._io.seek(_pos)
             return self._m_recent_recommendation_title_entry if hasattr(self, '_m_recent_recommendation_title_entry') else None
-
 
     class TitleTypesTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -223,7 +220,6 @@ class NinchDllist(KaitaiStruct):
             self.title = (self._io.read_bytes(102)).decode(u"utf-16be")
             self.group_id = self._io.read_u1()
             self.unknown = self._io.read_u1()
-
 
     class RatingsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -241,6 +237,16 @@ class NinchDllist(KaitaiStruct):
             self.jpeg_size = self._io.read_u4be()
             self.title = (self._io.read_bytes(22)).decode(u"utf-16be")
 
+        @property
+        def jpeg(self):
+            if hasattr(self, '_m_jpeg'):
+                return self._m_jpeg if hasattr(self, '_m_jpeg') else None
+
+            _pos = self._io.pos()
+            self._io.seek(self.jpeg_offset)
+            self._m_jpeg = self._io.read_bytes(self.jpeg_size)
+            self._io.seek(_pos)
+            return self._m_jpeg if hasattr(self, '_m_jpeg') else None
 
     class Videos1Table(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -267,7 +273,6 @@ class NinchDllist(KaitaiStruct):
                 self.unknown_4[i] = self._io.read_u1()
 
             self.title = (self._io.read_bytes(246)).decode(u"utf-16be")
-
 
     class TitleTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -304,10 +309,10 @@ class NinchDllist(KaitaiStruct):
 
             _pos = self._io.pos()
             self._io.seek(self.company_offset)
-            self._m_company_entry = self._root.CompanyTable(self._io, self, self._root)
+            self._m_company_entry = self._root.CompanyTable(
+                self._io, self, self._root)
             self._io.seek(_pos)
             return self._m_company_entry if hasattr(self, '_m_company_entry') else None
-
 
     class DemosTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -333,7 +338,6 @@ class NinchDllist(KaitaiStruct):
             for i in range(205):
                 self.unknown_2[i] = self._io.read_u1()
 
-
         @property
         def company_entry(self):
             if hasattr(self, '_m_company_entry'):
@@ -341,10 +345,10 @@ class NinchDllist(KaitaiStruct):
 
             _pos = self._io.pos()
             self._io.seek(self.company_offset)
-            self._m_company_entry = self._root.CompanyTable(self._io, self, self._root)
+            self._m_company_entry = self._root.CompanyTable(
+                self._io, self, self._root)
             self._io.seek(_pos)
             return self._m_company_entry if hasattr(self, '_m_company_entry') else None
-
 
     @property
     def demos_table(self):
@@ -355,7 +359,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.demos_table_offset)
         self._m_demos_table = [None] * (self.demos_entry_number)
         for i in range(self.demos_entry_number):
-            self._m_demos_table[i] = self._root.DemosTable(self._io, self, self._root)
+            self._m_demos_table[i] = self._root.DemosTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_demos_table if hasattr(self, '_m_demos_table') else None
@@ -369,7 +374,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.ratings_table_offset)
         self._m_ratings_table = [None] * (self.ratings_entry_number)
         for i in range(self.ratings_entry_number):
-            self._m_ratings_table[i] = self._root.RatingsTable(self._io, self, self._root)
+            self._m_ratings_table[i] = self._root.RatingsTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_ratings_table if hasattr(self, '_m_ratings_table') else None
@@ -383,7 +389,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.videos_1_table_offset)
         self._m_videos_1_table = [None] * (self.videos_1_entry_number)
         for i in range(self.videos_1_entry_number):
-            self._m_videos_1_table[i] = self._root.Videos1Table(self._io, self, self._root)
+            self._m_videos_1_table[i] = self._root.Videos1Table(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_videos_1_table if hasattr(self, '_m_videos_1_table') else None
@@ -395,9 +402,11 @@ class NinchDllist(KaitaiStruct):
 
         _pos = self._io.pos()
         self._io.seek(self.recent_recommendations_table_offset)
-        self._m_recent_recommendations_table = [None] * (self.recent_recommendations_entry_number)
+        self._m_recent_recommendations_table = [
+            None] * (self.recent_recommendations_entry_number)
         for i in range(self.recent_recommendations_entry_number):
-            self._m_recent_recommendations_table[i] = self._root.RecentRecommendationsTable(self._io, self, self._root)
+            self._m_recent_recommendations_table[i] = self._root.RecentRecommendationsTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_recent_recommendations_table if hasattr(self, '_m_recent_recommendations_table') else None
@@ -411,7 +420,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.title_table_offset)
         self._m_title_table = [None] * (self.title_entry_number)
         for i in range(self.title_entry_number):
-            self._m_title_table[i] = self._root.TitleTable(self._io, self, self._root)
+            self._m_title_table[i] = self._root.TitleTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_title_table if hasattr(self, '_m_title_table') else None
@@ -423,9 +433,11 @@ class NinchDllist(KaitaiStruct):
 
         _pos = self._io.pos()
         self._io.seek(self.detailed_ratings_table_offset)
-        self._m_detailed_ratings_table = [None] * (self.detailed_ratings_entry_number)
+        self._m_detailed_ratings_table = [
+            None] * (self.detailed_ratings_entry_number)
         for i in range(self.detailed_ratings_entry_number):
-            self._m_detailed_ratings_table[i] = self._root.DetailedRatingsTable(self._io, self, self._root)
+            self._m_detailed_ratings_table[i] = self._root.DetailedRatingsTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_detailed_ratings_table if hasattr(self, '_m_detailed_ratings_table') else None
@@ -437,9 +449,11 @@ class NinchDllist(KaitaiStruct):
 
         _pos = self._io.pos()
         self._io.seek(self.popular_videos_table_offset)
-        self._m_popular_videos_table = [None] * (self.popular_videos_entry_number)
+        self._m_popular_videos_table = [None] * \
+            (self.popular_videos_entry_number)
         for i in range(self.popular_videos_entry_number):
-            self._m_popular_videos_table[i] = self._root.PopularVideosTable(self._io, self, self._root)
+            self._m_popular_videos_table[i] = self._root.PopularVideosTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_popular_videos_table if hasattr(self, '_m_popular_videos_table') else None
@@ -453,7 +467,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.title_types_table_offset)
         self._m_title_types_table = [None] * (self.title_types_entry_number)
         for i in range(self.title_types_entry_number):
-            self._m_title_types_table[i] = self._root.TitleTypesTable(self._io, self, self._root)
+            self._m_title_types_table[i] = self._root.TitleTypesTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_title_types_table if hasattr(self, '_m_title_types_table') else None
@@ -465,9 +480,11 @@ class NinchDllist(KaitaiStruct):
 
         _pos = self._io.pos()
         self._io.seek(self.recommendations_table_offset)
-        self._m_recommendations_table = [None] * (self.recommendations_entry_number)
+        self._m_recommendations_table = [
+            None] * (self.recommendations_entry_number)
         for i in range(self.recommendations_entry_number):
-            self._m_recommendations_table[i] = self._root.RecommendationsTable(self._io, self, self._root)
+            self._m_recommendations_table[i] = self._root.RecommendationsTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_recommendations_table if hasattr(self, '_m_recommendations_table') else None
@@ -481,7 +498,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.new_video_table_offset)
         self._m_new_video_table = [None] * (self.new_video_entry_number)
         for i in range(self.new_video_entry_number):
-            self._m_new_video_table[i] = self._root.NewVideoTable(self._io, self, self._root)
+            self._m_new_video_table[i] = self._root.NewVideoTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_new_video_table if hasattr(self, '_m_new_video_table') else None
@@ -495,7 +513,8 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.new_title_table_offset)
         self._m_new_title_table = [None] * (self.new_title_entry_number)
         for i in range(self.new_title_entry_number):
-            self._m_new_title_table[i] = self._root.NewTitleTable(self._io, self, self._root)
+            self._m_new_title_table[i] = self._root.NewTitleTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_new_title_table if hasattr(self, '_m_new_title_table') else None
@@ -509,9 +528,9 @@ class NinchDllist(KaitaiStruct):
         self._io.seek(self.company_table_offset)
         self._m_company_table = [None] * (self.company_entry_number)
         for i in range(self.company_entry_number):
-            self._m_company_table[i] = self._root.CompanyTable(self._io, self, self._root)
+            self._m_company_table[i] = self._root.CompanyTable(
+                self._io, self, self._root)
 
         self._io.seek(_pos)
         return self._m_company_table if hasattr(self, '_m_company_table') else None
-
 

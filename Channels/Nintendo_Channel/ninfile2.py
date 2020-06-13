@@ -78,7 +78,11 @@ class NintendoChannel:
         self.dictionaries.append(self.make_recommendations_table())
         self.dictionaries.append(self.make_recent_recommendations_table())
         self.dictionaries.append(self.make_popular_videos_table())
+        self.dictionaries.append(self.make_jpeg())
         self.dictionaries.append(self.make_detailed_ratings_table())
+
+    def offset_count(self):
+        return sum(len(values) for dictionary in self.dictionaries for values in list(dictionary.values()) if values)
 
     def write(self):
         filename = "434968893.LZ"
@@ -403,5 +407,36 @@ class NintendoChannel:
             detailed_ratings_table["title_" + str(i)] = d["title"].encode("utf-16be").rjust(204, b"\x00")
 
         return detailed_ratings_table
+
+    def deadbeef(self, i):
+        k = 0
+
+        while ((self.offset_count() + (sum(len(values) for values in list(self.jpeg.values()) if values))) % 32) != 0:
+            bytes = {0: 0xDE, 1: 0xAD, 2: 0xBE, 3: 0xEF}
+
+            self.jpeg["deadbeef_" + str(i) + "_" + str(k)] = u8(bytes[k % 4])
+
+            k += 1
+
+        return self.jpeg
+
+    def make_jpeg(self):
+        self.jpeg = {}
+
+        i = 0
+
+        for j in self.ninfile["ratings_table"]:
+            j = self.ninfile["ratings_table"][j]
+
+            if j["jpeg_offset"] != 0:
+                i += 1
+
+                self.jpeg = self.deadbeef(i)
+
+                self.jpeg["jpeg_" + str(i)] = j["jpeg"]
+
+            self.jpeg = self.deadbeef(i)
+
+        return self.jpeg
 
 NintendoChannel(ninfile1.nintendo_channel_file)

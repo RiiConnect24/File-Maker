@@ -63,6 +63,7 @@ for f in file.ratings_table:
     nintendo_channel_file["ratings_table"][i]["jpeg_offset"] = f.jpeg_offset
     nintendo_channel_file["ratings_table"][i]["jpeg_size"] = f.jpeg_size
     nintendo_channel_file["ratings_table"][i]["title"] = f.title
+    nintendo_channel_file["ratings_table"][i]["jpeg"] = f.jpeg
 
     i += 1
 
