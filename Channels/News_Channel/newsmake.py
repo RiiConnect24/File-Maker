@@ -71,12 +71,12 @@ sources = {
         "topics_news": collections.OrderedDict([
             ("World", "world"),
             ("UK", "uk"),
-            ("Health", "health"),
             ("Science", "science"),
             ("Technology", "technology"),
             ("Entertainment", "entertainment"),
             ("Sports", "sports"),
-            ("Lifestyle", "lifestyle")
+            ("Lifestyle", "lifestyle"),
+            ("Business", "business")
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 1,

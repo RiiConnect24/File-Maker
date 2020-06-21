@@ -71,17 +71,17 @@ sources = {
     },
     "reuters_europe_english": {
         "name": "Reuters",
-        "url": "http://feeds.reuters.com/reuters/%s.rss",
+        "url": "https://wireapi.reuters.com/v7/feed/rapp/uk/tabbar/feeds/%s",
         "lang": "en",
         "cat": collections.OrderedDict([
-            ("UKWorldNews", "world"),
-            ("UKdomesticNews", "uk"),
-            ("UKHealthNews", "health"),
-            ("UKScienceNews", "science"),
-            ("technology", "technology"),
-            ("UKEntertainment", "entertainment"),
-            ("UKSportsNews", "sports"),
-            ("lifestyle", "lifestyle")
+            ("world", "world"),
+            ("uk", "uk"),
+            ("science", "science"),
+            ("tech", "technology"),
+            ("entertainment", "entertainment"),
+            ("sports", "sports"),
+            ("lifestyle", "lifestyle"),
+            ("business", "business")
         ])
     },
     "afp_french": {
@@ -140,14 +140,14 @@ sources = {
     },
     "reuters_japanese": {
         "name": "Reuters",
-        "url": "http://feeds.reuters.com/reuters/%s.rss",
+        "url": "https://wireapi.reuters.com/v7/feed/rapp/jp/tabbar/feeds/%s",
         "lang": "ja",
         "cat": collections.OrderedDict([
-            ("JPWorldNews", "world"),
-            ("JPBusinessNews", "business"),
-            ("JPSportsNews", "sports"),
-            ("JPTechnologyNews", "technology"),
-            ("JPEntertainment", "entertainment")
+            ("world", "world"),
+            ("business", "business"),
+            ("sports", "sports"),
+            ("technology", "technology"),
+            ("entertainment", "entertainment")
         ])
     }
 }
@@ -398,59 +398,93 @@ class News:
                 i = self.parse_feed(key, value, i)
             
     def parse_feed(self, key, value, i):
-        if self.source == "AP":
+        if self.source == "AP" or self.source == "Reuters":
             try:
-                ap_json = requests.get(self.url % key).json() # we use AP's API to download their news, it's epic and it uses JSON
+                news_url = self.url % key
+
+                if self.source == "Reuters":
+                    news_url += "?since=" + str(int((time.mktime(datetime.utcnow().timetuple()))) * 10000000000)
+
+                feed = requests.get(news_url).json() # we use AP's API to download their news, it's epic and it uses JSON
             except:
                 return i
-
-        feed = ap_json if self.source == "AP" \
-                else feedparser.parse(self.url) if self.source == "AFP_French" \
-                else feedparser.parse(self.sourceinfo["url2"] % (key, key)) if self.source == "ANSA" and value == "italy" \
-                else feedparser.parse(self.url % (key, key)) if self.source == "ANSA" \
-                else feedparser.parse(self.url % key) # I know this is a mess
+        elif self.source == "AFP_French":
+            feed = feedparser.parse(self.url)
+        elif self.source == "ANSA" and value == "italy":
+            feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
+        elif self.source == "ANSA":
+            feed = feedparser.parse(self.url % (key, key))
+        else:
+            feed = feedparser.parse(self.url % key)
 
         j = 0
 
-        entries = feed["cards"] if self.source == "AP" else feed.entries
-
+        if self.source == "AP":
+            entries = feed["cards"]
+        elif self.source == "Reuters":
+            entries = feed["wireitems"]
+        else:
+            entries = feed.entries
+        
         for entry in entries:
-            if self.source == "AP":
-                try:
-                    entry = entry["contents"][0]
-                except:
-                    continue
-
-            current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
             try:
-                updated_time = int((time.mktime(time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S") if self.source == "AP" else entry["updated_parsed"]) - 946684800) / 60)
-            except:
-                print("Failed to parse RSS feed.")
-                continue
+                if self.source == "AP":
+                    entry = entry["contents"][0]
+                elif self.source == "Reuters":
+                    try:
+                        _ = entry["templates"][1]["story"]["hed"]
+                        entry = entry["templates"][1]
+                    except:
+                        continue
 
-            if current_time - updated_time < 60: # if it's a new article since the last hour
-                i += 1
-                j += 1
+                current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
+
+                if self.source == "AP":
+                    update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
+                elif self.source == "Reuters":
+                    update = time.strptime(entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
+                else:
+                    update = entry["updated_parsed"]
                 
-                if i > 25: # in case we have too many articles, we don't want the news file to get too big, there's a limit
-                    break
+                updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                if self.source == "AFP_French" and key not in entry["link"]:
-                    continue
-                elif self.source == "AFP" and "SID" in entry["description"]:
-                    self.source = "SID"
-                elif self.source == "NU.nl" and entry["author"] == "ANP":
-                    self.source = "ANP"
+                if current_time - updated_time < 60: # if it's a new article since the last hour
+                    i += 1
+                    j += 1
+                    
+                    if i > 25: # in case we have too many articles, we don't want the news file to get too big, there's a limit
+                        break
 
-                title = entry["headline"] if self.source == "AP" else entry["title"]
+                    if self.source == "AFP_French" and key not in entry["link"]:
+                        continue
+                    elif self.source == "AFP" and "SID" in entry["description"]:
+                        self.source = "SID"
+                    elif self.source == "NU.nl" and entry["author"] == "ANP":
+                        self.source = "ANP"
 
-                print(title)
+                    if self.source == "AP":
+                        title = entry["headline"]
+                    elif self.source == "Reuters":
+                        title = entry["story"]["hed"]
+                    else:
+                        title = entry["title"]
 
-                downloaded_news = Parse(entry["gcsUrl"] if self.source == "AP" else entry["link"], self.source, updated_time,
-                                        title, self.language).get_news()
+                    print(title)
 
-                if downloaded_news:
-                    self.newsdata[value + str(j)] = downloaded_news
+                    if self.source == "AP":
+                        entry_url = entry["gcsUrl"]
+                    elif self.source == "Reuters":
+                        entry_url = self.url[:30] + entry["template_action"]["api_path"]
+                    else:
+                        entry_url = entry["link"]
+
+                    downloaded_news = Parse(entry_url, self.source, updated_time, title, self.language).get_news()
+
+                    if downloaded_news:
+                        self.newsdata[value + str(j)] = downloaded_news
+            except Exception as e:
+                print("Failed to parse feed: " + str(e))
+                continue
                 
         return i
 
@@ -473,7 +507,7 @@ class Parse(News):
         self.html = html
         self.soup = soup
 
-        if self.source != "AP":
+        if self.source != "AP" or self.source != "Reuters":
             init = self.newspaper_init()
             if init == []:
                 return None
@@ -565,6 +599,34 @@ class Parse(News):
 
     def parse_reuters(self):
         try:
+            self.newsdata = requests.get(self.url).json()["wireitems"][0]["templates"][0]["story"]
+        except Exception as e:
+            print(e)
+            return []
+
+        try:
+            self.article = newspaper.fulltext(self.newsdata["body"], language=self.language)
+
+            self.caption = self.newsdata["images"][0]["caption"]
+
+            self.picture = self.newsdata["images"][0]["url"] + "&w=200.0"
+
+            self.resize = False
+        except Exception as e:
+            print(e)
+
+        try:
+            location = self.newsdata["dateline"]
+
+            if location != "(Reuters)":
+                self.location = location.split(" (Reuters)")[0].split("/")[0]
+
+            print(self.location)
+        except Exception as e:
+            print(e)
+            
+
+        """try:
             self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/", " REUTERS/")
              
             if self.caption in self.article:
@@ -583,7 +645,7 @@ class Parse(News):
         elif "\uff3b" in self.article and "\u3000" in self.article:
             self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
         elif "\uff3b" in self.article and "\u0020" in self.article:
-            self.location = self.article.split("\uff3b")[1].split("\u0020")[0]
+            self.location = self.article.split("\uff3b")[1].split("\u0020")[0]"""
 
     def parse_afp(self):
         try:
