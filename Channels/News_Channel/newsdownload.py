@@ -620,32 +620,12 @@ class Parse(News):
 
             if location != "(Reuters)":
                 self.location = location.split(" (Reuters)")[0].split("/")[0]
+            elif "\uff3b" in self.location and "\u3000" in self.location:
+                self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
 
             print(self.location)
         except Exception as e:
             print(e)
-            
-
-        """try:
-            self.caption = self.soup.find("div", {"class": "Image_caption"}).text.replace("  REUTERS/", " REUTERS/")
-             
-            if self.caption in self.article:
-                self.article = self.article.replace(self.caption + "\n\n", "")
-        except AttributeError:
-            pass
-
-        if self.picture is not None:
-            if "rcom-default.png" in self.picture: # Default picture
-                self.picture = None
-            else:
-                self.resize = True
-
-        if "(Reuters)" in self.article and self.article[:9] != "(Reuters)":
-            self.location = self.article.split(" (Reuters)")[0]
-        elif "\uff3b" in self.article and "\u3000" in self.article:
-            self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
-        elif "\uff3b" in self.article and "\u0020" in self.article:
-            self.location = self.article.split("\uff3b")[1].split("\u0020")[0]"""
 
     def parse_afp(self):
         try:
