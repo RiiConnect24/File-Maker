@@ -98,7 +98,7 @@ sources = {
             ("politique", "politics")
         ])
     },
-    "dtoday_german": {
+    "afp_german": {
         "name": "AFP",
         "url": "http://www.dtoday.de/feed/%s.xml",
         "lang": "de",

@@ -101,7 +101,7 @@ sources = {
         "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
     },
-    "dtoday_german": {
+    "afp_german": {
         "topics_news": collections.OrderedDict([
             ("Nachrichten", "world"),
             ("Panorama", "panorama"),
