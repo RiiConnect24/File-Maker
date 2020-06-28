@@ -125,18 +125,16 @@ sources = {
               "marche", "molise", "piemonte", "puglia", "sardegna", "sicilia", "toscana", "trentino", "umbria", "valledaosta", "veneto"])
         ])
     },
-    "nu_dutch": {
-        "name": "NU.nl",
-        "url": "https://www.nu.nl/rss/%s",
+    "anp_dutch": {
+        "name": "ANP",
+        "url": "https://nieuws.nl/feed/",
         "lang": "nl",
         "cat": collections.OrderedDict([
-            ("Algemeen", "algemeen"),
-            ("Economie", "economy"),
-            ("Sport", "sports"),
-            ("Tech", "technology"),
-            ("Entertainment", "entertainment"),
-            ("Lifestyle", "lifestyle"),
-            ("Opmerkelijk", "noteworthy")
+            ("algemeen", "general"),
+            ("economie", "economy"),
+            ("sport", "sports"),
+            ("entertainment", "entertainment"),
+            ("lifestyle", "lifestyle")
         ])
     },
     "reuters_japanese": {
@@ -333,8 +331,9 @@ def locations_download(language_code, data): # using Google Maps API is so much 
                 coordinates = s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536))) + \
                                 s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + \
                                 country + region + location + zoom_factor # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max int for a 16-bit int
-            except:
-                log("There was a error downloading the location data.", "INFO")
+            except Exception as e:
+                print("There was a error downloading the location data: " + str(e))
+                log("There was a error downloading the location data: " + str(e), "INFO")
 
         else:
             coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
@@ -409,7 +408,7 @@ class News:
                 feed = requests.get(news_url).json() # we use AP's API to download their news, it's epic and it uses JSON
             except:
                 return i
-        elif self.source == "AFP_French":
+        elif self.source == "AFP_French" or self.source == "ANP":
             feed = feedparser.parse(self.url)
         elif self.source == "ANSA" and value == "italy":
             feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
@@ -458,7 +457,7 @@ class News:
                     if i > 25: # in case we have too many articles, we don't want the news file to get too big, there's a limit
                         break
 
-                    if self.source == "AFP_French" and key not in entry["link"]:
+                    if self.source == "AFP_French" or "ANP_Dutch" and key not in entry["link"]:
                         continue
                     elif self.source == "AFP" and "SID" in entry["description"]:
                         self.source = "SID"
@@ -487,6 +486,7 @@ class News:
                         self.newsdata[value + str(j)] = downloaded_news
             except Exception as e:
                 print("Failed to parse feed: " + str(e))
+                log("Failed to parse feed: " + str(e), "INFO")
                 continue
                 
         return i
@@ -522,8 +522,7 @@ class Parse(News):
             "AFP": self.parse_dtoday,
             "SID": self.parse_dtoday,
             "ANSA": self.parse_ansa,
-            "NU.nl": self.parse_nu,
-            "ANP": self.parse_nu,
+            "ANP": self.parse_anp,
         }[self.source]()
 
         self.get_news()
@@ -688,17 +687,15 @@ class Parse(News):
         except AttributeError:
             pass
 
-    def parse_nu(self):
-        if "Video" in self.headline or "Liveblog" in self.headline: # not an article
-            return None
-
+    def parse_anp(self):
         try:
             self.resize = True
-            self.credits = self.soup.find("span", {"class": "photographer"}).text
+            self.credits = self.soup.find("div", {"class": "credits"}).text
         except AttributeError:
             pass
 
         try:
-            self.location = geoparse(self.article)
+            self.location = self.soup.find("meta", {"property": "og:description"})["content"].split(" (ANP) - ")[0]
+            self.article = self.location + " (ANP) - " + self.article
         except:
             pass

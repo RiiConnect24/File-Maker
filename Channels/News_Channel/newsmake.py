@@ -132,22 +132,20 @@ sources = {
         "position": 6,
         "copyright": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma."
     },
-    "nu_dutch": {
+    "anp_dutch": {
         "topics_news": collections.OrderedDict([
             ("Algemeen", "general"),
             ("Economie", "economy"),
             ("Sport", "sports"),
-            ("Tech", "technology"),
             ("Entertainment", "entertainment"),
             ("Lifestyle", "lifestyle"),
-            ("Opmerkelijk", "noteworthy")
         ]),
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 6,
         "country_code": 110, # Uk
         "picture": 0,
         "position": 5,
-        "copyright": "© {} Sanoma Digital The Netherlands B.V. NU - onderdeel van Sanoma Media Netherlands Group"
+        "copyright": "© {} B.V. Algemeen Nederlands Persbureau ANP"
     },
     "reuters_japanese": {
         "topics_news": collections.OrderedDict([
