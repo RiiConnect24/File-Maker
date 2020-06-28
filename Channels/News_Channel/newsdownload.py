@@ -100,7 +100,7 @@ sources = {
     },
     "afp_german": {
         "name": "AFP",
-        "url": "http://www.afp_german.de/feed/%s.xml",
+        "url": "http://www.dtoday.de/feed/%s.xml",
         "lang": "de",
         "cat": collections.OrderedDict([
             ("16-nachrichten-ueberregional", "world"),
