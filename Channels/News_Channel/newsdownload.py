@@ -350,22 +350,6 @@ def locations_download(language_code, data): # using Google Maps API is so much 
 
     return locations
 
-
-# get location from geocode
-# geocode sucks and it doesn't seem to be working right now
-
-def geoparse(article):
-    location = requests.post("https://geocode.xyz/",
-                data={
-                    "scantext": article.split("\n")[0],
-                    "json": "1",
-                    "auth": config["geocode_key"]
-                }).json()
-    try:
-        return location["match"][0]["location"]
-    except:
-        return None
-
 # download the news
 
 class News:
