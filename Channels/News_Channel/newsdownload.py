@@ -100,7 +100,7 @@ sources = {
     },
     "afp_german": {
         "name": "AFP",
-        "url": "http://www.dtoday.de/feed/%s.xml",
+        "url": "http://www.afp_german.de/feed/%s.xml",
         "lang": "de",
         "cat": collections.OrderedDict([
             ("16-nachrichten-ueberregional", "world"),
@@ -441,7 +441,7 @@ class News:
                     if i > 25: # in case we have too many articles, we don't want the news file to get too big, there's a limit
                         break
 
-                    if self.source == "AFP_French" or "ANP_Dutch" and key not in entry["link"]:
+                    if self.source == "AFP_French" or self.source == "ANP_Dutch" and key not in entry["link"]:
                         continue
                     elif self.source == "AFP" and "SID" in entry["description"]:
                         self.source = "SID"
@@ -502,9 +502,9 @@ class Parse(News):
         {
             "AP": self.parse_ap,
             "Reuters": self.parse_reuters,
-            "AFP_French": self.parse_afp,
-            "AFP": self.parse_dtoday,
-            "SID": self.parse_dtoday,
+            "AFP_French": self.parse_afp_french,
+            "AFP": self.parse_afp_german,
+            "SID": self.parse_afp_german,
             "ANSA": self.parse_ansa,
             "ANP": self.parse_anp,
         }[self.source]()
@@ -613,7 +613,7 @@ class Parse(News):
         except Exception as e:
             print(e)
 
-    def parse_afp(self):
+    def parse_afp_french(self):
         try:
             self.resize = True
             self.caption = self.soup.find("figcaption", {"class": "art-caption"}).text
@@ -632,7 +632,7 @@ class Parse(News):
         except AttributeError:
             pass
 
-    def parse_dtoday(self):
+    def parse_afp_german(self):
         if " (SID)" in self.article.split("\n")[2] or " (AFP)" in self.article.split("\n")[4]:
             split = self.article.split("\n")
             for s in split: # remove caption text from being the first paragraph of the article
