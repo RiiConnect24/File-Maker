@@ -565,6 +565,9 @@ class Parse(News):
 
         if self.article is None:
             return []
+
+        if "storyHTML" in self.article: # get rid of broken articles that have the headline and article both matching
+            return []
         
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"] != []:
             if self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
