@@ -539,21 +539,26 @@ class Parse(News):
         try:
             self.newsdata = requests.get(self.url).json()
         except:
-            return []
+            self.article = None
+            return
 
         if self.newsdata["localMemberName"] is not None:
-            return []
+            self.article = None
+            return
 
         if self.newsdata["localLinkUrl"]:
             if "apnews" not in self.newsdata["localLinkUrl"]:
-                return []
+                self.article = None
+            return
         else:
-            return []
+            self.article = None
+            return
         
         try:
             self.article = newspaper.fulltext(self.newsdata["storyHTML"], language=self.language)
         except AttributeError:
-            return []
+            self.article = None
+            return
 
         self.article = self.article.replace("\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.", "")
 
@@ -563,11 +568,9 @@ class Parse(News):
         if self.newsdata["bylines"] != "" and self.newsdata["bylines"] != None:
             self.article += "\n\n" + self.newsdata["bylines"]
 
-        if self.article is None:
-            return []
-
         if "storyHTML" in self.article: # get rid of broken articles that have the headline and article both matching
-            return []
+            self.article = None
+            return
         
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"] != []:
             if self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
