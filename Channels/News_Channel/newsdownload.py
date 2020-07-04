@@ -438,7 +438,7 @@ class News:
                 
                 updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                if self.source == "AFP_French" and current_time - updated_time < 60:
+                if self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 180
 
                 if current_time - updated_time < 60:  # if it's a new article since the last hour
