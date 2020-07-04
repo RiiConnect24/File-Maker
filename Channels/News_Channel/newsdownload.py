@@ -438,15 +438,19 @@ class News:
                 
                 updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                if current_time - updated_time < 60: # if it's a new article since the last hour
+                if self.source == "AFP_French" and current_time - updated_time < 60:
+                    updated_time -= 180
+
+                if current_time - updated_time < 60:  # if it's a new article since the last hour
                     i += 1
                     j += 1
-                    
-                    if i > 25: # in case we have too many articles, we don't want the news file to get too big, there's a limit
+
+                    if i > 25:  # in case we have too many articles, we don't want the news file to get too big, there's a limit
                         break
 
-                    if self.source == "AFP_French" or self.source == "ANP_Dutch" and key not in entry["link"]:
-                        continue
+                    if self.source == "AFP_French" or self.source == "ANP_Dutch":
+                        if key not in entry["link"]:
+                            continue
                     elif self.source == "AFP" and "SID" in entry["description"]:
                         self.source = "SID"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
