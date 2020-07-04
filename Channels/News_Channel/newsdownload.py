@@ -332,8 +332,9 @@ def locations_download(language_code, data): # using Google Maps API is so much 
                                 s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + \
                                 country + region + location + zoom_factor # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max int for a 16-bit int
             except Exception as e:
-                print("There was a error downloading the location data: " + str(e))
-                log("There was a error downloading the location data: " + str(e), "INFO")
+                ex = "There was a error downloading the location data - line {}: {}".format(sys.exc_info()[-1].tb_lineno, str(e))
+                print(ex)
+                log(ex, "INFO")
 
         else:
             coordinates = binascii.unhexlify(cities[name][0] + "0000000006000000")
@@ -415,7 +416,10 @@ class News:
         for entry in entries:
             try:
                 if self.source == "AP":
-                    entry = entry["contents"][0]
+                    try:
+                        entry = entry["contents"][0]
+                    except:
+                        continue
                 elif self.source == "Reuters":
                     try:
                         _ = entry["templates"][1]["story"]["hed"]
@@ -469,8 +473,9 @@ class News:
                     if downloaded_news:
                         self.newsdata[value + str(j)] = downloaded_news
             except Exception as e:
-                print("Failed to parse feed: " + str(e))
-                log("Failed to parse feed: " + str(e), "INFO")
+                ex = "Failed to parse feed - line {}: {}".format(sys.exc_info()[-1].tb_lineno, str(e))
+                print(ex)
+                log(ex, "INFO")
                 continue
                 
         return i
@@ -549,7 +554,7 @@ class Parse(News):
         if self.newsdata["localLinkUrl"]:
             if "apnews" not in self.newsdata["localLinkUrl"]:
                 self.article = None
-            return
+                return
         else:
             self.article = None
             return
