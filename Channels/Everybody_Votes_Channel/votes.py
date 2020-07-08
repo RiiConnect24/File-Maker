@@ -226,16 +226,22 @@ def mysql_get_votes(days, vote_type, index):
         region_id = row[5] - 2
 
         if row[1] == 0:
-            male_voters_response_1[country_index] += int(anscnt[0])
-            female_voters_response_1[country_index] += int(anscnt[1])
-            male_voters_response_2[country_index] += int(anscnt[2])
-            female_voters_response_2[country_index] += int(anscnt[3])
+            try:
+                male_voters_response_1[country_index] += int(anscnt[0])
+                female_voters_response_1[country_index] += int(anscnt[1])
+                male_voters_response_2[country_index] += int(anscnt[2])
+                female_voters_response_2[country_index] += int(anscnt[3])
 
-            region_response_1[country_index][region_id] += int(anscnt[0]) + int(anscnt[1])
-            region_response_2[country_index][region_id] += int(anscnt[2]) + int(anscnt[3])
+                region_response_1[country_index][region_id] += int(anscnt[0]) + int(anscnt[1])
+                region_response_2[country_index][region_id] += int(anscnt[2]) + int(anscnt[3])
+            except:
+                pass
         elif row[1] == 1:
-            predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
-            predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[3])
+            try:
+                predict_response_1[country_index] += int(anscnt[0]) + int(anscnt[1])
+                predict_response_2[country_index] += int(anscnt[2]) + int(anscnt[3])
+            except:
+                pass
 
     # print("Male Voters Response 1: %s" % male_voters_response_1)
     # print("Female Voters Response 1: %s" % female_voters_response_1)
