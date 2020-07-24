@@ -1,6 +1,6 @@
 # File-Maker
 [![License](https://img.shields.io/github/license/riiconnect24/file-maker.svg?style=flat-square)](http://www.gnu.org/licenses/agpl-3.0)
-![Discord](https://img.shields.io/discord/206934458954153984.svg?style=flat-square)
+[![Discord](https://img.shields.io/discord/206934458954153984.svg?style=flat-square)](https://discord.com/invite/b4Y7jfD)
 
 These scripts will create static data files for these Wii Channels:
 
