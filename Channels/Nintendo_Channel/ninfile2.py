@@ -57,7 +57,7 @@ def s32(data):
         data = 0
     return struct.pack(">i", data)
 
-def strIDToInt(id):
+def strIDToint(id):
     return (ord(id[0]) << 24 | ord(id[1]) << 16 | ord(id[2]) << 8) ^ 0x52433234
 
 def intTostrID(id):
