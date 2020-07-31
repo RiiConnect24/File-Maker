@@ -57,12 +57,8 @@ def s32(data):
         data = 0
     return struct.pack(">i", data)
 
-def strIDToint(id):
-    return (ord(id[0]) << 24 | ord(id[1]) << 16 | ord(id[2]) << 8) ^ 0x52433234
-
-def intTostrID(id):
-    id ^= 0x52433234
-    return chr(id >> 24) + chr(id >> 16 & 0xFF) + chr(id >> 8 & 0xFF)
+def enc_dec_id(id):
+    return id ^ 0x52433234
 
 class NintendoChannel:
     def __init__(self, ninfile):
