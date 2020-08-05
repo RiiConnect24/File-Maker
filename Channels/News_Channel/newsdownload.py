@@ -525,6 +525,11 @@ class Parse(News):
             return []
         elif self.article == "" or self.article is None:
             return []
+        try:
+            _ = enc(self.headline).replace(b'\n', b'').decode("utf-16be")
+            _ = enc(self.article).replace(b'\n', b'').decode("utf-16be")
+        except:
+            return []
         return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
                 shrink_image(self.picture, self.resize, self.source), enc(self.credits), enc(self.caption),
                 self.location, self.source]
