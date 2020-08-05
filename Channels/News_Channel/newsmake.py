@@ -312,8 +312,11 @@ def make_news_bin(mode, data, locations_data):
     headlines = []
 
     for article in list(data.values()):
-        if article[3].replace(b'\n', b'').decode("utf-16be") not in headlines:
-            headlines.append(article[3].replace(b'\n', b'').decode("utf-16be") + "\n")
+        try:
+            if article[3].replace(b'\n', b'').decode("utf-16be") not in headlines:
+                headlines.append(article[3].replace(b'\n', b'').decode("utf-16be") + "\n")
+        except UnicodeDecodeError:
+            pass
 
     make_news = "".join(headlines)
 
