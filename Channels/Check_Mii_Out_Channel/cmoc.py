@@ -70,7 +70,7 @@ def encodeMii(data): #takes binary mii data, returns compressed and b64 encoded 
 
 def wii2studio(mii_file):
     try:
-		orig_mii = Mii.from_file(mii_file)
+        orig_mii = Mii.from_file(mii_file)
     except:
         return ""
 
