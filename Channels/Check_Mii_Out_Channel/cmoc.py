@@ -122,12 +122,12 @@ def wii2studio(mii_file):
 
     mii_data = b""
     n = r = 256
-    mii_data += hexlify(u8(0))
+    mii_data += binascii.hexlify(u8(0))
     for v in studio_mii.values():
         print(v)
         eo = (7 + (v ^ n)) % 256
         n = eo
-        mii_data += hexlify(u8(eo))
+        mii_data += binascii.hexlify(u8(eo))
 
     return "https://studio.mii.nintendo.com/miis/image.png?data=" + mii_data.decode("utf-8") + "&type=face&width=250&instanceCount=1"
 
