@@ -15,6 +15,7 @@ from random import randint
 from datetime import datetime
 from time import mktime
 import sentry_sdk
+from wii_kaitai import Mii
 
 with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
         config = load(f)
@@ -65,6 +66,70 @@ def decodeMii(data): #takes compressed and b64 encoded data, returns binary mii 
 
 def encodeMii(data): #takes binary mii data, returns compressed and b64 encoded data
 	return(b64encode(lz4.block.compress(data, store_size=False)).decode())
+
+
+def wii2studio(mii_file):
+    orig_mii = Mii.from_file(sys.argv[1])
+
+    studio_mii = {}
+
+    studio_mii["facial_hair_color"] = orig_mii.facial_hair_color
+    studio_mii["beard_goatee"] = orig_mii.facial_hair_beard
+    studio_mii["body_weight"] = orig_mii.body_weight
+    studio_mii["eye_stretch"] = 3
+    studio_mii["eye_color"] = orig_mii.eye_color
+    studio_mii["eye_rotation"] = orig_mii.eye_rotation
+    studio_mii["eye_size"] = orig_mii.eye_size
+    studio_mii["eye_type"] = orig_mii.eye_type
+    studio_mii["eye_horizontal"] = orig_mii.eye_horizontal
+    studio_mii["eye_vertical"] = orig_mii.eye_vertical
+    studio_mii["eyebrow_stretch"] = 3
+    studio_mii["eyebrow_color"] = orig_mii.eyebrow_color
+    studio_mii["eyebrow_rotation"] = orig_mii.eyebrow_rotation
+    studio_mii["eyebrow_size"] = orig_mii.eyebrow_size
+    studio_mii["eyebrow_type"] = orig_mii.eyebrow_type
+    studio_mii["eyebrow_horizontal"] = orig_mii.eyebrow_horizontal
+    studio_mii["eyebrow_vertical"] = orig_mii.eyebrow_vertical
+    studio_mii["face_color"] = orig_mii.face_color
+    studio_mii["face_makeup"] = 0
+    studio_mii["face_type"] = orig_mii.face_type
+    studio_mii["face_wrinkles"] = 0
+    studio_mii["favorite_color"] = orig_mii.favorite_color
+    studio_mii["gender"] = orig_mii.gender
+    studio_mii["glasses_color"] = orig_mii.glasses_color
+    studio_mii["glasses_size"] = orig_mii.glasses_size
+    studio_mii["glasses_type"] = orig_mii.glasses_type
+    studio_mii["glasses_vertical"] = orig_mii.glasses_vertical
+    studio_mii["hair_color"] = orig_mii.hair_color
+    studio_mii["hair_flip"] = orig_mii.hair_flip
+    studio_mii["hair_type"] = orig_mii.hair_type
+    studio_mii["body_height"] = orig_mii.body_height
+    studio_mii["mole_size"] = orig_mii.mole_size
+    studio_mii["mole_enable"] = orig_mii.mole_enable
+    studio_mii["mole_horizontal"] = orig_mii.mole_horizontal
+    studio_mii["mole_vertical"] = orig_mii.mole_vertical
+    studio_mii["mouth_stretch"] = 3
+    studio_mii["mouth_color"] = orig_mii.mouth_color
+    studio_mii["mouth_size"] = orig_mii.mouth_size
+    studio_mii["mouth_type"] = orig_mii.mouth_type
+    studio_mii["mouth_vertical"] = orig_mii.mouth_vertical
+    studio_mii["beard_size"] = orig_mii.facial_hair_size
+    studio_mii["beard_mustache"] = orig_mii.facial_hair_mustache
+    studio_mii["beard_vertical"] = orig_mii.facial_hair_vertical
+    studio_mii["nose_size"] = orig_mii.nose_size
+    studio_mii["nose_type"] = orig_mii.nose_type
+    studio_mii["nose_vertical"] = orig_mii.nose_vertical
+
+    mii_data = b""
+    n = r = 256
+    mii_data += hexlify(u8(0))
+    for v in studio_mii.values():
+        print(v)
+        eo = (7 + (v ^ n)) % 256
+        n = eo
+        mii_data += hexlify(u8(eo))
+
+    return "https://studio.mii.nintendo.com/miis/image.png?data=" + mii_data.decode("utf-8") + "&type=face&width=250&instanceCount=1"
 
 class ResetList(): #removes all miis from a list
 	def __init__(self, list_type):
