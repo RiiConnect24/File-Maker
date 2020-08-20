@@ -129,7 +129,7 @@ def wii2studio(mii_file):
         n = eo
         mii_data += binascii.hexlify(u8(eo))
 
-    return "https://studio.mii.nintendo.com/miis/image.png?data=" + mii_data.decode("utf-8") + "&type=face&width=250&instanceCount=1"
+    return "https://studio.mii.nintendo.com/miis/image.png?data=" + mii_data.decode("utf-8") + "&type=face&width=512&instanceCount=1"
 
 class ResetList(): #removes all miis from a list
 	def __init__(self, list_type):
