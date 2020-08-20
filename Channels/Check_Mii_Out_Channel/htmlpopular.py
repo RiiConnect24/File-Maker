@@ -6,6 +6,7 @@ from os.path import exists
 from subprocess import call
 from json import load
 from datetime import datetime
+from cmoc import wii2studio
 
 with open('/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json', 'r') as f:
 		config = load(f)
@@ -49,8 +50,8 @@ for i in range(len(row)):
 			miidata = miidata[:28] + b'\x00\x00\x00\x00' + miidata[32:] #remove mac address from mii data
 			f.write(miidata)
 
-	if not exists(mii_filename + '.png'):
-		call(['mono', '/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/MiiRender.exe', mii_filename])
+	# if not exists(mii_filename + '.png'):
+	#	call(['mono', '/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/MiiRender.exe', mii_filename])
 
 	if len(initial) == 1:
 		initial += '.'
@@ -64,7 +65,7 @@ for i in range(len(row)):
 	longentry = longentry[:4] + '-' + longentry[4:8] + '-' + longentry[8:12]
 
 	table += '\t<tr>\n'
-	table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="/render/entry-{entryno}.mii.png"/></a></td>\n'
+	table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="{wii2studio(mii_filename)}"/></a></td>\n'
 	table += f'\t\t<td>{longentry}</td>\n'
 	table += f'\t\t<td>{row[i][4]}</td>\n'
 	table += f'\t\t<td>{initial}</td>\n'

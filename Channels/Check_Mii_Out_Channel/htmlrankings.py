@@ -6,6 +6,7 @@ from os.path import exists
 from subprocess import call
 from json import load
 from datetime import datetime
+from cmoc import wii2studio
 
 with open('/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json', 'r') as f:
 		config = load(f)
@@ -40,8 +41,8 @@ for i in range(len(row)):
 			miidata = miidata[:28] + b'\x00\x00\x00\x00' + miidata[32:] #remove mac address from mii data
 			f.write(miidata)
 
-	if not exists(mii_filename + '.png'):
-		call(['mono', 'MiiRender.exe', mii_filename])
+	# if not exists(mii_filename + '.png'):
+	#	call(['mono', 'MiiRender.exe', mii_filename])
 
 	if int(row[i][4]) >= 1000:
 		master = "<img src=\"/images/master.png\" /><br>"
@@ -55,7 +56,7 @@ for i in range(len(row)):
 
 	table += '\t<tr>\n'
 	table += f'\t\t<td>{i + 1}</td>\n'
-	table += f'\t\t<td><a href="/render/crafts-{craftsno}.mii"><img width="75" src="/render/crafts-{craftsno}.mii.png"/></a></td>\n'
+	table += f'\t\t<td><a href="/render/crafts-{craftsno}.mii"><img width="75" src="{wii2studio(mii_filename)}"/></a></td>\n'
 	table += f'\t\t<td><a href="https://miicontestp.wii.rc24.xyz/cgi-bin/htmlcraftsearch.cgi?query={craftsno}">{country + nickname}<br>{master}</a></td>\n'
 	table += f'\t\t<td>{row[i][4]}</td>\n'
 	table += f'\t\t<td>{row[i][5]}</td>\n'
