@@ -15,7 +15,7 @@ from random import randint
 from datetime import datetime
 from time import mktime
 import sentry_sdk
-from wii_kaitai import Mii
+from miikaitai import Mii
 
 with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
         config = load(f)
