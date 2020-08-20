@@ -124,7 +124,6 @@ def wii2studio(mii_file):
     n = r = 256
     mii_data += binascii.hexlify(u8(0))
     for v in studio_mii.values():
-        print(v)
         eo = (7 + (v ^ n)) % 256
         n = eo
         mii_data += binascii.hexlify(u8(eo))
