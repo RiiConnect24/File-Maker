@@ -1,51 +1,79 @@
-import lz4.block
-from base64 import b64encode, b64decode
+#!/usr/bin/env python
 import MySQLdb
-import os
-import subprocess
+from lz4.block import decompress
+from base64 import b64encode, b64decode
+from os.path import exists
+from subprocess import call
 from json import load
 from datetime import datetime
 
-with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
-        config = load(f)
+with open('/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json', 'r') as f:
+		config = load(f)
 
-def decodeMii(data): #takes compressed and b64 encoded data, returns binary mii data
-	return(lz4.block.decompress(b64decode(data.encode()), uncompressed_size = 76))
+def decodeMii(data):
+		return(decompress(b64decode(data.encode()), uncompressed_size = 76))
 
-date = str(datetime.today().strftime("%B %d, %Y"))
+def decToEntry(num): #takes decimal int, outputs 12 digit entry number string
+	num ^= ((num << 0x1E) ^ (num << 0x12) ^ (num << 0x18)) & 0xFFFFFFFF
+	num ^= (num & 0xF0F0F0F) << 4
+	num ^= (num >> 0x1D) ^ (num >> 0x11) ^ (num >> 0x17) ^ 0x20070419
 
-beginning = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css\">\n<link href=\"/css/style.css\" rel=\"Stylesheet\" type=\"text/css\" />\n<link href=\"/css/ctmkf.css\" rel=\"Stylesheet\" type=\"text/css\" />\n<title>Top 50 Miis</title>\n<link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/apple-touch-icon.png\">\n<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon-32x32.png\">\n<link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/favicon-16x16.png\">\n<link rel=\"manifest\" href=\"/site.webmanifest\">\n<link rel=\"mask-icon\" href=\"/safari-pinned-tab.svg\" color=\"#89c0ca\">\n<meta name=\"msapplication-TileColor\" content=\"#2d89ef\">\n<meta name=\"theme-color\" content=\"#ffffff\">\n</head>\n<body class=\"center\">\n\n<h2><img src=\"/images/top50.png\"> Top 50 Miis</h2>\n<h4>" + date + "</h4>\n<p>Click on a Mii to download it.</p>\n<table class=\"striped\" align=\"center\">\n"
+	crc = (num >> 8) ^ (num >> 24) ^ (num >> 16) ^ (num & 0xFF) ^ 0xFF
+	if 232 < (0xd4a50fff < num) + (crc & 0xFF):
+		crc &= 0x7F
 
+	crc &= 0xFF
+	return str(int((format(crc, '08b') + format(num, '032b')), 2)).zfill(12)
+
+date = str(datetime.today().strftime('%B %d, %Y'))
 db = MySQLdb.connect('localhost', config['dbuser'], config['dbpass'], 'cmoc', use_unicode=True, charset='utf8mb4')
 cursor = db.cursor()
 
-cursor.execute('SELECT entryno,initial,permlikes,miidata FROM mii ORDER BY permlikes DESC LIMIT 50')
-list = cursor.fetchall()
+headers = ['Mii', 'Entry Number', 'Nickname', 'Initials', 'Likes', 'Creator']
+for h in range(len(headers)):
+	headers[h] = '\t\t<th>' + headers[h] + '</th>\n'
+headers = '\t<tr>\n' + ''.join(headers) + '</tr>\n'
 
-month = int(datetime.now().month)
-day = int(datetime.now().day)
+cursor.execute('SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.craftsno = artisan.craftsno ORDER BY permlikes DESC LIMIT 50')
+row = cursor.fetchall()
 
-tables = beginning + "\t<tr>\n\t\t<th>Mii</th>\n\t\t<th>Initials</th>\n\t\t<th>Likes</th>\n"
+table = f'<p>Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n' + headers
+for i in range(len(row)):
+	artisan = row[i][6]
+	entryno = row[i][0]
+	initial = row[i][1]
+	mii_filename = '/var/www/wapp.wii.com/miicontest/public_html/render/entry-{}.mii'.format(entryno)
+	if not exists(mii_filename):
+		with open(mii_filename, 'wb') as f:
+			miidata = decodeMii(row[i][3])[:-2]
+			miidata = miidata[:28] + b'\x00\x00\x00\x00' + miidata[32:] #remove mac address from mii data
+			f.write(miidata)
 
-for i in range(len(list)):
-	mii_filename = "/var/www/wapp.wii.com/miicontest/public_html/render/entry-{}.mii".format(list[i][0])
-	if not os.path.exists(mii_filename):
-		with open(mii_filename, "wb") as f:
-			f.write(decodeMii(list[i][3])[:-2])
-		import binascii
-		subprocess.call(["mono", "MiiRender.exe", mii_filename])
-	tables += "\t<tr>\n"
-	tables += "\t\t<td>{}</td>\n".format("<a href=\"/render/entry-{}.mii\"><img width=\"75\" src=\"/render/entry-{}.mii.png\"/></a>".format(list[i][0], list[i][0]))
-	if len(list[i][1]) == 1:
-		initial = list[i][1][0] + "."
-	elif len(list[i][1]) == 2:
-		initial = list[i][1][0] + "." + list[i][1][1] + "."
-	tables += "\t\t<td>{}</td>\n".format(initial)
-	tables += "\t\t<td>{}</td>\n".format(list[i][2])
-	tables += "\t</tr>\n"
-	#tables += str('\n' + list[i][0] + '' + str(list[i][1]))
+	if not exists(mii_filename + '.png'):
+		call(['mono', 'MiiRender.exe', mii_filename])
 
-tables += "\n</table>\n</body>\n</html>"
+	if len(initial) == 1:
+		initial += '.'
+	elif len(initial) == 2:
+		initial = initial[0] + '.' + initial[1] + '.'
 
-with open('/var/www/wapp.wii.com/miicontest/public_html/top50.html', 'w') as file:
-	file.write(tables)
+	if bool(row[i][7]):
+		artisan += '<br><img width = 125 src="http://miicontest.wii.rc24.xyz/images/master.png" />'
+
+	longentry = decToEntry(entryno)
+	longentry = longentry[:4] + '-' + longentry[4:8] + '-' + longentry[8:12]
+
+	table += '\t<tr>\n'
+	table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="/render/entry-{entryno}.mii.png"/></a></td>\n'
+	table += f'\t\t<td>{longentry}</td>\n'
+	table += f'\t\t<td>{row[i][4]}</td>\n'
+	table += f'\t\t<td>{initial}</td>\n'
+	table += f'\t\t<td>{row[i][2]}</td>\n'
+	table += f'\t\t<td><a href="http://miicontestp.wii.rc24.xyz/cgi-bin/htmlcraftsearch.cgi?query={row[i][5]}">{artisan}</a></td>\n'
+
+	table += '\t</tr>\n'
+
+table += '</table>\n'
+
+with open('/var/www/wapp.wii.com/miicontest/public_html/tables/top50.html', 'w') as file:
+	file.write(table)

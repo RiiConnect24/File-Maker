@@ -23,10 +23,10 @@ if count >= 100:
 else:
 	extraCount = 100 - count
 
-cursor.execute('SELECT mii.initial, mii.miidata, artisan.miidata FROM mii, artisan WHERE mii.craftsno=artisan.craftsno ORDER BY mii.likes DESC LIMIT %s', [count])
+cursor.execute('SELECT mii.initial, mii.miidata, artisan.miidata, mii.entryno FROM mii, artisan WHERE mii.craftsno=artisan.craftsno ORDER BY mii.likes DESC LIMIT %s', [count])
 popularMiis = cursor.fetchall()
 
-cursor.execute('SELECT mii.initial, mii.miidata, artisan.miidata FROM mii, artisan WHERE mii.permlikes < 25 AND mii.craftsno=artisan.craftsno ORDER BY mii.permlikes DESC LIMIT %s', [extraCount])
+cursor.execute('SELECT mii.initial, mii.miidata, artisan.miidata, mii.entryno FROM mii, artisan WHERE mii.permlikes < 25 AND mii.craftsno=artisan.craftsno ORDER BY mii.permlikes DESC LIMIT %s', [extraCount])
 extraMiis = cursor.fetchall()
 
 db.close()

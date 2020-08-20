@@ -5,6 +5,9 @@ import os
 import struct
 import subprocess
 import sys
+import nlzss
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 from json import load
 from base64 import b64encode, b64decode
 import lz4.block
@@ -17,6 +20,18 @@ with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r"
         config = load(f)
 
 sentry_sdk.init(config["sentry_url"])
+
+def decToEntry(num: int) -> str: #takes decimal int, outputs 12 digit entry number string
+	num ^= ((num << 0x1E) ^ (num << 0x12) ^ (num << 0x18)) & 0xFFFFFFFF
+	num ^= (num & 0xF0F0F0F) << 4
+	num ^= (num >> 0x1D) ^ (num >> 0x11) ^ (num >> 0x17) ^ 0x20070419
+
+	crc = (num >> 8) ^ (num >> 24) ^ (num >> 16) ^ (num & 0xFF) ^ 0xFF
+	if 232 < (0xd4a50fff < num) + (crc & 0xFF):
+		crc &= 0x7F
+
+	crc &= 0xFF
+	return str(int((format(crc, '08b') + format(num, '032b')), 2)).zfill(12)
 
 def u8(data):
 	if not 0 <= data <= 255:
@@ -463,7 +478,7 @@ class WSR(): #returns an unencrypted mii list for wii sports resort
 	def __init__(self):
 		self.miilist = []
 
-	def build(self, miis): #requires 2 dimensional array containing initials, miidata, and artisan data
+	def build(self, miis): #requires 2 dimensional array containing initials, miidata, artisan data, and entryno
 		open = int(mktime(datetime.utcnow().timetuple())) - 946684800 #current time since 1/1/2000 in seconds
 		close = int(mktime(datetime.utcnow().timetuple())) - 946512000 #current time since 1/1/2000 in seconds + 48 hours
 		self.header = u32(open) + u32(close) + bytes.fromhex('000041A0000000A864000000000000000000000000000000')
@@ -481,8 +496,9 @@ class WSR(): #returns an unencrypted mii list for wii sports resort
 			self.mii['initials'] = initial
 			self.mii['country_code'] = u8(49) #country code doesn't matter or change anything
 			self.mii['unk1'] = u32(0)
-			self.mii['entry_number1'] = u32(0) #this is actually a u64 for the 12 digit code
-			self.mii['entry_number2'] = u32(0) #except nobody knows how to convert it
+			#self.mii['entry_number1'] = u32(0) #this is actually a u64 for the 12 digit code
+			#self.mii['entry_number2'] = u32(0) #except nobody knows how to convert it
+			self.mii['entry_number'] = int(decToEntry(entry[3])).to_bytes(8, 'big')
 			self.mii['miidata'] = miidata
 			self.mii['mii_artisan'] = artisan
 
@@ -720,46 +736,43 @@ class Write():
 
 class Prepare(): #this is only used to compress and encrypt data by external scripts. any data can be used with this
 
-	def __init__(self):
-		self.filename = '/tmp/TMP{}.ces'.format(str(randint(1, 1000000)))
+    def __init__(self):
+        self.filename = '/tmp/TMP{}.ces'.format(str(randint(1, 1000000)))
 
-	def prepare(self, data): #takes only data and doesn't write it anywhere. returns the final data
-		prepared = b''
+    def prepare(self, data): #takes only data and doesn't write it anywhere. returns the final data
+        prepared = b''
 
-		with open(self.filename, 'wb') as tempfile:
-			tempfile.write(data)
+        with open(self.filename, 'wb') as tempfile:
+            tempfile.write(data)
 
-		self.compress()
-		self.encrypt()
-		self.hmac()
+        self.compress()
+        self.encrypt()
+        self.hmac()
 
-		prepared += b'MC'
-		prepared += u16(1)
-		prepared += self.hmacsha1
-		prepared += self.processed
-		os.remove(self.filename)
+        prepared += b'MC'
+        prepared += u16(1)
+        prepared += self.hmacsha1
+        prepared += self.processed
+        os.remove(self.filename)
 
-		return prepared
+        return prepared
 
-	def compress(self):
-		subprocess.call(["{}/lzss".format(config["lzss_path"]), "-evf", self.filename])
+    def compress(self):
+        nlzss.encode_file(self.filename, self.filename)
 
-	def encrypt(self):
-		subprocess.call(["openssl", "enc", "-aes-128-cbc", "-e", "-in", self.filename, "-out", self.filename + "1", "-K", "8D22A3D808D5D072027436B6303C5B50", "-iv", "BE5E548925ACDD3CD5342E08FB8ABFEC"])
+    def encrypt(self):
+        aes = AES.new(bytes.fromhex('8D22A3D808D5D072027436B6303C5B50'), AES.MODE_CBC, bytes.fromhex('BE5E548925ACDD3CD5342E08FB8ABFEC'))
+        with open(self.filename, "rb") as readf:
+            self.processed = aes.encrypt(pad(readf.read(), 16))
+        
+    def hmac(self):
+        self.sign = bytes.fromhex("4CC08FA141DE2537AAA52B8DACD9B56335AFE467")
+        self.digester = hmac.new(self.sign, self.processed, hashlib.sha1)
+        self.hmacsha1 = self.digester.digest()
 
-		with open(self.filename + "1", "rb") as readf:
-			self.processed = readf.read()
-
-		os.remove(self.filename + "1")
-		
-	def hmac(self):
-		self.sign = binascii.unhexlify("4CC08FA141DE2537AAA52B8DACD9B56335AFE467")
-		self.digester = hmac.new(self.sign, self.processed, hashlib.sha1)
-		self.hmacsha1 = self.digester.digest()
-
-	def write(self):
-		with open(self.filename, "wb+") as writef:
-			writef.write(b'MC')
-			writef.write(u16(1))
-			writef.write(self.hmacsha1)
-			writef.write(self.processed)
+    def write(self):
+        with open(self.filename, "wb+") as writef:
+            writef.write(b'MC')
+            writef.write(u16(1))
+            writef.write(self.hmacsha1)
+            writef.write(self.processed)
