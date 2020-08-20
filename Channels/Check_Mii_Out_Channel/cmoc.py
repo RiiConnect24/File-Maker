@@ -69,9 +69,9 @@ def encodeMii(data): #takes binary mii data, returns compressed and b64 encoded 
 
 
 def wii2studio(mii_file):
-    if os.path.exists(mii_file):
-        orig_mii = Mii.from_file(mii_file)
-    else:
+    try:
+		orig_mii = Mii.from_file(mii_file)
+    except:
         return ""
 
     studio_mii = {}
