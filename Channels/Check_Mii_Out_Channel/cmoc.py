@@ -74,13 +74,30 @@ def wii2studio(mii_file):
     except:
         return ""
 
+    makeup = {
+        1: 1,
+        2: 6,
+        3: 9,
+        9: 10
+    }
+
+    wrinkles = {
+        4: 5,
+        5: 2,
+        6: 3,
+        7: 7,
+        8: 8,
+        10: 9,
+        11: 11
+    }
+
     studio_mii = {}
 
     studio_mii["facial_hair_color"] = orig_mii.facial_hair_color
     studio_mii["beard_goatee"] = orig_mii.facial_hair_beard
     studio_mii["body_weight"] = orig_mii.body_weight
     studio_mii["eye_stretch"] = 3
-    studio_mii["eye_color"] = orig_mii.eye_color
+    studio_mii["eye_color"] = orig_mii.eye_color + 8
     studio_mii["eye_rotation"] = orig_mii.eye_rotation
     studio_mii["eye_size"] = orig_mii.eye_size
     studio_mii["eye_type"] = orig_mii.eye_type
@@ -94,12 +111,23 @@ def wii2studio(mii_file):
     studio_mii["eyebrow_horizontal"] = orig_mii.eyebrow_horizontal
     studio_mii["eyebrow_vertical"] = orig_mii.eyebrow_vertical
     studio_mii["face_color"] = orig_mii.face_color
-    studio_mii["face_makeup"] = 0
+    if orig_mii.facial_feature in makeup:
+        studio_mii["face_makeup"] = makeup[orig_mii.facial_feature]
+    else:
+        studio_mii["face_makeup"] = 0
     studio_mii["face_type"] = orig_mii.face_type
-    studio_mii["face_wrinkles"] = 0
+    if orig_mii.facial_feature in wrinkles:
+        studio_mii["face_wrinkles"] = wrinkles[orig_mii.facial_feature]
+    else:
+        studio_mii["face_wrinkles"] = 0
     studio_mii["favorite_color"] = orig_mii.favorite_color
     studio_mii["gender"] = orig_mii.gender
-    studio_mii["glasses_color"] = orig_mii.glasses_color
+    if orig_mii.glasses_color == 0:
+        studio_mii["glasses_color"] = 8
+    elif orig_mii.glasses_color < 6:
+        studio_mii["glasses_color"] = orig_mii.glasses_color + 13
+    else:
+        studio_mii["glasses_color"] = 0
     studio_mii["glasses_size"] = orig_mii.glasses_size
     studio_mii["glasses_type"] = orig_mii.glasses_type
     studio_mii["glasses_vertical"] = orig_mii.glasses_vertical
@@ -112,7 +140,10 @@ def wii2studio(mii_file):
     studio_mii["mole_horizontal"] = orig_mii.mole_horizontal
     studio_mii["mole_vertical"] = orig_mii.mole_vertical
     studio_mii["mouth_stretch"] = 3
-    studio_mii["mouth_color"] = orig_mii.mouth_color
+    if orig_mii.mouth_color < 4:
+        studio_mii["mouth_color"] = orig_mii.mouth_color + 19
+    else:
+        studio_mii["mouth_color"] = 0
     studio_mii["mouth_size"] = orig_mii.mouth_size
     studio_mii["mouth_type"] = orig_mii.mouth_type
     studio_mii["mouth_vertical"] = orig_mii.mouth_vertical
