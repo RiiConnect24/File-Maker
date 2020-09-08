@@ -14,6 +14,7 @@ import lz4.block
 from random import randint
 from datetime import datetime
 from time import mktime
+from textwrap import wrap
 import sentry_sdk
 from miikaitai import Mii
 
