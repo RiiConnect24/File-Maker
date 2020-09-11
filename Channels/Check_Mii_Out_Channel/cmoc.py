@@ -14,6 +14,7 @@ import lz4.block
 from random import randint
 from datetime import datetime
 from time import mktime
+from textwrap import wrap
 import sentry_sdk
 from miikaitai import Mii
 
@@ -647,7 +648,7 @@ class ConDetail():
 		self.condetail["padding5"] = u32(0) * 5
 		self.condetail["topic"] = topic[:16].encode()
 		self.condetail["padding6"] = u8(0) * (32 - len(topic))
-		self.condetail["description"] = description[:64].encode()
+		self.condetail["description"] = "\n".join(wrap(description[:64], 32)).encode()
 		self.condetail["padding7"] = u8(0) * (64 - len(description))
 
 		data = b''
