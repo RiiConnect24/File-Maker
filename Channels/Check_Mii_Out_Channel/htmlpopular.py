@@ -7,9 +7,12 @@ from subprocess import call
 from json import load
 from datetime import datetime
 from cmoc import wii2studio
+import sentry_sdk
 
 with open('/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json', 'r') as f:
 		config = load(f)
+
+sentry_sdk.init(config["sentry_url"])
 
 def decodeMii(data):
 		return(decompress(b64decode(data.encode()), uncompressed_size = 76))
@@ -35,8 +38,25 @@ for h in range(len(headers)):
 	headers[h] = '\t\t<th>' + headers[h] + '</th>\n'
 headers = '\t<tr>\n' + ''.join(headers) + '\t</tr>\n'
 
-cursor.execute('SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.craftsno = artisan.craftsno AND likes > 0 ORDER BY likes DESC LIMIT 100')
-row = cursor.fetchall()
+cursor.execute('SELECT COUNT(*) FROM mii WHERE likes > 0')
+count = int(cursor.fetchone()[0])
+print('Popular Count:', count)
+
+#popular is always sorted by volatile likes first, but we combine miis ordered by permlikes to fill in the rest to equal 100 total miis
+if count >= 100:
+        extraCount = 0
+        count = 100
+
+else:
+        extraCount = 100 - count
+
+cursor.execute('SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.craftsno = artisan.craftsno AND likes > 0 ORDER BY likes DESC LIMIT %s', [count])
+popularMiis = cursor.fetchall()
+
+cursor.execute('SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.permlikes < 25 AND mii.craftsno=artisan.craftsno ORDER BY mii.permlikes DESC LIMIT %s', [extraCount])
+extraMiis = cursor.fetchall()
+
+row = popularMiis + extraMiis
 
 table = f'<p>Only the top 100 popular Miis are shown. Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n' + headers
 for i in range(len(row)):
