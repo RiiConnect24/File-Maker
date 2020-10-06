@@ -132,7 +132,10 @@ def wii2studio(mii_file):
     studio_mii["glasses_size"] = orig_mii.glasses_size
     studio_mii["glasses_type"] = orig_mii.glasses_type
     studio_mii["glasses_vertical"] = orig_mii.glasses_vertical
-    studio_mii["hair_color"] = orig_mii.hair_color
+    if orig_mii.hair_color == 0:
+		studio_mii["hair_color"] = 8
+	else:
+		studio_mii["hair_color"] = orig_mii.hair_color
     studio_mii["hair_flip"] = orig_mii.hair_flip
     studio_mii["hair_type"] = orig_mii.hair_type
     studio_mii["body_height"] = orig_mii.body_height
