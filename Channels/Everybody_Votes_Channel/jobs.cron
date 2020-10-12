@@ -1,0 +1,6 @@
+0 0 1,16 * 2,4,6 cd /var/rc24/File-Maker/ && /usr/local/bin/python3.7 -m Channels.Everybody_Votes_Channel.votes v >/dev/null 2>&1
+0 0 * * 2,4,6 cd /var/rc24/File-Maker/ && /usr/local/bin/python3.7 -m Channels.Everybody_Votes_Channel.votes q n >/dev/null 2>&1
+0 0 * * 2,4,6 cd /var/rc24/File-Maker/ && /usr/local/bin/python3.7 -m Channels.Everybody_Votes_Channel.votes r n >/dev/null 2>&1
+0 0 1,16 * * cd /var/rc24/File-Maker/ && /usr/local/bin/python3.7 -m Channels.Everybody_Votes_Channel.votes q w >/dev/null 2>&1
+0 0 1,16 * * cd /var/rc24/File-Maker/ && /usr/local/bin/python3.7 -m Channels.Everybody_Votes_Channel.votes r w >/dev/null 2>&1
+5 0 1,16 * 2,4,6 cd /var/rc24/pack/ && /usr/local/bin/python3.7 votespack.py >/dev/null 2>&1

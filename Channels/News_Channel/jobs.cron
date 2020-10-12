@@ -1,0 +1,2 @@
+0 * * * * cd /var/rc24/File-Maker/ && /usr/local/bin/python3.7 -m Channels.News_Channel.news >/dev/null 2>&1
+5 * * * * cd /var/rc24/pack/ && /usr/local/bin/python3.7 newspack.py >/dev/null 2>&1

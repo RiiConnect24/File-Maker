@@ -1,0 +1,2 @@
+0 * * * * cd /var/rc24/File-Maker/ && /usr/bin/timeout 10m /usr/local/bin/python3.7 -m Channels.Forecast_Channel.forecast >/dev/null 2>&1
+5 * * * * cd /var/rc24/pack/ && /usr/local/bin/python3.7 forecastpack.py >/dev/null 2>&1

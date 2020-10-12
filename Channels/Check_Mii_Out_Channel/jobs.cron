@@ -1,0 +1,29 @@
+#generate top 50 miis once a week
+0 0 */5 * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./top50.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/top50.log
+
+#generate top 50 web miis once a week
+5 0 */5 * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./htmltop50.py > /dev/null 2>&1
+
+#generate popular list once a day
+0 0 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./popular.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/popular.log
+
+#generate popular web list once a day
+5 0 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./htmlpopular.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/popular2.log 2>&1
+
+#generate grab bag every 30 minutes
+*/30 * * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./randlist.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/randlist.log
+
+#generate popcrafts every 2 hours
+0 */2 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./popcrafts.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/popcrafts.log
+
+#generate artisan web list every 2 hours
+5 */2 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./htmlrankings.py >/dev/null 2>&1
+
+#generate contest web list every 2 hours
+5 */2 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./htmlcontest.py >/dev/null 2>&1
+
+#generate wii sports resort popular list every day
+0 0 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./wiisports.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/wsr.log
+
+#generate coninfo and condetail every 2 hours
+0 */2 * * * cd /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel && /usr/local/bin/python3.7 ./coninfo.py > /var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/logs/coninfo.log
