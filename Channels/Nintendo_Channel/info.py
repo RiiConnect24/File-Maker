@@ -1,12 +1,10 @@
 import binascii
 import collections
 import os
-import requests
 import struct
 import sys
 import textwrap
-import zipfile
-from bs4 import BeautifulSoup
+from ninfile2 import GameTDB
 
 def u8(data):
     if not 0 <= data <= 255:
@@ -41,40 +39,10 @@ if len(sys.argv) != 3:
         print("Error: Title ID must be 4 characters.")
     sys.exit(1)
 
-class gametdb():
-    def __init__(self):
-        self.databases = {
-            "Wii": ["wii", None],
-            # "3DS": ["3ds", None],
-            # "NDS": ["ds", None]
-        }
-
-        self.download()
-        make_info(self.parse())
-    
-    def download(self):
-        for k,v in self.databases.items():
-            print("Downloading {} Database from GameTDB...".format(k))
-            zip_filename = "{}tdb.zip".format(v[0])
-            if not os.path.exists(zip_filename):
-                url = "https://www.gametdb.com/{}".format(zip_filename)
-                r = requests.get(url, headers={"User-Agent": "Nintendo Channel Info Downloader"}) # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
-                open(zip_filename, 'wb').write(r.content)
-                self.zip = zipfile.ZipFile(zip_filename)
-                self.zip.extractall(".")
-                self.zip.close()
-
-    def parse(self):
-        for k,v in self.databases.items():
-            print("Parsing {}...".format(k))
-            v[1] = BeautifulSoup(open("{}tdb.xml".format(v[0]), "r").read(), "lxml")
-
-        return self.databases
-
 def enc(text, length):
     return text.encode("utf-16be").ljust(length, b'\0')[:length]
 
-class make_info(gametdb):
+class make_info():
     def __init__(self, databases):
         self.databases = databases
 
@@ -171,7 +139,7 @@ class make_info(gametdb):
 
     def write_gametdb_info(self):
         for s in self.databases[sys.argv[1]][1].datafile.find_all("game"):
-            if s.find("id").text[:4] == sys.argv[2]:
+            if s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
                 print("Found {}!".format(sys.argv[2]))
 
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
@@ -250,6 +218,8 @@ class make_info(gametdb):
 
                 print(self.header)
 
+                return
+
     
     def write_file(self):
         filename = sys.argv[2] + "-output.info"
@@ -282,4 +252,4 @@ class make_info(gametdb):
 
         self.writef2.close()
 
-gametdb()
+make_info(GameTDB().parse())

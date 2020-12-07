@@ -1,6 +1,9 @@
 import ninfile1
 import os
+import requests
 import struct
+import zipfile
+from bs4 import BeautifulSoup
 
 """Pack integers to specific type."""
 
@@ -63,6 +66,38 @@ def strIDToint(id):
 def intTostrID(id):
     id ^= 0x52433234
     return chr(id >> 24) + chr(id >> 16 & 0xFF) + chr(id >> 8 & 0xFF) + chr(id & 0xFF)
+
+class GameTDB():
+    def __init__(self):
+        self.databases = {
+            "Wii": ["wii", None],
+            # "3DS": ["3ds", None],
+            # "NDS": ["ds", None]
+        }
+
+        self.download()
+
+    def download(self):
+        for k, v in self.databases.items():
+            print("Downloading {} Database from GameTDB...".format(k))
+            zip_filename = "{}tdb.zip".format(v[0])
+            if not os.path.exists(zip_filename):
+                url = "https://www.gametdb.com/{}".format(zip_filename)
+                # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
+                r = requests.get(
+                    url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
+                open(zip_filename, 'wb').write(r.content)
+                self.zip = zipfile.ZipFile(zip_filename)
+                self.zip.extractall(".")
+                self.zip.close()
+
+    def parse(self):
+        for k, v in self.databases.items():
+            print("Parsing {}...".format(k))
+            v[1] = BeautifulSoup(
+                open("{}tdb.xml".format(v[0]), "r").read(), "lxml")
+
+        return self.databases
 
 class NintendoChannel:
     def __init__(self, ninfile):
@@ -128,39 +163,39 @@ class NintendoChannel:
         for i in range(0, 9):
             header["unknown_2_" + str(i)] = u8(self.ninfile["unknown_2"][i])
 
-        header["ratings_entry_number"] = u32(self.ninfile["ratings_entry_number"])
+        header["ratings_entry_number"] = u32(len(self.ninfile["ratings_table"]))
         header["ratings_table_offset"] = u32(0)
-        header["title_types_entry_number"] = u32(self.ninfile["title_types_entry_number"])
+        header["title_types_entry_number"] = u32(len(self.ninfile["title_types_table"]))
         header["title_types_table_offset"] = u32(0)
-        header["company_entry_number"] = u32(self.ninfile["company_entry_number"])
+        header["company_entry_number"] = u32(len(self.ninfile["company_table"]))
         header["company_table_offset"] = u32(0)
-        header["title_entry_number"] = u32(self.ninfile["title_entry_number"])
+        header["title_entry_number"] = u32(len(self.ninfile["title_table"]))
         header["title_table_offset"] = u32(0)
-        header["new_title_entry_number"] = u32(self.ninfile["new_title_entry_number"])
+        header["new_title_entry_number"] = u32(len(self.ninfile["new_title_table"]))
         header["new_title_table_offset"] = u32(0)
-        header["videos_1_entry_number"] = u32(self.ninfile["videos_1_entry_number"])
+        header["videos_1_entry_number"] = u32(len(self.ninfile["videos_1_table"]))
         header["videos_1_table_offset"] = u32(0)
-        header["new_video_entry_number"] = u32(self.ninfile["new_video_entry_number"])
+        header["new_video_entry_number"] = u32(len(self.ninfile["new_video_table"]))
         header["new_video_table_offset"] = u32(0)
-        header["demos_entry_number"] = u32(self.ninfile["demos_entry_number"])
+        header["demos_entry_number"] = u32(len(self.ninfile["demos_table"]))
         header["demos_table_offset"] = u32(0)
         header["unknown_5"] = u32(self.ninfile["unknown_5"])
         header["unknown_6"] = u32(self.ninfile["unknown_6"])
-        header["recommendations_entry_number"] = u32(self.ninfile["recommendations_entry_number"])
+        header["recommendations_entry_number"] = u32(len(self.ninfile["recommendations_table"]))
         header["recommendations_table_offset"] = u32(0)
 
         for i in range(0, 4):
             header["unknown_7_" + str(i)] = u32(self.ninfile["unknown_7"][i])
 
-        header["recent_recommendations_entry_number"] = u32(self.ninfile["recent_recommendations_entry_number"])
+        header["recent_recommendations_entry_number"] = u32(len(self.ninfile["recent_recommendations_table"]))
         header["recent_recommendations_table_offset"] = u32(0)
 
         for i in range(0, 2):
             header["unknown_8_" + str(i)] = u32(self.ninfile["unknown_8"][i])
 
-        header["popular_videos_entry_number"] = u32(self.ninfile["popular_videos_entry_number"])
+        header["popular_videos_entry_number"] = u32(len(self.ninfile["popular_videos_table"]))
         header["popular_videos_table_offset"] = u32(0)
-        header["detailed_ratings_entry_number"] = u32(self.ninfile["detailed_ratings_entry_number"])
+        header["detailed_ratings_entry_number"] = u32(len(self.ninfile["detailed_ratings_table"]))
         header["detailed_ratings_table_offset"] = u32(0)
         header["last_update"] = self.ninfile["last_update"].encode("utf-16be").rjust(62, b"\x00")
 
