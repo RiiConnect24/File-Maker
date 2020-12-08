@@ -498,77 +498,67 @@ def blank_data(forecast_list, key):
     globe[key]['lng'] = binascii.unhexlify(get_lng(forecast_list, key))
     globe[key]['time'] = get_epoch()
 
-
 def get_accuweather_api(forecast_list, key):
     accuapi = weather_data[key]
-    forecast = accuapi.find("{http://www.accuweather.com}forecast")
-    current_conditions = accuapi.find("{http://www.accuweather.com}currentconditions")
-    hourly_forecast = forecast.find("{http://www.accuweather.com}hourly")
-    airandpollen = accuapi.find("{http://www.accuweather.com}airandpollen")
-    current[key][3] = int(current_conditions[4].text)
+    aw = "{http://www.accuweather.com}"
+    forecast = accuapi.find(aw+"forecast")
+    current_conditions = accuapi.find(aw+"currentconditions")
+    hourly_forecast = accuapi.find(aw+"hourly")
+    airandpollen = accuapi.find(aw+"airandpollen")
+    current[key][3] = int(current_conditions.find(aw+"temperature").text)
     current[key][4] = to_celsius(current[key][3])
-    current[key][5] = get_icon(int(current_conditions[8].text), forecast_list, key)
-    current[key][0] = current_conditions[11].text
-    current[key][2] = int(current_conditions[10].text)
+    current[key][5] = get_icon(int(current_conditions.find(aw+"weathericon").text), forecast_list, key)
+    current[key][0] = current_conditions.find(aw+"winddirection").text
+    current[key][2] = int(current_conditions.find(aw+"windspeed").text)
     current[key][1] = mph_kmh(current[key][2])
-    today[key][1] = int(forecast[2][6][4].text)
-    today[key][2] = int(forecast[2][6][3].text)
+    today[key][1] = int(forecast[2].find(aw+"daytime").find(aw+"lowtemperature").text)
+    today[key][2] = int(forecast[2].find(aw+"daytime").find(aw+"hightemperature").text)
     today[key][3] = to_celsius(today[key][1])
     today[key][4] = to_celsius(today[key][2])
-    today[key][0] = get_icon(int(forecast[2][6][2].text), forecast_list, key)
-    tomorrow[key][1] = int(forecast[3][6][4].text)
-    tomorrow[key][2] = int(forecast[3][6][3].text)
+    today[key][0] = get_icon(int(forecast[2].find(aw+"daytime").find(aw+"weathericon").text), forecast_list, key)
+    tomorrow[key][1] = int(forecast[3].find(aw+"daytime").find(aw+"lowtemperature").text)
+    tomorrow[key][2] = int(forecast[3].find(aw+"daytime").find(aw+"hightemperature").text)
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = to_celsius(tomorrow[key][2])
-    tomorrow[key][0] = get_icon(int(forecast[3][6][2].text), forecast_list, key)
-    uvindex[key] = int(current_conditions[14].attrib['index'])
+    tomorrow[key][0] = get_icon(int(forecast[3].find(aw+"daytime").find(aw+"weathericon").text), forecast_list, key)
+    uvindex[key] = int(current_conditions.find(aw+"uvindex").attrib['index'])
     if uvindex[key] > 12:
         uvindex[key] = 12
-    wind[key][0] = mph_kmh(forecast[2][6][7].text)
-    wind[key][1] = int(forecast[2][6][7].text)
-    wind[key][2] = forecast[2][6][8].text
-    wind[key][3] = mph_kmh(forecast[3][6][7].text)
-    wind[key][4] = int(forecast[3][6][7].text)
-    wind[key][5] = forecast[3][6][8].text
-    grass = forecastlists.pollen_api[airandpollen[0].text]
-    tree = forecastlists.pollen_api[airandpollen[1].text]
-    ragweed = forecastlists.pollen_api[airandpollen[2].text]
+    wind[key][0] = mph_kmh(forecast[2].find(aw+"daytime").find(aw+"windspeed").text)
+    wind[key][1] = int(forecast[2].find(aw+"daytime").find(aw+"windspeed").text)
+    wind[key][2] = forecast[2].find(aw+"daytime").find(aw+"winddirection").text
+    wind[key][3] = mph_kmh(forecast[3].find(aw+"daytime").find(aw+"windspeed").text)
+    wind[key][4] = int(forecast[3].find(aw+"daytime").find(aw+"windspeed").text)
+    wind[key][5] = forecast[3].find(aw+"daytime").find(aw+"winddirection").text
+    if airandpollen:
+        grass = forecastlists.pollen_api[airandpollen.find(aw+"tree").text]
+        tree = forecastlists.pollen_api[airandpollen.find(aw+"grass").text]
+        ragweed = forecastlists.pollen_api[airandpollen.find(aw+"weed").text]
+    else:
+        grass = 2
+        tree = 2
+        ragweed = 2
     avg = int(round((grass+tree+ragweed)/3))
     pollen[key] = avg
-    precipitation[key][8] = int(forecast[3][6][19].text)
-    precipitation[key][9] = int(forecast[4][6][19].text)
-    precipitation[key][10] = int(forecast[5][6][19].text)
-    precipitation[key][11] = int(forecast[6][6][19].text)
-    precipitation[key][12] = int(forecast[7][6][19].text)
-    precipitation[key][13] = int(forecast[8][6][19].text)
-    precipitation[key][14] = int(forecast[9][6][19].text)
-    lat = float(accuapi[1].find("{http://www.accuweather.com}lat").text)
-    lng = float(accuapi[1].find("{http://www.accuweather.com}lon").text)
-    globe[key]['offset'] = float(accuapi[1].find("{http://www.accuweather.com}currentGmtOffset").text)
+    for i in range(3, 10):
+        if accudomain == "accuwxandroidv3":
+            precipitation[key][i+5] = int(forecast[i].find(aw+"daytime").find(aw+"precipitationProbability").text)
+        else:
+            precipitation[key][i+5] = int(0)
+    lat = float(accuapi[1].find(aw+"lat").text)
+    lng = float(accuapi[1].find(aw+"lon").text)
+    globe[key]['offset'] = float(accuapi[1].find(aw+"currentGmtOffset").text)
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
-    week[key][0] = int(forecast[3][6][3].text)
-    week[key][1] = int(forecast[3][6][4].text)
-    week[key][2] = int(forecast[4][6][3].text)
-    week[key][3] = int(forecast[4][6][4].text)
-    week[key][4] = int(forecast[5][6][3].text)
-    week[key][5] = int(forecast[5][6][4].text)
-    week[key][6] = int(forecast[6][6][3].text)
-    week[key][7] = int(forecast[6][6][4].text)
-    week[key][8] = int(forecast[7][6][3].text)
-    week[key][9] = int(forecast[7][6][4].text)
-    week[key][10] = int(forecast[8][6][3].text)
-    week[key][11] = int(forecast[8][6][4].text)
-    week[key][12] = int(forecast[9][6][3].text)
-    week[key][13] = int(forecast[9][6][4].text)
+    i = 0
+    for j in range(3, 10):
+        week[key][i] = int(forecast[j].find(aw+"daytime").find(aw+"hightemperature").text)
+        i += 1
+        week[key][i] = int(forecast[j].find(aw+"daytime").find(aw+"lowtemperature").text)
+        i += 1
     for i in range(0, 14):
         week[key][i+14] = to_celsius(week[key][i])
-    week[key][30] = get_icon(int(forecast[3][6][2].text), forecast_list, key)
-    week[key][31] = get_icon(int(forecast[4][6][2].text), forecast_list, key)
-    week[key][32] = get_icon(int(forecast[5][6][2].text), forecast_list, key)
-    week[key][33] = get_icon(int(forecast[6][6][2].text), forecast_list, key)
-    week[key][34] = get_icon(int(forecast[7][6][2].text), forecast_list, key)
-    week[key][35] = get_icon(int(forecast[8][6][2].text), forecast_list, key)
-    week[key][36] = get_icon(int(forecast[9][6][2].text), forecast_list, key)
+    for i in range(30, 37):
+        week[key][i] = get_icon(int(forecast[i-26].find(aw+"daytime").find(aw+"weathericon").text), forecast_list, key)
     
     time_index = [[3,9,15,21], [27,33,39,45]]
     hourlyAvg = [-3,-2,-1,0,1,2]
@@ -581,12 +571,15 @@ def get_accuweather_api(forecast_list, key):
             hourlyAvgIcons = []
             for k in hourlyAvg:
                 if validHour(temp+k):
-                    precip.append(int(hourly_forecast[temp+k][12].text))
-                    hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+k][0].text), forecast_list, key))
+                    if accudomain == "accuwxandroidv3":
+                        precip.append(int(hourly_forecast[temp+k][12].text))
+                        hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+k].find(aw+"weathericon").text), forecast_list, key))
+                    else:
+                        precip.append(int(0))
             if len(precip) > 0 and isJapan(forecast_list, key): precipitation[key][j + index_offset] = int(round(sum(precip)/len(precip), -1))
             modeValue = mode_calc(hourlyAvgIcons)
             if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][j + index_offset] = modeValue
-            elif validHour(temp): hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp][0].text), forecast_list, key)
+            elif validHour(temp) and accudomain == "accuwxandroidv3": hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp].find(aw+"weathericon").text), forecast_list, key)
             else: hourly[key][j + index_offset] = get_icon(int(-1), forecast_list, key)
 
     if check_coords(forecast_list,key,lat,lng):
@@ -834,7 +827,7 @@ def get_data(forecast_list, key):
     blank_data(forecast_list, key)
     lat = coord_decode(get_lat(forecast_list, key))
     lon = coord_decode(get_lng(forecast_list, key))
-    weather_data[key] = request_data("http://{}/widget/accuwxandroidv3/weather-data.asp?slat={}&slon={}".format(ip, lat, lon))
+    weather_data[key] = request_data("http://{}/widget/{}/weather-data.asp?slat={}&slon={}".format(ip, accudomain, lat, lon))
 
 
 def make_header_short(forecast_list):
@@ -1193,10 +1186,10 @@ with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
 if config["production"] and config["send_logs"]:
     setup_log(config["sentry_url"], False)
-
+accudomain = config["accudomain"]
 s = requests.Session()  # Use session to speed up requests
-s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'accuwxandroidv3.accu-weather.com'})
-ip = socket.gethostbyname("accuwxandroidv3.accu-weather.com")
+s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': '{}.accu-weather.com'.format(accudomain)})
+ip = socket.gethostbyname("{}.accu-weather.com".format(accudomain))
 total_time = time.time()
 q = queue.Queue()
 threads = []
