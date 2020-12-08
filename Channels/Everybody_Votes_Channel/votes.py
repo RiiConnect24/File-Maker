@@ -766,7 +766,7 @@ def make_question_text(question_text_table):
 
 prepare()
 if arg != "w":
-    for country_code in country_codes[1:]:
+    for country_code in country_codes:
         make_bin(country_code)
 else:
     make_bin(country_code)

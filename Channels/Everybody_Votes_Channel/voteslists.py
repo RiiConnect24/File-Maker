@@ -139,7 +139,7 @@ language_num[8] = "French Canada"
 
 country_language = collections.OrderedDict()
 
-country_language[1] = [0]
+country_language[1] = [1]
 country_language[10] = [1, 4, 8]
 country_language[16] = [1, 4, 7, 8]
 country_language[18] = [1, 4, 8]
