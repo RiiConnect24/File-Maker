@@ -20,7 +20,6 @@ import os
 import pathlib
 import pickle
 import shutil
-import socket
 import subprocess
 import sys
 import threading
@@ -66,6 +65,7 @@ globe = {}
 weatherloc = {}
 cache = {}
 laundry = {}
+location_keys = {}
 
 
 def to_celsius(temp):
@@ -251,12 +251,12 @@ def close_threads():
 
 def refresh(type):
     # Uses ANSI escape codes
-    if type == 0:
+    """if type == 0:
         print("\033[2J")  # Erase display command
     elif type == 1:
         os.system('cls')  # Clear screen
     else:
-        print("\033[F\033[K" * 20)  # Clear each line individually
+        print("\033[F\033[K" * 20)  # Clear each line individually"""
 
 
 def ui():
@@ -272,11 +272,11 @@ def ui():
             refresh_type = 0
         else:
             refresh_type = 1
-        os.system('cls')
+        # os.system('cls')
     else:
         display = "✓"
         refresh_type = 2
-        os.system('clear')
+        # os.system('clear')
     while not ui_run:
         pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
@@ -324,8 +324,8 @@ def ui():
         sys.stdout.write(out)
         sys.stdout.flush()
         time.sleep(REFRESH_RATE)
-    print("\n")
-    """Log stuff to Datadog."""
+        print("\n")
+        
     if config["production"] and config["send_stats"]:    
         statsd.increment("forecast.api_requests", apirequests)
         statsd.increment("forecast.retry_count", retrycount)
@@ -377,7 +377,7 @@ def request_data(url):
                 c = True
             i += 1
         except: i += 1
-    return data.content
+    return data.json()
 
 
 def timestamps(mode, key=None):
@@ -500,87 +500,68 @@ def blank_data(forecast_list, key):
 
 def get_accuweather_api(forecast_list, key):
     accuapi = weather_data[key]
-    aw = "{http://www.accuweather.com}"
-    forecast = accuapi.find(aw+"forecast")
-    current_conditions = accuapi.find(aw+"currentconditions")
-    hourly_forecast = accuapi.find(aw+"hourly")
-    airandpollen = accuapi.find(aw+"airandpollen")
-    current[key][3] = int(current_conditions.find(aw+"temperature").text)
-    current[key][4] = to_celsius(current[key][3])
-    current[key][5] = get_icon(int(current_conditions.find(aw+"weathericon").text), forecast_list, key)
-    current[key][0] = current_conditions.find(aw+"winddirection").text
-    current[key][2] = int(current_conditions.find(aw+"windspeed").text)
-    current[key][1] = mph_kmh(current[key][2])
-    today[key][1] = int(forecast[2].find(aw+"daytime").find(aw+"lowtemperature").text)
-    today[key][2] = int(forecast[2].find(aw+"daytime").find(aw+"hightemperature").text)
+    data_current = accuapi["current"]
+    data_quarters = accuapi["quarters"]
+    data_10day = accuapi["10day"]
+    current[key][3] = int(data_current["Temperature"][0]["Imperial"][0]["Value"])
+    current[key][4] = int(data_current["Temperature"][0]["Metric"][0]["Value"])
+    current[key][5] = get_icon(int(current["WeatherIcon"]), forecast_list, key)
+    current[key][0] = current["Wind"][0]["Direction"][0]["English"]
+    current[key][2] = int(data_current["Wind"][0]["Speed"][0]["Imperial"][0]["Value"])
+    current[key][1] = int(data_current["Wind"][0]["Speed"][0]["Metric"][0]["Value"])
+    today[key][1] = int(data_10day["DailyForecasts"][0][0]["Temperature"][0]["Minimum"][0]["Value"])
+    today[key][2] = int(data_10day["DailyForecasts"][0][0]["Temperature"][0]["Maximum"][0]["Value"])
     today[key][3] = to_celsius(today[key][1])
     today[key][4] = to_celsius(today[key][2])
-    today[key][0] = get_icon(int(forecast[2].find(aw+"daytime").find(aw+"weathericon").text), forecast_list, key)
-    tomorrow[key][1] = int(forecast[3].find(aw+"daytime").find(aw+"lowtemperature").text)
-    tomorrow[key][2] = int(forecast[3].find(aw+"daytime").find(aw+"hightemperature").text)
+    today[key][0] = get_icon(int(data_10day["DailyForecasts"][0][0]["Day"][0]["Icon"]), forecast_list, key)
+    tomorrow[key][1] = int(data_10day["DailyForecasts"][1][0]["Temperature"][0]["Minimum"][0]["Value"])
+    tomorrow[key][2] = int(data_10day["DailyForecasts"][1][0]["Temperature"][0]["Maximum"][0]["Value"])
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = to_celsius(tomorrow[key][2])
-    tomorrow[key][0] = get_icon(int(forecast[3].find(aw+"daytime").find(aw+"weathericon").text), forecast_list, key)
-    uvindex[key] = int(current_conditions.find(aw+"uvindex").attrib['index'])
+    tomorrow[key][0] = get_icon(int(data_10day["DailyForecasts"][1][0]["Day"][0]["Icon"]), forecast_list, key)
+    uvindex[key] = int(data_10day["DailyForecasts"][0][0]["AirAndPollen"][5][0]["Value"])
     if uvindex[key] > 12:
         uvindex[key] = 12
-    wind[key][0] = mph_kmh(forecast[2].find(aw+"daytime").find(aw+"windspeed").text)
-    wind[key][1] = int(forecast[2].find(aw+"daytime").find(aw+"windspeed").text)
-    wind[key][2] = forecast[2].find(aw+"daytime").find(aw+"winddirection").text
-    wind[key][3] = mph_kmh(forecast[3].find(aw+"daytime").find(aw+"windspeed").text)
-    wind[key][4] = int(forecast[3].find(aw+"daytime").find(aw+"windspeed").text)
-    wind[key][5] = forecast[3].find(aw+"daytime").find(aw+"winddirection").text
+    i = 0
+    wind[key][0] = mph_kmh(int(data_10day["DailyForecasts"][0][0]["Wind"][0]["Speed"][0]["Value"]))
+    wind[key][1] = int(data_10day["DailyForecasts"][0][0]["Wind"][0]["Speed"][0]["Value"])
+    wind[key][2] = data_10day["DailyForecasts"][0][0]["Wind"][0]["Direction"][0]["English"]
+    wind[key][3] = mph_kmh(int(data_10day["DailyForecasts"][1][0]["Wind"][0]["Speed"][0]["Value"]))
+    wind[key][4] = int(data_10day["DailyForecasts"][1][0]["Wind"][0]["Speed"][0]["Value"])
+    wind[key][5] = data_10day["DailyForecasts"][1][0]["Wind"][0]["Direction"][0]["English"]
     if airandpollen:
-        grass = forecastlists.pollen_api[airandpollen.find(aw+"tree").text]
-        tree = forecastlists.pollen_api[airandpollen.find(aw+"grass").text]
-        ragweed = forecastlists.pollen_api[airandpollen.find(aw+"weed").text]
+        grass = forecastlists.pollen_api[data_10day["DailyForecasts"][0][0]["AirAndPollen"][1][0]["Value"]]
+        tree = forecastlists.pollen_api[data_10day["DailyForecasts"][0][0]["AirAndPollen"][4][0]["Value"]]
+        ragweed = forecastlists.pollen_api[data_10day["DailyForecasts"][0][0]["AirAndPollen"][3][0]["Value"]]
     else:
         grass = 2
         tree = 2
         ragweed = 2
     avg = int(round((grass+tree+ragweed)/3))
     pollen[key] = avg
-    for i in range(3, 10):
-        if accudomain == "accuwxandroidv3":
-            precipitation[key][i+5] = int(forecast[i].find(aw+"daytime").find(aw+"precipitationProbability").text)
-        else:
-            precipitation[key][i+5] = int(0)
+    for i in range(0, 8):
+        precipitation[key][i] = int(data_quarters[i][0]["PrecipitationProbability"])
+    for i in range(8, 15):
+        precipitation[key][i] = int(data_10day[i-8][0]["Day"][0]["PrecipitationProbability"])
     lat = float(accuapi[1].find(aw+"lat").text)
     lng = float(accuapi[1].find(aw+"lon").text)
-    globe[key]['offset'] = float(accuapi[1].find(aw+"currentGmtOffset").text)
+    localdatetime = data_current[0][0]["LocalObservationDateTime"]
+    globe[key]['offset'] = float(localdatetime[20:22].lstrip("0")) + float(localdatetime[23:25].lstrip("0") / 60)
+    if data_current[0][0]["LocalObservationDateTime"][19] == "-":
+        globe[key]['offset'] *= -1
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
-    i = 0
-    for j in range(3, 10):
-        week[key][i] = int(forecast[j].find(aw+"daytime").find(aw+"hightemperature").text)
-        i += 1
-        week[key][i] = int(forecast[j].find(aw+"daytime").find(aw+"lowtemperature").text)
-        i += 1
+
+    for i in range(0, 14, 2):
+        week[key][i] = int(data_10day[i][0]["Temperature"][0]["Maximum"][0]["Value"])
+    for i in range(1, 14, 2):
+        week[key][i] = int(data_10day[i][0]["Temperature"][0]["Minimum"][0]["Value"])
     for i in range(0, 14):
         week[key][i+14] = to_celsius(week[key][i])
-    for i in range(30, 37):
-        week[key][i] = get_icon(int(forecast[i-26].find(aw+"daytime").find(aw+"weathericon").text), forecast_list, key)
+    for i in range(0, 8):
+        week[key][i+30] = get_icon(int(data_10day[i][0]["Icon"]), forecast_list, key)
     
-    time_index = [[3,9,15,21], [27,33,39,45]]
-    hourlyAvg = [-3,-2,-1,0,1,2]
-    hour = (datetime.utcnow() + timedelta(hours=globe[key]['offset'])).hour
-    for i in [0,1]:
-        index_offset = 0 if i == 0 else 4
-        for j in range(0,4):
-            temp = time_index[i][j] - hour
-            precip = []
-            hourlyAvgIcons = []
-            for k in hourlyAvg:
-                if validHour(temp+k):
-                    if accudomain == "accuwxandroidv3":
-                        precip.append(int(hourly_forecast[temp+k][12].text))
-                        hourlyAvgIcons.append(get_icon(int(hourly_forecast[temp+k].find(aw+"weathericon").text), forecast_list, key))
-                    else:
-                        precip.append(int(0))
-            if len(precip) > 0 and isJapan(forecast_list, key): precipitation[key][j + index_offset] = int(round(sum(precip)/len(precip), -1))
-            modeValue = mode_calc(hourlyAvgIcons)
-            if len(hourlyAvgIcons) >= 3 and modeValue: hourly[key][j + index_offset] = modeValue
-            elif validHour(temp) and accudomain == "accuwxandroidv3": hourly[key][j + index_offset] = get_icon(int(hourly_forecast[temp].find(aw+"weathericon").text), forecast_list, key)
-            else: hourly[key][j + index_offset] = get_icon(int(-1), forecast_list, key)
+    for i in range(0, 8):
+        hourly[key][i] = get_icon(int(data_quarters[i][0]["Icon"]), forecast_list, key)
 
     if check_coords(forecast_list,key,lat,lng):
         globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
@@ -821,13 +802,25 @@ def packVFF(language_code, country_code):
 
 
 def get_data(forecast_list, key):
-    global citycount, cache, weather_data
+    global config, citycount, cache, location_keys, weather_data
     citycount += 1
     cache[key] = get_all(forecast_list, key)
     blank_data(forecast_list, key)
     lat = coord_decode(get_lat(forecast_list, key))
     lon = coord_decode(get_lng(forecast_list, key))
-    weather_data[key] = request_data("http://{}/widget/{}/weather-data.asp?slat={}&slon={}".format(ip, accudomain, lat, lon))
+    if config["download_locations"]:
+        location_key = request_data(
+            "https://api.accuweather.com/locations/v1/cities/geoposition/search.json?q={},{}&apikey={}".format(lat, lon, api_key))["Key"]
+        location_keys["{},{}".format(lat, lon)] = location_key
+    else:
+        location_key = location_keys["{},{}".format(lat, lon)]
+    weather_data[key] = {}
+    weather_data[key]["current"] = request_data(
+        "https://api.accuweather.com/currentconditions/v1/{}?apikey={}&details=true".format(location_key, api_key))
+    weather_data[key]["quarters"] = request_data(
+        "https://api.accuweather.com/forecasts/v1/daily/5day/quarters/{}?apikey={}".format(location_key, api_key))
+    weather_data[key]["10day"] = request_data(
+        "https://api.accuweather.com/forecasts/v1/daily/10day/{}?apikey={}".format(location_key, api_key))
 
 
 def make_header_short(forecast_list):
@@ -1174,10 +1167,11 @@ def get_wind_direction(degrees):
 
 
 def dump_db():
-    db = {"update_time": time.time(), "location_keys": weatherloc, "local_times": times, "laundry_indexes": laundry,
-          "pollen_indexes": pollen, "globe_data": globe, "wind_speed": wind, "uvindexes": uvindex,
-          "current_forecast": current, "precipitation": precipitation, "hourly_forecast": hourly,
-          "tomorrow_forecast": tomorrow, "week_forecast": week, "today_forecast": today, "key_cache": cache}
+    # db = {"update_time": time.time(), "location_keys": weatherloc, "local_times": times, "laundry_indexes": laundry,
+    #      "pollen_indexes": pollen, "globe_data": globe, "wind_speed": wind, "uvindexes": uvindex,
+    #      "current_forecast": current, "precipitation": precipitation, "hourly_forecast": hourly,
+    #      "tomorrow_forecast": tomorrow, "week_forecast": week, "today_forecast": today, "key_cache": cache}
+    db = {"location_keys": location_keys}
     with open('weather.db', 'wb') as f:
         pickle.dump(db, f)
 
@@ -1186,14 +1180,14 @@ with open("./Channels/Forecast_Channel/config.json", "rb") as f:
     config = json.load(f)
 if config["production"] and config["send_logs"]:
     setup_log(config["sentry_url"], False)
-accudomain = config["accudomain"]
+location_keys = pickle.load(open("weather.db", "rb"))["location_keys"]
+api_key = "6e30dc9ea2aa4d3eb99ad8f6630174cd"
 s = requests.Session()  # Use session to speed up requests
-s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': '{}.accu-weather.com'.format(accudomain)})
-ip = socket.gethostbyname("{}.accu-weather.com".format(accudomain))
+s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'api.accuweather.com'})
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 10 if config["multithreaded"] else 1
+concurrent = 20 if config["multithreaded"] else 1
 file_gen = 3 if config["wii_u_generation"] else 2
 ui_run = None
 threads_run = True
