@@ -251,12 +251,12 @@ def close_threads():
 
 def refresh(type):
     # Uses ANSI escape codes
-    """if type == 0:
+    if type == 0:
         print("\033[2J")  # Erase display command
     elif type == 1:
         os.system('cls')  # Clear screen
     else:
-        print("\033[F\033[K" * 20)  # Clear each line individually"""
+        print("\033[F\033[K" * 20)  # Clear each line individually
 
 
 def ui():
@@ -500,85 +500,80 @@ def blank_data(forecast_list, key):
 
 def get_accuweather_api(forecast_list, key):
     accuapi = weather_data[key]
-    data_current = accuapi["current"]
+    data_current = accuapi["current"][0]
     data_quarters = accuapi["quarters"]
     data_10day = accuapi["10day"]
-    current[key][3] = int(data_current["Temperature"][0]["Imperial"][0]["Value"])
-    current[key][4] = int(data_current["Temperature"][0]["Metric"][0]["Value"])
-    current[key][5] = get_icon(int(current["WeatherIcon"]), forecast_list, key)
-    current[key][0] = current["Wind"][0]["Direction"][0]["English"]
-    current[key][2] = int(data_current["Wind"][0]["Speed"][0]["Imperial"][0]["Value"])
-    current[key][1] = int(data_current["Wind"][0]["Speed"][0]["Metric"][0]["Value"])
-    today[key][1] = int(data_10day["DailyForecasts"][0][0]["Temperature"][0]["Minimum"][0]["Value"])
-    today[key][2] = int(data_10day["DailyForecasts"][0][0]["Temperature"][0]["Maximum"][0]["Value"])
+    current[key][3] = int(data_current["Temperature"]["Imperial"]["Value"])
+    current[key][4] = int(data_current["Temperature"]["Metric"]["Value"])
+    current[key][5] = get_icon(int(data_current["WeatherIcon"]), forecast_list, key)
+    current[key][0] = data_current["Wind"]["Direction"]["English"]
+    current[key][2] = int(data_current["Wind"]["Speed"]["Imperial"]["Value"])
+    current[key][1] = int(data_current["Wind"]["Speed"]["Metric"]["Value"])
+    today[key][1] = int(data_10day["DailyForecasts"][0]["Temperature"]["Minimum"]["Value"])
+    today[key][2] = int(data_10day["DailyForecasts"][0]["Temperature"]["Maximum"]["Value"])
     today[key][3] = to_celsius(today[key][1])
     today[key][4] = to_celsius(today[key][2])
-    today[key][0] = get_icon(int(data_10day["DailyForecasts"][0][0]["Day"][0]["Icon"]), forecast_list, key)
-    tomorrow[key][1] = int(data_10day["DailyForecasts"][1][0]["Temperature"][0]["Minimum"][0]["Value"])
-    tomorrow[key][2] = int(data_10day["DailyForecasts"][1][0]["Temperature"][0]["Maximum"][0]["Value"])
+    today[key][0] = get_icon(int(data_10day["DailyForecasts"][0]["Day"]["Icon"]), forecast_list, key)
+    tomorrow[key][1] = int(data_10day["DailyForecasts"][1]["Temperature"]["Minimum"]["Value"])
+    tomorrow[key][2] = int(data_10day["DailyForecasts"][1]["Temperature"]["Maximum"]["Value"])
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = to_celsius(tomorrow[key][2])
-    tomorrow[key][0] = get_icon(int(data_10day["DailyForecasts"][1][0]["Day"][0]["Icon"]), forecast_list, key)
-    uvindex[key] = int(data_10day["DailyForecasts"][0][0]["AirAndPollen"][5][0]["Value"])
+    tomorrow[key][0] = get_icon(int(data_10day["DailyForecasts"][1]["Day"]["Icon"]), forecast_list, key)
+    uvindex[key] = int(data_10day["DailyForecasts"][0]["AirAndPollen"][5]["Value"])
     if uvindex[key] > 12:
         uvindex[key] = 12
-    i = 0
-    wind[key][0] = mph_kmh(int(data_10day["DailyForecasts"][0][0]["Wind"][0]["Speed"][0]["Value"]))
-    wind[key][1] = int(data_10day["DailyForecasts"][0][0]["Wind"][0]["Speed"][0]["Value"])
-    wind[key][2] = data_10day["DailyForecasts"][0][0]["Wind"][0]["Direction"][0]["English"]
-    wind[key][3] = mph_kmh(int(data_10day["DailyForecasts"][1][0]["Wind"][0]["Speed"][0]["Value"]))
-    wind[key][4] = int(data_10day["DailyForecasts"][1][0]["Wind"][0]["Speed"][0]["Value"])
-    wind[key][5] = data_10day["DailyForecasts"][1][0]["Wind"][0]["Direction"][0]["English"]
-    if airandpollen:
-        grass = forecastlists.pollen_api[data_10day["DailyForecasts"][0][0]["AirAndPollen"][1][0]["Value"]]
-        tree = forecastlists.pollen_api[data_10day["DailyForecasts"][0][0]["AirAndPollen"][4][0]["Value"]]
-        ragweed = forecastlists.pollen_api[data_10day["DailyForecasts"][0][0]["AirAndPollen"][3][0]["Value"]]
-    else:
+    wind[key][0] = mph_kmh(int(data_10day["DailyForecasts"][0]["Day"]["Wind"]["Speed"]["Value"]))
+    wind[key][1] = int(data_10day["DailyForecasts"][0]["Day"]["Wind"]["Speed"]["Value"])
+    wind[key][2] = data_10day["DailyForecasts"][0]["Day"]["Wind"]["Direction"]["English"]
+    wind[key][3] = mph_kmh(int(data_10day["DailyForecasts"][1]["Day"]["Wind"]["Speed"]["Value"]))
+    wind[key][4] = int(data_10day["DailyForecasts"][1]["Day"]["Wind"]["Speed"]["Value"])
+    wind[key][5] = data_10day["DailyForecasts"][1]["Day"]["Wind"]["Direction"]["English"]
+    try:
+        grass = forecastlists.pollen_api[data_10day["DailyForecasts"][0]["AirAndPollen"][1]["Value"]]
+        tree = forecastlists.pollen_api[data_10day["DailyForecasts"][0]["AirAndPollen"][4]["Value"]]
+        ragweed = forecastlists.pollen_api[data_10day["DailyForecasts"][0]["AirAndPollen"][3]["Value"]]
+    except:
         grass = 2
         tree = 2
         ragweed = 2
     avg = int(round((grass+tree+ragweed)/3))
     pollen[key] = avg
     for i in range(0, 8):
-        precipitation[key][i] = int(data_quarters[i][0]["PrecipitationProbability"])
+        precipitation[key][i] = int(data_quarters[i]["PrecipitationProbability"])
     for i in range(8, 15):
-        precipitation[key][i] = int(data_10day[i-8][0]["Day"][0]["PrecipitationProbability"])
-    lat = float(accuapi[1].find(aw+"lat").text)
-    lng = float(accuapi[1].find(aw+"lon").text)
-    localdatetime = data_current[0][0]["LocalObservationDateTime"]
-    globe[key]['offset'] = float(localdatetime[20:22].lstrip("0")) + float(localdatetime[23:25].lstrip("0") / 60)
-    if data_current[0][0]["LocalObservationDateTime"][19] == "-":
+        precipitation[key][i] = int(data_10day["DailyForecasts"][i-8]["Day"]["PrecipitationProbability"])
+    # lat = float(accuapi[1].find(aw+"lat").text)
+    # lng = float(accuapi[1].find(aw+"lon").text)
+    localdatetime = data_current["LocalObservationDateTime"]
+    globe[key]['offset'] = float(localdatetime[20:22]) + float(int(localdatetime[23:25]) / 60)
+    if data_current["LocalObservationDateTime"][19] == "-":
         globe[key]['offset'] *= -1
     globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
 
+    j = 1
     for i in range(0, 14, 2):
-        week[key][i] = int(data_10day[i][0]["Temperature"][0]["Maximum"][0]["Value"])
+        week[key][i] = int(data_10day["DailyForecasts"][j]["Temperature"]["Maximum"]["Value"])
+        j += 1
+    j = 1
     for i in range(1, 14, 2):
-        week[key][i] = int(data_10day[i][0]["Temperature"][0]["Minimum"][0]["Value"])
+        week[key][i] = int(data_10day["DailyForecasts"][j]["Temperature"]["Minimum"]["Value"])
+        j += 1
     for i in range(0, 14):
         week[key][i+14] = to_celsius(week[key][i])
     for i in range(0, 8):
-        week[key][i+30] = get_icon(int(data_10day[i][0]["Icon"]), forecast_list, key)
+        week[key][i+30] = get_icon(int(data_10day["DailyForecasts"][i+1]["Day"]["Icon"]), forecast_list, key)
     
     for i in range(0, 8):
-        hourly[key][i] = get_icon(int(data_quarters[i][0]["Icon"]), forecast_list, key)
+        hourly[key][i] = get_icon(int(data_quarters[i]["Icon"]), forecast_list, key)
 
-    if check_coords(forecast_list,key,lat,lng):
+    """if check_coords(forecast_list,key,lat,lng):
         globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
-        globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))
+        globe[key]['lng'] = s16(int(lng / GLOBE_CONSTANT))"""
 
 
 def parse_data(forecast_list):
     global weather_data
     for k, v in weather_data.items():
-        try:
-            weather_data[k] = ElementTree.fromstring(v)
-            if weather_data[k].find("{http://www.accuweather.com}failure"):
-                weather_data[k] = None
-        except Exception as e:
-            log("An API parsing exception has occurred: %s" % e, "WARNING")
-            weather_data[k] = None
-            continue
         if weather_data[k]:
             get_accuweather_api(forecast_list, k)
         else:
@@ -820,7 +815,7 @@ def get_data(forecast_list, key):
     weather_data[key]["quarters"] = request_data(
         "https://api.accuweather.com/forecasts/v1/daily/5day/quarters/{}?apikey={}".format(location_key, api_key))
     weather_data[key]["10day"] = request_data(
-        "https://api.accuweather.com/forecasts/v1/daily/10day/{}?apikey={}".format(location_key, api_key))
+        "https://api.accuweather.com/forecasts/v1/daily/10day/{}?apikey={}&details=true".format(location_key, api_key))
 
 
 def make_header_short(forecast_list):
@@ -1096,8 +1091,8 @@ def make_location_table(forecast_list):
         location_table["city_text_offset_%s" % keyIndex] = u32(0)  # Offset for location's city text
         location_table["region_text_offset_%s" % keyIndex] = u32(0)  # Offset for location's region text
         location_table["country_text_offset_%s" % keyIndex] = u32(0)  # Offset for location's country text
-        location_table["latitude_coordinates_%s" % keyIndex] = globe[key]['lat']  # Latitude coordinates for location on globe
-        location_table["longitude_coordinates_%s" % keyIndex] = globe[key]['lng']  # Longitude coordinates for location on globe
+        location_table["latitude_coordinates_%s" % keyIndex] = binascii.unhexlify(get_lat(forecast_list, key))  # Latitude coordinates for location on globe
+        location_table["longitude_coordinates_%s" % keyIndex] = binascii.unhexlify(get_lng(forecast_list, key))  # Longitude coordinates for location on globe
         location_table["location_zoom_1_%s" % keyIndex] = binascii.unhexlify(zoom(forecast_list, key, 1))  # Location zoom for location on globe
         location_table["location_zoom_2_%s" % keyIndex] = binascii.unhexlify(zoom(forecast_list, key, 2))  # Location zoom for location on globe
         location_table["padding_%s" % keyIndex] = u16(0)
