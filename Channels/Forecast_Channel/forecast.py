@@ -34,7 +34,7 @@ from datadog import statsd
 from Channels.Forecast_Channel import forecastlists
 from utils import setup_log, log, u8, u16, u32, s8, s16
 
-VERSION = 5.0
+VERSION = 5.1
 GLOBE_CONSTANT = (360 / 65536)
 REFRESH_RATE = 0.15
 apirequests = 0  # API Request Counter
@@ -276,7 +276,7 @@ def ui():
     else:
         display = "✓"
         refresh_type = 2
-        # os.system('clear')
+        os.system('clear')
     while not ui_run:
         pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
@@ -284,6 +284,8 @@ def ui():
     header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2020\n\n"
     if config["production"]:
         header += " " * 13 + "*** Production Mode Enabled ***\n"
+    else:
+        header += " " * 13 + "*** Production Mode Disabled ***\n"
     while ui_run:
         # Calculate values to show on screen
         dl = len(forecast_list) - cached > 0
@@ -324,15 +326,7 @@ def ui():
         sys.stdout.write(out)
         sys.stdout.flush()
         time.sleep(REFRESH_RATE)
-        print("\n")
-        
-    if config["production"] and config["send_stats"]:    
-        statsd.increment("forecast.api_requests", apirequests)
-        statsd.increment("forecast.retry_count", retrycount)
-        statsd.increment("forecast.elapsed_time", elapsed_time)
-        statsd.increment("forecast.bandwidth_usage", bandwidth)
-        statsd.increment("forecast.cities", cities)
-        statsd.increment("forecast.errors", errors)
+    print("\n")
 
 
 def get_icon(icon, forecast_list, key):
@@ -1178,11 +1172,11 @@ if config["production"] and config["send_logs"]:
 location_keys = pickle.load(open("weather.db", "rb"))["location_keys"]
 api_key = "6e30dc9ea2aa4d3eb99ad8f6630174cd"
 s = requests.Session()  # Use session to speed up requests
-s.headers.update({'Accept-Encoding': 'gzip, deflate', 'Host': 'api.accuweather.com'})
+s.headers.update({'Host': 'api.accuweather.com'}) # using gzip actually seems to slow it down a bit
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 20 if config["multithreaded"] else 1
+concurrent = 10 if config["multithreaded"] else 1
 file_gen = 3 if config["wii_u_generation"] else 2
 ui_run = None
 threads_run = True
@@ -1226,18 +1220,27 @@ time.sleep(REFRESH_RATE)
 close_threads()
 dump_db()
 
-if config["production"] and config["send_webhooks"]:
-    """This will use a webhook to log that the script has been ran."""
-    data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
-            "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
-            {"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script",
-             "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png",
-             "text": "Weather Data has been updated!", "title": "Update!",
-             "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}],
-             "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
-             "footer_icon": "https://rc24.xyz/images/logo-small.png",
-             "ts": int(calendar.timegm(datetime.utcnow().timetuple()))}]}
-    for url in config["webhook_urls"]:
-        post_webhook = requests.post(url, json=data, allow_redirects=True)
+if config["production"]:
+    if config["send_stats"]:
+        # log stuff to Datadog
+        statsd.increment("forecast.api_requests", apirequests)
+        statsd.increment("forecast.retry_count", retrycount)
+        statsd.increment("forecast.elapsed_time", elapsed_time)
+        statsd.increment("forecast.bandwidth_usage", bandwidth)
+        statsd.increment("forecast.cities", cities)
+        statsd.increment("forecast.errors", errors)
+    if config["send_webhooks"]:
+        # this will use a webhook to log that the script has been ran.
+        data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
+                "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
+                {"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script",
+                "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png",
+                "text": "Weather Data has been updated!", "title": "Update!",
+                "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}],
+                "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
+                "footer_icon": "https://rc24.xyz/images/logo-small.png",
+                "ts": int(calendar.timegm(datetime.utcnow().timetuple()))}]}
+        for url in config["webhook_urls"]:
+            post_webhook = requests.post(url, json=data, allow_redirects=True)
 
 print("Completed Successfully")
