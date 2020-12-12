@@ -159,11 +159,11 @@ def enc(text):
 
 # resize the image and strip metadata (to make the image size smaller)
 
-def shrink_image(data, resize, source): # Resize the image and strip metadata (to make the image size smaller).
-    if data == "" or data is None: return None
+def shrink_image(data, resize, source, session): # Resize the image and strip metadata (to make the image size smaller).
+    if not data or data == "": return None
 
     try:
-        picture = requests.get(data).content
+        picture = session.get(data).content
     except requests.exceptions.ReadTimeout:
         return None
     except requests.exceptions.MissingSchema:
@@ -295,7 +295,7 @@ def locations_download(language_code, data): # using Google Maps API is so much 
     for keys, values in list(data.items()):
         location = values[7]
 
-        if location is not None and location is not "":
+        if location and location != "":
             if location not in locations:
                 locations[location] = [None, None, []]
 
@@ -502,6 +502,7 @@ class Parse(News):
         self.resize = resize
         self.html = html
         self.soup = soup
+        self.session = requests.Session()
 
         if self.source != "AP" or self.source != "Reuters":
             init = self.newspaper_init()
@@ -531,7 +532,7 @@ class Parse(News):
         except:
             return []
         return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
-                shrink_image(self.picture, self.resize, self.source), enc(self.credits), enc(self.caption),
+                shrink_image(self.picture, self.resize, self.source, self.session), enc(self.credits), enc(self.caption),
                 self.location, self.source]
 
     def newspaper_init(self):
@@ -551,7 +552,7 @@ class Parse(News):
 
     def parse_ap(self):
         try:
-            self.newsdata = requests.get(self.url).json()
+            self.newsdata = self.session.get(self.url).json()
         except:
             self.article = None
             return
@@ -605,7 +606,7 @@ class Parse(News):
 
     def parse_reuters(self):
         try:
-            self.newsdata = requests.get(self.url).json()["wireitems"][0]["templates"][0]["story"]
+            self.newsdata = self.session.get(self.url).json()["wireitems"][0]["templates"][0]["story"]
         except Exception as e:
             print(e)
             return []
