@@ -34,133 +34,161 @@ import importlib
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-if config["production"]: setup_log(config["sentry_url"], True)
+if config["production"]:
+    setup_log(config["sentry_url"], True)
 
 # define information about news sources
 
 sources = {
     # urls string argument is category key
     # reference parse_feed
-
     "ap_english": {
         "name": "AP",
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "en",
-        "cat": collections.OrderedDict([
-            ("apf-usnews", "national"),
-            ("apf-intlnews", "world"),
-            ("apf-sports", "sports"),
-            ("apf-entertainment", "entertainment"),
-            ("apf-business", "business"),
-            ("apf-science", "science"),
-            ("apf-Health", "science"),
-            ("apf-technology", "technology"),
-            ("apf-oddities", "oddities")
-        ])
+        "cat": {
+            "apf-usnews": "national",
+            "apf-intlnews": "world",
+            "apf-sports": "sports",
+            "apf-entertainment": "entertainment",
+            "apf-business": "business",
+            "apf-science": "science",
+            "apf-Health": "science",
+            "apf-technology": "technology",
+            "apf-oddities": "oddities",
+        },
     },
     "ap_spanish": {
         "name": "AP",
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "es",
-        "cat": collections.OrderedDict([
-            ("apf-Noticias", "general"),
-            ("apf-Finanzas", "finance"),
-            ("apf-Deportes", "sports"),
-            ("apf-Entretenimiento", "shows")
-        ])
+        "cat": {
+            "apf-Noticias": "general",
+            "apf-Finanzas": "finance",
+            "apf-Deportes": "sports",
+            "apf-Entretenimiento": "shows",
+        },
     },
     "reuters_europe_english": {
         "name": "Reuters",
         "url": "https://wireapi.reuters.com/v7/feed/rapp/uk/tabbar/feeds/%s",
         "lang": "en",
-        "cat": collections.OrderedDict([
-            ("world", "world"),
-            ("uk", "uk"),
-            ("science", "science"),
-            ("tech", "technology"),
-            ("entertainment", "entertainment"),
-            ("sports", "sports"),
-            ("lifestyle", "lifestyle"),
-            ("business", "business")
-        ])
+        "cat": {
+            "world": "world",
+            "uk": "uk",
+            "science": "science",
+            "tech": "technology",
+            "entertainment": "entertainment",
+            "sports": "sports",
+            "lifestyle": "lifestyle",
+            "business": "business",
+        },
     },
     "afp_french": {
         "name": "AFP_French",
         "url": "https://www.lepoint.fr/tags/rss/AFP.xml",
         "url2": "https://www.lepoint.fr/24h-infos/rss.xml",
         "lang": "fr",
-        "cat": collections.OrderedDict([
-            ("monde", "world"),
-            ("sport", "sports"),
-            ("societe", "society"),
-            ("culture", "culture"),
-            ("economie", "economy"),
-            ("politique", "politics")
-        ])
+        "cat": {
+            "monde": "world",
+            "sport": "sports",
+            "societe": "society",
+            "culture": "culture",
+            "economie": "economy",
+            "politique": "politics",
+        },
     },
     "afp_german": {
         "name": "AFP",
         "url": "http://www.dtoday.de/feed/%s.xml",
         "lang": "de",
-        "cat": collections.OrderedDict([
-            ("16-nachrichten-ueberregional", "world"),
-            ("12-panorama-ueberregional", "panorama"),
-            ("14-politik-ueberregional", "politics"),
-            ("13-wirtschaft-ueberregional", "economy"),
-            ("15-sport-ueberregional", "sports")
-        ])
+        "cat": {
+            "16-nachrichten-ueberregional": "world",
+            "12-panorama-ueberregional": "panorama",
+            "14-politik-ueberregional": "politics",
+            "13-wirtschaft-ueberregional": "economy",
+            "15-sport-ueberregional": "sports",
+        },
     },
     "ansa_italian": {
         "name": "ANSA",
         "url": "http://ansa.it/sito/notizie/%s/%s_rss.xml",
         "url2": "http://ansa.it/%s/notizie/%s_rss.xml",
         "lang": "it",
-        "cat": collections.OrderedDict([
-            ("mondo", "world"),
-            ("sport", "sports"),
-            ("economia", "economy"),
-            ("tecnologia", "technology"),
+        "cat": {
+            "mondo": "world",
+            "sport": "sports",
+            "economia": "economy",
+            "tecnologia": "technology",
             # yeah this is a mess, shame on ANSA for seemingly not having an all-Italian feed
-            ("italy", ["abruzzo", "basilicata", "calabria", "campania", "emiliaromagna", "friuliveneziagiulia", "lazio", "liguria", "lombardia",
-              "marche", "molise", "piemonte", "puglia", "sardegna", "sicilia", "toscana", "trentino", "umbria", "valledaosta", "veneto"])
-        ])
+            "italy": [
+                "abruzzo",
+                "basilicata",
+                "calabria",
+                "campania",
+                "emiliaromagna",
+                "friuliveneziagiulia",
+                "lazio",
+                "liguria",
+                "lombardia",
+                "marche",
+                "molise",
+                "piemonte",
+                "puglia",
+                "sardegna",
+                "sicilia",
+                "toscana",
+                "trentino",
+                "umbria",
+                "valledaosta",
+                "veneto",
+            ],
+        },
     },
     "anp_dutch": {
         "name": "ANP",
         "url": "https://nieuws.nl/feed/",
         "lang": "nl",
-        "cat": collections.OrderedDict([
-            ("algemeen", "general"),
-            ("economie", "economy"),
-            ("sport", "sports"),
-            ("entertainment", "entertainment"),
-            ("lifestyle", "lifestyle")
-        ])
+        "cat": {
+            "algemeen": "general",
+            "economie": "economy",
+            "sport": "sports",
+            "entertainment": "entertainment",
+            "lifestyle": "lifestyle",
+        },
     },
     "reuters_japanese": {
         "name": "Reuters",
         "url": "https://wireapi.reuters.com/v7/feed/rapp/jp/tabbar/feeds/%s",
         "lang": "ja",
-        "cat": collections.OrderedDict([
-            ("world", "world"),
-            ("business", "business"),
-            ("sports", "sports"),
-            ("technology", "technology"),
-            ("entertainment", "entertainment")
-        ])
-    }
+        "cat": {
+            "world": "world",
+            "business": "business",
+            "sports": "sports",
+            "technology": "technology",
+            "entertainment": "entertainment",
+        },
+    },
 }
 
 # encode the text
 
+
 def enc(text):
     if text:
-        return ftfy.fix_encoding(HTMLParser().unescape(text)).encode("utf-16be", "replace")
+        return ftfy.fix_encoding(HTMLParser().unescape(text)).encode(
+            "utf-16be", "replace"
+        )
+
 
 # resize the image and strip metadata (to make the image size smaller)
 
-def shrink_image(data, resize, source, session): # Resize the image and strip metadata (to make the image size smaller).
-    if not data or data == "": return None
+
+def shrink_image(
+    data, resize, source, session
+):  # Resize the image and strip metadata (to make the image size smaller).
+    if not data or data == "":
+        return None
 
     try:
         picture = session.get(data).content
@@ -168,7 +196,7 @@ def shrink_image(data, resize, source, session): # Resize the image and strip me
         return None
     except requests.exceptions.MissingSchema:
         return None
-    
+
     try:
         image = Image.open(BytesIO(picture))
     except IOError:
@@ -188,13 +216,14 @@ def shrink_image(data, resize, source, session): # Resize the image and strip me
     image_without_exif.putdata(data)
 
     buffer = BytesIO()
-    image_without_exif.save(buffer, format='jpeg')
+    image_without_exif.save(buffer, format="jpeg")
 
     return buffer.getvalue()
 
+
 # these are common locations for cities so we don't have to waste API calls if they're used a lot
 
-cities = collections.OrderedDict() 
+cities = {}
 
 cities["AMSTERDAM"] = ["253d0379", "Amsterdam"]
 cities["ATLANTA"] = ["17ffc3fe", "Atlanta"]
@@ -271,15 +300,20 @@ cities["STOCKHOLM"] = ["2a200cd5", "Stockholm"]
 cities["SYDNEY"] = ["e7e76b8c", "Sydney"]
 cities["TOKYO"] = ["19606363", "Tokyo"]
 cities["TORONTO"] = ["1f13c787", "Toronto"]
-cities["UNITED NATIONS"] = ["1cf0cb78", "United Nations"] # maps to the UN offices in New York
+cities["UNITED NATIONS"] = [
+    "1cf0cb78",
+    "United Nations",
+]  # maps to the UN offices in New York
 cities["VATICAN CITY"] = ["1dcc08db", "Vatican City"]
 cities["VIENNA"] = ["223d0ba0", "Vienna"]
 cities["WASHINGTON"] = ["1ba8c938", "Washington D.C."]
 cities["ZURICH"] = ["21a40610", "Zürich"]
 
 
-def locations_download(language_code, data): # using Google Maps API is so much better than the crap Nintendo used for say, AP news.
-    locations = collections.OrderedDict()
+def locations_download(
+    language_code, data
+):  # using Google Maps API is so much better than the crap Nintendo used for say, AP news.
+    locations = {}
     gmaps = googlemaps.Client(key=config["google_maps_api_key"])
 
     languages = {  # corresponds to the Wii's language codes
@@ -305,7 +339,9 @@ def locations_download(language_code, data): # using Google Maps API is so much 
         if name == "":
             continue
 
-        uni_name = name if languages[language_code] == "ja" else unidecode(name) # if using unidecode with Japanese, it'll translate all the characters to English
+        uni_name = (
+            name if languages[language_code] == "ja" else unidecode(name)
+        )  # if using unidecode with Japanese, it'll translate all the characters to English
 
         print(uni_name)
 
@@ -326,13 +362,22 @@ def locations_download(language_code, data): # using Google Maps API is so much 
                 country = u8(0)
                 region = u8(0)
                 location = u16(0)
-                zoom_factor = u32_littleendian(6) # Nintendo used the value of 3 for states and countries but we probably don't have any articles that are just states or countries
+                zoom_factor = u32_littleendian(
+                    6
+                )  # Nintendo used the value of 3 for states and countries but we probably don't have any articles that are just states or countries
 
-                coordinates = s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536))) + \
-                                s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536))) + \
-                                country + region + location + zoom_factor # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max int for a 16-bit int
+                coordinates = (
+                    s16(int(read[0]["geometry"]["location"]["lat"] / (360 / 65536)))
+                    + s16(int(read[0]["geometry"]["location"]["lng"] / (360 / 65536)))
+                    + country
+                    + region
+                    + location
+                    + zoom_factor
+                )  # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max int for a 16-bit int
             except Exception as e:
-                ex = "There was a error downloading the location data - line {}: {}".format(sys.exc_info()[-1].tb_lineno, str(e))
+                ex = "There was a error downloading the location data - line {}: {}".format(
+                    sys.exc_info()[-1].tb_lineno, str(e)
+                )
                 print(ex)
                 log(ex, "INFO")
 
@@ -345,13 +390,15 @@ def locations_download(language_code, data): # using Google Maps API is so much 
         else:
             del locations[name]
             continue
-        
+
         if locations[name][1] is None:
             locations[name][1] = loc_name
 
     return locations
 
+
 # download the news
+
 
 class News:
     def __init__(self, source):
@@ -359,7 +406,7 @@ class News:
         self.sourceinfo = sources[self.source]
         self.url = self.sourceinfo["url"]
         self.language = self.sourceinfo["lang"]
-        self.newsdata = collections.OrderedDict()
+        self.newsdata = {}
 
         self.source = self.sourceinfo["name"]
 
@@ -372,25 +419,31 @@ class News:
 
     def feed(self):
         print("Downloading News from {}...\n".format(self.source))
-        
+
         i = 0
 
         for key, value in list(self.sourceinfo["cat"].items()):
             if isinstance(value, list):
-                for v in random.sample(value, len(value)): # reverse and mix up the list
+                for v in random.sample(
+                    value, len(value)
+                ):  # reverse and mix up the list
                     i = self.parse_feed(v, key, i)
             else:
                 i = self.parse_feed(key, value, i)
-            
+
     def parse_feed(self, key, value, i):
         if self.source == "AP" or self.source == "Reuters":
             try:
                 news_url = self.url % key
 
                 if self.source == "Reuters":
-                    news_url += "?since=" + str(int((time.mktime(datetime.utcnow().timetuple()))) * 10000000000)
+                    news_url += "?since=" + str(
+                        int((time.mktime(datetime.utcnow().timetuple()))) * 10000000000
+                    )
 
-                feed = requests.get(news_url).json() # we use AP's API to download their news, it's epic and it uses JSON
+                feed = requests.get(
+                    news_url
+                ).json()  # we use AP's API to download their news, it's epic and it uses JSON
             except:
                 return i
         elif self.source == "AFP_French" or self.source == "ANP":
@@ -412,7 +465,7 @@ class News:
             entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
         else:
             entries = feed.entries
-        
+
         for entry in entries:
             try:
                 if self.source == "AP":
@@ -427,25 +480,33 @@ class News:
                     except:
                         continue
 
-                current_time = int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
+                current_time = int(
+                    (time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60
+                )
 
                 if self.source == "AP":
                     update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
                 elif self.source == "Reuters":
-                    update = time.strptime(entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
+                    update = time.strptime(
+                        entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
+                    )
                 else:
                     update = entry["updated_parsed"]
-                
+
                 updated_time = int((time.mktime(update) - 946684800) / 60)
 
                 if self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 180
 
-                if current_time - updated_time < 60:  # if it's a new article since the last hour
+                if (
+                    current_time - updated_time < 60
+                ):  # if it's a new article since the last hour
                     i += 1
                     j += 1
 
-                    if i > 25:  # in case we have too many articles, we don't want the news file to get too big, there's a limit
+                    if (
+                        i > 25
+                    ):  # in case we have too many articles, we don't want the news file to get too big, there's a limit
                         break
 
                     if self.source == "AFP_French" or self.source == "ANP_Dutch":
@@ -472,23 +533,40 @@ class News:
                     else:
                         entry_url = entry["link"]
 
-                    downloaded_news = Parse(entry_url, self.source, updated_time, title, self.language).get_news()
+                    downloaded_news = Parse(
+                        entry_url, self.source, updated_time, title, self.language
+                    ).get_news()
 
                     if downloaded_news:
                         self.newsdata[value + str(j)] = downloaded_news
             except Exception as e:
-                ex = "Failed to parse feed - line {}: {}".format(sys.exc_info()[-1].tb_lineno, str(e))
+                ex = "Failed to parse feed - line {}: {}".format(
+                    sys.exc_info()[-1].tb_lineno, str(e)
+                )
                 print(ex)
                 log(ex, "INFO")
                 continue
-                
+
         return i
 
 
-
 class Parse(News):
-    def __init__(self, url, source, updated_time, headline, language, article=None, picture=None, credits=None, caption=None,
-                 location=None, resize=None, html=None, soup=None):
+    def __init__(
+        self,
+        url,
+        source,
+        updated_time,
+        headline,
+        language,
+        article=None,
+        picture=None,
+        credits=None,
+        caption=None,
+        location=None,
+        resize=None,
+        html=None,
+        soup=None,
+    ):
         self.url = url
         self.source = source
         self.updated_time = updated_time
@@ -527,20 +605,28 @@ class Parse(News):
         elif self.article == "" or self.article is None:
             return []
         try:
-            _ = enc(self.headline).replace(b'\n', b'').decode("utf-16be")
-            _ = enc(self.article).replace(b'\n', b'').decode("utf-16be")
+            _ = enc(self.headline).replace(b"\n", b"").decode("utf-16be")
+            _ = enc(self.article).replace(b"\n", b"").decode("utf-16be")
         except:
             return []
-        return [u32(self.updated_time), u32(self.updated_time), enc(self.article), enc(self.headline),
-                shrink_image(self.picture, self.resize, self.source, self.session), enc(self.credits), enc(self.caption),
-                self.location, self.source]
+        return [
+            u32(self.updated_time),
+            u32(self.updated_time),
+            enc(self.article),
+            enc(self.headline),
+            shrink_image(self.picture, self.resize, self.source, self.session),
+            enc(self.credits),
+            enc(self.caption),
+            self.location,
+            self.source,
+        ]
 
     def newspaper_init(self):
         self.newsdata = newspaper.Article(self.url, language=self.language)
         self.newsdata.download()
         try:
             self.newsdata.parse()
-        except newspaper.article.ArticleException: # trying again
+        except newspaper.article.ArticleException:  # trying again
             self.newsdata.parse()
         except newspaper.article.ArticleException:
             return []
@@ -568,14 +654,19 @@ class Parse(News):
         else:
             self.article = None
             return
-        
+
         try:
-            self.article = newspaper.fulltext(self.newsdata["storyHTML"], language=self.language)
+            self.article = newspaper.fulltext(
+                self.newsdata["storyHTML"], language=self.language
+            )
         except AttributeError:
             self.article = None
             return
 
-        self.article = self.article.replace("\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.", "")
+        self.article = self.article.replace(
+            "\n\nYour browser does not support the iframe HTML tag. Try viewing this in a modern browser like Chrome, Safari, Firefox or Internet Explorer 9 or later.",
+            "",
+        )
 
         if self.article[-2:] == "\n":
             self.article = self.article[:-2]
@@ -583,15 +674,21 @@ class Parse(News):
         if self.newsdata["bylines"] != "" and self.newsdata["bylines"] != None:
             self.article += "\n\n" + self.newsdata["bylines"]
 
-        if "storyHTML" in self.article: # get rid of broken articles that have the headline and article both matching
+        if (
+            "storyHTML" in self.article
+        ):  # get rid of broken articles that have the headline and article both matching
             self.article = None
             return
-        
+
         if self.newsdata["mediaCount"] > 0 and self.newsdata["media"] != []:
             if self.newsdata["media"][0]["imageMimeType"] == "image/jpeg":
                 self.resize = True
 
-                self.picture = self.newsdata["media"][0]["gcsBaseUrl"] + "400" + self.newsdata["media"][0]["imageFileExtension"]
+                self.picture = (
+                    self.newsdata["media"][0]["gcsBaseUrl"]
+                    + "400"
+                    + self.newsdata["media"][0]["imageFileExtension"]
+                )
 
                 self.caption = self.newsdata["media"][0]["flattenedCaption"]
 
@@ -606,13 +703,17 @@ class Parse(News):
 
     def parse_reuters(self):
         try:
-            self.newsdata = self.session.get(self.url).json()["wireitems"][0]["templates"][0]["story"]
+            self.newsdata = self.session.get(self.url).json()["wireitems"][0][
+                "templates"
+            ][0]["story"]
         except Exception as e:
             print(e)
             return []
 
         try:
-            self.article = newspaper.fulltext(self.newsdata["body"], language=self.language)
+            self.article = newspaper.fulltext(
+                self.newsdata["body"], language=self.language
+            )
 
             self.caption = self.newsdata["images"][0]["caption"]
 
@@ -649,14 +750,23 @@ class Parse(News):
                 line = buf.readlines()[-1]
                 buf = StringIO(self.article)
                 self.location = line.strip()[22:-19]
-                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace("\n\n" + line, "")
+                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace(
+                    "\n\n" + line, ""
+                )
         except AttributeError:
             pass
 
     def parse_afp_german(self):
-        if " (SID)" in self.article.split("\n")[2] or " (AFP)" in self.article.split("\n")[4]:
+        if (
+            " (SID)" in self.article.split("\n")[2]
+            or " (AFP)" in self.article.split("\n")[4]
+        ):
             split = self.article.split("\n")
-            for s in split: # remove caption text from being the first paragraph of the article
+            for (
+                s
+            ) in (
+                split
+            ):  # remove caption text from being the first paragraph of the article
                 if "© AFP" in s or "© SID" in s:
                     del split[split.index(s) - 1]
                     del split[split.index(s)]
@@ -667,8 +777,12 @@ class Parse(News):
 
         try:
             self.resize = True
-            self.caption = self.soup.find("div", {"class": "articleimg_full"}).find("span").text
-            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find("img")["src"]
+            self.caption = (
+                self.soup.find("div", {"class": "articleimg_full"}).find("span").text
+            )
+            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find(
+                "img"
+            )["src"]
         except AttributeError:
             pass
 
@@ -683,12 +797,18 @@ class Parse(News):
     def parse_ansa(self):
         try:
             self.resize = True
-            self.credits = self.soup.find("div", {"class": "news-caption hidden-phone"}).find("em").text
+            self.credits = (
+                self.soup.find("div", {"class": "news-caption hidden-phone"})
+                .find("em")
+                .text
+            )
         except AttributeError:
             pass
 
         try:
-            self.location = self.soup.find("span", {"itemprop": "dateline"}, {"class": "location"}).text
+            self.location = self.soup.find(
+                "span", {"itemprop": "dateline"}, {"class": "location"}
+            ).text
         except AttributeError:
             pass
 
@@ -700,7 +820,9 @@ class Parse(News):
             pass
 
         try:
-            self.location = self.soup.find("meta", {"property": "og:description"})["content"].split(" (ANP) - ")[0]
+            self.location = self.soup.find("meta", {"property": "og:description"})[
+                "content"
+            ].split(" (ANP) - ")[0]
             self.article = self.location + " (ANP) - " + self.article
         except:
             pass
