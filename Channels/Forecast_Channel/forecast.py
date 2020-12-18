@@ -9,33 +9,30 @@
 # Copyright (c) 2015-2020 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
-import queue
 import binascii
 import calendar
-import collections
 import io
 import json
-import nlzss
 import os
 import pathlib
 import pickle
+import queue
 import shutil
 import subprocess
 import sys
 import threading
 import time
-import xml.etree.cElementTree as ElementTree
-from datetime import datetime, timedelta
+from datetime import datetime
 
+import nlzss
 import requests
 import rsa
-from datadog import statsd
-
 from Channels.Forecast_Channel import forecastlists
-from utils import setup_log, log, u8, u16, u32, s8, s16
+from datadog import statsd
+from utils import setup_log, log, u8, u16, u32, s8
 
 VERSION = 5.1
-GLOBE_CONSTANT = (360 / 65536)
+GLOBE_CONSTANT = 360 / 65536
 REFRESH_RATE = 0.15
 apirequests = 0  # API Request Counter
 seek_offset = 0  # Seek Offset Location
@@ -49,7 +46,7 @@ bw_usage = 0  # Bandwidth Usage Counter
 lists = 0  # Lists Counter
 errors = 0  # Errors
 bandwidth = 0.0  # Bandwidth
-file = None # Forecast file which is currently open
+file = None  # Forecast file which is currently open
 
 uvindex = {}
 wind = {}
@@ -108,7 +105,18 @@ def get_country(forecast_list, key):
 
 
 def get_all(forecast_list, key):
-    return ", ".join(list(filter(None, [get_city(forecast_list, key), get_region(forecast_list, key), get_country(forecast_list, key)])))
+    return ", ".join(
+        list(
+            filter(
+                None,
+                [
+                    get_city(forecast_list, key),
+                    get_region(forecast_list, key),
+                    get_country(forecast_list, key),
+                ],
+            )
+        )
+    )
 
 
 def pad(amnt):
@@ -118,27 +126,34 @@ def pad(amnt):
 def get_lat(forecast_list, key):
     return forecast_list[key][3][:4]
 
+
 def get_lng(forecast_list, key):
     return forecast_list[key][3][:8][4:]
 
 
-def isJapan(forecast_list,key):
+def isJapan(forecast_list, key):
     return forecast_list[key][2][1] == "Japan"
+
 
 def matches_country_code(forecast_list, key):
     v = forecast_list[key]
     if v[2][1] in forecastlists.bincountries:
-        return hex(int(str(forecastlists.bincountries[v[2][1]])))[2:].zfill(2) == hex(country_code)[2:].zfill(2)
+        return hex(int(str(forecastlists.bincountries[v[2][1]])))[2:].zfill(2) == hex(
+            country_code
+        )[2:].zfill(2)
     return False
 
 
 def check_coords(forecast_list, key, lat, lng):
     global errors
     """ Verify Location Coordinates """
-    if abs(lat-coord_decode(binascii.hexlify(globe[key]['lat']))) >= 2 or abs(lng-coord_decode(binascii.hexlify(globe[key]['lng']))) >= 2:
+    if (
+            abs(lat - coord_decode(binascii.hexlify(globe[key]["lat"]))) >= 2
+            or abs(lng - coord_decode(binascii.hexlify(globe[key]["lng"]))) >= 2
+    ):
         if config["check_coordinates"]:
             log("Coordinate Inaccuracy Detected: %s" % key, "WARNING")
-        errors+=1
+        errors += 1
         blank_data(forecast_list, key)
         return
 
@@ -153,7 +168,10 @@ def get_bins(country_code):
     elif 64 <= country_code <= 110:
         bins = [1, 2, 3, 4, 5, 6]
     else:
-        log("Unknown country code %s - generating English only" % country_code, "WARNING")
+        log(
+            "Unknown country code %s - generating English only" % country_code,
+            "WARNING",
+        )
         bins = [1]
     return bins
 
@@ -161,10 +179,10 @@ def get_bins(country_code):
 def get_region_flag(country_code):
     if country_code == 1:
         return 0
-    elif country_code in [8,9,12,14,17,19,37,43,48,49,51]:
-        return 1 # Fahrenheit
+    elif country_code in [8, 9, 12, 14, 17, 19, 37, 43, 48, 49, 51]:
+        return 1  # Fahrenheit
     else:
-        return 2 # Celsius
+        return 2  # Celsius
 
 
 def coord_decode(value):
@@ -173,27 +191,34 @@ def coord_decode(value):
         value -= 0x10000
     return value * GLOBE_CONSTANT
 
+
 def validHour(hour):
     return True if -1 < hour < 24 else False
 
+
 def mode_calc(forecast_list):
-    if not forecast_list: return
+    if not forecast_list:
+        return
     temp = {}
     for i in forecast_list:
-        if i not in temp: temp[i] = 1
-        else: temp[i] += 1
+        if i not in temp:
+            temp[i] = 1
+        else:
+            temp[i] += 1
 
     largestValue = 0
     largestKey = None
     duplicate = False
-    for k,v in temp.items():
+    for k, v in temp.items():
         if v > largestValue:
             largestValue = v
             largestKey = k
             duplicate = False
-        elif v == largestValue: duplicate = True
+        elif v == largestValue:
+            duplicate = True
 
-    if not duplicate: return largestKey
+    if not duplicate:
+        return largestKey
 
 
 def populate_international(forecast_list):
@@ -213,7 +238,7 @@ def size(data):
 
 def get_bandwidth_usage(r):
     req = len(r.request.method + r.request.path_url) + size(r.request.headers) + 12
-    resp = len(r.reason) + size(r.headers) + int(r.headers['Content-Length']) + 15
+    resp = len(r.reason) + size(r.headers) + int(r.headers["Content-Length"]) + 15
     return req + resp
 
 
@@ -227,7 +252,9 @@ def worker():
             pass
         except Exception as e:
             log("A thread exception has occurred: %s" % e, "CRITICAL")
-            blank_data(item[0], item[1]) # Since item data is in an unknown state, reset it
+            blank_data(
+                item[0], item[1]
+            )  # Since item data is in an unknown state, reset it
             q.task_done()
             continue
 
@@ -235,15 +262,17 @@ def worker():
 def spawn_threads():
     global threads
     for i in range(concurrent):
-            t = threading.Thread(target=worker)
-            t.daemon = True
-            threads.append(t)
-            t.start()
+        t = threading.Thread(target=worker)
+        t.daemon = True
+        threads.append(t)
+        t.start()
+
 
 def close_threads():
     global threads_run, ui_run
     threads_run = False
-    for t in threads: t.join()
+    for t in threads:
+        t.join()
 
     ui_run = False
     ui_thread.join()
@@ -254,7 +283,7 @@ def refresh(type):
     if type == 0:
         print("\033[2J")  # Erase display command
     elif type == 1:
-        os.system('cls')  # Clear screen
+        os.system("cls")  # Clear screen
     else:
         print("\033[F\033[K" * 20)  # Clear each line individually
 
@@ -264,8 +293,8 @@ def ui():
     progcount = 0
     bar = 35  # Size of progress bars
     i = 0  # Counter for building progress bar
-    if os.name == 'nt': # Windows
-        display = '*'
+    if os.name == "nt":  # Windows
+        display = "*"
         os.system("title Forecast Downloader - v%s" % VERSION)
         ver = sys.getwindowsversion()
         if ver[0] == 6 and ver[1] == 2:
@@ -276,7 +305,7 @@ def ui():
     else:
         display = "✓"
         refresh_type = 2
-        os.system('clear')
+        os.system("clear")
     while not ui_run:
         pass  # Wait for main loop to start
     header = "=" * 64 + "\n\n"
@@ -291,11 +320,17 @@ def ui():
         dl = len(forecast_list) - cached > 0
         elapsed_time = int(round(time.time() - total_time))
         bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
-        totalpercent = int(round(float(lists) / float(len(forecastlists.weathercities)) * 100))
+        totalpercent = int(
+            round(float(lists) / float(len(forecastlists.weathercities)) * 100)
+        )
         totalfill = int(totalpercent * 35 / 100)
         totalprog = "[" + "#" * totalfill + " " * (35 - totalfill) + "]"
         if status == 1:
-            percent = int(round(float(citycount) / float(len(forecast_list) - cached) * 100)) if dl else 0
+            percent = (
+                int(round(float(citycount) / float(len(forecast_list) - cached) * 100))
+                if dl
+                else 0
+            )
             fill = int(round(percent * bar / 100))
             progbar = str(percent) + "% [" + "=" * fill + " " * (bar - fill) + "]"
         else:
@@ -303,20 +338,43 @@ def ui():
             progbar = "[" + " " * i + "=" * 5 + (bar - i - 2) * " " + "]"
         # Build output
         out = header
-        out += "API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (apirequests, retrycount, elapsed_time)
-        out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (bandwidth, cities, errors)
+        out += "API Requests: [%s] API Retries: [%s] Time: [%s]\n" % (
+            apirequests,
+            retrycount,
+            elapsed_time,
+        )
+        out += "Bandwidth Usage: [%s MiB] Cities: [%s] Errors: [%s]\n" % (
+            bandwidth,
+            cities,
+            errors,
+        )
         out += "\nProcessing List #%s/%s (%s): %s %s\n\n" % (
-        listid, len(forecastlists.weathercities), country_code, currentlist, "." * progcount)
-        if status == 1 and dl: out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
-        else: out += "Downloading Forecasts [%s] 100%%\n" % display
-        if status == 2: out += "Parsing Data [%s]\n" % prog[progcount]
-        elif status == 1: out += "Parsing Data [-]\n"
-        else: out += "Parsing Data [%s]" % display + "\n"
-        if status == 3: out += "Generating Data [%s]\n" % prog[progcount]
-        elif status == 4: out += "Generating Data [%s]" % display + "\n"
-        else: out += "Generating Data [-]\n"
-        if status == 4: out += "Building Files [%s]\n\n" % prog[progcount]
-        else: out += "Building Files [-]\n\n"
+            listid,
+            len(forecastlists.weathercities),
+            country_code,
+            currentlist,
+            "." * progcount,
+        )
+        if status == 1 and dl:
+            out += "Downloading Forecasts [%s] %s%%\n" % (prog[progcount], percent)
+        else:
+            out += "Downloading Forecasts [%s] 100%%\n" % display
+        if status == 2:
+            out += "Parsing Data [%s]\n" % prog[progcount]
+        elif status == 1:
+            out += "Parsing Data [-]\n"
+        else:
+            out += "Parsing Data [%s]" % display + "\n"
+        if status == 3:
+            out += "Generating Data [%s]\n" % prog[progcount]
+        elif status == 4:
+            out += "Generating Data [%s]" % display + "\n"
+        else:
+            out += "Generating Data [-]\n"
+        if status == 4:
+            out += "Building Files [%s]\n\n" % prog[progcount]
+        else:
+            out += "Building Files [-]\n\n"
         out += "List Progress:  %s" % progbar
         out += "\nTotal Progress: %s%% " % totalpercent + totalprog
         out += "\n\n" + "=" * 64
@@ -330,8 +388,9 @@ def ui():
 
 
 def get_icon(icon, forecast_list, key):
-    if icon == -1: return 'FFFF'
-    if isJapan(forecast_list,key):
+    if icon == -1:
+        return "FFFF"
+    if isJapan(forecast_list, key):
         return forecastlists.weatherconditions[icon][3]
     else:
         return forecastlists.weatherconditions[icon][1]
@@ -370,13 +429,15 @@ def request_data(url):
             if status_code == 200:
                 c = True
             i += 1
-        except: i += 1
+        except:
+            i += 1
     return data.json()
 
 
 def timestamps(mode, key=None):
     time = time_convert(get_epoch())
-    if key: citytime = time_convert(globe[key]['time'])
+    if key:
+        citytime = time_convert(globe[key]["time"])
     if mode == 0:
         timestamp = time
     elif mode == 1:
@@ -391,20 +452,23 @@ def get_locationkey(forecast_list, key):
     region = get_region(forecast_list, key)
     city = get_city(forecast_list, key)
     listid = forecastlists.weathercities.index(forecast_list)
-    if region == '' and (country not in forecastlists.bincountries or matches_country_code(forecast_list, key)):
-        a = hex(weatherloc[listid]['null'][city])[2:].zfill(4)
-        b = 'FE'
-        c = 'FE'
-    elif region == '' and not matches_country_code(forecast_list, key):
-        a = hex(weatherloc[listid]['no-region'][country][city])[2:].zfill(4)
-        if weatherloc[listid]['count'][country][region] > 1:
-            b = 'FE'
+    if region == "" and (
+            country not in forecastlists.bincountries
+            or matches_country_code(forecast_list, key)
+    ):
+        a = hex(weatherloc[listid]["null"][city])[2:].zfill(4)
+        b = "FE"
+        c = "FE"
+    elif region == "" and not matches_country_code(forecast_list, key):
+        a = hex(weatherloc[listid]["no-region"][country][city])[2:].zfill(4)
+        if weatherloc[listid]["count"][country][region] > 1:
+            b = "FE"
         else:
-            b = '01'
+            b = "01"
         c = hex(forecastlists.bincountries[country])[2:].zfill(2)
     else:
         a = hex(weatherloc[listid][country][region][city])[2:].zfill(4)
-        b = hex(weatherloc[listid]['regions'][country][region])[2:].zfill(2)
+        b = hex(weatherloc[listid]["regions"][country][region])[2:].zfill(2)
         c = hex(forecastlists.bincountries[country])[2:].zfill(2)
     return "".join([c, b, a])
 
@@ -419,26 +483,37 @@ def zoom(forecast_list, key, mode):
 def generate_locationkeys(forecast_list):
     listid = forecastlists.weathercities.index(forecast_list)
     weatherloc[listid] = {}
-    weatherloc[listid]['null'] = {}
-    weatherloc[listid]['no-region'] = {}
-    weatherloc[listid]['regions'] = {}
-    weatherloc[listid]['count'] = {}
+    weatherloc[listid]["null"] = {}
+    weatherloc[listid]["no-region"] = {}
+    weatherloc[listid]["regions"] = {}
+    weatherloc[listid]["count"] = {}
     for k, v in forecast_list.items():
-        if v[1][1] == "" and (v[2][1] not in forecastlists.bincountries or matches_country_code(forecast_list, k)):
-            weatherloc[listid]['null'].setdefault(v[0][1], len(weatherloc[listid]['null']) + 1)
+        if v[1][1] == "" and (
+                v[2][1] not in forecastlists.bincountries
+                or matches_country_code(forecast_list, k)
+        ):
+            weatherloc[listid]["null"].setdefault(
+                v[0][1], len(weatherloc[listid]["null"]) + 1
+            )
         elif v[1][1] == "" and not matches_country_code(forecast_list, k):
-            weatherloc[listid]['no-region'].setdefault(v[2][1], {})
-            weatherloc[listid]['no-region'][v[2][1]].setdefault(v[0][1], len(weatherloc[listid]['no-region'][v[2][1]]) + 1)
+            weatherloc[listid]["no-region"].setdefault(v[2][1], {})
+            weatherloc[listid]["no-region"][v[2][1]].setdefault(
+                v[0][1], len(weatherloc[listid]["no-region"][v[2][1]]) + 1
+            )
         else:
             weatherloc[listid].setdefault(v[2][1], {})
             weatherloc[listid][v[2][1]].setdefault(v[1][1], {})
-            weatherloc[listid][v[2][1]][v[1][1]].setdefault(v[0][1], len(weatherloc[listid][v[2][1]][v[1][1]]) + 1)
-            weatherloc[listid]['regions'].setdefault(v[2][1], {})
-            weatherloc[listid]['regions'][v[2][1]].setdefault('', 1)
-            weatherloc[listid]['regions'][v[2][1]].setdefault(v[1][1], len(weatherloc[listid]['regions'][v[2][1]]) + 1)
-        weatherloc[listid]['count'].setdefault(v[2][1], {})
-        weatherloc[listid]['count'][v[2][1]].setdefault(v[1][1], 0)
-        weatherloc[listid]['count'][v[2][1]][v[1][1]] += 1
+            weatherloc[listid][v[2][1]][v[1][1]].setdefault(
+                v[0][1], len(weatherloc[listid][v[2][1]][v[1][1]]) + 1
+            )
+            weatherloc[listid]["regions"].setdefault(v[2][1], {})
+            weatherloc[listid]["regions"][v[2][1]].setdefault("", 1)
+            weatherloc[listid]["regions"][v[2][1]].setdefault(
+                v[1][1], len(weatherloc[listid]["regions"][v[2][1]]) + 1
+            )
+        weatherloc[listid]["count"].setdefault(v[2][1], {})
+        weatherloc[listid]["count"][v[2][1]].setdefault(v[1][1], 0)
+        weatherloc[listid]["count"][v[2][1]][v[1][1]] += 1
 
 
 """If the script was unable to get forecast for a city, it's filled with this blank data."""
@@ -456,41 +531,42 @@ def blank_data(forecast_list, key):
     globe[key] = {}
     wind[key][0] = 0
     wind[key][1] = 0
-    wind[key][2] = 'N'
+    wind[key][2] = "N"
     wind[key][3] = 0
     wind[key][4] = 0
-    wind[key][5] = 'N'
-    current[key][0] = 'N'
+    wind[key][5] = "N"
+    current[key][0] = "N"
     current[key][1] = 0
     current[key][2] = 0
     current[key][3] = -128
     current[key][4] = -128
     uvindex[key] = 255
     if isJapan(forecast_list, key):
-        pollen[key] = 231 # Missing/No Data
-        laundry[key] = 231 # Missing/No Data
+        pollen[key] = 231  # Missing/No Data
+        laundry[key] = 231  # Missing/No Data
     else:
         pollen[key] = 255
         laundry[key] = 255
-    current[key][5] = 'FFFF'
+    current[key][5] = "FFFF"
     times[key] = get_epoch()
     for k in range(0, 15):
         precipitation[key][k] = 255
     for k in range(0, 28):
-        week[key][k] = -128 # Week Temperature Values
+        week[key][k] = -128  # Week Temperature Values
     for k in range(30, 37):
-        week[key][k] = 'FFFF' # Week Forecast Icons
+        week[key][k] = "FFFF"  # Week Forecast Icons
     for k in range(0, 8):
-        hourly[key][k] = 'FFFF' # Hourly Weather Icons
+        hourly[key][k] = "FFFF"  # Hourly Weather Icons
     for k in range(1, 9):
-        today[key][k] = -128 # Today Temperature Values
+        today[key][k] = -128  # Today Temperature Values
     for k in range(1, 9):
-        tomorrow[key][k] = -128 # Tomorrow Temperature Values
-    today[key][0] = 'FFFF'
-    tomorrow[key][0] = 'FFFF'
-    globe[key]['lat'] = binascii.unhexlify(get_lat(forecast_list, key))
-    globe[key]['lng'] = binascii.unhexlify(get_lng(forecast_list, key))
-    globe[key]['time'] = get_epoch()
+        tomorrow[key][k] = -128  # Tomorrow Temperature Values
+    today[key][0] = "FFFF"
+    tomorrow[key][0] = "FFFF"
+    globe[key]["lat"] = binascii.unhexlify(get_lat(forecast_list, key))
+    globe[key]["lng"] = binascii.unhexlify(get_lng(forecast_list, key))
+    globe[key]["time"] = get_epoch()
+
 
 def get_accuweather_api(forecast_list, key):
     accuapi = weather_data[key]
@@ -503,60 +579,96 @@ def get_accuweather_api(forecast_list, key):
     current[key][0] = data_current["Wind"]["Direction"]["English"]
     current[key][2] = int(data_current["Wind"]["Speed"]["Imperial"]["Value"])
     current[key][1] = int(data_current["Wind"]["Speed"]["Metric"]["Value"])
-    today[key][1] = int(data_10day["DailyForecasts"][0]["Temperature"]["Minimum"]["Value"])
-    today[key][2] = int(data_10day["DailyForecasts"][0]["Temperature"]["Maximum"]["Value"])
+    today[key][1] = int(
+        data_10day["DailyForecasts"][0]["Temperature"]["Minimum"]["Value"]
+    )
+    today[key][2] = int(
+        data_10day["DailyForecasts"][0]["Temperature"]["Maximum"]["Value"]
+    )
     today[key][3] = to_celsius(today[key][1])
     today[key][4] = to_celsius(today[key][2])
-    today[key][0] = get_icon(int(data_10day["DailyForecasts"][0]["Day"]["Icon"]), forecast_list, key)
-    tomorrow[key][1] = int(data_10day["DailyForecasts"][1]["Temperature"]["Minimum"]["Value"])
-    tomorrow[key][2] = int(data_10day["DailyForecasts"][1]["Temperature"]["Maximum"]["Value"])
+    today[key][0] = get_icon(
+        int(data_10day["DailyForecasts"][0]["Day"]["Icon"]), forecast_list, key
+    )
+    tomorrow[key][1] = int(
+        data_10day["DailyForecasts"][1]["Temperature"]["Minimum"]["Value"]
+    )
+    tomorrow[key][2] = int(
+        data_10day["DailyForecasts"][1]["Temperature"]["Maximum"]["Value"]
+    )
     tomorrow[key][3] = to_celsius(tomorrow[key][1])
     tomorrow[key][4] = to_celsius(tomorrow[key][2])
-    tomorrow[key][0] = get_icon(int(data_10day["DailyForecasts"][1]["Day"]["Icon"]), forecast_list, key)
+    tomorrow[key][0] = get_icon(
+        int(data_10day["DailyForecasts"][1]["Day"]["Icon"]), forecast_list, key
+    )
     uvindex[key] = int(data_10day["DailyForecasts"][0]["AirAndPollen"][5]["Value"])
     if uvindex[key] > 12:
         uvindex[key] = 12
-    wind[key][0] = mph_kmh(int(data_10day["DailyForecasts"][0]["Day"]["Wind"]["Speed"]["Value"]))
+    wind[key][0] = mph_kmh(
+        int(data_10day["DailyForecasts"][0]["Day"]["Wind"]["Speed"]["Value"])
+    )
     wind[key][1] = int(data_10day["DailyForecasts"][0]["Day"]["Wind"]["Speed"]["Value"])
-    wind[key][2] = data_10day["DailyForecasts"][0]["Day"]["Wind"]["Direction"]["English"]
-    wind[key][3] = mph_kmh(int(data_10day["DailyForecasts"][1]["Day"]["Wind"]["Speed"]["Value"]))
+    wind[key][2] = data_10day["DailyForecasts"][0]["Day"]["Wind"]["Direction"][
+        "English"
+    ]
+    wind[key][3] = mph_kmh(
+        int(data_10day["DailyForecasts"][1]["Day"]["Wind"]["Speed"]["Value"])
+    )
     wind[key][4] = int(data_10day["DailyForecasts"][1]["Day"]["Wind"]["Speed"]["Value"])
-    wind[key][5] = data_10day["DailyForecasts"][1]["Day"]["Wind"]["Direction"]["English"]
+    wind[key][5] = data_10day["DailyForecasts"][1]["Day"]["Wind"]["Direction"][
+        "English"
+    ]
     try:
-        grass = forecastlists.pollen_api[data_10day["DailyForecasts"][0]["AirAndPollen"][1]["Value"]]
-        tree = forecastlists.pollen_api[data_10day["DailyForecasts"][0]["AirAndPollen"][4]["Value"]]
-        ragweed = forecastlists.pollen_api[data_10day["DailyForecasts"][0]["AirAndPollen"][3]["Value"]]
+        grass = forecastlists.pollen_api[
+            data_10day["DailyForecasts"][0]["AirAndPollen"][1]["Value"]
+        ]
+        tree = forecastlists.pollen_api[
+            data_10day["DailyForecasts"][0]["AirAndPollen"][4]["Value"]
+        ]
+        ragweed = forecastlists.pollen_api[
+            data_10day["DailyForecasts"][0]["AirAndPollen"][3]["Value"]
+        ]
     except:
         grass = 2
         tree = 2
         ragweed = 2
-    avg = int(round((grass+tree+ragweed)/3))
+    avg = int(round((grass + tree + ragweed) / 3))
     pollen[key] = avg
     for i in range(0, 8):
         precipitation[key][i] = int(data_quarters[i]["PrecipitationProbability"])
     for i in range(8, 15):
-        precipitation[key][i] = int(data_10day["DailyForecasts"][i-8]["Day"]["PrecipitationProbability"])
+        precipitation[key][i] = int(
+            data_10day["DailyForecasts"][i - 8]["Day"]["PrecipitationProbability"]
+        )
     # lat = float(accuapi[1].find(aw+"lat").text)
     # lng = float(accuapi[1].find(aw+"lon").text)
     localdatetime = data_current["LocalObservationDateTime"]
-    globe[key]['offset'] = float(localdatetime[20:22]) + float(int(localdatetime[23:25]) / 60)
+    globe[key]["offset"] = float(localdatetime[20:22]) + float(
+        int(localdatetime[23:25]) / 60
+    )
     if data_current["LocalObservationDateTime"][19] == "-":
-        globe[key]['offset'] *= -1
-    globe[key]['time'] = int(get_epoch() + globe[key]['offset'] * 3600)
+        globe[key]["offset"] *= -1
+    globe[key]["time"] = int(get_epoch() + globe[key]["offset"] * 3600)
 
     j = 1
     for i in range(0, 14, 2):
-        week[key][i] = int(data_10day["DailyForecasts"][j]["Temperature"]["Maximum"]["Value"])
+        week[key][i] = int(
+            data_10day["DailyForecasts"][j]["Temperature"]["Maximum"]["Value"]
+        )
         j += 1
     j = 1
     for i in range(1, 14, 2):
-        week[key][i] = int(data_10day["DailyForecasts"][j]["Temperature"]["Minimum"]["Value"])
+        week[key][i] = int(
+            data_10day["DailyForecasts"][j]["Temperature"]["Minimum"]["Value"]
+        )
         j += 1
     for i in range(0, 14):
-        week[key][i+14] = to_celsius(week[key][i])
+        week[key][i + 14] = to_celsius(week[key][i])
     for i in range(0, 8):
-        week[key][i+30] = get_icon(int(data_10day["DailyForecasts"][i+1]["Day"]["Icon"]), forecast_list, key)
-    
+        week[key][i + 30] = get_icon(
+            int(data_10day["DailyForecasts"][i + 1]["Day"]["Icon"]), forecast_list, key
+        )
+
     for i in range(0, 8):
         hourly[key][i] = get_icon(int(data_quarters[i]["Icon"]), forecast_list, key)
 
@@ -571,7 +683,9 @@ def parse_data(forecast_list):
         if weather_data[k]:
             get_accuweather_api(forecast_list, k)
         else:
-            log('Unable to retrieve forecast data for %s - using blank data' % k, "INFO")
+            log(
+                "Unable to retrieve forecast data for %s - using blank data" % k, "INFO"
+            )
 
 
 def hex_write(loc, data):
@@ -585,7 +699,8 @@ def offset_write(value, post=True):
     seek_offset += 4
     file.seek(seek_offset)
     file.write(u32(value))
-    if post: seek_offset += 4
+    if post:
+        seek_offset += 4
 
 
 def make_bins(forecast_list, data):
@@ -596,7 +711,8 @@ def make_bins(forecast_list, data):
             language_code = j
             make_forecast_bin(forecast_list, data)
             make_short_bin(forecast_list, data)
-            if config["production"] and config["packVFF"]: packVFF(j, country_code)
+            if config["production"] and config["packVFF"]:
+                packVFF(j, country_code)
             reset_data()
 
 
@@ -625,9 +741,21 @@ def generate_data(forecast_list, bins):
         uvindex_text_tables[language] = make_uvindex_text_table()
         text_tables[language] = make_forecast_text_table(forecast_list)
         weathervalue_text_tables[language] = make_weather_value_table()
-    return [long_forecast_tables, uvindex_table, uvindex_text_tables, short_japan_tables, pollenindex_table,
-            pollen_text_table, laundryindex_table, laundry_text_table, location_table, text_tables,
-            weathervalue_offset_table, weathervalue_text_tables, short_forecast_tables]
+    return [
+        long_forecast_tables,
+        uvindex_table,
+        uvindex_text_tables,
+        short_japan_tables,
+        pollenindex_table,
+        pollen_text_table,
+        laundryindex_table,
+        laundry_text_table,
+        location_table,
+        text_tables,
+        weathervalue_offset_table,
+        weathervalue_text_tables,
+        short_forecast_tables,
+    ]
 
 
 def make_forecast_bin(forecast_list, data):
@@ -647,16 +775,30 @@ def make_forecast_bin(forecast_list, data):
     text_table = data[9][language_code]
     weathervalue_offset_table = data[10]
     weathervalue_text_table = data[11][language_code]
-    dictionaries = [header, long_forecast_table, short_japan_tables, weathervalue_offset_table, uvindex_table,
-                    laundryindex_table, pollenindex_table, location_table, weathervalue_text_table, uvindex_text_table,
-                    laundry_text_table, pollen_text_table, text_table]
+    dictionaries = [
+        header,
+        long_forecast_table,
+        short_japan_tables,
+        weathervalue_offset_table,
+        uvindex_table,
+        laundryindex_table,
+        pollenindex_table,
+        location_table,
+        weathervalue_text_table,
+        uvindex_text_table,
+        laundry_text_table,
+        pollen_text_table,
+        text_table,
+    ]
     if mode == 1:
         extension = "bin"
     elif mode == 2:
         extension = "bi2"
     file = io.BytesIO()
-    file1 = 'forecast.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
-    file2 = 'forecast.{}'.format(extension)
+    file1 = "forecast.{}.{}_{}".format(
+        extension, str(country_code).zfill(3), str(language_code)
+    )
+    file2 = "forecast.{}".format(extension)
     file.write(pad(12))
     file.write(u32(timestamps(0)))
     file.write(u32(timestamps(2)))
@@ -666,7 +808,9 @@ def make_forecast_bin(forecast_list, data):
         count[constant] = file.tell()
         constant += 1
     file.write(pad(16))
-    file.write('RIICONNECT24'.encode('ASCII'))  # This can be used to identify that we made this file.
+    file.write(
+        "RIICONNECT24".encode("ASCII")
+    )  # This can be used to identify that we made this file.
     file.seek(0)
     hex_write(36, count[0])
     if shortcount > 0:
@@ -678,42 +822,48 @@ def make_forecast_bin(forecast_list, data):
     hex_write(84, count[6])
     seek_offset = count[2]
     seek_base = count[7]
-    for i in [list(forecastlists.weatherconditions.values())[j // 2] for j in
-              range(len(forecastlists.weatherconditions.values()) * 2)]:
+    for i in [
+        list(forecastlists.weatherconditions.values())[j // 2]
+        for j in range(len(forecastlists.weatherconditions.values()) * 2)
+    ]:
         offset_write(seek_base)
-        seek_base += len(i[0][language_code].encode('utf-16be')) + 2
+        seek_base += len(i[0][language_code].encode("utf-16be")) + 2
     """UV Index"""
     seek_offset = count[3]
     seek_base = count[8]
     for i in forecastlists.uvindex.values():
         offset_write(seek_base)
-        seek_base += len(i[language_code].encode('utf-16be')) + 2
+        seek_base += len(i[language_code].encode("utf-16be")) + 2
     """Laundry Table"""
     seek_offset = count[4]
     seek_base = count[9]
     for i in forecastlists.laundry.values():
         offset_write(seek_base)
-        seek_base += len(i.encode('utf-16be')) + 2
+        seek_base += len(i.encode("utf-16be")) + 2
     """Pollen Table"""
     seek_offset = count[5]
     seek_base = count[10]
     for i in forecastlists.pollen.values():
         offset_write(seek_base)
-        seek_base += len(i.encode('utf-16be')) + 2
+        seek_base += len(i.encode("utf-16be")) + 2
     """Location Text"""
     seek_offset = count[6]
     seek_base = count[11]
     for key in forecast_list.keys():
         offset_write(seek_base, False)
-        seek_base += len(forecast_list[key][0][language_code].encode('utf-16be')) + 2
+        seek_base += len(forecast_list[key][0][language_code].encode("utf-16be")) + 2
         if len(forecast_list[key][1][language_code]) > 0:
             offset_write(seek_base, False)
-            seek_base += len(forecast_list[key][1][language_code].encode('utf-16be')) + 2
+            seek_base += (
+                    len(forecast_list[key][1][language_code].encode("utf-16be")) + 2
+            )
         else:
             offset_write(0, False)
         if len(forecast_list[key][2][language_code]) > 0:
             offset_write(seek_base, False)
-            seek_base += len(forecast_list[key][2][language_code].encode('utf-16be')) + 2
+            seek_base += (
+                    len(forecast_list[key][2][language_code].encode("utf-16be")) + 2
+            )
         else:
             offset_write(0, False)
         seek_offset += 12
@@ -727,8 +877,10 @@ def make_forecast_bin(forecast_list, data):
 def make_short_bin(forecast_list, data):
     short_forecast_header = make_header_short(forecast_list)
     short_forecast_table = data[12][mode]
-    file1 = 'short.{}.{}_{}'.format(extension, str(country_code).zfill(3), str(language_code))
-    file2 = 'short.{}'.format(extension)
+    file1 = "short.{}.{}_{}".format(
+        extension, str(country_code).zfill(3), str(language_code)
+    )
+    file2 = "short.{}".format(extension)
     file = io.BytesIO()
     file.write(u32(timestamps(0)))
     file.write(u32(timestamps(2)))
@@ -737,8 +889,8 @@ def make_short_bin(forecast_list, data):
     count = file.tell()
     for v in short_forecast_table.values():
         file.write(v)
-    file.seek(count-4)
-    file.write(u32(count+12))
+    file.seek(count - 4)
+    file.write(u32(count + 12))
     file.seek(0)
     f = file.read()
     file.close()
@@ -748,9 +900,9 @@ def make_short_bin(forecast_list, data):
 
 def sign_file(file, local_name, server_name):
     log("Processing " + local_name + " ...", "VERBOSE")
-    crc32 = format(binascii.crc32(file) & 0xFFFFFFFF, '08x')
+    crc32 = format(binascii.crc32(file) & 0xFFFFFFFF, "08x")
     size = len(file) + 12
-    dest = open(local_name, 'wb')
+    dest = open(local_name, "wb")
     dest.write(u32(0))
     dest.write(u32(size))
     dest.write(binascii.unhexlify(crc32))
@@ -758,36 +910,55 @@ def sign_file(file, local_name, server_name):
     dest.close()
     log("Compressing ...", "VERBOSE")
     nlzss.encode_file(local_name, local_name)
-    file = open(local_name, 'rb')
+    file = open(local_name, "rb")
     new = file.read()
     file.close()
-    dest = open(local_name, 'wb')
+    dest = open(local_name, "wb")
     log("RSA Signing ...", "VERBOSE")
-    signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(pad(64))  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    signature = rsa.sign(
+        new, private_key, "SHA-1"
+    )  # Makes a SHA1 with ASN1 padding. Beautiful.
+    dest.write(
+        pad(64)
+    )  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
     # Create directory if it does not exist
-    path = "{}/{}/{}".format(config["file_path"], language_code, str(country_code).zfill(3))
+    path = "{}/{}/{}".format(
+        config["file_path"], language_code, str(country_code).zfill(3)
+    )
     pathlib.Path(path).mkdir(parents=True, exist_ok=True)
-    shutil.copy2(local_name, path+"/"+server_name)
+    shutil.copy2(local_name, path + "/" + server_name)
     os.remove(local_name)
+
 
 def packVFF(language_code, country_code):
     log("Packing VFF ...", "VERBOSE")
-    path = "{}/{}/{}/".format(config["file_path"], language_code, str(country_code).zfill(3))
-    pathlib.Path(path+"wc24dl").mkdir(parents=True, exist_ok=True)
-    with open(path+"forecast.bin", 'rb') as source:
-        with open(path+"wc24dl/3.BIN", 'wb') as dest:
+    path = "{}/{}/{}/".format(
+        config["file_path"], language_code, str(country_code).zfill(3)
+    )
+    pathlib.Path(path + "wc24dl").mkdir(parents=True, exist_ok=True)
+    with open(path + "forecast.bin", "rb") as source:
+        with open(path + "wc24dl/3.BIN", "wb") as dest:
             dest.write(source.read()[320:])
-    with open(path+"short.bin", 'rb') as source:
-        with open(path+"wc24dl/4.BIN", 'wb') as dest:
+    with open(path + "short.bin", "rb") as source:
+        with open(path + "wc24dl/4.BIN", "wb") as dest:
             dest.write(source.read()[320:])
-    subprocess.call([config["winePath"], config["prfArcPath"], "-v", "200", path+"wc24dl", path+"wc24dl.vff"], stdout=subprocess.DEVNULL) # Pack VFF
-    os.remove(path+"wc24dl/3.BIN")
-    os.remove(path+"wc24dl/4.BIN")
-    os.rmdir(path+"wc24dl")
+    subprocess.call(
+        [
+            config["winePath"],
+            config["prfArcPath"],
+            "-v",
+            "200",
+            path + "wc24dl",
+            path + "wc24dl.vff",
+        ],
+        stdout=subprocess.DEVNULL,
+    )  # Pack VFF
+    os.remove(path + "wc24dl/3.BIN")
+    os.remove(path + "wc24dl/4.BIN")
+    os.rmdir(path + "wc24dl")
 
 
 def get_data(forecast_list, key):
@@ -799,51 +970,81 @@ def get_data(forecast_list, key):
     lon = coord_decode(get_lng(forecast_list, key))
     if config["download_locations"]:
         location_key = request_data(
-            "https://api.accuweather.com/locations/v1/cities/geoposition/search.json?q={},{}&apikey={}".format(lat, lon, api_key))["Key"]
+            "https://api.accuweather.com/locations/v1/cities/geoposition/search.json?q={},{}&apikey={}".format(
+                lat, lon, api_key
+            )
+        )["Key"]
         location_keys["{},{}".format(lat, lon)] = location_key
     else:
         location_key = location_keys["{},{}".format(lat, lon)]
     weather_data[key] = {}
     weather_data[key]["current"] = request_data(
-        "https://api.accuweather.com/currentconditions/v1/{}?apikey={}&details=true".format(location_key, api_key))
+        "https://api.accuweather.com/currentconditions/v1/{}?apikey={}&details=true".format(
+            location_key, api_key
+        )
+    )
     weather_data[key]["quarters"] = request_data(
-        "https://api.accuweather.com/forecasts/v1/daily/5day/quarters/{}?apikey={}".format(location_key, api_key))
+        "https://api.accuweather.com/forecasts/v1/daily/5day/quarters/{}?apikey={}".format(
+            location_key, api_key
+        )
+    )
     weather_data[key]["10day"] = request_data(
-        "https://api.accuweather.com/forecasts/v1/daily/10day/{}?apikey={}&details=true".format(location_key, api_key))
+        "https://api.accuweather.com/forecasts/v1/daily/10day/{}?apikey={}&details=true".format(
+            location_key, api_key
+        )
+    )
 
 
 def make_header_short(forecast_list):
-    header = collections.OrderedDict()
+    header = {}
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
     header["region_flag"] = u8(region_flag)  # Region Flag.
     header["unknown_2"] = u8(0)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
-    header["short_forecast_number"] = u32(len(forecast_list))  # Number of short forecast entries.
+    header["short_forecast_number"] = u32(
+        len(forecast_list)
+    )  # Number of short forecast entries.
     header["start_offset"] = u32(0)
 
     return header
 
 
 def make_header_forecast(forecast_list):
-    header = collections.OrderedDict()
+    header = {}
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
     header["region_flag"] = u8(region_flag)  # Region Flag.
     header["unknown_2"] = u8(1)  # Unknown.
     header["padding_1"] = u8(0)  # Padding.
     header["message_offset"] = u32(0)  # Offset for a message.
-    header["long_forecast_number"] = u32(len(forecast_list) - shortcount)  # Number of long forecast entries.
+    header["long_forecast_number"] = u32(
+        len(forecast_list) - shortcount
+    )  # Number of long forecast entries.
     header["long_forecast_offset"] = u32(0)  # Offset for the long forecast entry table.
-    header["short_forecast_number"] = u32(shortcount)  # Number of short forecast entries.
-    header["short_forecast_offset"] = u32(0)  # Offset for the short forecast entry table.
-    header["weather_condition_codes_number"] = u32(len(forecastlists.weatherconditions) * 2)  # Number of weather condition code entries.
-    header["weather_condition_codes_offset"] = u32(0)  # Offset for the weather condition code table.
-    header["uv_index_number"] = u32(len(forecastlists.uvindex))  # Number of UV Index entries.
+    header["short_forecast_number"] = u32(
+        shortcount
+    )  # Number of short forecast entries.
+    header["short_forecast_offset"] = u32(
+        0
+    )  # Offset for the short forecast entry table.
+    header["weather_condition_codes_number"] = u32(
+        len(forecastlists.weatherconditions) * 2
+    )  # Number of weather condition code entries.
+    header["weather_condition_codes_offset"] = u32(
+        0
+    )  # Offset for the weather condition code table.
+    header["uv_index_number"] = u32(
+        len(forecastlists.uvindex)
+    )  # Number of UV Index entries.
     header["uv_index_offset"] = u32(0)  # Offset for the UV Index table.
-    header["laundry_index_number"] = u32(len(forecastlists.laundry))  # Number of Laundry Index entries.
+    header["laundry_index_number"] = u32(
+        len(forecastlists.laundry)
+    )  # Number of Laundry Index entries.
     header["laundry_index_offset"] = u32(0)  # Offset for the Laundry Index table.
-    header["pollen_count_number"] = u32(len(forecastlists.pollen))  # Number of Pollen Count entries.
+    header["pollen_count_number"] = u32(
+        len(forecastlists.pollen)
+    )  # Number of Pollen Count entries.
     header["pollen_count_offset"] = u32(0)  # Offset for the Pollen Count table.
     header["location_number"] = u32(len(forecast_list))  # Number of location entries.
     header["location_offset"] = u32(0)  # Offset for the location table.
@@ -852,188 +1053,536 @@ def make_header_forecast(forecast_list):
 
 
 def make_long_forecast_table(forecast_list):
-    long_forecast_table = collections.OrderedDict()
+    long_forecast_table = {}
     for key in forecast_list.keys():
-        if matches_country_code(forecast_list, key) and get_region(forecast_list, key) != '':
+        if (
+                matches_country_code(forecast_list, key)
+                and get_region(forecast_list, key) != ""
+        ):
             keyIndex = list(forecast_list).index(key)
-            long_forecast_table["location_code_%s" % keyIndex] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii Location Code.
-            long_forecast_table["timestamp_1_%s" % keyIndex] = u32(timestamps(1, key))  # 1st timestamp.
-            long_forecast_table["timestamp_2_%s" % keyIndex] = u32(timestamps(0, key))  # 2nd timestamp.
-            long_forecast_table["unknown_1_%s" % keyIndex] = u32(0)  # Unknown. (0xC-0xF)
-            long_forecast_table["today_forecast_%s" % keyIndex] = binascii.unhexlify(today[key][0])  # Today's forecast.
-            long_forecast_table["today_hourly_forecast_12am_6am_%s" % keyIndex] = binascii.unhexlify(hourly[key][0])  # Today's hourly forecast from 12am to 6am.
-            long_forecast_table["today_hourly_forecast_6am_12pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][1])  # Today's hourly forecast from 6am to 12pm.
-            long_forecast_table["today_hourly_forecast_12pm_6pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][2])  # Today's hourly forecast from 12pm to 6pm.
-            long_forecast_table["today_hourly_forecast_6pm_12am_%s" % keyIndex] = binascii.unhexlify(hourly[key][3])  # Today's hourly forecast from 6pm to 12am.
-            long_forecast_table["today_tempc_high_%s" % keyIndex] = s8(today[key][4])  # Today's high temperature in Celsius
-            long_forecast_table["today_tempc_high_difference_%s" % keyIndex] = s8(today[key][8])  # Today's high temperature difference in Celsius
-            long_forecast_table["today_tempc_low_%s" % keyIndex] = s8(today[key][3])  # Today's low temperature in Celsius
-            long_forecast_table["today_tempc_low_difference_%s" % keyIndex] = s8(today[key][7])  # Today's low temperature difference in Celsius
-            long_forecast_table["today_tempf_high_%s" % keyIndex] = s8(today[key][2])  # Today's high temperature in Fahrenheit
-            long_forecast_table["today_tempf_high_difference_%s" % keyIndex] = s8(today[key][6])  # Today's high Fahrenheit difference
-            long_forecast_table["today_tempf_low_%s" % keyIndex] = s8(today[key][1])  # Today's low temperature in Fahrenheit
-            long_forecast_table["today_tempf_low_difference_%s" % keyIndex] = s8(today[key][5])  # Today's low Fahrenheit difference
-            long_forecast_table["today_precipitation_1_%s" % keyIndex] = u8(precipitation[key][0])  # Today's precipitation 1
-            long_forecast_table["today_precipitation_2_%s" % keyIndex] = u8(precipitation[key][1])  # Today's precipitation 2
-            long_forecast_table["today_precipitation_3_%s" % keyIndex] = u8(precipitation[key][2])  # Today's precipitation 3
-            long_forecast_table["today_precipitation_4_%s" % keyIndex] = u8(precipitation[key][3])  # Today's precipitation 4
-            long_forecast_table["today_winddirection_%s" % keyIndex] = u8(int(get_wind_direction(wind[key][2])))  # Today's wind direction
-            long_forecast_table["today_windkm_%s" % keyIndex] = u8(wind[key][0])  # Today's wind speed in km/hr
-            long_forecast_table["today_windmph_%s" % keyIndex] = u8(wind[key][1])  # Today's wind speed in mph
+            long_forecast_table["location_code_%s" % keyIndex] = binascii.unhexlify(
+                get_locationkey(forecast_list, key)
+            )  # Wii Location Code.
+            long_forecast_table["timestamp_1_%s" % keyIndex] = u32(
+                timestamps(1, key)
+            )  # 1st timestamp.
+            long_forecast_table["timestamp_2_%s" % keyIndex] = u32(
+                timestamps(0, key)
+            )  # 2nd timestamp.
+            long_forecast_table["unknown_1_%s" % keyIndex] = u32(
+                0
+            )  # Unknown. (0xC-0xF)
+            long_forecast_table["today_forecast_%s" % keyIndex] = binascii.unhexlify(
+                today[key][0]
+            )  # Today's forecast.
+            long_forecast_table[
+                "today_hourly_forecast_12am_6am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][0]
+            )  # Today's hourly forecast from 12am to 6am.
+            long_forecast_table[
+                "today_hourly_forecast_6am_12pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][1]
+            )  # Today's hourly forecast from 6am to 12pm.
+            long_forecast_table[
+                "today_hourly_forecast_12pm_6pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][2]
+            )  # Today's hourly forecast from 12pm to 6pm.
+            long_forecast_table[
+                "today_hourly_forecast_6pm_12am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][3]
+            )  # Today's hourly forecast from 6pm to 12am.
+            long_forecast_table["today_tempc_high_%s" % keyIndex] = s8(
+                today[key][4]
+            )  # Today's high temperature in Celsius
+            long_forecast_table["today_tempc_high_difference_%s" % keyIndex] = s8(
+                today[key][8]
+            )  # Today's high temperature difference in Celsius
+            long_forecast_table["today_tempc_low_%s" % keyIndex] = s8(
+                today[key][3]
+            )  # Today's low temperature in Celsius
+            long_forecast_table["today_tempc_low_difference_%s" % keyIndex] = s8(
+                today[key][7]
+            )  # Today's low temperature difference in Celsius
+            long_forecast_table["today_tempf_high_%s" % keyIndex] = s8(
+                today[key][2]
+            )  # Today's high temperature in Fahrenheit
+            long_forecast_table["today_tempf_high_difference_%s" % keyIndex] = s8(
+                today[key][6]
+            )  # Today's high Fahrenheit difference
+            long_forecast_table["today_tempf_low_%s" % keyIndex] = s8(
+                today[key][1]
+            )  # Today's low temperature in Fahrenheit
+            long_forecast_table["today_tempf_low_difference_%s" % keyIndex] = s8(
+                today[key][5]
+            )  # Today's low Fahrenheit difference
+            long_forecast_table["today_precipitation_1_%s" % keyIndex] = u8(
+                precipitation[key][0]
+            )  # Today's precipitation 1
+            long_forecast_table["today_precipitation_2_%s" % keyIndex] = u8(
+                precipitation[key][1]
+            )  # Today's precipitation 2
+            long_forecast_table["today_precipitation_3_%s" % keyIndex] = u8(
+                precipitation[key][2]
+            )  # Today's precipitation 3
+            long_forecast_table["today_precipitation_4_%s" % keyIndex] = u8(
+                precipitation[key][3]
+            )  # Today's precipitation 4
+            long_forecast_table["today_winddirection_%s" % keyIndex] = u8(
+                int(get_wind_direction(wind[key][2]))
+            )  # Today's wind direction
+            long_forecast_table["today_windkm_%s" % keyIndex] = u8(
+                wind[key][0]
+            )  # Today's wind speed in km/hr
+            long_forecast_table["today_windmph_%s" % keyIndex] = u8(
+                wind[key][1]
+            )  # Today's wind speed in mph
             long_forecast_table["uv_index_%s" % keyIndex] = u8(uvindex[key])  # UV Index
-            long_forecast_table["laundry_index_%s" % keyIndex] = u8(laundry[key])  # Laundry Index
-            long_forecast_table["pollen_index_%s" % keyIndex] = u8(pollen[key])  # Pollen Index
-            long_forecast_table["tomorrow_forecast_%s" % keyIndex] = binascii.unhexlify(tomorrow[key][0])  # Tomorrow's forecast.
-            long_forecast_table["tomorrow_hourly_forecast_12am_6am_%s" % keyIndex] = binascii.unhexlify(hourly[key][4])  # Tomorrow's hourly forecast from 12am to 6am.
-            long_forecast_table["tomorrow_hourly_forecast_6am_12pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][5])  # Tomorrow's hourly forecast from 6am to 12pm.
-            long_forecast_table["tomorrow_hourly_forecast_12pm_6pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][6])  # Tomorrow's hourly forecast from 12pm to 6pm.
-            long_forecast_table["tomorrow_hourly_forecast_6pm_12am_%s" % keyIndex] = binascii.unhexlify(hourly[key][7])  # Tomorrow's hourly forecast from 6pm to 12am.
-            long_forecast_table["tomorrow_tempc_high_%s" % keyIndex] = s8(tomorrow[key][4])  # Tomorrow's temperature in Celsius
-            long_forecast_table["tomorrow_tempc_high_difference_%s" % keyIndex] = s8(tomorrow[key][8])  # Tomorrow's temperature mean in Celsius
-            long_forecast_table["tomorrow_tempc_low_%s" % keyIndex] = s8(tomorrow[key][3])  # Tomorrow's Celsius globe value
-            long_forecast_table["tomorrow_tempc_low_difference_%s" % keyIndex] = s8(tomorrow[key][7])  # Tomorrow's Celsius globe value
-            long_forecast_table["tomorrow_tempf_high_%s" % keyIndex] = s8(tomorrow[key][2])  # Tomorrow's temperature in Fahrenheit
-            long_forecast_table["tomorrow_tempf_high_difference_%s" % keyIndex] = s8(tomorrow[key][6])  # Tomorrow's Celsius globe value
-            long_forecast_table["tomorrow_tempf_low_%s" % keyIndex] = s8(tomorrow[key][1])  # Tomorrow's temperature mean in Fahrenheit
-            long_forecast_table["tomorrow_tempf_low_difference_%s" % keyIndex] = s8(tomorrow[key][5])  # Tomorrow's Fahrenheit globe value
-            long_forecast_table["tomorrow_precipitation_1_%s" % keyIndex] = u8(precipitation[key][4])  # Tomorrow's precipitation 1
-            long_forecast_table["tomorrow_precipitation_2_%s" % keyIndex] = u8(precipitation[key][5])  # Tomorrow's precipitation 2
-            long_forecast_table["tomorrow_precipitation_3_%s" % keyIndex] = u8(precipitation[key][6])  # Tomorrow's precipitation 3
-            long_forecast_table["tomorrow_precipitation_4_%s" % keyIndex] = u8(precipitation[key][7])  # Tomorrow's precipitation 4
-            long_forecast_table["tomorrow_winddirection_%s" % keyIndex] = u8(int(get_wind_direction(wind[key][5])))  # Tomorrow's wind direction
-            long_forecast_table["tomorrow_windkm_%s" % keyIndex] = u8(wind[key][3])  # Tomorrow's wind speed in km/hr
-            long_forecast_table["tomorrow_windmph_%s" % keyIndex] = u8(wind[key][4])  # Tomorrow's wind speed in mph
-            long_forecast_table["uvindex_2_%s" % keyIndex] = u8(uvindex[key])  # UV Index (Unknown)
-            long_forecast_table["laundry_index_2_%s" % keyIndex] = u8(laundry[key])  # Laundry Index (Unknown)
-            long_forecast_table["pollen_index_2_%s" % keyIndex] = u8(pollen[key])  # Pollen Index (Unknown)
-            long_forecast_table["5day_forecast_1_%s" % keyIndex] = binascii.unhexlify(week[key][30])  # 5-Day forecast day 1 weather icon
-            long_forecast_table["5day_tempc_high_1_%s" % keyIndex] = s8(week[key][14])  # 5-Day forecast day 1 high temperature in Celsius
-            long_forecast_table["5day_tempc_low_1_%s" % keyIndex] = s8(week[key][15])  # 5-Day forecast day 1 low temperature in Celsius
-            long_forecast_table["5day_tempf_high_1_%s" % keyIndex] = s8(week[key][0])  # 5-Day forecast day 1 high temperature in Fahrenheit
-            long_forecast_table["5day_tempf_low_1_%s" % keyIndex] = s8(week[key][1])  # 5-Day forecast day 1 low temperature in Fahrenheit
-            long_forecast_table["5day_precipitation_1_%s" % keyIndex] = u8(precipitation[key][8])  # 5-Day precipitation percentage 1
-            long_forecast_table["5day_forecast_padding_1_%s" % keyIndex] = u8(0)  # Padding
-            long_forecast_table["5day_forecast_2_%s" % keyIndex] = binascii.unhexlify(week[key][31])  # 5-Day forecast day 2 weather icon
-            long_forecast_table["5day_tempc_high_2_%s" % keyIndex] = s8(week[key][16])  # 5-Day forecast day 2 high temperature in Celsius
-            long_forecast_table["5day_tempc_low_2_%s" % keyIndex] = s8(week[key][17])  # 5-Day forecast day 2 low temperature in Celsius
-            long_forecast_table["5day_tempf_high_2_%s" % keyIndex] = s8(week[key][2])  # 5-Day forecast day 2 high temperature in Fahrenheit
-            long_forecast_table["5day_tempf_low_2_%s" % keyIndex] = s8(week[key][3])  # 5-Day forecast day 2 low temperature in Fahrenheit
-            long_forecast_table["5day_precipitation_2_%s" % keyIndex] = u8(precipitation[key][9])  # 5-Day precipitation percentage 2
-            long_forecast_table["5day_forecast_padding_2_%s" % keyIndex] = u8(0)  # Padding
-            long_forecast_table["5day_forecast_3_%s" % keyIndex] = binascii.unhexlify(week[key][32])  # 5-Day forecast day 3 weather icon
-            long_forecast_table["5day_tempc_high_3_%s" % keyIndex] = s8(week[key][18])  # 5-Day forecast day 3 high temperature in Celsius
-            long_forecast_table["5day_tempc_low_3_%s" % keyIndex] = s8(week[key][19])  # 5-Day forecast day 3 low temperature in Celsius
-            long_forecast_table["5day_tempf_high_3_%s" % keyIndex] = s8(week[key][4])  # 5-Day forecast day 3 high temperature in Fahrenheit
-            long_forecast_table["5day_tempf_low_3_%s" % keyIndex] = s8(week[key][5])  # 5-Day forecast day 3 low temperature in Fahrenheit
-            long_forecast_table["5day_precipitation_3_%s" % keyIndex] = u8(precipitation[key][10])  # 5-Day precipitation percentage 3
-            long_forecast_table["5day_forecast_padding_3_%s" % keyIndex] = u8(0)  # Padding
-            long_forecast_table["5day_forecast_4_%s" % keyIndex] = binascii.unhexlify(week[key][33])  # 5-Day forecast day 4 weather icon
-            long_forecast_table["5day_tempc_high_4_%s" % keyIndex] = s8(week[key][20])  # 5-Day forecast day 4 high temperature in Celsius
-            long_forecast_table["5day_tempc_low_4_%s" % keyIndex] = s8(week[key][21])  # 5-Day forecast day 4 low temperature in Celsius
-            long_forecast_table["5day_tempf_high_4_%s" % keyIndex] = s8(week[key][6])  # 5-Day forecast day 4 high temperature in Fahrenheit
-            long_forecast_table["5day_tempf_low_4_%s" % keyIndex] = s8(week[key][7])  # 5-Day forecast day 4 low temperature in Fahrenheit
-            long_forecast_table["5day_precipitation_4_%s" % keyIndex] = u8(precipitation[key][11])  # 5-Day precipitation percentage 4
-            long_forecast_table["5day_forecast_padding_4_%s" % keyIndex] = u8(0)  # Padding
-            long_forecast_table["5day_forecast_5_%s" % keyIndex] = binascii.unhexlify(week[key][34])  # 5-Day forecast day 5 weather icon
-            long_forecast_table["5day_tempc_high_5_%s" % keyIndex] = s8(week[key][22])  # 5-Day forecast day 5 high temperature in Celsius
-            long_forecast_table["5day_tempc_low_5_%s" % keyIndex] = s8(week[key][23])  # 5-Day forecast day 5 low temperature in Celsius
-            long_forecast_table["5day_tempf_high_5_%s" % keyIndex] = s8(week[key][8])  # 5-Day forecast day 5 high temperature in Fahrenheit
-            long_forecast_table["5day_tempf_low_5_%s" % keyIndex] = s8(week[key][9])  # 5-Day forecast day 5 low temperature in Fahrenheit
-            long_forecast_table["5day_precipitation_5_%s" % keyIndex] = u8(precipitation[key][12])  # 5-Day precipitation percentage 5
-            long_forecast_table["5day_forecast_padding_5_%s" % keyIndex] = u8(0)  # Padding
-            long_forecast_table["5day_forecast_6_%s" % keyIndex] = binascii.unhexlify(week[key][35])  # 5-Day forecast day 6 weather icon (JAPAN ONLY)
-            long_forecast_table["5day_tempc_high_6_%s" % keyIndex] = s8(week[key][24])  # 5-Day forecast day 6 high temperature in Celsius (JAPAN ONLY)
-            long_forecast_table["5day_tempc_low_6_%s" % keyIndex] = s8(week[key][25])  # 5-Day forecast day 6 low temperature in Celsius (JAPAN ONLY)
-            long_forecast_table["5day_tempf_high_6_%s" % keyIndex] = s8(week[key][10])  # 5-Day forecast day 6 high temperature in Fahrenheit (JAPAN ONLY)
-            long_forecast_table["5day_tempf_low_6_%s" % keyIndex] = s8(week[key][11])  # 5-Day forecast day 6 low temperature in Fahrenheit (JAPAN ONLY)
-            long_forecast_table["5day_precipitation_6_%s" % keyIndex] = u8(precipitation[key][13])  # 5-Day precipitation percentage 6 (JAPAN ONLY)
-            long_forecast_table["5day_forecast_padding_6_%s" % keyIndex] = u8(0)  # Padding (JAPAN ONLY)
-            long_forecast_table["5day_forecast_7_%s" % keyIndex] = binascii.unhexlify(week[key][36])  # 5-Day forecast day 7 weather icon (JAPAN ONLY)
-            long_forecast_table["5day_tempc_high_7_%s" % keyIndex] = s8(week[key][26])  # 5-Day forecast day 7 high temperature in Celsius (JAPAN ONLY)
-            long_forecast_table["5day_tempc_low_7_%s" % keyIndex] = s8(week[key][27])  # 5-Day forecast day 7 low temperature in Celsius (JAPAN ONLY)
-            long_forecast_table["5day_tempf_high_7_%s" % keyIndex] = s8(week[key][12])  # 5-Day forecast day 7 high temperature in Fahrenheit (JAPAN ONLY)
-            long_forecast_table["5day_tempf_low_7_%s" % keyIndex] = s8(week[key][13])  # 5-Day forecast day 7 low temperature in Fahrenheit (JAPAN ONLY)
-            long_forecast_table["5day_precipitation_7_%s" % keyIndex] = u8(precipitation[key][14])  # 5-Day precipitation percentage 7 (JAPAN ONLY)
-            long_forecast_table["5day_forecast_padding_7_%s" % keyIndex] = u8(0)  # Padding (JAPAN ONLY)
+            long_forecast_table["laundry_index_%s" % keyIndex] = u8(
+                laundry[key]
+            )  # Laundry Index
+            long_forecast_table["pollen_index_%s" % keyIndex] = u8(
+                pollen[key]
+            )  # Pollen Index
+            long_forecast_table["tomorrow_forecast_%s" % keyIndex] = binascii.unhexlify(
+                tomorrow[key][0]
+            )  # Tomorrow's forecast.
+            long_forecast_table[
+                "tomorrow_hourly_forecast_12am_6am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][4]
+            )  # Tomorrow's hourly forecast from 12am to 6am.
+            long_forecast_table[
+                "tomorrow_hourly_forecast_6am_12pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][5]
+            )  # Tomorrow's hourly forecast from 6am to 12pm.
+            long_forecast_table[
+                "tomorrow_hourly_forecast_12pm_6pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][6]
+            )  # Tomorrow's hourly forecast from 12pm to 6pm.
+            long_forecast_table[
+                "tomorrow_hourly_forecast_6pm_12am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][7]
+            )  # Tomorrow's hourly forecast from 6pm to 12am.
+            long_forecast_table["tomorrow_tempc_high_%s" % keyIndex] = s8(
+                tomorrow[key][4]
+            )  # Tomorrow's temperature in Celsius
+            long_forecast_table["tomorrow_tempc_high_difference_%s" % keyIndex] = s8(
+                tomorrow[key][8]
+            )  # Tomorrow's temperature mean in Celsius
+            long_forecast_table["tomorrow_tempc_low_%s" % keyIndex] = s8(
+                tomorrow[key][3]
+            )  # Tomorrow's Celsius globe value
+            long_forecast_table["tomorrow_tempc_low_difference_%s" % keyIndex] = s8(
+                tomorrow[key][7]
+            )  # Tomorrow's Celsius globe value
+            long_forecast_table["tomorrow_tempf_high_%s" % keyIndex] = s8(
+                tomorrow[key][2]
+            )  # Tomorrow's temperature in Fahrenheit
+            long_forecast_table["tomorrow_tempf_high_difference_%s" % keyIndex] = s8(
+                tomorrow[key][6]
+            )  # Tomorrow's Celsius globe value
+            long_forecast_table["tomorrow_tempf_low_%s" % keyIndex] = s8(
+                tomorrow[key][1]
+            )  # Tomorrow's temperature mean in Fahrenheit
+            long_forecast_table["tomorrow_tempf_low_difference_%s" % keyIndex] = s8(
+                tomorrow[key][5]
+            )  # Tomorrow's Fahrenheit globe value
+            long_forecast_table["tomorrow_precipitation_1_%s" % keyIndex] = u8(
+                precipitation[key][4]
+            )  # Tomorrow's precipitation 1
+            long_forecast_table["tomorrow_precipitation_2_%s" % keyIndex] = u8(
+                precipitation[key][5]
+            )  # Tomorrow's precipitation 2
+            long_forecast_table["tomorrow_precipitation_3_%s" % keyIndex] = u8(
+                precipitation[key][6]
+            )  # Tomorrow's precipitation 3
+            long_forecast_table["tomorrow_precipitation_4_%s" % keyIndex] = u8(
+                precipitation[key][7]
+            )  # Tomorrow's precipitation 4
+            long_forecast_table["tomorrow_winddirection_%s" % keyIndex] = u8(
+                int(get_wind_direction(wind[key][5]))
+            )  # Tomorrow's wind direction
+            long_forecast_table["tomorrow_windkm_%s" % keyIndex] = u8(
+                wind[key][3]
+            )  # Tomorrow's wind speed in km/hr
+            long_forecast_table["tomorrow_windmph_%s" % keyIndex] = u8(
+                wind[key][4]
+            )  # Tomorrow's wind speed in mph
+            long_forecast_table["uvindex_2_%s" % keyIndex] = u8(
+                uvindex[key]
+            )  # UV Index (Unknown)
+            long_forecast_table["laundry_index_2_%s" % keyIndex] = u8(
+                laundry[key]
+            )  # Laundry Index (Unknown)
+            long_forecast_table["pollen_index_2_%s" % keyIndex] = u8(
+                pollen[key]
+            )  # Pollen Index (Unknown)
+            long_forecast_table["5day_forecast_1_%s" % keyIndex] = binascii.unhexlify(
+                week[key][30]
+            )  # 5-Day forecast day 1 weather icon
+            long_forecast_table["5day_tempc_high_1_%s" % keyIndex] = s8(
+                week[key][14]
+            )  # 5-Day forecast day 1 high temperature in Celsius
+            long_forecast_table["5day_tempc_low_1_%s" % keyIndex] = s8(
+                week[key][15]
+            )  # 5-Day forecast day 1 low temperature in Celsius
+            long_forecast_table["5day_tempf_high_1_%s" % keyIndex] = s8(
+                week[key][0]
+            )  # 5-Day forecast day 1 high temperature in Fahrenheit
+            long_forecast_table["5day_tempf_low_1_%s" % keyIndex] = s8(
+                week[key][1]
+            )  # 5-Day forecast day 1 low temperature in Fahrenheit
+            long_forecast_table["5day_precipitation_1_%s" % keyIndex] = u8(
+                precipitation[key][8]
+            )  # 5-Day precipitation percentage 1
+            long_forecast_table["5day_forecast_padding_1_%s" % keyIndex] = u8(
+                0
+            )  # Padding
+            long_forecast_table["5day_forecast_2_%s" % keyIndex] = binascii.unhexlify(
+                week[key][31]
+            )  # 5-Day forecast day 2 weather icon
+            long_forecast_table["5day_tempc_high_2_%s" % keyIndex] = s8(
+                week[key][16]
+            )  # 5-Day forecast day 2 high temperature in Celsius
+            long_forecast_table["5day_tempc_low_2_%s" % keyIndex] = s8(
+                week[key][17]
+            )  # 5-Day forecast day 2 low temperature in Celsius
+            long_forecast_table["5day_tempf_high_2_%s" % keyIndex] = s8(
+                week[key][2]
+            )  # 5-Day forecast day 2 high temperature in Fahrenheit
+            long_forecast_table["5day_tempf_low_2_%s" % keyIndex] = s8(
+                week[key][3]
+            )  # 5-Day forecast day 2 low temperature in Fahrenheit
+            long_forecast_table["5day_precipitation_2_%s" % keyIndex] = u8(
+                precipitation[key][9]
+            )  # 5-Day precipitation percentage 2
+            long_forecast_table["5day_forecast_padding_2_%s" % keyIndex] = u8(
+                0
+            )  # Padding
+            long_forecast_table["5day_forecast_3_%s" % keyIndex] = binascii.unhexlify(
+                week[key][32]
+            )  # 5-Day forecast day 3 weather icon
+            long_forecast_table["5day_tempc_high_3_%s" % keyIndex] = s8(
+                week[key][18]
+            )  # 5-Day forecast day 3 high temperature in Celsius
+            long_forecast_table["5day_tempc_low_3_%s" % keyIndex] = s8(
+                week[key][19]
+            )  # 5-Day forecast day 3 low temperature in Celsius
+            long_forecast_table["5day_tempf_high_3_%s" % keyIndex] = s8(
+                week[key][4]
+            )  # 5-Day forecast day 3 high temperature in Fahrenheit
+            long_forecast_table["5day_tempf_low_3_%s" % keyIndex] = s8(
+                week[key][5]
+            )  # 5-Day forecast day 3 low temperature in Fahrenheit
+            long_forecast_table["5day_precipitation_3_%s" % keyIndex] = u8(
+                precipitation[key][10]
+            )  # 5-Day precipitation percentage 3
+            long_forecast_table["5day_forecast_padding_3_%s" % keyIndex] = u8(
+                0
+            )  # Padding
+            long_forecast_table["5day_forecast_4_%s" % keyIndex] = binascii.unhexlify(
+                week[key][33]
+            )  # 5-Day forecast day 4 weather icon
+            long_forecast_table["5day_tempc_high_4_%s" % keyIndex] = s8(
+                week[key][20]
+            )  # 5-Day forecast day 4 high temperature in Celsius
+            long_forecast_table["5day_tempc_low_4_%s" % keyIndex] = s8(
+                week[key][21]
+            )  # 5-Day forecast day 4 low temperature in Celsius
+            long_forecast_table["5day_tempf_high_4_%s" % keyIndex] = s8(
+                week[key][6]
+            )  # 5-Day forecast day 4 high temperature in Fahrenheit
+            long_forecast_table["5day_tempf_low_4_%s" % keyIndex] = s8(
+                week[key][7]
+            )  # 5-Day forecast day 4 low temperature in Fahrenheit
+            long_forecast_table["5day_precipitation_4_%s" % keyIndex] = u8(
+                precipitation[key][11]
+            )  # 5-Day precipitation percentage 4
+            long_forecast_table["5day_forecast_padding_4_%s" % keyIndex] = u8(
+                0
+            )  # Padding
+            long_forecast_table["5day_forecast_5_%s" % keyIndex] = binascii.unhexlify(
+                week[key][34]
+            )  # 5-Day forecast day 5 weather icon
+            long_forecast_table["5day_tempc_high_5_%s" % keyIndex] = s8(
+                week[key][22]
+            )  # 5-Day forecast day 5 high temperature in Celsius
+            long_forecast_table["5day_tempc_low_5_%s" % keyIndex] = s8(
+                week[key][23]
+            )  # 5-Day forecast day 5 low temperature in Celsius
+            long_forecast_table["5day_tempf_high_5_%s" % keyIndex] = s8(
+                week[key][8]
+            )  # 5-Day forecast day 5 high temperature in Fahrenheit
+            long_forecast_table["5day_tempf_low_5_%s" % keyIndex] = s8(
+                week[key][9]
+            )  # 5-Day forecast day 5 low temperature in Fahrenheit
+            long_forecast_table["5day_precipitation_5_%s" % keyIndex] = u8(
+                precipitation[key][12]
+            )  # 5-Day precipitation percentage 5
+            long_forecast_table["5day_forecast_padding_5_%s" % keyIndex] = u8(
+                0
+            )  # Padding
+            long_forecast_table["5day_forecast_6_%s" % keyIndex] = binascii.unhexlify(
+                week[key][35]
+            )  # 5-Day forecast day 6 weather icon (JAPAN ONLY)
+            long_forecast_table["5day_tempc_high_6_%s" % keyIndex] = s8(
+                week[key][24]
+            )  # 5-Day forecast day 6 high temperature in Celsius (JAPAN ONLY)
+            long_forecast_table["5day_tempc_low_6_%s" % keyIndex] = s8(
+                week[key][25]
+            )  # 5-Day forecast day 6 low temperature in Celsius (JAPAN ONLY)
+            long_forecast_table["5day_tempf_high_6_%s" % keyIndex] = s8(
+                week[key][10]
+            )  # 5-Day forecast day 6 high temperature in Fahrenheit (JAPAN ONLY)
+            long_forecast_table["5day_tempf_low_6_%s" % keyIndex] = s8(
+                week[key][11]
+            )  # 5-Day forecast day 6 low temperature in Fahrenheit (JAPAN ONLY)
+            long_forecast_table["5day_precipitation_6_%s" % keyIndex] = u8(
+                precipitation[key][13]
+            )  # 5-Day precipitation percentage 6 (JAPAN ONLY)
+            long_forecast_table["5day_forecast_padding_6_%s" % keyIndex] = u8(
+                0
+            )  # Padding (JAPAN ONLY)
+            long_forecast_table["5day_forecast_7_%s" % keyIndex] = binascii.unhexlify(
+                week[key][36]
+            )  # 5-Day forecast day 7 weather icon (JAPAN ONLY)
+            long_forecast_table["5day_tempc_high_7_%s" % keyIndex] = s8(
+                week[key][26]
+            )  # 5-Day forecast day 7 high temperature in Celsius (JAPAN ONLY)
+            long_forecast_table["5day_tempc_low_7_%s" % keyIndex] = s8(
+                week[key][27]
+            )  # 5-Day forecast day 7 low temperature in Celsius (JAPAN ONLY)
+            long_forecast_table["5day_tempf_high_7_%s" % keyIndex] = s8(
+                week[key][12]
+            )  # 5-Day forecast day 7 high temperature in Fahrenheit (JAPAN ONLY)
+            long_forecast_table["5day_tempf_low_7_%s" % keyIndex] = s8(
+                week[key][13]
+            )  # 5-Day forecast day 7 low temperature in Fahrenheit (JAPAN ONLY)
+            long_forecast_table["5day_precipitation_7_%s" % keyIndex] = u8(
+                precipitation[key][14]
+            )  # 5-Day precipitation percentage 7 (JAPAN ONLY)
+            long_forecast_table["5day_forecast_padding_7_%s" % keyIndex] = u8(
+                0
+            )  # Padding (JAPAN ONLY)
 
     return long_forecast_table
 
 
 def make_short_forecast_table(forecast_list):
-    short_forecast_table = collections.OrderedDict()
+    short_forecast_table = {}
     for key in forecast_list.keys():
         keyIndex = list(forecast_list).index(key)
-        short_forecast_table["location_code_%s" % keyIndex] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii location code for city
-        short_forecast_table["timestamp_1_%s" % keyIndex] = u32(timestamps(1, key))  # Timestamp 1
-        short_forecast_table["timestamp_2_%s" % keyIndex] = u32(timestamps(0, key))  # Timestamp 2
-        short_forecast_table["current_forecast_%s" % keyIndex] = binascii.unhexlify(current[key][5])  # Current forecast
+        short_forecast_table["location_code_%s" % keyIndex] = binascii.unhexlify(
+            get_locationkey(forecast_list, key)
+        )  # Wii location code for city
+        short_forecast_table["timestamp_1_%s" % keyIndex] = u32(
+            timestamps(1, key)
+        )  # Timestamp 1
+        short_forecast_table["timestamp_2_%s" % keyIndex] = u32(
+            timestamps(0, key)
+        )  # Timestamp 2
+        short_forecast_table["current_forecast_%s" % keyIndex] = binascii.unhexlify(
+            current[key][5]
+        )  # Current forecast
         short_forecast_table["unknown_%s" % keyIndex] = u8(0)  # 0xE unknown
-        short_forecast_table["current_tempc_%s" % keyIndex] = s8(current[key][4])  # Current temperature in Celsius
-        short_forecast_table["current_tempf_%s" % keyIndex] = s8(current[key][3])  # Current temperature in Fahrenheit
-        short_forecast_table["current_winddirection_%s" % keyIndex] = u8(int(get_wind_direction(current[key][0])))  # Current wind direction
-        short_forecast_table["current_windkm_%s" % keyIndex] = u8(current[key][1])  # Current wind in km/hr
-        short_forecast_table["current_windmph_%s" % keyIndex] = u8(current[key][2])  # Current wind in mph
+        short_forecast_table["current_tempc_%s" % keyIndex] = s8(
+            current[key][4]
+        )  # Current temperature in Celsius
+        short_forecast_table["current_tempf_%s" % keyIndex] = s8(
+            current[key][3]
+        )  # Current temperature in Fahrenheit
+        short_forecast_table["current_winddirection_%s" % keyIndex] = u8(
+            int(get_wind_direction(current[key][0]))
+        )  # Current wind direction
+        short_forecast_table["current_windkm_%s" % keyIndex] = u8(
+            current[key][1]
+        )  # Current wind in km/hr
+        short_forecast_table["current_windmph_%s" % keyIndex] = u8(
+            current[key][2]
+        )  # Current wind in mph
         short_forecast_table["unknown_2_%s" % keyIndex] = u16(0)  # 00?
-        short_forecast_table["unknown_3_%s" % keyIndex] = binascii.unhexlify('FFFF')  # FFFF?
+        short_forecast_table["unknown_3_%s" % keyIndex] = binascii.unhexlify(
+            "FFFF"
+        )  # FFFF?
 
     return short_forecast_table
 
 
 def make_forecast_short_table(forecast_list):
-    short_forecast_table = collections.OrderedDict()
+    short_forecast_table = {}
     for key in forecast_list.keys():
-        if not matches_country_code(forecast_list, key) or get_region(forecast_list, key) == '':
+        if (
+                not matches_country_code(forecast_list, key)
+                or get_region(forecast_list, key) == ""
+        ):
             keyIndex = list(forecast_list).index(key)
-            short_forecast_table["location_code_%s" % keyIndex] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii Location Code.
-            short_forecast_table["timestamp_1_%s" % keyIndex] = u32(timestamps(1, key))  # 1st timestamp.
-            short_forecast_table["timestamp_2_%s" % keyIndex] = u32(timestamps(0, key))  # 2nd timestamp.
+            short_forecast_table["location_code_%s" % keyIndex] = binascii.unhexlify(
+                get_locationkey(forecast_list, key)
+            )  # Wii Location Code.
+            short_forecast_table["timestamp_1_%s" % keyIndex] = u32(
+                timestamps(1, key)
+            )  # 1st timestamp.
+            short_forecast_table["timestamp_2_%s" % keyIndex] = u32(
+                timestamps(0, key)
+            )  # 2nd timestamp.
             short_forecast_table["padding_%s" % keyIndex] = u32(0)
-            short_forecast_table["today_forecast_%s" % keyIndex] = binascii.unhexlify(today[key][0])  # Today's forecast.
-            short_forecast_table["today_hourly_forecast_12am_6am_%s" % keyIndex] = binascii.unhexlify(hourly[key][0])  # Today's hourly forecast from 12am to 6am.
-            short_forecast_table["today_hourly_forecast_6am_12pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][1])  # Today's hourly forecast from 6am to 12pm.
-            short_forecast_table["today_hourly_forecast_12pm_6pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][2])  # Today's hourly forecast from 12pm to 6pm.
-            short_forecast_table["today_hourly_forecast_6pm_12am_%s" % keyIndex] = binascii.unhexlify(hourly[key][3])  # Today's hourly forecast from 6pm to 12am.
-            short_forecast_table["today_tempc_high_%s" % keyIndex] = s8(today[key][4])  # Today's high temperature in Celsius
-            short_forecast_table["today_tempc_high_difference_%s" % keyIndex] = s8(today[key][8])  # Today's high temperature difference in Celsius
-            short_forecast_table["today_tempc_low_%s" % keyIndex] = s8(today[key][3])  # Today's low temperature in Celsius
-            short_forecast_table["today_tempc_low_difference_%s" % keyIndex] = s8(today[key][7])  # Today's low temperature difference in Celsius
-            short_forecast_table["today_tempf_high_%s" % keyIndex] = s8(today[key][2])  # Today's high temperature in Fahrenheit
-            short_forecast_table["today_tempf_high_difference_%s" % keyIndex] = s8(today[key][6])  # Today's high Fahrenheit difference
-            short_forecast_table["today_tempf_low_%s" % keyIndex] = s8(today[key][1])  # Today's low temperature in Fahrenheit
-            short_forecast_table["today_tempf_low_difference_%s" % keyIndex] = s8(today[key][5])  # Today's low Fahrenheit difference
-            short_forecast_table["today_precipitation_1_%s" % keyIndex] = u8(precipitation[key][0])  # Today's precipitation 1
-            short_forecast_table["today_precipitation_2_%s" % keyIndex] = u8(precipitation[key][1])  # Today's precipitation 2
-            short_forecast_table["today_precipitation_3_%s" % keyIndex] = u8(precipitation[key][2])  # Today's precipitation 3
-            short_forecast_table["today_precipitation_4_%s" % keyIndex] = u8(precipitation[key][3])  # Today's precipitation 4
-            short_forecast_table["today_winddirection_%s" % keyIndex] = u8(int(get_wind_direction(wind[key][2])))  # Today's wind direction
-            short_forecast_table["today_windkm_%s" % keyIndex] = u8(wind[key][0])  # Today's wind speed in km/hr
-            short_forecast_table["today_windmph_%s" % keyIndex] = u8(wind[key][1])  # Today's wind speed in mph
+            short_forecast_table["today_forecast_%s" % keyIndex] = binascii.unhexlify(
+                today[key][0]
+            )  # Today's forecast.
+            short_forecast_table[
+                "today_hourly_forecast_12am_6am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][0]
+            )  # Today's hourly forecast from 12am to 6am.
+            short_forecast_table[
+                "today_hourly_forecast_6am_12pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][1]
+            )  # Today's hourly forecast from 6am to 12pm.
+            short_forecast_table[
+                "today_hourly_forecast_12pm_6pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][2]
+            )  # Today's hourly forecast from 12pm to 6pm.
+            short_forecast_table[
+                "today_hourly_forecast_6pm_12am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][3]
+            )  # Today's hourly forecast from 6pm to 12am.
+            short_forecast_table["today_tempc_high_%s" % keyIndex] = s8(
+                today[key][4]
+            )  # Today's high temperature in Celsius
+            short_forecast_table["today_tempc_high_difference_%s" % keyIndex] = s8(
+                today[key][8]
+            )  # Today's high temperature difference in Celsius
+            short_forecast_table["today_tempc_low_%s" % keyIndex] = s8(
+                today[key][3]
+            )  # Today's low temperature in Celsius
+            short_forecast_table["today_tempc_low_difference_%s" % keyIndex] = s8(
+                today[key][7]
+            )  # Today's low temperature difference in Celsius
+            short_forecast_table["today_tempf_high_%s" % keyIndex] = s8(
+                today[key][2]
+            )  # Today's high temperature in Fahrenheit
+            short_forecast_table["today_tempf_high_difference_%s" % keyIndex] = s8(
+                today[key][6]
+            )  # Today's high Fahrenheit difference
+            short_forecast_table["today_tempf_low_%s" % keyIndex] = s8(
+                today[key][1]
+            )  # Today's low temperature in Fahrenheit
+            short_forecast_table["today_tempf_low_difference_%s" % keyIndex] = s8(
+                today[key][5]
+            )  # Today's low Fahrenheit difference
+            short_forecast_table["today_precipitation_1_%s" % keyIndex] = u8(
+                precipitation[key][0]
+            )  # Today's precipitation 1
+            short_forecast_table["today_precipitation_2_%s" % keyIndex] = u8(
+                precipitation[key][1]
+            )  # Today's precipitation 2
+            short_forecast_table["today_precipitation_3_%s" % keyIndex] = u8(
+                precipitation[key][2]
+            )  # Today's precipitation 3
+            short_forecast_table["today_precipitation_4_%s" % keyIndex] = u8(
+                precipitation[key][3]
+            )  # Today's precipitation 4
+            short_forecast_table["today_winddirection_%s" % keyIndex] = u8(
+                int(get_wind_direction(wind[key][2]))
+            )  # Today's wind direction
+            short_forecast_table["today_windkm_%s" % keyIndex] = u8(
+                wind[key][0]
+            )  # Today's wind speed in km/hr
+            short_forecast_table["today_windmph_%s" % keyIndex] = u8(
+                wind[key][1]
+            )  # Today's wind speed in mph
             short_forecast_table["unknown_value_%s" % keyIndex] = u8(255)  # ??
             short_forecast_table["unknown_value_2_%s" % keyIndex] = u8(255)  # ??
             short_forecast_table["unknown_value_3_%s" % keyIndex] = u8(255)  # ??
-            short_forecast_table["tomorrow_forecast_%s" % keyIndex] = binascii.unhexlify(tomorrow[key][0])  # Tomorrow's forecast.
-            short_forecast_table["tomorrow_hourly_forecast_12am_6am_%s" % keyIndex] = binascii.unhexlify(hourly[key][4])  # Tomorrow's hourly forecast from 12am to 6am.
-            short_forecast_table["tomorrow_hourly_forecast_6am_12pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][5])  # Tomorrow's hourly forecast from 6am to 12pm.
-            short_forecast_table["tomorrow_hourly_forecast_12pm_6pm_%s" % keyIndex] = binascii.unhexlify(hourly[key][6])  # Tomorrow's hourly forecast from 12pm to 6pm.
-            short_forecast_table["tomorrow_hourly_forecast_6pm_12am_%s" % keyIndex] = binascii.unhexlify(hourly[key][7])  # Tomorrow's hourly forecast from 6pm to 12am.
-            short_forecast_table["tomorrow_tempc_high_%s" % keyIndex] = s8(tomorrow[key][4])  # Tomorrow's temperature in Celsius
-            short_forecast_table["tomorrow_tempc_high_difference_%s" % keyIndex] = s8(tomorrow[key][8])  # Tomorrow's temperature mean in Celsius
-            short_forecast_table["tomorrow_tempc_low_%s" % keyIndex] = s8(tomorrow[key][3])  # Tomorrow's Celsius globe value
-            short_forecast_table["tomorrow_tempc_low_difference_%s" % keyIndex] = s8(tomorrow[key][7])  # Tomorrow's Celsius globe value
-            short_forecast_table["tomorrow_tempf_high_%s" % keyIndex] = s8(tomorrow[key][2])  # Tomorrow's temperature in Fahrenheit
-            short_forecast_table["tomorrow_tempf_high_difference_%s" % keyIndex] = s8(tomorrow[key][6])  # Tomorrow's Celsius globe value
-            short_forecast_table["tomorrow_tempf_low_%s" % keyIndex] = s8(tomorrow[key][1])  # Tomorrow's temperature mean in Fahrenheit
-            short_forecast_table["tomorrow_tempf_low_difference_%s" % keyIndex] = s8(tomorrow[key][5])  # Tomorrow's Fahrenheit globe value
-            short_forecast_table["tomorrow_precipitation_1_%s" % keyIndex] = u8(precipitation[key][4])  # Tomorrow's precipitation 1
-            short_forecast_table["tomorrow_precipitation_2_%s" % keyIndex] = u8(precipitation[key][5])  # Tomorrow's precipitation 2
-            short_forecast_table["tomorrow_precipitation_3_%s" % keyIndex] = u8(precipitation[key][6])  # Tomorrow's precipitation 3
-            short_forecast_table["tomorrow_precipitation_4_%s" % keyIndex] = u8(precipitation[key][7])  # Tomorrow's precipitation 4
-            short_forecast_table["tomorrow_winddirection_%s" % keyIndex] = u8(int(get_wind_direction(wind[key][5])))  # Tomorrow's wind direction
-            short_forecast_table["tomorrow_windkm_%s" % keyIndex] = u8(wind[key][3])  # Tomorrow's wind speed in km/hr
-            short_forecast_table["tomorrow_windmph_%s" % keyIndex] = u8(wind[key][4])  # Tomorrow's wind speed in mph
-            short_forecast_table["uvindex_%s" % keyIndex] = u8(uvindex[key])  # Today's UV Index
-            short_forecast_table["laundry_index_%s" % keyIndex] = u8(laundry[key])  # Today's Laundry Index
-            short_forecast_table["pollen_index_%s" % keyIndex] = u8(pollen[key])  # Today's Pollen Index
+            short_forecast_table[
+                "tomorrow_forecast_%s" % keyIndex
+                ] = binascii.unhexlify(
+                tomorrow[key][0]
+            )  # Tomorrow's forecast.
+            short_forecast_table[
+                "tomorrow_hourly_forecast_12am_6am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][4]
+            )  # Tomorrow's hourly forecast from 12am to 6am.
+            short_forecast_table[
+                "tomorrow_hourly_forecast_6am_12pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][5]
+            )  # Tomorrow's hourly forecast from 6am to 12pm.
+            short_forecast_table[
+                "tomorrow_hourly_forecast_12pm_6pm_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][6]
+            )  # Tomorrow's hourly forecast from 12pm to 6pm.
+            short_forecast_table[
+                "tomorrow_hourly_forecast_6pm_12am_%s" % keyIndex
+                ] = binascii.unhexlify(
+                hourly[key][7]
+            )  # Tomorrow's hourly forecast from 6pm to 12am.
+            short_forecast_table["tomorrow_tempc_high_%s" % keyIndex] = s8(
+                tomorrow[key][4]
+            )  # Tomorrow's temperature in Celsius
+            short_forecast_table["tomorrow_tempc_high_difference_%s" % keyIndex] = s8(
+                tomorrow[key][8]
+            )  # Tomorrow's temperature mean in Celsius
+            short_forecast_table["tomorrow_tempc_low_%s" % keyIndex] = s8(
+                tomorrow[key][3]
+            )  # Tomorrow's Celsius globe value
+            short_forecast_table["tomorrow_tempc_low_difference_%s" % keyIndex] = s8(
+                tomorrow[key][7]
+            )  # Tomorrow's Celsius globe value
+            short_forecast_table["tomorrow_tempf_high_%s" % keyIndex] = s8(
+                tomorrow[key][2]
+            )  # Tomorrow's temperature in Fahrenheit
+            short_forecast_table["tomorrow_tempf_high_difference_%s" % keyIndex] = s8(
+                tomorrow[key][6]
+            )  # Tomorrow's Celsius globe value
+            short_forecast_table["tomorrow_tempf_low_%s" % keyIndex] = s8(
+                tomorrow[key][1]
+            )  # Tomorrow's temperature mean in Fahrenheit
+            short_forecast_table["tomorrow_tempf_low_difference_%s" % keyIndex] = s8(
+                tomorrow[key][5]
+            )  # Tomorrow's Fahrenheit globe value
+            short_forecast_table["tomorrow_precipitation_1_%s" % keyIndex] = u8(
+                precipitation[key][4]
+            )  # Tomorrow's precipitation 1
+            short_forecast_table["tomorrow_precipitation_2_%s" % keyIndex] = u8(
+                precipitation[key][5]
+            )  # Tomorrow's precipitation 2
+            short_forecast_table["tomorrow_precipitation_3_%s" % keyIndex] = u8(
+                precipitation[key][6]
+            )  # Tomorrow's precipitation 3
+            short_forecast_table["tomorrow_precipitation_4_%s" % keyIndex] = u8(
+                precipitation[key][7]
+            )  # Tomorrow's precipitation 4
+            short_forecast_table["tomorrow_winddirection_%s" % keyIndex] = u8(
+                int(get_wind_direction(wind[key][5]))
+            )  # Tomorrow's wind direction
+            short_forecast_table["tomorrow_windkm_%s" % keyIndex] = u8(
+                wind[key][3]
+            )  # Tomorrow's wind speed in km/hr
+            short_forecast_table["tomorrow_windmph_%s" % keyIndex] = u8(
+                wind[key][4]
+            )  # Tomorrow's wind speed in mph
+            short_forecast_table["uvindex_%s" % keyIndex] = u8(
+                uvindex[key]
+            )  # Today's UV Index
+            short_forecast_table["laundry_index_%s" % keyIndex] = u8(
+                laundry[key]
+            )  # Today's Laundry Index
+            short_forecast_table["pollen_index_%s" % keyIndex] = u8(
+                pollen[key]
+            )  # Today's Pollen Index
 
     return short_forecast_table
 
@@ -1042,7 +1591,7 @@ def make_forecast_short_table(forecast_list):
 
 
 def make_uvindex_table():
-    uvindex = collections.OrderedDict()
+    uvindex = {}
     for i in forecastlists.uvindex:
         uvindex["uv_%s_number" % i] = u8(i)
         uvindex["uv_%s_padding" % i] = pad(3)
@@ -1055,7 +1604,7 @@ def make_uvindex_table():
 
 
 def make_laundryindex_table():
-    laundry = collections.OrderedDict()
+    laundry = {}
     for i in forecastlists.laundry:
         laundry["laundry_%s_number" % i] = u8(i)
         laundry["laundry_%s_padding" % i] = pad(3)
@@ -1068,7 +1617,7 @@ def make_laundryindex_table():
 
 
 def make_pollenindex_table():
-    pollen = collections.OrderedDict()
+    pollen = {}
     for i in forecastlists.pollen:
         pollen["pollen_%s_number" % i] = u8(i)
         pollen["pollen_%s_padding" % i] = pad(3)
@@ -1078,56 +1627,92 @@ def make_pollenindex_table():
 
 
 def make_location_table(forecast_list):
-    location_table = collections.OrderedDict()
+    location_table = {}
     for key in forecast_list.keys():
         keyIndex = list(forecast_list).index(key)
-        location_table["location_code_%s" % keyIndex] = binascii.unhexlify(get_locationkey(forecast_list, key))  # Wii Location Code.
-        location_table["city_text_offset_%s" % keyIndex] = u32(0)  # Offset for location's city text
-        location_table["region_text_offset_%s" % keyIndex] = u32(0)  # Offset for location's region text
-        location_table["country_text_offset_%s" % keyIndex] = u32(0)  # Offset for location's country text
-        location_table["latitude_coordinates_%s" % keyIndex] = binascii.unhexlify(get_lat(forecast_list, key))  # Latitude coordinates for location on globe
-        location_table["longitude_coordinates_%s" % keyIndex] = binascii.unhexlify(get_lng(forecast_list, key))  # Longitude coordinates for location on globe
-        location_table["location_zoom_1_%s" % keyIndex] = binascii.unhexlify(zoom(forecast_list, key, 1))  # Location zoom for location on globe
-        location_table["location_zoom_2_%s" % keyIndex] = binascii.unhexlify(zoom(forecast_list, key, 2))  # Location zoom for location on globe
+        location_table["location_code_%s" % keyIndex] = binascii.unhexlify(
+            get_locationkey(forecast_list, key)
+        )  # Wii Location Code.
+        location_table["city_text_offset_%s" % keyIndex] = u32(
+            0
+        )  # Offset for location's city text
+        location_table["region_text_offset_%s" % keyIndex] = u32(
+            0
+        )  # Offset for location's region text
+        location_table["country_text_offset_%s" % keyIndex] = u32(
+            0
+        )  # Offset for location's country text
+        location_table["latitude_coordinates_%s" % keyIndex] = binascii.unhexlify(
+            get_lat(forecast_list, key)
+        )  # Latitude coordinates for location on globe
+        location_table["longitude_coordinates_%s" % keyIndex] = binascii.unhexlify(
+            get_lng(forecast_list, key)
+        )  # Longitude coordinates for location on globe
+        location_table["location_zoom_1_%s" % keyIndex] = binascii.unhexlify(
+            zoom(forecast_list, key, 1)
+        )  # Location zoom for location on globe
+        location_table["location_zoom_2_%s" % keyIndex] = binascii.unhexlify(
+            zoom(forecast_list, key, 2)
+        )  # Location zoom for location on globe
         location_table["padding_%s" % keyIndex] = u16(0)
 
     return location_table
 
 
 def make_forecast_text_table(forecast_list):
-    text_table = collections.OrderedDict()
+    text_table = {}
     for key in forecast_list.keys():
         keyIndex = list(forecast_list).index(key)
-        text_table[keyIndex] = "\0".join(list(filter(None, [forecast_list[key][0][language_code],
-                                                           forecast_list[key][1][language_code],
-                                                           forecast_list[key][2][language_code]]))).encode("utf-16be") + pad(2)
+        text_table[keyIndex] = "\0".join(
+            list(
+                filter(
+                    None,
+                    [
+                        forecast_list[key][0][language_code],
+                        forecast_list[key][1][language_code],
+                        forecast_list[key][2][language_code],
+                    ],
+                )
+            )
+        )
+        text_table[keyIndex] = text_table[keyIndex].encode("utf-16be") + pad(2)
     return text_table
 
 
 def make_weather_value_table():
-    weathervalue_text_table = collections.OrderedDict()
-    for k,v in forecastlists.weatherconditions.items():
+    weathervalue_text_table = {}
+    for k, v in forecastlists.weatherconditions.items():
         keyIndex = list(forecastlists.weatherconditions).index(k)
         for i in range(2):
-            weathervalue_text_table["weather_text_%s_%s" % (keyIndex, i)] = v[0][language_code].encode("utf-16be") + pad(2)
+            weathervalue_text_table["weather_text_%s_%s" % (keyIndex, i)] = v[0][
+                                                                                language_code
+                                                                            ].encode("utf-16be") + pad(2)
     return weathervalue_text_table
 
 
 def make_weather_offset_table():
-    weathervalue_offset_table = collections.OrderedDict()
-    for k,v in forecastlists.weatherconditions.items():
+    weathervalue_offset_table = {}
+    for k, v in forecastlists.weatherconditions.items():
         keyIndex = list(forecastlists.weatherconditions).index(k)
-        weathervalue_offset_table["condition_code_1_international_%s" % keyIndex] = binascii.unhexlify(v[1])
-        weathervalue_offset_table["condition_code_2_international_%s" % keyIndex] = binascii.unhexlify(v[2])
+        weathervalue_offset_table[
+            "condition_code_1_international_%s" % keyIndex
+            ] = binascii.unhexlify(v[1])
+        weathervalue_offset_table[
+            "condition_code_2_international_%s" % keyIndex
+            ] = binascii.unhexlify(v[2])
         weathervalue_offset_table["padding_1_%s" % keyIndex] = u32(0)
-        weathervalue_offset_table["condition_code_1_japan_%s" % keyIndex] = binascii.unhexlify(v[3])
-        weathervalue_offset_table["condition_code_2_japan_%s" % keyIndex] = binascii.unhexlify(v[4])
+        weathervalue_offset_table[
+            "condition_code_1_japan_%s" % keyIndex
+            ] = binascii.unhexlify(v[3])
+        weathervalue_offset_table[
+            "condition_code_2_japan_%s" % keyIndex
+            ] = binascii.unhexlify(v[4])
         weathervalue_offset_table["padding_2_%s" % keyIndex] = u32(0)
     return weathervalue_offset_table
 
 
 def make_uvindex_text_table():
-    uvindex_text_table = collections.OrderedDict()
+    uvindex_text_table = {}
     uvindexlist = []
     for v in forecastlists.uvindex.values():
         uvindexlist.append(v[language_code])
@@ -1136,16 +1721,16 @@ def make_uvindex_text_table():
 
 
 def make_laundry_text_table():
-    laundry = collections.OrderedDict()
-    for k,v in forecastlists.laundry.items():
+    laundry = {}
+    for k, v in forecastlists.laundry.items():
         keyIndex = list(forecastlists.laundry).index(k)
         laundry[keyIndex] = v.encode("utf-16be") + pad(2)
     return laundry
 
 
 def make_pollen_text_table():
-    pollen = collections.OrderedDict()
-    for k,v in forecastlists.pollen.items():
+    pollen = {}
+    for k, v in forecastlists.pollen.items():
         keyIndex = list(forecastlists.pollen).index(k)
         pollen[keyIndex] = v.encode("utf-16be") + pad(2)
     return pollen
@@ -1161,7 +1746,7 @@ def dump_db():
     #      "current_forecast": current, "precipitation": precipitation, "hourly_forecast": hourly,
     #      "tomorrow_forecast": tomorrow, "week_forecast": week, "today_forecast": today, "key_cache": cache}
     db = {"location_keys": location_keys}
-    with open('weather.db', 'wb') as f:
+    with open("weather.db", "wb") as f:
         pickle.dump(db, f)
 
 
@@ -1172,22 +1757,23 @@ if config["production"] and config["send_logs"]:
 location_keys = pickle.load(open("weather.db", "rb"))["location_keys"]
 api_key = "6e30dc9ea2aa4d3eb99ad8f6630174cd"
 s = requests.Session()  # Use session to speed up requests
-s.headers.update({'Host': 'api.accuweather.com'}) # using gzip actually seems to slow it down a bit
+s.headers.update(
+    {"Host": "api.accuweather.com"}
+)  # using gzip actually seems to slow it down a bit
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 10 if config["multithreaded"] else 1
+concurrent = 25 if config["multithreaded"] else 1
 file_gen = 3 if config["wii_u_generation"] else 2
 ui_run = None
 threads_run = True
-key = open(config["key_path"], 'rb') # Loads the RSA key.
+key = open(config["key_path"], "rb")  # Loads the RSA key.
 private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")
 key.close()
 ui_thread = threading.Thread(target=ui)
 ui_thread.daemon = True
 ui_thread.start()
 spawn_threads()
-
 
 for forecast_list in forecastlists.weathercities:
     status = 1
@@ -1203,9 +1789,15 @@ for forecast_list in forecastlists.weathercities:
     populate_international(forecast_list)
     generate_locationkeys(forecast_list)
     for key in forecast_list.keys():
-        if not matches_country_code(forecast_list, key) or get_region(forecast_list, key) == '': shortcount += 1
-        if key in cache and cache[key] == get_all(forecast_list, key): cached += 1
-        else: q.put([forecast_list, key])
+        if (
+                not matches_country_code(forecast_list, key)
+                or get_region(forecast_list, key) == ""
+        ):
+            shortcount += 1
+        if key in cache and cache[key] == get_all(forecast_list, key):
+            cached += 1
+        else:
+            q.put([forecast_list, key])
     q.join()
     status = 2
     parse_data(forecast_list)
@@ -1231,15 +1823,32 @@ if config["production"]:
         statsd.increment("forecast.errors", errors)
     if config["send_webhooks"]:
         # this will use a webhook to log that the script has been ran.
-        data = {"username": "Forecast Bot", "content": "Weather Data has been updated!",
-                "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
-                {"fallback": "Weather Data Update", "color": "#0381D7", "author_name": "RiiConnect24 Forecast Script",
-                "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png",
-                "text": "Weather Data has been updated!", "title": "Update!",
-                "fields": [{"title": "Script", "value": "Forecast Channel", "short": "false"}],
-                "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png", "footer": "RiiConnect24 Script",
-                "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                "ts": int(calendar.timegm(datetime.utcnow().timetuple()))}]}
+        data = {
+            "username": "Forecast Bot",
+            "content": "Weather Data has been updated!",
+            "avatar_url": "http://rc24.xyz/images/logo-small.png",
+            "attachments": [
+                {
+                    "fallback": "Weather Data Update",
+                    "color": "#0381D7",
+                    "author_name": "RiiConnect24 Forecast Script",
+                    "author_icon": "https://rc24.xyz/images/webhooks/forecast/profile.png",
+                    "text": "Weather Data has been updated!",
+                    "title": "Update!",
+                    "fields": [
+                        {
+                            "title": "Script",
+                            "value": "Forecast Channel",
+                            "short": "false",
+                        }
+                    ],
+                    "thumb_url": "https://rc24.xyz/images/webhooks/forecast/accuweather.png",
+                    "footer": "RiiConnect24 Script",
+                    "footer_icon": "https://rc24.xyz/images/logo-small.png",
+                    "ts": int(calendar.timegm(datetime.utcnow().timetuple())),
+                }
+            ],
+        }
         for url in config["webhook_urls"]:
             post_webhook = requests.post(url, json=data, allow_redirects=True)
 
