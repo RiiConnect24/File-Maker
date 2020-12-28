@@ -96,7 +96,7 @@ if entry == 1:
 				exit()
 
 			day = int(input('-> Enter starting day: '))
-			if day < datetime.now().day and month < datetime.now().month:
+			if (month != 1 and datetime.now().month == 12) and day < datetime.now().day and month < datetime.now().month:
 				print('That date has already passed.')
 				exit()
 
