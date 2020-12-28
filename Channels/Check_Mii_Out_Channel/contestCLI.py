@@ -99,9 +99,13 @@ if entry == 1:
 			if (month != 1 and datetime.now().month == 12) and day < datetime.now().day and month < datetime.now().month:
 				print('That date has already passed.')
 				exit()
+				
+			year = datetime.now().year
+			if datetime.now().month == 12 and month == 1:
+				year = datetime.now().year + 1
 
 			try:
-				d = date(datetime.now().year, month, day)
+				d = date(year, month, day)
 				
 			except ValueError as e:
 				print(e)
