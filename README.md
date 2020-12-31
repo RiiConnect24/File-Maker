@@ -25,9 +25,9 @@ We use the following services for this project:
 Some notable Python modules used in the project are:
 
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) for HTML parsing.
-- [ElementTree](https://docs.python.org/2/library/xml.etree.elementtree.html) to parse XML.
 - [feedparser](https://pypi.python.org/pypi/feedparser) to parse RSS feeds.
-- [newspaper](http://newspaper.readthedocs.io/en/latest/) for article scraping.
+- [newspaper](http://newspaper.readthedocs.io/en/latest/) for news article scraping.
+- [nlzss](https://github.com/DorkmasterFlek/python-nlzss) for LZ compressing the files.
 - [requests](http://docs.python-requests.org/en/master/) for various HTTP requests.
 - [rsa](https://pypi.python.org/pypi/rsa) to create an RSA signed SHA-1 (that the Wii verifies downloaded files with).
 
