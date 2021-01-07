@@ -82,10 +82,7 @@ def mph_kmh(wind):
 
 
 def time_convert(time):
-    if mode == 1:
-        return int((time - 946684800) / 60)
-    elif mode == 2:
-        return int((time - 789563880) / 60)
+    return int((time - 946684800) / 60)
 
 
 def get_epoch():
@@ -705,15 +702,13 @@ def offset_write(value, post=True):
 
 def make_bins(forecast_list, data):
     global mode, language_code
-    for i in range(1, file_gen):
-        mode = i
-        for j in bins:
-            language_code = j
-            make_forecast_bin(forecast_list, data)
-            make_short_bin(forecast_list, data)
-            if config["production"] and config["packVFF"]:
-                packVFF(j, country_code)
-            reset_data()
+    for j in bins:
+        language_code = j
+        make_forecast_bin(forecast_list, data)
+        make_short_bin(forecast_list, data)
+        if config["production"] and config["packVFF"]:
+            packVFF(j, country_code)
+        reset_data()
 
 
 def generate_data(forecast_list, bins):
@@ -790,10 +785,7 @@ def make_forecast_bin(forecast_list, data):
         pollen_text_table,
         text_table,
     ]
-    if mode == 1:
-        extension = "bin"
-    elif mode == 2:
-        extension = "bi2"
+    extension = "bin"
     file = io.BytesIO()
     file1 = "forecast.{}.{}_{}".format(
         extension, str(country_code).zfill(3), str(language_code)
@@ -871,7 +863,9 @@ def make_forecast_bin(forecast_list, data):
     f = file.read()[12:]
     file.close()
     if config["production"]:
-        sign_file(f, file1, file2)
+        sign_file(f, file1, file2, False)
+        if config["wii_u_generation"]:
+            sign_file(f, file1, file2, True)
 
 
 def make_short_bin(forecast_list, data):
@@ -895,10 +889,16 @@ def make_short_bin(forecast_list, data):
     f = file.read()
     file.close()
     if config["production"]:
-        sign_file(f, file1, file2)
+        sign_file(f, file1, file2, False)
+        if config["wii_u_generation"]:
+            sign_file(f, file1, file2, True)
 
 
-def sign_file(file, local_name, server_name):
+def sign_file(file, local_name, server_name, wiiu):
+    if wiiu:
+        local_name = local_name.replace("bin", "alt")
+        server_name = server_name.replace("bin", "alt")
+        file = u32(0) + u32(4294967295) + file[8:]
     log("Processing " + local_name + " ...", "VERBOSE")
     crc32 = format(binascii.crc32(file) & 0xFFFFFFFF, "08x")
     size = len(file) + 12
@@ -1764,7 +1764,6 @@ total_time = time.time()
 q = queue.Queue()
 threads = []
 concurrent = 25 if config["multithreaded"] else 1
-file_gen = 3 if config["wii_u_generation"] else 2
 ui_run = None
 threads_run = True
 key = open(config["key_path"], "rb")  # Loads the RSA key.
