@@ -101,12 +101,15 @@ sources = {
         "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
     },
-    "afp_german": {
+    "dpa_german": {
         "topics_news": {
-            "Nachrichten": "world",
-            "Panorama": "panorama",
+            "Deutschland": "germany",
+            "Nachricten": "world",
             "Politik": "politics",
             "Wirtschaft": "economy",
+            "Gesundheit": "health",
+            "Boulevard": "boulevard",
+            "Unterhaltung": "entertainment",
             "Sport": "sports",
         },
         "languages": [1, 2, 3, 4, 5, 6],
@@ -114,7 +117,7 @@ sources = {
         "country_code": 110,  # UK
         "picture": 4,
         "position": 4,
-        "copyright": "All reproduction and representation rights reserved. © {} Agence France-Presse",
+        "copyright": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} dpa",
     },
     "ansa_italian": {
         "topics_news": {
@@ -997,7 +1000,6 @@ def make_source_pictures(source_table, data):
         "dpa",
         "Reuters",
         "SID",
-        "NU.nl",
     ]  # these are the news sources which will use a custom JPG for the logo
 
     for article in list(data.values()):

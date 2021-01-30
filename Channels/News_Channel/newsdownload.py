@@ -98,16 +98,19 @@ sources = {
             "politique": "politics",
         },
     },
-    "afp_german": {
-        "name": "AFP",
-        "url": "http://www.dtoday.de/feed/%s.xml",
+    "dpa_german": {
+        "name": "dpa",
+        "url": "https://feeds.t-online.de/rss/%s",
         "lang": "de",
         "cat": {
-            "16-nachrichten-ueberregional": "world",
-            "12-panorama-ueberregional": "panorama",
-            "14-politik-ueberregional": "politics",
-            "13-wirtschaft-ueberregional": "economy",
-            "15-sport-ueberregional": "sports",
+            "deutschland": "germany",
+            "nachrichten": "world",
+            "politik": "politics",
+            "wirtschaft": "economy",
+            "gesundheit": "health",
+            "boulevard": "boulevard",
+            "unterhaltung": "entertainment",
+            "sport": "sports",
         },
     },
     "ansa_italian": {
@@ -217,7 +220,7 @@ def shrink_image(
 
     buffer = BytesIO()
     image_without_exif.save(buffer, format="jpeg")
-
+    
     return buffer.getvalue()
 
 
@@ -591,8 +594,7 @@ class Parse(News):
             "AP": self.parse_ap,
             "Reuters": self.parse_reuters,
             "AFP_French": self.parse_afp_french,
-            "AFP": self.parse_afp_german,
-            "SID": self.parse_afp_german,
+            "dpa": self.parse_dpa_german,
             "ANSA": self.parse_ansa,
             "ANP": self.parse_anp,
         }[self.source]()
@@ -756,43 +758,29 @@ class Parse(News):
         except AttributeError:
             pass
 
-    def parse_afp_german(self):
-        if (
-            " (SID)" in self.article.split("\n")[2]
-            or " (AFP)" in self.article.split("\n")[4]
-        ):
-            split = self.article.split("\n")
-            for (
-                s
-            ) in (
-                split
-            ):  # remove caption text from being the first paragraph of the article
-                if "© AFP" in s or "© SID" in s:
-                    del split[split.index(s) - 1]
-                    del split[split.index(s)]
-            if self.source == "AFP":
-                self.article = "\n".join(split[4:])
-            elif self.source == "SID":
-                self.article = "\n".join(split[2:])
+    def parse_dpa_german(self):
+        if " (dpa)" not in self.article:
+            self.article = None
+            return
+
+        article = self.article.split("\n")
+        
+        i = 0
+
+        for a in article:
+            if " (dpa)" in a:
+                break
+            i += 1
+
+        self.article = "\n".join(article[i:])
 
         try:
             self.resize = True
-            self.caption = (
-                self.soup.find("div", {"class": "articleimg_full"}).find("span").text
-            )
-            self.picture = self.soup.find("div", {"class": "articleimg_full"}).find(
-                "img"
-            )["src"]
+            self.caption = self.soup.find("p", {"class": "Tbu"}).text
         except AttributeError:
             pass
 
-        try:
-            if self.source == "AFP":
-                self.location = self.article.split(" (AFP)")[0]
-            elif self.source == "SID":
-                self.location = self.article.split(" (SID)")[0]
-        except AttributeError:
-            pass
+        self.location = self.article.split(" (dpa)")[0].split("/")[0]
 
     def parse_ansa(self):
         try:
