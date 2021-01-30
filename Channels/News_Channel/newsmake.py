@@ -104,7 +104,7 @@ sources = {
     "dpa_german": {
         "topics_news": {
             "Deutschland": "germany",
-            "Nachricten": "world",
+            "Nachrichten": "world",
             "Politik": "politics",
             "Wirtschaft": "economy",
             "Gesundheit": "health",
