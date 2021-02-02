@@ -24,6 +24,7 @@ import ftfy
 import googlemaps
 import newspaper
 import requests
+import zlib
 from PIL import Image
 from bs4 import BeautifulSoup
 from unidecode import unidecode
@@ -44,18 +45,18 @@ sources = {
     # reference parse_feed
     "ap_english": {
         "name": "AP",
-        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
+        "url": "https://storage.googleapis.com/afs-prod/feeds/%s.json.gz",
         "lang": "en",
         "cat": {
-            "apf-usnews": "national",
-            "apf-intlnews": "world",
-            "apf-sports": "sports",
-            "apf-entertainment": "entertainment",
-            "apf-business": "business",
-            "apf-science": "science",
-            "apf-Health": "science",
-            "apf-technology": "technology",
-            "apf-oddities": "oddities",
+            "us-news": "national",
+            "world-news": "world",
+            "sports": "sports",
+            "entertainment": "entertainment",
+            "business": "business",
+            "science": "science",
+            "health": "science",
+            "technology": "technology",
+            "oddities": "oddities",
         },
     },
     "ap_spanish": {
