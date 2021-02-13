@@ -13,6 +13,7 @@ import binascii
 import calendar
 import io
 import json
+import math
 import os
 import pathlib
 import pickle
@@ -631,8 +632,13 @@ def get_accuweather_api(forecast_list, key):
         ragweed = 2
     avg = int(round((grass + tree + ragweed) / 3))
     pollen[key] = avg
-    for i in range(0, 8):
-        precipitation[key][i] = int(data_quarters[i]["PrecipitationProbability"])
+
+    hourly_start = math.floor(int(data_quarters[0]["EffectiveDate"][11:13]) / 6)
+
+    j = 0
+    for i in range(hourly_start, 8):
+        precipitation[key][i] = int(data_quarters[j]["PrecipitationProbability"])
+        j += 1
     for i in range(8, 15):
         precipitation[key][i] = int(
             data_10day["DailyForecasts"][i - 8]["Day"]["PrecipitationProbability"]
@@ -666,8 +672,10 @@ def get_accuweather_api(forecast_list, key):
             int(data_10day["DailyForecasts"][i + 1]["Day"]["Icon"]), forecast_list, key
         )
 
-    for i in range(0, 8):
-        hourly[key][i] = get_icon(int(data_quarters[i]["Icon"]), forecast_list, key)
+    j = 0
+    for i in range(hourly_start, 8):
+        hourly[key][i] = get_icon(int(data_quarters[j]["Icon"]), forecast_list, key)
+        j += 1
 
     """if check_coords(forecast_list,key,lat,lng):
         globe[key]['lat'] = s16(int(lat / GLOBE_CONSTANT))
