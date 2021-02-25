@@ -23,6 +23,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 from datetime import datetime
 
 import nlzss
@@ -251,12 +252,13 @@ def worker():
             q.task_done()
         except queue.Empty:
             pass
-        except Exception as e:
-            log("A thread exception has occurred: %s" % e, "CRITICAL")
+        except:
+            log("A thread exception has occurred: %s" % traceback.format_exc(), "CRITICAL")
             if len(item) == 2:
                 blank_data(
                     item[0], item[1]
                 )  # Since item data is in an unknown state, reset it
+            errors += 1
             q.task_done()
             continue
 
@@ -654,8 +656,8 @@ def get_accuweather_api(forecast_list, key):
                 int(data_quarters[quarter_offset]["EffectiveDate"][11:13]) / 6
             )
         except IndexError:
-            hourly_start = quarter_offset
-            break
+            blank_data(forecast_list, key)
+            return
         
         if data_quarters[quarter_offset]["EffectiveDate"][:10] == localdatetime[:10]:
             right_day = True
@@ -747,6 +749,7 @@ def make_bin(forecast_list, data, language_code):
     if config["production"] and config["packVFF"]:
         packVFF(j, country_code)
     reset_data()
+    return
 
 
 def generate_data(forecast_list, bins):
@@ -792,7 +795,7 @@ def generate_data(forecast_list, bins):
 
 
 def make_forecast_bin(forecast_list, data, language_code):
-    global shortcount, constant, file, seek_offset, seek_base, extension
+    global shortcount, file, seek_offset, seek_base, extension
     constant = 0
     count = {}
     header = make_header_forecast(forecast_list, language_code)
@@ -892,18 +895,19 @@ def make_forecast_bin(forecast_list, data, language_code):
         if len(forecast_list[key][2][language_code]) > 0:
             offset_write(seek_base, False)
             seek_base += (
-                len(forecast_list[key][2][language_code].encode("utf-16be")) + 2
+                len(forecast_list[key][2][language_code].encode(" utf-16be")) + 2
             )
         else:
             offset_write(0, False)
         seek_offset += 12
     file.seek(0)
     f = file.read()[12:]
-    file.close()
     if config["production"]:
         sign_file(f, file1, file2, language_code, False)
         if config["wii_u_generation"]:
             sign_file(f, file1, file2, language_code, True)
+    # file.close()
+    return
 
 
 def make_short_bin(forecast_list, data, language_code):
@@ -925,11 +929,12 @@ def make_short_bin(forecast_list, data, language_code):
     file.write(u32(count + 12))
     file.seek(0)
     f = file.read()
-    file.close()
     if config["production"]:
         sign_file(f, file1, file2, language_code, False)
         if config["wii_u_generation"]:
             sign_file(f, file1, file2, language_code, True)
+    # file.close()
+    return
 
 
 def sign_file(file, local_name, server_name, language_code, wiiu):
