@@ -244,15 +244,19 @@ def worker():
     while threads_run:
         try:
             item = q.get_nowait()
-            get_data(item[0], item[1])
+            if len(item) == 2:
+                get_data(item[0], item[1])
+            elif len(item) == 3:
+                make_bin(item[0], item[1], item[2])
             q.task_done()
         except queue.Empty:
             pass
         except Exception as e:
             log("A thread exception has occurred: %s" % e, "CRITICAL")
-            blank_data(
-                item[0], item[1]
-            )  # Since item data is in an unknown state, reset it
+            if len(item) == 2:
+                blank_data(
+                    item[0], item[1]
+                )  # Since item data is in an unknown state, reset it
             q.task_done()
             continue
 
@@ -731,15 +735,13 @@ def offset_write(value, post=True):
         seek_offset += 4
 
 
-def make_bins(forecast_list, data):
-    global mode, language_code
-    for j in bins:
-        language_code = j
-        make_forecast_bin(forecast_list, data)
-        make_short_bin(forecast_list, data)
-        if config["production"] and config["packVFF"]:
-            packVFF(j, country_code)
-        reset_data()
+def make_bin(forecast_list, data, language_code):
+    global mode
+    make_forecast_bin(forecast_list, data, language_code)
+    make_short_bin(forecast_list, data, language_code)
+    if config["production"] and config["packVFF"]:
+        packVFF(j, country_code)
+    reset_data()
 
 
 def generate_data(forecast_list, bins):
@@ -784,11 +786,11 @@ def generate_data(forecast_list, bins):
     ]
 
 
-def make_forecast_bin(forecast_list, data):
+def make_forecast_bin(forecast_list, data, language_code):
     global shortcount, constant, file, seek_offset, seek_base, extension
     constant = 0
     count = {}
-    header = make_header_forecast(forecast_list)
+    header = make_header_forecast(forecast_list, language_code)
     long_forecast_table = data[0][mode]
     uvindex_table = data[1]
     uvindex_text_table = data[2][language_code]
@@ -894,13 +896,13 @@ def make_forecast_bin(forecast_list, data):
     f = file.read()[12:]
     file.close()
     if config["production"]:
-        sign_file(f, file1, file2, False)
+        sign_file(f, file1, file2, language_code, False)
         if config["wii_u_generation"]:
-            sign_file(f, file1, file2, True)
+            sign_file(f, file1, file2, language_code, True)
 
 
-def make_short_bin(forecast_list, data):
-    short_forecast_header = make_header_short(forecast_list)
+def make_short_bin(forecast_list, data, language_code):
+    short_forecast_header = make_header_short(forecast_list, language_code)
     short_forecast_table = data[12][mode]
     file1 = "short.{}.{}_{}".format(
         extension, str(country_code).zfill(3), str(language_code)
@@ -920,12 +922,12 @@ def make_short_bin(forecast_list, data):
     f = file.read()
     file.close()
     if config["production"]:
-        sign_file(f, file1, file2, False)
+        sign_file(f, file1, file2, language_code, False)
         if config["wii_u_generation"]:
-            sign_file(f, file1, file2, True)
+            sign_file(f, file1, file2, language_code, True)
 
 
-def sign_file(file, local_name, server_name, wiiu):
+def sign_file(file, local_name, server_name, language_code, wiiu):
     if wiiu:
         local_name = local_name.replace("bin", "alt")
         server_name = server_name.replace("bin", "alt")
@@ -1026,7 +1028,7 @@ def get_data(forecast_list, key):
     )
 
 
-def make_header_short(forecast_list):
+def make_header_short(forecast_list, language_code):
     header = {}
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
@@ -1041,7 +1043,7 @@ def make_header_short(forecast_list):
     return header
 
 
-def make_header_forecast(forecast_list):
+def make_header_forecast(forecast_list, language_code):
     header = {}
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
@@ -1582,7 +1584,7 @@ s.headers.update(
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 25 if config["multithreaded"] else 1
+concurrent = 15 if config["multithreaded"] else 1
 ui_run = None
 threads_run = True
 key = open(config["key_path"], "rb")  # Loads the RSA key.
@@ -1623,7 +1625,9 @@ for forecast_list in forecastlists.weathercities:
     status = 3
     data = generate_data(forecast_list, bins)
     status = 4
-    make_bins(forecast_list, data)
+    for j in bins:
+        q.put([forecast_list, data, j])
+    q.join()
     lists += 1
 
 time.sleep(REFRESH_RATE)
@@ -1640,7 +1644,7 @@ if config["production"]:
         statsd.increment("forecast.cities", cities)
         statsd.increment("forecast.errors", errors)
     if config["send_webhooks"]:
-        # this will use a webhook to log that the script has been ran.
+        # this will use a webhook to log that the script has been ran.frsaƒ
         data = {
             "username": "Forecast Bot",
             "content": "Weather Data has been updated!",
