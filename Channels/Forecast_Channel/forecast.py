@@ -23,7 +23,6 @@ import subprocess
 import sys
 import threading
 import time
-import traceback
 from datetime import datetime
 
 import nlzss
@@ -245,20 +244,15 @@ def worker():
     while threads_run:
         try:
             item = q.get_nowait()
-            if len(item) == 2:
-                get_data(item[0], item[1])
-            elif len(item) == 3:
-                make_bin(item[0], item[1], item[2])
+            get_data(item[0], item[1])
             q.task_done()
         except queue.Empty:
             pass
-        except:
-            log("A thread exception has occurred: %s" % traceback.format_exc(), "CRITICAL")
-            if len(item) == 2:
-                blank_data(
-                    item[0], item[1]
-                )  # Since item data is in an unknown state, reset it
-            errors += 1
+        except Exception as e:
+            log("A thread exception has occurred: %s" % e, "CRITICAL")
+            blank_data(
+                item[0], item[1]
+            )  # Since item data is in an unknown state, reset it
             q.task_done()
             continue
 
@@ -651,14 +645,9 @@ def get_accuweather_api(forecast_list, key):
     right_day = False
 
     while not right_day:
-        try:
-            hourly_start = math.floor(
-                int(data_quarters[quarter_offset]["EffectiveDate"][11:13]) / 6
-            )
-        except IndexError:
-            blank_data(forecast_list, key)
-            return
-        
+        hourly_start = math.floor(
+            int(data_quarters[quarter_offset]["EffectiveDate"][11:13]) / 6
+        )
         if data_quarters[quarter_offset]["EffectiveDate"][:10] == localdatetime[:10]:
             right_day = True
         else:
@@ -742,14 +731,15 @@ def offset_write(value, post=True):
         seek_offset += 4
 
 
-def make_bin(forecast_list, data, language_code):
-    global mode
-    make_forecast_bin(forecast_list, data, language_code)
-    make_short_bin(forecast_list, data, language_code)
-    if config["production"] and config["packVFF"]:
-        packVFF(j, country_code)
-    reset_data()
-    return
+def make_bins(forecast_list, data):
+    global mode, language_code
+    for j in bins:
+        language_code = j
+        make_forecast_bin(forecast_list, data)
+        make_short_bin(forecast_list, data)
+        if config["production"] and config["packVFF"]:
+            packVFF(j, country_code)
+        reset_data()
 
 
 def generate_data(forecast_list, bins):
@@ -794,11 +784,11 @@ def generate_data(forecast_list, bins):
     ]
 
 
-def make_forecast_bin(forecast_list, data, language_code):
-    global shortcount, file, seek_offset, seek_base, extension
+def make_forecast_bin(forecast_list, data):
+    global shortcount, constant, file, seek_offset, seek_base, extension
     constant = 0
     count = {}
-    header = make_header_forecast(forecast_list, language_code)
+    header = make_header_forecast(forecast_list)
     long_forecast_table = data[0][mode]
     uvindex_table = data[1]
     uvindex_text_table = data[2][language_code]
@@ -895,23 +885,22 @@ def make_forecast_bin(forecast_list, data, language_code):
         if len(forecast_list[key][2][language_code]) > 0:
             offset_write(seek_base, False)
             seek_base += (
-                len(forecast_list[key][2][language_code].encode(" utf-16be")) + 2
+                len(forecast_list[key][2][language_code].encode("utf-16be")) + 2
             )
         else:
             offset_write(0, False)
         seek_offset += 12
     file.seek(0)
     f = file.read()[12:]
+    file.close()
     if config["production"]:
-        sign_file(f, file1, file2, language_code, False)
+        sign_file(f, file1, file2, False)
         if config["wii_u_generation"]:
-            sign_file(f, file1, file2, language_code, True)
-    # file.close()
-    return
+            sign_file(f, file1, file2, True)
 
 
-def make_short_bin(forecast_list, data, language_code):
-    short_forecast_header = make_header_short(forecast_list, language_code)
+def make_short_bin(forecast_list, data):
+    short_forecast_header = make_header_short(forecast_list)
     short_forecast_table = data[12][mode]
     file1 = "short.{}.{}_{}".format(
         extension, str(country_code).zfill(3), str(language_code)
@@ -929,15 +918,14 @@ def make_short_bin(forecast_list, data, language_code):
     file.write(u32(count + 12))
     file.seek(0)
     f = file.read()
+    file.close()
     if config["production"]:
-        sign_file(f, file1, file2, language_code, False)
+        sign_file(f, file1, file2, False)
         if config["wii_u_generation"]:
-            sign_file(f, file1, file2, language_code, True)
-    # file.close()
-    return
+            sign_file(f, file1, file2, True)
 
 
-def sign_file(file, local_name, server_name, language_code, wiiu):
+def sign_file(file, local_name, server_name, wiiu):
     if wiiu:
         local_name = local_name.replace("bin", "alt")
         server_name = server_name.replace("bin", "alt")
@@ -1038,7 +1026,7 @@ def get_data(forecast_list, key):
     )
 
 
-def make_header_short(forecast_list, language_code):
+def make_header_short(forecast_list):
     header = {}
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
@@ -1053,7 +1041,7 @@ def make_header_short(forecast_list, language_code):
     return header
 
 
-def make_header_forecast(forecast_list, language_code):
+def make_header_forecast(forecast_list):
     header = {}
     header["country_code"] = u8(country_code)  # Wii Country Code.
     header["language_code"] = u32(language_code)  # Wii Language Code.
@@ -1594,7 +1582,7 @@ s.headers.update(
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 15 if config["multithreaded"] else 1
+concurrent = 25 if config["multithreaded"] else 1
 ui_run = None
 threads_run = True
 key = open(config["key_path"], "rb")  # Loads the RSA key.
@@ -1635,9 +1623,7 @@ for forecast_list in forecastlists.weathercities:
     status = 3
     data = generate_data(forecast_list, bins)
     status = 4
-    for j in bins:
-        q.put([forecast_list, data, j])
-    q.join()
+    make_bins(forecast_list, data)
     lists += 1
 
 time.sleep(REFRESH_RATE)
