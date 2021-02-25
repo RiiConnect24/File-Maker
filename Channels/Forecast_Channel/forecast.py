@@ -1644,7 +1644,7 @@ if config["production"]:
         statsd.increment("forecast.cities", cities)
         statsd.increment("forecast.errors", errors)
     if config["send_webhooks"]:
-        # this will use a webhook to log that the script has been ran.frsaƒ
+        # this will use a webhook to log that the script has been ran.
         data = {
             "username": "Forecast Bot",
             "content": "Weather Data has been updated!",
