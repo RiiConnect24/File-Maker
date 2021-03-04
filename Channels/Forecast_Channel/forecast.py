@@ -287,6 +287,7 @@ def refresh(type):
 
 
 def ui():
+    global elapsed_time
     prog = """-\|/"""  # These are characters which will make a spinning effect
     progcount = 0
     bar = 35  # Size of progress bars
@@ -1636,7 +1637,7 @@ if config["production"]:
         statsd.increment("forecast.api_requests", apirequests)
         statsd.increment("forecast.retry_count", retrycount)
         statsd.increment("forecast.elapsed_time", elapsed_time)
-        statsd.increment("forecast.bandwidth_usage", bandwidth)
+        statsd.increment("forecast.bandwidth_usage", bw_usage)
         statsd.increment("forecast.cities", cities)
         statsd.increment("forecast.errors", errors)
     if config["send_webhooks"]:
