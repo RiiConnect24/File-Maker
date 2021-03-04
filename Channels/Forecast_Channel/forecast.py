@@ -287,7 +287,7 @@ def refresh(type):
 
 
 def ui():
-    global elapsed_time
+    global elapsed_time, bandwidth
     prog = """-\|/"""  # These are characters which will make a spinning effect
     progcount = 0
     bar = 35  # Size of progress bars
@@ -318,7 +318,7 @@ def ui():
         # Calculate values to show on screen
         dl = len(forecast_list) - cached > 0
         elapsed_time = int(round(time.time() - total_time))
-        bandwidth = "%.2f" % round(float(bw_usage) / 1048576, 2)
+        bandwidth = float("%.2f" % round(float(bw_usage) / 1048576, 2))
         totalpercent = int(
             round(float(lists) / float(len(forecastlists.weathercities)) * 100)
         )
@@ -1637,7 +1637,7 @@ if config["production"]:
         statsd.increment("forecast.api_requests", apirequests)
         statsd.increment("forecast.retry_count", retrycount)
         statsd.increment("forecast.elapsed_time", elapsed_time)
-        statsd.increment("forecast.bandwidth_usage", bw_usage)
+        statsd.increment("forecast.bandwidth_usage", bandwidth)
         statsd.increment("forecast.cities", cities)
         statsd.increment("forecast.errors", errors)
     if config["send_webhooks"]:
