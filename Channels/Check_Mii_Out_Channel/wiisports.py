@@ -44,7 +44,7 @@ with open("decfiles/wiisports.dec", "wb") as file:
 path = config["miicontest_path"]
 
 with open("{}/dd/wiisports.dec".format(path), "wb") as file:
-    file.write(crc(ql).to_bytes(2, "big") + ql)
+    file.write(ql)
 
 # symlink all miidd country code files to wiisports.enc with its FULL directory path
 system(
