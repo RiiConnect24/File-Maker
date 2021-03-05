@@ -45,10 +45,12 @@ db.commit()
 db.close()
 
 for country in [0, 150]:
-	data = ql.build("SL", (popularMiis + extraMiis), country)
+    data = ql.build("SL", (popularMiis + extraMiis), country)
 
-	with open("{}/{}/spot_list.ces".format(config["miicontest_path"], country), "wb") as file:
-    	file.write(pr.prepare(data))
+    with open(
+        "{}/{}/spot_list.ces".format(config["miicontest_path"], country), "wb"
+    ) as file:
+        file.write(pr.prepare(data))
 
 with open("decfiles/spot_list.dec", "wb") as file:
     file.write(data)
