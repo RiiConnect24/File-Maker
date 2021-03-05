@@ -819,7 +819,7 @@ class ConInfo:
             self.contest["contest_index"] = u32(contests.index(entry) + 1)
             self.contest["contest_id"] = u32(entry[0])
             self.contest["status"] = u8(conStatus(entry[1]))
-            self.contest["worldwide"] = u8(1)
+            self.contest["worldwide"] = u8(1) # set to 2 or 10 for it to try to grab thumbnails
             self.contest["padding1"] = u8(0) * 18
             self.conlist += self.contest.values()
 
