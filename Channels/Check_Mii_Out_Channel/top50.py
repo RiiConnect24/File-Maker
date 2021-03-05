@@ -26,4 +26,4 @@ for country in [0, 150]:
     ) as file:
         file.write(pr.prepare(data))
 
-    ResetList("PL")
+    ResetList(b"PL")
