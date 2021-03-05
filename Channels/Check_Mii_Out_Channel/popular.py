@@ -6,10 +6,6 @@ from time import sleep
 with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
     config = load(f)
 
-# gets the most popular miis ordered by their volatile likes which resets to 0 when spot_list resets
-ql = QuickList()
-pr = Prepare()
-
 db = MySQLdb.connect("localhost", config["dbuser"], config["dbpass"], "cmoc")
 cursor = db.cursor()
 
@@ -45,6 +41,10 @@ db.commit()
 db.close()
 
 for country in [0, 150]:
+    # gets the most popular miis ordered by their volatile likes which resets to 0 when spot_list resets
+    ql = QuickList()
+    pr = Prepare()
+    
     data = ql.build("SL", (popularMiis + extraMiis), country)
 
     with open(

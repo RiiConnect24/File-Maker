@@ -27,9 +27,10 @@ for n in a:
     miilist = cursor.fetchall()
 
     list_type = "RL" + str(bl)
-    ql = NumberedList()
 
     for country in [0, 150]:
+        ql = NumberedList()
+
         data = ql.build(list_type, miilist, country)
 
         with open(
@@ -57,9 +58,10 @@ for t in a:
     miilist = cursor.fetchall()
 
     list_type = "NL" + str(nl)
-    ql = NumberedList()
 
     for country in [0, 150]:
+        ql = NumberedList()
+        
         data = ql.build(list_type, miilist, country)
 
         with open(
