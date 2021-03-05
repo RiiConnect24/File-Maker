@@ -1,9 +1,9 @@
 {
-  "file_path": "/path/to/save/file",
-  "lzss_path": "/path/to/lzss",
-  "production": true,
-  "miicontest_path": "/var/www/wapp.wii.com/miicontest/public_html",
-  "miicontestp_path": "/var/www/wapp.wii.com/miicontestp/public_html",
-  "dbuser": "mysqluser",
-  "dbpass": "mysqlpassword"
+    "file_path": "/path/to/save/file",
+    "lzss_path": "/path/to/lzss",
+    "production": true,
+    "miicontest_path": "/var/www/wapp.wii.com/miicontest/public_html",
+    "miicontestp_path": "/var/www/wapp.wii.com/miicontestp/public_html",
+    "dbuser": "mysqluser",
+    "dbpass": "mysqlpassword",
 }

@@ -19,28 +19,37 @@ def u16(data):
 def u32(data):
     return struct.pack(">I", data)
 
+
 parser = argparse.ArgumentParser(description="Sign / Encrypt WiiConnect24 files.")
-parser.add_argument("-t", "--type",
-                        type=str, nargs="+",
-                        help="Type of file. Set either enc for encrypted file, or dec for decrypted (compressed) file.")
-parser.add_argument("-in", "--input",
-                        type=str, nargs="+",
-                        help="Input file.")
-parser.add_argument("-out", "--output",
-                        type=str, nargs="+",
-                        help="Output file.")
-parser.add_argument("-c", "--compress",
-                        type=str, nargs="+",
-                        help="If set, this will compress the file before signing.")
-parser.add_argument("-key", "--aes-key",
-                        type=str, nargs="+",
-                        help="AES key in hex or a path.")
-parser.add_argument("-iv", "--iv-key",
-                        type=str, nargs="+",
-                        help="AES IV in hex or a path.")
-parser.add_argument("-rsa", "--rsa-key-path",
-                        type=str, nargs="+",
-                        help="RSA private key path. If not specified, it will use the private key in Private.pem if it exists.")
+parser.add_argument(
+    "-t",
+    "--type",
+    type=str,
+    nargs="+",
+    help="Type of file. Set either enc for encrypted file, or dec for decrypted (compressed) file.",
+)
+parser.add_argument("-in", "--input", type=str, nargs="+", help="Input file.")
+parser.add_argument("-out", "--output", type=str, nargs="+", help="Output file.")
+parser.add_argument(
+    "-c",
+    "--compress",
+    type=str,
+    nargs="+",
+    help="If set, this will compress the file before signing.",
+)
+parser.add_argument(
+    "-key", "--aes-key", type=str, nargs="+", help="AES key in hex or a path."
+)
+parser.add_argument(
+    "-iv", "--iv-key", type=str, nargs="+", help="AES IV in hex or a path."
+)
+parser.add_argument(
+    "-rsa",
+    "--rsa-key-path",
+    type=str,
+    nargs="+",
+    help="RSA private key path. If not specified, it will use the private key in Private.pem if it exists.",
+)
 
 args = parser.parse_args()
 
