@@ -1,4 +1,4 @@
-from cmoc import QuickList, Prepare
+from cmoc import QuickList, Prepare, ResetList
 import MySQLdb
 from json import load
 from time import sleep
@@ -25,3 +25,5 @@ for country in [0, 150]:
         "{}/{}/pop_list.ces".format(config["miicontest_path"], country), "wb"
     ) as file:
         file.write(pr.prepare(data))
+
+    ResetList("PL")
