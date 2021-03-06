@@ -646,13 +646,17 @@ def get_accuweather_api(forecast_list, key):
     right_day = False
 
     while not right_day:
-        hourly_start = math.floor(
-            int(data_quarters[quarter_offset]["EffectiveDate"][11:13]) / 6
-        )
-        if data_quarters[quarter_offset]["EffectiveDate"][:10] == localdatetime[:10]:
-            right_day = True
-        else:
-            quarter_offset += 1
+        try:
+            hourly_start = math.floor(
+                int(data_quarters[quarter_offset]["EffectiveDate"][11:13]) / 6
+            )
+            if data_quarters[quarter_offset]["EffectiveDate"][:10] == localdatetime[:10]:
+                right_day = True
+            else:
+                quarter_offset += 1
+        except:
+            blank_data(forecast_list, key)
+            return
 
     j = 0
     for i in range(hourly_start, 8):
