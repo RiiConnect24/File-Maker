@@ -442,7 +442,7 @@ def timestamps(mode, key=None):
     elif mode == 1:
         timestamp = citytime
     elif mode == 2:
-        timestamp = time + 60
+        timestamp = time + 63
     return timestamp
 
 
