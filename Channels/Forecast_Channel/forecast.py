@@ -900,10 +900,8 @@ def make_forecast_bin(forecast_list, data):
     file.close()
     if config["production"]:
         sign_file(f, file1, file2, False)
-        time.sleep(0.025)
         if config["wii_u_generation"]:
             sign_file(f, file1, file2, True)
-        time.sleep(0.025)
 
 
 def make_short_bin(forecast_list, data):
@@ -928,10 +926,8 @@ def make_short_bin(forecast_list, data):
     file.close()
     if config["production"]:
         sign_file(f, file1, file2, False)
-        time.sleep(0.025)
         if config["wii_u_generation"]:
             sign_file(f, file1, file2, True)
-        time.sleep(0.025)
 
 
 def sign_file(file, local_name, server_name, wiiu):
@@ -1033,8 +1029,6 @@ def get_data(forecast_list, key):
             location_key, api_key
         )
     )
-
-    time.sleep(0.025)
 
 
 def make_header_short(forecast_list):
