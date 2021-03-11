@@ -900,8 +900,10 @@ def make_forecast_bin(forecast_list, data):
     file.close()
     if config["production"]:
         sign_file(f, file1, file2, False)
+        time.sleep(0.025)
         if config["wii_u_generation"]:
             sign_file(f, file1, file2, True)
+        time.sleep(0.025)
 
 
 def make_short_bin(forecast_list, data):
@@ -926,8 +928,10 @@ def make_short_bin(forecast_list, data):
     file.close()
     if config["production"]:
         sign_file(f, file1, file2, False)
+        time.sleep(0.025)
         if config["wii_u_generation"]:
             sign_file(f, file1, file2, True)
+        time.sleep(0.025)
 
 
 def sign_file(file, local_name, server_name, wiiu):
@@ -1029,6 +1033,8 @@ def get_data(forecast_list, key):
             location_key, api_key
         )
     )
+
+    time.sleep(0.025)
 
 
 def make_header_short(forecast_list):
@@ -1587,7 +1593,7 @@ s.headers.update(
 total_time = time.time()
 q = queue.Queue()
 threads = []
-concurrent = 25 if config["multithreaded"] else 1
+concurrent = 15 if config["multithreaded"] else 1
 ui_run = None
 threads_run = True
 key = open(config["key_path"], "rb")  # Loads the RSA key.
@@ -1649,7 +1655,7 @@ if config["production"]:
         data = {
             "username": "Forecast Bot",
             "content": "Weather Data has been updated!",
-            "avatar_url": "http://rc24.xyz/images/logo-small.png",
+            "avatar_url": "https://rc24.xyz/images/logo-small.png",
             "attachments": [
                 {
                     "fallback": "Weather Data Update",
