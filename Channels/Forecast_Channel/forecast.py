@@ -692,11 +692,15 @@ def get_accuweather_api(forecast_list, key):
     for i in range(0, 14):
         week[key][i + 14] = to_celsius(week[key][i])
     for i in range(0, 8):
-        week[key][i + 30] = get_icon(
-            int(data_10day["DailyForecasts"][i + 1 + day]["Day"]["Icon"]),
-            forecast_list,
-            key,
-        )
+        try:
+            week[key][i + 30] = get_icon(
+                int(data_10day["DailyForecasts"][i + 1 + day]["Day"]["Icon"]),
+                forecast_list,
+                key,
+            )
+        except:
+            blank_data(forecast_list, key)
+            return
 
     j = 0
     for i in range(hourly_start, 8):
