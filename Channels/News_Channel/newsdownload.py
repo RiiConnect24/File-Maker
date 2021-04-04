@@ -15,7 +15,7 @@ import random
 import sys
 import textwrap
 import time
-from html.parser import HTMLParser
+from html.parser import unescape
 from io import BytesIO, StringIO
 from datetime import datetime
 
@@ -180,7 +180,7 @@ sources = {
 
 def enc(text):
     if text:
-        return ftfy.fix_encoding(HTMLParser().unescape(text)).encode(
+        return ftfy.fix_encoding(unescape(text)).encode(
             "utf-16be", "replace"
         )
 
@@ -440,11 +440,6 @@ class News:
             try:
                 news_url = self.url % key
 
-                if self.source == "Reuters":
-                    news_url += "?since=" + str(
-                        int((time.mktime(datetime.utcnow().timetuple()))) * 10000000000
-                    )
-
                 feed = requests.get(
                     news_url
                 ).json()  # we use AP's API to download their news, it's epic and it uses JSON
@@ -464,7 +459,18 @@ class News:
         if self.source == "AP":
             entries = feed["cards"]
         elif self.source == "Reuters":
-            entries = feed["wireitems"]
+            entries = []
+            entries2 = feed["wireitems"]
+            for entry in entries2:
+                try:
+                    entry = entry["templates"][1]
+                    if entry["type"] == "story":
+                        entries.append(entry)
+                    elif entry["type"] == "headlines":
+                        for entry2 in entry["headlines"]:
+                            entries.append(entry2)
+                except:
+                    continue
         elif self.source == "AFP_French":
             entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
         else:
@@ -475,12 +481,6 @@ class News:
                 if self.source == "AP":
                     try:
                         entry = entry["contents"][0]
-                    except:
-                        continue
-                elif self.source == "Reuters":
-                    try:
-                        _ = entry["templates"][1]["story"]["hed"]
-                        entry = entry["templates"][1]
                     except:
                         continue
 
@@ -709,34 +709,35 @@ class Parse(News):
             self.newsdata = self.session.get(self.url).json()["wireitems"][0][
                 "templates"
             ][0]["story"]
+
+            self.article = newspaper.fulltext(
+                self.newsdata["body"], language=self.language
+            )
         except Exception as e:
             print(e)
             return []
 
         try:
-            self.article = newspaper.fulltext(
-                self.newsdata["body"], language=self.language
-            )
-
             self.caption = self.newsdata["images"][0]["caption"]
 
             self.picture = self.newsdata["images"][0]["url"] + "&w=200.0"
 
             self.resize = False
-        except Exception as e:
-            print(e)
+        except:
+            pass
 
         try:
             location = self.newsdata["dateline"]
 
-            if location != "(Reuters)":
+            if " (Reuters)" in location:
                 self.location = location.split(" (Reuters)")[0].split("/")[0]
-            elif "\uff3b" in self.location and "\u3000" in self.location:
-                self.location = self.article.split("\uff3b")[1].split("\u3000")[0]
+            elif "［" in self.article and "］" in self.article:
+                self.location = self.article.split("［")[1].split("］")[0].split("日 ロイター")[0][:-1]
 
-            print(self.location)
-        except Exception as e:
-            print(e)
+            if self.location == "":
+                self.location = None
+        except:
+            pass
 
     def parse_afp_french(self):
         try:

@@ -62,9 +62,9 @@ def download(source):
         else:
             print("Invalid source specified.")
             exit()
-    except:
-        sentry_sdk.capture_exception()
-        return
+    except Exception as e:
+        print("Failed to make news for " + source + ".")
+        print(e)
 
 
 if __name__ == "__main__":
