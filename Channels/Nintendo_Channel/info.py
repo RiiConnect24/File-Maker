@@ -40,6 +40,9 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 def enc(text, length):
+    if len(text) > length:
+        print("Error: Text too long.")
+        sys.exit(1)
     return text.encode("utf-16be").ljust(length, b'\0')[:length]
 
 class make_info():
@@ -150,10 +153,23 @@ class make_info():
                 self.header["release_day"] = u8(int(s.find("date").get("day")))
 
                 controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller", "gamecube": "gamecube_controller", "mii": "mii"}
-
+                controllers2 = {"wheel": "Wii Wheel", "balanceboard": "Wii Balance Board", "wiispeak": "Wii Speak", "microphone": "Microphone", "guitar": "Guitar", "drums": "Drums", "dancepad": "Dance Pad", "keyboard": "Keyboard", "udraw": "uDraw"}
+                
+                other_peripherals = False
+                
                 for controller in s.find("input").findall("control"):
                     if controller.get("type") in controllers:
                         self.header["{}_flag".format(controllers[controller.get("type")])] = u8(1)
+                    elif controller.get("type") in controllers2:
+                        if not other_peripherals:
+                            self.header["peripherals_text"] = ""
+
+                        self.header["peripherals_text"] += controllers2[controller.get("type")] + ", "
+                        
+                        other_peripherals = True
+
+                if other_peripherals:
+                    self.header["peripherals_text"] = enc(self.header["peripherals_text"][:-2], 88)
                 
                 for feature in s.find("wi-fi").findall("feature"):
                     if "online" in feature.text:
@@ -167,7 +183,6 @@ class make_info():
 
                 for l in languages.keys():
                     if l in languages_list:
-                        print(languages[l])
                         self.header["language_{}_flag".format(languages[l])] = u8(1)
 
                 wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
@@ -217,6 +232,25 @@ class make_info():
                 self.header["title"] = enc(self.header["title"], 62)
                 
                 self.header["genre_text"] = enc(s.find("genre").text.title().replace(",", ", "), 58)
+
+                players_local = s.find("input").get("players")
+                players_online = s.find("wi-fi").get("players")
+
+                self.header["players_text"] = players_local + " Player"
+                
+                if players_local != "1":
+                    self.header["players_text"] += "s"
+
+                if players_online != "0":
+                    self.header["players_text"] += " (Local), " + players_online + " Player"
+
+                    if players_online != "1":
+                        self.header["players_text"] += "s"
+
+                    self.header["players_text"] += " (Online)"
+
+                self.header["players_text"] = enc(self.header["players_text"], 82)
+
                 self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 4800)
 
                 print(self.header)
