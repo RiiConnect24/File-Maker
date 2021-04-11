@@ -203,13 +203,17 @@ class make_info():
                     self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
                     i += 1
 
-                self.header["title"] = s.find("locale", {"lang": "EN"}).title.text
+                self.header["title"] = title = s.find("locale", {"lang": "EN"}).title.text
 
                 # make separator in game name have a subtitle too
                 
-                if ": " in self.header["title"] or " - " in self.header["title"]:
-                    self.header["title"] = self.header["title"].split(": ")[0].split(" - ")[0]
-                    self.header["subtitle"] = enc(self.header["title"].split(": ")[1].split(" - ")[1], 62)
+                if ": " in self.header["title"]:
+                    self.header["title"] = title.split(": ")[0]
+                    self.header["subtitle"] = enc(title.split(": ")[1], 62)
+                
+                elif " - " in self.header["title"]:
+                    self.header["title"] = title.split(" - ")[0]
+                    self.header["subtitle"] = enc(title.split(" - ")[1], 62)
                 
                 self.header["title"] = enc(self.header["title"], 62)
                 
