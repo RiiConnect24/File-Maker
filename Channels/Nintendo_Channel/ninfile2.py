@@ -1,7 +1,10 @@
+import lxml.etree as ET
 import ninfile1
 import os
+import pickle
 import requests
 import struct
+import sys
 import zipfile
 from bs4 import BeautifulSoup
 
@@ -68,7 +71,7 @@ def intTostrID(id):
     return chr(id >> 24) + chr(id >> 16 & 0xFF) + chr(id >> 8 & 0xFF) + chr(id & 0xFF)
 
 class GameTDB():
-    def __init__(self):
+    def __init__(self, cache):
         self.databases = {
             "Wii": ["wii", None],
             # "3DS": ["3ds", None],
@@ -80,22 +83,23 @@ class GameTDB():
     def download(self):
         for k, v in self.databases.items():
             print("Downloading {} Database from GameTDB...".format(k))
-            zip_filename = "{}tdb.zip".format(v[0])
-            if not os.path.exists(zip_filename):
-                url = "https://www.gametdb.com/{}".format(zip_filename)
+            filename = v[0] + "tdb"
+            if not os.path.exists(filename + ".xml"):
+                url = "https://www.gametdb.com/{}".format(filename + ".zip")
                 # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
                 r = requests.get(
                     url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
-                open(zip_filename, 'wb').write(r.content)
-                self.zip = zipfile.ZipFile(zip_filename)
+                open(filename + ".zip", 'wb').write(r.content)
+                self.zip = zipfile.ZipFile(filename + ".zip")
                 self.zip.extractall(".")
                 self.zip.close()
 
     def parse(self):
         for k, v in self.databases.items():
-            print("Parsing {}...".format(k))
-            v[1] = BeautifulSoup(
-                open("{}tdb.xml".format(v[0]), "r").read(), "lxml")
+            filename = v[0] + "tdb"
+            
+            print("Loading {}...".format(k))
+            v[1] = ET.parse(filename + ".xml")
 
         return self.databases
 

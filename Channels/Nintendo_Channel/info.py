@@ -138,24 +138,24 @@ class make_info():
             self.header["custom_field_text_%s" % i] = b'\0' * 82
 
     def write_gametdb_info(self):
-        for s in self.databases[sys.argv[1]][1].datafile.find_all("game"):
+        for s in self.databases[sys.argv[1]][1].findall("game"):
             if s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
                 print("Found {}!".format(sys.argv[2]))
 
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
 
                 self.header["purchase_button_flag"] = u8(1) # we'll make it go to gametdb
-                self.header["release_year"] = u16(int(s.date["year"]))
-                self.header["release_month"] = u8(int(s.date["month"]) - 1)
-                self.header["release_day"] = u8(int(s.date["day"]))
+                self.header["release_year"] = u16(int(s.find("date").get("year")))
+                self.header["release_month"] = u8(int(s.find("date").get("month")) - 1)
+                self.header["release_day"] = u8(int(s.find("date").get("day")))
 
-                controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller", "gamecube": "gamecube_controller"}
+                controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller", "gamecube": "gamecube_controller", "mii": "mii"}
 
-                for controller in s.find_all("control"):
-                    if controller["type"] in controllers:
-                        self.header["{}_flag".format(controllers[controller["type"]])] = u8(1)
+                for controller in s.find("input").findall("control"):
+                    if controller.get("type") in controllers:
+                        self.header["{}_flag".format(controllers[controller.get("type")])] = u8(1)
                 
-                for feature in s.find_all("feature"):
+                for feature in s.find("wi-fi").findall("feature"):
                     if "online" in feature.text:
                         self.header["online_flag"] = u8(1)
                         self.header["nintendo_wifi_connection_flag"] = u8(1)
@@ -163,13 +163,14 @@ class make_info():
                 # what languages does this game apparently support? (not sure how accurate the db is)
                 
                 languages = {"ZHCN": "chinese", "KO": "korean", "JA": "japanese", "EN": "english", "FR": "french", "ES": "spanish", "DE": "german", "IT": "italian", "NL": "dutch"}
-                languages_list = s.languages.text.split(",")
+                languages_list = s.find("languages").text.split(",")
 
                 for l in languages.keys():
                     if l in languages_list:
+                        print(languages[l])
                         self.header["language_{}_flag".format(languages[l])] = u8(1)
 
-                wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).synopsis.text, 41)
+                wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
 
                 text_type = None
 
@@ -182,7 +183,7 @@ class make_info():
 
                     # let's shorten the synopsis until it fits
 
-                    synopsis_text = s.find("locale", {"lang": "EN"}).synopsis.text.split(". ")
+                    synopsis_text = s.find("locale", {"lang": "EN"}).find("synopsis").text.split(". ")
 
                     i = len(textwrap.wrap(". ".join(synopsis_text), 41)) + 1
                     j = len(synopsis_text)
@@ -196,14 +197,12 @@ class make_info():
                         i = len(wrap)
 
                 i = 1
-
-                print(wrap)
                 
                 for w in wrap:
                     self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
                     i += 1
 
-                self.header["title"] = title = s.find("locale", {"lang": "EN"}).title.text
+                self.header["title"] = title = s.find("locale", {"lang": "EN"}).find("title").text
 
                 # make separator in game name have a subtitle too
                 
@@ -217,7 +216,7 @@ class make_info():
                 
                 self.header["title"] = enc(self.header["title"], 62)
                 
-                self.header["genre_text"] = enc(s.genre.text.title().replace(",", ", "), 58)
+                self.header["genre_text"] = enc(s.find("genre").text.title().replace(",", ", "), 58)
                 self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 4800)
 
                 print(self.header)
@@ -256,4 +255,4 @@ class make_info():
 
         self.writef2.close()
 
-make_info(GameTDB().parse())
+make_info(GameTDB(True).parse())
