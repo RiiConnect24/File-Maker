@@ -21,6 +21,10 @@ voting.*
 *_q.*
 *_r.*
 
+# Nintendo Channel
+
+.DS_Store
+
 # JetBrains IDE
 
 .idea/**
