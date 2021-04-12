@@ -35,8 +35,9 @@ def u32_littleendian(data):
 
 if len(sys.argv) != 3:
     print("Usage: info.py <platform> <title id>")
-    if len(sys.argv[2]) != 4:
-        print("Error: Title ID must be 4 characters.")
+    sys.exit(1)
+elif len(sys.argv[2]) != 4:
+    print("Error: Title ID must be 4 characters.")
     sys.exit(1)
 
 def enc(text, length):
@@ -253,9 +254,13 @@ class make_info():
 
                 self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 4800)
 
+                self.header["filesize"] = u32(sum(len(values) for values in list(self.header.values()) if values))
+
                 print(self.header)
 
                 return
+        print("Error: Could not find {}.".format(sys.argv[2]))
+        sys.exit(1)
 
     
     def write_file(self):
@@ -281,8 +286,7 @@ class make_info():
         self.writef2 = open(filename, "wb")
 
         self.writef2.write(read)
-        self.writef2.seek(4)
-        self.writef2.write(u32(len(read)))
+        self.writef2.seek(8)
         self.writef2.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))  
 
         os.remove(filename + "-1")
