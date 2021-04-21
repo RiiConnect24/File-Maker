@@ -45,7 +45,7 @@ sources = {
     # reference parse_feed
     "ap_english": {
         "name": "AP",
-        "url": "https://storage.googleapis.com/afs-prod/feeds/%s.json.gz",
+        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "en",
         "cat": {
             "us-news": "national",
@@ -531,7 +531,7 @@ class News:
                     print(title)
 
                     if self.source == "AP":
-                        entry_url = entry["gcsUrl"]
+                        entry_url = json.dumps(entry)
                     elif self.source == "Reuters":
                         entry_url = self.url[:30] + entry["template_action"]["api_path"]
                     else:
@@ -586,7 +586,7 @@ class Parse(News):
         self.soup = soup
         self.session = requests.Session()
 
-        if self.source != "AP" or self.source != "Reuters":
+        if self.source != "AP" and self.source != "Reuters":
             init = self.newspaper_init()
             if init == []:
                 return None
@@ -641,7 +641,7 @@ class Parse(News):
 
     def parse_ap(self):
         try:
-            self.newsdata = self.session.get(self.url).json()
+            self.newsdata = json.loads(self.url)
         except:
             self.article = None
             return
