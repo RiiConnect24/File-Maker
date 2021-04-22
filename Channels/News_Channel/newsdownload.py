@@ -693,7 +693,9 @@ class Parse(News):
                     + self.newsdata["media"][0]["imageFileExtension"]
                 )
 
-                self.caption = self.newsdata["media"][0]["flattenedCaption"]
+                self.caption = newspaper.fulltext(
+                    self.newsdata["media"][0]["caption"] + "<p></p>", language=self.language
+                )
 
                 self.credits = self.caption.rsplit("(")[-1][:-1]
             else:
