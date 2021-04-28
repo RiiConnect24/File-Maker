@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import collections
-
-weathercities001 = collections.OrderedDict()
+weathercities001 = {}
 
 weathercities001["Tokyo"] = [
     ["東京", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
@@ -734,21 +732,21 @@ weathercities001["Iriomote-jima"] = [
     ["沖縄県", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa", "Okinawa"],
     ["日本", "Japan", "Japan", "Japon", "Japón", "Giappone", "Japan"], "115e580300030000"]
 
-weathercities008 = collections.OrderedDict()
+weathercities008 = {}
 
 weathercities008["The Valley"] = [
     ["バレー", "The Valley", "The Valley", "The Valley", "El Valle", "The Valley", "The Valley"],
     ["アンギラ", "Anguilla", "Anguilla", "Anguilla", "Anguila", "Anguilla", "Anguilla"],
     ["アンギラ", "Anguilla", "Anguilla", "Anguilla", "Anguila", "Anguilla", "Anguilla"], "0cf4d32b01030000"]
 
-weathercities009 = collections.OrderedDict()
+weathercities009 = {}
 
 weathercities009["St. John's"] = [
     ["セント・ジョンズ", "St. John's", "Saint John’s", "Saint John’s", "Saint John", "Saint John's", "Saint John's"],
     ["セント・ジョン", "Saint John", "Saint John", "Saint-Jean", "Saint John", "Saint John", "Saint John"],
     ["アンティグア・バーブーダ", "Antigua and Barbuda", "Antigua und Barbuda", "Antigua-et-Barbuda", "Antigua y Barbuda", "Antigua e Barbuda", "Antigua en Barbuda"], "0c2bd40501030000"]
 
-weathercities010 = collections.OrderedDict()
+weathercities010 = {}
 
 weathercities010["Buenos Aires"] = [
     ["ブエノスアイレス", "Buenos Aires", "Buenos Aires", "Buenos Aires", "Buenos Aires", "Buenos Aires", "Buenos Aires"],
@@ -827,35 +825,35 @@ weathercities010["San Miguel de Tucumán"] = [
     ["トゥクマン州", "Tucumán", "Tucumán", "Tucuman", "Tucumán", "Tucumán", "Tucumán"],
     ["アルゼンチン", "Argentina", "Argentinien", "Argentine", "Argentina", "Argentina", "Argentinië"], "ecefd1a003030000"]
 
-weathercities011 = collections.OrderedDict()
+weathercities011 = {}
 
 weathercities011["Oranjestad"] = [
     ["オラニェスタット", "Oranjestad", "Oranjestad", "Oranjestad", "Oranjestad", "Oranjestad", "Oranjestad"],
     ["トゥクマン州", "Tucumán", "Tucumán", "Tucuman", "Tucumán", "Tucumán", "Tucumán"],
     ["アルバ", "Aruba", "Aruba", "Aruba", "Aruba", "Aruba", "Aruba"], "08e6ce3305030000"]
 
-weathercities012 = collections.OrderedDict()
+weathercities012 = {}
 
 weathercities012["Nassau"] = [
     ["ナッソー", "Nassau", "Nassau", "Nassau", "Nasáu", "Nassau", "Nassau"],
     ["トゥクマン州", "Tucumán", "Tucumán", "Tucuman", "Tucumán", "Tucumán", "Tucumán"],
     ["バハマ", "Bahamas", "Bahamas", "Bahamas", "Bahamas", "Bahamas", "Bahama's"], "11d6c8ff05030000"]
 
-weathercities013 = collections.OrderedDict()
+weathercities013 = {}
 
 weathercities013["Bridgetown"] = [
     ["ブリッジタウン", "Bridgetown", "Bridgetown", "Bridgetown", "Bridgetown", "Bridgetown", "Bridgetown"],
     ["トゥクマン州", "Tucumán", "Tucumán", "Tucuman", "Tucumán", "Tucumán", "Tucumán"],
     ["バルバドス", "Barbados", "Barbados", "Barbade", "Barbados", "Barbados", "Barbados"], "0950d59c07030000"]
 
-weathercities014 = collections.OrderedDict()
+weathercities014 = {}
 
 weathercities014["Belmopan"] = [
     ["ベルモパン", "Belmopan", "Belmopan", "Belmopan", "Belmopán", "Belmopan", "Belmopan"],
     ["カヨー州", "Cayo", "Cayo", "Cayo", "Cayo", "Cayo", "Cayo"],
     ["ベリーズ", "Belize", "Belize", "Belize", "Belice", "Belize", "Belize"], "0c44c0e104030000"]
 
-weathercities015 = collections.OrderedDict()
+weathercities015 = {}
 
 weathercities015["Trinidad"] = [
     ["トリニダード", "Trinidad", "Trinidad", "Trinidad", "La Santísima Trinidad", "Trinidad", "Trinidad"],
@@ -930,7 +928,7 @@ weathercities015["Yacuiba"] = [
     ["タリハ県", "Tarija", "Tarija", "Tarija", "Tarija", "Tarija", "Tarija"],
     ["ボリビア", "Bolivia", "Bolivien", "Bolivie", "Bolivia", "Bolivia", "Bolivia"], "f05cd2c708030000"]
 
-weathercities016 = collections.OrderedDict()
+weathercities016 = {}
 
 weathercities016["Brasília"] = [
     ["ブラジリア", "Brasília", "Brasília", "Brasília", "Brasilia", "Brasilia", "Brasilia"],
@@ -1069,14 +1067,14 @@ weathercities016["Jaboatão"] = [
     ["ペルナンブコ州", "Pernambuco", "Pernambuco", "Pernambouc", "Pernambuco", "Pernambuco", "Pernambuco"],
     ["ブラジル", "Brazil", "Brasilien", "Brésil", "Brasil", "Brasile", "Brazilië"], "fa3be71a03030000"]
 
-weathercities017 = collections.OrderedDict()
+weathercities017 = {}
 
 weathercities017["Road Town"] = [
     ["ボリビア", "Road Town", "Bolivien", "Bolivie", "Bolivia", "Bolivia", "Bolivia"],
     ["ペルナンブコ州", "Pernambuco", "Pernambuco", "Pernambouc", "Pernambuco", "Pernambuco", "Pernambuco"],
     ["英領ヴァージン諸島", "British Virgin Islands", "Britische Jungferninseln", "Iles Vierges britanniques", "Islas Vírgenes Británicas", "Isole Vergini Britanniche", "Britse Maagdeneilanden"], "0d18d20d01030000"]
 
-weathercities018 = collections.OrderedDict()
+weathercities018 = {}
 
 weathercities018["Ottawa"] = [
     ["オタワ", "Ottawa", "Ottawa", "Ottawa", "Ottawa", "Ottawa", "Ottawa"],
@@ -1550,14 +1548,14 @@ weathercities018["Sanikiluaq"] = [
     ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut", "Nunavut", "Nunavut"],
     ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"], "2833c7a900030000"]
 
-weathercities019 = collections.OrderedDict()
+weathercities019 = {}
 
 weathercities019["George Town"] = [
     ["ジョージ・タウン", "George Town", "George Town", "George Town", "George Town", "George Town", "George Town"],
     ["ヌナブト準州", "Nunavut", "Nunavut", "Territoire du Nunavut", "Nunavut", "Nunavut", "Nunavut"],
     ["ケイマン諸島", "Cayman Islands", "Kaimaninseln", "Iles Caïmans", "Islas Caimán", "Isole Cayman", "Kaaimaneilanden"], "0db9c62101030000"]
 
-weathercities020 = collections.OrderedDict()
+weathercities020 = {}
 
 weathercities020["Antofagasta"] = [
     ["アントファガスタ", "Antofagasta", "Antofagasta", "Antofagasta", "Antofagasta", "Antofagasta", "Antofagasta"],
@@ -1628,7 +1626,7 @@ weathercities020["Valparaíso"] = [
     ["タラパカ州", "Tarapacá", "Tarapacá (Region I)", "Tarapacá", "Tarapacá", "Tarapacá", "Tarapacá"],
     ["チリ", "Chile", "Chile", "Chili", "Chile", "Cile", "Chili"], "e885cd2101030000"]
 
-weathercities021 = collections.OrderedDict()
+weathercities021 = {}
 
 weathercities021["Leticia"] = [
     ["レティシア", "Leticia", "Leticia", "Leticia", "Leticia", "Leticia", "Leticia"],
@@ -1727,7 +1725,7 @@ weathercities021["Palmira"] = [
     ["バジェ・デル・カウカ県", "Valle del Cauca", "Valle del Cauca", "Valle del Cauca", "Valle del Cauca", "Valle del Cauca", "Valle del Cauca"],
     ["コロンビア", "Colombia", "Kolumbien", "Colombie", "Colombia", "Colombia", "Colombia"], "0282c9d001030000"]
 
-weathercities022 = collections.OrderedDict()
+weathercities022 = {}
 
 weathercities022["San José"] = [
     ["サン・ホセ", "San José", "San José", "San José", "San José", "San José", "San José"],
@@ -1798,14 +1796,14 @@ weathercities022["San Vito"] = [
     ["プンタレナス州", "Puntarenas", "Puntarenas", "Puntarenas", "Puntarenas", "Puntarenas", "Puntarenas"],
     ["コスタリカ", "Costa Rica", "Costa Rica", "Costa Rica", "Costa Rica", "Costa Rica", "Costa Rica"], "0643c51206030000"]
 
-weathercities023 = collections.OrderedDict()
+weathercities023 = {}
 
 weathercities023["Roseau"] = [
     ["ロゾー", "Roseau", "Roseau", "Roseau", "Roseau", "Roseau", "Roseau"],
     ["プンタレナス州", "Puntarenas", "Puntarenas", "Puntarenas", "Puntarenas", "Puntarenas", "Puntarenas"],
     ["ドミニカ国", "Dominica", "Dominica", "Dominique", "Dominica", "Dominica", "Dominica"], "0ae1d45704030000"]
 
-weathercities024 = collections.OrderedDict()
+weathercities024 = {}
 
 weathercities024["Santo Domingo"] = [
     ["サント・ドミンゴ", "Santo Domingo", "Santo Domingo", "Saint-Domingue", "Santo Domingo", "Santo Domingo", "Santo Domingo"],
@@ -1944,7 +1942,7 @@ weathercities024["San Cristobal"] = [
     ["San Cristóbal", "San Cristóbal", "San Cristóbal", "San Cristóbal", "San Cristóbal", "San Cristóbal", "San Cristóbal"],
     ["ドミニカ共和国", "Dominican Republic", "Dominikanische Republik", "République dominicaine", "República Dominicana", "Repubblica Dominicana", "Dominicaanse Replubliek"], "0d14ce3504030000"]
 
-weathercities025 = collections.OrderedDict()
+weathercities025 = {}
 
 weathercities025["Quito"] = [
     ["キト", "Quito", "Quito", "Quito", "Quito", "Quito", "Quito"],
@@ -2051,7 +2049,7 @@ weathercities025["Puerto Francisco de Orellana"] = [
     ["オレリャナ", "Orellana", "Orellana", "Orellana", "Orellana", "Orellana", "Orellana"],
     ["エクアドル", "Ecuador", "Ecuador", "Equateur", "Ecuador", "Ecuador", "Ecuador"], "ffacc95602030000"]
 
-weathercities026 = collections.OrderedDict()
+weathercities026 = {}
 
 weathercities026["Santa Tecla"] = [
     ["サンタ・テクラ", "Santa Tecla", "Santa Tecla", "Santa Tecla", "Santa Tecla", "Santa Tecla", "Santa Tecla"],
@@ -2110,21 +2108,21 @@ weathercities026["Sonsonate"] = [
     ["ソンソナテ県", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate"],
     ["エルサルバドル", "El Salvador", "El Salvador", "Salvador", "El Salvador", "El Salvador", "El Salvador"], "09bec04801030000"]
 
-weathercities027 = collections.OrderedDict()
+weathercities027 = {}
 
 weathercities027["Cayenne"] = [
     ["カイエンヌ", "Cayenne", "Cayenne", "Cayenne", "Cayena", "Cayenne", "Cayenne"],
     ["ソンソナテ県", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate"],
     ["フランス領ギアナ", "French Guiana", "Guayana", "Guyane française", "Guayana Francesa", "Guayana Francese", "Frans-Guyana"], "0381dad600030000"]
 
-weathercities028 = collections.OrderedDict()
+weathercities028 = {}
 
 weathercities028["St. George's"] = [
     ["セント・ジョージズ", "St. George's", "Sankt George's", "Saint-Georges", "Saint George", "Saint George's", "Saint George's"],
     ["ソンソナテ県", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate"],
     ["グレナダ", "Grenada", "Grenada", "Grenade", "Granada", "Grenada", "Grenada"], "0891d41701030000"]
 
-weathercities029 = collections.OrderedDict()
+weathercities029 = {}
 
 weathercities029["Basse-Terre"] = [
     ["バス・テール", "Basse-Terre", "Basse-Terre", "Basse-Terre", "Basse-Terre", "Basse-Terre", "Basse-Terre"],
@@ -2135,7 +2133,7 @@ weathercities029["Pointe-a-Pitre"] = [
     ["ソンソナテ県", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate", "Sonsonate"],
     ["グアドループ", "Guadeloupe", "Guadeloupe", "Guadeloupe", "Guadalupe", "Guadalupa", "Guadeloupe"], "0b8bd43f03030000"]
 
-weathercities030 = collections.OrderedDict()
+weathercities030 = {}
 
 weathercities030["Cobán"] = [
     ["コバン", "Cobán", "Cobán", "Cobán", "Cobán", "Cobán", "Cobán"],
@@ -2270,14 +2268,14 @@ weathercities030["Zacapa"] = [
     ["サカパ県", "Zacapa", "Zacapa", "Zacapa", "Zacapa", "Zacapa", "Zacapa"],
     ["グアテマラ", "Guatemala", "Guatemala", "Guatemala", "Guatemala", "Guatemala", "Guatemala"], "0aa2c06a05030000"]
 
-weathercities031 = collections.OrderedDict()
+weathercities031 = {}
 
 weathercities031["Georgetown"] = [
     ["ジョージ・タウン", "Georgetown", "Georgetown", "Georgetown", "Georgetown", "Georgetown", "Georgetown"],
     ["デメララ", "Demerara-Mahaica", "Demerara-Mahaica", "Demerara-Mahaica", "Demerara-Mahaica", "Demerara-Mahaica", "Demerara-Mahaica"],
     ["ガイアナ", "Guyana", "Guyana", "République Coopérative de Guyane", "Guyana", "Guyana", "Guyana"], "04d5d6a404030000"]
 
-weathercities032 = collections.OrderedDict()
+weathercities032 = {}
 
 weathercities032["Arcahaie"] = [
     ["ラカイエ", "Arcahaie", "Arcahaie", "Arrondissement d'Arcahaie", "Arcahaie", "Arrondissement di Arcahaie", "Arcahaie"],
@@ -2360,7 +2358,7 @@ weathercities032["Jacmel"] = [
     ["南東県", "Sud-Est", "Sud-Est", "Sud-Est", "Sureste", "Sud-Est", "Sud-Est"],
     ["ハイチ", "Haiti", "Haiti", "Haïti", "Haití", "Haiti", "Haïti"], "0cf3cc7c05030000"]
 
-weathercities033 = collections.OrderedDict()
+weathercities033 = {}
 
 weathercities033["Talanga"] = [
     ["タランガ", "Talanga", "Talanga", "Talanga", "Talanga", "Talanga", "Talanga"],
@@ -2499,21 +2497,21 @@ weathercities033["Yoro"] = [
     ["ヨロ", "Yoro", "Yoro", "Yoro", "Yoro", "Yoro", "Yoro"],
     ["ホンジュラス", "Honduras", "Honduras", "Honduras", "Honduras", "Honduras", "Honduras"], "0abfc21e01030000"]
 
-weathercities034 = collections.OrderedDict()
+weathercities034 = {}
 
 weathercities034["Kingston"] = [
     ["キングストン", "Kingston", "Kingston", "Kingston", "Kingston", "Kingston", "Kingston"],
     ["セント・トーマス", "Saint Thomas", "Saint Thomas", "Saint-Thomas", "Saint Thomas", "Saint Thomas", "Saint Thomas"],
     ["ジャマイカ", "Jamaica", "Jamaika", "Jamaïque", "Jamaica", "Giamaica", "Jamaica"], "0cccc96307030000"]
 
-weathercities035 = collections.OrderedDict()
+weathercities035 = {}
 
 weathercities035["Fort-de-France"] = [
     ["フォール・ド・フランス", "Fort-de-France", "Fort-de-France", "Fort-de-France", "Fort-de-France", "Fort-de-France", "Fort-de-France Bay"],
     ["セント・トーマス", "Saint Thomas", "Saint Thomas", "Saint-Thomas", "Saint Thomas", "Saint Thomas", "Saint Thomas"],
     ["マルティニーク", "Martinique", "Martinique", "Martinique", "Martinica", "Martinica", "Martinique"], "0a5fd4a106030000"]
 
-weathercities036 = collections.OrderedDict()
+weathercities036 = {}
 
 weathercities036["Mexico City"] = [
     ["メキシコシティ", "Mexico City", "Mexiko-Stadt", "Mexico", "Ciudad de México", "Città del Messico", "Mexico-Stad"],
@@ -2800,21 +2798,21 @@ weathercities036["Zacatecas"] = [
     ["サカテカス州", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas"],
     ["メキシコ", "Mexico", "Mexiko", "Mexique", "México", "Messico", "Mexico"], "1033b70e01030000"]
 
-weathercities037 = collections.OrderedDict()
+weathercities037 = {}
 
 weathercities037["Plymouth"] = [
     ["プリマス", "Plymouth", "Plymouth", "Plymouth", "Plymouth", "Plymouth", "Plymouth"],
     ["サカテカス州", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas"],
     ["モントセラト", "Montserrat", "Montserrat", "Montserrat", "Montserrat", "Montserrat", "Montserrat"], "0be0d3c201030000"]
 
-weathercities038 = collections.OrderedDict()
+weathercities038 = {}
 
 weathercities038["Willemstad"] = [
     ["ウィレムスタット", "Willemstad", "Willemstad", "Willemstad", "Willemstad", "Willemstad", "Willemstad"],
     ["サカテカス州", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas", "Zacatecas"],
     ["オランダ領アンティル", "Curaçao", "Niederländische Antillen", "Antilles néerlandaises", "Antillas Neerlandesas", "Antille Olandesi", "Nederlandse Antillen"], "089aceff01030000"]
 
-weathercities039 = collections.OrderedDict()
+weathercities039 = {}
 
 weathercities039["Ciudad Sandino"] = [
     ["シウダー・サンディノ", "Ciudad Sandino", "Ciudad Sandino", "Ciudad Sandino", "Ciudad Sandino", "Ciudad Sandino", "Ciudad Sandino"],
@@ -2949,7 +2947,7 @@ weathercities039["Nueva Guinea"] = [
     ["南アトランティコ自治地域", "Atlántico Sur", "Región Autónoma del Atlántico Sur", "Atlantique-Sud", "Atlántico Sur", "Regione Autonoma dell'Atlantico del Sud", "Atlántico Sur"],
     ["ニカラグア", "Nicaragua", "Nicaragua", "Nicaragua", "Nicaragua", "Nicaragua", "Nicaragua"], "084cc40506030000"]
 
-weathercities040 = collections.OrderedDict()
+weathercities040 = {}
 
 weathercities040["Arraiján"] = [
     ["アライハン", "Arraiján", "Arraijan", "Arraiján", "Arraiján", "Arraijan", "Arraiján"],
@@ -3016,7 +3014,7 @@ weathercities040["Santiago de Veraguas"] = [
     ["ベラグアス", "Veraguas", "Veraguas", "Veraguas", "Veraguas", "Veraguas", "Veraguas"],
     ["パナマ", "Panama", "Panama", "Panama", "Panamá", "Panamá", "Panama"], "05c0c68007030000"]
 
-weathercities041 = collections.OrderedDict()
+weathercities041 = {}
 
 weathercities041["Capiatá"] = [
     ["カピアタ", "Capiatá", "Capiatá", "Capiatá", "Capiatá", "Capiatá", "Capiatá"],
@@ -3139,7 +3137,7 @@ weathercities041["Mariscal Estigarribia"] = [
     ["ボケロン県", "Boquerón", "Boquerón", "Boquerón", "Boquerón", "Boquerón", "Boquerón"],
     ["パラグアイ", "Paraguay", "Paraguay", "Paraguay", "Paraguay", "Paraguay", "Paraguay"], "f05ad4f005030000"]
 
-weathercities042 = collections.OrderedDict()
+weathercities042 = {}
 
 weathercities042["Barranca"] = [
     ["バランカ", "Barranca", "Barranca District", "Barranca District", "Barranca", "Barranca District", "Barranca District"],
@@ -3286,49 +3284,49 @@ weathercities042["Pucallpa"] = [
     ["ウカヤリ", "Ucayali", "Ucayali", "Ucayali", "Ucayali", "Ucayali", "Ucayali"],
     ["ペルー", "Peru", "Peru", "Pérou", "Perú", "Perù", "Peru"], "fa0ccb1008030000"]
 
-weathercities043 = collections.OrderedDict()
+weathercities043 = {}
 
 weathercities043["Basseterre"] = [
     ["バセテール", "Basseterre", "Basseterre", "Basseterre", "Basseterre", "Basseterre", "Basseterre"],
     ["セント・ジョージ・バセテール", "Saint George Basseterre", "Saint George Basseterre", "Saint-George Basseterre", "Saint George Basseterre", "Saint George Basseterre", "Saint George Basseterre"],
     ["セントキッツ・ネイビス", "St. Kitts and Nevis", "St. Kitts und Nevis", "Saint-Kitts-et-Nevis", "San Cristóbal y Nieves", "Saint Kitts e Nevis", "Saint Kitts en Nevis"], "0c4dd36701030000"]
 
-weathercities044 = collections.OrderedDict()
+weathercities044 = {}
 
 weathercities044["Castries"] = [
     ["カストリーズ", "Castries", "Castries", "Castries", "Castries", "Castries", "Castries"],
     ["セント・ジョージ・バセテール", "Saint George Basseterre", "Saint George Basseterre", "Saint-George Basseterre", "Saint George Basseterre", "Saint George Basseterre", "Saint George Basseterre"],
     ["セントルシア", "St. Lucia", "St. Lucia", "Sainte-Lucie", "Santa Lucía", "Santa Lucia", "Saint Lucia"], "09f4d4a001030000"]
 
-weathercities045 = collections.OrderedDict()
+weathercities045 = {}
 
 weathercities045["Kingstown"] = [
     ["キングスタウン", "Kingstown", "Kingstown", "Kingstown", "Kingstown", "Kingstown", "Kingstown"],
     ["セント・ジョージ・バセテール", "Saint George Basseterre", "Saint George Basseterre", "Saint-George Basseterre", "Saint George Basseterre", "Saint George Basseterre", "Saint George Basseterre"],
     ["セントビンセント・グレナディーン", "St. Vincent and the Grenadines", "St. Vincent und die Grenadinen", "Saint-Vincent-et-les-Grenadines", "San Vicente y las Granadinas", "Saint Vincent e Grenadine", "Saint Vincent en de Grenadines"], "0956d47801030000"]
 
-weathercities046 = collections.OrderedDict()
+weathercities046 = {}
 
 weathercities046["Paramaribo"] = [
     ["パラマリボ", "Paramaribo", "Paramaribo", "Paramaribo", "Paramaribo", "Paramaribo", "Paramaribo"],
     ["パラマリボ", "Paramaribo", "Paramaribo", "Paramaribo", "Paramaribo", "Paramaribo", "Paramaribo"],
     ["スリナム", "Suriname", "Suriname", "Suriname", "Surinam", "Suriname", "Suriname"], "0425d8c607030000"]
 
-weathercities047 = collections.OrderedDict()
+weathercities047 = {}
 
 weathercities047["Port of Spain"] = [
     ["ポート・オブ・スペイン", "Port of Spain", "Port of Spain", "Port-d'Espagne", "Puerto España", "Port of Spain", "Port of Spain"],
     ["ポート・オブ・スペイン", "Port-of-Spain", "Port-of-Spain", "Port d'Espagne", "Puerto España", "Port of Spain", "Port of Spain"],
     ["トリニダード・トバゴ", "Trinidad and Tobago", "Trinidad und Tobago", "Trinité-et-Tobago", "Trinidad y Tobago", "Trinidad e Tobago", "Trinidad en Tobago"], "0790d45002030000"]
 
-weathercities048 = collections.OrderedDict()
+weathercities048 = {}
 
 weathercities048["Cockburn Town"] = [
     ["コックバーン・タウン", "Cockburn Town", "Cockburn Town", "Cockburn Town", "Cockburn Town", "Cockburn Town", "Cockburn Town"],
     ["ポート・オブ・スペイン", "Port-of-Spain", "Port-of-Spain", "Port d'Espagne", "Puerto España", "Port of Spain", "Port of Spain"],
     ["タークス・カイコス諸島", "Turks and Caicos Islands", "Turks- und Caicosinseln", "Iles Turques et Caïques", "Islas Turcas y Caicos", "Isole Turks e Caicos", "Turks- en Caicoseilanden"], "0f43cd6b05030000"]
 
-weathercities049 = collections.OrderedDict()
+weathercities049 = {}
 
 weathercities049["Washington D.C."] = [
     ["ワシントンD.C.", "Washington D.C.", "Washington, D.C.", "Washington", "Washington D. C.", "Washington", "Washington D.C."],
@@ -5303,7 +5301,7 @@ weathercities049["San Juan"] = [
     ["プエルトリコ", "Puerto Rico", "Puerto Rico", "Porto Rico", "Puerto Rico", "Porto Rico", "Puerto Rico"],
     ["アメリカ", "United States", "Vereinigte Staaten", "Etats-Unis d’Amérique", "Estados Unidos de América", "Stati Uniti d'America", "Verenigde Staten"], "0d22d0fe09030000"]
 
-weathercities050 = collections.OrderedDict()
+weathercities050 = {}
 
 weathercities050["La Paz"] = [
     ["ラ・パス", "La Paz", "La Paz", "La Paz", "La Paz", "La Paz", "La Paz"],
@@ -5394,7 +5392,7 @@ weathercities050["Treinta y Tres"] = [
     ["トレインタ・イ・トレス", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres"],
     ["ウルグアイ", "Uruguay", "Uruguay", "Uruguay", "Uruguay", "Uruguay", "Uruguay"], "e866d96207030000"]
 
-weathercities051 = collections.OrderedDict()
+weathercities051 = {}
 
 weathercities051["Charlotte Amalie"] = [
     ["シャーロット・アマリエ", "Charlotte Amalie", "Charlotte Amalie", "Charlotte Amalie", "Carlota Amalia", "Charlotte Amalie", "Charlotte Amalie"],
@@ -5413,7 +5411,7 @@ weathercities051["Cruz Bay"] = [
     ["トレインタ・イ・トレス", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres", "Treinta y Tres"],
     ["米領バージン諸島", "US Virgin Islands", "Amerikanische Jungferninseln", "Iles Vierges américaines", "Islas Vírgenes Americanas", "Isole Vergini Statunitensi", "Amerikaanse Maagdeneilanden"], "0d04d1fc07030000"]
 
-weathercities052 = collections.OrderedDict()
+weathercities052 = {}
 
 weathercities052["Caracas"] = [
     ["カラカス", "Caracas", "Caracas", "Caracas", "Caracas", "Caracas", "Caracas"],
@@ -5564,7 +5562,7 @@ weathercities052["La Guaira"] = [
     ["バルガス", "Vargas", "Vargas", "Vargas", "Vargas", "Vargas", "Vargas"],
     ["ベネズエラ", "Venezuela", "Venezuela", "Venezuela", "Venezuela", "Venezuela", "Venezuela"], "0788d07f01030000"]
 
-weathercities065 = collections.OrderedDict()
+weathercities065 = {}
 
 weathercities065["Canberra"] = [
     ["キャンベラ", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra", "Canberra"],
@@ -5851,7 +5849,7 @@ weathercities065["Kununurra"] = [
     ["西オーストラリア州", "Western Australia", "Westaustralien", "Australie-Occidentale", "Australia Occidental", "Australia Occidentale", "West-Australië"],
     ["オーストラリア", "Australia", "Australien", "Australie", "Australia", "Australia", "Australië"], "f4ca5b8b03030000"]
 
-weathercities066 = collections.OrderedDict()
+weathercities066 = {}
 
 weathercities066["Vienna"] = [
     ["ウィーン", "Vienna", "Wien", "Vienne", "Viena", "Vienna", "Wenen"],
@@ -5930,7 +5928,7 @@ weathercities066["Feldkirch"] = [
     ["フォアアールベルク州", "Vorarlberg", "Vorarlberg", "Vorarlberg", "Vorarlberg", "Vorarlberg", "Vorarlberg"],
     ["オーストリア", "Austria", "Österreich", "Autriche", "Austria", "Austria", "Oostenrijk"], "218c06d003030000"]
 
-weathercities067 = collections.OrderedDict()
+weathercities067 = {}
 
 weathercities067["Brussels"] = [
     ["ブリュッセル首都圏地域", "Brussels", "Region Brüssel-Hauptstadt", "Bruxelles", "Región de Bruselas-Capital", "Bruxelles", "Brussels Hoofdstedelijk Gewest"],
@@ -5993,7 +5991,7 @@ weathercities067["Mons"] = [
     ["ワロン地域圏", "Wallonia", "Wallonien", "Wallonie", "Región de Valonia", "Vallonia", "Wallonië"],
     ["ベルギー", "Belgium", "Belgien", "Belgique", "Bélgica", "Belgio", "België"], "23d502ce03030000"]
 
-weathercities074 = collections.OrderedDict()
+weathercities074 = {}
 
 weathercities074["Copenhagen"] = [
     ["コペンハーゲン", "Copenhagen", "Kopenhagen", "Copenhague", "Copenhague", "Copenaghen", "Kopenhagen"],
@@ -6052,7 +6050,7 @@ weathercities074["Nuuk"] = [
     ["グリーンランド", "Greenland", "Grönland", "Groenland", "Groenlandia", "Groenlandia", "Groenland"],
     ["デンマーク", "Denmark", "Dänemark", "Danemark", "Dinamarca", "Danimarca", "Denemarken"], "2da4db3909030000"]
 
-weathercities076 = collections.OrderedDict()
+weathercities076 = {}
 
 weathercities076["Helsinki"] = [
     ["ヘルシンキ", "Helsinki", "Helsinki", "Helsinki", "Helsinki", "Helsinki", "Helsinki"],
@@ -6147,7 +6145,7 @@ weathercities076["Mariehamn"] = [
     ["アハベナンマー州", "Åland", "Åland", "Åland", "Islas de Åland", "Isole Åland", "Åland"],
     ["フィンランド", "Finland", "Finnland", "Finlande", "Finlandia", "Finlandia", "Finland"], "2abb0e2d02030000"]
 
-weathercities077 = collections.OrderedDict()
+weathercities077 = {}
 
 weathercities077["Paris"] = [
     ["パリ", "Paris", "Paris", "Paris", "París", "Parigi", "Parijs"],
@@ -6562,7 +6560,7 @@ weathercities077["Saint-Denis"] = [
     ["レユニオン", "Réunion", "Réunion", "Réunion", "La Reunión", "La Réunion", "Réunion"],
     ["フランス", "France", "Frankreich", "France", "Francia", "Francia", "Frankrijk"], "f128276e03030000"]
 
-weathercities078 = collections.OrderedDict()
+weathercities078 = {}
 
 weathercities078["Berlin"] = [
     ["ベルリン", "Berlin", "Berlin", "Berlin", "Berlín", "Berlino", "Berlijn"],
@@ -6817,7 +6815,7 @@ weathercities078["Suhl"] = [
     ["テューリンゲン州", "Thuringia", "Thüringen", "Thuringe", "Turingia", "Turingia", "Thüringen"],
     ["ドイツ", "Germany", "Deutschland", "Allemagne", "Alemania", "Germania", "Duitsland"], "23fc079901030000"]
 
-weathercities079 = collections.OrderedDict()
+weathercities079 = {}
 
 weathercities079["Athens"] = [
     ["アテネ", "Athens", "Athen", "Athènes", "Atenas", "Atene", "Athene"],
@@ -7052,7 +7050,7 @@ weathercities079["Ptolemaida"] = [
     ["西マケドニア", "West Macedonia", "Westmakedonien", "Macédoine de l'Ouest", "Macedonia Occidental", "Macedonia Occidentale", "West-Macedonië"],
     ["ギリシャ", "Greece", "Griechenland", "Grèce", "Grecia", "Grecia", "Griekenland"], "1cc60f6605030000"]
 
-weathercities082 = collections.OrderedDict()
+weathercities082 = {}
 
 weathercities082["Dublin"] = [
     ["ダブリン", "Dublin", "Dublin", "Dublin", "Dublín", "Dublino", "Dublin"],
@@ -7163,7 +7161,7 @@ weathercities082["Galway"] = [
     ["西部地方", "West", "West", "West", "Oeste", "West", "West"],
     ["アイルランド", "Ireland", "Irland", "Irlande", "Irlanda", "Irlanda", "Ierland"], "25d5f99209030000"]
 
-weathercities083 = collections.OrderedDict()
+weathercities083 = {}
 
 weathercities083["Roma"] = [
     ["ローマ", "Roma", "Rom", "Rome", "Roma", "Roma", "Rome"],
@@ -7450,7 +7448,7 @@ weathercities083["Sassari"] = [
     ["サルデーニャ州", "Sardinia", "Sardinien", "Sardaigne", "Cerdeña", "Sardegna",  "Sardinië"],
     ["イタリア", "Italy", "Italien", "Italie", "Italia", "Italia", "Italië"], "1cf5061501030000"]
 
-weathercities088 = collections.OrderedDict()
+weathercities088 = {}
 
 weathercities088["Luxembourg City"] = [
     ["ルクセンブルク", "Luxembourg City", "Luxemburg", "Luxembourg", "Luxemburgo", "Lussemburgo", "Luxemburg"],
@@ -7465,7 +7463,7 @@ weathercities088["Dudelange"] = [
     ["ルクセンブルク", "Luxembourg", "Luxemburg", "Luxembourg", "Luxemburgo", "Lussemburgo", "Luxemburg"],
     ["ルクセンブルク", "Luxembourg", "Luxemburg", "Luxembourg", "Luxemburgo", "Lussemburgo", "Luxemburg"], "2324045200030000"]
 
-weathercities094 = collections.OrderedDict()
+weathercities094 = {}
 
 weathercities094["Amsterdam"] = [
     ["アムステルダム", "Amsterdam", "Amsterdam", "Amsterdam", "Ámsterdam", "Amsterdam", "Amsterdam"],
@@ -7568,7 +7566,7 @@ weathercities094["Terneuzen"] = [
     ["ゼーラント州", "Zeeland", "Zeeland", "Zélande", "Zelanda", "Zelanda", "Zeeland"],
     ["オランダ", "Netherlands", "Niederlande", "Pays-Bas", "Países Bajos", "Paesi Bassi", "Nederland"], "248102b801030000"]
 
-weathercities095 = collections.OrderedDict()
+weathercities095 = {}
 
 weathercities095["Paraparaumu"] = [
     ["パラパラウム", "Paraparaumu", "Paraparaumu", "Paraparaumu", "Paraparaumu", "Paraparaumu", "Paraparaumu"],
@@ -7635,7 +7633,7 @@ weathercities095["Hamilton"] = [
     ["ワイカト", "Waikato", "Waikato", "Waikato", "Waikato", "Waikato", "Waikato"],
     ["ニュージーランド", "New Zealand", "Neuseeland", "Nouvelle-Zélande",  "Nueva Zelanda", "Nuova Zelanda", "Nieuw-Zeeland" ], "e52a7c7e05030000"]
 
-weathercities096 = collections.OrderedDict()
+weathercities096 = {}
 
 weathercities096["Dombås"] = [
     ["ドンボース", "Dombås", "Dombås", "Dombås", "Dombås", "Dombås", "Dombås"],
@@ -7786,7 +7784,7 @@ weathercities096["Bygland"] = [
     ["ソールランネ", "Sørlandet", "Sørlandet", "Sørlandet", "Sørlandet", "Norvegia del Sud", "Sørlandet"],
     ["ノルウェー", "Norway", "Norwegen", "Norvège", "Noruega", "Norvegia", "Noorwegen"], "29c8058905030000"]
 
-weathercities097 = collections.OrderedDict()
+weathercities097 = {}
 
 weathercities097["Sosnowiec"] = [
     ["ソスノヴィエツ", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec", "Sosnowiec"],
@@ -7981,7 +7979,7 @@ weathercities097["Tarnobrzeg"] = [
     ["マウォポルスカ", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie", "Woj. podkarpackie"],
     ["ポーランド", "Poland", "Polen", "Pologne", "Polonia", "Polonia", "Polen"], "23f80f6b05030000"]
 
-weathercities098 = collections.OrderedDict()
+weathercities098 = {}
 
 weathercities098["Lisbon"] = [
     ["リスボン", "Lisbon", "Lissabon", "Lisbonne", "Lisboa", "Lisbona", "Lissabon"],
@@ -8220,7 +8218,7 @@ weathercities098["Ribeira Grande"] = [
     ["アソレス自治州", "Azores", "Azoren", "Açores", "Azores", "Azzorre", "Azoren"],
     ["ポルトガル", "Portugal", "Portugal", "Portugal", "Portugal", "Portogallo", "Portugal"], "1ae4eddb01030000"]
 
-weathercities099 = collections.OrderedDict()
+weathercities099 = {}
 
 weathercities099["Satu Mare"] = [
     ["サトゥ・マーレ", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare", "Satu Mare"],
@@ -8375,7 +8373,7 @@ weathercities099["Giurgiu"] = [
     ["ジュルジュ", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu", "Giurgiu"],
     ["羅馬尼亜", "Romania", "Romania", "Romania", "Romania", "Romania", "Romania"], "1f37127805030000"]
 	
-weathercities100 = collections.OrderedDict()
+weathercities100 = {}
 
 weathercities100["Moscow"] = [
     ["モスクワ", "Moscow", "Moskau", "Moscou", "Moscú", "Mosca", "Moskou"],
@@ -8410,7 +8408,7 @@ weathercities100["Grozny"] = [
     ["南部連邦管区", "Southern Federal District", "Südrussland", "District fédéral du Sud", "Distrito Federal Meridional", "Distretto Federale Meridionale", "Zuidelijk Federaal District"],
     ["ロシア", "Russia", "Russland", "Russie", "Rusia", "Russia", "Rusland"], "1ec9207c01030000"]
 
-weathercities105 = collections.OrderedDict()
+weathercities105 = {}
 
 weathercities105["Alcalá de Henares"] = [
     ["アルカラ・デ・エナレス", "Alcalá de Henares", "Alcala de Henares", "Alcala de Henares", "Alcalá de Henares", "Alcala de Henares", "Alcala de Henares"],
@@ -8649,7 +8647,7 @@ weathercities105["Logroño"] = [
     ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e29fe4400030000"]
 
-weathercities107 = collections.OrderedDict()
+weathercities107 = {}
 
 weathercities107["Stockholm"] = [
     ["ストックホルム", "Stockholm", "Stockholm", "Stockholm", "Estocolmo", "Stoccolma", "Stockholm"],
@@ -8816,7 +8814,7 @@ weathercities107["Varberg"] = [
     ["ハランド州", "Halland County", "Hallands län", "Comté de Halland",  "Halland", "Halland", "Hallands län"],
     ["スウェーデン", "Sweden", "Schweden", "Suède", "Suecia", "Svezia", "Zweden"], "289208b900030000"]
 
-weathercities108 = collections.OrderedDict()
+weathercities108 = {}
 
 weathercities108["Bern"] = [
     ["ベルン", "Bern", "Bern", "Berne", "Berna", "Berna", "Bern"],
@@ -8947,7 +8945,7 @@ weathercities108["Zürich"] = [
     ["チューリヒ州", "Zürich", "Zürich", "Zurich", "Zúrich", "Zurigo", "Zürich"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"], "21a4061006030000"]
 
-weathercities110 = collections.OrderedDict()
+weathercities110 = {}
 
 weathercities110["London"] = [
     ["ロンドン", "London", "London", "Londres", "Londres", "Londra", "Londen"],
@@ -9262,7 +9260,7 @@ weathercities110["Omagh"] = [
     ["北アイルランド", "Northern Ireland", "Nordirland", "Irlande du Nord", "Irlanda del Norte", "Irlanda del Nord", "Noord-Ierland"],
     ["イギリス", "United Kingdom", "Großbritannien", "Royaume-Uni", "Reino Unido", "Regno Unito", "Verenigd Koninkrijk"], "26d3facf01030000"]
 
-weathercities_international = collections.OrderedDict()
+weathercities_international = {}
 
 weathercities_international["Tokyo"] = [
     ["東京", "Tokyo", "Tokio", "Tokyo", "Tokio", "Tokyo", "Tokio"],
@@ -10657,7 +10655,7 @@ weathercities_international["Mount Everest"] = [
     ["", "", "", "", "", "", ""],
     ["", "", "", "", "", "", ""], "13e63dd107030000"]
 
-bincountries = collections.OrderedDict()
+bincountries = {}
 
 bincountries["Japan"] = 1
 bincountries["Australia"] = 65
@@ -10788,50 +10786,50 @@ bincountries["Jordan"] = 177
 """Dictionary for weather conditions."""
 """The last 4 values: First 2 - International code, Last 2 - Japanese code"""
 
-weatherconditions = collections.OrderedDict()
+weatherconditions = {}
 
 weatherconditions[1] = [["晴れ", "Sunny", "Sonnig", "Ensoleillé", "Soleado", "Soleggiato", "Zonnig"], "0464", "0065", "0064", "0001"]
-weatherconditions[2] = [["おおむね晴れ", "Mostly Sunny", "Überwiegend sonnig", "Plutôt Ensoleillé", "Mayormente soleado", "Prevalentemente soleggiato", "Overwegend zonnig"], "0462", "0065", "0065", "0001"]
-weatherconditions[3] = [["所により曇り", "Partly Cloudy", "Teilweise bewölkt", "Ciel assez nuageux", "Parcialmente nublado", "Parzialmente nuvoloso", "Deels bewolkt"], "0465", "0066", "0066", "0002"]
-weatherconditions[4] = [["時々曇り", "Intermittent Clouds", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nubi sparse", "Wisselend bewolkt"], "0463", "006B", "0067", "0002"]
-weatherconditions[5] = [["霞", "Haze", "Dunst", "Voilé", "Calina", "Foschia", "Nevelig"], "05F4", "007A", "0068", "0001"]
-weatherconditions[6] = [["おおむね曇り", "Mostly Cloudy", "Stark bewölkt", "Ciel plutôt nuageux", "Muy nublado", "Prevalentemente nuvoloso", "Overwegend bewolkt"], "04C9", "006B", "00C4", "000A"]
+weatherconditions[2] = [["おおむね晴れ", "Mostly Sunny", "Überwiegend sonnig", "Plutôt ensoleillé", "Mayormente soleado", "Prevalentemente soleggiato", "Overwegend zonnig"], "0462", "0065", "0065", "0001"]
+weatherconditions[3] = [["所により晴れ", "Partly Cloudy", "Teils sonnig", "Partiellement ensoleillé", "Parcialmente soleado", "Parzialmente soleggiato", "Deels zonnig"], "0465", "0066", "0066", "0002"]
+weatherconditions[4] = [["時々曇り", "Intermittent Clouds", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nuvole intermittenti", "Wisselend bewolkt"], "0463", "006B", "0067", "0002"]
+weatherconditions[5] = [["もやのかかった晴れ", "Haze", "Sonnig und diesig", "Soleil voilé", "Soleado\ncon bruma", "Sole velato", "Waterig zonnetje"], "05F4", "007A", "0068", "0001"]
+weatherconditions[6] = [["おおむね曇り", "Mostly Cloudy", "Stark bewölkt", "Plutôt nuageux", "Mayormente nublado", "Prevalentemente nuvoloso", "Overwegend bewolkt"], "04C9", "006B", "00C4", "000A"]
 weatherconditions[7] = [["曇り", "Cloudy", "Wolkig", "Nuageux", "Nublado", "Nuvoloso", "Bewolkt"], "04C8", "006A", "00C5", "000A"]
-weatherconditions[8] = [["曇り", "Overcast", "Wolkig", "Nuageux", "Nublado", "Nuvoloso", "Bewolkt"], "0469", "006A", "00C6", "000A"]
+weatherconditions[8] = [["うっとうしい", "Overcast", "Bedeckt", "Maussade", "Cubierto", "Uggioso", "Druilerig"], "0469", "006A", "00C6", "000A"]
 weatherconditions[11] = [["霧", "Fog", "Nebel", "Brouillard", "Niebla", "Nebbia", "Mist"], "0680", "007C", "00C7", "000A"]
 weatherconditions[12] = [["にわか雨", "Showers", "Schauer", "Averses", "Chubascos", "Rovesci", "Buien"], "052E", "0071", "012C", "0013"]
-weatherconditions[13] = [["にわか雨を伴いおおむね曇り", "Mostly Cloudy\nwith Showers", "Stark bewölkt mit Schauern", "Principalement couvert, avec averses", "Muy nublado con chubascos", "Prevalentemente nuvoloso con rovesci", "Overwegend bewolkt met buien"], "04CB", "006C", "00C9", "000C"]
-weatherconditions[14] = [["にわか雨を伴い所により晴れ", "Partly Sunny\nwith Showers", "Teils sonnig mit Schauern", "Partiellement ensoleillé, avec averses", "Parcialmente soleado con chubascos", "Parzialmente soleggiato con rovesci", "Deels zonnig met buien"], "0467", "0067", "0069", "0003"]
+weatherconditions[13] = [["曇り時々雨", "Mostly Cloudy\nwith Showers", "Stark bewölkt\nmit Schauern", "Plutôt nuageux - averses", "Mayormente nublado\ncon chubascos", "Prevalentemente nuvoloso\ncon rovesci", "Overwegend bewolkt\nmet buien"], "04CB", "006C", "00C9", "000C"]
+weatherconditions[14] = [["所により晴れ時々雨", "Partly Sunny\nwith Showers", "Teils sonnig\nmit Schauern", "Partiellement ensoleillé - averses", "Parcialmente soleado\ncon chubascos", "Parzialmente soleggiato\ncon rovesci isolati", "Deels zonnig\nmet buien"], "0467", "0067", "0069", "0003"]
 weatherconditions[15] = [["雷雨", "Thunderstorms", "Gewitter", "Orages", "Tormentas eléctricas", "Temporali", "Onweersbuien"], "0784", "007D", "0384", "0021"]
-weatherconditions[16] = [["雷雨を伴いおおむね曇り", "Mostly Cloudy\nwith Thunderstorms", "Teilweise bewölkt mit Gewitter", "Principalement couvert, avec orages", "Muy nublado con Tormentas eléctricas", "Prevalentemente nuvoloso con temporali", "Overwegend bewolkt met onweersbuien"], "04CA", "007D", "00D0", "000E"]
-weatherconditions[17] = [["雷雨を伴い所により晴れ", "Partly Sunny\nwith Thunderstorms", "Teils sonnig mit Gewitter", "Partiellement ensoleillé, avec orages", "Parcialmente soleado con Tormentas eléctricas", "Parzialmente soleggiato con temporali", "Deels zonnig met onweersbuien"], "0466", "007D", "006A", "0005"]
+weatherconditions[16] = [["曇り時々雷雨", "Mostly Cloudy\nwith Thunderstorms", "Stark bewölkt\nmit Gewittern", "Plutôt nuageux - orages", "Mayormente nublado\ncon tormentas eléctricas", "Prevalentemente nuvoloso\ncon temporali", "Overwegend bewolkt\nmet onweersbuien"], "04CA", "007D", "00D0", "000E"]
+weatherconditions[17] = [["所により晴れ時々雷雨", "Partly Sunny\nwith Thunderstorms", "Teils sonnig\nmit Gewittern", "Partiellement ensoleillé - orages", "Parcialmente soleado\ncon tormentas eléctricas", "Parzialmente soleggiato\ncon temporali", "Deels zonnig\nmet onweersbuien"], "0466", "007D", "006A", "0005"]
 weatherconditions[18] = [["雨", "Rain", "Regen", "Pluie", "Lluvia", "Pioggia", "Regen"], "052C", "006F", "012D", "0013"]
-weatherconditions[19] = [["フラワーズ", "Flurries", "Schneegestöber", "Rivières", "Ráfagas de nieve", "Raffica", "Vlagen"], "0592", "0076", "8190", "801A"]
-weatherconditions[20] = [["フラワーズを伴いおおむね曇り", "Mostly Cloudy\nwith Flurries", "Stark bewölkt mit Schneegestöber", "Principalement couvert, avec rivières", "Muy nublado con ráfagas de nieve", "Prevalentemente nuvoloso con raffica", "Overwegend bewolkt met vlagen"], "04CD", "0076", "00CA", "000C"]
-weatherconditions[21] = [["フラワーズを伴い所により晴れ", "Partly Sunny\nwith Flurries", "Teils sonnig mit Schneegestöber", "Partiellement ensoleillé, avec rivières", "Parcialmente soleado con ráfagas de nieve", "Parzialmente soleggiato con raffica", "Deels zonnig met vlagen"], "0468", "0068", "006B", "0004"]
-weatherconditions[22] = [["雪", "Snow", "Schnee", "Neige", "Nieve", "La neve", "Sneeuw"], "05E0", "0074", "8191", "801A"]
-weatherconditions[23] = [["雪おおむね曇り", "Mostly Cloudy\nwith Snow", "Stark bewölkt mit Schnee", "Principalement couvert, avec neige", "Muy nublado con nieve", "Prevalentemente nuvoloso con la neve", "Overwegend bewolkt met sneeuw"], "04CC", "006D", "00CB", "000C"]
-weatherconditions[24] = [["氷", "Ice", "Eis", "La glace", "Hielo", "Ghiaccio", "Ijs"], "05AE", "0079", "8192", "801A"]
-weatherconditions[25] = [["おやすみ", "Sleet", "Schneeregen", "Neige fondue", "Aguanieve", "Nevischio", "Sleet"], "04CF", "0079", "8193", "801A"]
-weatherconditions[26] = [["フリーズレイン", "Freezing Rain", "Gefrierender Regen", "Pluie verglaçante", "Lluvia helada", "Grandine", "Ijskoude regen"], "0549", "0073", "8194", "801A"]
-weatherconditions[29] = [["雨と雪", "Rain and Snow", "Regen und Schnee", "Pluie et neige", "Lluvia y nieve", "Pioggia e neve", "Regen en sneeuw"], "052F", "0072", "012F", "0016"]
-weatherconditions[30] = [["ホット", "Hot", "Heiß", "Chaud", "Caliente", "Caldo", "Warm"], "0459", "0065", "00EA", "0001"]
-weatherconditions[31] = [["コールド", "Cold", "Kalt", "Du froid", "Frío", "Freddo", "Koude"], "0460", "0065", "00EB", "0001"]
-weatherconditions[32] = [["ウィンディ", "Windy", "Windig", "Venteux", "Ventoso", "Ventoso", "Winderig"], "0461", "0065", "00EC", "0001"]
+weatherconditions[19] = [["にわか雪", "Flurries", "Schneegestöber", "Quelques flocons", "Neviscas", "Deboli nevicate", "Lichte sneeuwbuien"], "0592", "0076", "8190", "801A"]
+weatherconditions[20] = [["曇り時々にわか雪", "Mostly Cloudy\nwith Flurries", "Stark bewölkt\nmit Schneegestöber", "Plutôt nuageux - quelques flocons", "Mayormente nublado\ncon neviscas", "Prevalentemente nuvoloso\ncon nevicate", "Overwegend bewolkt\nmet lichte sneeuwbuien"], "04CD", "0076", "00CA", "000C"]
+weatherconditions[21] = [["所により晴れ時々にわか雪", "Partly Sunny\nwith Flurries", "Teils sonnig\nmit Schneegestöber", "Partiellement ensoleillé - faible neige", "Parcialmente soleado\ncon neviscas", "Parzialmente soleggiato\ncon nevicate", "Deels zonnig\nmet lichte sneeuwbuien"], "0468", "0068", "006B", "0004"]
+weatherconditions[22] = [["雪", "Snow", "Schneefall", "Neige", "Nieve", "Neve", "Sneeuw"], "05E0", "0074", "8191", "801A"]
+weatherconditions[23] = [["曇り時々雪", "Mostly Cloudy\nwith Snow", "Stark bewölkt\nmit Schneefall", "Plutôt nuageux - neige", "Mayormente nublado\ncon precipitaciones de nieve", "Prevalentemente nuvoloso\ncon neve", "Overwegend bewolkt\nmet sneeuwval"], "04CC", "006D", "00CB", "000C"]
+weatherconditions[24] = [["みぞれ", "Ice", "Eis", "Verglas", "Hielo", "Ghiaccio", "IJzel"], "05AE", "0079", "8192", "801A"]
+weatherconditions[25] = [["みぞれ", "Sleet", "Graupel", "Grésil", "Aguanieve", "Nevischio", "IJsregen"], "04CF", "0079", "8193", "801A"]
+weatherconditions[26] = [["氷晶雨", "Freezing Rain", "Gefrierender Regen", "Pluie verglaçante", "Lluvia helada", "Pioggia gelata", "Aanvriezende regen"], "0549", "0073", "8194", "801A"]
+weatherconditions[29] = [["雨や雪", "Rain and Snow", "Regen und Schnee", "Pluie et neige", "Lluvia y nieve", "Pioggia e neve", "Regen en sneeuw"], "052F", "0072", "012F", "0016"]
+weatherconditions[30] = [["暑い", "Hot", "Heiß", "Chaud", "Caluroso", "Caldo", "Heet"], "0459", "0065", "00EA", "0001"]
+weatherconditions[31] = [["寒い", "Cold", "Kalt", "Froid", "Frío", "Freddo", "Koud"], "0460", "0065", "00EB", "0001"]
+weatherconditions[32] = [["風がある", "Windy", "Windig", "Vent", "Ventoso", "Ventilato", "Winderig"], "0461", "0065", "00EC", "0001"]
 weatherconditions[33] = [["晴れ", "Clear", "Klar", "Ciel dégagé", "Despejado", "Sereno", "Helder"], "8464", "8065", "006C", "8001"]
-weatherconditions[34] = [["おおむね晴れ", "Mostly Clear", "Größtenteils klar", "Ciel peu nuageux", "Muy despejado", "Prevalentemente sereno", "Overwegend helder"], "85F4", "8065", "006D", "8001"]
+weatherconditions[34] = [["快晴", "Mostly Clear", "Vielfach klar", "Plutôt dégagé", "Mayormente despejado", "Prevalentemente sereno", "Overwegend helder"], "85F4", "8065", "006D", "8001"]
 weatherconditions[35] = [["所により曇り", "Partly Cloudy", "Teilweise bewölkt", "Partiellement nuageux", "Parcialmente nublado", "Parzialmente nuvoloso", "Deels bewolkt"], "8465", "8066", "00C8", "800A"]
-weatherconditions[36] = [["時々曇り", "Intermittent Clouds", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nubi sparse", "Wisselend bewolkt"], "84C9", "806B", "00CC", "800A"]
-weatherconditions[37] = [["朧月夜", "Hazy Moonlight", "Nachts klar bis diesig", "Lune voilée", "Luna con calima", "Foschia notturna", "Nevelig maanlicht"], "05F8", "807A", "00CD", "800A"]
-weatherconditions[38] = [["おおむね曇り", "Mostly Cloudy", "Stark bewölkt", "Ciel plutôt nuageux", "Muy nublado", "Prevalentemente nuvoloso", "Overwegend bewolkt"], "84C8", "806A", "00CE", "800A"]
-weatherconditions[39] = [["にわか雨を伴い所により曇り", "Partly Cloudy\nwith Showers", "Teilweise bewölkt mit Schauern", "Assez couvert, avec averses", "Parcialmente nublado con chubascos", "Parzialmente nuvoloso con rovesci", "Deels bewolkt en buiig"], "8466", "806C", "00CF", "800C"]
-weatherconditions[40] = [["にわか雨を伴いおおむね曇り", "Mostly Cloudy\nwith Showers", "Stark bewölkt mit Schauern", "Principalement couvert, avec averses", "Muy nublado con chubascos", "Prevalentemente nuvoloso con rovesci", "Overwegend bewolkt met buien"], "852E", "8071", "00D1", "800C"]
-weatherconditions[41] = [["雷雨を伴い所により曇り", "Partly Cloudy\nwith Thunderstorms", "Teilweise bewölkt mit Gewitter", "Ciel assez nuageux, avec orages", "Parcialmente nublado con Tormentas eléctricas", "Parzialmente nuvoloso con temporali", "Deels bewolkt met onweersbuien"], "8467", "807D", "00D2", "800E"]
-weatherconditions[42] = [["雷雨を伴いおおむね曇り", "Mostly Cloudy\nwith Thunderstorms", "Teilweise bewölkt mit Gewitter", "Principalement couvert, avec orages", "Muy nublado con Tormentas eléctricas", "Prevalentemente nuvoloso con temporali", "Overwegend bewolkt met onweersbuien"], "84CA", "807D", "00D3", "800E"]
-weatherconditions[43] = [["フラワーズを伴いおおむね曇り", "Mostly Cloudy\nwith Flurries", "Stark bewölkt mit Schneegestöber", "Principalement couvert, avec rivières", "Muy nublado con ráfagas de nieve", "Prevalentemente nuvoloso con raffica", "Overwegend bewolkt met vlagen"], "8592", "8076", "00D4", "800D"]
-weatherconditions[44] = [["雪おおむね曇り", "Mostly Cloudy\nwith Snow", "Stark bewölkt mit Schnee", "Principalement couvert, avec neige", "Muy nublado con nieve", "Prevalentemente nuvoloso con la neve", "Overwegend bewolkt met sneeuw"], "84CC", "806D", "00D5", "800D"]
+weatherconditions[36] = [["時々曇り", "Intermittent Clouds", "Heiter bis wolkig", "Passages nuageux", "Nubes y claros", "Nuvole intermittenti", "Wisselend bewolkt"], "84C9", "806B", "00CC", "800A"]
+weatherconditions[37] = [["朧月夜", "Hazy Moonlight", "Nachts klar bis diesig", "Lune voilée", "Luna con bruma", "Foschia notturna", "Wazig maanlicht"], "05F8", "807A", "00CD", "800A"]
+weatherconditions[38] = [["おおむね曇り", "Mostly Cloudy", "Stark bewölkt", "Plutôt nuageux", "Mayormente nublado", "Prevalentemente nuvoloso", "Overwegend bewolkt"], "84C8", "806A", "00CE", "800A"]
+weatherconditions[39] = [["所により曇り時々雨", "Partly Cloudy\nwith Showers", "Teilweise bewölkt\nmit Schauern", "Partiellement nuageux - averses", "Parcialmente nublado\ncon chubascos", "Parzialmente nuvoloso\ncon rovesci", "Deels bewolkt\nmet buien"], "8466", "806C", "00CF", "800C"]
+weatherconditions[40] = [["曇り時々雨", "Mostly Cloudy\nwith Showers", "Stark bewölkt\nmit Schauern", "Plutôt nuageux - averses", "Mayormente nublado\ncon chubascos", "Prevalentemente nuvoloso\ncon rovesci", "Overwegend bewolkt\nmet buien"], "852E", "8071", "00D1", "800C"]
+weatherconditions[41] = [["所により曇り時々雷雨", "Partly Cloudy\nwith Thunderstorms", "Teilweise bewölkt\nmit Gewittern", "Partiellement nuageux - orages", "Parcialmente nublado\ncon tormentas eléctricas", "Parzialmente nuvoloso\ncon temporali", "Deels bewolkt\nmet onweersbuien"], "8467", "807D", "00D2", "800E"]
+weatherconditions[42] = [["曇り時々雷雨", "Mostly Cloudy\nwith Thunderstorms", "Stark bewölkt\nmit Gewittern", "Plutôt nuageux - orages", "Mayormente nublado\ncon tormentas eléctricas", "Prevalentemente nuvoloso\ncon temporali", "Overwegend bewolkt\nmet onweersbuien"], "84CA", "807D", "00D3", "800E"]
+weatherconditions[43] = [["曇り時々にわか雪", "Mostly Cloudy\nwith Flurries", "Stark bewölkt\nmit Schneegestöber", "Plutôt nuageux - quelques flocons", "Mayormente nublado\ncon neviscas", "Prevalentemente nuvoloso\ncon nevicate", "Overwegend bewolkt\nmet lichte sneeuwbuien"], "8592", "8076", "00D4", "800D"]
+weatherconditions[44] = [["曇り時々雪", "Mostly Cloudy\nwith Snow", "Stark bewölkt\nmit Schneefall", "Plutôt nuageux - neige", "Mayormente nublado\ncon precipitaciones de nieve", "Prevalentemente nuvoloso\ncon neve", "Overwegend bewolkt\nmet sneeuwval"], "84CC", "806D", "00D5", "800D"]
 
-uvindex = collections.OrderedDict()
+uvindex = {}
 
 uvindex[0] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
 uvindex[1] = ["弱い", "Low", "Niedrig", "Faible", "Bajo", "Basso", "Laag"]
@@ -10847,7 +10845,7 @@ uvindex[10] = ["非常に強い", "Very High", "Sehr hoch", "Très élevé", "Mu
 uvindex[11] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
 uvindex[12] = ["エクストリーム", "Extreme", "Extrem", "Extrême", "Extremo", "Estremo", "Extreem"]
 
-winddirection = collections.OrderedDict()
+winddirection = {}
 
 winddirection["NNE"] = '01'
 winddirection["NE"] = '02'
@@ -10866,7 +10864,7 @@ winddirection["NW"] = '14'
 winddirection["NNW"] = '15'
 winddirection["N"] = '16'
 
-pollen = collections.OrderedDict()
+pollen = {}
 
 pollen[2] = "少ない"
 pollen[3] = "やや多い"
@@ -10874,7 +10872,7 @@ pollen[4] = "多い"
 pollen[5] = "非常に多い"
 pollen[231] = "欠測（データなし）"
 
-laundry = collections.OrderedDict()
+laundry = {}
 
 laundry[0] = "外に干せません"
 laundry[10] = "外干し時は天候に注意"
