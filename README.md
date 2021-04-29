@@ -33,7 +33,7 @@ Some notable Python modules used in the project are:
 
 [AccuWeather](https://accuweather.com/) is used as the weather source for the Forecast Channel. For a list of news sources we use for the News Channel, [refer to this webpage](https://rc24.xyz/services/news.html).
 
-All files are LZ10 compressed; we use `lzss` from the set of [Nintendo DS/GBA compressors by CUE](http://www.romhacking.net/utilities/826/), because it can compress the files quite fast, which is desirable for our usage.
+All files are LZ10 compressed.
 
 If you want to know the format of the files used by the Channels, you can [look at our Kaitais](https://github.com/RiiConnect24/Kaitai-Files), check the wiki, or look at the code.
 
