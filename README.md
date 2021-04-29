@@ -16,9 +16,9 @@ These files are downloaded on the Wii, and contain news, weather info, etc that 
 
 We use the following services for this project:
 
-- [Datadog](https:/datadoghq.com/) for analytics.
+- [Datadog](https://datadoghq.com/) for analytics.
 - For News Channel, [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/intro) to get location coordinates.
-- For Everybody Votes Channel, [MySQL](https://www.mysql.com/) to hold votes and suggestions.
+- For Everybody Votes Channel and Check Mii Out Channel, [MySQL](https://www.mysql.com/) to hold votes and suggestions.
 - [Sentry](https://sentry.io/) for error logging.
 - Webhooks to log when a script has been ran.
 
