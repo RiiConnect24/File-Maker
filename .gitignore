@@ -4,6 +4,7 @@
 *.pyc
 config.py
 config.json
+.DS_Store
 
 # Forecast Channel
 
