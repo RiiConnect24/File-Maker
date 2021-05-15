@@ -15,7 +15,6 @@ import io
 import json
 import math
 import os
-import pathlib
 import pickle
 import queue
 import shutil
@@ -971,7 +970,7 @@ def sign_file(file, local_name, server_name, wiiu):
     path = "{}/{}/{}".format(
         config["file_path"], language_code, str(country_code).zfill(3)
     )
-    pathlib.Path(path).mkdir(parents=True, exist_ok=True)
+    os.makedirs(path, exist_ok=True)
     shutil.copy2(local_name, path + "/" + server_name)
     os.remove(local_name)
 
@@ -981,7 +980,7 @@ def packVFF(language_code, country_code):
     path = "{}/{}/{}/".format(
         config["file_path"], language_code, str(country_code).zfill(3)
     )
-    pathlib.Path(path + "wc24dl").mkdir(parents=True, exist_ok=True)
+    os.makedirs(path + "wc24dl", exist_ok=True)
     with open(path + "forecast.bin", "rb") as source:
         with open(path + "wc24dl/3.BIN", "wb") as dest:
             dest.write(source.read()[320:])

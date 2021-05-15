@@ -269,7 +269,10 @@ def process_news(name, mode, language, region, d):
         for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)
 
-        copy_file(mode, region)
+        copy_file(region)
+
+        if config["packVFF"]:
+            packVFF(region)
 
         os.remove(newsfilename)
 
@@ -277,7 +280,7 @@ def process_news(name, mode, language, region, d):
 # copy the temp files to the correct path that the Wii will request from the server
 
 
-def copy(mode, region, hour):
+def copy(region, hour):
     newsfilename2 = "news.bin.{}".format(str(datetime.utcnow().hour).zfill(2))
     path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
     mkdir_p(path)
@@ -285,12 +288,12 @@ def copy(mode, region, hour):
     subprocess.call(["cp", newsfilename, path])
 
 
-def copy_file(mode, region):
+def copy_file(region):
     if config["force_all"]:
         for hour in range(0, 24):
-            copy(mode, region, hour)  # copy to all 24 files
+            copy(region, hour)  # copy to all 24 files
     else:
-        copy(mode, region, datetime.utcnow().hour)
+        copy(region, datetime.utcnow().hour)
 
 
 # Run the functions to make the news
@@ -1063,6 +1066,29 @@ def make_riiconnect24_text():
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
     riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
+def packVFF(region):
+    path = "{}/v2/{}_{}/".format(config["file_path"], language_code, region)
+    os.makedirs(path + "wc24dl", exist_ok=True)
+    for i in range(0, 24):
+        with open(path + "news.bin.%s" % str(i).zfill(2), "rb") as source:
+            with open(path + "wc24dl/2.BIN.%s" % str(i).zfill(2), "wb") as dest:
+                dest.write(source.read()[320:])
+    subprocess.call(
+        [
+            config["winePath"],
+            config["prfArcPath"],
+            "-v",
+            "3712",
+            path + "wc24dl",
+            path + "wc24dl.vff",
+        ],
+        stdout=subprocess.DEVNULL,
+    )  # Pack VFF
+    
+    for i in range(0, 24):
+        os.remove(path + "wc24dl/2.BIN.%s" % str(i).zfill(2))
+    os.rmdir(path + "wc24dl")
+
 
 # Write everything to the file
 
@@ -1101,6 +1127,7 @@ def write_dictionary(mode):
             dest_file.write(binascii.unhexlify("0".zfill(128)))
             dest_file.write(signature)
             dest_file.write(read)
+
 
     # Remove the rest of the other files
 

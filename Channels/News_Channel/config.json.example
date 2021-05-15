@@ -1,12 +1,14 @@
 {
   "key_path": "/path/to/key",
   "file_path": "/path/to/save/file",
-  "lzss_path": "/path/to/lzss",
   "force_all": false,
   "google_maps_api_key": "key",
   "production": true,
   "sentry_url": "http://status.domain.tld/",
   "webhook_urls": [
     "http://status.domain.tld/"
-  ]
+  ],
+  "packVFF": true,
+  "winePath": "/usr/bin/wine",
+  "prfArcPath": "/var/rc24/File-Maker/PrfArc.exe"
 }
