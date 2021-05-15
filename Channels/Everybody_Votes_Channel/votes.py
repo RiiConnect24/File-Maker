@@ -177,7 +177,7 @@ def mysql_connect():
 
 def mysql_get_votes(days, vote_type, index):
     cursor = cnx.cursor()
-    query = "SELECT questionID from EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC" % (days, vote_type)
+    query = "SELECT questionID from rc24_EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC" % (days, vote_type)
     cursor.execute(query)
     global poll_id, poll_type
 
@@ -191,7 +191,7 @@ def mysql_get_votes(days, vote_type, index):
         i += 1
 
     poll_id = row[0]
-    query = "SELECT * from EVC.votes WHERE questionID = %s"
+    query = "SELECT * from rc24_EVC.votes WHERE questionID = %s"
     cursor.execute(query, [poll_id])
 
     global national_results, worldwide_results
@@ -263,7 +263,7 @@ def mysql_get_votes(days, vote_type, index):
 
 def mysql_get_questions(days, count, vote_type):
     cursor = cnx.cursor()
-    query = "SELECT * from EVC.questions WHERE DATE(date) > CURDATE() - INTERVAL %s DAY AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % (days, vote_type)
+    query = "SELECT * from rc24_EVC.questions WHERE DATE(date) > CURDATE() - INTERVAL %s DAY AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % (days, vote_type)
 
     cursor.execute(query)
 
@@ -413,7 +413,27 @@ def sign_file(name):
                 config["file_path"], folder, get_year())])  # If folder for the year does not exist, make it.
             path = "/".join([config["file_path"], folder, get_year(), final])
         elif file_type == "v":
-            path = "/".join([config["file_path"], str(country_code).zfill(3), final])
+            path = "/".join([config["file_path"], str(country_code).zfill(3), ""])
+            if config["packVFF"]:
+                os.makedirs(path + "wc24dl", exist_ok=True)
+                with open(path + "voting.bin", "rb") as source:
+                    with open(path + "wc24dl/VOTING.BIN", "wb") as dest:
+                            dest.write(source.read()[320:])
+                subprocess.call(
+                    [
+                        config["winePath"],
+                        config["prfArcPath"],
+                        "-v",
+                        "64",
+                        path + "wc24dl",
+                        path + "wc24dl.vff",
+                    ],
+                    stdout=subprocess.DEVNULL,
+                )  # Pack VFF
+                
+                os.remove(path + "wc24dl/VOTING.BIN")
+                os.rmdir(path + "wc24dl")
+            path += final
     subprocess.call(["mv", final, path])
     os.remove(final + '-1')
 

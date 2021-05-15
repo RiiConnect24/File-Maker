@@ -1,6 +1,5 @@
 {
   "key_path": "/path/to/key",
-  "lzss_path": "/path/to/lzss",
   "file_path": "/path/to/save/file",
   "production": true,
   "mysql_user": "user",
@@ -9,5 +8,8 @@
   "sentry_url": "http://status.domain.tld/",
   "webhook_urls": [
     "http://status.domain.tld/"
-  ]
+  ],
+  "packVFF": true,
+  "winePath": "/bin/wine",
+  "prfArcPath": "/path/to/prfarc.exe"
 }
