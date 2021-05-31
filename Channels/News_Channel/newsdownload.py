@@ -355,6 +355,9 @@ def locations_download(
             try:
                 read = gmaps.geocode(uni_name, language=languages[language_code])
                 loc_name = read[0]["address_components"][0]["long_name"]
+                for loc in read[0]["address_components"]:
+                    if "locality" in loc["types"]:
+                        loc_name = loc["long_name"]
 
                 if languages[language_code] == "ja":
                     loc_name = enc(loc_name)
