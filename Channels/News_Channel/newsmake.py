@@ -10,6 +10,7 @@
 
 import binascii
 import calendar
+import difflib
 import glob
 import json
 import nlzss
@@ -410,6 +411,17 @@ def remove_duplicates(data):
     headlines = []
 
     for k, v in list(data.items()):
+        removed = False
+        
+        for h in headlines:
+            if difflib.SequenceMatcher(None, v[3], h).ratio() > 0.85:
+                del data[k]
+                removed = True
+                break
+
+        if removed:
+            continue
+        
         if v[3] not in headlines:
             headlines.append(v[3])
         elif v[3] in headlines:
