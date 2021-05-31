@@ -16,7 +16,7 @@ with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r"
     config = load(f)
 
 db = MySQLdb.connect(
-    "localhost", config["dbuser"], config["dbpass"], "cmoc", charset="utf8mb4"
+    "localhost", config["dbuser"], config["dbpass"], "rc24_cmoc", charset="utf8mb4"
 )
 cursor = db.cursor()
 
@@ -254,7 +254,7 @@ with open(task_file + ".txt", "w") as f:
     f.close()
 
 system(
-    "python ./sign_encrypt.py -t enc -in '{}.txt' -out '{}.bin' -key BE3715C308F341A8F16F0EF4FB1497AF -rsa /var/rc24/key/cmoc.pem".format(
+    "python3 ./sign_encrypt.py -t enc -in '{}.txt' -out '{}.bin' -key BE3715C308F341A8F16F0EF4FB1497AF -rsa /var/rc24/key/cmoc.pem".format(
         task_file, task_file
     )
 )

@@ -35,7 +35,7 @@ db = MySQLdb.connect(
     "localhost",
     config["dbuser"],
     config["dbpass"],
-    "cmoc",
+    "rc24_cmoc",
     use_unicode=True,
     charset="utf8mb4",
 )
@@ -60,7 +60,7 @@ for i in range(len(row)):
     entryno = row[i][0]
     initial = row[i][1]
     mii_filename = (
-        "/var/www/wapp.wii.com/miicontest/public_html/render/entry-{}.mii".format(
+        "/var/www/rc24/wapp.wii.com/miicontest/public_html/render/entry-{}.mii".format(
             entryno
         )
     )
@@ -81,7 +81,7 @@ for i in range(len(row)):
         initial = initial[0] + "." + initial[1] + "."
 
     if bool(row[i][7]):
-        artisan += '<br><img width = 125 src="http://miicontest.wii.rc24.xyz/images/master.png" />'
+        artisan += '<br><img width = 125 src="https://miicontest.wii.rc24.xyz/images/master.png" />'
 
     longentry = decToEntry(entryno)
     longentry = longentry[:4] + "-" + longentry[4:8] + "-" + longentry[8:12]
@@ -92,13 +92,13 @@ for i in range(len(row)):
     table += f"\t\t<td>{row[i][4]}</td>\n"
     table += f"\t\t<td>{initial}</td>\n"
     table += f"\t\t<td>{row[i][2]}</td>\n"
-    table += f'\t\t<td><a href="http://miicontestp.wii.rc24.xyz/cgi-bin/htmlcraftsearch.cgi?query={row[i][5]}">{artisan}</a></td>\n'
+    table += f'\t\t<td><a href="https://miicontestp.wii.rc24.xyz/cgi-bin/htmlcraftsearch.cgi?query={row[i][5]}">{artisan}</a></td>\n'
 
     table += "\t</tr>\n"
 
 table += "</table>\n"
 
 with open(
-    "/var/www/wapp.wii.com/miicontest/public_html/tables/top50.html", "w"
+    "/var/www/rc24/wapp.wii.com/miicontest/public_html/tables/top50.html", "w"
 ) as file:
     file.write(table)

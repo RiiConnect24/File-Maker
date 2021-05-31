@@ -8,7 +8,7 @@ with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r"
 ql = NumberedList()
 pr = Prepare()
 
-db = MySQLdb.connect("localhost", config["dbuser"], config["dbpass"], "cmoc")
+db = MySQLdb.connect("localhost", config["dbuser"], config["dbpass"], "rc24_cmoc")
 cursor = db.cursor()
 
 # grab bag is extremely unpredictable and can cause server spam or crash wiis if done incorrectly
