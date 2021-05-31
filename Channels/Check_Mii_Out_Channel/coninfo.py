@@ -31,7 +31,7 @@ def setRankings(id):  # once voting is concluded, rank miis from 1 to 10
 
 currentTime = int(mktime(datetime.utcnow().timetuple())) - 946684800
 db = MySQLdb.connect(
-    "localhost", config["dbuser"], config["dbpass"], "cmoc", charset="utf8mb4"
+    "localhost", config["dbuser"], config["dbpass"], "rc24_cmoc", charset="utf8mb4"
 )
 cursor = db.cursor()
 ci = ConInfo()
@@ -99,8 +99,8 @@ with open("decfiles/con_info.dec", "wb") as file:
 db.close()
 
 if new:
-    call(["python", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/conmail.py"])
+    call(["python3", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/conmail.py"])
 
-call(["python", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/condetail.py"])
-call(["python", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/bestlist.py"])
-call(["python", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/entrylist.py"])
+call(["python3", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/condetail.py"])
+call(["python3", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/bestlist.py"])
+call(["python3", "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/entrylist.py"])

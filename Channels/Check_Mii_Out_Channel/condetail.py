@@ -7,7 +7,7 @@ with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r"
     config = load(f)
 
 db = MySQLdb.connect(
-    "localhost", config["dbuser"], config["dbpass"], "cmoc", charset="utf8mb4"
+    "localhost", config["dbuser"], config["dbpass"], "rc24_cmoc", charset="utf8mb4"
 )
 cursor = db.cursor()
 cd = ConDetail()

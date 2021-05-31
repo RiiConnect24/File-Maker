@@ -21,7 +21,7 @@ db = MySQLdb.connect(
     "localhost",
     config["dbuser"],
     config["dbpass"],
-    "cmoc",
+    "rc24_cmoc",
     use_unicode=True,
     charset="utf8mb4",
 )
@@ -173,7 +173,7 @@ for i in range(len(row)):
     nickname = row[i][2]
     craftsno = row[i][0]
     mii_filename = (
-        "/var/www/wapp.wii.com/miicontest/public_html/render/crafts-{}.mii".format(
+        "/var/www/rc24/wapp.wii.com/miicontest/public_html/render/crafts-{}.mii".format(
             craftsno
         )
     )
@@ -210,6 +210,6 @@ for i in range(len(row)):
 table += "</table>\n"
 
 with open(
-    "/var/www/wapp.wii.com/miicontest/public_html/tables/rankings.html", "w"
+    "/var/www/rc24/wapp.wii.com/miicontest/public_html/tables/rankings.html", "w"
 ) as file:
     file.write(table)

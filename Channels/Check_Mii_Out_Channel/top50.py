@@ -8,7 +8,7 @@ with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r"
 # get the top 50 most popular miis sorted by their permanent likes and add them to pop_list
 
 
-db = MySQLdb.connect("localhost", config["dbuser"], config["dbpass"], "cmoc")
+db = MySQLdb.connect("localhost", config["dbuser"], config["dbpass"], "rc24_cmoc")
 cursor = db.cursor()
 
 cursor.execute(
