@@ -189,38 +189,41 @@ def process_news(name, mode, language, region, d):
         "production"
     ]:  # brilliant way to keep the news flowing when it's close to or over the file size limit, surprisingly seems to work?
         path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
-        size = round(
-            float(
-                subprocess.check_output(["du", "-sh", path])
-                .split()[0]
-                .decode("utf-8")
-                .replace("M", "")
-            )
-            - 3.7,
-            1,
-        )
-        if size >= 3.9:  # over the limit
-            limit -= 15
-        elif size == 3.8:  # hitting the limit
-            limit -= 10
-        elif size == 3.7:  # close to the limit
-            limit -= 5
-        elif size == 3.6:
-            limit -= 4
-        elif size == 3.5:
-            limit -= 3
-
-        filesize = sum(
-            os.path.getsize(f) - 320
-            for f in glob.glob(
-                "/var/www/wapp.wii.com/news/v2/%s_%s/news.bin.*".format(
-                    language_code, region
+        try:
+            size = round(
+                float(
+                    subprocess.check_output(["du", "-sh", path])
+                    .split()[0]
+                    .decode("utf-8")
+                    .replace("M", "")
                 )
+                - 3.7,
+                1,
             )
-        )  # let's do one more check to see if the filesize is ok
+            if size >= 3.9:  # over the limit
+                limit -= 15
+            elif size == 3.8:  # hitting the limit
+                limit -= 10
+            elif size == 3.7:  # close to the limit
+                limit -= 5
+            elif size == 3.6:
+                limit -= 4
+            elif size == 3.5:
+                limit -= 3
 
-        if filesize > 3712000:
-            log("News files exceed the maximum file size amount.", "error")
+            filesize = sum(
+                os.path.getsize(f) - 320
+                for f in glob.glob(
+                    "/var/www/wapp.wii.com/news/v2/%s_%s/news.bin.*".format(
+                        language_code, region
+                    )
+                )
+            )  # let's do one more check to see if the filesize is ok
+
+            if filesize > 3712000:
+                log("News files exceed the maximum file size amount.", "error")
+        except:
+            pass
 
     for key in list(data.keys()):
         i += 1
