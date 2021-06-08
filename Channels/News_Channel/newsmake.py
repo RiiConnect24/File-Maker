@@ -414,17 +414,6 @@ def remove_duplicates(data):
     headlines = []
 
     for k, v in list(data.items()):
-        removed = False
-        
-        for h in headlines:
-            if difflib.SequenceMatcher(None, v[3], h).ratio() > 0.85:
-                del data[k]
-                removed = True
-                break
-
-        if removed:
-            continue
-        
         if v[3] not in headlines:
             headlines.append(v[3])
         elif v[3] in headlines:
@@ -610,7 +599,15 @@ def make_timestamps_table(mode, topics_table, topics_news):
                     )  # TODO: Change stored encoding later
 
                     for keys in list(newstime.keys()):
+                        removed = False
+
                         if keys not in times:
+                            for keys2 in times.keys():
+                                if difflib.SequenceMatcher(None, keys, keys2).ratio() > 0.85:
+                                    removed = True
+                                    break
+                        
+                        if not removed:
                             times[keys] = newstime[keys]
         except:
             pass
