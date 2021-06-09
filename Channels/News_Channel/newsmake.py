@@ -603,7 +603,7 @@ def make_timestamps_table(mode, topics_table, topics_news):
 
                         if keys not in times:
                             for keys2 in times.keys():
-                                if difflib.SequenceMatcher(None, keys, keys2).ratio() > 0.85:
+                                if difflib.SequenceMatcher(None, keys.decode("utf-16be"), keys2.decode("utf-16be")).ratio() > 0.85:
                                     removed = True
                                     break
                         else:
