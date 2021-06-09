@@ -606,6 +606,8 @@ def make_timestamps_table(mode, topics_table, topics_news):
                                 if difflib.SequenceMatcher(None, keys, keys2).ratio() > 0.85:
                                     removed = True
                                     break
+                        else:
+                            removed = True
                         
                         if not removed:
                             times[keys] = newstime[keys]
