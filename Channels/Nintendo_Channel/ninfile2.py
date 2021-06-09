@@ -1,12 +1,9 @@
-import lxml.etree as ET
+import lxml.etree as et
 import ninfile1
 import os
-import pickle
 import requests
 import struct
-import sys
 import zipfile
-from bs4 import BeautifulSoup
 
 """Pack integers to specific type."""
 
@@ -99,9 +96,10 @@ class GameTDB():
             filename = v[0] + "tdb"
             
             print("Loading {}...".format(k))
-            v[1] = ET.parse(filename + ".xml")
+            v[1] = et.parse(filename + ".xml")
 
         return self.databases
+
 
 class NintendoChannel:
     def __init__(self, ninfile):
