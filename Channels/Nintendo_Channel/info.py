@@ -329,5 +329,7 @@ class make_info():
             f.seek(cover_offset)
             f.write(cover)
 
+        os.remove(f"{game_id}.jpg")
+
 
 make_info(GameTDB(True).parse())
