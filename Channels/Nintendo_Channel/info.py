@@ -1,10 +1,12 @@
 import binascii
-import collections
 import os
 import struct
 import sys
 import textwrap
+import requests
+from PIL import Image
 from ninfile2 import GameTDB
+
 
 def u8(data):
     if not 0 <= data <= 255:
@@ -33,6 +35,7 @@ def u32_littleendian(data):
         data = 0
     return struct.pack("<I", data)
 
+
 if len(sys.argv) != 3:
     print("Usage: info.py <platform> <title id>")
     sys.exit(1)
@@ -40,11 +43,13 @@ elif len(sys.argv[2]) != 4:
     print("Error: Title ID must be 4 characters.")
     sys.exit(1)
 
+
 def enc(text, length):
     if len(text) > length:
         print("Error: Text too long.")
         sys.exit(1)
     return text.encode("utf-16be").ljust(length, b'\0')[:length]
+
 
 class make_info():
     def __init__(self, databases):
@@ -53,9 +58,10 @@ class make_info():
         self.make_header()
         self.write_gametdb_info()
         self.write_file()
+        self.insert_image()
 
         print("Completed Successfully")
-        
+
     def make_header(self):
         self.header = {}
 
@@ -78,8 +84,10 @@ class make_info():
         self.header["demos_entry_number"] = u32(0)
         self.header["demos_table_offset"] = u32(0)
         self.header["unknown_2"] = u32(0) * 2
-        self.header["picture_offset"] = u32(0)
-        self.header["picture_size"] = u32(0)
+        self.header["picture_offset"] = u32(0x2351)
+        # The channel only seems to care if this offset is lower than the last offset in the file.
+        # If this offset is lower, then the image will not display. I am pretty sure no covers in GameTDB are larger than 36 KB.
+        self.header["picture_size"] = u32(0x9999)
         self.header["unknown_3"] = u32(0)
         self.header["rating_picture_offset"] = u32(0)
         self.header["rating_picture_size"] = u32(0)
@@ -145,19 +153,21 @@ class make_info():
         for s in self.databases[sys.argv[1]][1].findall("game"):
             if s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
                 print("Found {}!".format(sys.argv[2]))
-
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
 
-                self.header["purchase_button_flag"] = u8(1) # we'll make it go to gametdb
+                self.header["purchase_button_flag"] = u8(1)  # we'll make it go to gametdb
                 self.header["release_year"] = u16(int(s.find("date").get("year")))
                 self.header["release_month"] = u8(int(s.find("date").get("month")) - 1)
                 self.header["release_day"] = u8(int(s.find("date").get("day")))
 
-                controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller", "gamecube": "gamecube_controller", "mii": "mii"}
-                controllers2 = {"wheel": "Wii Wheel", "balanceboard": "Wii Balance Board", "wiispeak": "Wii Speak", "microphone": "Microphone", "guitar": "Guitar", "drums": "Drums", "dancepad": "Dance Pad", "keyboard": "Keyboard", "udraw": "uDraw"}
-                
+                controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller",
+                               "gamecube": "gamecube_controller", "mii": "mii"}
+                controllers2 = {"wheel": "Wii Wheel", "balanceboard": "Wii Balance Board", "wiispeak": "Wii Speak",
+                                "microphone": "Microphone", "guitar": "Guitar", "drums": "Drums",
+                                "dancepad": "Dance Pad", "keyboard": "Keyboard", "udraw": "uDraw"}
+
                 other_peripherals = False
-                
+
                 for controller in s.find("input").findall("control"):
                     if controller.get("type") in controllers:
                         self.header["{}_flag".format(controllers[controller.get("type")])] = u8(1)
@@ -166,20 +176,21 @@ class make_info():
                             self.header["peripherals_text"] = ""
 
                         self.header["peripherals_text"] += controllers2[controller.get("type")] + ", "
-                        
+
                         other_peripherals = True
 
                 if other_peripherals:
                     self.header["peripherals_text"] = enc(self.header["peripherals_text"][:-2], 88)
-                
+
                 for feature in s.find("wi-fi").findall("feature"):
                     if "online" in feature.text:
                         self.header["online_flag"] = u8(1)
                         self.header["nintendo_wifi_connection_flag"] = u8(1)
 
                 # what languages does this game apparently support? (not sure how accurate the db is)
-                
-                languages = {"ZHCN": "chinese", "KO": "korean", "JA": "japanese", "EN": "english", "FR": "french", "ES": "spanish", "DE": "german", "IT": "italian", "NL": "dutch"}
+
+                languages = {"ZHCN": "chinese", "KO": "korean", "JA": "japanese", "EN": "english", "FR": "french",
+                             "ES": "spanish", "DE": "german", "IT": "italian", "NL": "dutch"}
                 languages_list = s.find("languages").text.split(",")
 
                 for l in languages.keys():
@@ -191,9 +202,9 @@ class make_info():
                 text_type = None
 
                 if len(wrap) <= 4:
-                    text_type = "description" # put the synoppsis at the top of the page
+                    text_type = "description"  # put the synoppsis at the top of the page
                 elif len(wrap) <= 11:
-                    text_type = "custom_field" # put the synopsis in the middle of the page
+                    text_type = "custom_field"  # put the synopsis in the middle of the page
                 else:
                     text_type = "custom_field"  # put the synopsis in the middle of the page
 
@@ -213,7 +224,7 @@ class make_info():
                         i = len(wrap)
 
                 i = 1
-                
+
                 for w in wrap:
                     self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
                     i += 1
@@ -221,24 +232,24 @@ class make_info():
                 self.header["title"] = title = s.find("locale", {"lang": "EN"}).find("title").text
 
                 # make separator in game name have a subtitle too
-                
+
                 if ": " in self.header["title"]:
                     self.header["title"] = title.split(": ")[0]
                     self.header["subtitle"] = enc(title.split(": ")[1], 62)
-                
+
                 elif " - " in self.header["title"]:
                     self.header["title"] = title.split(" - ")[0]
                     self.header["subtitle"] = enc(title.split(" - ")[1], 62)
-                
+
                 self.header["title"] = enc(self.header["title"], 62)
-                
+
                 self.header["genre_text"] = enc(s.find("genre").text.title().replace(",", ", "), 58)
 
                 players_local = s.find("input").get("players")
                 players_online = s.find("wi-fi").get("players")
 
                 self.header["players_text"] = players_local + " Player"
-                
+
                 if players_local != "1":
                     self.header["players_text"] += "s"
 
@@ -252,7 +263,22 @@ class make_info():
 
                 self.header["players_text"] = enc(self.header["players_text"], 82)
 
-                self.header["disclaimer_text"] = enc('Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected to the GameTDB page.', 4800)
+                self.header["disclaimer_text"] = enc(
+                    'Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected '
+                    'to the GameTDB page.',
+                    4800)
+
+                # Download cover and convert to JPEG
+                print("Downloading cover art...")
+                title_id = s.find("id").text
+                url = f"https://art.gametdb.com/wii/cover/US/{title_id}.png"
+                r = requests.get(
+                    url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
+                open(f"{title_id}.png", "wb").write(r.content)
+                im = Image.open(f"{title_id}.png")
+                rgb_im = im.convert("RGB")
+                rgb_im.save(f"{title_id[:4]}.jpg")
+                os.remove(f"{title_id}.png")
 
                 self.header["filesize"] = u32(sum(len(values) for values in list(self.header.values()) if values))
 
@@ -262,7 +288,6 @@ class make_info():
         print("Error: Could not find {}.".format(sys.argv[2]))
         sys.exit(1)
 
-    
     def write_file(self):
         filename = sys.argv[2] + "-output.info"
 
@@ -278,7 +303,7 @@ class make_info():
             self.writef.write(values)
 
         self.writef.close()
-        
+
         self.readf = open(filename + "-1", "rb")
 
         read = self.readf.read()
@@ -287,10 +312,22 @@ class make_info():
 
         self.writef2.write(read)
         self.writef2.seek(8)
-        self.writef2.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))  
+        self.writef2.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))
 
         os.remove(filename + "-1")
 
         self.writef2.close()
+
+    def insert_image(self):
+        game_id = sys.argv[2]
+        cover_offset = 0x2351
+
+        with open(f"{game_id}.jpg", "rb") as f:
+            cover = f.read()
+
+        with open(f"{game_id}-output.info", 'r+b') as f:
+            f.seek(cover_offset)
+            f.write(cover)
+
 
 make_info(GameTDB(True).parse())
