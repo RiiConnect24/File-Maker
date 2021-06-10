@@ -92,8 +92,8 @@ class make_info():
         self.header["rating_picture_offset"] = u32(0)
         self.header["rating_picture_size"] = u32(0)
         for i in range(1, 8):
-            self.header["rating_detail_picture_%s_size" % i] = u32(0)
             self.header["rating_detail_picture_%s_offset" % i] = u32(0)
+            self.header["rating_detail_picture_%s_size" % i] = u32(0)
         self.header["unknown_4"] = u32(0) * 2
         self.header["soft_id"] = u32(0)
         self.header["game_id"] = u32(0)
@@ -153,12 +153,13 @@ class make_info():
         for s in self.databases[sys.argv[1]][1].findall("game"):
             if s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
                 print("Found {}!".format(sys.argv[2]))
+
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
 
                 # Get the game type
                 game_type = {"VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
                              "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, "Channel": 0x02,
-                             None: 0x01, "WiiWare": 0x0B}
+                             None: 0x01, "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
                                                     # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
                     self.header["platform_flag"] = u8(game_type[s.find("type").text])
@@ -167,9 +168,24 @@ class make_info():
                     sys.exit(1)
 
                 self.header["purchase_button_flag"] = u8(1)  # we'll make it go to gametdb
-                self.header["release_year"] = u16(int(s.find("date").get("year")))
-                self.header["release_month"] = u8(int(s.find("date").get("month")) - 1)
-                self.header["release_day"] = u8(int(s.find("date").get("day")))
+                # Some games, more notably DSiWare and some 3DS games do not have a release date in the xml.
+                # Due to this, we must set defaults in the case of no date.
+                if s.find("date").get("year") == "":
+                    release_year = 2011 # Chose this year because of the release year of the 3DS
+                else:
+                    release_year = s.find("date").get("year")
+                if s.find("date").get("month") == "":
+                    release_month = 11
+                else:
+                    release_month = s.find("date").get("month")
+                if s.find("date").get("day") == "":
+                    release_day = 11
+                else:
+                    release_day = s.find("date").get("day")
+
+                self.header["release_year"] = u16(int(release_year))
+                self.header["release_month"] = u8(int(release_month) - 1)
+                self.header["release_day"] = u8(int(release_day))
 
                 controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller",
                                "gamecube": "gamecube_controller", "mii": "mii"}
@@ -208,37 +224,37 @@ class make_info():
                     if l in languages_list:
                         self.header["language_{}_flag".format(languages[l])] = u8(1)
 
-                wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
+                # The 3DS games don't have a synopsis for some reason
+                if sys.argv[1] != "3DS":
+                    wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
 
-                text_type = None
+                    if len(wrap) <= 4:
+                        text_type = "description"  # put the synopsis at the top of the page
+                    elif len(wrap) <= 11:
+                        text_type = "custom_field"  # put the synopsis in the middle of the page
+                    else:
+                        text_type = "custom_field"  # put the synopsis in the middle of the page
 
-                if len(wrap) <= 4:
-                    text_type = "description"  # put the synoppsis at the top of the page
-                elif len(wrap) <= 11:
-                    text_type = "custom_field"  # put the synopsis in the middle of the page
-                else:
-                    text_type = "custom_field"  # put the synopsis in the middle of the page
+                        # let's shorten the synopsis until it fits
 
-                    # let's shorten the synopsis until it fits
+                        synopsis_text = s.find("locale", {"lang": "EN"}).find("synopsis").text.split(". ")
 
-                    synopsis_text = s.find("locale", {"lang": "EN"}).find("synopsis").text.split(". ")
+                        i = len(textwrap.wrap(". ".join(synopsis_text), 41)) + 1
+                        j = len(synopsis_text)
 
-                    i = len(textwrap.wrap(". ".join(synopsis_text), 41)) + 1
-                    j = len(synopsis_text)
+                        while i > 11:
+                            j -= 1
+                            sentences = ". ".join(synopsis_text[:j])
+                            if len(sentences) != 0:
+                                sentences += "."
+                            wrap = textwrap.wrap(sentences, 41)
+                            i = len(wrap)
 
-                    while i > 11:
-                        j -= 1
-                        sentences = ". ".join(synopsis_text[:j])
-                        if len(sentences) != 0:
-                            sentences += "."
-                        wrap = textwrap.wrap(sentences, 41)
-                        i = len(wrap)
+                    i = 1
 
-                i = 1
-
-                for w in wrap:
-                    self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
-                    i += 1
+                    for w in wrap:
+                        self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
+                        i += 1
 
                 self.header["title"] = title = s.find("locale", {"lang": "EN"}).find("title").text
 
@@ -259,20 +275,21 @@ class make_info():
                 players_local = s.find("input").get("players")
                 players_online = s.find("wi-fi").get("players")
 
-                self.header["players_text"] = players_local + " Player"
+                if sys.argv[1] == "Wii":
+                    self.header["players_text"] = players_local + " Player"
 
-                if players_local != "1":
-                    self.header["players_text"] += "s"
-
-                if players_online != "0":
-                    self.header["players_text"] += " (Local), " + players_online + " Player"
-
-                    if players_online != "1":
+                    if players_local != "1":
                         self.header["players_text"] += "s"
 
-                    self.header["players_text"] += " (Online)"
+                    if players_online != "0":
+                        self.header["players_text"] += " (Local), " + players_online + " Player"
 
-                self.header["players_text"] = enc(self.header["players_text"], 82)
+                        if players_online != "1":
+                            self.header["players_text"] += "s"
+
+                        self.header["players_text"] += " (Online)"
+
+                    self.header["players_text"] = enc(self.header["players_text"], 82)
 
                 self.header["disclaimer_text"] = enc(
                     'Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected '
@@ -282,7 +299,12 @@ class make_info():
                 # Download cover and convert to JPEG
                 print("Downloading cover art...")
                 title_id = s.find("id").text
-                url = f"https://art.gametdb.com/wii/cover/US/{title_id}.png"
+                url = f"https://art.gametdb.com/ds/box/US/{title_id}.png"
+                if sys.argv[1] == "Wii":
+                    url = f"https://art.gametdb.com/wii/cover/US/{title_id}.png"
+                if sys.argv[1] == "3DS":
+                    url = f"https://art.gametdb.com/3ds/box/US/{title_id}.png"
+
                 r = requests.get(
                     url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
                 open(f"{title_id}.png", "wb").write(r.content)
@@ -296,6 +318,7 @@ class make_info():
                 print(self.header)
 
                 return
+
         print("Error: Could not find {}.".format(sys.argv[2]))
         sys.exit(1)
 
@@ -335,6 +358,7 @@ class make_info():
 
         with open(f"{game_id}.jpg", "rb") as f:
             cover = f.read()
+
 
         with open(f"{game_id}-output.info", 'r+b') as f:
             f.seek(cover_offset)
