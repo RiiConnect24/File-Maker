@@ -155,6 +155,17 @@ class make_info():
                 print("Found {}!".format(sys.argv[2]))
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
 
+                # Get the game type
+                game_type = {"VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
+                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, "Channel": 0x02,
+                             None: 0x01, "WiiWare": 0x0B}
+                                                    # The XML returns None for disc games when we query the type.
+                if s.find("type").text in game_type:
+                    self.header["platform_flag"] = u8(game_type[s.find("type").text])
+                else:
+                    print("Could not find game type")
+                    sys.exit(1)
+
                 self.header["purchase_button_flag"] = u8(1)  # we'll make it go to gametdb
                 self.header["release_year"] = u16(int(s.find("date").get("year")))
                 self.header["release_month"] = u8(int(s.find("date").get("month")) - 1)
