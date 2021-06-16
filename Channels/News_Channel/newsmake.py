@@ -201,9 +201,9 @@ def process_news(name, mode, language, region, d):
                 1,
             )
             if size >= 3.9:  # over the limit
-                limit -= 15
+                limit -= 20
             elif size == 3.8:  # hitting the limit
-                limit -= 10
+                limit -= 15
             elif size == 3.7:  # close to the limit
                 limit -= 5
             elif size == 3.6:
@@ -214,9 +214,7 @@ def process_news(name, mode, language, region, d):
             filesize = sum(
                 os.path.getsize(f) - 320
                 for f in glob.glob(
-                    "/var/www/wapp.wii.com/news/v2/%s_%s/news.bin.*".format(
-                        language_code, region
-                    )
+                    path + "/news.bin.*"
                 )
             )  # let's do one more check to see if the filesize is ok
 
