@@ -200,12 +200,10 @@ def process_news(name, mode, language, region, d):
                 - 3.7,
                 1,
             )
-            if size >= 3.9:  # over the limit
+            if size >= 3.8:
                 limit -= 20
-            elif size == 3.8:  # hitting the limit
+            elif size == 3.7:
                 limit -= 15
-            elif size == 3.7:  # close to the limit
-                limit -= 5
             elif size == 3.6:
                 limit -= 4
             elif size == 3.5:
