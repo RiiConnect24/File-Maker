@@ -318,7 +318,7 @@ def locations_download(
     language_code, data
 ):  # using Google Maps API is so much better than the crap Nintendo used for say, AP news.
     locations = {}
-    gmaps = googlemaps.Client(key=config["google_maps_api_key"])
+    gmaps = googlemaps.Client(key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI").geocode("東京", language="ja")[0]["address_components"][0]["long_name"]
 
     languages = {  # corresponds to the Wii's language codes
         0: "ja",
@@ -737,7 +737,7 @@ class Parse(News):
             if " (Reuters)" in location:
                 self.location = location.split(" (Reuters)")[0].split("/")[0]
             elif "［" in self.article and "］" in self.article:
-                self.location = self.article.split("［")[1].split("］")[0].split("日 ロイター")[0][:-1]
+                self.location = self.article.split("［")[1].split("］")[0].split(" ")[0]
 
             if self.location == "":
                 self.location = None
