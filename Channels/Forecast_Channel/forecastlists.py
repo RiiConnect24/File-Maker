@@ -3239,7 +3239,7 @@ weathercities018["Lloydminster"] = [
         "ロイドミンスター",
         "Lloydminster",
         "Lloydminster",
-        "Lethbridge",
+        "Lloydminster",
         "Lloydminster",
         "Lloydminster",
         "Lloydminster",
@@ -4682,15 +4682,15 @@ weathercities018["Cambridge Bay"] = [
     ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"],
     "3125b54c00030000",
 ]
-weathercities018["Cape Dorset"] = [
+weathercities018["Kinngait"] = [
     [
-        "ケープドーセット",
-        "Cape Dorset",
-        "Cape Dorset",
-        "Cape Dorset",
-        "Cape Dorset",
-        "Cape Dorset",
-        "Cape Dorset",
+        "キンゲイト",
+        "Kinngait",
+        "Kinngait",
+        "Kinngait",
+        "Kinngait",
+        "Kinngait",
+        "Kinngait",
     ],
     [
         "ヌナブト準州",
@@ -4726,15 +4726,15 @@ weathercities018["Grise Fiord"] = [
     ["カナダ", "Canada", "Kanada", "Canada", "Canadá", "Canada", "Canada"],
     "3657c50e00030000",
 ]
-weathercities018["Hall Beach"] = [
+weathercities018["Sanirajak"] = [
     [
-        "ホールビーチ",
-        "Hall Beach",
-        "Hall Beach",
-        "Hall Beach",
-        "Hall Beach",
-        "Hall Beach",
-        "Hall Beach",
+        "サニラジャク",
+        "Sanirajak",
+        "Sanirajak",
+        "Sanirajak",
+        "Sanirajak",
+        "Sanirajak",
+        "Sanirajak",
     ],
     [
         "ヌナブト準州",
@@ -42067,13 +42067,13 @@ weathercities_international["Mbabane"] = [
     ["ムババネ", "Mbabane", "Mbabane", "Mbabane", "Mbabane", "Mbabane", "Mbabane"],
     ["ホホ", "Hhohho", "Hhohho", "Hhohho", "Hhohho", "Hhohho", "Hhohho"],
     [
-        "スワジランド",
-        "Swaziland",
-        "Swasiland",
-        "Swaziland",
-        "Suazilandia",
-        "Swaziland",
-        "Swaziland",
+        "エスワティニ",
+        "Eswatini",
+        "Eswatini",
+        "Eswatini",
+        "Eswatini",
+        "eSwatini",
+        "Eswatini",
     ],
     "ed49162404030000",
 ]
@@ -43213,8 +43213,8 @@ weathercities_international["Jerusalem"] = [
     ["イスラエル", "Israel", "Israel", "Israël", "Israel", "Israele", "Israël"],
     "1696190a05030000",
 ]
-weathercities_international["Astana"] = [
-    ["アスタナ", "Astana", "Astana", "Astana", "Astana", "Astana", "Astana"],
+weathercities_international["Nur-Sultan"] = [
+    ["ヌルスルタン", "Nur-Sultan", "Nur-Sultan", "Noursultan", "Nur-sultán", "Nur-Sultan", "Nur-Sultan"],
     ["", "", "", "", "", "", ""],
     [
         "カザフスタン",
