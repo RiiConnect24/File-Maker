@@ -42072,7 +42072,7 @@ weathercities_international["Mbabane"] = [
         "Eswatini",
         "Eswatini",
         "Eswatini",
-        "eSwatini",
+        "Eswatini",
         "Eswatini",
     ],
     "ed49162404030000",
@@ -44005,7 +44005,7 @@ bincountries["Slovakia"] = 102
 bincountries["Slovenia"] = 103
 bincountries["South Africa"] = 104
 bincountries["Spain"] = 105
-bincountries["Swaziland"] = 106
+bincountries["Eswatini"] = 106
 bincountries["Sweden"] = 107
 bincountries["Switzerland"] = 108
 bincountries["Turkey"] = 109

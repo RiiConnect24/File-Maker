@@ -318,7 +318,7 @@ def locations_download(
     language_code, data
 ):  # using Google Maps API is so much better than the crap Nintendo used for say, AP news.
     locations = {}
-    gmaps = googlemaps.Client(key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI").geocode("東京", language="ja")[0]["address_components"][0]["long_name"]
+    gmaps = googlemaps.Client(key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI")
 
     languages = {  # corresponds to the Wii's language codes
         0: "ja",
@@ -343,26 +343,19 @@ def locations_download(
         if name == "":
             continue
 
-        uni_name = (
-            name if languages[language_code] == "ja" else unidecode(name)
-        )  # if using unidecode with Japanese, it'll translate all the characters to English
-
-        print(uni_name)
+        print(name)
 
         coordinates = None
 
         if name not in cities:
             try:
-                read = gmaps.geocode(uni_name, language=languages[language_code])
+                read = gmaps.geocode(name, language=languages[language_code])
                 loc_name = read[0]["address_components"][0]["long_name"]
                 for loc in read[0]["address_components"]:
                     if "locality" in loc["types"]:
                         loc_name = loc["long_name"]
 
-                if languages[language_code] == "ja":
-                    loc_name = enc(loc_name)
-                else:
-                    loc_name = enc(unidecode(loc_name))
+                loc_name = enc(loc_name)
 
                 """Not doing anything with these."""
 
