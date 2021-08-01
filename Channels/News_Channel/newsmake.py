@@ -183,7 +183,7 @@ def process_news(name, mode, language, region, d):
     # multiple news articles will be removed
 
     i = 0
-    limit = 22
+    limit = 20
 
     if config[
         "production"
