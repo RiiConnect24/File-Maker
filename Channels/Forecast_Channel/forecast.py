@@ -971,7 +971,10 @@ def sign_file(file, local_name, server_name, wiiu):
         config["file_path"], language_code, str(country_code).zfill(3)
     )
     os.makedirs(path, exist_ok=True)
-    shutil.copy2(local_name, path + "/" + server_name)
+    try:
+        shutil.copy2(local_name, path + "/" + server_name)
+    except:
+        pass
     os.remove(local_name)
 
 
