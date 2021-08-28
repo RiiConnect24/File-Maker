@@ -75,7 +75,7 @@ extraMiis = cursor.fetchall()
 row = popularMiis + extraMiis
 
 table = (
-    f'<p>Only the top 100 popular Miis are shown. Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
+    f'<p>These are all of the popular Miis that currently appear on the Check Mii Out Channel. Only the top 100 popular Miis are shown. Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
     + headers
 )
 for i in range(len(row)):

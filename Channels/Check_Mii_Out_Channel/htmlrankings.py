@@ -165,7 +165,7 @@ cursor.execute(
 row = cursor.fetchall()
 
 table = (
-    f'<p>Only the top 300 Mii Artisans are shown. Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
+    f'<p>These are currently the top Mii Artisans of the Check Mii Out Channel, ranked. Only the top 300 Mii Artisans are shown. Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
     + headers
 )
 for i in range(len(row)):
