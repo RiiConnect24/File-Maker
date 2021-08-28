@@ -52,7 +52,7 @@ cursor.execute(
 row = cursor.fetchall()
 
 table = (
-    f'<p>These are currently the top rated Miis on the Check Mii Out Channel, ranked. Click on a Mii to download it.</p>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
+    f'<p>These are currently the top rated Miis on the Check Mii Out Channel, ranked. Click on a Mii to download it.</p>\n<a href="https://mii.rc24.xyz/">Back to Homepage</a>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
     + headers
 )
 for i in range(len(row)):
