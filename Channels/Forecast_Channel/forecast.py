@@ -751,7 +751,6 @@ def make_bins(forecast_list, data):
         make_short_bin(forecast_list, data)
         if config["production"] and config["packVFF"]:
             packVFF(j, country_code)
-        purge_cache(language_code, country_code)
         reset_data()
 
 
@@ -1008,26 +1007,31 @@ def packVFF(language_code, country_code):
     os.rmdir(path + "wc24dl")
 
 
-def purge_cache(language_code, country_code):
-    url = "http://{}/{}/{}/".format(
-        config["cloudflare_hostname"],
-        language_code,
-        str(country_code).zfill(3),
-    )
+def purge_cache():
+    purge_list = []
+
+    for forecast_list in forecastlists.weathercities:
+        country_code = forecastlists.bincountries[currentlist]
+
+        for language_code in get_bins(country_code):
+            url = "http://{}/{}/{}/".format(
+                config["cloudflare_hostname"],
+                language_code,
+                str(country_code).zfill(3),
+            )
+
+            purge_list.append(url + "forecast.bin")
+            purge_list.append(url + "forecast.bi2")
+            purge_list.append(url + "short.bin")
+            purge_list.append(url + "short.bi2")
+            purge_list.append(url + "wc24dl.vff")
+
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
             yield cf.zones.purge_cache.post(
                 config["cloudflare_zone_name"],
-                data={
-                    "files": [
-                        url + "forecast.bin",
-                        url + "forecast.bi2",
-                        url + "short.bin",
-                        url + "short.bi2",
-                        url + "wc24dl.vff",
-                    ]
-                },
+                data={"files": purge_list},
             )
 
 
@@ -1670,6 +1674,8 @@ close_threads()
 dump_db()
 
 if config["production"]:
+    purge_cache()
+
     if config["send_stats"]:
         # log stuff to Datadog
         statsd.increment("forecast.api_requests", apirequests)
