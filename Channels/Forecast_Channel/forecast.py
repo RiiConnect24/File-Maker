@@ -1011,7 +1011,7 @@ def purge_cache():
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             print("Purging cache...")
-            
+
             for forecast_list in forecastlists.weathercities:
                 purge_list = []
 
@@ -1032,7 +1032,7 @@ def purge_cache():
 
                 cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
 
-                return cf.zones.purge_cache.post(
+                cf.zones.purge_cache.post(
                     config["cloudflare_zone_name"],
                     data={"files": purge_list},
                 )
