@@ -3,17 +3,21 @@
   "file_path": "/path/to/save/file",
   "production": true,
   "multithreaded": true,
-  "wii_u_generation": false,
+  "wii_u_generation": true,
   "check_coordinates": false,
   "send_logs": true,
   "send_stats": true,
   "send_webhooks": true,
-  "sentry_url": "http://status.domain.tld/",
+  "sentry_url": "http://example.com/",
   "webhook_urls": [
-    "http://status.domain.tld/"
+    "http://example.com/"
   ],
   "packVFF": true,
   "winePath": "/bin/wine",
   "prfArcPath": "/path/to/prfarc.exe",
-  "download_locations": false
+  "download_locations": false,
+  "cloudflare_cache_purge": true,
+  "cloudflare_zone_name": "id",
+  "cloudflare_token": "token",
+  "cloudflare_hostname": "http://example.com/"
 }
