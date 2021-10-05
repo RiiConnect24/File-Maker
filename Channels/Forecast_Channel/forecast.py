@@ -11,7 +11,7 @@
 
 import binascii
 import calendar
-import cloudflare
+import CloudFlare
 import io
 import json
 import math
@@ -1016,7 +1016,7 @@ def purge_cache(language_code, country_code):
     )
     if config["production"]:
         if config["cloudflare_cache_purge"]:
-            cf = cloudflare.CloudFlare(token=config["cloudflare_token"])
+            cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
             cf.zones.purge_cache.post(
                 config["cloudflare_zone_name"],
                 data={
