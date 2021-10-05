@@ -751,6 +751,7 @@ def make_bins(forecast_list, data):
         make_short_bin(forecast_list, data)
         if config["production"] and config["packVFF"]:
             packVFF(j, country_code)
+        purge_cache(language_code, country_code)
         reset_data()
 
 
@@ -977,7 +978,6 @@ def sign_file(file, local_name, server_name, wiiu):
     except:
         pass
     os.remove(local_name)
-    remove_cache(path, language_code, country_code, server_name)
 
 
 def packVFF(language_code, country_code):
@@ -1006,10 +1006,14 @@ def packVFF(language_code, country_code):
     os.remove(path + "wc24dl/3.BIN")
     os.remove(path + "wc24dl/4.BIN")
     os.rmdir(path + "wc24dl")
-    remove_cache(path, language_code, country_code, "wc24dl.vff")
 
 
-def remove_cache(path, language_code, country_code, server_name):
+def purge_cache(language_code, country_code):
+    url = "http://{}/{}/{}/".format(
+        config["cloudflare_hostname"],
+        language_code,
+        str(country_code).zfill(3),
+    )
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             cf = cloudflare.CloudFlare(token=config["cloudflare_token"])
@@ -1017,12 +1021,11 @@ def remove_cache(path, language_code, country_code, server_name):
                 config["cloudflare_zone_name"],
                 data={
                     "files": [
-                        "http://{}/{}/{}/{}".format(
-                            config["cloudflare_hostname"],
-                            language_code,
-                            str(country_code).zfill(3),
-                            server_name,
-                        )
+                        url + "forecast.bin",
+                        url + "forecast.bi2",
+                        url + "short.bin",
+                        url + "short.bi2",
+                        url + "wc24dl.vff",
                     ]
                 },
             )
