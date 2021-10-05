@@ -179,11 +179,12 @@ for i in range(len(row)):
     )
     if not exists(mii_filename):
         with open(mii_filename, "wb") as f:
-            miidata = decodeMii(row[i][3])[:-2]
+            miidata = decodeMii(row[i][1])[:-2]
             miidata = (
                 miidata[:28] + b"\x00\x00\x00\x00" + miidata[32:]
             )  # remove mac address from mii data
             f.write(miidata)
+            f.close()
 
     # if not exists(mii_filename + '.png'):
     # 	call(['mono', 'MiiRender.exe', mii_filename])
@@ -201,7 +202,7 @@ for i in range(len(row)):
 
     table += "\t<tr>\n"
     table += f"\t\t<td>{i + 1}</td>\n"
-    table += f'\t\t<td><a href="/render/crafts-{craftsno}.mii"><img width="75" src="{wii2studio(mii_filename)}"/></a></td>\n'
+    table += f'\t\t<td><a href="/render/crafts-{craftsno}.mii"><img width="75" src="{wii2studio(mii_filename)}" onerror="tryAgain(this)" /></a></td>\n'
     table += f'\t\t<td><a href="https://miicontestp.wii.rc24.xyz/cgi-bin/htmlcraftsearch.cgi?query={craftsno}">{country + nickname}<br>{master}</a></td>\n'
     table += f"\t\t<td>{row[i][4]}</td>\n"
     table += f"\t\t<td>{row[i][5]}</td>\n"

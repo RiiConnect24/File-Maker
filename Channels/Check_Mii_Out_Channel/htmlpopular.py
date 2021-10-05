@@ -7,6 +7,7 @@ from subprocess import call
 from json import load
 from datetime import datetime
 from cmoc import wii2studio
+from random import shuffle
 import sentry_sdk
 
 with open("/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/config.json", "r") as f:
@@ -53,12 +54,12 @@ count = int(cursor.fetchone()[0])
 print("Popular Count:", count)
 
 # popular is always sorted by volatile likes first, but we combine miis ordered by permlikes to fill in the rest to equal 100 total miis
-if count >= 100:
+if count >= 1000:
     extraCount = 0
-    count = 100
+    count = 1000
 
 else:
-    extraCount = 100 - count
+    extraCount = 1000 - count
 
 cursor.execute(
     "SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.craftsno = artisan.craftsno AND likes > 0 ORDER BY likes DESC LIMIT %s",
@@ -67,12 +68,14 @@ cursor.execute(
 popularMiis = cursor.fetchall()
 
 cursor.execute(
-    "SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.permlikes < 25 AND mii.craftsno=artisan.craftsno ORDER BY mii.permlikes DESC LIMIT %s",
+    "SELECT mii.entryno, mii.initial, mii.permlikes, mii.miidata, mii.nickname, mii.craftsno, artisan.nickname, artisan.master FROM mii, artisan WHERE mii.permlikes > 21 AND mii.craftsno=artisan.craftsno ORDER BY mii.permlikes DESC LIMIT %s",
     [extraCount],
 )
 extraMiis = cursor.fetchall()
 
-row = popularMiis + extraMiis
+row = list(set(popularMiis + extraMiis))[:500]
+shuffle(row)
+row = tuple(row)
 
 table = (
     f'<p>These are all of the popular Miis that currently appear on the Check Mii Out Channel. Only the top 100 popular Miis are shown. Click on a Mii to download it.</p>\n<a href="https://mii.rc24.xyz/">Back to Homepage</a>\n<h4>{date}</h4>\n<table class="striped" align="center">\n'
@@ -110,7 +113,7 @@ for i in range(len(row)):
     longentry = longentry[:4] + "-" + longentry[4:8] + "-" + longentry[8:12]
 
     table += "\t<tr>\n"
-    table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="{wii2studio(mii_filename)}"/></a></td>\n'
+    table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="{wii2studio(mii_filename)}" onerror="tryAgain(this)" /></a></td>\n'
     table += f"\t\t<td>{longentry}</td>\n"
     table += f"\t\t<td>{row[i][4]}</td>\n"
     table += f"\t\t<td>{initial}</td>\n"

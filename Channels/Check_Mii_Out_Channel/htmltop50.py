@@ -87,7 +87,7 @@ for i in range(len(row)):
     longentry = longentry[:4] + "-" + longentry[4:8] + "-" + longentry[8:12]
 
     table += "\t<tr>\n"
-    table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="{wii2studio(mii_filename)}"/></a></td>\n'
+    table += f'\t\t<td><a href="/render/entry-{entryno}.mii"><img width="75" src="{wii2studio(mii_filename)}" onerror="tryAgain(this)" /></a></td>\n'
     table += f"\t\t<td>{longentry}</td>\n"
     table += f"\t\t<td>{row[i][4]}</td>\n"
     table += f"\t\t<td>{initial}</td>\n"

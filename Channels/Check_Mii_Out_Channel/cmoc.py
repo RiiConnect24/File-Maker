@@ -770,13 +770,13 @@ class ConDetail:
         self.condetail["id3"] = u32(1)
         self.condetail["id4"] = u32(id)
         self.condetail["status"] = u8(conStatus(status))
-        self.condetail["worldwide"] = u8(1)
+        self.condetail["worldwide"] = u8(9)
         self.condetail["padding4"] = u16(0)
         self.condetail["entrycount"] = u32(entrycount)
         self.condetail["padding5"] = u32(0) * 5
         self.condetail["topic"] = topic[:16].encode()
         self.condetail["padding6"] = u8(0) * (32 - len(topic))
-        self.condetail["description"] = "\n".join(wrap(description[:64], 32)).encode()
+        self.condetail["description"] = " \n".join(wrap(description[:64], 32)).encode()
         self.condetail["padding7"] = u8(0) * (64 - len(description))
 
         data = b""

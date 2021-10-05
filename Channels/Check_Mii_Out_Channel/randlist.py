@@ -14,7 +14,7 @@ cursor = db.cursor()
 # grab bag is extremely unpredictable and can cause server spam or crash wiis if done incorrectly
 # the code below is basically all just trial and error
 
-a = [150, 150, 150, 100, 100, 100, 100, 50, 0, 0]
+a = [150, 150, 150, 0, 0, 0, 0, 0, 0, 0]
 
 bl = 0
 for n in a:
@@ -46,7 +46,7 @@ for n in a:
     ) as file:
         file.write(data)
 
-a = [150, 150, 150, 100, 100, 100, 100, 50, 0, 0]
+a = [150, 150, 150, 0, 0, 0, 0, 0, 0, 0]
 nl = 0
 for t in a:
     nl += 1

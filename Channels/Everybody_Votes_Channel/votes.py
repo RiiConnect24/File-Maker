@@ -221,6 +221,8 @@ def mysql_get_votes(days, vote_type, index):
     """Grab the votes from the database."""
 
     for row in cursor:
+        if row[4] == 99:
+            continue
         country_index = country_codes.index(row[4])
         anscnt = str(row[6]).zfill(4)
         region_id = row[5] - 2
