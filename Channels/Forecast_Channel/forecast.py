@@ -1008,9 +1008,10 @@ def packVFF(language_code, country_code):
 
 
 def purge_cache():
-
     if config["production"]:
         if config["cloudflare_cache_purge"]:
+            print("Purging cache...")
+            
             for forecast_list in forecastlists.weathercities:
                 purge_list = []
 
