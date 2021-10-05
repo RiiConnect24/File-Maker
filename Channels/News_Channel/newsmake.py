@@ -10,6 +10,7 @@
 
 import binascii
 import calendar
+import CloudFlare
 import difflib
 import glob
 import json
@@ -273,6 +274,8 @@ def process_news(name, mode, language, region, d):
 
         if config["packVFF"]:
             packVFF(region)
+
+        purge_cache(region)
 
         os.remove(newsfilename)
 
@@ -1076,6 +1079,25 @@ def make_riiconnect24_text():
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
     riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
+def purge_cache(region):
+    url = "http://{}/v2/{}_{}/".format(
+        config["cloudflare_hostname"],
+        language_code,
+        region,
+    )
+    if config["production"]:
+        if config["cloudflare_cache_purge"]:
+            cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
+            yield cf.zones.purge_cache.post(
+                config["cloudflare_zone_name"],
+                data={
+                    "files": [
+                        url + "news.bin." + str(datetime.utcnow().hour).zfill(2),
+                        url + "wc24dl.vff",
+                    ]
+                },
+            )
+
 def packVFF(region):
     path = "{}/v2/{}_{}/".format(config["file_path"], language_code, region)
     os.makedirs(path + "wc24dl", exist_ok=True)
@@ -1137,7 +1159,6 @@ def write_dictionary(mode):
             dest_file.write(binascii.unhexlify("0".zfill(128)))
             dest_file.write(signature)
             dest_file.write(read)
-
 
     # Remove the rest of the other files
 
