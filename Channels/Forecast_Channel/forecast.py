@@ -1008,31 +1008,33 @@ def packVFF(language_code, country_code):
 
 
 def purge_cache():
-    purge_list = []
-
-    for forecast_list in forecastlists.weathercities:
-        country_code = forecastlists.bincountries[currentlist]
-
-        for language_code in get_bins(country_code):
-            url = "http://{}/{}/{}/".format(
-                config["cloudflare_hostname"],
-                language_code,
-                str(country_code).zfill(3),
-            )
-
-            purge_list.append(url + "forecast.bin")
-            purge_list.append(url + "forecast.bi2")
-            purge_list.append(url + "short.bin")
-            purge_list.append(url + "short.bi2")
-            purge_list.append(url + "wc24dl.vff")
 
     if config["production"]:
         if config["cloudflare_cache_purge"]:
-            cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
-            return cf.zones.purge_cache.post(
-                config["cloudflare_zone_name"],
-                data={"files": purge_list},
-            )
+            for forecast_list in forecastlists.weathercities:
+                purge_list = []
+
+                country_code = forecastlists.bincountries[currentlist]
+
+                for language_code in get_bins(country_code):
+                    url = "http://{}/{}/{}/".format(
+                        config["cloudflare_hostname"],
+                        language_code,
+                        str(country_code).zfill(3),
+                    )
+
+                    purge_list.append(url + "forecast.bin")
+                    purge_list.append(url + "forecast.bi2")
+                    purge_list.append(url + "short.bin")
+                    purge_list.append(url + "short.bi2")
+                    purge_list.append(url + "wc24dl.vff")
+
+                cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
+
+                return cf.zones.purge_cache.post(
+                    config["cloudflare_zone_name"],
+                    data={"files": purge_list},
+                )
 
 
 def get_data(forecast_list, key):
