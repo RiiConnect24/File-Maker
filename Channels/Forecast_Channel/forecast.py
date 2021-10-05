@@ -1029,7 +1029,7 @@ def purge_cache():
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
-            yield cf.zones.purge_cache.post(
+            return cf.zones.purge_cache.post(
                 config["cloudflare_zone_name"],
                 data={"files": purge_list},
             )
