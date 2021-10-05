@@ -1017,7 +1017,7 @@ def purge_cache(language_code, country_code):
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
-            cf.zones.purge_cache.post(
+            yield cf.zones.purge_cache.post(
                 config["cloudflare_zone_name"],
                 data={
                     "files": [
