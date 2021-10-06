@@ -10,6 +10,7 @@
 
 import binascii
 import calendar
+import CloudFlare
 import datetime
 import json
 import logging
@@ -366,6 +367,27 @@ def webhook():
         for url in config["webhook_urls"]:
             post_webhook = requests.post(url, json=data, allow_redirects=True)
 
+def purge_cache():
+    if config["production"]:
+        if config["cloudflare_cache_purge"]:
+            print("Purging cache...")
+
+            for country_code in country_codes:
+                purge_list = []
+
+                url = "http://{}/{}/".format(
+                    config["cloudflare_hostname"],
+                    str(country_code).zfill(3),
+                )
+
+                purge_list.append(url + "voting.bin")
+
+            cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
+
+            cf.zones.purge_cache.post(
+                config["cloudflare_zone_name"],
+                data={"files": purge_list},
+            )
 
 dictionaries = []
 
@@ -487,6 +509,9 @@ def make_bin(country_code):
 
     if config["production"]:
         sign_file(question_file)
+
+    if file_type == "v":
+        purge_cache()
 
     print("Writing Completed")
 
