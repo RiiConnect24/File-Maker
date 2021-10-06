@@ -510,9 +510,6 @@ def make_bin(country_code):
     if config["production"]:
         sign_file(question_file)
 
-    if file_type == "v":
-        purge_cache()
-
     print("Writing Completed")
 
     for dictionary in dictionaries:
@@ -820,5 +817,8 @@ else:
 
 if file_type == "q":
     webhook()
+
+if file_type == "v":
+    purge_cache()
 
 print("Completed Successfully")
