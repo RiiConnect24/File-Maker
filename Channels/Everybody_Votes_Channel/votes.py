@@ -371,10 +371,10 @@ def purge_cache():
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             print("Purging cache...")
+            
+            purge_list = []
 
             for country_code in country_codes:
-                purge_list = []
-
                 url = "http://{}/{}/".format(
                     config["cloudflare_hostname"],
                     str(country_code).zfill(3),
