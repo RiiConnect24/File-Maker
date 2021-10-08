@@ -54,6 +54,7 @@ sources = {
         "picture": 0,
         "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
+        "countries": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52],
     },
     "ap_spanish": {
         "topics_news": {
@@ -68,6 +69,7 @@ sources = {
         "picture": 0,
         "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
+        "countries": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
     },
     "reuters_europe_english": {
         "topics_news": {
@@ -86,6 +88,7 @@ sources = {
         "picture": 0,
         "position": 4,
         "copyright": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies.",
+        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
     },
     "afp_french": {
         "topics_news": {
@@ -102,6 +105,7 @@ sources = {
         "picture": 4,
         "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
+        "countries": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
     },
     "dpa_german": {
         "topics_news": {
@@ -120,6 +124,7 @@ sources = {
         "picture": 4,
         "position": 4,
         "copyright": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} dpa",
+        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
     },
     "ansa_italian": {
         "topics_news": {
@@ -136,6 +141,7 @@ sources = {
         "picture": 6,
         "position": 6,
         "copyright": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma.",
+        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
     },
     "anp_dutch": {
         "topics_news": {
@@ -151,6 +157,7 @@ sources = {
         "picture": 0,
         "position": 5,
         "copyright": "© {} B.V. Algemeen Nederlands Persbureau ANP",
+        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
     },
     "reuters_japanese": {
         "topics_news": {
@@ -165,7 +172,8 @@ sources = {
         "country_code": 1,  # Japan
         "picture": 0,
         "position": 4,
-        "copyright": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 ",
+        "copyright": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 ",\
+        "countries": [1],
     },
 }
 
@@ -231,7 +239,7 @@ def process_news(name, mode, language, region, d):
 
     locations_data = newsdownload.locations_download(language_code, data)
 
-    make_news = make_news_bin(mode, data, locations_data)
+    make_news = make_news_bin(mode, data, locations_data, region)
 
     if config["production"]:
         # Log stuff to Datadog
@@ -275,8 +283,6 @@ def process_news(name, mode, language, region, d):
         if config["packVFF"]:
             packVFF(region)
 
-        purge_cache(region)
-
         os.remove(newsfilename)
 
 
@@ -302,7 +308,7 @@ def copy_file(region):
 # Run the functions to make the news
 
 
-def make_news_bin(mode, data, locations_data):
+def make_news_bin(mode, data, locations_data, region):
     global dictionaries, languages, country_code, language_code
 
     source = sources[mode]
@@ -372,6 +378,8 @@ def make_news_bin(mode, data, locations_data):
             pass
 
     make_news = "".join(headlines)
+
+    purge_cache(region, source)
 
     return make_news
 
@@ -1079,24 +1087,39 @@ def make_riiconnect24_text():
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
     riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
-def purge_cache(region):
-    url = "http://{}/v2/{}_{}/".format(
-        config["cloudflare_hostname"],
-        language_code,
-        region,
-    )
+def purge_cache(region, source):
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
-            return cf.zones.purge_cache.post(
-                config["cloudflare_zone_name"],
-                data={
-                    "files": [
-                        url + "news.bin." + str(datetime.utcnow().hour).zfill(2),
-                        url + "wc24dl.vff",
-                    ]
-                },
+            for country in source["countries"]:
+                url = "http://{}/v2/{}/{}/news.bin.{}".format(
+                    config["cloudflare_hostname"],
+                    str(source["language_code"]),
+                    str(country).zfill(3),
+                    str(datetime.utcnow().hour).zfill(2),
+                )
+
+                purge_cache2(url)
+            
+            url = "http://{}/v2/{}_{}/wc24dl.vff".format(
+                config["cloudflare_hostname"],
+                str(source["language_code"]),
+                region,
             )
+
+            purge_cache2(url)
+
+def purge_cache2(url):
+    cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
+
+    cf.zones.purge_cache.post(
+        config["cloudflare_zone_name"],
+        data={
+            "files": [
+                url,
+            ]
+        },
+    )
 
 def packVFF(region):
     path = "{}/v2/{}_{}/".format(config["file_path"], language_code, region)
