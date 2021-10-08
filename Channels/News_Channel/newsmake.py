@@ -1090,8 +1090,8 @@ def make_riiconnect24_text():
 def purge_cache(region, source):
     if config["production"]:
         if config["cloudflare_cache_purge"]:
-            print("Purging cache...")
-            
+            print("\nPurging cache...")
+
             cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
             for country in source["countries"]:
                 url = "http://{}/v2/{}/{}/news.bin.{}".format(
