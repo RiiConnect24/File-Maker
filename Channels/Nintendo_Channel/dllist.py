@@ -267,8 +267,18 @@ class MakeDList:
                     self.header[f"title_unknown7_{entry_number}"] = u32(0)
                     self.header[f"title_unknown9_{entry_number}"] = u16(222)
 
-                    self.header[f"title_title_{entry_number}"] = enc(title, 62)
-                    self.header[f"title_subtitle_{entry_number}"] = enc("", 62)
+                    if ": " in title:
+                        self.header[f"title_title_{entry_number}"] = enc(title.split(": ")[0], 62)
+                        self.header[f"title_subtitle_{entry_number}"] = enc(title.split(": ")[1], 62)
+
+                    elif " - " in title:
+                        self.header[f"title_title_{entry_number}"] = enc(title.split(" - ")[0], 62)
+                        self.header[f"title_subtitle_{entry_number}"] = enc(title.split(" - ")[1], 62)
+                    
+                    else:
+                        self.header[f"title_title_{entry_number}"] = enc(title, 62)
+                        self.header[f"title_subtitle_{entry_number}"] = enc("", 62)
+                        
                     self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
                     entry_number += 1
 
