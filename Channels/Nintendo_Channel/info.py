@@ -157,9 +157,9 @@ class make_info():
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
 
                 # Get the game type
-                game_type = {"VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
-                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, "Channel": 0x02,
-                             None: 0x01, "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
+                game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
+                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
+                              "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
                                                     # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
                     self.header["platform_flag"] = u8(game_type[s.find("type").text])
@@ -225,8 +225,10 @@ class make_info():
                         self.header["language_{}_flag".format(languages[l])] = u8(1)
 
                 # The 3DS games don't have a synopsis for some reason
-                if sys.argv[1] != "3DS":
-                    wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
+                if sys.argv[1] != "3DS" and s.find("locale", {"lang": "EN"}).find("synopsis").text:
+                    synopsis = s.find("locale", {"lang": "EN"}).find("synopsis").text
+
+                    wrap = textwrap.wrap(synopsis, 41)
 
                     if len(wrap) <= 4:
                         text_type = "description"  # put the synopsis at the top of the page

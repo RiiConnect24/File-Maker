@@ -206,82 +206,95 @@ class MakeDList:
     def write_title_table(self):
         self.header["titleTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        game_type = {"VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
-                     "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, "Channel": 0x02,
-                     None: 0x01, "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
-        database = self.databases["Wii"][1].findall("game") + self.databases["NDS"][1].findall("game") + self.databases["3DS"][1].findall("game")
-        for s in database:
-            if s.find("region").text == "NTSC-U":
-                if s.find("type").text != "CUSTOM" and s.find("type").text != "GameCube":
-                    title = "lmfao null"
-                    if s.find("locale", {"lang": "EN"}):
-                        title = s.find("locale", {"lang": "EN"}).find("title").text
+        game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
+                     "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
+                      "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
+        database = [self.databases["Wii"][1].findall("game") + self.databases["NDS"][1].findall("game") + self.databases["3DS"][1].findall("game")]
+        j = 0
+        for d in database:
+            for s in d:
+                if s.find("region").text == "NTSC-U":
+                    if s.find("type").text != "CUSTOM" and s.find("type").text != "GameCube":
+                        title = "lmfao null"
+                        if s.find("locale", {"lang": "EN"}):
+                            title = s.find("locale", {"lang": "EN"}).find("title").text
 
-                    # Create custom ID
-                    id = s.find("id").text[:4].encode()
-                    id = int(id.hex(), base=16)
+                        # Create custom ID
+                        text_id = s.find("id").text[:4]
+                        id = int(text_id.encode().hex(), base=16)
 
-                    self.header[f"title_id_{entry_number}"] = u32(id)
-                    self.header[f"title_titleId_{entry_number}"] = enc_utf_8(s.find("id").text[:4], 4)
-                    if s.find("type").text in game_type:
-                        self.header[f"title_titleType_{entry_number}"] = u8(game_type[s.find("type").text])
-                    else:
-                        self.header[f"title_titleType_{entry_number}"] = u8(0)
-                    for w in range(3):
-                        self.header[f"title_genre_{entry_number}_{w}"] = u8(3)
+                        self.header[f"title_id_{entry_number}"] = u32(id)
+                        self.header[f"title_titleId_{entry_number}"] = enc_utf_8(s.find("id").text[:4], 4)
+                        if s.find("type").text in game_type:
+                            self.header[f"title_titleType_{entry_number}"] = u8(game_type[s.find("type").text])
+                        else:
+                            self.header[f"title_titleType_{entry_number}"] = u8(0)
+                        for w in range(3):
+                            self.header[f"title_genre_{entry_number}_{w}"] = u8(3)
 
-                    self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
+                        self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
 
-                    if s.find("date").get("year") == "":
-                        release_year = 2011
-                    else:
-                        release_year = s.find("date").get("year")
+                        if s.find("date").get("year") == "":
+                            release_year = 2011
+                        else:
+                            release_year = s.find("date").get("year")
 
-                    if s.find("date").get("month") == "":
-                        release_month = 11
-                    else:
-                        release_month = s.find("date").get("month")
-                    
-                    if s.find("date").get("day") == "":
-                        release_day = 11
-                    else:
-                        release_day = s.find("date").get("day")
-
-                    self.header[f"title_releaseYear_{entry_number}"] = u16(int(release_year))
-                    self.header[f"title_releaseMonth_{entry_number}"] = u8(int(release_month) - 1)
-                    self.header[f"title_releaseDay_{entry_number}"] = u8(int(release_day))
-                    self.header[f"title_ratingId_{entry_number}"] = u8(9)
-
-                    # Unknown Value
-                    self.header[f"title_unknown1_{entry_number}"] = u16(2080)
-
-                    # Up ahead is some extremely lazy code. This should work, but some flags will be incorrect such as
-                    # Hardcore and casual
-                    self.header[f"title_hardcore_{entry_number}"] = u32(536872960)
-                    self.header[f"title_friends_{entry_number}"] = u32(2863311530)
-                    self.header[f"title_unknown2_{entry_number}"] = u32(2863311530)
-                    self.header[f"title_unknown3_{entry_number}"] = u16(43690)
-                    # Unknown4 will be a combo of what in the kaitai is unknown16 and unknown17 and other flags
-                    self.header[f"title_unknown4_{entry_number}"] = u16(170)
-                    self.header[f"title_unknown5_{entry_number}"] = u8(170)
-                    self.header[f"title_unknown6_{entry_number}"] = u32(50331648)
-                    self.header[f"title_unknown7_{entry_number}"] = u32(0)
-                    self.header[f"title_unknown9_{entry_number}"] = u16(222)
-
-                    if ": " in title:
-                        self.header[f"title_title_{entry_number}"] = enc(title.split(": ")[0], 62)
-                        self.header[f"title_subtitle_{entry_number}"] = enc(title.split(": ")[1], 62)
-
-                    elif " - " in title:
-                        self.header[f"title_title_{entry_number}"] = enc(title.split(" - ")[0], 62)
-                        self.header[f"title_subtitle_{entry_number}"] = enc(title.split(" - ")[1], 62)
-                    
-                    else:
-                        self.header[f"title_title_{entry_number}"] = enc(title, 62)
-                        self.header[f"title_subtitle_{entry_number}"] = enc("", 62)
+                        if s.find("date").get("month") == "":
+                            release_month = 11
+                        else:
+                            release_month = s.find("date").get("month")
                         
-                    self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
-                    entry_number += 1
+                        if s.find("date").get("day") == "":
+                            release_day = 11
+                        else:
+                            release_day = s.find("date").get("day")
+
+                        self.header[f"title_releaseYear_{entry_number}"] = u16(int(release_year))
+                        self.header[f"title_releaseMonth_{entry_number}"] = u8(int(release_month) - 1)
+                        self.header[f"title_releaseDay_{entry_number}"] = u8(int(release_day))
+                        self.header[f"title_ratingId_{entry_number}"] = u8(9)
+
+                        # Unknown Value
+                        self.header[f"title_unknown1_{entry_number}"] = u16(2080)
+
+                        # Up ahead is some extremely lazy code. This should work, but some flags will be incorrect such as
+                        # Hardcore and casual
+                        self.header[f"title_hardcore_{entry_number}"] = u32(536872960)
+                        self.header[f"title_friends_{entry_number}"] = u32(2863311530)
+                        self.header[f"title_unknown2_{entry_number}"] = u32(2863311530)
+                        self.header[f"title_unknown3_{entry_number}"] = u16(43690)
+                        # Unknown4 will be a combo of what in the kaitai is unknown16 and unknown17 and other flags
+                        self.header[f"title_unknown4_{entry_number}"] = u16(170)
+                        self.header[f"title_unknown5_{entry_number}"] = u8(170)
+                        self.header[f"title_unknown6_{entry_number}"] = u32(50331648)
+                        self.header[f"title_unknown7_{entry_number}"] = u32(0)
+                        self.header[f"title_unknown9_{entry_number}"] = u16(222)
+
+                        if ": " in title:
+                            self.header[f"title_title_{entry_number}"] = enc(title.split(": ")[0], 62)
+                            self.header[f"title_subtitle_{entry_number}"] = enc(title.split(": ")[1], 62)
+
+                        elif " - " in title:
+                            self.header[f"title_title_{entry_number}"] = enc(title.split(" - ")[0], 62)
+                            self.header[f"title_subtitle_{entry_number}"] = enc(title.split(" - ")[1], 62)
+                        
+                        else:
+                            self.header[f"title_title_{entry_number}"] = enc(title, 62)
+                            self.header[f"title_subtitle_{entry_number}"] = enc("", 62)
+                            
+                        self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
+                        entry_number += 1
+
+                        make_info = False
+
+                        if make_info:
+                            plat = {0: "Wii", 1: "DS", "2": "3DS"}
+
+                            print("python3.9 info.py {} {}".format(plat[j], text_id))
+
+                            os.system("python3.9 info.py {} {}".format(plat[j], text_id))
+            
+            j += 1
 
         self.header["titleEntryNumber"] = u32(entry_number)
 
