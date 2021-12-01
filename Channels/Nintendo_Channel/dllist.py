@@ -181,7 +181,7 @@ class MakeDList:
             # Write the image to our file then update the rating table's offset to the image
             if i == 8:
                 return
-            with open(rating_names[i], "rb") as image:
+            with open(f"./ratings/ESRB/{rating_names[i]}", "rb") as image:
                 self.header[f"jpegOffset{i}"] = u32(self.offset_count())
                 self.header[f"ratingJPEGData{i}"] = image.read()
                 # Seek to end of file to set filesize
@@ -293,8 +293,8 @@ class MakeDList:
                     for w in range(3):
                         self.header[f"title_genre_{entry_number}_{w}"] = u8(3)
 
-                    self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
 
+                    self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
                     if s.find("date").get("year") == "":
                         release_year = 2011
                     else:
