@@ -176,7 +176,7 @@ class MakeDList:
 
     def write_rating_images(self):
         """Writes the ESRB rating images to the file. It also updates the JPEG Offset and Size which is handy"""
-        rating_names = ["EC.jpg", "E.jpg", "E10.jpg", "T.jpg", "M.jpg", "RP.jpg", "RP2.jpg", "RP10.jpg"]
+        rating_names = ["EC.jpg", "E.jpg", "E10.jpg", "T.jpg", "M.jpg", "visitesrb.jpg", "visitesrb.jpg", "maycontain.jpg"]
         for i, rating in enumerate(self.list.ratings_table):
             # Write the image to our file then update the rating table's offset to the image
             if i == 8:
