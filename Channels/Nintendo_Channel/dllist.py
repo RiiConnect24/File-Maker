@@ -211,7 +211,7 @@ class MakeDList:
                      None: 0x01, "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
         for s in self.databases["Wii"][1].findall("game"):
             if s.find("region").text == "NTSC-U":
-                if s.find("type").text != "CUSTOM":
+                if s.find("type").text != "CUSTOM" and s.find("type").text != "GameCube":
                     title = "lmfao null"
                     if s.find("locale", {"lang": "EN"}):
                         title = s.find("locale", {"lang": "EN"}).find("title").text
@@ -241,6 +241,7 @@ class MakeDList:
                         release_month = 11
                     else:
                         release_month = s.find("date").get("month")
+                    
                     if s.find("date").get("day") == "":
                         release_day = 11
                     else:
