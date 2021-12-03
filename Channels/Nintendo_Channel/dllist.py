@@ -241,7 +241,30 @@ class MakeDList:
                         for w in range(3):
                             self.header[f"title_genre_{entry_number}_{w}"] = u8(3)
 
+                        # We will default to Nintendo because why not
                         self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
+                        company_start = struct.unpack(">I", self.header["companyTableOffset"])[0]
+
+                        for c in self.databases["Wii"][1].findall("companies"):
+                            for i, company in enumerate(c.findall("company")):
+                                # Firstly, we will try to find the company by the company code.
+                                # This method will only work for disc games. As such, methods below exist
+                                if s.find("id").text[4:] != "":
+                                    if s.find("id").text[4:] == company.get("code"):
+                                        self.header[f"title_companyOffset_{entry_number}"] = u32(
+                                            company_start + (128 * i))
+                                        break
+
+                                # If None we will default to Nintendo as well
+                                if s.find("publisher").text is None:
+                                    self.header[f"title_companyOffset_{entry_number}"] = self.header[
+                                        "companyTableOffset"]
+                                    break
+                                if company.get("name") in s.find("publisher").text:
+                                    self.header[f"title_companyOffset_{entry_number}"] = u32(company_start + (128 * i))
+                                    break
+
+
 
                         if s.find("date").get("year") == "":
                             release_year = 2011
