@@ -10,30 +10,30 @@ from ninfile2 import GameTDB
 
 def u8(data):
     if not 0 <= data <= 255:
-        log("u8 out of range: %s" % data, "INFO")
+        print("u8 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">B", data)
 
 
 def u16(data):
     if not 0 <= data <= 65535:
-        log("u16 out of range: %s" % data, "INFO")
+        print("u16 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">H", data)
 
 
 def u32(data):
     if not 0 <= data <= 4294967295:
-        log("u32 out of range: %s" % data, "INFO")
+        print("u32 out of range: %s" % data, "INFO")
         data = 0
     return struct.pack(">I", data)
 
 
-def u32_littleendian(data):
-    if not 0 <= data <= 4294967295:
-        log("u32 little endian out of range: %s" % data, "INFO")
-        data = 0
-    return struct.pack("<I", data)
+def enc(text, length):
+    if len(text) > length:
+        print("Error: Text too long.")
+        sys.exit(1)
+    return text.encode("utf-16be").ljust(length, b'\0')[:length]
 
 
 if len(sys.argv) != 3:
@@ -44,27 +44,25 @@ elif len(sys.argv[2]) != 4:
     sys.exit(1)
 
 
-def enc(text, length):
-    if len(text) > length:
-        print("Error: Text too long.")
-        sys.exit(1)
-    return text.encode("utf-16be").ljust(length, b'\0')[:length]
-
-
-class make_info():
+class MakeInfo:
     def __init__(self, databases):
+        self.header = {}
         self.databases = databases
 
         self.make_header()
         self.write_gametdb_info()
+        self.write_jpegs()
         self.write_file()
-        self.insert_image()
 
         print("Completed Successfully")
 
-    def make_header(self):
-        self.header = {}
+    def offset_count(self):
+        """
+        This function returns the offset of where the selected table is
+        """
+        return sum(len(values) for values in list(self.header.values()) if values)
 
+    def make_header(self):
         self.header["unknown"] = u16(0)
         self.header["version"] = u8(6)
         self.header["unknown_region"] = u8(2)
@@ -84,10 +82,8 @@ class make_info():
         self.header["demos_entry_number"] = u32(0)
         self.header["demos_table_offset"] = u32(0)
         self.header["unknown_2"] = u32(0) * 2
-        self.header["picture_offset"] = u32(0x2351)
-        # The channel only seems to care if this offset is lower than the last offset in the file.
-        # If this offset is lower, then the image will not display. I am pretty sure no covers in GameTDB are larger than 36 KB.
-        self.header["picture_size"] = u32(0x9999)
+        self.header["picture_offset"] = u32(0)
+        self.header["picture_size"] = u32(0)
         self.header["unknown_3"] = u32(0)
         self.header["rating_picture_offset"] = u32(0)
         self.header["rating_picture_size"] = u32(0)
@@ -98,18 +94,21 @@ class make_info():
         self.header["soft_id"] = u32(0)
         self.header["game_id"] = u32(0)
         self.header["platform_flag"] = u8(0)
-        self.header["company_id"] = u32(0)
-        self.header["unknown_5"] = u16(0)
-        self.header["unknown_6"] = u16(0)
-        self.header["unknown_7"] = u8(0)
-        self.header["wii_shop_channel_button_flag"] = u8(0)
+        self.header["company_id"] = u32(2)
+        self.header["unknown_5"] = u16(1)
+        self.header["unknown_6"] = u16(1)
+        self.header["unknown_7"] = u8(1)
+        self.header["wii_shop_channel_button_flag"] = u8(1)
         self.header["purchase_button_flag"] = u8(0)
         self.header["release_year"] = u16(0)
         self.header["release_month"] = u8(0)
         self.header["release_day"] = u8(0)
         self.header["shop_points"] = u32(0)
-        for i in range(1, 5):
-            self.header["unknown_8_%s" % i] = u8(0)
+        # Seems to have enabled 
+        self.header["unknown_8_0"] = u8(4)
+        self.header["unknown_8_1"] = u8(1)
+        self.header["unknown_8_2"] = u8(0)
+        self.header["unknown_8_3"] = u8(4)
         self.header["wii_remote_flag"] = u8(0)
         self.header["nunchuk_flag"] = u8(0)
         self.header["classic_controller_flag"] = u8(0)
@@ -143,7 +142,7 @@ class make_info():
         self.header["peripherals_text"] = b'\0' * 88
         self.header["unknown_10"] = b'\0' * 80
         self.header["disclaimer_text"] = b'\0' * 4800
-        self.header["unknown_11"] = u8(0)
+        self.header["unknown_11"] = u8(9)
         self.header["distribution_date_text"] = b'\0' * 82
         self.header["wii_points_text"] = b'\0' * 82
         for i in range(1, 11):
@@ -158,8 +157,8 @@ class make_info():
 
                 # Get the game type
                 game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
-                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
-                              "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
+                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, 
+                             "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
                                                     # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
                     self.header["platform_flag"] = u8(game_type[s.find("type").text])
@@ -314,17 +313,37 @@ class make_info():
                 rgb_im = im.convert("RGB")
                 rgb_im.save(f"{title_id[:4]}.jpg")
                 os.remove(f"{title_id}.png")
-
-                self.header["filesize"] = u32(sum(len(values) for values in list(self.header.values()) if values))
-
-                print(self.header)
-
                 return
 
         print("Error: Could not find {}.".format(sys.argv[2]))
         sys.exit(1)
 
+    def write_jpegs(self):
+        game_id = sys.argv[2]
+
+        with open(f"{game_id}.jpg", "rb") as cover:
+            self.header["picture_offset"] = u32(self.offset_count())
+            self.header["coverArt"] = cover.read()
+            cover.seek(0, os.SEEK_END)
+            self.header["picture_size"] = u32(cover.tell())
+
+        # TODO: Figure out the ratings so I can write the correct images
+        with open("E-small.jpg", "rb") as rating:
+            self.header["rating_picture_offset"] = u32(self.offset_count())
+            self.header["ratingArt"] = rating.read()
+            rating.seek(0, os.SEEK_END)
+            self.header["rating_picture_size"] = u32(rating.tell())
+
+        with open("rating.jpg", "rb") as detailed:
+            self.header["rating_detail_picture_1_offset"] = u32(self.offset_count())
+            self.header["detailed_rating_picture"] = detailed.read()
+            detailed.seek(0, os.SEEK_END)
+            self.header["rating_detail_picture_1_size"] = u32(detailed.tell())
+
+        os.remove(f"{game_id}.jpg")
+
     def write_file(self):
+        self.header["filesize"] = u32(self.offset_count())
         filename = sys.argv[2] + "-output.info"
 
         if os.path.exists(filename + "-1"):
@@ -354,19 +373,5 @@ class make_info():
 
         self.writef2.close()
 
-    def insert_image(self):
-        game_id = sys.argv[2]
-        cover_offset = 0x2351
 
-        with open(f"{game_id}.jpg", "rb") as f:
-            cover = f.read()
-
-
-        with open(f"{game_id}-output.info", 'r+b') as f:
-            f.seek(cover_offset)
-            f.write(cover)
-
-        os.remove(f"{game_id}.jpg")
-
-
-make_info(GameTDB(True).parse())
+MakeInfo(GameTDB(True).parse())
