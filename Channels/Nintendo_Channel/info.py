@@ -104,7 +104,7 @@ class MakeInfo:
         self.header["release_month"] = u8(0)
         self.header["release_day"] = u8(0)
         self.header["shop_points"] = u32(0)
-        # Seems to have enabled 
+        # Seems to have enabled
         self.header["unknown_8_0"] = u8(4)
         self.header["unknown_8_1"] = u8(1)
         self.header["unknown_8_2"] = u8(0)
@@ -153,12 +153,33 @@ class MakeInfo:
             if s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
                 print("Found {}!".format(sys.argv[2]))
 
+                for c in self.databases["Wii"][1].findall("companies"):
+                    for i, company in enumerate(c.findall("company")):
+                        # Firstly, we will try to find the company by the company code.
+                        # This method will only work for disc games. As such, methods below exist
+                        if s.find("id").text[4:] != "":
+                            if s.find("id").text[4:] == company.get("code"):
+                                id = company.get("code").encode()
+                                id = int(id.hex(), base=16)
+                                self.header["company_id"] = u32(id)
+                                break
+
+                        # If None we will default to Nintendo as well
+                        if s.find("publisher").text is None:
+                            self.header["company_id"] = u32(0x3031)
+                            break
+                        if company.get("name") in s.find("publisher").text:
+                            id = company.get("code").encode()
+                            id = int(id.hex(), base=16)
+                            self.header["company_id"] = u32(id)
+                            break
+
                 self.header["game_id"] = sys.argv[2].encode("utf-8")
 
                 # Get the game type
-                game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
-                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, 
-                             "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
+                game_type = {"VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
+                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, "Channel": 0x02,
+                             None: 0x01, "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
                                                     # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
                     self.header["platform_flag"] = u8(game_type[s.find("type").text])
@@ -224,10 +245,8 @@ class MakeInfo:
                         self.header["language_{}_flag".format(languages[l])] = u8(1)
 
                 # The 3DS games don't have a synopsis for some reason
-                if sys.argv[1] != "3DS" and s.find("locale", {"lang": "EN"}).find("synopsis").text:
-                    synopsis = s.find("locale", {"lang": "EN"}).find("synopsis").text
-
-                    wrap = textwrap.wrap(synopsis, 41)
+                if sys.argv[1] != "3DS":
+                    wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
 
                     if len(wrap) <= 4:
                         text_type = "description"  # put the synopsis at the top of the page
