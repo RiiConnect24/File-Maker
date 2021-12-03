@@ -176,14 +176,20 @@ class MakeDList:
 
     def write_rating_images(self):
         """Writes the ESRB rating images to the file. It also updates the JPEG Offset and Size which is handy"""
-        rating_names = ["EC.jpg", "E.jpg", "E10.jpg", "T.jpg", "M.jpg", "visitesrb.jpg", "visitesrb.jpg", "maycontain.jpg"]
+        rating_names = ["EC.jpg", "E.jpg", "E10.jpg", "T.jpg", "M.jpg", "visitesrb.jpg", "visitesrb.jpg",
+                        "maycontain.jpg"]
         for i, rating in enumerate(self.list.ratings_table):
+            deadbeef = {0: 0xDE, 1: 0xAD, 2: 0xBE, 3: 0xEF}
             # Write the image to our file then update the rating table's offset to the image
             if i == 8:
                 return
             with open(f"./ratings/ESRB/{rating_names[i]}", "rb") as image:
                 self.header[f"jpegOffset{i}"] = u32(self.offset_count())
                 self.header[f"ratingJPEGData{i}"] = image.read()
+                counter = 0
+                while self.offset_count() % 32 != 0:
+                    self.header[f"deadbeef_{i}_{counter}"] = u8(deadbeef[counter % 4])
+                    counter += 1
                 # Seek to end of file to set filesize
                 image.seek(0, os.SEEK_END)
                 self.header[f"jpegSize{i}"] = u32(image.tell())
@@ -206,10 +212,13 @@ class MakeDList:
     def write_title_table(self):
         self.header["titleTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
+        game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C,
+                     "VC-MD": 0x07,
                      "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
-                      "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
-        database = [self.databases["Wii"][1].findall("game") + self.databases["NDS"][1].findall("game") + self.databases["3DS"][1].findall("game")]
+                     "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
+        database = [
+            self.databases["Wii"][1].findall("game") + self.databases["NDS"][1].findall("game") + self.databases["3DS"][
+                1].findall("game")]
         j = 0
         for d in database:
             for s in d:
@@ -243,7 +252,7 @@ class MakeDList:
                             release_month = 11
                         else:
                             release_month = s.find("date").get("month")
-                        
+
                         if s.find("date").get("day") == "":
                             release_day = 11
                         else:
@@ -277,11 +286,11 @@ class MakeDList:
                         elif " - " in title:
                             self.header[f"title_title_{entry_number}"] = enc(title.split(" - ")[0], 62)
                             self.header[f"title_subtitle_{entry_number}"] = enc(title.split(" - ")[1], 62)
-                        
+
                         else:
                             self.header[f"title_title_{entry_number}"] = enc(title, 62)
                             self.header[f"title_subtitle_{entry_number}"] = enc("", 62)
-                            
+
                         self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
                         entry_number += 1
 
@@ -293,7 +302,7 @@ class MakeDList:
                             print("python3.9 info.py {} {}".format(plat[j], text_id))
 
                             os.system("python3.9 info.py {} {}".format(plat[j], text_id))
-            
+
             j += 1
 
         self.header["titleEntryNumber"] = u32(entry_number)
