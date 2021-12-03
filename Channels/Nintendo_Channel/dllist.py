@@ -220,6 +220,7 @@ class MakeDList:
         database = [
             self.databases["Wii"][1].findall("game") + self.databases["NDS"][1].findall("game") + self.databases["3DS"][
                 1].findall("game")]
+
         j = 0
         for d in database:
             for s in d:
@@ -239,8 +240,41 @@ class MakeDList:
                             self.header[f"title_titleType_{entry_number}"] = u8(game_type[s.find("type").text])
                         else:
                             self.header[f"title_titleType_{entry_number}"] = u8(0)
-                        for w in range(3):
-                            self.header[f"title_genre_{entry_number}_{w}"] = u8(3)
+
+                        # Parse the genre's. The XML is a giant mess for this, this will be a giant dictionary.
+                        genre_dict = {"arcade": 15, "party": 13, "puzzle": 5, "action": 1, "2D platformer": 1,
+                                      "3D platformer": 1, "shooter": 12, "first-person shooter": 12,
+                                      "third-person shooter": 12, "rail shooter": 12, "run and gun": 12,
+                                      "shoot 'em up": 12, "stealth action": 1, "survival horror": 1, "sports": 4,
+                                      "adventure": 2, "hidden object": 13, "interactive fiction": 2,
+                                      "interactive movie": 2, "point-and-click": 13, "music": 10, "rhythm": 10,
+                                      "dance": 10, "karaoke": 10, "racing": 7, "fighting": 14, "simulation": 9,
+                                      "role-playing": 6, "strategy": 8, "traditional": 11, "health": 3, "others": 13}
+
+                        # We will have a static variable to store our genre. This is because I didn't include
+                        # many subgenres in the dict since they share the same ID as their parent genre.
+                        _genre = 13
+                        genre_text = s.find("genre")
+                        
+                        # Check for None
+                        if genre_text is None:
+                            self.header[f"title_genre_{entry_number}_0"] = u8(13)
+                            self.header[f"title_genre_{entry_number}_1"] = u8(13)
+                            self.header[f"title_genre_{entry_number}_2"] = u8(13)
+                        else:
+                            # This is a mess. Some titles don't have genres, some have only 1 or 2 genres, so
+                            # workarounds were made
+                            genre_list = genre_text.text.split(",")
+
+                            for i in range(3):
+                                try:
+                                    if genre_list[i] in genre_dict:
+                                        _genre = genre_dict[genre_list[i]]
+                                        self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
+                                    else:
+                                        self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
+                                except IndexError:
+                                    self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
 
                         # We will default to Nintendo because why not
                         self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
