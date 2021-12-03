@@ -1,4 +1,5 @@
 import binascii
+import enum
 import os
 import struct
 import sys
@@ -264,8 +265,6 @@ class MakeDList:
                                     self.header[f"title_companyOffset_{entry_number}"] = u32(company_start + (128 * i))
                                     break
 
-
-
                         if s.find("date").get("year") == "":
                             release_year = 2011
                         else:
@@ -284,7 +283,23 @@ class MakeDList:
                         self.header[f"title_releaseYear_{entry_number}"] = u16(int(release_year))
                         self.header[f"title_releaseMonth_{entry_number}"] = u8(int(release_month) - 1)
                         self.header[f"title_releaseDay_{entry_number}"] = u8(int(release_day))
-                        self.header[f"title_ratingId_{entry_number}"] = u8(9)
+
+                        rating = s.find("rating").get("value")
+                        rating_group = s.find("rating").get("type")
+                        if rating == "E10+":
+                            # GameTDB has E10 as E10+. As I cannot use that as an enum key, here we are
+                            rating = "E10"
+                        elif rating == "AO":
+                            # The Wii has Adults Only?????
+                            rating = "M"
+                        elif rating == "3":
+                            # I don't know why PEGI ratings are getting mixed in
+                            rating = "E"
+                        elif rating == "":
+                            # Default to E
+                            rating = "E"
+
+                        self.header[f"title_ratingId_{entry_number}"] = u8(self.RatingSystem[rating].value)
 
                         # Unknown Value
                         self.header[f"title_unknown1_{entry_number}"] = u16(2080)
@@ -440,6 +455,13 @@ class MakeDList:
             self.header["pop_video_title_%s" % entry_number] = enc("Larsen gets grounded", 204)
             entry_number += 1
         self.header["popularVideosEntryNumber"] = u32(entry_number)
+
+    class RatingSystem(enum.Enum):
+        EC = 8
+        E = 9
+        E10 = 10
+        T = 11
+        M = 12
 
     def write_file(self):
         # Now that all the file contents are written, calculate filesize
