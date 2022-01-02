@@ -6,6 +6,7 @@ import struct
 import sys
 from ninfile import NinchDllist
 from ninfile2 import GameTDB
+from ninfile3 import *
 
 
 def u8(data):
@@ -44,7 +45,6 @@ class MakeDList:
     def __init__(self, databases):
         self.header = {}
         self.databases = databases
-        self.list = NinchDllist.from_file("4349688911.LZ")
         self.make_header()
         self.write_ratings_table()
         self.write_title_types()
@@ -130,17 +130,17 @@ class MakeDList:
         """Writes the ESRB rating scales from EC (Early Childhood) to M (Mature)"""
         self.header["ratingsTableOffset"] = u32(self.offset_count())
         ratings_entry_number = 0
-        for rating in self.list.ratings_table:
+        for rating in nin_ratings_table:
             # This is the ESRB value.
             rating_group = 2
 
-            self.header[f"rating_ratingID{ratings_entry_number}"] = u8(rating.rating_id)
+            self.header[f"rating_ratingID{ratings_entry_number}"] = u8(nin_ratings_table[rating]["rating_id"])
             self.header[f"rating_ratingGroup{ratings_entry_number}"] = u8(rating_group)
-            self.header[f"rating_age{ratings_entry_number}"] = u8(rating.age)
+            self.header[f"rating_age{ratings_entry_number}"] = u8(nin_ratings_table[rating]["age"])
             self.header[f"rating_unknown{ratings_entry_number}"] = u8(222)
-            self.header[f"rating_jpegOffset{ratings_entry_number}"] = u32(rating.jpeg_offset)
-            self.header[f"rating_jpegSize{ratings_entry_number}"] = u32(rating.jpeg_size)
-            self.header[f"rating_title{ratings_entry_number}"] = enc(rating.title, 22)
+            self.header[f"rating_jpegOffset{ratings_entry_number}"] = u32(nin_ratings_table[rating]["jpeg_offset"])
+            self.header[f"rating_jpegSize{ratings_entry_number}"] = u32(nin_ratings_table[rating]["jpeg_size"])
+            self.header[f"rating_title{ratings_entry_number}"] = enc(nin_ratings_table[rating]["title"], 22)
 
             ratings_entry_number += 1
 
@@ -152,10 +152,10 @@ class MakeDList:
         """
         self.header["detailedRatingsTableOffset"] = u32(self.offset_count())
         detail_entry_number = 0
-        for detail in self.list.detailed_ratings_table:
-            self.header["detailedRatingGroup_%s" % detail_entry_number] = u8(detail.rating_group)
-            self.header["detailedRatingID_%s" % detail_entry_number] = u8(detail.rating_id)
-            self.header["detailedTitle_%s" % detail_entry_number] = enc(detail.title, 204)
+        for detail in nin_detailed_ratings_table:
+            self.header["detailedRatingGroup_%s" % detail_entry_number] = u8(nin_detailed_ratings_table[detail]["rating_group"])
+            self.header["detailedRatingID_%s" % detail_entry_number] = u8(nin_detailed_ratings_table[detail]["rating_id"])
+            self.header["detailedTitle_%s" % detail_entry_number] = enc(nin_detailed_ratings_table[detail]["title"], 204)
             detail_entry_number += 1
 
         self.header["detailedRatingsEntryNumber"] = u32(detail_entry_number)
@@ -166,12 +166,12 @@ class MakeDList:
         """
         self.header["titleTypesTableOffset"] = u32(self.offset_count())
         title_types_entry_number = 0
-        for title_type in self.list.title_types_table:
-            self.header["typeID_%s" % title_types_entry_number] = u8(title_type.type_id)
-            self.header["consoleModel_%s" % title_types_entry_number] = enc_utf_8(title_type.console_model, 3)
-            self.header["title_%s" % title_types_entry_number] = enc(title_type.title, 102)
-            self.header["groupID_%s" % title_types_entry_number] = u8(title_type.group_id)
-            self.header["unknown_title_type_%s" % title_types_entry_number] = u8(title_type.unknown)
+        for title_type in nin_title_types_table:
+            self.header["typeID_%s" % title_types_entry_number] = u8(nin_title_types_table[title_type]["type_id"])
+            self.header["consoleModel_%s" % title_types_entry_number] = enc_utf_8(nin_title_types_table[title_type]["console_model"], 3)
+            self.header["title_%s" % title_types_entry_number] = enc(nin_title_types_table[title_type]["title"], 102)
+            self.header["groupID_%s" % title_types_entry_number] = u8(nin_title_types_table[title_type]["group_id"])
+            self.header["unknown_title_type_%s" % title_types_entry_number] = u8(nin_title_types_table[title_type]["unknown"])
             title_types_entry_number += 1
 
         self.header["titleTypesEntryNumber"] = u32(title_types_entry_number)
@@ -180,7 +180,7 @@ class MakeDList:
         """Writes the ESRB rating images to the file. It also updates the JPEG Offset and Size which is handy"""
         rating_names = ["EC.jpg", "E.jpg", "E10.jpg", "T.jpg", "M.jpg", "visitesrb.jpg", "visitesrb.jpg",
                         "maycontain.jpg"]
-        for i, rating in enumerate(self.list.ratings_table):
+        for i, rating in enumerate(nin_ratings_table):
             deadbeef = {0: 0xDE, 1: 0xAD, 2: 0xBE, 3: 0xEF}
             # Write the image to our file then update the rating table's offset to the image
             if i == 8:
@@ -384,7 +384,7 @@ class MakeDList:
         """Writes the offset where the title is in the title table."""
         self.header["newTitleTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for new_title in self.list.new_title_table:
+        for new_title in nin_new_title_table:
             self.header[f"newTitle_offset_{entry_number}"] = self.header["titleTableOffset"]
             entry_number += 1
         self.header["newTitleEntryNumber"] = u32(entry_number)
@@ -393,17 +393,17 @@ class MakeDList:
         """Writes the videos"""
         self.header["videos1TableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for video in self.list.videos_1_table:
-            self.header["video_id_%s" % entry_number] = u32(video.id)
-            self.header["video_timeLength_%s" % entry_number] = u16(video.time_length)
-            self.header["video_titleID_%s" % entry_number] = u32(video.title_id)
+        for video in nin_videos_1_table:
+            self.header["video_id_%s" % entry_number] = u32(nin_videos_1_table[video]["id"])
+            self.header["video_timeLength_%s" % entry_number] = u16(nin_videos_1_table[video]["time_length"])
+            self.header["video_titleID_%s" % entry_number] = u32(nin_videos_1_table[video]["title_id"])
             for i in range(15):
                 self.header["bruh_unknown_%s_%s" % (i, entry_number)] = u8(0)
-            self.header["video_unknown2_%s" % entry_number] = u8(video.unknown_2)
-            self.header["video_ratingID_%s" % entry_number] = u8(video.rating_id)
-            self.header["video_unknown3_%s" % entry_number] = u8(video.unknown_3)
-            self.header["video_newTag_%s" % entry_number] = u8(video.new_tag)
-            self.header["videoIndex_%s" % entry_number] = u8(video.video_index)
+            self.header["video_unknown2_%s" % entry_number] = u8(nin_videos_1_table[video]["unknown_2"])
+            self.header["video_ratingID_%s" % entry_number] = u8(nin_videos_1_table[video]["rating_id"])
+            self.header["video_unknown3_%s" % entry_number] = u8(nin_videos_1_table[video]["unknown_3"])
+            self.header["video_newTag_%s" % entry_number] = u8(nin_videos_1_table[video]["new_tag"])
+            self.header["videoIndex_%s" % entry_number] = u8(nin_videos_1_table[video]["video_index"])
             self.header["unknown4_1_%s" % entry_number] = u8(61 + entry_number)
             self.header["unknown4_2_%s" % entry_number] = u8(222)
             self.header["video_title_%s" % entry_number] = enc("Larsen gets grounded", 246)
@@ -415,12 +415,12 @@ class MakeDList:
         """Writes the new videos"""
         self.header["newVideoTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for new_video in self.list.new_video_table:
+        for new_video in nin_new_video_table:
             entry_number += 1
-            self.header["new_videoID_%s" % entry_number] = u32(new_video.id)
-            self.header["new_video_unknown_%s" % entry_number] = u16(new_video.unknown)
-            self.header["new_video_titleID_%s" % entry_number] = u32(new_video.title_id)
-            for i, data in enumerate(new_video.unknown_2):
+            self.header["new_videoID_%s" % entry_number] = u32(nin_new_video_table[new_video]["id"])
+            self.header["new_video_unknown_%s" % entry_number] = u16(nin_new_video_table[new_video]["unknown"])
+            self.header["new_video_titleID_%s" % entry_number] = u32(nin_new_video_table[new_video]["title_id"])
+            for i, data in enumerate(nin_new_video_table[new_video]["unknown_2"]):
                 if i == 0:
                     self.header["new_video_unknown2_%s_%s" % (i, entry_number)] = u8(8)
                 elif i == 1:
@@ -435,19 +435,19 @@ class MakeDList:
         """Writes the demos"""
         self.header["demosTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for demo in self.list.demos_table:
-            self.header["demo_id_%s" % entry_number] = u32(demo.id)
+        for demo in nin_demos_table:
+            self.header["demo_id_%s" % entry_number] = u32(nin_demos_table[demo]["id"])
             self.header["demo_title_%s" % entry_number] = enc("Sketch's Demo", 62)
-            self.header["demo_subtitle_%s" % entry_number] = enc(demo.subtitle, 62)
-            self.header["demo_titleID_%s" % entry_number] = u32(demo.titleid)
-            self.header["demo_company_offset_%s" % entry_number] = u32(demo.company_offset)
+            self.header["demo_subtitle_%s" % entry_number] = enc(nin_demos_table[demo]["subtitle"], 62)
+            self.header["demo_titleID_%s" % entry_number] = u32(nin_demos_table[demo]["titleid"])
+            self.header["demo_company_offset_%s" % entry_number] = u32(nin_demos_table[demo]["company_offset"])
             self.header["demo_removal_year_%s" % entry_number] = u16(65535)
             self.header["demo_removal_month_%s" % entry_number] = u8(255)
             self.header["demo_removal_day_%s" % entry_number] = u8(255)
             self.header["demo_unknown_%s" % entry_number] = u32(0)
-            self.header["demo_rating_id_%s" % entry_number] = u8(demo.rating_id)
-            self.header["demo_new_tag_%s" % entry_number] = u8(demo.new_tag)
-            self.header["demo_new_tag_index_%s" % entry_number] = u8(demo.new_tag_index)
+            self.header["demo_rating_id_%s" % entry_number] = u8(nin_demos_table[demo]["rating_id"])
+            self.header["demo_new_tag_%s" % entry_number] = u8(nin_demos_table[demo]["new_tag"])
+            self.header["demo_new_tag_index_%s" % entry_number] = u8(nin_demos_table[demo]["new_tag_index"])
             for i in range(205):
                 self.header["demo_unknown2_%s_%s" % (entry_number, i)] = u8(0)
             entry_number += 1
@@ -458,7 +458,7 @@ class MakeDList:
         """Writes the recommended games"""
         self.header["recommendationsTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for recommend in self.list.recommendations_table:
+        for recommend in nin_recommendations_table:
             self.header["recommend_recommendation_title_offset_%s" % entry_number] = self.header["titleTableOffset"]
             entry_number += 1
         self.header["recommendationsEntryNumber"] = u32(entry_number)
@@ -466,9 +466,9 @@ class MakeDList:
     def write_recent_recommendation_table(self):
         self.header["recentRecommendationsTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for idk in self.list.recent_recommendations_table:
+        for idk in nin_recent_recommendations_table:
             self.header["recent_recommendation_title_offset_%s" % entry_number] = self.header["titleTableOffset"]
-            self.header["recent_recommendation_unknown_%s" % entry_number] = u16(idk.unknown)
+            self.header["recent_recommendation_unknown_%s" % entry_number] = u16(nin_recent_recommendations_table[idk]["unknown"])
             entry_number += 1
 
         self.header["recentRecommendationsEntryNumber"] = u32(entry_number)
@@ -476,14 +476,14 @@ class MakeDList:
     def write_pop_videos(self):
         self.header["popularVideosTableOffset"] = u32(self.offset_count())
         entry_number = 0
-        for pop in self.list.popular_videos_table:
-            self.header["pop_video_id_%s" % entry_number] = u32(pop.id)
-            self.header["pop_video_time_%s" % entry_number] = u16(pop.time_length)
+        for pop in nin_popular_videos_table:
+            self.header["pop_video_id_%s" % entry_number] = u32(nin_popular_videos_table[pop]["id"])
+            self.header["pop_video_time_%s" % entry_number] = u16(nin_popular_videos_table[pop]["time_length"])
             self.header["pop_video_title_id_%s" % entry_number] = u32(0)
             self.header["pop_video_bar_color_%s" % entry_number] = u8(0)
             for i in range(15):
                 self.header["pop_video_unknown_%s_%s" % (i, entry_number)] = u8(0)
-            self.header["pop_video_ratingID_%s" % entry_number] = u8(pop.rating_id)
+            self.header["pop_video_ratingID_%s" % entry_number] = u8(nin_popular_videos_table[pop]["rating_id"])
             self.header["pop_video_unknown3_%s" % entry_number] = u8(1)
             self.header["pop_video_videoRank_%s" % entry_number] = u8(1)
             self.header["pop_video_unknown4_%s" % entry_number] = u8(222)
