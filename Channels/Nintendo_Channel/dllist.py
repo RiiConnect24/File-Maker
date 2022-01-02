@@ -1,5 +1,6 @@
 import binascii
 import enum
+import nlzss
 import os
 import struct
 import sys
@@ -501,7 +502,7 @@ class MakeDList:
         # Now that all the file contents are written, calculate filesize
         self.header["filesize"] = u32(self.offset_count())
 
-        filename = "testing.LZ"
+        filename = "testing.bin"
 
         if os.path.exists(filename + "-1"):
             os.remove(filename + "-1")
@@ -530,6 +531,7 @@ class MakeDList:
 
         self.writef2.close()
 
+        nlzss.encode_file(filename, filename.replace(".bin", ".LZ"))
 
 MakeDList(GameTDB(True).parse())
 
