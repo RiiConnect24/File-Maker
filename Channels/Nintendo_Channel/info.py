@@ -30,9 +30,9 @@ def u32(data):
 
 
 def enc(text, length):
+    print(text)
     if len(text) > length:
         print("Error: Text too long.")
-        sys.exit(1)
     return text.encode("utf-16be").ljust(length, b'\0')[:length]
 
 
@@ -245,21 +245,22 @@ class MakeInfo:
                         self.header["language_{}_flag".format(languages[l])] = u8(1)
 
                 # The 3DS games don't have a synopsis for some reason
-                if sys.argv[1] != "3DS":
-                    wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 41)
+                try:
+                    if sys.argv[1] != "3DS":
+                        wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 40)
 
-                    if len(wrap) <= 4:
-                        text_type = "description"  # put the synopsis at the top of the page
-                    elif len(wrap) <= 11:
-                        text_type = "custom_field"  # put the synopsis in the middle of the page
-                    else:
-                        text_type = "custom_field"  # put the synopsis in the middle of the page
+                        if len(wrap) <= 4:
+                            text_type = "description"  # put the synopsis at the top of the page
+                        elif len(wrap) <= 11:
+                            text_type = "custom_field"  # put the synopsis in the middle of the page
+                        else:
+                            text_type = "custom_field"  # put the synopsis in the middle of the page
 
                         # let's shorten the synopsis until it fits
 
                         synopsis_text = s.find("locale", {"lang": "EN"}).find("synopsis").text.split(". ")
 
-                        i = len(textwrap.wrap(". ".join(synopsis_text), 41)) + 1
+                        i = len(textwrap.wrap(". ".join(synopsis_text), 40)) + 1
                         j = len(synopsis_text)
 
                         while i > 11:
@@ -267,14 +268,17 @@ class MakeInfo:
                             sentences = ". ".join(synopsis_text[:j])
                             if len(sentences) != 0:
                                 sentences += "."
-                            wrap = textwrap.wrap(sentences, 41)
+                            wrap = textwrap.wrap(sentences, 40)
                             i = len(wrap)
 
-                    i = 1
+                        i = 1
 
-                    for w in wrap:
-                        self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
-                        i += 1
+                        for w in wrap:
+                            self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
+                            i += 1
+
+                except AttributeError:
+                    pass
 
                 self.header["title"] = title = s.find("locale", {"lang": "EN"}).find("title").text
 
@@ -290,35 +294,40 @@ class MakeInfo:
 
                 self.header["title"] = enc(self.header["title"], 62)
 
-                self.header["genre_text"] = enc(s.find("genre").text.title().replace(",", ", "), 58)
+                try:
+                    self.header["genre_text"] = enc(s.find("genre").text.title().replace(",", ", "), 58)
+
+                except AttributeError:
+                    pass
 
                 players_local = s.find("input").get("players")
                 players_online = s.find("wi-fi").get("players")
 
                 if sys.argv[1] == "Wii":
-                    self.header["players_text"] = players_local + " Player"
+                    self.header["players_text"] = players_local
 
-                    if players_local != "1":
+                    """if players_local != "1":
                         self.header["players_text"] += "s"
 
                     if players_online != "0":
-                        self.header["players_text"] += " (Local), " + players_online + " Player"
+                        self.header["players_text"] += " (Local), " + players_online
 
                         if players_online != "1":
                             self.header["players_text"] += "s"
 
-                        self.header["players_text"] += " (Online)"
+                        self.header["players_text"] += " (Online)"""
 
                     self.header["players_text"] = enc(self.header["players_text"], 82)
 
                 self.header["disclaimer_text"] = enc(
-                    'Game information is provided by GameTDB. Press the "Purchase this Game" button to get redirected '
+                    'Game information is provided by GameTDB. Press the\n"Purchase" button to get redirected '
                     'to the GameTDB page.',
                     4800)
 
-                # Download cover and convert to JPEG
-                print("Downloading cover art...")
                 title_id = s.find("id").text
+
+                # Download cover and convert to JPEG
+                """print("Downloading cover art...")
                 url = f"https://art.gametdb.com/ds/box/US/{title_id}.png"
                 if sys.argv[1] == "Wii":
                     url = f"https://art.gametdb.com/wii/cover/US/{title_id}.png"
@@ -326,12 +335,21 @@ class MakeInfo:
                     url = f"https://art.gametdb.com/3ds/box/US/{title_id}.png"
 
                 r = requests.get(
-                    url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
-                open(f"{title_id}.png", "wb").write(r.content)
-                im = Image.open(f"{title_id}.png")
-                rgb_im = im.convert("RGB")
-                rgb_im.save(f"{title_id[:4]}.jpg")
-                os.remove(f"{title_id}.png")
+                    url, headers={"User-Agent": "Nintendo Channel Info Downloader"})"""
+
+                # Grab the cover image, and resize and center it
+                if os.path.exists(f"covers/{sys.argv[1]}/US/{title_id}.png"):
+                    img = Image.new(mode="RGB", size=(384, 384), color=(255, 255, 255))
+                    cover_img = Image.open(f"covers/{sys.argv[1]}/US/{title_id}.png")
+                    cover_img_w, cover_img_h = cover_img.size
+                    cover_img_resized = cover_img.resize(
+                        (int(cover_img_w * (384 / cover_img_h)), 384))
+                    cover_img_w, cover_img_h = cover_img_resized.size
+                    cover_rgb_img = img.convert("RGB")
+                    offset = ((384 - cover_img_w) // 2, (384 - cover_img_h) // 2)
+                    img.paste(cover_img_resized, offset)
+                    img.save(f"{title_id[:4]}.jpg")
+
                 return
 
         print("Error: Could not find {}.".format(sys.argv[2]))
@@ -340,30 +358,46 @@ class MakeInfo:
     def write_jpegs(self):
         game_id = sys.argv[2]
 
-        with open(f"{game_id}.jpg", "rb") as cover:
-            self.header["picture_offset"] = u32(self.offset_count())
-            self.header["coverArt"] = cover.read()
-            cover.seek(0, os.SEEK_END)
-            self.header["picture_size"] = u32(cover.tell())
+        if os.path.exists(f"{game_id}.jpg"):
+            with open(f"{game_id}.jpg", "rb") as cover:
+                self.header["picture_offset"] = u32(self.offset_count())
+                self.header["coverArt"] = cover.read()
+                cover.seek(0, os.SEEK_END)
+                self.header["picture_size"] = u32(cover.tell())
 
         # TODO: Figure out the ratings so I can write the correct images
-        with open("E-small.jpg", "rb") as rating:
+        with open("ratings/ESRB/E-small.jpg", "rb") as rating:
             self.header["rating_picture_offset"] = u32(self.offset_count())
             self.header["ratingArt"] = rating.read()
             rating.seek(0, os.SEEK_END)
             self.header["rating_picture_size"] = u32(rating.tell())
 
-        with open("rating.jpg", "rb") as detailed:
+        """with open("ratings/ESRB/rating.jpg", "rb") as detailed:
             self.header["rating_detail_picture_1_offset"] = u32(self.offset_count())
             self.header["detailed_rating_picture"] = detailed.read()
             detailed.seek(0, os.SEEK_END)
-            self.header["rating_detail_picture_1_size"] = u32(detailed.tell())
+            self.header["rating_detail_picture_1_size"] = u32(detailed.tell())"""
 
-        os.remove(f"{game_id}.jpg")
+        if os.path.exists(f"{game_id}.jpg"):
+            os.remove(f"{game_id}.jpg")
 
     def write_file(self):
         self.header["filesize"] = u32(self.offset_count())
-        filename = sys.argv[2] + "-output.info"
+        id = int(binascii.hexlify(sys.argv[2].encode("utf-8")).decode("utf-8"), 16) 
+
+        if sys.argv[1] == "NDS":
+            id ^= 0x22222222
+
+        elif sys.argv[1] == "3DS":
+            id ^= 0x33333333
+
+        elif sys.argv[1] == "WiiU":
+            id ^= 0x44444444
+
+        elif sys.argv[1] == "Switch":
+            id ^= 0x55555555
+
+        filename = str(id) + "-output.info"
 
         if os.path.exists(filename + "-1"):
             os.remove(filename + "-1")

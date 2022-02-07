@@ -77,7 +77,9 @@ class GameTDB:
         self.databases = {
             "Wii": ["wii", None],
             "3DS": ["3ds", None],
-            "NDS": ["ds", None]
+            "NDS": ["ds", None],
+            "WiiU": ["wiiu", None],
+            "Switch": ["switch", None],
         }
         self.download()
 
