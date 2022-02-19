@@ -32,10 +32,12 @@ def u32_littleendian(data):
 
 if len(sys.argv) != 4:
     print("Usage: dstrial_header.py <nds file> <name> <title id>")
-    if len(sys.argv[2]) > 98:
-        print("Error: Name must be less than or equal to 98 characters.")
-    if len(sys.argv[3]) != 4:
-        print("Error: Title ID must be 4 characters.")
+    sys.exit(1)
+elif len(sys.argv[2]) > 98:
+    print("Error: Name must be less than or equal to 98 characters.")
+    sys.exit(1)
+elif len(sys.argv[3]) != 4:
+    print("Error: Title ID must be 4 characters.")
     sys.exit(1)
 
 class make_rom():
@@ -44,7 +46,7 @@ class make_rom():
         self.make_rom()
         self.write_file()
 
-        print "Completed Successfully"
+        print("Completed Successfully")
 
     def open_rom(self):
         self.rom = open(sys.argv[1], "rb").read()
@@ -61,13 +63,13 @@ class make_rom():
         self.header["language_code"] = u32(1)
         self.header["rom_offset"] = u32(332)
         self.header["rom_size"] = u32(len(self.rom))
-        self.header["game_title"] = sys.argv[2].encode("utf-16be").ljust(98, "\0")
-        self.header["game_description"] = "Nintendo Channel Demo".encode("utf-16be").ljust(194, "\0")
+        self.header["game_title"] = sys.argv[2].encode("utf-16be").ljust(98, b"\0")
+        self.header["game_description"] = "Nintendo Channel Demo".encode("utf-16be").ljust(194, b"\0")
         self.header["removal_year"] = u16(65535) # No removal year
         self.header["removal_month"] = u8(255) # No removal month
         self.header["removal_day"] = u8(255) # No removal day
         self.header["company_id"] = u32(1)
-        self.header["title_id"] = sys.argv[3]
+        self.header["title_id"] = sys.argv[3].encode()
     
     def write_file(self):
         self.writef = open(sys.argv[1] + "-output.bin", "wb")

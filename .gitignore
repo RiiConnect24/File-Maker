@@ -1,5 +1,6 @@
 # General
 
+.DS_Store
 *.pem
 *.pyc
 config.py
@@ -21,6 +22,7 @@ news.bin.*
 voting.*
 *_q.*
 *_r.*
+
 
 # JetBrains IDE
 

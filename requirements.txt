@@ -12,3 +12,4 @@ requests
 rsa
 sentry_sdk
 unidecode
+pillow
