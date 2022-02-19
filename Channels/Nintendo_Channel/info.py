@@ -1,5 +1,6 @@
 import binascii
 import glob
+import json
 import os
 import struct
 import sys
@@ -8,6 +9,8 @@ import requests
 from PIL import Image
 from ninfile2 import GameTDB
 
+with open("./config.json", "rb") as f:
+    config = json.load(f)
 
 def u8(data):
     if not 0 <= data <= 255:
@@ -180,7 +183,7 @@ class MakeInfo:
                 game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C,
                              "VC-MD": 0x07,
                              "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
-                             "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12, "3DSWare": 0x13, "New3DS": 0x12, "New3DSWare": 0x13, "WiiU": 0x15, "Switch": 0x17}  # The XML returns None for disc games when we query the type.
+                             "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12, "3DSWare": 0x13, "New3DS": 0x12, "New3DSWare": 0x13, "WiiU": 0x15, "eShop": 0x15, "Switch": 0x17}  # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
                     if s.find("type").text == "WiiU" or s.find("type").text == "Switch":
                         self.header["platform_flag"] = u8(0)
@@ -442,7 +445,7 @@ class MakeInfo:
 
         read = self.readf.read()
 
-        self.writef2 = open(filename, "wb")
+        self.writef2 = open(config["file_path"] + "/soft/US/en/" + filename, "wb")
 
         self.writef2.write(read)
         self.writef2.seek(8)

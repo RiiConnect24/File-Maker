@@ -1,5 +1,6 @@
 import binascii
 import enum
+import json
 import nlzss
 import os
 import sqlite3
@@ -10,6 +11,8 @@ from ninfile import NinchDllist
 from ninfile2 import GameTDB
 from ninfile3 import *
 
+with open("./config.json", "rb") as f:
+    config = json.load(f)
 
 def u8(data):
     if not 0 <= data <= 255:
@@ -240,15 +243,17 @@ class MakeDList:
         titles = {}
 
         # import leaderboards from RiiTag
-        con = sqlite3.connect("/var/www/rc24/tag.rc24.xyz/public_html/games.db")
+        if config["production"]:
+            con = sqlite3.connect("/var/www/rc24/tag.rc24.xyz/public_html/games.db")
 
-        cur = con.cursor()
+            cur = con.cursor()
 
-        titles_ranking = []
+            titles_ranking = []
+
+            for row in cur.execute("SELECT * FROM games ORDER BY count DESC"):
+                titles_ranking.append(row[2])
+        
         titles_keys = {}
-
-        for row in cur.execute("SELECT * FROM games ORDER BY count DESC"):
-            titles_ranking.append(row[2])
 
         for platform in platforms:
             for title in self.databases[platform][1].findall("game"):
@@ -467,15 +472,16 @@ class MakeDList:
                         fixed_title = title
                         fixed_subtitle = ""
 
-                    if s.find("id").text in titles_ranking:
-                        if titles_ranking.index(s.find("id").text) <= 15:
-                            self.header[f"title_medal_{entry_number}"] = u8(4) # platinum
-                        elif titles_ranking.index(s.find("id").text) <= 30:
-                            self.header[f"title_medal_{entry_number}"] = u8(3) # gold
-                        elif titles_ranking.index(s.find("id").text) <= 50:
-                            self.header[f"title_medal_{entry_number}"] = u8(2) # silver
-                        elif titles_ranking.index(s.find("id").text) <= 100:
-                            self.header[f"title_medal_{entry_number}"] = u8(1) # bronze
+                    if config["production"]:
+                        if s.find("id").text in titles_ranking:
+                            if titles_ranking.index(s.find("id").text) <= 15:
+                                self.header[f"title_medal_{entry_number}"] = u8(4) # platinum
+                            elif titles_ranking.index(s.find("id").text) <= 30:
+                                self.header[f"title_medal_{entry_number}"] = u8(3) # gold
+                            elif titles_ranking.index(s.find("id").text) <= 50:
+                                self.header[f"title_medal_{entry_number}"] = u8(2) # silver
+                            elif titles_ranking.index(s.find("id").text) <= 100:
+                                self.header[f"title_medal_{entry_number}"] = u8(1) # bronze
 
 
                     self.header[f"title_title_{entry_number}"] = enc(fixed_title, 62)
@@ -486,11 +492,9 @@ class MakeDList:
                     self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
                     entry_number += 1
 
-                    make_info = False
-
-                    if make_info:
-                        if not os.path.exists(str(id) + ".info"):
-                            print("python3.8 info.py {} {}".format(title_platform, text_id))
+                    if config["make_info"]:
+                        if not os.path.exists(config["file_path"] + "/soft/US/en/" + str(id) + ".info"):
+                            print("Making info file for {} {}...".format(title_platform, text_id))
 
                             os.system("python3.8 info.py {} {}".format(title_platform, text_id))
 
