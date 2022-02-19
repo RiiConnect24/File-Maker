@@ -2,8 +2,10 @@ import binascii
 import enum
 import nlzss
 import os
+import sqlite3
 import struct
 import sys
+import textwrap
 from ninfile import NinchDllist
 from ninfile2 import GameTDB
 from ninfile3 import *
@@ -31,6 +33,20 @@ def u32(data):
 
 
 def enc(text, length):
+    name_fixes = {
+        "Take-Two Interactive / GameTek / Rockstar Games / Global Star Software": "Take-Two Interactive",
+        "Sierra Entertainment / Vivendi Games / Universal Interactive Studios": "Sierra Entertainment",
+        "Marvelous Entertainment / Victor Entertainment / Pack-In-Video / Rising Star Games": "Marvelous Entertainment",
+        "Take-Two Interactive / Global Star Software / Gotham Games / Gathering of Developers": "Take-Two Interactive",
+    }
+
+    if text in name_fixes:
+        text = name_fixes[text]
+    
+    if len(text) > length:
+        print("Error: Text too long.")
+        print(text)
+        # sys.exit(1)
     return text.encode("utf-16be").ljust(length, b'\0')[:length]
 
 
@@ -117,7 +133,7 @@ class MakeDList:
         self.header["popularVideosTableOffset"] = u32(0)
         self.header["detailedRatingsEntryNumber"] = u32(0)
         self.header["detailedRatingsTableOffset"] = u32(0)
-        self.header["lastUpdate"] = enc("Sketch Edition", 62)
+        self.header["lastUpdate"] = enc("RiiConnect24 Edition 2.0", 62)
         self.header["unknown9_0"] = u8(0)
         self.header["unknown9_1"] = u8(0x2E)
         self.header["unknown9_2"] = u8(1)
@@ -217,166 +233,270 @@ class MakeDList:
         game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C,
                      "VC-MD": 0x07,
                      "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
-                     "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
-        database = [
-            self.databases["Wii"][1].findall("game") + self.databases["NDS"][1].findall("game") + self.databases["3DS"][
-                1].findall("game")]
+                     "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12, "3DSWare": 0x13, "New3DS": 0x12, "New3DSWare": 0x13, "WiiU": 0x15, "Switch": 0x17}
+
+        platforms = ["Wii", "NDS", "3DS", "WiiU", "Switch"]
+        
+        titles = {}
+
+        # import leaderboards from RiiTag
+        con = sqlite3.connect("/var/www/rc24/tag.rc24.xyz/public_html/games.db")
+
+        cur = con.cursor()
+
+        titles_ranking = []
+        titles_keys = {}
+
+        for row in cur.execute("SELECT * FROM games ORDER BY count DESC"):
+            titles_ranking.append(row[2])
+
+        for platform in platforms:
+            for title in self.databases[platform][1].findall("game"):
+                if title.find("locale", {"lang": "EN"}) is not None:
+                    titles[title.find("locale", {"lang": "EN"}).find("title").text + " - " + title.find("id").text + " - " + platform] = title
 
         j = 0
-        for d in database:
-            for s in d:
-                if s.find("region").text == "NTSC-U":
-                    if s.find("type").text != "CUSTOM" and s.find("type").text != "GameCube":
-                        title = "lmfao null"
-                        if s.find("locale", {"lang": "EN"}):
-                            title = s.find("locale", {"lang": "EN"}).find("title").text
+        conflict_number = 0
+        for key, s in sorted(titles.items()):
+            if s.find("region").text == "NTSC-U" or s.find("region").text == "USA" or s.find("region").text == "ALL":
+                if s.find("type").text != "CUSTOM" and s.find("type").text != "GameCube":
+                    title = "lmfao null"
+                    if s.find("locale", {"lang": "EN"}) is not None:
+                        title = s.find("locale", {"lang": "EN"}).find("title").text.replace(" - ", ": ").replace("Ō", "O").replace("&amp;", "&")
 
-                        # Create custom ID
-                        text_id = s.find("id").text[:4]
-                        id = int(text_id.encode().hex(), base=16)
+                    title_platform = key.split(" - ")[-1]
 
-                        self.header[f"title_id_{entry_number}"] = u32(id)
-                        self.header[f"title_titleId_{entry_number}"] = enc_utf_8(s.find("id").text[:4], 4)
-                        if s.find("type").text in game_type:
-                            self.header[f"title_titleType_{entry_number}"] = u8(game_type[s.find("type").text])
+                    titles_key = " - ".join(key.split(" - ")[:-2]) + " - " + title_platform
+
+                    if titles_key in titles_keys.keys():
+                        """if titles_keys[titles_key][0] == "ALL" and s.find("region").text == "USA" or len(titles_keys[titles_key][2]) == 4 and len(key.split(" - ")[-2]) == 6:
+                            for header_key in self.header.keys():
+                                if "title_" in header_key and str(titles_keys[titles_key][1]) in header_key:
+                                    conflict_number += 1
+                                    del header_key
                         else:
-                            self.header[f"title_titleType_{entry_number}"] = u8(0)
+                             continue"""
 
-                        # Parse the genre's. The XML is a giant mess for this, this will be a giant dictionary.
-                        genre_dict = {"arcade": 15, "party": 13, "puzzle": 5, "action": 1, "2D platformer": 1,
-                                      "3D platformer": 1, "shooter": 12, "first-person shooter": 12,
-                                      "third-person shooter": 12, "rail shooter": 12, "run and gun": 12,
-                                      "shoot 'em up": 12, "stealth action": 1, "survival horror": 1, "sports": 4,
-                                      "adventure": 2, "hidden object": 13, "interactive fiction": 2,
-                                      "interactive movie": 2, "point-and-click": 13, "music": 10, "rhythm": 10,
-                                      "dance": 10, "karaoke": 10, "racing": 7, "fighting": 14, "simulation": 9,
-                                      "role-playing": 6, "strategy": 8, "traditional": 11, "health": 3, "others": 13}
+                        continue
 
-                        # We will have a static variable to store our genre. This is because I didn't include
-                        # many subgenres in the dict since they share the same ID as their parent genre.
-                        _genre = 13
-                        genre_text = s.find("genre")
+                    titles_keys[titles_key] = [s.find("region").text, entry_number, key.split(" - ")[-2]]
+
+                    if title_platform == "Switch" and s.find("type").text == "eShop":
+                        continue
+
+                    # Create custom ID
+                    text_id = s.find("id").text[:4]
+                    id = int(text_id.encode().hex(), base=16)
+
+
+                    # for NDS, 3DS, WiiU, and Switch, we xor the id to avoid conflicts. (for example, Mario Kart 7 for 3DS and Mario Kart 8 for Wii U both have the ID "AMKE")
+                    if title_platform == "NDS":
+                        id ^= 0x22222222
+
+                    elif title_platform == "3DS":
+                        id ^= 0x33333333
+
+                    elif title_platform == "WiiU":
+                        id ^= 0x44444444
+
+                    elif title_platform == "Switch":
+                        id ^= 0x55555555
+
+                    self.header[f"title_id_{entry_number}"] = u32(id)
+                    self.header[f"title_titleId_{entry_number}"] = enc_utf_8(s.find("id").text[:4], 4)
+
+                    if title_platform == "WiiU" and "VC-" in s.find("type").text:
+                        self.header[f"title_titleType_{entry_number}"] = u8(0x16)
+                    elif title_platform == "3DS" and "VC-" in s.find("type").text:
+                        self.header[f"title_titleType_{entry_number}"] = u8(0x14)
+                    elif s.find("type").text in game_type:
+                        self.header[f"title_titleType_{entry_number}"] = u8(game_type[s.find("type").text])
+                    else:
+                        self.header[f"title_titleType_{entry_number}"] = u8(0)
+
+                    # Parse the genre's. The XML is a giant mess for this, this will be a giant dictionary.
+                    genre_dict = {"arcade": 15, "party": 13, "puzzle": 5, "action": 1, "2D platformer": 1,
+                                  "3D platformer": 1, "shooter": 12, "first-person shooter": 12,
+                                  "third-person shooter": 12, "rail shooter": 12, "run and gun": 12,
+                                  "shoot 'em up": 12, "stealth action": 1, "survival horror": 1, "sports": 4,
+                                  "adventure": 2, "hidden object": 13, "interactive fiction": 2,
+                                  "interactive movie": 2, "point-and-click": 13, "music": 10, "rhythm": 10,
+                                  "dance": 10, "karaoke": 10, "racing": 7, "fighting": 14, "simulation": 9,
+                                  "role-playing": 6, "strategy": 8, "traditional": 11, "health": 3, "others": 13}
+
+                    # We will have a static variable to store our genre. This is because I didn't include
+                    # many subgenres in the dict since they share the same ID as their parent genre.
+                    _genre = 13
+                    genre_text = s.find("genre")
                         
-                        # Check for None
-                        if genre_text is None:
-                            self.header[f"title_genre_{entry_number}_0"] = u8(13)
-                            self.header[f"title_genre_{entry_number}_1"] = u8(13)
-                            self.header[f"title_genre_{entry_number}_2"] = u8(13)
-                        else:
-                            # This is a mess. Some titles don't have genres, some have only 1 or 2 genres, so
-                            # workarounds were made
-                            genre_list = genre_text.text.split(",")
+                    # Check for None
+                    if genre_text is None:
+                        self.header[f"title_genre_{entry_number}_0"] = u8(13)
+                        self.header[f"title_genre_{entry_number}_1"] = u8(13)
+                        self.header[f"title_genre_{entry_number}_2"] = u8(13)
+                    else:
+                        # This is a mess. Some titles don't have genres, some have only 1 or 2 genres, so
+                        # workarounds were made
+                        genre_list = genre_text.text.split(",")
 
-                            for i in range(3):
-                                try:
-                                    if genre_list[i] in genre_dict:
-                                        _genre = genre_dict[genre_list[i]]
-                                        self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
-                                    else:
-                                        self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
-                                except IndexError:
+                        for i in range(3):
+                            try:
+                                if genre_list[i] in genre_dict:
+                                    _genre = genre_dict[genre_list[i]]
                                     self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
+                                else:
+                                    self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
+                            except IndexError:
+                                self.header[f"title_genre_{entry_number}_{i}"] = u8(_genre)
 
-                        # We will default to Nintendo because why not
-                        self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
-                        company_start = struct.unpack(">I", self.header["companyTableOffset"])[0]
+                    # We will default to Nintendo because why not
+                    self.header[f"title_companyOffset_{entry_number}"] = self.header["companyTableOffset"]
+                    company_start = struct.unpack(">I", self.header["companyTableOffset"])[0]
 
-                        for c in self.databases["Wii"][1].findall("companies"):
-                            for i, company in enumerate(c.findall("company")):
-                                # Firstly, we will try to find the company by the company code.
-                                # This method will only work for disc games. As such, methods below exist
-                                if s.find("id").text[4:] != "":
-                                    if s.find("id").text[4:] == company.get("code"):
-                                        self.header[f"title_companyOffset_{entry_number}"] = u32(
-                                            company_start + (128 * i))
-                                        break
-
-                                # If None we will default to Nintendo as well
-                                if s.find("publisher").text is None:
-                                    self.header[f"title_companyOffset_{entry_number}"] = self.header[
-                                        "companyTableOffset"]
-                                    break
-                                if company.get("name") in s.find("publisher").text:
-                                    self.header[f"title_companyOffset_{entry_number}"] = u32(company_start + (128 * i))
+                    for c in self.databases["Wii"][1].findall("companies"):
+                        for i, company in enumerate(c.findall("company")):
+                            # Firstly, we will try to find the company by the company code.
+                            # This method will only work for disc games. As such, methods below exist
+                            if s.find("id").text[4:] != "":
+                                if s.find("id").text[4:] == company.get("code"):
+                                    self.header[f"title_companyOffset_{entry_number}"] = u32(
+                                        company_start + (128 * i))
                                     break
 
-                        if s.find("date").get("year") == "":
-                            release_year = 2011
-                        else:
-                            release_year = s.find("date").get("year")
+                            # If None we will default to Nintendo as well
+                            if s.find("publisher").text is None:
+                                self.header[f"title_companyOffset_{entry_number}"] = self.header[
+                                    "companyTableOffset"]
+                                break
+                            if company.get("name") in s.find("publisher").text:
+                                self.header[f"title_companyOffset_{entry_number}"] = u32(company_start + (128 * i))
+                                break
 
-                        if s.find("date").get("month") == "":
-                            release_month = 11
-                        else:
-                            release_month = s.find("date").get("month")
+                    if s.find("date").get("year") == "":
+                        release_year = 0xFFFF
+                    else:
+                        release_year = s.find("date").get("year")
 
-                        if s.find("date").get("day") == "":
-                            release_day = 11
-                        else:
-                            release_day = s.find("date").get("day")
+                    if s.find("date").get("month") == "":
+                        release_month = 0xFF
+                    else:
+                        release_month = s.find("date").get("month")
 
-                        self.header[f"title_releaseYear_{entry_number}"] = u16(int(release_year))
-                        self.header[f"title_releaseMonth_{entry_number}"] = u8(int(release_month) - 1)
-                        self.header[f"title_releaseDay_{entry_number}"] = u8(int(release_day))
+                    if s.find("date").get("day") == "":
+                        release_day = 0xFF
+                    else:
+                        release_day = s.find("date").get("day")
 
-                        rating = s.find("rating").get("value")
-                        rating_group = s.find("rating").get("type")
-                        if rating == "E10+":
-                            # GameTDB has E10 as E10+. As I cannot use that as an enum key, here we are
-                            rating = "E10"
-                        elif rating == "AO":
-                            # The Wii has Adults Only?????
-                            rating = "M"
-                        elif rating == "3":
-                            # I don't know why PEGI ratings are getting mixed in
-                            rating = "E"
-                        elif rating == "":
-                            # Default to E
-                            rating = "E"
+                    self.header[f"title_releaseYear_{entry_number}"] = u16(int(release_year))
+                    self.header[f"title_releaseMonth_{entry_number}"] = u8(int(release_month) - 1) # the month starts at 0, not 1
+                    self.header[f"title_releaseDay_{entry_number}"] = u8(int(release_day))
 
-                        self.header[f"title_ratingId_{entry_number}"] = u8(self.RatingSystem[rating].value)
+                    if title_platform == "Switch":
+                        try:
+                            rating = s.find("rating_ESRB").get("value")
+                        except AttributeError:
+                            rating = ""
 
-                        # Unknown Value
-                        self.header[f"title_unknown1_{entry_number}"] = u16(2080)
+                        rating_group = "ESRB"
 
-                        # Up ahead is some extremely lazy code. This should work, but some flags will be incorrect such as
-                        # Hardcore and casual
-                        self.header[f"title_hardcore_{entry_number}"] = u32(536872960)
-                        self.header[f"title_friends_{entry_number}"] = u32(2863311530)
-                        self.header[f"title_unknown2_{entry_number}"] = u32(2863311530)
-                        self.header[f"title_unknown3_{entry_number}"] = u16(43690)
-                        # Unknown4 will be a combo of what in the kaitai is unknown16 and unknown17 and other flags
-                        self.header[f"title_unknown4_{entry_number}"] = u16(170)
-                        self.header[f"title_unknown5_{entry_number}"] = u8(170)
-                        self.header[f"title_unknown6_{entry_number}"] = u32(50331648)
-                        self.header[f"title_unknown7_{entry_number}"] = u32(0)
-                        self.header[f"title_unknown9_{entry_number}"] = u16(222)
+                    else:
+                        try:
+                            rating = s.find("rating").get("value")
+                            rating_group = s.find("rating").get("type")
+                        except AttributeError:
+                            rating = ""
+                            rating_group = "ESRB"
 
-                        if ": " in title:
-                            self.header[f"title_title_{entry_number}"] = enc(title.split(": ")[0], 62)
-                            self.header[f"title_subtitle_{entry_number}"] = enc(title.split(": ")[1], 62)
+                    if rating == "E10+" or rating == "E10 ":
+                        # GameTDB has E10 as E10+. As I cannot use that as an enum key, here we are
+                        rating = "E10"
+                    elif rating == "AO":
+                        # The Wii has Adults Only?????
+                        rating = "M"
+                    elif rating == "3":
+                        # I don't know why PEGI ratings are getting mixed in
+                        rating = "E"
+                    elif rating == "" or rating == "Ratin":
+                        # Default to E
+                        rating = "E"
 
-                        elif " - " in title:
-                            self.header[f"title_title_{entry_number}"] = enc(title.split(" - ")[0], 62)
-                            self.header[f"title_subtitle_{entry_number}"] = enc(title.split(" - ")[1], 62)
+                    self.header[f"title_ratingId_{entry_number}"] = u8(self.RatingSystem[rating].value)
 
-                        else:
-                            self.header[f"title_title_{entry_number}"] = enc(title, 62)
-                            self.header[f"title_subtitle_{entry_number}"] = enc("", 62)
+                    # Unknown Value
+                    self.header[f"title_unknown1_{entry_number}"] = u16(2080)
 
-                        self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
-                        entry_number += 1
+                    # Up ahead is some extremely lazy code. This should work, but some flags will be incorrect such as
+                    # Hardcore and casual
+                    self.header[f"title_hardcore_{entry_number}"] = u32(536872960)
+                    self.header[f"title_friends_{entry_number}"] = u32(2863311530)
+                    self.header[f"title_unknown2_{entry_number}"] = u32(2863311530)
+                    self.header[f"title_unknown3_{entry_number}"] = u16(43690)
+                    # Unknown4 will be a combo of what in the kaitai is unknown16 and unknown17 and other flags
+                    self.header[f"title_unknown4_{entry_number}"] = u16(170)
+                    self.header[f"title_unknown5_{entry_number}"] = 168 # contains unknown17 through multiplayer
+                    self.header[f"title_unknown6_{entry_number}"] = u32(50331648)
+                    self.header[f"title_unknown7_{entry_number}"] = u32(0)
+                    self.header[f"title_medal_{entry_number}"] = u8(0)
+                    self.header[f"title_unknown9_{entry_number}"] = u8(222)
 
-                        make_info = False
+                    for feature in s.find("wi-fi").findall("feature"):
+                        if "online" not in feature.text:
+                            self.header[f"title_unknown5_{entry_number}"] |= 4 # online flag set to no
 
-                        if make_info:
-                            plat = {0: "Wii", 1: "DS", "2": "3DS"}
+                    try:
+                        if int(s.find("input").get("players")) < 2:
+                            self.header[f"title_unknown5_{entry_number}"] |= 1 # multiplayer flag set to no
+                    except TypeError:
+                        pass
 
-                            print("python3.9 info.py {} {}".format(plat[j], text_id))
+                    self.header[f"title_unknown5_{entry_number}"] = u8(self.header[f"title_unknown5_{entry_number}"])
 
-                            os.system("python3.9 info.py {} {}".format(plat[j], text_id))
+                    if len(title) > 30:
+                        fixed_title = textwrap.wrap(title, width=30)[0]
+                        fixed_subtitle = textwrap.wrap(title, width=30)[1]
+
+                    elif ": " in title:
+                        fixed_title = title.split(": ")[0] + ": "
+                        fixed_subtitle = title.split(": ")[1]
+
+                    elif " - " in title:
+                        fixed_title = title.split(" - ")[0] + ": "
+                        fixed_subtitle = title.split(" - ")[1]
+
+                    else:
+                        fixed_title = title
+                        fixed_subtitle = ""
+
+                    if s.find("id").text in titles_ranking:
+                        if titles_ranking.index(s.find("id").text) <= 15:
+                            self.header[f"title_medal_{entry_number}"] = u8(4) # platinum
+                        elif titles_ranking.index(s.find("id").text) <= 30:
+                            self.header[f"title_medal_{entry_number}"] = u8(3) # gold
+                        elif titles_ranking.index(s.find("id").text) <= 50:
+                            self.header[f"title_medal_{entry_number}"] = u8(2) # silver
+                        elif titles_ranking.index(s.find("id").text) <= 100:
+                            self.header[f"title_medal_{entry_number}"] = u8(1) # bronze
+
+
+                    self.header[f"title_title_{entry_number}"] = enc(fixed_title, 62)
+                    self.header[f"title_subtitle_{entry_number}"] = enc(fixed_subtitle, 62)
+
+                    # print(title)
+
+                    self.header[f"title_shortTitle_{entry_number}"] = enc("", 62)
+                    entry_number += 1
+
+                    make_info = False
+
+                    if make_info:
+                        if not os.path.exists(str(id) + ".info"):
+                            print("python3.8 info.py {} {}".format(title_platform, text_id))
+
+                            os.system("python3.8 info.py {} {}".format(title_platform, text_id))
 
             j += 1
+
+        entry_number -= conflict_number
 
         self.header["titleEntryNumber"] = u32(entry_number)
 
@@ -406,7 +526,7 @@ class MakeDList:
             self.header["videoIndex_%s" % entry_number] = u8(nin_videos_1_table[video]["video_index"])
             self.header["unknown4_1_%s" % entry_number] = u8(61 + entry_number)
             self.header["unknown4_2_%s" % entry_number] = u8(222)
-            self.header["video_title_%s" % entry_number] = enc("Larsen gets grounded", 246)
+            self.header["video_title_%s" % entry_number] = enc(nin_videos_1_table[video]["title"], 246)
             entry_number += 1
 
         self.header["videos1EntryNumber"] = u32(entry_number)
@@ -427,7 +547,7 @@ class MakeDList:
                     self.header["new_video_unknown2_%s_%s" % (i, entry_number)] = u8(1)
                 else:
                     self.header["new_video_unknown2_%s_%s" % (i, entry_number)] = u8(data)
-            self.header["new_video_title_%s" % entry_number] = enc("Larsen is grounded", 204)
+            self.header["new_video_title_%s" % entry_number] = enc(nin_new_video_table[new_video]["title"], 204)
 
         self.header["newVideoEntryNumber"] = u32(entry_number)
 
@@ -437,7 +557,7 @@ class MakeDList:
         entry_number = 0
         for demo in nin_demos_table:
             self.header["demo_id_%s" % entry_number] = u32(nin_demos_table[demo]["id"])
-            self.header["demo_title_%s" % entry_number] = enc("Sketch's Demo", 62)
+            self.header["demo_title_%s" % entry_number] = enc(nin_demos_table[demo]["title"], 62)
             self.header["demo_subtitle_%s" % entry_number] = enc(nin_demos_table[demo]["subtitle"], 62)
             self.header["demo_titleID_%s" % entry_number] = u32(nin_demos_table[demo]["titleid"])
             self.header["demo_company_offset_%s" % entry_number] = u32(nin_demos_table[demo]["company_offset"])
@@ -487,7 +607,7 @@ class MakeDList:
             self.header["pop_video_unknown3_%s" % entry_number] = u8(1)
             self.header["pop_video_videoRank_%s" % entry_number] = u8(1)
             self.header["pop_video_unknown4_%s" % entry_number] = u8(222)
-            self.header["pop_video_title_%s" % entry_number] = enc("Larsen gets grounded", 204)
+            self.header["pop_video_title_%s" % entry_number] = enc(nin_popular_videos_table[pop]["title"], 204)
             entry_number += 1
         self.header["popularVideosEntryNumber"] = u32(entry_number)
 

@@ -1,4 +1,5 @@
 import binascii
+import glob
 import os
 import struct
 import sys
@@ -30,7 +31,6 @@ def u32(data):
 
 
 def enc(text, length):
-    print(text)
     if len(text) > length:
         print("Error: Text too long.")
     return text.encode("utf-16be").ljust(length, b'\0')[:length]
@@ -39,8 +39,8 @@ def enc(text, length):
 if len(sys.argv) != 3:
     print("Usage: info.py <platform> <title id>")
     sys.exit(1)
-elif len(sys.argv[2]) != 4:
-    print("Error: Title ID must be 4 characters.")
+elif len(sys.argv[2]) != 4 and len(sys.argv[2]) != 5:
+    print("Error: Title ID must be 4 or 5 characters.")
     sys.exit(1)
 
 
@@ -150,7 +150,7 @@ class MakeInfo:
 
     def write_gametdb_info(self):
         for s in self.databases[sys.argv[1]][1].findall("game"):
-            if s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
+            if sys.argv[1] == "Switch" and s.find("id").text == sys.argv[2] or s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
                 print("Found {}!".format(sys.argv[2]))
 
                 for c in self.databases["Wii"][1].findall("companies"):
@@ -174,32 +174,37 @@ class MakeInfo:
                             self.header["company_id"] = u32(id)
                             break
 
-                self.header["game_id"] = sys.argv[2].encode("utf-8")
+                self.header["game_id"] = sys.argv[2].encode("utf-8")[:4]
 
                 # Get the game type
-                game_type = {"VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C, "VC-MD": 0x07,
-                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E, "Channel": 0x02,
-                             None: 0x01, "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12}
-                                                    # The XML returns None for disc games when we query the type.
+                game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C,
+                             "VC-MD": 0x07,
+                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
+                             "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12, "3DSWare": 0x13, "New3DS": 0x12, "New3DSWare": 0x13, "WiiU": 0x15, "Switch": 0x17}  # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
-                    self.header["platform_flag"] = u8(game_type[s.find("type").text])
+                    if s.find("type").text == "WiiU" or s.find("type").text == "Switch":
+                        self.header["platform_flag"] = u8(0)
+                    else:
+                        self.header["platform_flag"] = u8(
+                            game_type[s.find("type").text])
                 else:
                     print("Could not find game type")
                     sys.exit(1)
 
-                self.header["purchase_button_flag"] = u8(1)  # we'll make it go to gametdb
+                self.header["purchase_button_flag"] = u8(
+                    1)  # we'll make it go to gametdb
                 # Some games, more notably DSiWare and some 3DS games do not have a release date in the xml.
                 # Due to this, we must set defaults in the case of no date.
                 if s.find("date").get("year") == "":
-                    release_year = 2011 # Chose this year because of the release year of the 3DS
+                    release_year = 65535
                 else:
                     release_year = s.find("date").get("year")
                 if s.find("date").get("month") == "":
-                    release_month = 11
+                    release_month = 255
                 else:
                     release_month = s.find("date").get("month")
                 if s.find("date").get("day") == "":
-                    release_day = 11
+                    release_day = 255
                 else:
                     release_day = s.find("date").get("day")
 
@@ -217,70 +222,88 @@ class MakeInfo:
 
                 for controller in s.find("input").findall("control"):
                     if controller.get("type") in controllers:
-                        self.header["{}_flag".format(controllers[controller.get("type")])] = u8(1)
+                        self.header["{}_flag".format(
+                            controllers[controller.get("type")])] = u8(1)
                     elif controller.get("type") in controllers2:
                         if not other_peripherals:
                             self.header["peripherals_text"] = ""
 
-                        self.header["peripherals_text"] += controllers2[controller.get("type")] + ", "
+                        if sys.argv[1] != "Wii" and controllers2[controller.get("type")] == "Wii Wheel":
+                            self.header["peripherals_text"] + "Wheel" + ", "
+                        else:
+                            self.header["peripherals_text"] += controllers2[controller.get(
+                                "type")] + ", "
 
                         other_peripherals = True
 
                 if other_peripherals:
-                    self.header["peripherals_text"] = enc(self.header["peripherals_text"][:-2], 88)
+                    # find a way to get rid of the "ZZ" part later
+                    self.header["peripherals_text"] = enc(
+                        "ZZ" + self.header["peripherals_text"][:-2], 88)
 
                 for feature in s.find("wi-fi").findall("feature"):
                     if "online" in feature.text:
                         self.header["online_flag"] = u8(1)
                         self.header["nintendo_wifi_connection_flag"] = u8(1)
 
-                # what languages does this game apparently support? (not sure how accurate the db is)
-
+                # what languages does this game support?
                 languages = {"ZHCN": "chinese", "KO": "korean", "JA": "japanese", "EN": "english", "FR": "french",
                              "ES": "spanish", "DE": "german", "IT": "italian", "NL": "dutch"}
                 languages_list = s.find("languages").text.split(",")
 
                 for l in languages.keys():
                     if l in languages_list:
-                        self.header["language_{}_flag".format(languages[l])] = u8(1)
+                        self.header["language_{}_flag".format(
+                            languages[l])] = u8(1)
 
-                # The 3DS games don't have a synopsis for some reason
+                # write the synopsis, and text wrap it properly
                 try:
-                    if sys.argv[1] != "3DS":
-                        wrap = textwrap.wrap(s.find("locale", {"lang": "EN"}).find("synopsis").text, 40)
+                    wrap = textwrap.wrap(
+                        s.find("locale", {"lang": "EN"}).find("synopsis").text, 40)
 
-                        if len(wrap) <= 4:
-                            text_type = "description"  # put the synopsis at the top of the page
-                        elif len(wrap) <= 11:
-                            text_type = "custom_field"  # put the synopsis in the middle of the page
-                        else:
-                            text_type = "custom_field"  # put the synopsis in the middle of the page
+                    if len(wrap) <= 4:
+                        text_type = "description"  # put the synopsis at the top of the page
+                    else:
+                        text_type = "custom_field"  # put the synopsis in the middle of the page
 
-                        # let's shorten the synopsis until it fits
+                    # let's shorten the synopsis until it fits
 
-                        synopsis_text = s.find("locale", {"lang": "EN"}).find("synopsis").text.split(". ")
+                    synopsis_text = s.find("locale", {"lang": "EN"}).find(
+                        "synopsis").text[:400].replace("\n", "").replace("  ", " ").split(".")
 
-                        i = len(textwrap.wrap(". ".join(synopsis_text), 40)) + 1
-                        j = len(synopsis_text)
+                    if len(s.find("locale", {"lang": "EN"}).find("synopsis").text) > 400:
+                        try:
+                            synopsis_text = synopsis_text[:-1]
+                            synopsis_text[-1] += "."
+                        except:
+                            pass
 
-                        while i > 11:
-                            j -= 1
-                            sentences = ". ".join(synopsis_text[:j])
-                            if len(sentences) != 0:
-                                sentences += "."
-                            wrap = textwrap.wrap(sentences, 40)
-                            i = len(wrap)
+                    i = len("".join(textwrap.wrap(
+                        ". ".join(synopsis_text), 40))) + 1
+                    j = len(synopsis_text)
 
-                        i = 1
+                    while i > 11:
+                        j -= 1
+                        sentences = ". ".join(synopsis_text[:j])
+                        if len(sentences) != 0:
+                            sentences += "."
+                        wrap = textwrap.wrap(sentences, 40)
+                        i = len(wrap)
 
-                        for w in wrap:
-                            self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
-                            i += 1
+                    i = 1
 
+                    for w in wrap:
+                        self.header["{}_text_{}".format(
+                            text_type, i)] = enc(w, 82)
+                        i += 1
+                        if i == 10 and len(wrap) > 10:
+                            self.header["{}_text_{}".format(text_type, i)] += b"..."
+                            break
                 except AttributeError:
                     pass
 
-                self.header["title"] = title = s.find("locale", {"lang": "EN"}).find("title").text
+                self.header["title"] = title = s.find(
+                    "locale", {"lang": "EN"}).find("title").text
 
                 # make separator in game name have a subtitle too
 
@@ -295,7 +318,8 @@ class MakeInfo:
                 self.header["title"] = enc(self.header["title"], 62)
 
                 try:
-                    self.header["genre_text"] = enc(s.find("genre").text.title().replace(",", ", "), 58)
+                    self.header["genre_text"] = enc(
+                        s.find("genre").text.title().replace(",", ", "), 58)
 
                 except AttributeError:
                     pass
@@ -306,18 +330,16 @@ class MakeInfo:
                 if sys.argv[1] == "Wii":
                     self.header["players_text"] = players_local
 
-                    """if players_local != "1":
+                    if players_local != "1":
                         self.header["players_text"] += "s"
 
-                    if players_online != "0":
-                        self.header["players_text"] += " (Local), " + players_online
+                    """if players_online != "0":
+                        self.header["players_text"] += " (Local), " + \
+                                                          players_online + \
+                                                              " (Online)"""
 
-                        if players_online != "1":
-                            self.header["players_text"] += "s"
-
-                        self.header["players_text"] += " (Online)"""
-
-                    self.header["players_text"] = enc(self.header["players_text"], 82)
+                    self.header["players_text"] = enc(
+                        self.header["players_text"], 82)
 
                 self.header["disclaimer_text"] = enc(
                     'Game information is provided by GameTDB. Press the\n"Purchase" button to get redirected '
@@ -338,17 +360,21 @@ class MakeInfo:
                     url, headers={"User-Agent": "Nintendo Channel Info Downloader"})"""
 
                 # Grab the cover image, and resize and center it
-                if os.path.exists(f"covers/{sys.argv[1]}/US/{title_id}.png"):
+                if len(glob.glob(f"covers/{sys.argv[1]}/US/{title_id}*")) > 0:
                     img = Image.new(mode="RGB", size=(384, 384), color=(255, 255, 255))
-                    cover_img = Image.open(f"covers/{sys.argv[1]}/US/{title_id}.png")
+                    cover_img = Image.open(glob.glob(f"covers/{sys.argv[1]}/US/{title_id}*")[0])
                     cover_img_w, cover_img_h = cover_img.size
-                    cover_img_resized = cover_img.resize(
-                        (int(cover_img_w * (384 / cover_img_h)), 384))
+                    if sys.argv[1] != "3DS" and sys.argv[1] != "NDS":
+                        cover_img_resized = cover_img.resize(
+                            (int(cover_img_w * (384 / cover_img_h)), 384))
+                    else:
+                        cover_img_resized = cover_img.resize(
+                            (384, int(cover_img_h * (384 / cover_img_w))))
                     cover_img_w, cover_img_h = cover_img_resized.size
                     cover_rgb_img = img.convert("RGB")
                     offset = ((384 - cover_img_w) // 2, (384 - cover_img_h) // 2)
                     img.paste(cover_img_resized, offset)
-                    img.save(f"{title_id[:4]}.jpg")
+                    img.save(f"{sys.argv[1]}-{title_id}.jpg")
 
                 return
 
@@ -358,8 +384,8 @@ class MakeInfo:
     def write_jpegs(self):
         game_id = sys.argv[2]
 
-        if os.path.exists(f"{game_id}.jpg"):
-            with open(f"{game_id}.jpg", "rb") as cover:
+        if len(glob.glob(f"{sys.argv[1]}-{game_id}*")) > 0:
+            with open(glob.glob(f"{sys.argv[1]}-{game_id}*")[0], "rb") as cover:
                 self.header["picture_offset"] = u32(self.offset_count())
                 self.header["coverArt"] = cover.read()
                 cover.seek(0, os.SEEK_END)
@@ -378,12 +404,12 @@ class MakeInfo:
             detailed.seek(0, os.SEEK_END)
             self.header["rating_detail_picture_1_size"] = u32(detailed.tell())"""
 
-        if os.path.exists(f"{game_id}.jpg"):
-            os.remove(f"{game_id}.jpg")
+        if os.path.exists(f"{sys.argv[1]}-{game_id}.jpg"):
+            os.remove(f"{sys.argv[1]}-{game_id}.jpg")
 
     def write_file(self):
         self.header["filesize"] = u32(self.offset_count())
-        id = int(binascii.hexlify(sys.argv[2].encode("utf-8")).decode("utf-8"), 16) 
+        id = int(binascii.hexlify(sys.argv[2][:4].encode("utf-8")).decode("utf-8"), 16) 
 
         if sys.argv[1] == "NDS":
             id ^= 0x22222222
@@ -397,7 +423,7 @@ class MakeInfo:
         elif sys.argv[1] == "Switch":
             id ^= 0x55555555
 
-        filename = str(id) + "-output.info"
+        filename = str(id) + ".info"
 
         if os.path.exists(filename + "-1"):
             os.remove(filename + "-1")
