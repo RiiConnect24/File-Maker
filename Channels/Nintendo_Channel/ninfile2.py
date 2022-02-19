@@ -1,11 +1,12 @@
+import lxml.etree as et
 import ninfile1
 import os
 import requests
 import struct
 import zipfile
-from bs4 import BeautifulSoup
 
 """Pack integers to specific type."""
+
 
 # Unsigned integers
 
@@ -37,6 +38,7 @@ def u32_littleendian(data):
         data = 0
     return struct.pack("<I", data)
 
+
 # Signed integer
 
 
@@ -60,55 +62,60 @@ def s32(data):
         data = 0
     return struct.pack(">i", data)
 
+
 def strIDToint(id):
     return (ord(id[0]) << 24 | ord(id[1]) << 16 | ord(id[2]) << 8) ^ 0x52433234
+
 
 def intTostrID(id):
     id ^= 0x52433234
     return chr(id >> 24) + chr(id >> 16 & 0xFF) + chr(id >> 8 & 0xFF) + chr(id & 0xFF)
 
-class GameTDB():
-    def __init__(self):
+
+class GameTDB:
+    def __init__(self, cache):
         self.databases = {
             "Wii": ["wii", None],
-            # "3DS": ["3ds", None],
-            # "NDS": ["ds", None]
+            "3DS": ["3ds", None],
+            "NDS": ["ds", None],
+            "WiiU": ["wiiu", None],
+            "Switch": ["switch", None],
         }
-
         self.download()
 
     def download(self):
         for k, v in self.databases.items():
             print("Downloading {} Database from GameTDB...".format(k))
-            zip_filename = "{}tdb.zip".format(v[0])
-            if not os.path.exists(zip_filename):
-                url = "https://www.gametdb.com/{}".format(zip_filename)
+            filename = v[0] + "tdb"
+            if not os.path.exists(filename + ".xml"):
+                url = "https://www.gametdb.com/{}".format(filename + ".zip")
                 # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
                 r = requests.get(
                     url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
-                open(zip_filename, 'wb').write(r.content)
-                self.zip = zipfile.ZipFile(zip_filename)
+                open(filename + ".zip", 'wb').write(r.content)
+                self.zip = zipfile.ZipFile(filename + ".zip")
                 self.zip.extractall(".")
                 self.zip.close()
 
     def parse(self):
         for k, v in self.databases.items():
-            print("Parsing {}...".format(k))
-            v[1] = BeautifulSoup(
-                open("{}tdb.xml".format(v[0]), "r").read(), "lxml")
+            filename = v[0] + "tdb"
+
+            print("Loading {}...".format(k))
+            v[1] = et.parse(filename + ".xml")
 
         return self.databases
 
+
 class NintendoChannel:
     def __init__(self, ninfile):
+        self.dictionaries = {}
         self.ninfile = ninfile
         self.build()
         self.write()
-        
+
     def build(self):
         print("Generating list file...")
-
-        self.dictionaries = {}
 
         self.dictionaries["header"] = self.make_header()
         self.dictionaries["ratings_table"] = self.make_ratings_table()
@@ -124,11 +131,13 @@ class NintendoChannel:
         self.dictionaries["popular_videos_table"] = self.make_popular_videos_table()
         self.dictionaries["jpeg"] = self.make_jpeg()
         self.dictionaries["detailed_ratings_table"] = self.make_detailed_ratings_table()
-        
+
         self.dictionaries["header"]["filesize"] = u32(self.offset_count1())
 
     def offset_count1(self):
-        return sum(len(values) for dictionary in self.dictionaries for values in list(self.dictionaries[dictionary].values()) if values)
+        return sum(
+            len(values) for dictionary in self.dictionaries for values in list(self.dictionaries[dictionary].values())
+            if values)
 
     def offset_count2(self, dictionary):
         return sum(len(values) for values in list(dictionary.values()) if values)
@@ -141,7 +150,7 @@ class NintendoChannel:
 
         if os.path.exists(filename):
             os.remove(filename)
-            
+
         with open(filename, "ab+") as f:
             for dictionary in self.dictionaries:
                 for v in self.dictionaries[dictionary].values():
@@ -159,7 +168,7 @@ class NintendoChannel:
         header["thumbnail_id"] = u32(self.ninfile["thumbnail_id"])
         header["country_code"] = u32(self.ninfile["country_code"])
         header["language_code"] = u32(self.ninfile["language_code"])
-        
+
         for i in range(0, 9):
             header["unknown_2_" + str(i)] = u8(self.ninfile["unknown_2"][i])
 
@@ -204,7 +213,7 @@ class NintendoChannel:
 
         for i in range(0, 5):
             header["dl_url_ids_" + str(i)] = self.ninfile["dl_url_ids"][i].encode("utf-8").rjust(256, b"\x00")
-        
+
         for i in range(0, 4):
             header["unknown_10_" + str(i)] = u8(self.ninfile["unknown_10"][i])
 
@@ -214,12 +223,12 @@ class NintendoChannel:
         ratings_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["ratings_table_offset"] = u32(self.offset_count1())
 
         for r in self.ninfile["ratings_table"]:
             r = self.ninfile["ratings_table"][r]
-            
+
             i += 1
 
             ratings_table["rating_id_" + str(i)] = u8(r["rating_id"])
@@ -236,7 +245,7 @@ class NintendoChannel:
         title_types_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["title_types_table_offset"] = u32(self.offset_count1())
 
         for t in self.ninfile["title_types_table"]:
@@ -256,7 +265,7 @@ class NintendoChannel:
         company_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["company_table_offset"] = u32(self.offset_count1())
 
         for c in self.ninfile["company_table"]:
@@ -274,7 +283,7 @@ class NintendoChannel:
         title_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["title_table_offset"] = u32(self.offset_count1())
 
         for t in self.ninfile["title_table"]:
@@ -285,19 +294,19 @@ class NintendoChannel:
             title_table["id_" + str(i)] = u32(t["id"])
             title_table["title_id_" + str(i)] = t["title_id"].encode("utf-8").rjust(4, b"\x00")
             title_table["title_type_" + str(i)] = u8(t["title_type"])
-            
+
             for j in range(0, 3):
                 title_table["genre_" + str(i) + "_" + str(j)] = u8(t["genre"][j])
-                
+
             title_table["company_offset_" + str(i)] = u32(t["company_offset"])
             title_table["release_date_year_" + str(i)] = u16(t["release_date_year"])
             title_table["release_date_month_" + str(i)] = u8(t["release_date_month"])
             title_table["release_date_day_" + str(i)] = u8(t["release_date_day"])
             title_table["rating_id_" + str(i)] = u8(t["rating_id"])
-            
+
             for j in range(0, 29):
                 title_table["unknown_4_" + str(i) + "_" + str(j)] = u8(t["unknown_4"][j])
-                
+
             title_table["title_" + str(i)] = t["title"].encode("utf-16be").rjust(62, b"\x00")
             title_table["subtitle_" + str(i)] = t["subtitle"].encode("utf-16be").rjust(62, b"\x00")
             title_table["short_title_" + str(i)] = t["short_title"].encode("utf-16be").rjust(62, b"\x00")
@@ -308,7 +317,7 @@ class NintendoChannel:
         new_title_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["new_title_table_offset"] = u32(self.offset_count1())
 
         for n in self.ninfile["new_title_table"]:
@@ -324,7 +333,7 @@ class NintendoChannel:
         videos_1_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["videos_1_table_offset"] = u32(self.offset_count1())
 
         for v in self.ninfile["videos_1_table"]:
@@ -356,7 +365,7 @@ class NintendoChannel:
         new_video_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["new_video_table_offset"] = u32(self.offset_count1())
 
         for n in self.ninfile["new_video_table"]:
@@ -370,7 +379,7 @@ class NintendoChannel:
 
             for j in range(0, 18):
                 new_video_table["unknown2_" + str(i) + "_" + str(j)] = u8(n["unknown_2"][j])
-                
+
             new_video_table["title_" + str(i)] = n["title"].encode("utf-16be").rjust(204, b"\x00")
 
         return new_video_table
@@ -379,7 +388,7 @@ class NintendoChannel:
         demos_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["demos_table_offset"] = u32(self.offset_count1())
 
         for d in self.ninfile["demos_table"]:
@@ -399,7 +408,7 @@ class NintendoChannel:
             demos_table["rating_id_" + str(i)] = u8(d["rating_id"])
             demos_table["new_tag_" + str(i)] = u8(d["new_tag"])
             demos_table["new_tag_index_" + str(i)] = u8(d["new_tag_index"])
-            
+
             for j in range(0, 205):
                 demos_table["unknown2_" + str(i) + "_" + str(j)] = u8(d["unknown_2"][j])
 
@@ -409,7 +418,7 @@ class NintendoChannel:
         recommendations_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["recommendations_table_offset"] = u32(self.offset_count1())
 
         for r in self.ninfile["recommendations_table"]:
@@ -418,14 +427,14 @@ class NintendoChannel:
             i += 1
 
             recommendations_table["recommendation_table_offset_" + str(i)] = u32(r["recommendation_title_offset"])
-            
+
         return recommendations_table
 
     def make_recent_recommendations_table(self):
         recent_recommendations_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["recent_recommendations_table_offset"] = u32(self.offset_count1())
 
         for r in self.ninfile["recent_recommendations_table"]:
@@ -433,16 +442,17 @@ class NintendoChannel:
 
             i += 1
 
-            recent_recommendations_table["recent_recommendation_title_offset_" + str(i)] = u32(r["recent_recommendation_title_offset"])
+            recent_recommendations_table["recent_recommendation_title_offset_" + str(i)] = u32(
+                r["recent_recommendation_title_offset"])
             recent_recommendations_table["unknown_" + str(i)] = u16(r["unknown"])
-            
+
         return recent_recommendations_table
 
     def make_popular_videos_table(self):
         popular_videos_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["popular_videos_table_offset"] = u32(self.offset_count1())
 
         for p in self.ninfile["popular_videos_table"]:
@@ -454,23 +464,23 @@ class NintendoChannel:
             popular_videos_table["time_length_" + str(i)] = u16(p["time_length"])
             popular_videos_table["title_id_" + str(i)] = u32(p["title_id"])
             popular_videos_table["bar_color_" + str(i)] = u8(p["bar_color"])
-            
+
             for j in range(0, 15):
                 popular_videos_table["unknown2_" + str(i) + "_" + str(j)] = u8(p["unknown_2"][j])
-                
+
             popular_videos_table["rating_id_" + str(i)] = u8(p["rating_id"])
             popular_videos_table["unknown3_" + str(i)] = u8(p["unknown_3"])
             popular_videos_table["video_rank_" + str(i)] = u8(p["video_rank"])
             popular_videos_table["unknown4_" + str(i)] = u8(p["unknown_4"])
             popular_videos_table["title_" + str(i)] = p["title"].encode("utf-16be").rjust(204, b"\x00")
-            
+
         return popular_videos_table
 
     def make_detailed_ratings_table(self):
         detailed_ratings_table = {}
 
         i = 0
-        
+
         self.dictionaries["header"]["detailed_ratings_table_offset"] = u32(self.offset_count1())
 
         for d in self.ninfile["detailed_ratings_table"]:
@@ -487,7 +497,7 @@ class NintendoChannel:
     def deadbeef(self, i):
         k = 0
 
-        while ((self.offset_count(self.jpeg) % 32) != 0):
+        while (self.offset_count(self.jpeg) % 32) != 0:
             bytes = {0: 0xDE, 1: 0xAD, 2: 0xBE, 3: 0xEF}
 
             self.jpeg["deadbeef_" + str(i) + "_" + str(k)] = u8(bytes[k % 4])
@@ -512,5 +522,6 @@ class NintendoChannel:
             self.deadbeef(i)
 
         return self.jpeg
+
 
 NintendoChannel(ninfile1.nintendo_channel_file)
