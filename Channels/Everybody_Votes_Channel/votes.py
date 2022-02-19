@@ -288,13 +288,13 @@ def num():
     return num1
 
 
-def get_question(id, language_code): return question_data[id][0][language_code]
+def get_question(id, language_code): return question_data[id][0][language_code - 1]
 
 
-def get_response1(id, language_code): return question_data[id][1][language_code]
+def get_response1(id, language_code): return question_data[id][1][language_code - 1]
 
 
-def get_response2(id, language_code): return question_data[id][2][language_code]
+def get_response2(id, language_code): return question_data[id][2][language_code - 1]
 
 
 def get_type(id): return question_data[id][3]
@@ -311,25 +311,25 @@ def add_question(row):
 
     i = 0
 
-    question = [[None] * 9, [None] * 9, [None] * 9, None, None, None]
+    question = [[None] * 8, [None] * 8, [None] * 8, None, None, None]
 
     for r in row:
         if row[i] is not None:
-            if i >= 1 and i <= 9:
+            if i >= 1 and i <= 8:
                 question[0][i - 1] = question_text_replace(row[i])
-            elif i >= 10 and i <= 18:
-                question[1][i - 10] = question_text_replace(row[i])
-            elif i >= 19 and i <= 27:
-                question[2][i - 19] = question_text_replace(row[i])
-            elif i > 27:
-                question[i - 25] = row[i]
+            elif i >= 9 and i <= 16:
+                question[1][i - 9] = question_text_replace(row[i])
+            elif i >= 17 and i <= 24:
+                question[2][i - 17] = question_text_replace(row[i])
+            elif i > 24:
+                question[i - 22] = row[i]
         i += 1
 
     question_data[row[0]] = question
 
-    if row[28] == "n":
+    if row[25] == "n":
         national += 1
-    elif row[28] == "w":
+    elif row[25] == "w":
         worldwide += 1
 
 

@@ -48,7 +48,7 @@ with open("{}/dd/wiisports.dec".format(path), "wb") as file:
 
 # symlink all miidd country code files to wiisports.enc with its FULL directory path
 system(
-    "python ./sign_encrypt.py -t enc -in '{}/dd/wiisports.dec' -out '{}/dd/wiisports.enc' -key 91D9A5DD10AAB467491A066EAD9FDD6F -rsa /var/rc24/key/miidd.pem".format(
+    "python3.8 ./sign_encrypt.py -t enc -in '{}/dd/wiisports.dec' -out '{}/dd/wiisports.enc' -key 91D9A5DD10AAB467491A066EAD9FDD6F -rsa /var/rc24/key/miidd.pem".format(
         path, path
     )
 )

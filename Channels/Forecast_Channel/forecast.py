@@ -1015,6 +1015,7 @@ def purge_cache():
             for forecast_list in forecastlists.weathercities:
                 purge_list = []
 
+                currentlist = list(forecast_list.values())[0][2][1]
                 country_code = forecastlists.bincountries[currentlist]
 
                 for language_code in get_bins(country_code):
