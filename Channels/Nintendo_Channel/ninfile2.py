@@ -91,8 +91,9 @@ class GameTDB:
                 url = "https://www.gametdb.com/{}".format(filename + ".zip")
                 # It's blocked for the "python-requests" user-agent to encourage setting a different user-agent for different apps, to get an idea of the origin of the requests. (according to the GameTDB admin).
                 r = requests.get(
-                    url, headers={"User-Agent": "Nintendo Channel Info Downloader"})
-                open(filename + ".zip", 'wb').write(r.content)
+                    url, headers={"User-Agent": "Nintendo Channel Info Downloader"}
+                )
+                open(filename + ".zip", "wb").write(r.content)
                 self.zip = zipfile.ZipFile(filename + ".zip")
                 self.zip.extractall(".")
                 self.zip.close()
@@ -127,7 +128,9 @@ class NintendoChannel:
         self.dictionaries["new_video_table"] = self.make_new_video_table()
         self.dictionaries["demos_table"] = self.make_demos_table()
         self.dictionaries["recommendations_table"] = self.make_recommendations_table()
-        self.dictionaries["recent_recommendations_table"] = self.make_recent_recommendations_table()
+        self.dictionaries[
+            "recent_recommendations_table"
+        ] = self.make_recent_recommendations_table()
         self.dictionaries["popular_videos_table"] = self.make_popular_videos_table()
         self.dictionaries["jpeg"] = self.make_jpeg()
         self.dictionaries["detailed_ratings_table"] = self.make_detailed_ratings_table()
@@ -136,8 +139,11 @@ class NintendoChannel:
 
     def offset_count1(self):
         return sum(
-            len(values) for dictionary in self.dictionaries for values in list(self.dictionaries[dictionary].values())
-            if values)
+            len(values)
+            for dictionary in self.dictionaries
+            for values in list(self.dictionaries[dictionary].values())
+            if values
+        )
 
     def offset_count2(self, dictionary):
         return sum(len(values) for values in list(dictionary.values()) if values)
@@ -190,29 +196,41 @@ class NintendoChannel:
         header["demos_table_offset"] = u32(0)
         header["unknown_5"] = u32(self.ninfile["unknown_5"])
         header["unknown_6"] = u32(self.ninfile["unknown_6"])
-        header["recommendations_entry_number"] = u32(len(self.ninfile["recommendations_table"]))
+        header["recommendations_entry_number"] = u32(
+            len(self.ninfile["recommendations_table"])
+        )
         header["recommendations_table_offset"] = u32(0)
 
         for i in range(0, 4):
             header["unknown_7_" + str(i)] = u32(self.ninfile["unknown_7"][i])
 
-        header["recent_recommendations_entry_number"] = u32(len(self.ninfile["recent_recommendations_table"]))
+        header["recent_recommendations_entry_number"] = u32(
+            len(self.ninfile["recent_recommendations_table"])
+        )
         header["recent_recommendations_table_offset"] = u32(0)
 
         for i in range(0, 2):
             header["unknown_8_" + str(i)] = u32(self.ninfile["unknown_8"][i])
 
-        header["popular_videos_entry_number"] = u32(len(self.ninfile["popular_videos_table"]))
+        header["popular_videos_entry_number"] = u32(
+            len(self.ninfile["popular_videos_table"])
+        )
         header["popular_videos_table_offset"] = u32(0)
-        header["detailed_ratings_entry_number"] = u32(len(self.ninfile["detailed_ratings_table"]))
+        header["detailed_ratings_entry_number"] = u32(
+            len(self.ninfile["detailed_ratings_table"])
+        )
         header["detailed_ratings_table_offset"] = u32(0)
-        header["last_update"] = self.ninfile["last_update"].encode("utf-16be").rjust(62, b"\x00")
+        header["last_update"] = (
+            self.ninfile["last_update"].encode("utf-16be").rjust(62, b"\x00")
+        )
 
         for i in range(0, 3):
             header["unknown_9_" + str(i)] = u8(self.ninfile["unknown_9"][i])
 
         for i in range(0, 5):
-            header["dl_url_ids_" + str(i)] = self.ninfile["dl_url_ids"][i].encode("utf-8").rjust(256, b"\x00")
+            header["dl_url_ids_" + str(i)] = (
+                self.ninfile["dl_url_ids"][i].encode("utf-8").rjust(256, b"\x00")
+            )
 
         for i in range(0, 4):
             header["unknown_10_" + str(i)] = u8(self.ninfile["unknown_10"][i])
@@ -237,7 +255,9 @@ class NintendoChannel:
             ratings_table["unknown2_" + str(i)] = u8(r["unknown2"])
             ratings_table["jpeg_offset_" + str(i)] = u32(r["jpeg_offset"])
             ratings_table["jpeg_size_" + str(i)] = u32(r["jpeg_size"])
-            ratings_table["title_" + str(i)] = r["title"].encode("utf-16be").rjust(22, b"\x00")
+            ratings_table["title_" + str(i)] = (
+                r["title"].encode("utf-16be").rjust(22, b"\x00")
+            )
 
         return ratings_table
 
@@ -246,7 +266,9 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["title_types_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["title_types_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for t in self.ninfile["title_types_table"]:
             t = self.ninfile["title_types_table"][t]
@@ -254,8 +276,12 @@ class NintendoChannel:
             i += 1
 
             title_types_table["type_id_" + str(i)] = u8(t["type_id"])
-            title_types_table["console_model_" + str(i)] = t["console_model"].encode("utf-8").rjust(3, b"\x00")
-            title_types_table["title_" + str(i)] = t["title"].encode("utf-16be").rjust(102, b"\x00")
+            title_types_table["console_model_" + str(i)] = (
+                t["console_model"].encode("utf-8").rjust(3, b"\x00")
+            )
+            title_types_table["title_" + str(i)] = (
+                t["title"].encode("utf-16be").rjust(102, b"\x00")
+            )
             title_types_table["group_id_" + str(i)] = u8(t["group_id"])
             title_types_table["unknown_" + str(i)] = u8(t["unknown"])
 
@@ -274,8 +300,12 @@ class NintendoChannel:
             i += 1
 
             company_table["id_" + str(i)] = u32(c["id"])
-            company_table["dev_title_" + str(i)] = c["dev_title"].encode("utf-16be").rjust(62, b"\x00")
-            company_table["pub_title_" + str(i)] = c["pub_title"].encode("utf-16be").rjust(62, b"\x00")
+            company_table["dev_title_" + str(i)] = (
+                c["dev_title"].encode("utf-16be").rjust(62, b"\x00")
+            )
+            company_table["pub_title_" + str(i)] = (
+                c["pub_title"].encode("utf-16be").rjust(62, b"\x00")
+            )
 
         return company_table
 
@@ -292,7 +322,9 @@ class NintendoChannel:
             i += 1
 
             title_table["id_" + str(i)] = u32(t["id"])
-            title_table["title_id_" + str(i)] = t["title_id"].encode("utf-8").rjust(4, b"\x00")
+            title_table["title_id_" + str(i)] = (
+                t["title_id"].encode("utf-8").rjust(4, b"\x00")
+            )
             title_table["title_type_" + str(i)] = u8(t["title_type"])
 
             for j in range(0, 3):
@@ -305,11 +337,19 @@ class NintendoChannel:
             title_table["rating_id_" + str(i)] = u8(t["rating_id"])
 
             for j in range(0, 29):
-                title_table["unknown_4_" + str(i) + "_" + str(j)] = u8(t["unknown_4"][j])
+                title_table["unknown_4_" + str(i) + "_" + str(j)] = u8(
+                    t["unknown_4"][j]
+                )
 
-            title_table["title_" + str(i)] = t["title"].encode("utf-16be").rjust(62, b"\x00")
-            title_table["subtitle_" + str(i)] = t["subtitle"].encode("utf-16be").rjust(62, b"\x00")
-            title_table["short_title_" + str(i)] = t["short_title"].encode("utf-16be").rjust(62, b"\x00")
+            title_table["title_" + str(i)] = (
+                t["title"].encode("utf-16be").rjust(62, b"\x00")
+            )
+            title_table["subtitle_" + str(i)] = (
+                t["subtitle"].encode("utf-16be").rjust(62, b"\x00")
+            )
+            title_table["short_title_" + str(i)] = (
+                t["short_title"].encode("utf-16be").rjust(62, b"\x00")
+            )
 
         return title_table
 
@@ -318,7 +358,9 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["new_title_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["new_title_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for n in self.ninfile["new_title_table"]:
             n = self.ninfile["new_title_table"][n]
@@ -355,9 +397,13 @@ class NintendoChannel:
             videos_1_table["video_index_" + str(i)] = u8(v["video_index"])
 
             for j in range(0, 2):
-                videos_1_table["unknown4_" + str(i) + "_" + str(j)] = u8(v["unknown_4"][j])
+                videos_1_table["unknown4_" + str(i) + "_" + str(j)] = u8(
+                    v["unknown_4"][j]
+                )
 
-            videos_1_table["title_" + str(i)] = v["title"].encode("utf-16be").rjust(246, b"\x00")
+            videos_1_table["title_" + str(i)] = (
+                v["title"].encode("utf-16be").rjust(246, b"\x00")
+            )
 
         return videos_1_table
 
@@ -366,7 +412,9 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["new_video_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["new_video_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for n in self.ninfile["new_video_table"]:
             n = self.ninfile["new_video_table"][n]
@@ -378,9 +426,13 @@ class NintendoChannel:
             new_video_table["title_id_" + str(i)] = u32(n["title_id"])
 
             for j in range(0, 18):
-                new_video_table["unknown2_" + str(i) + "_" + str(j)] = u8(n["unknown_2"][j])
+                new_video_table["unknown2_" + str(i) + "_" + str(j)] = u8(
+                    n["unknown_2"][j]
+                )
 
-            new_video_table["title_" + str(i)] = n["title"].encode("utf-16be").rjust(204, b"\x00")
+            new_video_table["title_" + str(i)] = (
+                n["title"].encode("utf-16be").rjust(204, b"\x00")
+            )
 
         return new_video_table
 
@@ -397,8 +449,12 @@ class NintendoChannel:
             i += 1
 
             demos_table["id_" + str(i)] = u32(d["id"])
-            demos_table["title_" + str(i)] = d["title"].encode("utf-16be").rjust(62, b"\x00")
-            demos_table["subtitle_" + str(i)] = d["subtitle"].encode("utf-16be").rjust(62, b"\x00")
+            demos_table["title_" + str(i)] = (
+                d["title"].encode("utf-16be").rjust(62, b"\x00")
+            )
+            demos_table["subtitle_" + str(i)] = (
+                d["subtitle"].encode("utf-16be").rjust(62, b"\x00")
+            )
             demos_table["titleid_" + str(i)] = u32(d["titleid"])
             demos_table["company_offset_" + str(i)] = u32(d["company_offset"])
             demos_table["removal_year_" + str(i)] = u16(d["removal_year"])
@@ -419,14 +475,18 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["recommendations_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["recommendations_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for r in self.ninfile["recommendations_table"]:
             r = self.ninfile["recommendations_table"][r]
 
             i += 1
 
-            recommendations_table["recommendation_table_offset_" + str(i)] = u32(r["recommendation_title_offset"])
+            recommendations_table["recommendation_table_offset_" + str(i)] = u32(
+                r["recommendation_title_offset"]
+            )
 
         return recommendations_table
 
@@ -435,15 +495,18 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["recent_recommendations_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["recent_recommendations_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for r in self.ninfile["recent_recommendations_table"]:
             r = self.ninfile["recent_recommendations_table"][r]
 
             i += 1
 
-            recent_recommendations_table["recent_recommendation_title_offset_" + str(i)] = u32(
-                r["recent_recommendation_title_offset"])
+            recent_recommendations_table[
+                "recent_recommendation_title_offset_" + str(i)
+            ] = u32(r["recent_recommendation_title_offset"])
             recent_recommendations_table["unknown_" + str(i)] = u16(r["unknown"])
 
         return recent_recommendations_table
@@ -453,7 +516,9 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["popular_videos_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["popular_videos_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for p in self.ninfile["popular_videos_table"]:
             p = self.ninfile["popular_videos_table"][p]
@@ -466,13 +531,17 @@ class NintendoChannel:
             popular_videos_table["bar_color_" + str(i)] = u8(p["bar_color"])
 
             for j in range(0, 15):
-                popular_videos_table["unknown2_" + str(i) + "_" + str(j)] = u8(p["unknown_2"][j])
+                popular_videos_table["unknown2_" + str(i) + "_" + str(j)] = u8(
+                    p["unknown_2"][j]
+                )
 
             popular_videos_table["rating_id_" + str(i)] = u8(p["rating_id"])
             popular_videos_table["unknown3_" + str(i)] = u8(p["unknown_3"])
             popular_videos_table["video_rank_" + str(i)] = u8(p["video_rank"])
             popular_videos_table["unknown4_" + str(i)] = u8(p["unknown_4"])
-            popular_videos_table["title_" + str(i)] = p["title"].encode("utf-16be").rjust(204, b"\x00")
+            popular_videos_table["title_" + str(i)] = (
+                p["title"].encode("utf-16be").rjust(204, b"\x00")
+            )
 
         return popular_videos_table
 
@@ -481,7 +550,9 @@ class NintendoChannel:
 
         i = 0
 
-        self.dictionaries["header"]["detailed_ratings_table_offset"] = u32(self.offset_count1())
+        self.dictionaries["header"]["detailed_ratings_table_offset"] = u32(
+            self.offset_count1()
+        )
 
         for d in self.ninfile["detailed_ratings_table"]:
             d = self.ninfile["detailed_ratings_table"][d]
@@ -490,7 +561,9 @@ class NintendoChannel:
 
             detailed_ratings_table["rating_group_" + str(i)] = u8(d["rating_group"])
             detailed_ratings_table["rating_id_" + str(i)] = u8(d["rating_id"])
-            detailed_ratings_table["title_" + str(i)] = d["title"].encode("utf-16be").rjust(204, b"\x00")
+            detailed_ratings_table["title_" + str(i)] = (
+                d["title"].encode("utf-16be").rjust(204, b"\x00")
+            )
 
         return detailed_ratings_table
 

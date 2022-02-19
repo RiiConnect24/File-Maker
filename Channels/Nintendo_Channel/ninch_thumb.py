@@ -1,6 +1,7 @@
 import struct
 import os
 
+
 def u8(data):
     if not 0 <= data <= 255:
         print("u8 out of range: %s" % data, "INFO")

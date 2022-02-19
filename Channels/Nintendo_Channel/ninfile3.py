@@ -220,7 +220,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     1: {
         "company_offset": 8736,
         "id": 839603577,
@@ -442,8 +441,6 @@ nin_demos_table = {
             0,
         ],
     },
-
-
     2: {
         "company_offset": 8736,
         "id": 839603578,
@@ -665,8 +662,6 @@ nin_demos_table = {
             0,
         ],
     },
-
-
     3: {
         "company_offset": 8736,
         "id": 839603579,
@@ -888,8 +883,6 @@ nin_demos_table = {
             0,
         ],
     },
-
-
     7: {
         "company_offset": 8736,
         "id": 839603580,
@@ -1111,7 +1104,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     8: {
         "company_offset": 8736,
         "id": 839603581,
@@ -1333,7 +1325,6 @@ nin_demos_table = {
             0,
         ],
     },
-    
     9: {
         "company_offset": 8736,
         "id": 839603582,
@@ -1555,7 +1546,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     10: {
         "company_offset": 8736,
         "id": 839603583,
@@ -1777,7 +1767,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     11: {
         "company_offset": 8736,
         "id": 839603584,
@@ -1999,7 +1988,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     12: {
         "company_offset": 8736,
         "id": 839603585,
@@ -2221,7 +2209,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     13: {
         "company_offset": 8736,
         "id": 839603586,
@@ -2443,7 +2430,6 @@ nin_demos_table = {
             0,
         ],
     },
-
     14: {
         "company_offset": 8736,
         "id": 839603587,

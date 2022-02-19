@@ -12,6 +12,7 @@ from ninfile2 import GameTDB
 with open("./config.json", "rb") as f:
     config = json.load(f)
 
+
 def u8(data):
     if not 0 <= data <= 255:
         print("u8 out of range: %s" % data, "INFO")
@@ -36,7 +37,7 @@ def u32(data):
 def enc(text, length):
     if len(text) > length:
         print("Error: Text too long.")
-    return text.encode("utf-16be").ljust(length, b'\0')[:length]
+    return text.encode("utf-16be").ljust(length, b"\0")[:length]
 
 
 if len(sys.argv) != 3:
@@ -135,25 +136,30 @@ class MakeInfo:
         self.header["language_dutch_flag"] = u8(0)
         for i in range(1, 11):
             self.header["unknown_9_%s" % i] = u8(0)
-        self.header["title"] = b'\0' * 62
-        self.header["subtitle"] = b'\0' * 62
-        self.header["short_title"] = b'\0' * 62
+        self.header["title"] = b"\0" * 62
+        self.header["subtitle"] = b"\0" * 62
+        self.header["short_title"] = b"\0" * 62
         for i in range(1, 4):
-            self.header["description_text_%s" % i] = b'\0' * 82
-        self.header["genre_text"] = b'\0' * 58
-        self.header["players_text"] = b'\0' * 82
-        self.header["peripherals_text"] = b'\0' * 88
-        self.header["unknown_10"] = b'\0' * 80
-        self.header["disclaimer_text"] = b'\0' * 4800
+            self.header["description_text_%s" % i] = b"\0" * 82
+        self.header["genre_text"] = b"\0" * 58
+        self.header["players_text"] = b"\0" * 82
+        self.header["peripherals_text"] = b"\0" * 88
+        self.header["unknown_10"] = b"\0" * 80
+        self.header["disclaimer_text"] = b"\0" * 4800
         self.header["unknown_11"] = u8(9)
-        self.header["distribution_date_text"] = b'\0' * 82
-        self.header["wii_points_text"] = b'\0' * 82
+        self.header["distribution_date_text"] = b"\0" * 82
+        self.header["wii_points_text"] = b"\0" * 82
         for i in range(1, 11):
-            self.header["custom_field_text_%s" % i] = b'\0' * 82
+            self.header["custom_field_text_%s" % i] = b"\0" * 82
 
     def write_gametdb_info(self):
         for s in self.databases[sys.argv[1]][1].findall("game"):
-            if sys.argv[1] == "Switch" and s.find("id").text == sys.argv[2] or s.find("id").text[:4] == sys.argv[2] and s.find("type") != "CUSTOM":
+            if (
+                sys.argv[1] == "Switch"
+                and s.find("id").text == sys.argv[2]
+                or s.find("id").text[:4] == sys.argv[2]
+                and s.find("type") != "CUSTOM"
+            ):
                 print("Found {}!".format(sys.argv[2]))
 
                 for c in self.databases["Wii"][1].findall("companies"):
@@ -180,22 +186,44 @@ class MakeInfo:
                 self.header["game_id"] = sys.argv[2].encode("utf-8")[:4]
 
                 # Get the game type
-                game_type = {None: 0x01, "Channel": 0x02, "VC-NES": 0x03, "VC-SNES": 0x04, "VC-N64": 0x05, "VC-SMS": 0x0C,
-                             "VC-MD": 0x07,
-                             "VC-PCE": 0x06, "VC-C64": 0x0D, "VC-NEOGEO": 0x08, "VC-Arcade": 0x0E,
-                             "WiiWare": 0x0B, "DS": 0x0A, "DSi": 0x10, "DSiWare": 0x11, "3DS": 0x12, "3DSWare": 0x13, "New3DS": 0x12, "New3DSWare": 0x13, "WiiU": 0x15, "eShop": 0x15, "Switch": 0x17}  # The XML returns None for disc games when we query the type.
+                game_type = {
+                    None: 0x01,
+                    "Channel": 0x02,
+                    "VC-NES": 0x03,
+                    "VC-SNES": 0x04,
+                    "VC-N64": 0x05,
+                    "VC-SMS": 0x0C,
+                    "VC-MD": 0x07,
+                    "VC-PCE": 0x06,
+                    "VC-C64": 0x0D,
+                    "VC-NEOGEO": 0x08,
+                    "VC-Arcade": 0x0E,
+                    "WiiWare": 0x0B,
+                    "DS": 0x0A,
+                    "DSi": 0x10,
+                    "DSiWare": 0x11,
+                    "3DS": 0x12,
+                    "3DSWare": 0x13,
+                    "New3DS": 0x12,
+                    "New3DSWare": 0x13,
+                    "WiiU": 0x15,
+                    "eShop": 0x15,
+                    "Switch": 0x17,
+                }  # The XML returns None for disc games when we query the type.
                 if s.find("type").text in game_type:
                     if s.find("type").text == "WiiU" or s.find("type").text == "Switch":
                         self.header["platform_flag"] = u8(0)
                     else:
                         self.header["platform_flag"] = u8(
-                            game_type[s.find("type").text])
+                            game_type[s.find("type").text]
+                        )
                 else:
                     print("Could not find game type")
                     sys.exit(1)
 
                 self.header["purchase_button_flag"] = u8(
-                    1)  # we'll make it go to gametdb
+                    1
+                )  # we'll make it go to gametdb
                 # Some games, more notably DSiWare and some 3DS games do not have a release date in the xml.
                 # Due to this, we must set defaults in the case of no date.
                 if s.find("date").get("year") == "":
@@ -215,34 +243,53 @@ class MakeInfo:
                 self.header["release_month"] = u8(int(release_month) - 1)
                 self.header["release_day"] = u8(int(release_day))
 
-                controllers = {"wiimote": "wii_remote", "nunchuk": "nunchuk", "classiccontroller": "classic_controller",
-                               "gamecube": "gamecube_controller", "mii": "mii"}
-                controllers2 = {"wheel": "Wii Wheel", "balanceboard": "Wii Balance Board", "wiispeak": "Wii Speak",
-                                "microphone": "Microphone", "guitar": "Guitar", "drums": "Drums",
-                                "dancepad": "Dance Pad", "keyboard": "Keyboard", "udraw": "uDraw"}
+                controllers = {
+                    "wiimote": "wii_remote",
+                    "nunchuk": "nunchuk",
+                    "classiccontroller": "classic_controller",
+                    "gamecube": "gamecube_controller",
+                    "mii": "mii",
+                }
+                controllers2 = {
+                    "wheel": "Wii Wheel",
+                    "balanceboard": "Wii Balance Board",
+                    "wiispeak": "Wii Speak",
+                    "microphone": "Microphone",
+                    "guitar": "Guitar",
+                    "drums": "Drums",
+                    "dancepad": "Dance Pad",
+                    "keyboard": "Keyboard",
+                    "udraw": "uDraw",
+                }
 
                 other_peripherals = False
 
                 for controller in s.find("input").findall("control"):
                     if controller.get("type") in controllers:
-                        self.header["{}_flag".format(
-                            controllers[controller.get("type")])] = u8(1)
+                        self.header[
+                            "{}_flag".format(controllers[controller.get("type")])
+                        ] = u8(1)
                     elif controller.get("type") in controllers2:
                         if not other_peripherals:
                             self.header["peripherals_text"] = ""
 
-                        if sys.argv[1] != "Wii" and controllers2[controller.get("type")] == "Wii Wheel":
+                        if (
+                            sys.argv[1] != "Wii"
+                            and controllers2[controller.get("type")] == "Wii Wheel"
+                        ):
                             self.header["peripherals_text"] + "Wheel" + ", "
                         else:
-                            self.header["peripherals_text"] += controllers2[controller.get(
-                                "type")] + ", "
+                            self.header["peripherals_text"] += (
+                                controllers2[controller.get("type")] + ", "
+                            )
 
                         other_peripherals = True
 
                 if other_peripherals:
                     # find a way to get rid of the "ZZ" part later
                     self.header["peripherals_text"] = enc(
-                        "ZZ" + self.header["peripherals_text"][:-2], 88)
+                        "ZZ" + self.header["peripherals_text"][:-2], 88
+                    )
 
                 for feature in s.find("wi-fi").findall("feature"):
                     if "online" in feature.text:
@@ -250,39 +297,60 @@ class MakeInfo:
                         self.header["nintendo_wifi_connection_flag"] = u8(1)
 
                 # what languages does this game support?
-                languages = {"ZHCN": "chinese", "KO": "korean", "JA": "japanese", "EN": "english", "FR": "french",
-                             "ES": "spanish", "DE": "german", "IT": "italian", "NL": "dutch"}
+                languages = {
+                    "ZHCN": "chinese",
+                    "KO": "korean",
+                    "JA": "japanese",
+                    "EN": "english",
+                    "FR": "french",
+                    "ES": "spanish",
+                    "DE": "german",
+                    "IT": "italian",
+                    "NL": "dutch",
+                }
                 languages_list = s.find("languages").text.split(",")
 
                 for l in languages.keys():
                     if l in languages_list:
-                        self.header["language_{}_flag".format(
-                            languages[l])] = u8(1)
+                        self.header["language_{}_flag".format(languages[l])] = u8(1)
 
                 # write the synopsis, and text wrap it properly
                 try:
                     wrap = textwrap.wrap(
-                        s.find("locale", {"lang": "EN"}).find("synopsis").text, 40)
+                        s.find("locale", {"lang": "EN"}).find("synopsis").text, 40
+                    )
 
                     if len(wrap) <= 4:
-                        text_type = "description"  # put the synopsis at the top of the page
+                        text_type = (
+                            "description"  # put the synopsis at the top of the page
+                        )
                     else:
-                        text_type = "custom_field"  # put the synopsis in the middle of the page
+                        text_type = (
+                            "custom_field"  # put the synopsis in the middle of the page
+                        )
 
                     # let's shorten the synopsis until it fits
 
-                    synopsis_text = s.find("locale", {"lang": "EN"}).find(
-                        "synopsis").text[:400].replace("\n", "").replace("  ", " ").split(".")
+                    synopsis_text = (
+                        s.find("locale", {"lang": "EN"})
+                        .find("synopsis")
+                        .text[:400]
+                        .replace("\n", "")
+                        .replace("  ", " ")
+                        .split(".")
+                    )
 
-                    if len(s.find("locale", {"lang": "EN"}).find("synopsis").text) > 400:
+                    if (
+                        len(s.find("locale", {"lang": "EN"}).find("synopsis").text)
+                        > 400
+                    ):
                         try:
                             synopsis_text = synopsis_text[:-1]
                             synopsis_text[-1] += "."
                         except:
                             pass
 
-                    i = len("".join(textwrap.wrap(
-                        ". ".join(synopsis_text), 40))) + 1
+                    i = len("".join(textwrap.wrap(". ".join(synopsis_text), 40))) + 1
                     j = len(synopsis_text)
 
                     while i > 11:
@@ -296,8 +364,7 @@ class MakeInfo:
                     i = 1
 
                     for w in wrap:
-                        self.header["{}_text_{}".format(
-                            text_type, i)] = enc(w, 82)
+                        self.header["{}_text_{}".format(text_type, i)] = enc(w, 82)
                         i += 1
                         if i == 10 and len(wrap) > 10:
                             self.header["{}_text_{}".format(text_type, i)] += b"..."
@@ -305,8 +372,9 @@ class MakeInfo:
                 except AttributeError:
                     pass
 
-                self.header["title"] = title = s.find(
-                    "locale", {"lang": "EN"}).find("title").text
+                self.header["title"] = title = (
+                    s.find("locale", {"lang": "EN"}).find("title").text
+                )
 
                 # make separator in game name have a subtitle too
 
@@ -322,7 +390,8 @@ class MakeInfo:
 
                 try:
                     self.header["genre_text"] = enc(
-                        s.find("genre").text.title().replace(",", ", "), 58)
+                        s.find("genre").text.title().replace(",", ", "), 58
+                    )
 
                 except AttributeError:
                     pass
@@ -341,13 +410,13 @@ class MakeInfo:
                                                           players_online + \
                                                               " (Online)"""
 
-                    self.header["players_text"] = enc(
-                        self.header["players_text"], 82)
+                    self.header["players_text"] = enc(self.header["players_text"], 82)
 
                 self.header["disclaimer_text"] = enc(
                     'Game information is provided by GameTDB. Press the\n"Purchase" button to get redirected '
-                    'to the GameTDB page.',
-                    4800)
+                    "to the GameTDB page.",
+                    4800,
+                )
 
                 title_id = s.find("id").text
 
@@ -365,14 +434,18 @@ class MakeInfo:
                 # Grab the cover image, and resize and center it
                 if len(glob.glob(f"covers/{sys.argv[1]}/US/{title_id}*")) > 0:
                     img = Image.new(mode="RGB", size=(384, 384), color=(255, 255, 255))
-                    cover_img = Image.open(glob.glob(f"covers/{sys.argv[1]}/US/{title_id}*")[0])
+                    cover_img = Image.open(
+                        glob.glob(f"covers/{sys.argv[1]}/US/{title_id}*")[0]
+                    )
                     cover_img_w, cover_img_h = cover_img.size
                     if sys.argv[1] != "3DS" and sys.argv[1] != "NDS":
                         cover_img_resized = cover_img.resize(
-                            (int(cover_img_w * (384 / cover_img_h)), 384))
+                            (int(cover_img_w * (384 / cover_img_h)), 384)
+                        )
                     else:
                         cover_img_resized = cover_img.resize(
-                            (384, int(cover_img_h * (384 / cover_img_w))))
+                            (384, int(cover_img_h * (384 / cover_img_w)))
+                        )
                     cover_img_w, cover_img_h = cover_img_resized.size
                     cover_rgb_img = img.convert("RGB")
                     offset = ((384 - cover_img_w) // 2, (384 - cover_img_h) // 2)
@@ -412,7 +485,7 @@ class MakeInfo:
 
     def write_file(self):
         self.header["filesize"] = u32(self.offset_count())
-        id = int(binascii.hexlify(sys.argv[2][:4].encode("utf-8")).decode("utf-8"), 16) 
+        id = int(binascii.hexlify(sys.argv[2][:4].encode("utf-8")).decode("utf-8"), 16)
 
         if sys.argv[1] == "NDS":
             id ^= 0x22222222
@@ -449,7 +522,9 @@ class MakeInfo:
 
         self.writef2.write(read)
         self.writef2.seek(8)
-        self.writef2.write(binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, '08x')))
+        self.writef2.write(
+            binascii.unhexlify(format(binascii.crc32(read) & 0xFFFFFFFF, "08x"))
+        )
 
         os.remove(filename + "-1")
 

@@ -4,9 +4,11 @@ from pkg_resources import parse_version
 from kaitaistruct import __version__ as ks_version, KaitaiStruct, KaitaiStream, BytesIO
 
 
-if parse_version(ks_version) < parse_version('0.7'):
+if parse_version(ks_version) < parse_version("0.7"):
     raise Exception(
-        "Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s" % (ks_version))
+        "Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s"
+        % (ks_version)
+    )
 
 
 class NinchDllist(KaitaiStruct):
@@ -64,14 +66,14 @@ class NinchDllist(KaitaiStruct):
         self.popular_videos_table_offset = self._io.read_u4be()
         self.detailed_ratings_entry_number = self._io.read_u4be()
         self.detailed_ratings_table_offset = self._io.read_u4be()
-        self.last_update = (self._io.read_bytes(62)).decode(u"utf-16be")
+        self.last_update = (self._io.read_bytes(62)).decode("utf-16be")
         self.unknown_9 = [None] * (3)
         for i in range(3):
             self.unknown_9[i] = self._io.read_u1()
 
         self.dl_url_ids = [None] * (5)
         for i in range(5):
-            self.dl_url_ids[i] = (self._io.read_bytes(256)).decode(u"utf-8")
+            self.dl_url_ids[i] = (self._io.read_bytes(256)).decode("utf-8")
 
         self.unknown_10 = [None] * (4)
         for i in range(4):
@@ -92,7 +94,7 @@ class NinchDllist(KaitaiStruct):
             for i in range(18):
                 self.unknown_2[i] = self._io.read_u1()
 
-            self.title = (self._io.read_bytes(204)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(204)).decode("utf-16be")
 
     class RecommendationsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -106,15 +108,24 @@ class NinchDllist(KaitaiStruct):
 
         @property
         def recommendation_title_entry(self):
-            if hasattr(self, '_m_recommendation_title_entry'):
-                return self._m_recommendation_title_entry if hasattr(self, '_m_recommendation_title_entry') else None
+            if hasattr(self, "_m_recommendation_title_entry"):
+                return (
+                    self._m_recommendation_title_entry
+                    if hasattr(self, "_m_recommendation_title_entry")
+                    else None
+                )
 
             _pos = self._io.pos()
             self._io.seek(self.recommendation_title_offset)
             self._m_recommendation_title_entry = self._root.TitleTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
             self._io.seek(_pos)
-            return self._m_recommendation_title_entry if hasattr(self, '_m_recommendation_title_entry') else None
+            return (
+                self._m_recommendation_title_entry
+                if hasattr(self, "_m_recommendation_title_entry")
+                else None
+            )
 
     class NewTitleTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -128,15 +139,20 @@ class NinchDllist(KaitaiStruct):
 
         @property
         def new_title_entry(self):
-            if hasattr(self, '_m_new_title_entry'):
-                return self._m_new_title_entry if hasattr(self, '_m_new_title_entry') else None
+            if hasattr(self, "_m_new_title_entry"):
+                return (
+                    self._m_new_title_entry
+                    if hasattr(self, "_m_new_title_entry")
+                    else None
+                )
 
             _pos = self._io.pos()
             self._io.seek(self.new_title_offset)
-            self._m_new_title_entry = self._root.TitleTable(
-                self._io, self, self._root)
+            self._m_new_title_entry = self._root.TitleTable(self._io, self, self._root)
             self._io.seek(_pos)
-            return self._m_new_title_entry if hasattr(self, '_m_new_title_entry') else None
+            return (
+                self._m_new_title_entry if hasattr(self, "_m_new_title_entry") else None
+            )
 
     class DetailedRatingsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -148,7 +164,7 @@ class NinchDllist(KaitaiStruct):
         def _read(self):
             self.rating_group = self._io.read_u1()
             self.rating_id = self._io.read_u1()
-            self.title = (self._io.read_bytes(204)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(204)).decode("utf-16be")
 
     class CompanyTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -159,8 +175,8 @@ class NinchDllist(KaitaiStruct):
 
         def _read(self):
             self.id = self._io.read_u4be()
-            self.dev_title = (self._io.read_bytes(62)).decode(u"utf-16be")
-            self.pub_title = (self._io.read_bytes(62)).decode(u"utf-16be")
+            self.dev_title = (self._io.read_bytes(62)).decode("utf-16be")
+            self.pub_title = (self._io.read_bytes(62)).decode("utf-16be")
 
     class PopularVideosTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -182,7 +198,7 @@ class NinchDllist(KaitaiStruct):
             self.unknown_3 = self._io.read_u1()
             self.video_rank = self._io.read_u1()
             self.unknown_4 = self._io.read_u1()
-            self.title = (self._io.read_bytes(204)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(204)).decode("utf-16be")
 
     class RecentRecommendationsTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -197,15 +213,24 @@ class NinchDllist(KaitaiStruct):
 
         @property
         def recent_recommendation_title_entry(self):
-            if hasattr(self, '_m_recent_recommendation_title_entry'):
-                return self._m_recent_recommendation_title_entry if hasattr(self, '_m_recent_recommendation_title_entry') else None
+            if hasattr(self, "_m_recent_recommendation_title_entry"):
+                return (
+                    self._m_recent_recommendation_title_entry
+                    if hasattr(self, "_m_recent_recommendation_title_entry")
+                    else None
+                )
 
             _pos = self._io.pos()
             self._io.seek(self.recent_recommendation_title_offset)
             self._m_recent_recommendation_title_entry = self._root.TitleTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
             self._io.seek(_pos)
-            return self._m_recent_recommendation_title_entry if hasattr(self, '_m_recent_recommendation_title_entry') else None
+            return (
+                self._m_recent_recommendation_title_entry
+                if hasattr(self, "_m_recent_recommendation_title_entry")
+                else None
+            )
 
     class TitleTypesTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -216,8 +241,8 @@ class NinchDllist(KaitaiStruct):
 
         def _read(self):
             self.type_id = self._io.read_u1()
-            self.console_model = (self._io.read_bytes(3)).decode(u"utf-8")
-            self.title = (self._io.read_bytes(102)).decode(u"utf-16be")
+            self.console_model = (self._io.read_bytes(3)).decode("utf-8")
+            self.title = (self._io.read_bytes(102)).decode("utf-16be")
             self.group_id = self._io.read_u1()
             self.unknown = self._io.read_u1()
 
@@ -235,18 +260,18 @@ class NinchDllist(KaitaiStruct):
             self.unknown2 = self._io.read_u1()
             self.jpeg_offset = self._io.read_u4be()
             self.jpeg_size = self._io.read_u4be()
-            self.title = (self._io.read_bytes(22)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(22)).decode("utf-16be")
 
         @property
         def jpeg(self):
-            if hasattr(self, '_m_jpeg'):
-                return self._m_jpeg if hasattr(self, '_m_jpeg') else None
+            if hasattr(self, "_m_jpeg"):
+                return self._m_jpeg if hasattr(self, "_m_jpeg") else None
 
             _pos = self._io.pos()
             self._io.seek(self.jpeg_offset)
             self._m_jpeg = self._io.read_bytes(self.jpeg_size)
             self._io.seek(_pos)
-            return self._m_jpeg if hasattr(self, '_m_jpeg') else None
+            return self._m_jpeg if hasattr(self, "_m_jpeg") else None
 
     class Videos1Table(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -272,7 +297,7 @@ class NinchDllist(KaitaiStruct):
             for i in range(2):
                 self.unknown_4[i] = self._io.read_u1()
 
-            self.title = (self._io.read_bytes(246)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(246)).decode("utf-16be")
 
     class TitleTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -283,7 +308,7 @@ class NinchDllist(KaitaiStruct):
 
         def _read(self):
             self.id = self._io.read_u4be()
-            self.title_id = (self._io.read_bytes(4)).decode(u"utf-8")
+            self.title_id = (self._io.read_bytes(4)).decode("utf-8")
             self.title_type = self._io.read_u1()
             self.genre = [None] * (3)
             for i in range(3):
@@ -298,21 +323,22 @@ class NinchDllist(KaitaiStruct):
             for i in range(29):
                 self.unknown_4[i] = self._io.read_u1()
 
-            self.title = (self._io.read_bytes(62)).decode(u"utf-16be")
-            self.subtitle = (self._io.read_bytes(62)).decode(u"utf-16be")
-            self.short_title = (self._io.read_bytes(62)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(62)).decode("utf-16be")
+            self.subtitle = (self._io.read_bytes(62)).decode("utf-16be")
+            self.short_title = (self._io.read_bytes(62)).decode("utf-16be")
 
         @property
         def company_entry(self):
-            if hasattr(self, '_m_company_entry'):
-                return self._m_company_entry if hasattr(self, '_m_company_entry') else None
+            if hasattr(self, "_m_company_entry"):
+                return (
+                    self._m_company_entry if hasattr(self, "_m_company_entry") else None
+                )
 
             _pos = self._io.pos()
             self._io.seek(self.company_offset)
-            self._m_company_entry = self._root.CompanyTable(
-                self._io, self, self._root)
+            self._m_company_entry = self._root.CompanyTable(self._io, self, self._root)
             self._io.seek(_pos)
-            return self._m_company_entry if hasattr(self, '_m_company_entry') else None
+            return self._m_company_entry if hasattr(self, "_m_company_entry") else None
 
     class DemosTable(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -323,8 +349,8 @@ class NinchDllist(KaitaiStruct):
 
         def _read(self):
             self.id = self._io.read_u4be()
-            self.title = (self._io.read_bytes(62)).decode(u"utf-16be")
-            self.subtitle = (self._io.read_bytes(62)).decode(u"utf-16be")
+            self.title = (self._io.read_bytes(62)).decode("utf-16be")
+            self.subtitle = (self._io.read_bytes(62)).decode("utf-16be")
             self.titleid = self._io.read_u4be()
             self.company_offset = self._io.read_u4be()
             self.removal_year = self._io.read_u2be()
@@ -340,197 +366,247 @@ class NinchDllist(KaitaiStruct):
 
         @property
         def company_entry(self):
-            if hasattr(self, '_m_company_entry'):
-                return self._m_company_entry if hasattr(self, '_m_company_entry') else None
+            if hasattr(self, "_m_company_entry"):
+                return (
+                    self._m_company_entry if hasattr(self, "_m_company_entry") else None
+                )
 
             _pos = self._io.pos()
             self._io.seek(self.company_offset)
-            self._m_company_entry = self._root.CompanyTable(
-                self._io, self, self._root)
+            self._m_company_entry = self._root.CompanyTable(self._io, self, self._root)
             self._io.seek(_pos)
-            return self._m_company_entry if hasattr(self, '_m_company_entry') else None
+            return self._m_company_entry if hasattr(self, "_m_company_entry") else None
 
     @property
     def demos_table(self):
-        if hasattr(self, '_m_demos_table'):
-            return self._m_demos_table if hasattr(self, '_m_demos_table') else None
+        if hasattr(self, "_m_demos_table"):
+            return self._m_demos_table if hasattr(self, "_m_demos_table") else None
 
         _pos = self._io.pos()
         self._io.seek(self.demos_table_offset)
         self._m_demos_table = [None] * (self.demos_entry_number)
         for i in range(self.demos_entry_number):
-            self._m_demos_table[i] = self._root.DemosTable(
-                self._io, self, self._root)
+            self._m_demos_table[i] = self._root.DemosTable(self._io, self, self._root)
 
         self._io.seek(_pos)
-        return self._m_demos_table if hasattr(self, '_m_demos_table') else None
+        return self._m_demos_table if hasattr(self, "_m_demos_table") else None
 
     @property
     def ratings_table(self):
-        if hasattr(self, '_m_ratings_table'):
-            return self._m_ratings_table if hasattr(self, '_m_ratings_table') else None
+        if hasattr(self, "_m_ratings_table"):
+            return self._m_ratings_table if hasattr(self, "_m_ratings_table") else None
 
         _pos = self._io.pos()
         self._io.seek(self.ratings_table_offset)
         self._m_ratings_table = [None] * (self.ratings_entry_number)
         for i in range(self.ratings_entry_number):
             self._m_ratings_table[i] = self._root.RatingsTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_ratings_table if hasattr(self, '_m_ratings_table') else None
+        return self._m_ratings_table if hasattr(self, "_m_ratings_table") else None
 
     @property
     def videos_1_table(self):
-        if hasattr(self, '_m_videos_1_table'):
-            return self._m_videos_1_table if hasattr(self, '_m_videos_1_table') else None
+        if hasattr(self, "_m_videos_1_table"):
+            return (
+                self._m_videos_1_table if hasattr(self, "_m_videos_1_table") else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.videos_1_table_offset)
         self._m_videos_1_table = [None] * (self.videos_1_entry_number)
         for i in range(self.videos_1_entry_number):
             self._m_videos_1_table[i] = self._root.Videos1Table(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_videos_1_table if hasattr(self, '_m_videos_1_table') else None
+        return self._m_videos_1_table if hasattr(self, "_m_videos_1_table") else None
 
     @property
     def recent_recommendations_table(self):
-        if hasattr(self, '_m_recent_recommendations_table'):
-            return self._m_recent_recommendations_table if hasattr(self, '_m_recent_recommendations_table') else None
+        if hasattr(self, "_m_recent_recommendations_table"):
+            return (
+                self._m_recent_recommendations_table
+                if hasattr(self, "_m_recent_recommendations_table")
+                else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.recent_recommendations_table_offset)
-        self._m_recent_recommendations_table = [
-            None] * (self.recent_recommendations_entry_number)
+        self._m_recent_recommendations_table = [None] * (
+            self.recent_recommendations_entry_number
+        )
         for i in range(self.recent_recommendations_entry_number):
-            self._m_recent_recommendations_table[i] = self._root.RecentRecommendationsTable(
-                self._io, self, self._root)
+            self._m_recent_recommendations_table[
+                i
+            ] = self._root.RecentRecommendationsTable(self._io, self, self._root)
 
         self._io.seek(_pos)
-        return self._m_recent_recommendations_table if hasattr(self, '_m_recent_recommendations_table') else None
+        return (
+            self._m_recent_recommendations_table
+            if hasattr(self, "_m_recent_recommendations_table")
+            else None
+        )
 
     @property
     def title_table(self):
-        if hasattr(self, '_m_title_table'):
-            return self._m_title_table if hasattr(self, '_m_title_table') else None
+        if hasattr(self, "_m_title_table"):
+            return self._m_title_table if hasattr(self, "_m_title_table") else None
 
         _pos = self._io.pos()
         self._io.seek(self.title_table_offset)
         self._m_title_table = [None] * (self.title_entry_number)
         for i in range(self.title_entry_number):
-            self._m_title_table[i] = self._root.TitleTable(
-                self._io, self, self._root)
+            self._m_title_table[i] = self._root.TitleTable(self._io, self, self._root)
 
         self._io.seek(_pos)
-        return self._m_title_table if hasattr(self, '_m_title_table') else None
+        return self._m_title_table if hasattr(self, "_m_title_table") else None
 
     @property
     def detailed_ratings_table(self):
-        if hasattr(self, '_m_detailed_ratings_table'):
-            return self._m_detailed_ratings_table if hasattr(self, '_m_detailed_ratings_table') else None
+        if hasattr(self, "_m_detailed_ratings_table"):
+            return (
+                self._m_detailed_ratings_table
+                if hasattr(self, "_m_detailed_ratings_table")
+                else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.detailed_ratings_table_offset)
-        self._m_detailed_ratings_table = [
-            None] * (self.detailed_ratings_entry_number)
+        self._m_detailed_ratings_table = [None] * (self.detailed_ratings_entry_number)
         for i in range(self.detailed_ratings_entry_number):
             self._m_detailed_ratings_table[i] = self._root.DetailedRatingsTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_detailed_ratings_table if hasattr(self, '_m_detailed_ratings_table') else None
+        return (
+            self._m_detailed_ratings_table
+            if hasattr(self, "_m_detailed_ratings_table")
+            else None
+        )
 
     @property
     def popular_videos_table(self):
-        if hasattr(self, '_m_popular_videos_table'):
-            return self._m_popular_videos_table if hasattr(self, '_m_popular_videos_table') else None
+        if hasattr(self, "_m_popular_videos_table"):
+            return (
+                self._m_popular_videos_table
+                if hasattr(self, "_m_popular_videos_table")
+                else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.popular_videos_table_offset)
-        self._m_popular_videos_table = [None] * \
-            (self.popular_videos_entry_number)
+        self._m_popular_videos_table = [None] * (self.popular_videos_entry_number)
         for i in range(self.popular_videos_entry_number):
             self._m_popular_videos_table[i] = self._root.PopularVideosTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_popular_videos_table if hasattr(self, '_m_popular_videos_table') else None
+        return (
+            self._m_popular_videos_table
+            if hasattr(self, "_m_popular_videos_table")
+            else None
+        )
 
     @property
     def title_types_table(self):
-        if hasattr(self, '_m_title_types_table'):
-            return self._m_title_types_table if hasattr(self, '_m_title_types_table') else None
+        if hasattr(self, "_m_title_types_table"):
+            return (
+                self._m_title_types_table
+                if hasattr(self, "_m_title_types_table")
+                else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.title_types_table_offset)
         self._m_title_types_table = [None] * (self.title_types_entry_number)
         for i in range(self.title_types_entry_number):
             self._m_title_types_table[i] = self._root.TitleTypesTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_title_types_table if hasattr(self, '_m_title_types_table') else None
+        return (
+            self._m_title_types_table if hasattr(self, "_m_title_types_table") else None
+        )
 
     @property
     def recommendations_table(self):
-        if hasattr(self, '_m_recommendations_table'):
-            return self._m_recommendations_table if hasattr(self, '_m_recommendations_table') else None
+        if hasattr(self, "_m_recommendations_table"):
+            return (
+                self._m_recommendations_table
+                if hasattr(self, "_m_recommendations_table")
+                else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.recommendations_table_offset)
-        self._m_recommendations_table = [
-            None] * (self.recommendations_entry_number)
+        self._m_recommendations_table = [None] * (self.recommendations_entry_number)
         for i in range(self.recommendations_entry_number):
             self._m_recommendations_table[i] = self._root.RecommendationsTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_recommendations_table if hasattr(self, '_m_recommendations_table') else None
+        return (
+            self._m_recommendations_table
+            if hasattr(self, "_m_recommendations_table")
+            else None
+        )
 
     @property
     def new_video_table(self):
-        if hasattr(self, '_m_new_video_table'):
-            return self._m_new_video_table if hasattr(self, '_m_new_video_table') else None
+        if hasattr(self, "_m_new_video_table"):
+            return (
+                self._m_new_video_table if hasattr(self, "_m_new_video_table") else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.new_video_table_offset)
         self._m_new_video_table = [None] * (self.new_video_entry_number)
         for i in range(self.new_video_entry_number):
             self._m_new_video_table[i] = self._root.NewVideoTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_new_video_table if hasattr(self, '_m_new_video_table') else None
+        return self._m_new_video_table if hasattr(self, "_m_new_video_table") else None
 
     @property
     def new_title_table(self):
-        if hasattr(self, '_m_new_title_table'):
-            return self._m_new_title_table if hasattr(self, '_m_new_title_table') else None
+        if hasattr(self, "_m_new_title_table"):
+            return (
+                self._m_new_title_table if hasattr(self, "_m_new_title_table") else None
+            )
 
         _pos = self._io.pos()
         self._io.seek(self.new_title_table_offset)
         self._m_new_title_table = [None] * (self.new_title_entry_number)
         for i in range(self.new_title_entry_number):
             self._m_new_title_table[i] = self._root.NewTitleTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_new_title_table if hasattr(self, '_m_new_title_table') else None
+        return self._m_new_title_table if hasattr(self, "_m_new_title_table") else None
 
     @property
     def company_table(self):
-        if hasattr(self, '_m_company_table'):
-            return self._m_company_table if hasattr(self, '_m_company_table') else None
+        if hasattr(self, "_m_company_table"):
+            return self._m_company_table if hasattr(self, "_m_company_table") else None
 
         _pos = self._io.pos()
         self._io.seek(self.company_table_offset)
         self._m_company_table = [None] * (self.company_entry_number)
         for i in range(self.company_entry_number):
             self._m_company_table[i] = self._root.CompanyTable(
-                self._io, self, self._root)
+                self._io, self, self._root
+            )
 
         self._io.seek(_pos)
-        return self._m_company_table if hasattr(self, '_m_company_table') else None
-
+        return self._m_company_table if hasattr(self, "_m_company_table") else None

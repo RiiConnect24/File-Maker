@@ -35,16 +35,28 @@ nintendo_channel_file["demos_entry_number"] = file.demos_entry_number
 nintendo_channel_file["demos_table_offset"] = file.demos_table_offset
 nintendo_channel_file["unknown_5"] = file.unknown_5
 nintendo_channel_file["unknown_6"] = file.unknown_6
-nintendo_channel_file["recommendations_entry_number"] = file.recommendations_entry_number
-nintendo_channel_file["recommendations_table_offset"] = file.recommendations_table_offset
+nintendo_channel_file[
+    "recommendations_entry_number"
+] = file.recommendations_entry_number
+nintendo_channel_file[
+    "recommendations_table_offset"
+] = file.recommendations_table_offset
 nintendo_channel_file["unknown_7"] = file.unknown_7
-nintendo_channel_file["recent_recommendations_entry_number"] = file.recent_recommendations_entry_number
-nintendo_channel_file["recent_recommendations_table_offset"] = file.recent_recommendations_table_offset
+nintendo_channel_file[
+    "recent_recommendations_entry_number"
+] = file.recent_recommendations_entry_number
+nintendo_channel_file[
+    "recent_recommendations_table_offset"
+] = file.recent_recommendations_table_offset
 nintendo_channel_file["unknown_8"] = file.unknown_8
 nintendo_channel_file["popular_videos_entry_number"] = file.popular_videos_entry_number
 nintendo_channel_file["popular_videos_table_offset"] = file.popular_videos_table_offset
-nintendo_channel_file["detailed_ratings_entry_number"] = file.detailed_ratings_entry_number
-nintendo_channel_file["detailed_ratings_table_offset"] = file.detailed_ratings_table_offset
+nintendo_channel_file[
+    "detailed_ratings_entry_number"
+] = file.detailed_ratings_entry_number
+nintendo_channel_file[
+    "detailed_ratings_table_offset"
+] = file.detailed_ratings_table_offset
 nintendo_channel_file["last_update"] = file.last_update
 nintendo_channel_file["unknown_9"] = file.unknown_9
 nintendo_channel_file["dl_url_ids"] = file.dl_url_ids
@@ -56,7 +68,7 @@ nintendo_channel_file["ratings_table"] = {}
 
 for f in file.ratings_table:
     nintendo_channel_file["ratings_table"][i] = {}
-    nintendo_channel_file["ratings_table"][i]["rating_id"] = f.rating_id 
+    nintendo_channel_file["ratings_table"][i]["rating_id"] = f.rating_id
     nintendo_channel_file["ratings_table"][i]["unknown"] = f.unknown
     nintendo_channel_file["ratings_table"][i]["age"] = f.age
     nintendo_channel_file["ratings_table"][i]["unknown2"] = f.unknown2
@@ -187,7 +199,9 @@ nintendo_channel_file["recommendations_table"] = {}
 
 for f in file.recommendations_table:
     nintendo_channel_file["recommendations_table"][i] = {}
-    nintendo_channel_file["recommendations_table"][i]["recommendation_title_offset"] = f.recommendation_title_offset
+    nintendo_channel_file["recommendations_table"][i][
+        "recommendation_title_offset"
+    ] = f.recommendation_title_offset
 
     i += 1
 
@@ -195,7 +209,9 @@ nintendo_channel_file["recent_recommendations_table"] = {}
 
 for f in file.recent_recommendations_table:
     nintendo_channel_file["recent_recommendations_table"][i] = {}
-    nintendo_channel_file["recent_recommendations_table"][i]["recent_recommendation_title_offset"] = f.recent_recommendation_title_offset
+    nintendo_channel_file["recent_recommendations_table"][i][
+        "recent_recommendation_title_offset"
+    ] = f.recent_recommendation_title_offset
     nintendo_channel_file["recent_recommendations_table"][i]["unknown"] = f.unknown
 
     i += 1
