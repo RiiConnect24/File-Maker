@@ -187,35 +187,65 @@ class MakeInfo:
 
                 # Get the game type
                 game_type = {
-                    None: 0x01,
-                    "Channel": 0x02,
-                    "VC-NES": 0x03,
-                    "VC-SNES": 0x04,
-                    "VC-N64": 0x05,
-                    "VC-SMS": 0x0C,
-                    "VC-MD": 0x07,
-                    "VC-PCE": 0x06,
-                    "VC-C64": 0x0D,
-                    "VC-NEOGEO": 0x08,
-                    "VC-Arcade": 0x0E,
-                    "WiiWare": 0x0B,
-                    "DS": 0x0A,
-                    "DSi": 0x10,
-                    "DSiWare": 0x11,
-                    "3DS": 0x12,
-                    "3DSWare": 0x13,
-                    "New3DS": 0x12,
-                    "New3DSWare": 0x13,
-                    "WiiU": 0x15,
-                    "eShop": 0x15,
-                    "Switch": 0x17,
+                    "3DS": {
+                        None: 0x12,
+                        "3DS": 0x12,
+                        "3DSWare": 0x13,
+                        "New3DS": 0x18,
+                        "New3DSWare": 0x19,
+                        "VC-NES": 0x1A,
+                        "VC-GB": 0x1B,
+                        "VC-GBC": 0x1C,
+                        "VC-GBA": 0x1D,
+                        "VC-GG": 0x1E,
+                    },
+                    "NDS": {
+                        None: 0x0A,
+                        "DS": 0x0A,
+                        "DSi": 0x10,
+                        "DSiWare": 0x11,
+                    },
+                    "Switch": {
+                        None: 0x17,
+                        "Switch": 0x17,
+                        "eShop": 0x27,
+                    },
+                    "Wii": {
+                        None: 0x01,
+                        "Wii": 0x01,
+                        "Channel": 0x02,
+                        "WiiWare": 0x0B,
+                        "VC-NES": 0x03,
+                        "VC-SNES": 0x04,
+                        "VC-N64": 0x05,
+                        "VC-SMS": 0x0C,
+                        "VC-MD": 0x07,
+                        "VC-PCE": 0x06,
+                        "VC-NEOGEO": 0x08,
+                        "VC-Arcade": 0x0E,
+                        "VC-C64": 0x0D,
+                        "VC-MSX": 0x28,
+                    },
+                    "WiiU": {
+                        None: 0x15,
+                        "WiiU": 0x15,
+                        "eShop": 0x16,
+                        "VC-NES": 0x1F,
+                        "VC-SNES": 0x20,
+                        "VC-N64": 0x21,
+                        "VC-GBA": 0x22,
+                        "VC-DS": 0x23,
+                        "VC-PCE": 0x24,
+                        "VC-MSX": 0x25,
+                        "Channel": 0x26,
+                    }
                 }  # The XML returns None for disc games when we query the type.
-                if s.find("type").text in game_type:
+                if s.find("type").text in game_type[sys.argv[1]]:
                     if s.find("type").text == "WiiU" or s.find("type").text == "Switch":
                         self.header["platform_flag"] = u8(0)
                     else:
                         self.header["platform_flag"] = u8(
-                            game_type[s.find("type").text]
+                            game_type[sys.argv[1]][s.find("type").text]
                         )
                 else:
                     print("Could not find game type")
