@@ -12,6 +12,7 @@ import binascii
 import collections
 import json
 import random
+import re
 import sys
 import textwrap
 import time
@@ -667,6 +668,8 @@ class Parse(News):
             "",
         )
 
+        self.article = re.sub("\n\nHub peek embed ((.*)) - Compressed layout ((.*))", "", self.article)
+
         if self.article[-2:] == "\n":
             self.article = self.article[:-2]
 
@@ -701,6 +704,8 @@ class Parse(News):
 
         if " (AP)" in self.article:
             self.location = self.article.split(" (AP)")[0].split("\u2014")[0].split("\n")[-1]
+        elif "Live Updates" in self.headline:
+            self.location = self.article.split(" \u2014")[0]
 
     def parse_reuters(self):
         try:
