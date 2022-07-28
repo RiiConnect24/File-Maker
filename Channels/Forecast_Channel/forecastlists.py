@@ -35115,7 +35115,7 @@ weathercities105["Aranjuez"] = [
         "Madrid",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c77fd7101030000",
+    "1c77fd7001030000",
 ]
 weathercities105["Buitrago del Lozoya"] = [
     [
@@ -35137,7 +35137,7 @@ weathercities105["Buitrago del Lozoya"] = [
         "Madrid",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d25fd6b01030000",
+    "1d25fd6a01030000",
 ]
 weathercities105["San Martín de Valdeiglesias"] = [
     [
@@ -35173,7 +35173,7 @@ weathercities105["Seville"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a95fbbc04030000",
+    "1a96fbbf04030000",
 ]
 weathercities105["Almería"] = [
     ["アルメリア", "Almería", "Almería", "Almería", "Almería", "Almería", "Almería"],
@@ -35187,7 +35187,7 @@ weathercities105["Almería"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a31fe4101030000",
+    "1a31fe4001030000",
 ]
 weathercities105["Cádiz"] = [
     ["カディス", "Cádiz", "Cádiz", "Cadix", "Cádiz", "Cadice", "Cádiz"],
@@ -35201,7 +35201,7 @@ weathercities105["Cádiz"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "19f8fb8801030000",
+    "19f8fb8901030000",
 ]
 weathercities105["Algeciras"] = [
     [
@@ -35223,7 +35223,7 @@ weathercities105["Algeciras"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "19b1fc2001030000",
+    "19b3fc1f01030000",
 ]
 weathercities105["Córdoba"] = [
     ["コルドバ", "Córdoba", "Córdoba", "Cordoue", "Córdoba", "Cordova", "Córdoba"],
@@ -35237,7 +35237,7 @@ weathercities105["Córdoba"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1af0fc9c01030000",
+    "1af1fc9a01030000",
 ]
 weathercities105["Granada"] = [
     ["グラナダ", "Granada", "Granada", "Grenade", "Granada", "Granada", "Granada"],
@@ -35251,7 +35251,7 @@ weathercities105["Granada"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a6efd7101030000",
+    "1a6ffd7101030000",
 ]
 weathercities105["Motril"] = [
     ["モトリル", "Motril", "Motril", "Motril", "Motril", "Motril", "Motril"],
@@ -35265,7 +35265,7 @@ weathercities105["Motril"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a22fd8001030000",
+    "1a21fd8001030000",
 ]
 weathercities105["Huelva"] = [
     ["ウェルバ", "Huelva", "Huelva", "Huelva", "Huelva", "Huelva", "Huelva"],
@@ -35279,7 +35279,7 @@ weathercities105["Huelva"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a7dfb1101030000",
+    "1a7ffb1101030000",
 ]
 weathercities105["Jaén"] = [
     ["ハエン", "Jaén", "Jaén", "Jaén", "Jaén", "Jaén", "Jaén"],
@@ -35293,7 +35293,7 @@ weathercities105["Jaén"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1adbfd4f01030000",
+    "1addfd4f01030000",
 ]
 weathercities105["Linares"] = [
     ["リナレス", "Linares", "Linares", "Linares", "Linares", "Linares", "Linares"],
@@ -35307,7 +35307,7 @@ weathercities105["Linares"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b17fd6b01030000",
+    "1b17fd6a01030000",
 ]
 weathercities105["Málaga"] = [
     ["マラガ", "Málaga", "Málaga", "Málaga", "Málaga", "Málaga", "Málaga"],
@@ -35335,7 +35335,7 @@ weathercities105["Marbella"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "19f6fc8701030000",
+    "19f6fc8801030000",
 ]
 weathercities105["Écija"] = [
     ["エシハ", "Écija", "Écija", "Écija", "Écija", "Écija", "Écija"],
@@ -35349,7 +35349,7 @@ weathercities105["Écija"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ab1fc6501030000",
+    "1ab2fc6301030000",
 ]
 weathercities105["Lora del Río"] = [
     [
@@ -35371,7 +35371,7 @@ weathercities105["Lora del Río"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ac6fc1301030000",
+    "1ac6fc1201030000",
 ]
 weathercities105["Alanís"] = [
     ["アラニス", "Alanís", "Alanís", "Alanís", "Alanís", "Alanís", "Alanís"],
@@ -35385,7 +35385,7 @@ weathercities105["Alanís"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b0cfbf101030000",
+    "1b0cfbf001030000",
 ]
 weathercities105["Morón de la Frontera"] = [
     [
@@ -35421,7 +35421,7 @@ weathercities105["Lebrija"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a40fbaf01030000",
+    "1a41fbae01030000",
 ]
 weathercities105["Carboneras"] = [
     [
@@ -35446,7 +35446,7 @@ weathercities105["Carboneras"] = [
     "1a4ffea801030000",
 ]
 weathercities105["Adra"] = [
-    ["アドラ", "Adra", "Adra", "Abdère", "Adra", "Abdera", "Abdera, Spain"],
+    ["アドラ", "Adra", "Adra", "Abdère", "Adra", "Abdera", "Abdera"],
     [
         "アンダルシーア州",
         "Andalusia",
@@ -35457,7 +35457,7 @@ weathercities105["Adra"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a22fddb01030000",
+    "1a21fddb01030000",
 ]
 weathercities105["Albanchez"] = [
     [
@@ -35493,7 +35493,7 @@ weathercities105["Barbate"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "19bbfbcb01030000",
+    "19bcfbca01030000",
 ]
 weathercities105["Ubrique"] = [
     ["ウブリケ", "Ubrique", "Ubrique", "Ubrique", "Ubrique", "Ubrique", "Ubrique"],
@@ -35507,7 +35507,7 @@ weathercities105["Ubrique"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a14fc2201030000",
+    "1a14fc2101030000",
 ]
 weathercities105["Montoro"] = [
     ["モントロ", "Montoro", "Montoro", "Montoro", "Montoro", "Montoro", "Montoro"],
@@ -35543,7 +35543,7 @@ weathercities105["Pozoblanco"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b49fc8f01030000",
+    "1b4afc8e01030000",
 ]
 weathercities105["Baza"] = [
     ["バーサ", "Baza", "Baza", "Baza", "Baza", "Baza", "Baza"],
@@ -35557,7 +35557,7 @@ weathercities105["Baza"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1aa8fe0801030000",
+    "1aa8fe0701030000",
 ]
 weathercities105["Huéscar"] = [
     ["ウエスカル", "Huéscar", "Huéscar", "Huéscar", "Huéscar", "Huéscar", "Huéscar"],
@@ -35571,7 +35571,7 @@ weathercities105["Huéscar"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ae3fe3201030000",
+    "1ae2fe3201030000",
 ]
 weathercities105["Guadix"] = [
     ["グアディクス", "Guadix", "Guadix", "Guadix", "Guadix", "Guadix", "Guadix"],
@@ -35585,7 +35585,7 @@ weathercities105["Guadix"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a86fdc601030000",
+    "1a86fdc501030000",
 ]
 weathercities105["Santa Olalla del Cala"] = [
     [
@@ -35607,7 +35607,7 @@ weathercities105["Santa Olalla del Cala"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1af4fb9401030000",
+    "1af4fb9301030000",
 ]
 weathercities105["Cabezas Rubias"] = [
     [
@@ -35629,7 +35629,7 @@ weathercities105["Cabezas Rubias"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ad3faf701030000",
+    "1ad3faf601030000",
 ]
 weathercities105["Encinasola"] = [
     [
@@ -35665,7 +35665,7 @@ weathercities105["Nerva"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1acdfb5801030000",
+    "1acefb5801030000",
 ]
 weathercities105["Úbeda"] = [
     ["ウベダ", "Úbeda", "Úbeda", "Úbeda", "Úbeda", "Úbeda", "Úbeda"],
@@ -35701,7 +35701,7 @@ weathercities105["Alcalá la Real"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1aa2fd3701030000",
+    "1aa4fd3601030000",
 ]
 weathercities105["Beas de Segura"] = [
     [
@@ -35745,25 +35745,25 @@ weathercities105["Campillos"] = [
         "Andalusië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a58fc8c01030000",
+    "1a58fc8b01030000",
 ]
 weathercities105["Zaragoza"] = [
     ["サラゴサ", "Zaragoza", "Saragossa", "Saragosse", "Zaragoza", "Saragozza", "Zaragoza"],
     ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d9eff6204030000",
+    "1d9dff5f04030000",
 ]
 weathercities105["Huesca"] = [
     ["ウエスカ", "Huesca", "Huesca", "Huesca", "Huesca", "Huesca", "Huesca"],
     ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1df6ffb601030000",
+    "1df5ffb601030000",
 ]
 weathercities105["Teruel"] = [
     ["テルエル", "Teruel", "Teruel", "Teruel", "Teruel", "Teruel", "Teruel"],
     ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1cafff3801030000",
+    "1cb0ff3701030000",
 ]
 weathercities105["Calatayud"] = [
     [
@@ -35777,7 +35777,7 @@ weathercities105["Calatayud"] = [
     ],
     ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d67fed701030000",
+    "1d68fed501030000",
 ]
 weathercities105["Oviedo"] = [
     ["オビエド", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo"],
@@ -35791,7 +35791,7 @@ weathercities105["Oviedo"] = [
         "Asturië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ed6fbda02030000",
+    "1ed5fbd802030000",
 ]
 weathercities105["Gijón"] = [
     ["ヒホン", "Gijón", "Gijón", "Gijón", "Gijón", "Gijón", "Gijón"],
@@ -35805,7 +35805,7 @@ weathercities105["Gijón"] = [
         "Asturië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ef6fbfa01030000",
+    "1ef4fbfa01030000",
 ]
 weathercities105["Aviles"] = [
     ["アビレス", "Aviles", "Avilés", "Avilés", "Avilés", "Avilés", "Avilés"],
@@ -35819,7 +35819,7 @@ weathercities105["Aviles"] = [
         "Asturië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ef8fbcb01030000",
+    "1ef9fbca01030000",
 ]
 weathercities105["Grandas"] = [
     [
@@ -35841,7 +35841,7 @@ weathercities105["Grandas"] = [
         "Asturië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ebbfb1e01030000",
+    "1ebbfb1d01030000",
 ]
 weathercities105["Luarca"] = [
     ["ルアルカ", "Luarca", "Ḷḷuarca", "Luarca", "Luarca", "Luarca", "Luarca"],
@@ -35899,7 +35899,7 @@ weathercities105["Palma"] = [
         "Balearen",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c2301e004030000",
+    "1c2301e204030000",
 ]
 weathercities105["Ciutadella de Menorca"] = [
     [
@@ -35921,7 +35921,7 @@ weathercities105["Ciutadella de Menorca"] = [
         "Balearen",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c7502b501030000",
+    "1c7102ba01030000",
 ]
 weathercities105["Mahón"] = [
     ["マオン", "Mahón", "Mahón", "Port Mahon", "Maó-Mahón", "Mahón", "Mahón"],
@@ -35935,7 +35935,7 @@ weathercities105["Mahón"] = [
         "Balearen",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c5c030601030000",
+    "1c5d030701030000",
 ]
 weathercities105["Ibiza"] = [
     ["イビサ", "Ibiza", "Ibiza", "Ibiza", "Eivissa", "Ivissa", "Ibiza-stad"],
@@ -35963,7 +35963,7 @@ weathercities105["Manacor"] = [
         "Balearen",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c22024601030000",
+    "1c23024801030000",
 ]
 weathercities105["Municipality of Las Palmas"] = [
     [
@@ -35985,7 +35985,7 @@ weathercities105["Municipality of Las Palmas"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "13fff50702030000",
+    "13fbf50102030000",
 ]
 weathercities105["Santa Cruz de Tenerife"] = [
     [
@@ -36007,7 +36007,7 @@ weathercities105["Santa Cruz de Tenerife"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "143cf47204030000",
+    "143df47204030000",
 ]
 weathercities105["Arona"] = [
     ["アロナ", "Arona", "Arona", "Arona", "Arona", "Arona", "Arona"],
@@ -36021,7 +36021,7 @@ weathercities105["Arona"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "13f8f42501030000",
+    "13fbf42401030000",
 ]
 weathercities105["Santa Cruz de La Palma"] = [
     [
@@ -36043,7 +36043,7 @@ weathercities105["Santa Cruz de La Palma"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1465f35e01030000",
+    "1465f35f01030000",
 ]
 weathercities105["San Sebastián de La Gomera"] = [
     [
@@ -36065,7 +36065,7 @@ weathercities105["San Sebastián de La Gomera"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "13f9f3d601030000",
+    "13faf3d601030000",
 ]
 weathercities105["La Frontera, Santa Cruz de Tenerife"] = [
     [
@@ -36087,7 +36087,7 @@ weathercities105["La Frontera, Santa Cruz de Tenerife"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "13bcf33101030000",
+    "13bcf33201030000",
 ]
 weathercities105["Puerto del Rosario"] = [
     [
@@ -36109,7 +36109,7 @@ weathercities105["Puerto del Rosario"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1443f62401030000",
+    "1444f62501030000",
 ]
 weathercities105["Arrecife"] = [
     ["アレシーフェ", "Arrecife", "Arrecife", "Arrecife", "Arrecife", "Arrecife", "Arrecife"],
@@ -36123,7 +36123,7 @@ weathercities105["Arrecife"] = [
         "Canarische Eilanden",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1497f65e01030000",
+    "1498f65d01030000",
 ]
 weathercities105["Santander"] = [
     [
@@ -36145,7 +36145,7 @@ weathercities105["Santander"] = [
         "Cantabrië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ee8fd4c02030000",
+    "1ee8fd4902030000",
 ]
 weathercities105["Reinosa"] = [
     ["レイノサ", "Reinosa", "Reinosa", "Reinosa", "Reinosa", "Reinosa", "Reinosa"],
@@ -36159,7 +36159,7 @@ weathercities105["Reinosa"] = [
         "Cantabrië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e94fd1001030000",
+    "1e93fd0f01030000",
 ]
 weathercities105["Comillas"] = [
     ["コミージャス", "Comillas", "Comillas", "Comillas", "Comillas", "Comillas", "Comillas"],
@@ -36173,7 +36173,7 @@ weathercities105["Comillas"] = [
         "Cantabrië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1edafcf401030000",
+    "1edafcf301030000",
 ]
 weathercities105["Toledo"] = [
     ["トレド", "Toledo", "Toledo", "Tolède", "Toledo", "Toledo", "Toledo"],
@@ -36187,7 +36187,7 @@ weathercities105["Toledo"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c57fd2402030000",
+    "1c58fd2302030000",
 ]
 weathercities105["Albacete"] = [
     ["アルバセテ", "Albacete", "Albacete", "Albacete", "Albacete", "Albacete", "Albacete"],
@@ -36201,7 +36201,7 @@ weathercities105["Albacete"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bb9feaf01030000",
+    "1bbafeae01030000",
 ]
 weathercities105["Ciudad Real"] = [
     [
@@ -36245,7 +36245,7 @@ weathercities105["Puertollano"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b82fd1501030000",
+    "1b83fd1501030000",
 ]
 weathercities105["Cuenca"] = [
     ["クエンカ", "Cuenca", "Cuenca", "Cuenca", "Cuenca", "Cuenca", "Cuenca"],
@@ -36259,7 +36259,7 @@ weathercities105["Cuenca"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c7efe7c01030000",
+    "1c7efe7b01030000",
 ]
 weathercities105["Guadalajara"] = [
     [
@@ -36303,7 +36303,7 @@ weathercities105["Talavera de la Reina"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c69fc9101030000",
+    "1c6bfc9101030000",
 ]
 weathercities105["Alcaraz"] = [
     ["アルカラス", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz"],
@@ -36331,7 +36331,7 @@ weathercities105["Hellín"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b61fecc01030000",
+    "1b61fecb01030000",
 ]
 weathercities105["Almansa"] = [
     ["アルマンサ", "Almansa", "Almansa", "Almansa", "Almansa", "Almansa", "Almansa"],
@@ -36345,7 +36345,7 @@ weathercities105["Almansa"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ba3ff3901030000",
+    "1ba4ff3801030000",
 ]
 weathercities105["Alcázar de San Juan"] = [
     [
@@ -36367,7 +36367,7 @@ weathercities105["Alcázar de San Juan"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c02fdb901030000",
+    "1c02fdb801030000",
 ]
 weathercities105["Tomelloso"] = [
     [
@@ -36389,7 +36389,7 @@ weathercities105["Tomelloso"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bd7fddb01030000",
+    "1bd8fdda01030000",
 ]
 weathercities105["Retuerta del Bullaque"] = [
     [
@@ -36411,7 +36411,7 @@ weathercities105["Retuerta del Bullaque"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c0ffcde01030000",
+    "1c10fcdd01030000",
 ]
 weathercities105["Puebla de Don Rodrigo"] = [
     [
@@ -36433,7 +36433,7 @@ weathercities105["Puebla de Don Rodrigo"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bcbfcb801030000",
+    "1bcafcb801030000",
 ]
 weathercities105["Cañaveras"] = [
     [
@@ -36455,7 +36455,7 @@ weathercities105["Cañaveras"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1cb2fe4c01030000",
+    "1cb3fe4c01030000",
 ]
 weathercities105["San Clemente, Cuenca"] = [
     [
@@ -36477,7 +36477,7 @@ weathercities105["San Clemente, Cuenca"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c04fe4701030000",
+    "1c04fe4601030000",
 ]
 weathercities105["Tarancón"] = [
     ["タランコン", "Tarancón", "Tarancón", "Tarancón", "Tarancón", "Tarancón", "Tarancón"],
@@ -36505,7 +36505,7 @@ weathercities105["Iniesta, Cuenca"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c0cfec401030000",
+    "1c0bfec201030000",
 ]
 weathercities105["Sigüenza"] = [
     ["シグエンサ", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza"],
@@ -36519,7 +36519,7 @@ weathercities105["Sigüenza"] = [
         "Kastilië-La Mancha",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d33fe2001030000",
+    "1d34fe1f01030000",
 ]
 weathercities105["Valladolid"] = [
     [
@@ -36541,7 +36541,7 @@ weathercities105["Valladolid"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d9cfca502030000",
+    "1d9efca402030000",
 ]
 weathercities105["Burgos"] = [
     ["ブルゴス", "Burgos", "Burgos", "Burgos", "Burgos", "Burgos", "Burgos"],
@@ -36555,7 +36555,7 @@ weathercities105["Burgos"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e1bfd6001030000",
+    "1e1dfd6101030000",
 ]
 weathercities105["Aranda de Duero"] = [
     [
@@ -36577,7 +36577,7 @@ weathercities105["Aranda de Duero"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1da1fd6201030000",
+    "1da1fd6101030000",
 ]
 weathercities105["Miranda de Ebro"] = [
     [
@@ -36599,7 +36599,7 @@ weathercities105["Miranda de Ebro"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e5afde701030000",
+    "1e5afde801030000",
 ]
 weathercities105["Salamanca"] = [
     [
@@ -36621,7 +36621,7 @@ weathercities105["Salamanca"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d21fbf901030000",
+    "1d22fbf901030000",
 ]
 weathercities105["León"] = [
     ["レオン", "León", "León", "León", "León", "León", "León"],
@@ -36635,7 +36635,7 @@ weathercities105["León"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e4bfc0b01030000",
+    "1e4afc0a01030000",
 ]
 weathercities105["Ponferrada"] = [
     [
@@ -36657,7 +36657,7 @@ weathercities105["Ponferrada"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e41fb5001030000",
+    "1e41fb4f01030000",
 ]
 weathercities105["Palencia"] = [
     ["パレンシア", "Palencia", "Palencia", "Palencia", "Palencia", "Palencia", "Palencia"],
@@ -36671,7 +36671,7 @@ weathercities105["Palencia"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ddffcc701030000",
+    "1ddffcc801030000",
 ]
 weathercities105["Zamora"] = [
     ["サモラ", "Zamora", "Zamora", "Zamora", "Zamora", "Zamora", "Zamora"],
@@ -36685,7 +36685,7 @@ weathercities105["Zamora"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d83fbec01030000",
+    "1d83fbea01030000",
 ]
 weathercities105["Segovia"] = [
     ["セゴビア", "Segovia", "Segovia", "Ségovie", "Segovia", "Segovia", "Segovia"],
@@ -36699,7 +36699,7 @@ weathercities105["Segovia"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d1dfd1301030000",
+    "1d1dfd1501030000",
 ]
 weathercities105["Ávila"] = [
     ["アビラ", "Ávila", "Ávila", "Ávila", "Ávila", "Ávila", "Ávila"],
@@ -36713,7 +36713,7 @@ weathercities105["Ávila"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ce9fca901030000",
+    "1ce9fcac01030000",
 ]
 weathercities105["Soria"] = [
     ["ソリア", "Soria", "Soria", "Soria", "Soria", "Soria", "Soria"],
@@ -36727,7 +36727,7 @@ weathercities105["Soria"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1db1fe4101030000",
+    "1db3fe3d01030000",
 ]
 weathercities105["Arévalo"] = [
     ["アレバロ", "Arévalo", "Arévalo", "Arévalo", "Arévalo", "Arévalo", "Arévalo"],
@@ -36741,7 +36741,7 @@ weathercities105["Arévalo"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d33fca501030000",
+    "1d32fca501030000",
 ]
 weathercities105["Arenas de San Pedro"] = [
     [
@@ -36763,7 +36763,7 @@ weathercities105["Arenas de San Pedro"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c97fc6301030000",
+    "1c98fc6301030000",
 ]
 weathercities105["Burgo de Osma-Ciudad de Osma"] = [
     [
@@ -36799,7 +36799,7 @@ weathercities105["Cuéllar"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d70fcef01030000",
+    "1d70fcf001030000",
 ]
 weathercities105["Castronuño"] = [
     [
@@ -36821,7 +36821,7 @@ weathercities105["Castronuño"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d6efc4301030000",
+    "1d6efc4201030000",
 ]
 weathercities105["Medina de Rioseco"] = [
     [
@@ -36843,7 +36843,7 @@ weathercities105["Medina de Rioseco"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1dc8fc6b01030000",
+    "1dc8fc6a01030000",
 ]
 weathercities105["Salas de los Infantes"] = [
     [
@@ -36945,7 +36945,7 @@ weathercities105["Ciudad Rodrigo"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1cdffb5c01030000",
+    "1cdefb5c01030000",
 ]
 weathercities105["Villablino"] = [
     [
@@ -36967,7 +36967,7 @@ weathercities105["Villablino"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e88fb8201030000",
+    "1e89fb8101030000",
 ]
 weathercities105["Astorga"] = [
     ["アストルガ", "Astorga", "Astorga", "Astorga", "Astorga", "Astorga", "Astorga"],
@@ -36981,7 +36981,7 @@ weathercities105["Astorga"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e31fbb201030000",
+    "1e30fbb301030000",
 ]
 weathercities105["Sahagún"] = [
     ["サアグン", "Sahagún", "Sahagún", "Sahagún", "Sahagún", "Sahagún", "Sahagún"],
@@ -37009,7 +37009,7 @@ weathercities105["Riaño"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e8efc7201030000",
+    "1e8ffc7101030000",
 ]
 weathercities105["Cervera de Pisuerga"] = [
     [
@@ -37031,7 +37031,7 @@ weathercities105["Cervera de Pisuerga"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e7afccf01030000",
+    "1e7bfccd01030000",
 ]
 weathercities105["Benavente"] = [
     [
@@ -37075,7 +37075,7 @@ weathercities105["Puebla de Sanabria"] = [
         "Kastilië en León",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1de8fb4a01030000",
+    "1de7fb4901030000",
 ]
 weathercities105["Barcelona"] = [
     [
@@ -37097,7 +37097,7 @@ weathercities105["Barcelona"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d6d018b04030000",
+    "1d6e018a04030000",
 ]
 weathercities105["Girona"] = [
     ["ジローナ", "Girona", "Girona", "Gérone", "Girona", "Girona", "Gerona"],
@@ -37111,7 +37111,7 @@ weathercities105["Girona"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1dd9020101030000",
+    "1dda020101030000",
 ]
 weathercities105["Lleida"] = [
     ["レリダ", "Lleida", "Lleida", "Lérida", "Lleida", "Lleida", "Lleida"],
@@ -37125,7 +37125,7 @@ weathercities105["Lleida"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d98007301030000",
+    "1d98007001030000",
 ]
 weathercities105["Tarragona"] = [
     [
@@ -37147,7 +37147,7 @@ weathercities105["Tarragona"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d3d00e301030000",
+    "1d3d00e201030000",
 ]
 weathercities105["Tortosa"] = [
     ["トルトサ", "Tortosa", "Tortosa", "Tortosa", "Tortosa", "Tortosa", "Tortosa"],
@@ -37175,7 +37175,7 @@ weathercities105["Vic"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1dd1019901030000",
+    "1dd1019a01030000",
 ]
 weathercities105["Calella"] = [
     ["Calella", "Calella", "Calella", "Calella", "Calella", "Calella", "Calella"],
@@ -37189,7 +37189,7 @@ weathercities105["Calella"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d9801e501030000",
+    "1d9701e301030000",
 ]
 weathercities105["Setcases"] = [
     [
@@ -37225,7 +37225,7 @@ weathercities105["Figueres"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e0e021c01030000",
+    "1e0e021a01030000",
 ]
 weathercities105["Tàrrega"] = [
     ["タラガ", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega"],
@@ -37239,7 +37239,7 @@ weathercities105["Tàrrega"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d9e00ce01030000",
+    "1d9d00cf01030000",
 ]
 weathercities105["El Pont de Suert"] = [
     [
@@ -37261,7 +37261,7 @@ weathercities105["El Pont de Suert"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e27008601030000",
+    "1e28008601030000",
 ]
 weathercities105["Les, Catalonia"] = [
     ["レ", "Les, Catalonia", "Les", "Catalogne", "Les", "Les", "Les"],
@@ -37289,7 +37289,7 @@ weathercities105["Solsona"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ddc011401030000",
+    "1ddc011301030000",
 ]
 weathercities105["Artesa de Segre"] = [
     [
@@ -37311,7 +37311,7 @@ weathercities105["Artesa de Segre"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1dcb00be01030000",
+    "1dca00be01030000",
 ]
 weathercities105["Ascó"] = [
     ["アスコー", "Ascó", "Ascó", "Ascó", "Ascò", "Ascó", "Ascó"],
@@ -37339,7 +37339,7 @@ weathercities105["Manresa"] = [
         "Catalonië",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1dab014b01030000",
+    "1dac014b01030000",
 ]
 weathercities105["Valencian Community"] = [
     [
@@ -37361,7 +37361,7 @@ weathercities105["Valencian Community"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c11ffbe04030000",
+    "1c13ff7704030000",
 ]
 weathercities105["Gandia"] = [
     ["ガンディア", "Gandia", "Gandia", "Gandie", "Gandia", "Gandia", "Gandia"],
@@ -37375,7 +37375,7 @@ weathercities105["Gandia"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bb6ffe001030000",
+    "1bb5ffdf01030000",
 ]
 weathercities105["Municipality of Alicante"] = [
     [
@@ -37397,7 +37397,7 @@ weathercities105["Municipality of Alicante"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b44ffa801030000",
+    "1b44ffa701030000",
 ]
 weathercities105["Municipality of Castelló de la Plana"] = [
     [
@@ -37419,7 +37419,7 @@ weathercities105["Municipality of Castelló de la Plana"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c6efffa01030000",
+    "1c72fff601030000",
 ]
 weathercities105["Benidorm"] = [
     ["ベニドルム", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm"],
@@ -37433,7 +37433,7 @@ weathercities105["Benidorm"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b68ffe901030000",
+    "1b68ffea01030000",
 ]
 weathercities105["Villena"] = [
     ["ビリェナ", "Villena", "Villena", "Villena", "Villena", "Villena", "Villena"],
@@ -37447,7 +37447,7 @@ weathercities105["Villena"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b78ff6301030000",
+    "1b78ff6401030000",
 ]
 weathercities105["Xèrica"] = [
     ["Xèrica", "Xèrica", "Jérica", "Jérica", "Jérica", "Jérica", "Jérica"],
@@ -37461,7 +37461,7 @@ weathercities105["Xèrica"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c61ff9901030000",
+    "1c61ff9801030000",
 ]
 weathercities105["Vinaròs"] = [
     ["ビナロス", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs"],
@@ -37475,7 +37475,7 @@ weathercities105["Vinaròs"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1cc7005601030000",
+    "1cc6005601030000",
 ]
 weathercities105["Morella"] = [
     ["モレリャ", "Morella", "Morella", "Morella", "Morella", "Morella", "Morella"],
@@ -37539,7 +37539,7 @@ weathercities105["Aras de los Olmos"] = [
         "Valencia",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c64ff3201030000",
+    "1c63ff3201030000",
 ]
 weathercities105["Mérida"] = [
     ["メリダ", "Mérida", "Mérida", "Mérida", "Mérida", "Mérida", "Mérida"],
@@ -37553,7 +37553,7 @@ weathercities105["Mérida"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bacfb7e02030000",
+    "1badfb7e02030000",
 ]
 weathercities105["Cáceres"] = [
     ["カセレス", "Cáceres", "Cáceres", "Cáceres", "Cáceres", "Cáceres", "Cáceres"],
@@ -37567,7 +37567,7 @@ weathercities105["Cáceres"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c12fb7901030000",
+    "1c12fb7801030000",
 ]
 weathercities105["Badajoz"] = [
     ["バダホス", "Badajoz", "Badajoz", "Badajoz", "Badajoz", "Badajoz", "Badajoz"],
@@ -37661,7 +37661,7 @@ weathercities105["Villanueva del Fresno"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b4afae801030000",
+    "1b49fae801030000",
 ]
 weathercities105["Zafra"] = [
     ["サフラ", "Zafra", "Zafra", "Zafra", "Zafra", "Zafra", "Zafra"],
@@ -37697,7 +37697,7 @@ weathercities105["Plasencia"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c77fbac01030000",
+    "1c79fbad01030000",
 ]
 weathercities105["Guadalupe"] = [
     [
@@ -37741,7 +37741,7 @@ weathercities105["Navalmoral de la Mata"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c5dfc1001030000",
+    "1c5efc1101030000",
 ]
 weathercities105["Trujillo"] = [
     ["トルヒーリョ", "Trujillo", "Trujillo", "Trujillo", "Trujillo", "Trujillo", "Trujillo"],
@@ -37755,7 +37755,7 @@ weathercities105["Trujillo"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c0ffbd201030000",
+    "1c0ffbd301030000",
 ]
 weathercities105["Coria"] = [
     ["コリア", "Coria", "Coria", "Coria", "Coria", "Coria", "Coria"],
@@ -37769,7 +37769,7 @@ weathercities105["Coria"] = [
         "Extremadura",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c6ffb5b01030000",
+    "1c6ffb5a01030000",
 ]
 weathercities105["Santiago de Compostela"] = [
     [
@@ -37797,25 +37797,25 @@ weathercities105["A Coruña"] = [
     ],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ed5fa0701030000",
+    "1ed5fa0501030000",
 ]
 weathercities105["Lugo"] = [
     ["ルーゴ", "Lugo", "Lugo", "Lugo", "Lugo", "Lugo", "Lugo"],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e96faa101030000",
+    "1e95faa101030000",
 ]
 weathercities105["Ourense"] = [
     ["オーレンセ", "Ourense", "Ourense", "Orense", "Ourense", "Ourense", "Ourense"],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e1cfa6801030000",
+    "1e1afa6901030000",
 ]
 weathercities105["Vigo"] = [
     ["ビーゴ", "Vigo", "Vigo", "Vigo", "Vigo", "Vigo", "Vigo"],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e08f9ce01030000",
+    "1e09f9cd01030000",
 ]
 weathercities105["Pontevedra"] = [
     [
@@ -37829,7 +37829,7 @@ weathercities105["Pontevedra"] = [
     ],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e2cf9da01030000",
+    "1e2cf9db01030000",
 ]
 weathercities105["Lalín"] = [
     ["ラリン", "Lalín", "Lalín", "Lalín", "Lalín", "Lalín", "Lalín"],
@@ -37841,13 +37841,13 @@ weathercities105["Verín"] = [
     ["ベリン", "Verín", "Verín", "Verín", "Verín", "Verín", "Verín"],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1dd3fab701030000",
+    "1dd2fab701030000",
 ]
 weathercities105["A Rúa"] = [
     ["A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa"],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e25faf001030000",
+    "1e26faf101030000",
 ]
 weathercities105["Monforte de Lemos"] = [
     [
@@ -37861,13 +37861,13 @@ weathercities105["Monforte de Lemos"] = [
     ],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e3dfaab01030000",
+    "1e3cfaa801030000",
 ]
 weathercities105["Vilalba"] = [
     ["ビラルバ", "Vilalba", "Vilalba", "Vilalba", "Villalba", "Vilalba", "Vilalba"],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ec9fa8c01030000",
+    "1ecafa8a01030000",
 ]
 weathercities105["Ribadeo"] = [
     ["リバデオ", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo"],
@@ -37901,13 +37901,13 @@ weathercities105["Fisterra"] = [
     ],
     ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e82f96a01030000",
+    "1e83f96a01030000",
 ]
 weathercities105["Murcia"] = [
     ["ムルシア", "Murcia", "Murcia", "Murcie", "Murcia", "Murcia", "Murcia"],
     ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b02ff3402030000",
+    "1b04ff3302030000",
 ]
 weathercities105["Cartagena"] = [
     [
@@ -37921,19 +37921,19 @@ weathercities105["Cartagena"] = [
     ],
     ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1abeff4c01030000",
+    "1abfff4c01030000",
 ]
 weathercities105["Lorca"] = [
     ["ロルカ", "Lorca", "Lorca", "Lorca", "Lorca", "Lorca", "Lorca"],
     ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1acafecd01030000",
+    "1acafecc01030000",
 ]
 weathercities105["Aguilas"] = [
     ["アギラス", "Aguilas", "Águilas", "Águilas", "Águilas", "Águilas", "Águilas"],
     ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1a99fee001030000",
+    "1a9afee001030000",
 ]
 weathercities105["Moratalla, Murcia"] = [
     [
@@ -37947,7 +37947,7 @@ weathercities105["Moratalla, Murcia"] = [
     ],
     ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1b27fea901030000",
+    "1b28fea801030000",
 ]
 weathercities105["Jumilla"] = [
     ["フミリャ", "Jumilla", "Jumilla", "Jumilla", "Jumilla", "Jumilla", "Jumilla"],
@@ -37975,7 +37975,7 @@ weathercities105["Pamplona"] = [
         "Navarra",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e72fed402030000",
+    "1e71fed502030000",
 ]
 weathercities105["Güesa – Gorza"] = [
     [
@@ -38011,7 +38011,7 @@ weathercities105["Tudela"] = [
         "Navarra",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1de9fedb01030000",
+    "1de9fedc01030000",
 ]
 weathercities105["Elizondo"] = [
     [
@@ -38033,7 +38033,7 @@ weathercities105["Elizondo"] = [
         "Navarra",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1eaefeec01030000",
+    "1eadfeec01030000",
 ]
 weathercities105["Vitoria-Gasteiz"] = [
     [
@@ -38055,7 +38055,7 @@ weathercities105["Vitoria-Gasteiz"] = [
         "Baskenland",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e78fe1a04030000",
+    "1e79fe1a04030000",
 ]
 weathercities105["Bilbao"] = [
     ["ビルバオ", "Bilbao", "Bilbao", "Bilbao", "Bilbao", "Bilbao", "Bilbao"],
@@ -38069,7 +38069,7 @@ weathercities105["Bilbao"] = [
         "Baskenland",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ec3fdeb01030000",
+    "1ec3fdea01030000",
 ]
 weathercities105["Donostia-San Sebastian"] = [
     [
@@ -38091,13 +38091,13 @@ weathercities105["Donostia-San Sebastian"] = [
         "Baskenland",
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1ecdfe9701030000",
+    "1ecdfe9801030000",
 ]
 weathercities105["Logroño"] = [
     ["ログローニョ", "Logroño", "Logroño", "Logroño", "Logroño", "Logroño", "Logroño"],
     ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e32fe4202030000",
+    "1e32fe4302030000",
 ]
 weathercities105["Calahorra"] = [
     [
@@ -38131,7 +38131,7 @@ weathercities105["Lumbreras"] = [
     ],
     ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1df0fe2401030000",
+    "1deafe2701030000",
 ]
 
 weathercities107 = {}
