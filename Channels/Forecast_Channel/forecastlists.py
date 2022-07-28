@@ -35089,192 +35089,3050 @@ weathercities100["Grozny"] = [
 
 weathercities105 = {}
 
-weathercities105["Madrid"] = [["マドリード", "Madrid", "Madrid", "Madrid", "Madrid", "Madrid", "Madrid"], ["マドリード州", "Madrid", "Madrid", "Madrid", "Comunidad de Madrid", "Comunità di Madrid", "Madrid"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cbdfd5e09030000"]
-weathercities105["Aranjuez"] = [["アランフェス", "Aranjuez", "Aranjuez", "Aranjuez", "Aranjuez", "Aranjuez", "Aranjuez"], ["マドリード州", "Madrid", "Madrid", "Madrid", "Comunidad de Madrid", "Comunità di Madrid", "Madrid"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c77fd7101030000"]
-weathercities105["Buitrago del Lozoya"] = [["ブイトラゴ・デル・ロソヤ", "Buitrago del Lozoya", "Buitrago del Lozoya", "Buitrago del Lozoya", "Buitrago del Lozoya", "Buitrago del Lozoya", "Buitrago del Lozoya"], ["マドリード州", "Madrid", "Madrid", "Madrid", "Comunidad de Madrid", "Comunità di Madrid", "Madrid"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d25fd6b01030000"]
-weathercities105["San Martín de Valdeiglesias"] = [["サン・マルティン・デ・バルデイグレシアス", "San Martín de Valdeiglesias", "San Martín de Valdeiglesias", "San Martín de Valdeiglesias", "San Martín de Valdeiglesias", "San Martín de Valdeiglesias", "San Martín de Valdeiglesias"], ["マドリード州", "Madrid", "Madrid", "Madrid", "Comunidad de Madrid", "Comunità di Madrid", "Madrid"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cb3fcdf01030000"]
-weathercities105["Seville"] = [["セビーリャ", "Seville", "Sevilla", "Séville", "Sevilla", "Siviglia", "Sevilla"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a95fbbc04030000"]
-weathercities105["Almería"] = [["アルメリア", "Almería", "Almería", "Almería", "Almería", "Almería", "Almería"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a31fe4101030000"]
-weathercities105["Cádiz"] = [["カディス", "Cádiz", "Cádiz", "Cadix", "Cádiz", "Cadice", "Cádiz"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "19f8fb8801030000"]
-weathercities105["Algeciras"] = [["アルヘシラス", "Algeciras", "Algeciras", "Algésiras", "Algeciras", "Algeciras", "Taifa Algeciras"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "19b1fc2001030000"]
-weathercities105["Córdoba"] = [["コルドバ", "Córdoba", "Córdoba", "Cordoue", "Córdoba", "Cordova", "Córdoba"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1af0fc9c01030000"]
-weathercities105["Granada"] = [["グラナダ", "Granada", "Granada", "Grenade", "Granada", "Granada", "Granada"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a6efd7101030000"]
-weathercities105["Motril"] = [["モトリル", "Motril", "Motril", "Motril", "Motril", "Motril", "Motril"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a22fd8001030000"]
-weathercities105["Huelva"] = [["ウェルバ", "Huelva", "Huelva", "Huelva", "Huelva", "Huelva", "Huelva"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a7dfb1101030000"]
-weathercities105["Jaén"] = [["ハエン", "Jaén", "Jaén", "Jaén", "Jaén", "Jaén", "Jaén"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1adbfd4f01030000"]
-weathercities105["Linares"] = [["リナレス", "Linares", "Linares", "Linares", "Linares", "Linares", "Linares"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b17fd6b01030000"]
-weathercities105["Málaga"] = [["マラガ", "Málaga", "Málaga", "Málaga", "Málaga", "Málaga", "Málaga"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a1cfcdc01030000"]
-weathercities105["Marbella"] = [["マルベリャ", "Marbella", "Marbella", "Marbella", "Marbella", "Marbella", "Marbella"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "19f6fc8701030000"]
-weathercities105["Écija"] = [["エシハ", "Écija", "Écija", "Écija", "Écija", "Écija", "Écija"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ab1fc6501030000"]
-weathercities105["Lora del Río"] = [["ロラ・デル・リオ", "Lora del Río", "Lora del Río", "Lora del Río", "Lora del Río", "Lora del Río", "Lora del Río"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ac6fc1301030000"]
-weathercities105["Alanís"] = [["アラニス", "Alanís", "Alanís", "Alanís", "Alanís", "Alanís", "Alanís"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b0cfbf101030000"]
-weathercities105["Morón de la Frontera"] = [["モロン・デ・ラ・フロンテラ", "Morón de la Frontera", "Morón de la Frontera", "Morón de la Frontera", "Morón de la Frontera", "Morón de la Frontera", "Morón de la Frontera"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a65fc2001030000"]
-weathercities105["Lebrija"] = [["レブリハ", "Lebrija", "Lebrija", "Lebrija", "Lebrija", "Lebrija", "Lebrija"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a40fbaf01030000"]
-weathercities105["Carboneras"] = [["カルボネラス", "Carboneras", "Carboneras", "Carboneras", "Carboneras", "Carboneras", "Carboneras"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a4ffea801030000"]
-weathercities105["Adra"] = [["アドラ", "Adra", "Adra", "Abdère", "Adra", "Abdera", "Abdera, Spain"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a22fddb01030000"]
-weathercities105["Albanchez"] = [["アルバンチェス", "Albanchez", "Albanchez", "Albanchez", "Albánchez", "Albanchez", "Albánchez"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a83fe7301030000"]
-weathercities105["Barbate"] = [["バルバテ", "Barbate", "Barbate", "Barbate", "Barbate", "Barbate", "Barbate"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "19bbfbcb01030000"]
-weathercities105["Ubrique"] = [["ウブリケ", "Ubrique", "Ubrique", "Ubrique", "Ubrique", "Ubrique", "Ubrique"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a14fc2201030000"]
-weathercities105["Montoro"] = [["モントロ", "Montoro", "Montoro", "Montoro", "Montoro", "Montoro", "Montoro"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b09fce301030000"]
-weathercities105["Pozoblanco"] = [["ポソブランコ", "Pozoblanco", "Pozoblanco", "Pozoblanco", "Pozoblanco", "Pozoblanco", "Pozoblanco"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b49fc8f01030000"]
-weathercities105["Baza"] = [["バーサ", "Baza", "Baza", "Baza", "Baza", "Baza", "Baza"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1aa8fe0801030000"]
-weathercities105["Huéscar"] = [["ウエスカル", "Huéscar", "Huéscar", "Huéscar", "Huéscar", "Huéscar", "Huéscar"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ae3fe3201030000"]
-weathercities105["Guadix"] = [["グアディクス", "Guadix", "Guadix", "Guadix", "Guadix", "Guadix", "Guadix"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a86fdc601030000"]
-weathercities105["Santa Olalla del Cala"] = [["サンタ・オラージャ・デル・カラ", "Santa Olalla del Cala", "Santa Olalla del Cala", "Santa Olalla del Cala", "Santa Olalla del Cala", "Santa Olalla del Cala", "Santa Olalla del Cala"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1af4fb9401030000"]
-weathercities105["Cabezas Rubias"] = [["カベサス・ルビアス", "Cabezas Rubias", "Cabezas Rubias", "Cabezas Rubias", "Cabezas Rubias", "Cabezas Rubias", "Cabezas Rubias"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ad3faf701030000"]
-weathercities105["Encinasola"] = [["エンシナソラ", "Encinasola", "Encinasola", "Encinasola", "Encinasola", "Encinasola", "Encinasola"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b1efb1e01030000"]
-weathercities105["Nerva"] = [["ネルバ", "Nerva", "Nerva", "Nerva", "Nerva", "Nerva", "Nerva"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1acdfb5801030000"]
-weathercities105["Úbeda"] = [["ウベダ", "Úbeda", "Úbeda", "Úbeda", "Úbeda", "Úbeda", "Úbeda"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b07fd9b01030000"]
-weathercities105["Alcalá la Real"] = [["アルカラ・ラ・レアル", "Alcalá la Real", "Alcalá la Real", "Alcalá la Real", "Alcalá la Real", "Alcalá la Real", "Alcalá la Real"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1aa2fd3701030000"]
-weathercities105["Beas de Segura"] = [["ベアス・デ・セグラ", "Beas de Segura", "Beas de Segura", "Beas de Segura", "Beas de Segura", "Beas de Segura", "Beas de Segura"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b33fdf301030000"]
-weathercities105["Campillos"] = [["カンピージョス", "Campillos", "Campillos", "Campillos", "Campillos", "Campillos", "Campillos"], ["アンダルシーア州", "Andalusia", "Andalusien", "Andalousie", "Andalucía", "Andalusia", "Andalusië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a58fc8c01030000"]
-weathercities105["Zaragoza"] = [["サラゴサ", "Zaragoza", "Saragossa", "Saragosse", "Zaragoza", "Saragozza", "Zaragoza"], ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d9eff6204030000"]
-weathercities105["Huesca"] = [["ウエスカ", "Huesca", "Huesca", "Huesca", "Huesca", "Huesca", "Huesca"], ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1df6ffb601030000"]
-weathercities105["Teruel"] = [["テルエル", "Teruel", "Teruel", "Teruel", "Teruel", "Teruel", "Teruel"], ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cafff3801030000"]
-weathercities105["Calatayud"] = [["カラタユド", "Calatayud", "Calatayud", "Calatayud", "Calatayud", "Calatayud", "Calatayud"], ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d67fed701030000"]
-weathercities105["Oviedo"] = [["オビエド", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo"], ["アストゥーリアス州", "Principality of Asturias", "Asturien", "Asturies", "Principado de Asturias", "Asturie", "Asturië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ed6fbda02030000"]
-weathercities105["Gijón"] = [["ヒホン", "Gijón", "Gijón", "Gijón", "Gijón", "Gijón", "Gijón"], ["アストゥーリアス州", "Principality of Asturias", "Asturien", "Asturies", "Principado de Asturias", "Asturie", "Asturië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ef6fbfa01030000"]
-weathercities105["Aviles"] = [["アビレス", "Aviles", "Avilés", "Avilés", "Avilés", "Avilés", "Avilés"], ["アストゥーリアス州", "Principality of Asturias", "Asturien", "Asturies", "Principado de Asturias", "Asturie", "Asturië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ef8fbcb01030000"]
-weathercities105["Grandas"] = [["グランダス・デ・サリメ", "Grandas", "Grandas de Salime", "Grandas", "Grandas de Salime", "Grandas", "Grandas"], ["アストゥーリアス州", "Principality of Asturias", "Asturien", "Asturies", "Principado de Asturias", "Asturie", "Asturië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ebbfb1e01030000"]
-weathercities105["Luarca"] = [["ルアルカ", "Luarca", "Ḷḷuarca", "Luarca", "Luarca", "Luarca", "Luarca"], ["アストゥーリアス州", "Principality of Asturias", "Asturien", "Asturies", "Principado de Asturias", "Asturie", "Asturië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ef6fb5b01030000"]
-weathercities105["Ribadesella"] = [["リバデセリャ", "Ribadesella", "Ribadesella", "Ribadesella", "Ribadesella", "Ribadesella", "Ribadesella"], ["アストゥーリアス州", "Principality of Asturias", "Asturien", "Asturies", "Principado de Asturias", "Asturie", "Asturië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ee8fc6801030000"]
-weathercities105["Palma"] = [["パルマ", "Palma", "Palma", "Palma", "Palma de Mallorca", "Palma di Maiorca", "Palma de Mallorca"], ["バレアーレス諸島", "Balearic Islands", "Balearische Inseln", "Iles Baléares", "Illes Balears", "Baleari", "Balearen"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c2301e004030000"]
-weathercities105["Ciutadella de Menorca"] = [["メノルカ", "Ciutadella de Menorca", "Ciutadella de Menorca", "Minorque", "Ciutadella de Menorca", "Minorca", "Ciutadella de Menorca"], ["バレアーレス諸島", "Balearic Islands", "Balearische Inseln", "Iles Baléares", "Illes Balears", "Baleari", "Balearen"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c7502b501030000"]
-weathercities105["Mahón"] = [["マオン", "Mahón", "Mahón", "Port Mahon", "Maó-Mahón", "Mahón", "Mahón"], ["バレアーレス諸島", "Balearic Islands", "Balearische Inseln", "Iles Baléares", "Illes Balears", "Baleari", "Balearen"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c5c030601030000"]
-weathercities105["Ibiza"] = [["イビサ", "Ibiza", "Ibiza", "Ibiza", "Eivissa", "Ivissa", "Ibiza-stad"], ["バレアーレス諸島", "Balearic Islands", "Balearische Inseln", "Iles Baléares", "Illes Balears", "Baleari", "Balearen"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1baa010201030000"]
-weathercities105["Manacor"] = [["マナコル", "Manacor", "Manacor", "Manacor", "Manacor", "Manacor", "Manacor"], ["バレアーレス諸島", "Balearic Islands", "Balearische Inseln", "Iles Baléares", "Illes Balears", "Baleari", "Balearen"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c22024601030000"]
-weathercities105["Municipality of Las Palmas"] = [["ラス・パルマス", "Municipality of Las Palmas", "Las Palmas de Gran Canaria", "Las Palmas de Gran Canaria", "Las Palmas de Gran Canaria", "Las Palmas de Gran Canaria", "Las Palmas de Gran Canaria"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "13fff50702030000"]
-weathercities105["Santa Cruz de Tenerife"] = [["サンタ・クルス・デ・テネリフェ", "Santa Cruz de Tenerife", "Santa Cruz de Tenerife", "Santa Cruz de Tenerife", "Santa Cruz de Tenerife", "Santa Cruz de Tenerife", "Santa Cruz de Tenerife"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "143cf47204030000"]
-weathercities105["Arona"] = [["アロナ", "Arona", "Arona", "Arona", "Arona", "Arona", "Arona"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "13f8f42501030000"]
-weathercities105["Santa Cruz de La Palma"] = [["サンタ・クルス・デ・ラ・パルマ", "Santa Cruz de La Palma", "Santa Cruz de La Palma", "Santa Cruz de La Palma", "Santa Cruz de La Palma", "Santa Cruz de la Palma", "Santa Cruz de la Palma"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1465f35e01030000"]
-weathercities105["San Sebastián de La Gomera"] = [["サン・サバスティアン・デ・ラ・ゴメラ", "San Sebastián de La Gomera", "San Sebastián de La Gomera", "San Sebastián de la Gomera", "San Sebastián de la Gomera", "San Sebastián de la Gomera", "San Sebastián de la Gomera"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "13f9f3d601030000"]
-weathercities105["La Frontera, Santa Cruz de Tenerife"] = [["フロンテラ", "La Frontera, Santa Cruz de Tenerife", "La Frontera", "La Frontera", "Frontera", "La Frontera", "La Frontera"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "13bcf33101030000"]
-weathercities105["Puerto del Rosario"] = [["プエルト・デル・ロサリオ", "Puerto del Rosario", "Puerto del Rosario", "Puerto del Rosario", "Puerto del Rosario", "Puerto del Rosario", "Puerto del Rosario"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1443f62401030000"]
-weathercities105["Arrecife"] = [["アレシーフェ", "Arrecife", "Arrecife", "Arrecife", "Arrecife", "Arrecife", "Arrecife"], ["カナリア諸島", "Canary Islands", "Kanarische Inseln", "Canaries", "Canarias", "Canarie", "Canarische Eilanden"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1497f65e01030000"]
-weathercities105["Santander"] = [["サンタンデール", "Santander", "Santander", "Santander", "Santander", "Santander", "Santander"], ["カンタブリア州", "Cantabria", "Kantabrien", "Cantabrie", "Cantabria", "Cantabria", "Cantabrië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ee8fd4c02030000"]
-weathercities105["Reinosa"] = [["レイノサ", "Reinosa", "Reinosa", "Reinosa", "Reinosa", "Reinosa", "Reinosa"], ["カンタブリア州", "Cantabria", "Kantabrien", "Cantabrie", "Cantabria", "Cantabria", "Cantabrië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e94fd1001030000"]
-weathercities105["Comillas"] = [["コミージャス", "Comillas", "Comillas", "Comillas", "Comillas", "Comillas", "Comillas"], ["カンタブリア州", "Cantabria", "Kantabrien", "Cantabrie", "Cantabria", "Cantabria", "Cantabrië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1edafcf401030000"]
-weathercities105["Toledo"] = [["トレド", "Toledo", "Toledo", "Tolède", "Toledo", "Toledo", "Toledo"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c57fd2402030000"]
-weathercities105["Albacete"] = [["アルバセテ", "Albacete", "Albacete", "Albacete", "Albacete", "Albacete", "Albacete"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bb9feaf01030000"]
-weathercities105["Ciudad Real"] = [["シウダード・レアル", "Ciudad Real", "Ciudad Real", "Ciudad Real", "Ciudad Real", "Ciudad Real", "Ciudad Real"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bb8fd3601030000"]
-weathercities105["Puertollano"] = [["プエルトリャノ", "Puertollano", "Puertollano", "Puertollano", "Puertollano", "Puertollano", "Puertollano"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b82fd1501030000"]
-weathercities105["Cuenca"] = [["クエンカ", "Cuenca", "Cuenca", "Cuenca", "Cuenca", "Cuenca", "Cuenca"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c7efe7c01030000"]
-weathercities105["Guadalajara"] = [["グアダラハラ", "Guadalajara", "Guadalajara", "Guadalajara", "Guadalajara", "Guadalajara", "Guadalajara"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ce4fdc101030000"]
-weathercities105["Talavera de la Reina"] = [["タラベラ・デ・ラ・レイナ", "Talavera de la Reina", "Talavera de la Reina", "Talavera de la Reina", "Talavera de la Reina", "Talavera de la Reina", "Talavera de la Reina"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c69fc9101030000"]
-weathercities105["Alcaraz"] = [["アルカラス", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b7ffe3b01030000"]
-weathercities105["Hellín"] = [["エリン", "Hellín", "Hellín", "Hellín", "Hellín", "Hellín", "Hellín"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b61fecc01030000"]
-weathercities105["Almansa"] = [["アルマンサ", "Almansa", "Almansa", "Almansa", "Almansa", "Almansa", "Almansa"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ba3ff3901030000"]
-weathercities105["Alcázar de San Juan"] = [["アルカサル・デ・サン・フアン", "Alcázar de San Juan", "Alcázar de San Juan", "Alcázar de San Juan", "Alcázar de San Juan", "Alcázar de San Juan", "Alcázar de San Juan"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c02fdb901030000"]
-weathercities105["Tomelloso"] = [["トメリョソ", "Tomelloso", "Tomelloso", "Tomelloso", "Tomelloso", "Tomelloso", "Tomelloso"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bd7fddb01030000"]
-weathercities105["Retuerta del Bullaque"] = [["レトゥエルタ・デル・ブジャケ", "Retuerta del Bullaque", "Retuerta del Bullaque", "Retuerta del Bullaque", "Retuerta del Bullaque", "Retuerta del Bullaque", "Retuerta del Bullaque"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c0ffcde01030000"]
-weathercities105["Puebla de Don Rodrigo"] = [["プエブラ・デ・ドン・ロドリーゴ", "Puebla de Don Rodrigo", "Puebla de Don Rodrigo", "Puebla de Don Rodrigo", "Puebla de Don Rodrigo", "Puebla de Don Rodrigo", "Puebla de Don Rodrigo"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bcbfcb801030000"]
-weathercities105["Cañaveras"] = [["カニャベラス", "Cañaveras", "Cañaveras", "Cañaveras", "Cañaveras", "Cañaveras", "Cañaveras"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cb2fe4c01030000"]
-weathercities105["San Clemente, Cuenca"] = [["サン・クレメンテ", "San Clemente, Cuenca", "San Clemente, Cuenca", "San Clemente", "San Clemente", "San Clemente", "San Clemente"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c04fe4701030000"]
-weathercities105["Tarancón"] = [["タランコン", "Tarancón", "Tarancón", "Tarancón", "Tarancón", "Tarancón", "Tarancón"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c73fddd01030000"]
-weathercities105["Iniesta, Cuenca"] = [["イニエスタ", "Iniesta, Cuenca", "Iniesta", "Iniesta", "Iniesta", "Iniesta", "Iniesta"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c0cfec401030000"]
-weathercities105["Sigüenza"] = [["シグエンサ", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza"], ["カスティーリャ・ラ・マンチャ", "Castile-La Mancha", "Kastilien-La Mancha", "Castille-La Manche", "Castilla-La Mancha", "Castiglia-La Mancia", "Kastilië-La Mancha"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d33fe2001030000"]
-weathercities105["Valladolid"] = [["バリャドリード", "Valladolid", "Valladolid", "Valladolid", "Valladolid", "Valladolid", "Valladolid"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d9cfca502030000"]
-weathercities105["Burgos"] = [["ブルゴス", "Burgos", "Burgos", "Burgos", "Burgos", "Burgos", "Burgos"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e1bfd6001030000"]
-weathercities105["Aranda de Duero"] = [["アランダ・デ・ドゥエロ", "Aranda de Duero", "Aranda de Duero", "Aranda de Duero", "Aranda de Duero", "Aranda de Duero", "Aranda de Duero"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1da1fd6201030000"]
-weathercities105["Miranda de Ebro"] = [["ミランダ・デ・エブロ", "Miranda de Ebro", "Miranda de Ebro", "Miranda de Ebro", "Miranda de Ebro", "Miranda de Ebro", "Miranda de Ebro"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e5afde701030000"]
-weathercities105["Salamanca"] = [["サラマンカ", "Salamanca", "Salamanca", "Salamanque", "Salamanca", "Salamanca", "Salamanca"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d21fbf901030000"]
-weathercities105["León"] = [["レオン", "León", "León", "León", "León", "León", "León"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e4bfc0b01030000"]
-weathercities105["Ponferrada"] = [["ポンフェラダ", "Ponferrada", "Ponferrada", "Ponferrada", "Ponferrada", "Ponferrada", "Ponferrada"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e41fb5001030000"]
-weathercities105["Palencia"] = [["パレンシア", "Palencia", "Palencia", "Palencia", "Palencia", "Palencia", "Palencia"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ddffcc701030000"]
-weathercities105["Zamora"] = [["サモラ", "Zamora", "Zamora", "Zamora", "Zamora", "Zamora", "Zamora"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d83fbec01030000"]
-weathercities105["Segovia"] = [["セゴビア", "Segovia", "Segovia", "Ségovie", "Segovia", "Segovia", "Segovia"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d1dfd1301030000"]
-weathercities105["Ávila"] = [["アビラ", "Ávila", "Ávila", "Ávila", "Ávila", "Ávila", "Ávila"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ce9fca901030000"]
-weathercities105["Soria"] = [["ソリア", "Soria", "Soria", "Soria", "Soria", "Soria", "Soria"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1db1fe4101030000"]
-weathercities105["Arévalo"] = [["アレバロ", "Arévalo", "Arévalo", "Arévalo", "Arévalo", "Arévalo", "Arévalo"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d33fca501030000"]
-weathercities105["Arenas de San Pedro"] = [["アレーナス・デ・サン・ペドロ", "Arenas de San Pedro", "Arenas de San Pedro", "Arenas de San Pedro", "Arenas de San Pedro", "Arenas de San Pedro", "Arenas de San Pedro"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c97fc6301030000"]
-weathercities105["Burgo de Osma-Ciudad de Osma"] = [["エル・ブルゴ・デ・オスマ", "Burgo de Osma-Ciudad de Osma", "El Burgo de Osma-Ciudad de Osma", "El Burgo de Osma", "El Burgo de Osma", "Burgo de Osma-Ciudad de Osma", "Burgo de Osma-Ciudad de Osma"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d92fdd201030000"]
-weathercities105["Cuéllar"] = [["クエリャル", "Cuéllar", "Cuéllar", "Cuéllar", "Cuéllar", "Cuéllar", "Cuéllar"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d70fcef01030000"]
-weathercities105["Castronuño"] = [["カストロヌニョ", "Castronuño", "Castronuño", "Castronuño", "Castronuño", "Castronuño", "Castronuño"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d6efc4301030000"]
-weathercities105["Medina de Rioseco"] = [["メディナ・デ・リオセコ", "Medina de Rioseco", "Medina de Rioseco", "Medina de Rioseco", "Medina de Rioseco", "Medina de Rioseco", "Medina de Rioseco"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1dc8fc6b01030000"]
-weathercities105["Salas de los Infantes"] = [["サラス・デ・ロス・インファンテス", "Salas de los Infantes", "Salas de los Infantes", "Salas de los Infantes", "Salas de los Infantes", "Salas de los Infantes", "Salas de los Infantes"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1de1fdaa01030000"]
-weathercities105["Medina de Pomar"] = [["メディーナ・デ・ポマール", "Medina de Pomar", "Medina de Pomar", "Medina de Pomar", "Medina de Pomar", "Medina de Pomar", "Medina de Pomar"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e87fd8601030000"]
-weathercities105["Vitigudino"] = [["ビティグディノ", "Vitigudino", "Vitigudino", "Vitigudino", "Vitigudino", "Vitigudino", "Vitigudino"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d29fb6d01030000"]
-weathercities105["Béjar"] = [["ベハル", "Béjar", "Béjar", "Béjar", "Béjar", "Béjar", "Béjar"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cb8fbe701030000"]
-weathercities105["Ciudad Rodrigo"] = [["シウダード・ロドリゴ", "Ciudad Rodrigo", "Ciudad Rodrigo", "Ciudad Rodrigo", "Ciudad Rodrigo", "Ciudad Rodrigo", "Ciudad Rodrigo"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cdffb5c01030000"]
-weathercities105["Villablino"] = [["ビリャブリノ", "Villablino", "Villablino", "Villablino", "Villablino", "Villablino", "Villablino"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e88fb8201030000"]
-weathercities105["Astorga"] = [["アストルガ", "Astorga", "Astorga", "Astorga", "Astorga", "Astorga", "Astorga"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e31fbb201030000"]
-weathercities105["Sahagún"] = [["サアグン", "Sahagún", "Sahagún", "Sahagún", "Sahagún", "Sahagún", "Sahagún"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e21fc6d01030000"]
-weathercities105["Riaño"] = [["リアニョ", "Riaño", "Riaño", "Riaño", "Riaño", "Riaño", "Riaño"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e8efc7201030000"]
-weathercities105["Cervera de Pisuerga"] = [["セルベサ・デ・ピスエルガ", "Cervera de Pisuerga", "Cervera de Pisuerga", "Cervera de Pisuerga", "Cervera de Pisuerga", "Cervera de Pisuerga", "Cervera de Pisuerga"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e7afccf01030000"]
-weathercities105["Benavente"] = [["ベナベンテ", "Benavente", "Benavente", "Benavente", "Benavente", "Benavente", "Benavente"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ddefbf701030000"]
-weathercities105["Puebla de Sanabria"] = [["プエブラ・デ・サナブリア", "Puebla de Sanabria", "Puebla de Sanabria", "Puebla de Sanabria", "Puebla de Sanabria", "Puebla de Sanabria", "Puebla de Sanabria"], ["カスティーリャ・レオン", "Castilla y León", "Kastilien-León", "Castille-et-León", "Castilla y León", "Castiglia e Leon", "Kastilië en León"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1de8fb4a01030000"]
-weathercities105["Barcelona"] = [["バルセロナ", "Barcelona", "Barcelona", "Barcelone", "Barcelona", "Barcellona", "Barcelona"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d6d018b04030000"]
-weathercities105["Girona"] = [["ジローナ", "Girona", "Girona", "Gérone", "Girona", "Girona", "Gerona"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1dd9020101030000"]
-weathercities105["Lleida"] = [["レリダ", "Lleida", "Lleida", "Lérida", "Lleida", "Lleida", "Lleida"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d98007301030000"]
-weathercities105["Tarragona"] = [["タラゴーナ", "Tarragona", "Tarragona", "Tarragone", "Tarragona", "Tarragona", "Tarragona"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d3d00e301030000"]
-weathercities105["Tortosa"] = [["トルトサ", "Tortosa", "Tortosa", "Tortosa", "Tortosa", "Tortosa", "Tortosa"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d05005e01030000"]
-weathercities105["Vic"] = [["ビク", "Vic", "Vic", "Vic", "Vic", "Vic", "Vic"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1dd1019901030000"]
-weathercities105["Calella"] = [["Calella", "Calella", "Calella", "Calella", "Calella", "Calella", "Calella"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d9801e501030000"]
-weathercities105["Setcases"] = [["Setcases", "Setcases", "Setcases", "Setcases", "Setcases", "Setcases", "Setcases"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e2201a301030000"]
-weathercities105["Figueres"] = [["フィゲレス", "Figueres", "Figueres", "Figueras", "Figueres", "Figueres", "Figueres"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e0e021c01030000"]
-weathercities105["Tàrrega"] = [["タラガ", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d9e00ce01030000"]
-weathercities105["El Pont de Suert"] = [["El Pont de Suert", "El Pont de Suert", "El Pont de Suert", "El Pont de Suert", "El Pont de Suert", "El Pont de Suert", "El Pont de Suert"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e27008601030000"]
-weathercities105["Les, Catalonia"] = [["レ", "Les, Catalonia", "Les", "Catalogne", "Les", "Les", "Les"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e71008101030000"]
-weathercities105["Solsona"] = [["Solsona", "Solsona", "Solsona", "Solsona", "Solsona", "Solsona", "Solsona"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ddc011401030000"]
-weathercities105["Artesa de Segre"] = [["アルテサ・デ・セグレ", "Artesa de Segre", "Artesa de Segre", "Artesa de Segre", "Artesa de Segre", "Artesa de Segre", "Artesa de Segre"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1dcb00be01030000"]
-weathercities105["Ascó"] = [["アスコー", "Ascó", "Ascó", "Ascó", "Ascò", "Ascó", "Ascó"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1d49006701030000"]
-weathercities105["Manresa"] = [["マンレサ", "Manresa", "Manresa", "Manrèse", "Manresa", "Manresa", "Manresa"], ["カタルーニャ", "Catalonia", "Katalonien", "Catalogne", "Cataluña", "Catalogna", "Catalonië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1dab014b01030000"]
-weathercities105["Valencian Community"] = [["バレンシア", "Valencian Community", "Land Valencia", "Valence", "Valencia", "Comunità Valenzana", "Valencia"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c11ffbe04030000"]
-weathercities105["Gandia"] = [["ガンディア", "Gandia", "Gandia", "Gandie", "Gandia", "Gandia", "Gandia"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bb6ffe001030000"]
-weathercities105["Municipality of Alicante"] = [["アリカンテ", "Municipality of Alicante", "Alicante", "Alicante", "Alacant / Alicante", "Alicante", "Alicante"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b44ffa801030000"]
-weathercities105["Municipality of Castelló de la Plana"] = [["カステリョン・デ・ラ・プラナ", "Municipality of Castelló de la Plana", "Castellón de la Plana", "Castellón de la Plana", "Castellón de la Plana / Castelló de la Plana", "Castellón de la Plana", "Castellón de la Plana"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c6efffa01030000"]
-weathercities105["Benidorm"] = [["ベニドルム", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b68ffe901030000"]
-weathercities105["Villena"] = [["ビリェナ", "Villena", "Villena", "Villena", "Villena", "Villena", "Villena"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b78ff6301030000"]
-weathercities105["Xèrica"] = [["Xèrica", "Xèrica", "Jérica", "Jérica", "Jérica", "Jérica", "Jérica"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c61ff9901030000"]
-weathercities105["Vinaròs"] = [["ビナロス", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1cc7005601030000"]
-weathercities105["Morella"] = [["モレリャ", "Morella", "Morella", "Morella", "Morella", "Morella", "Morella"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ce2ffee01030000"]
-weathercities105["Bicorp"] = [["ビコルプ", "Bicorp", "Bicorp", "Bicorp", "Bicorp", "Bicorp", "Bicorp"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bd3ff7101030000"]
-weathercities105["Requena"] = [["レケナ", "Requena", "Requena", "Requena", "Requena", "Requena", "Requena"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c14ff3801030000"]
-weathercities105["Aras de los Olmos"] = [["アラス・デ・ロス・オルモス", "Aras de los Olmos", "Aras de los Olmos", "Aras de los Olmos", "Aras de los Olmos", "Aras de los Olmos", "Aras de los Olmos"], ["バレンシア州", "Valencia", "Valencia", "Valence", "Comunidad Valenciana", "Comunità Valenciana", "Valencia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c64ff3201030000"]
-weathercities105["Mérida"] = [["メリダ", "Mérida", "Mérida", "Mérida", "Mérida", "Mérida", "Mérida"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bacfb7e02030000"]
-weathercities105["Cáceres"] = [["カセレス", "Cáceres", "Cáceres", "Cáceres", "Cáceres", "Cáceres", "Cáceres"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c12fb7901030000"]
-weathercities105["Badajoz"] = [["バダホス", "Badajoz", "Badajoz", "Badajoz", "Badajoz", "Badajoz", "Badajoz"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ba5fb0c01030000"]
-weathercities105["San Vicente de Alcántara"] = [["サン・ビセンテ・デ・アルカンタラ", "San Vicente de Alcántara", "San Vicente de Alcántara", "San Vicente de Alcántara", "San Vicente de Alcántara", "San Vicente de Alcántara", "San Vicente de Alcántara"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1bfdfaed01030000"]
-weathercities105["Valencia de las Torres"] = [["バレンシア", "Valencia de las Torres", "Valencia de las Torres", "Valence", "Valencia de las Torres", "Valencia de las Torres", "Valencia de las Torres"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b4ffbbc01030000"]
-weathercities105["Castuera"] = [["カストゥエラ", "Castuera", "Castuera", "Castuera", "Castuera", "Castuera", "Castuera"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b89fc0f01030000"]
-weathercities105["Villanueva del Fresno"] = [["ビジャヌエバ・デル・フレスノ", "Villanueva del Fresno", "Villanueva del Fresno", "Villanueva del Fresno", "Villanueva del Fresno", "Villanueva del Fresno", "Villanueva del Fresno"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b4afae801030000"]
-weathercities105["Zafra"] = [["サフラ", "Zafra", "Zafra", "Zafra", "Zafra", "Zafra", "Zafra"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b52fb7101030000"]
-weathercities105["Plasencia"] = [["プラセンシア", "Plasencia", "Plasencia", "Plasence", "Plasencia", "Plasencia", "Plasencia"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c77fbac01030000"]
-weathercities105["Guadalupe"] = [["グアダルペ", "Guadalupe", "Guadalupe", "Guadalupe", "Guadalupe", "Guadalupe", "Guadalupe"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c0dfc3701030000"]
-weathercities105["Navalmoral de la Mata"] = [["ナバルモラル・デ・ラ・マタ", "Navalmoral de la Mata", "Navalmoral de la Mata", "Navalmoral de la Mata", "Navalmoral de la Mata", "Navalmoral de la Mata", "Navalmoral de la Mata"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c5dfc1001030000"]
-weathercities105["Trujillo"] = [["トルヒーリョ", "Trujillo", "Trujillo", "Trujillo", "Trujillo", "Trujillo", "Trujillo"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c0ffbd201030000"]
-weathercities105["Coria"] = [["コリア", "Coria", "Coria", "Coria", "Coria", "Coria", "Coria"], ["エストレマドゥーラ", "Extremadura", "Extremadura", "Estrémadure", "Extremadura", "Estremadura", "Extremadura"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1c6ffb5b01030000"]
-weathercities105["Santiago de Compostela"] = [["サンティアゴ・デ・コンポステーラ", "Santiago de Compostela", "Santiago de Compostela", "Saint-Jacques-de-Compostelle", "Santiago de Compostela", "Santiago di Compostela", "Santiago de Compostella"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e7df9ed04030000"]
-weathercities105["A Coruña"] = [["ア・コルーニャ", "A Coruña", "A Coruña", "La Corogne", "A Coruña", "La Coruña", "A Coruña"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ed5fa0701030000"]
-weathercities105["Lugo"] = [["ルーゴ", "Lugo", "Lugo", "Lugo", "Lugo", "Lugo", "Lugo"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e96faa101030000"]
-weathercities105["Ourense"] = [["オーレンセ", "Ourense", "Ourense", "Orense", "Ourense", "Ourense", "Ourense"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e1cfa6801030000"]
-weathercities105["Vigo"] = [["ビーゴ", "Vigo", "Vigo", "Vigo", "Vigo", "Vigo", "Vigo"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e08f9ce01030000"]
-weathercities105["Pontevedra"] = [["ポンテベドラ", "Pontevedra", "Pontevedra", "Pontevedra", "Pontevedra", "Pontevedra", "Pontevedra"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e2cf9da01030000"]
-weathercities105["Lalín"] = [["ラリン", "Lalín", "Lalín", "Lalín", "Lalín", "Lalín", "Lalín"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e56fa3c01030000"]
-weathercities105["Verín"] = [["ベリン", "Verín", "Verín", "Verín", "Verín", "Verín", "Verín"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1dd3fab701030000"]
-weathercities105["A Rúa"] = [["A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e25faf001030000"]
-weathercities105["Monforte de Lemos"] = [["モンフォルテ・デ・レモス", "Monforte de Lemos", "Monforte de Lemos", "Monforte de Lemos", "Monforte de Lemos", "Monforte de Lemos", "Monforte de Lemos"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e3dfaab01030000"]
-weathercities105["Vilalba"] = [["ビラルバ", "Vilalba", "Vilalba", "Vilalba", "Villalba", "Vilalba", "Vilalba"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ec9fa8c01030000"]
-weathercities105["Ribadeo"] = [["リバデオ", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ef5faff01030000"]
-weathercities105["Ortigueira"] = [["オルティゲイラ", "Ortigueira", "Ortigueira", "Ortigueira", "Ortigueira", "Ortigueira", "Ortigueira"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1f10fa6b01030000"]
-weathercities105["Fisterra"] = [["フィステーラ", "Fisterra", "Fisterra", "Finisterre", "Fisterra", "Finisterre", "Fisterra"], ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e82f96a01030000"]
-weathercities105["Murcia"] = [["ムルシア", "Murcia", "Murcia", "Murcie", "Murcia", "Murcia", "Murcia"], ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b02ff3402030000"]
-weathercities105["Cartagena"] = [["カルタヘナ", "Cartagena", "Cartagena", "Carthagène", "Cartagena", "Cartagena", "Cartagena"], ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1abeff4c01030000"]
-weathercities105["Lorca"] = [["ロルカ", "Lorca", "Lorca", "Lorca", "Lorca", "Lorca", "Lorca"], ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1acafecd01030000"]
-weathercities105["Aguilas"] = [["アギラス", "Aguilas", "Águilas", "Águilas", "Águilas", "Águilas", "Águilas"], ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1a99fee001030000"]
-weathercities105["Moratalla, Murcia"] = [["モラタリャ", "Moratalla, Murcia", "Moratalla", "Moratalla", "Moratalla", "Moratalla", "Moratalla"], ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b27fea901030000"]
-weathercities105["Jumilla"] = [["フミリャ", "Jumilla", "Jumilla", "Jumilla", "Jumilla", "Jumilla", "Jumilla"], ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1b5cff1001030000"]
-weathercities105["Pamplona"] = [["パンプローナ", "Pamplona", "Pamplona", "Pampelune", "Pamplona / Iruña", "Pamplona", "Pamplona"], ["ナバーラ州", "Navarre", "Navarra", "Navarre", "Comunidad Foral de Navarra", "Navarra", "Navarra"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e72fed402030000"]
-weathercities105["Güesa – Gorza"] = [["グエサ", "Güesa – Gorza", "Güesa – Gorza", "Güesa", "Güesa / Gorza", "Gorza", "Güesa"], ["ナバーラ州", "Navarre", "Navarra", "Navarre", "Comunidad Foral de Navarra", "Navarra", "Navarra"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e70ff3901030000"]
-weathercities105["Tudela"] = [["トゥデラ", "Tudela", "Tudela", "Tudela", "Tudela", "Tudela", "Tudela"], ["ナバーラ州", "Navarre", "Navarra", "Navarre", "Comunidad Foral de Navarra", "Navarra", "Navarra"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1de9fedb01030000"]
-weathercities105["Elizondo"] = [["エリソンド", "Elizondo", "Elizondo", "Elizondo", "Elizondo (Baztan)", "Elizondo", "Elizondo"], ["ナバーラ州", "Navarre", "Navarra", "Navarre", "Comunidad Foral de Navarra", "Navarra", "Navarra"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1eaefeec01030000"]
-weathercities105["Vitoria-Gasteiz"] = [["ビトリア", "Vitoria-Gasteiz", "Vitoria-Gasteiz", "Vitoria-Gasteiz", "Vitoria-Gasteiz", "Vitoria-Gasteiz", "Gasteiz"], ["バスク", "Basque Country", "Baskenland", "Pays basque", "País Vasco", "Paesi Baschi", "Baskenland"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e78fe1a04030000"]
-weathercities105["Bilbao"] = [["ビルバオ", "Bilbao", "Bilbao", "Bilbao", "Bilbao", "Bilbao", "Bilbao"], ["バスク", "Basque Country", "Baskenland", "Pays basque", "País Vasco", "Paesi Baschi", "Baskenland"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ec3fdeb01030000"]
-weathercities105["Donostia-San Sebastian"] = [["サン・セバスティアン", "Donostia-San Sebastian", "Donostia-San Sebastián", "Saint-Sébastien", "Donostia-San Sebastián", "San Sebastián", "San Sebastian"], ["バスク", "Basque Country", "Baskenland", "Pays basque", "País Vasco", "Paesi Baschi", "Baskenland"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1ecdfe9701030000"]
-weathercities105["Logroño"] = [["ログローニョ", "Logroño", "Logroño", "Logroño", "Logroño", "Logroño", "Logroño"], ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e32fe4202030000"]
-weathercities105["Calahorra"] = [["カラオラ", "Calahorra", "Calahorra", "Calahorra", "Calahorra", "Calahorra", "Calahorra"], ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e15fe9a01030000"]
-weathercities105["Ezcaray"] = [["エスカライ", "Ezcaray", "Ezcaray", "Ezcaray", "Ezcaray", "Ezcaray", "Ezcaray"], ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1e19fddc01030000"]
-weathercities105["Lumbreras"] = [["ルンブレラス", "Lumbreras", "Lumbreras", "Lumbreras", "Lumbreras", "Lumbreras", "Lumbreras"], ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"], ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"], "1df0fe2401030000]
+weathercities105["Madrid"] = [
+    ["マドリード", "Madrid", "Madrid", "Madrid", "Madrid", "Madrid", "Madrid"],
+    [
+        "マドリード州",
+        "Madrid",
+        "Madrid",
+        "Madrid",
+        "Comunidad de Madrid",
+        "Comunità di Madrid",
+        "Madrid",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cbdfd5e09030000",
+]
+weathercities105["Aranjuez"] = [
+    ["アランフェス", "Aranjuez", "Aranjuez", "Aranjuez", "Aranjuez", "Aranjuez", "Aranjuez"],
+    [
+        "マドリード州",
+        "Madrid",
+        "Madrid",
+        "Madrid",
+        "Comunidad de Madrid",
+        "Comunità di Madrid",
+        "Madrid",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c77fd7101030000",
+]
+weathercities105["Buitrago del Lozoya"] = [
+    [
+        "ブイトラゴ・デル・ロソヤ",
+        "Buitrago del Lozoya",
+        "Buitrago del Lozoya",
+        "Buitrago del Lozoya",
+        "Buitrago del Lozoya",
+        "Buitrago del Lozoya",
+        "Buitrago del Lozoya",
+    ],
+    [
+        "マドリード州",
+        "Madrid",
+        "Madrid",
+        "Madrid",
+        "Comunidad de Madrid",
+        "Comunità di Madrid",
+        "Madrid",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d25fd6b01030000",
+]
+weathercities105["San Martín de Valdeiglesias"] = [
+    [
+        "サン・マルティン・デ・バルデイグレシアス",
+        "San Martín de Valdeiglesias",
+        "San Martín de Valdeiglesias",
+        "San Martín de Valdeiglesias",
+        "San Martín de Valdeiglesias",
+        "San Martín de Valdeiglesias",
+        "San Martín de Valdeiglesias",
+    ],
+    [
+        "マドリード州",
+        "Madrid",
+        "Madrid",
+        "Madrid",
+        "Comunidad de Madrid",
+        "Comunità di Madrid",
+        "Madrid",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cb3fcdf01030000",
+]
+weathercities105["Seville"] = [
+    ["セビーリャ", "Seville", "Sevilla", "Séville", "Sevilla", "Siviglia", "Sevilla"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a95fbbc04030000",
+]
+weathercities105["Almería"] = [
+    ["アルメリア", "Almería", "Almería", "Almería", "Almería", "Almería", "Almería"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a31fe4101030000",
+]
+weathercities105["Cádiz"] = [
+    ["カディス", "Cádiz", "Cádiz", "Cadix", "Cádiz", "Cadice", "Cádiz"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "19f8fb8801030000",
+]
+weathercities105["Algeciras"] = [
+    [
+        "アルヘシラス",
+        "Algeciras",
+        "Algeciras",
+        "Algésiras",
+        "Algeciras",
+        "Algeciras",
+        "Taifa Algeciras",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "19b1fc2001030000",
+]
+weathercities105["Córdoba"] = [
+    ["コルドバ", "Córdoba", "Córdoba", "Cordoue", "Córdoba", "Cordova", "Córdoba"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1af0fc9c01030000",
+]
+weathercities105["Granada"] = [
+    ["グラナダ", "Granada", "Granada", "Grenade", "Granada", "Granada", "Granada"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a6efd7101030000",
+]
+weathercities105["Motril"] = [
+    ["モトリル", "Motril", "Motril", "Motril", "Motril", "Motril", "Motril"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a22fd8001030000",
+]
+weathercities105["Huelva"] = [
+    ["ウェルバ", "Huelva", "Huelva", "Huelva", "Huelva", "Huelva", "Huelva"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a7dfb1101030000",
+]
+weathercities105["Jaén"] = [
+    ["ハエン", "Jaén", "Jaén", "Jaén", "Jaén", "Jaén", "Jaén"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1adbfd4f01030000",
+]
+weathercities105["Linares"] = [
+    ["リナレス", "Linares", "Linares", "Linares", "Linares", "Linares", "Linares"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b17fd6b01030000",
+]
+weathercities105["Málaga"] = [
+    ["マラガ", "Málaga", "Málaga", "Málaga", "Málaga", "Málaga", "Málaga"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a1cfcdc01030000",
+]
+weathercities105["Marbella"] = [
+    ["マルベリャ", "Marbella", "Marbella", "Marbella", "Marbella", "Marbella", "Marbella"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "19f6fc8701030000",
+]
+weathercities105["Écija"] = [
+    ["エシハ", "Écija", "Écija", "Écija", "Écija", "Écija", "Écija"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ab1fc6501030000",
+]
+weathercities105["Lora del Río"] = [
+    [
+        "ロラ・デル・リオ",
+        "Lora del Río",
+        "Lora del Río",
+        "Lora del Río",
+        "Lora del Río",
+        "Lora del Río",
+        "Lora del Río",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ac6fc1301030000",
+]
+weathercities105["Alanís"] = [
+    ["アラニス", "Alanís", "Alanís", "Alanís", "Alanís", "Alanís", "Alanís"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b0cfbf101030000",
+]
+weathercities105["Morón de la Frontera"] = [
+    [
+        "モロン・デ・ラ・フロンテラ",
+        "Morón de la Frontera",
+        "Morón de la Frontera",
+        "Morón de la Frontera",
+        "Morón de la Frontera",
+        "Morón de la Frontera",
+        "Morón de la Frontera",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a65fc2001030000",
+]
+weathercities105["Lebrija"] = [
+    ["レブリハ", "Lebrija", "Lebrija", "Lebrija", "Lebrija", "Lebrija", "Lebrija"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a40fbaf01030000",
+]
+weathercities105["Carboneras"] = [
+    [
+        "カルボネラス",
+        "Carboneras",
+        "Carboneras",
+        "Carboneras",
+        "Carboneras",
+        "Carboneras",
+        "Carboneras",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a4ffea801030000",
+]
+weathercities105["Adra"] = [
+    ["アドラ", "Adra", "Adra", "Abdère", "Adra", "Abdera", "Abdera, Spain"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a22fddb01030000",
+]
+weathercities105["Albanchez"] = [
+    [
+        "アルバンチェス",
+        "Albanchez",
+        "Albanchez",
+        "Albanchez",
+        "Albánchez",
+        "Albanchez",
+        "Albánchez",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a83fe7301030000",
+]
+weathercities105["Barbate"] = [
+    ["バルバテ", "Barbate", "Barbate", "Barbate", "Barbate", "Barbate", "Barbate"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "19bbfbcb01030000",
+]
+weathercities105["Ubrique"] = [
+    ["ウブリケ", "Ubrique", "Ubrique", "Ubrique", "Ubrique", "Ubrique", "Ubrique"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a14fc2201030000",
+]
+weathercities105["Montoro"] = [
+    ["モントロ", "Montoro", "Montoro", "Montoro", "Montoro", "Montoro", "Montoro"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b09fce301030000",
+]
+weathercities105["Pozoblanco"] = [
+    [
+        "ポソブランコ",
+        "Pozoblanco",
+        "Pozoblanco",
+        "Pozoblanco",
+        "Pozoblanco",
+        "Pozoblanco",
+        "Pozoblanco",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b49fc8f01030000",
+]
+weathercities105["Baza"] = [
+    ["バーサ", "Baza", "Baza", "Baza", "Baza", "Baza", "Baza"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1aa8fe0801030000",
+]
+weathercities105["Huéscar"] = [
+    ["ウエスカル", "Huéscar", "Huéscar", "Huéscar", "Huéscar", "Huéscar", "Huéscar"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ae3fe3201030000",
+]
+weathercities105["Guadix"] = [
+    ["グアディクス", "Guadix", "Guadix", "Guadix", "Guadix", "Guadix", "Guadix"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a86fdc601030000",
+]
+weathercities105["Santa Olalla del Cala"] = [
+    [
+        "サンタ・オラージャ・デル・カラ",
+        "Santa Olalla del Cala",
+        "Santa Olalla del Cala",
+        "Santa Olalla del Cala",
+        "Santa Olalla del Cala",
+        "Santa Olalla del Cala",
+        "Santa Olalla del Cala",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1af4fb9401030000",
+]
+weathercities105["Cabezas Rubias"] = [
+    [
+        "カベサス・ルビアス",
+        "Cabezas Rubias",
+        "Cabezas Rubias",
+        "Cabezas Rubias",
+        "Cabezas Rubias",
+        "Cabezas Rubias",
+        "Cabezas Rubias",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ad3faf701030000",
+]
+weathercities105["Encinasola"] = [
+    [
+        "エンシナソラ",
+        "Encinasola",
+        "Encinasola",
+        "Encinasola",
+        "Encinasola",
+        "Encinasola",
+        "Encinasola",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b1efb1e01030000",
+]
+weathercities105["Nerva"] = [
+    ["ネルバ", "Nerva", "Nerva", "Nerva", "Nerva", "Nerva", "Nerva"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1acdfb5801030000",
+]
+weathercities105["Úbeda"] = [
+    ["ウベダ", "Úbeda", "Úbeda", "Úbeda", "Úbeda", "Úbeda", "Úbeda"],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b07fd9b01030000",
+]
+weathercities105["Alcalá la Real"] = [
+    [
+        "アルカラ・ラ・レアル",
+        "Alcalá la Real",
+        "Alcalá la Real",
+        "Alcalá la Real",
+        "Alcalá la Real",
+        "Alcalá la Real",
+        "Alcalá la Real",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1aa2fd3701030000",
+]
+weathercities105["Beas de Segura"] = [
+    [
+        "ベアス・デ・セグラ",
+        "Beas de Segura",
+        "Beas de Segura",
+        "Beas de Segura",
+        "Beas de Segura",
+        "Beas de Segura",
+        "Beas de Segura",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b33fdf301030000",
+]
+weathercities105["Campillos"] = [
+    [
+        "カンピージョス",
+        "Campillos",
+        "Campillos",
+        "Campillos",
+        "Campillos",
+        "Campillos",
+        "Campillos",
+    ],
+    [
+        "アンダルシーア州",
+        "Andalusia",
+        "Andalusien",
+        "Andalousie",
+        "Andalucía",
+        "Andalusia",
+        "Andalusië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a58fc8c01030000",
+]
+weathercities105["Zaragoza"] = [
+    ["サラゴサ", "Zaragoza", "Saragossa", "Saragosse", "Zaragoza", "Saragozza", "Zaragoza"],
+    ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d9eff6204030000",
+]
+weathercities105["Huesca"] = [
+    ["ウエスカ", "Huesca", "Huesca", "Huesca", "Huesca", "Huesca", "Huesca"],
+    ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1df6ffb601030000",
+]
+weathercities105["Teruel"] = [
+    ["テルエル", "Teruel", "Teruel", "Teruel", "Teruel", "Teruel", "Teruel"],
+    ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cafff3801030000",
+]
+weathercities105["Calatayud"] = [
+    [
+        "カラタユド",
+        "Calatayud",
+        "Calatayud",
+        "Calatayud",
+        "Calatayud",
+        "Calatayud",
+        "Calatayud",
+    ],
+    ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d67fed701030000",
+]
+weathercities105["Oviedo"] = [
+    ["オビエド", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo"],
+    [
+        "アストゥーリアス州",
+        "Principality of Asturias",
+        "Asturien",
+        "Asturies",
+        "Principado de Asturias",
+        "Asturie",
+        "Asturië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ed6fbda02030000",
+]
+weathercities105["Gijón"] = [
+    ["ヒホン", "Gijón", "Gijón", "Gijón", "Gijón", "Gijón", "Gijón"],
+    [
+        "アストゥーリアス州",
+        "Principality of Asturias",
+        "Asturien",
+        "Asturies",
+        "Principado de Asturias",
+        "Asturie",
+        "Asturië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ef6fbfa01030000",
+]
+weathercities105["Aviles"] = [
+    ["アビレス", "Aviles", "Avilés", "Avilés", "Avilés", "Avilés", "Avilés"],
+    [
+        "アストゥーリアス州",
+        "Principality of Asturias",
+        "Asturien",
+        "Asturies",
+        "Principado de Asturias",
+        "Asturie",
+        "Asturië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ef8fbcb01030000",
+]
+weathercities105["Grandas"] = [
+    [
+        "グランダス・デ・サリメ",
+        "Grandas",
+        "Grandas de Salime",
+        "Grandas",
+        "Grandas de Salime",
+        "Grandas",
+        "Grandas",
+    ],
+    [
+        "アストゥーリアス州",
+        "Principality of Asturias",
+        "Asturien",
+        "Asturies",
+        "Principado de Asturias",
+        "Asturie",
+        "Asturië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ebbfb1e01030000",
+]
+weathercities105["Luarca"] = [
+    ["ルアルカ", "Luarca", "Ḷḷuarca", "Luarca", "Luarca", "Luarca", "Luarca"],
+    [
+        "アストゥーリアス州",
+        "Principality of Asturias",
+        "Asturien",
+        "Asturies",
+        "Principado de Asturias",
+        "Asturie",
+        "Asturië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ef6fb5b01030000",
+]
+weathercities105["Ribadesella"] = [
+    [
+        "リバデセリャ",
+        "Ribadesella",
+        "Ribadesella",
+        "Ribadesella",
+        "Ribadesella",
+        "Ribadesella",
+        "Ribadesella",
+    ],
+    [
+        "アストゥーリアス州",
+        "Principality of Asturias",
+        "Asturien",
+        "Asturies",
+        "Principado de Asturias",
+        "Asturie",
+        "Asturië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ee8fc6801030000",
+]
+weathercities105["Palma"] = [
+    [
+        "パルマ",
+        "Palma",
+        "Palma",
+        "Palma",
+        "Palma de Mallorca",
+        "Palma di Maiorca",
+        "Palma de Mallorca",
+    ],
+    [
+        "バレアーレス諸島",
+        "Balearic Islands",
+        "Balearische Inseln",
+        "Iles Baléares",
+        "Illes Balears",
+        "Baleari",
+        "Balearen",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c2301e004030000",
+]
+weathercities105["Ciutadella de Menorca"] = [
+    [
+        "メノルカ",
+        "Ciutadella de Menorca",
+        "Ciutadella de Menorca",
+        "Minorque",
+        "Ciutadella de Menorca",
+        "Minorca",
+        "Ciutadella de Menorca",
+    ],
+    [
+        "バレアーレス諸島",
+        "Balearic Islands",
+        "Balearische Inseln",
+        "Iles Baléares",
+        "Illes Balears",
+        "Baleari",
+        "Balearen",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c7502b501030000",
+]
+weathercities105["Mahón"] = [
+    ["マオン", "Mahón", "Mahón", "Port Mahon", "Maó-Mahón", "Mahón", "Mahón"],
+    [
+        "バレアーレス諸島",
+        "Balearic Islands",
+        "Balearische Inseln",
+        "Iles Baléares",
+        "Illes Balears",
+        "Baleari",
+        "Balearen",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c5c030601030000",
+]
+weathercities105["Ibiza"] = [
+    ["イビサ", "Ibiza", "Ibiza", "Ibiza", "Eivissa", "Ivissa", "Ibiza-stad"],
+    [
+        "バレアーレス諸島",
+        "Balearic Islands",
+        "Balearische Inseln",
+        "Iles Baléares",
+        "Illes Balears",
+        "Baleari",
+        "Balearen",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1baa010201030000",
+]
+weathercities105["Manacor"] = [
+    ["マナコル", "Manacor", "Manacor", "Manacor", "Manacor", "Manacor", "Manacor"],
+    [
+        "バレアーレス諸島",
+        "Balearic Islands",
+        "Balearische Inseln",
+        "Iles Baléares",
+        "Illes Balears",
+        "Baleari",
+        "Balearen",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c22024601030000",
+]
+weathercities105["Municipality of Las Palmas"] = [
+    [
+        "ラス・パルマス",
+        "Municipality of Las Palmas",
+        "Las Palmas de Gran Canaria",
+        "Las Palmas de Gran Canaria",
+        "Las Palmas de Gran Canaria",
+        "Las Palmas de Gran Canaria",
+        "Las Palmas de Gran Canaria",
+    ],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "13fff50702030000",
+]
+weathercities105["Santa Cruz de Tenerife"] = [
+    [
+        "サンタ・クルス・デ・テネリフェ",
+        "Santa Cruz de Tenerife",
+        "Santa Cruz de Tenerife",
+        "Santa Cruz de Tenerife",
+        "Santa Cruz de Tenerife",
+        "Santa Cruz de Tenerife",
+        "Santa Cruz de Tenerife",
+    ],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "143cf47204030000",
+]
+weathercities105["Arona"] = [
+    ["アロナ", "Arona", "Arona", "Arona", "Arona", "Arona", "Arona"],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "13f8f42501030000",
+]
+weathercities105["Santa Cruz de La Palma"] = [
+    [
+        "サンタ・クルス・デ・ラ・パルマ",
+        "Santa Cruz de La Palma",
+        "Santa Cruz de La Palma",
+        "Santa Cruz de La Palma",
+        "Santa Cruz de La Palma",
+        "Santa Cruz de la Palma",
+        "Santa Cruz de la Palma",
+    ],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1465f35e01030000",
+]
+weathercities105["San Sebastián de La Gomera"] = [
+    [
+        "サン・サバスティアン・デ・ラ・ゴメラ",
+        "San Sebastián de La Gomera",
+        "San Sebastián de La Gomera",
+        "San Sebastián de la Gomera",
+        "San Sebastián de la Gomera",
+        "San Sebastián de la Gomera",
+        "San Sebastián de la Gomera",
+    ],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "13f9f3d601030000",
+]
+weathercities105["La Frontera, Santa Cruz de Tenerife"] = [
+    [
+        "フロンテラ",
+        "La Frontera, Santa Cruz de Tenerife",
+        "La Frontera",
+        "La Frontera",
+        "Frontera",
+        "La Frontera",
+        "La Frontera",
+    ],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "13bcf33101030000",
+]
+weathercities105["Puerto del Rosario"] = [
+    [
+        "プエルト・デル・ロサリオ",
+        "Puerto del Rosario",
+        "Puerto del Rosario",
+        "Puerto del Rosario",
+        "Puerto del Rosario",
+        "Puerto del Rosario",
+        "Puerto del Rosario",
+    ],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1443f62401030000",
+]
+weathercities105["Arrecife"] = [
+    ["アレシーフェ", "Arrecife", "Arrecife", "Arrecife", "Arrecife", "Arrecife", "Arrecife"],
+    [
+        "カナリア諸島",
+        "Canary Islands",
+        "Kanarische Inseln",
+        "Canaries",
+        "Canarias",
+        "Canarie",
+        "Canarische Eilanden",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1497f65e01030000",
+]
+weathercities105["Santander"] = [
+    [
+        "サンタンデール",
+        "Santander",
+        "Santander",
+        "Santander",
+        "Santander",
+        "Santander",
+        "Santander",
+    ],
+    [
+        "カンタブリア州",
+        "Cantabria",
+        "Kantabrien",
+        "Cantabrie",
+        "Cantabria",
+        "Cantabria",
+        "Cantabrië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ee8fd4c02030000",
+]
+weathercities105["Reinosa"] = [
+    ["レイノサ", "Reinosa", "Reinosa", "Reinosa", "Reinosa", "Reinosa", "Reinosa"],
+    [
+        "カンタブリア州",
+        "Cantabria",
+        "Kantabrien",
+        "Cantabrie",
+        "Cantabria",
+        "Cantabria",
+        "Cantabrië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e94fd1001030000",
+]
+weathercities105["Comillas"] = [
+    ["コミージャス", "Comillas", "Comillas", "Comillas", "Comillas", "Comillas", "Comillas"],
+    [
+        "カンタブリア州",
+        "Cantabria",
+        "Kantabrien",
+        "Cantabrie",
+        "Cantabria",
+        "Cantabria",
+        "Cantabrië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1edafcf401030000",
+]
+weathercities105["Toledo"] = [
+    ["トレド", "Toledo", "Toledo", "Tolède", "Toledo", "Toledo", "Toledo"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c57fd2402030000",
+]
+weathercities105["Albacete"] = [
+    ["アルバセテ", "Albacete", "Albacete", "Albacete", "Albacete", "Albacete", "Albacete"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bb9feaf01030000",
+]
+weathercities105["Ciudad Real"] = [
+    [
+        "シウダード・レアル",
+        "Ciudad Real",
+        "Ciudad Real",
+        "Ciudad Real",
+        "Ciudad Real",
+        "Ciudad Real",
+        "Ciudad Real",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bb8fd3601030000",
+]
+weathercities105["Puertollano"] = [
+    [
+        "プエルトリャノ",
+        "Puertollano",
+        "Puertollano",
+        "Puertollano",
+        "Puertollano",
+        "Puertollano",
+        "Puertollano",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b82fd1501030000",
+]
+weathercities105["Cuenca"] = [
+    ["クエンカ", "Cuenca", "Cuenca", "Cuenca", "Cuenca", "Cuenca", "Cuenca"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c7efe7c01030000",
+]
+weathercities105["Guadalajara"] = [
+    [
+        "グアダラハラ",
+        "Guadalajara",
+        "Guadalajara",
+        "Guadalajara",
+        "Guadalajara",
+        "Guadalajara",
+        "Guadalajara",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ce4fdc101030000",
+]
+weathercities105["Talavera de la Reina"] = [
+    [
+        "タラベラ・デ・ラ・レイナ",
+        "Talavera de la Reina",
+        "Talavera de la Reina",
+        "Talavera de la Reina",
+        "Talavera de la Reina",
+        "Talavera de la Reina",
+        "Talavera de la Reina",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c69fc9101030000",
+]
+weathercities105["Alcaraz"] = [
+    ["アルカラス", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz", "Alcaraz"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b7ffe3b01030000",
+]
+weathercities105["Hellín"] = [
+    ["エリン", "Hellín", "Hellín", "Hellín", "Hellín", "Hellín", "Hellín"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b61fecc01030000",
+]
+weathercities105["Almansa"] = [
+    ["アルマンサ", "Almansa", "Almansa", "Almansa", "Almansa", "Almansa", "Almansa"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ba3ff3901030000",
+]
+weathercities105["Alcázar de San Juan"] = [
+    [
+        "アルカサル・デ・サン・フアン",
+        "Alcázar de San Juan",
+        "Alcázar de San Juan",
+        "Alcázar de San Juan",
+        "Alcázar de San Juan",
+        "Alcázar de San Juan",
+        "Alcázar de San Juan",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c02fdb901030000",
+]
+weathercities105["Tomelloso"] = [
+    [
+        "トメリョソ",
+        "Tomelloso",
+        "Tomelloso",
+        "Tomelloso",
+        "Tomelloso",
+        "Tomelloso",
+        "Tomelloso",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bd7fddb01030000",
+]
+weathercities105["Retuerta del Bullaque"] = [
+    [
+        "レトゥエルタ・デル・ブジャケ",
+        "Retuerta del Bullaque",
+        "Retuerta del Bullaque",
+        "Retuerta del Bullaque",
+        "Retuerta del Bullaque",
+        "Retuerta del Bullaque",
+        "Retuerta del Bullaque",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c0ffcde01030000",
+]
+weathercities105["Puebla de Don Rodrigo"] = [
+    [
+        "プエブラ・デ・ドン・ロドリーゴ",
+        "Puebla de Don Rodrigo",
+        "Puebla de Don Rodrigo",
+        "Puebla de Don Rodrigo",
+        "Puebla de Don Rodrigo",
+        "Puebla de Don Rodrigo",
+        "Puebla de Don Rodrigo",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bcbfcb801030000",
+]
+weathercities105["Cañaveras"] = [
+    [
+        "カニャベラス",
+        "Cañaveras",
+        "Cañaveras",
+        "Cañaveras",
+        "Cañaveras",
+        "Cañaveras",
+        "Cañaveras",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cb2fe4c01030000",
+]
+weathercities105["San Clemente, Cuenca"] = [
+    [
+        "サン・クレメンテ",
+        "San Clemente, Cuenca",
+        "San Clemente, Cuenca",
+        "San Clemente",
+        "San Clemente",
+        "San Clemente",
+        "San Clemente",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c04fe4701030000",
+]
+weathercities105["Tarancón"] = [
+    ["タランコン", "Tarancón", "Tarancón", "Tarancón", "Tarancón", "Tarancón", "Tarancón"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c73fddd01030000",
+]
+weathercities105["Iniesta, Cuenca"] = [
+    ["イニエスタ", "Iniesta, Cuenca", "Iniesta", "Iniesta", "Iniesta", "Iniesta", "Iniesta"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c0cfec401030000",
+]
+weathercities105["Sigüenza"] = [
+    ["シグエンサ", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza", "Sigüenza"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d33fe2001030000",
+]
+weathercities105["Valladolid"] = [
+    [
+        "バリャドリード",
+        "Valladolid",
+        "Valladolid",
+        "Valladolid",
+        "Valladolid",
+        "Valladolid",
+        "Valladolid",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d9cfca502030000",
+]
+weathercities105["Burgos"] = [
+    ["ブルゴス", "Burgos", "Burgos", "Burgos", "Burgos", "Burgos", "Burgos"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e1bfd6001030000",
+]
+weathercities105["Aranda de Duero"] = [
+    [
+        "アランダ・デ・ドゥエロ",
+        "Aranda de Duero",
+        "Aranda de Duero",
+        "Aranda de Duero",
+        "Aranda de Duero",
+        "Aranda de Duero",
+        "Aranda de Duero",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1da1fd6201030000",
+]
+weathercities105["Miranda de Ebro"] = [
+    [
+        "ミランダ・デ・エブロ",
+        "Miranda de Ebro",
+        "Miranda de Ebro",
+        "Miranda de Ebro",
+        "Miranda de Ebro",
+        "Miranda de Ebro",
+        "Miranda de Ebro",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e5afde701030000",
+]
+weathercities105["Salamanca"] = [
+    [
+        "サラマンカ",
+        "Salamanca",
+        "Salamanca",
+        "Salamanque",
+        "Salamanca",
+        "Salamanca",
+        "Salamanca",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d21fbf901030000",
+]
+weathercities105["León"] = [
+    ["レオン", "León", "León", "León", "León", "León", "León"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e4bfc0b01030000",
+]
+weathercities105["Ponferrada"] = [
+    [
+        "ポンフェラダ",
+        "Ponferrada",
+        "Ponferrada",
+        "Ponferrada",
+        "Ponferrada",
+        "Ponferrada",
+        "Ponferrada",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e41fb5001030000",
+]
+weathercities105["Palencia"] = [
+    ["パレンシア", "Palencia", "Palencia", "Palencia", "Palencia", "Palencia", "Palencia"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ddffcc701030000",
+]
+weathercities105["Zamora"] = [
+    ["サモラ", "Zamora", "Zamora", "Zamora", "Zamora", "Zamora", "Zamora"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d83fbec01030000",
+]
+weathercities105["Segovia"] = [
+    ["セゴビア", "Segovia", "Segovia", "Ségovie", "Segovia", "Segovia", "Segovia"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d1dfd1301030000",
+]
+weathercities105["Ávila"] = [
+    ["アビラ", "Ávila", "Ávila", "Ávila", "Ávila", "Ávila", "Ávila"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ce9fca901030000",
+]
+weathercities105["Soria"] = [
+    ["ソリア", "Soria", "Soria", "Soria", "Soria", "Soria", "Soria"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1db1fe4101030000",
+]
+weathercities105["Arévalo"] = [
+    ["アレバロ", "Arévalo", "Arévalo", "Arévalo", "Arévalo", "Arévalo", "Arévalo"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d33fca501030000",
+]
+weathercities105["Arenas de San Pedro"] = [
+    [
+        "アレーナス・デ・サン・ペドロ",
+        "Arenas de San Pedro",
+        "Arenas de San Pedro",
+        "Arenas de San Pedro",
+        "Arenas de San Pedro",
+        "Arenas de San Pedro",
+        "Arenas de San Pedro",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c97fc6301030000",
+]
+weathercities105["Burgo de Osma-Ciudad de Osma"] = [
+    [
+        "エル・ブルゴ・デ・オスマ",
+        "Burgo de Osma-Ciudad de Osma",
+        "El Burgo de Osma-Ciudad de Osma",
+        "El Burgo de Osma",
+        "El Burgo de Osma",
+        "Burgo de Osma-Ciudad de Osma",
+        "Burgo de Osma-Ciudad de Osma",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d92fdd201030000",
+]
+weathercities105["Cuéllar"] = [
+    ["クエリャル", "Cuéllar", "Cuéllar", "Cuéllar", "Cuéllar", "Cuéllar", "Cuéllar"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d70fcef01030000",
+]
+weathercities105["Castronuño"] = [
+    [
+        "カストロヌニョ",
+        "Castronuño",
+        "Castronuño",
+        "Castronuño",
+        "Castronuño",
+        "Castronuño",
+        "Castronuño",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d6efc4301030000",
+]
+weathercities105["Medina de Rioseco"] = [
+    [
+        "メディナ・デ・リオセコ",
+        "Medina de Rioseco",
+        "Medina de Rioseco",
+        "Medina de Rioseco",
+        "Medina de Rioseco",
+        "Medina de Rioseco",
+        "Medina de Rioseco",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1dc8fc6b01030000",
+]
+weathercities105["Salas de los Infantes"] = [
+    [
+        "サラス・デ・ロス・インファンテス",
+        "Salas de los Infantes",
+        "Salas de los Infantes",
+        "Salas de los Infantes",
+        "Salas de los Infantes",
+        "Salas de los Infantes",
+        "Salas de los Infantes",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1de1fdaa01030000",
+]
+weathercities105["Medina de Pomar"] = [
+    [
+        "メディーナ・デ・ポマール",
+        "Medina de Pomar",
+        "Medina de Pomar",
+        "Medina de Pomar",
+        "Medina de Pomar",
+        "Medina de Pomar",
+        "Medina de Pomar",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e87fd8601030000",
+]
+weathercities105["Vitigudino"] = [
+    [
+        "ビティグディノ",
+        "Vitigudino",
+        "Vitigudino",
+        "Vitigudino",
+        "Vitigudino",
+        "Vitigudino",
+        "Vitigudino",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d29fb6d01030000",
+]
+weathercities105["Béjar"] = [
+    ["ベハル", "Béjar", "Béjar", "Béjar", "Béjar", "Béjar", "Béjar"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cb8fbe701030000",
+]
+weathercities105["Ciudad Rodrigo"] = [
+    [
+        "シウダード・ロドリゴ",
+        "Ciudad Rodrigo",
+        "Ciudad Rodrigo",
+        "Ciudad Rodrigo",
+        "Ciudad Rodrigo",
+        "Ciudad Rodrigo",
+        "Ciudad Rodrigo",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cdffb5c01030000",
+]
+weathercities105["Villablino"] = [
+    [
+        "ビリャブリノ",
+        "Villablino",
+        "Villablino",
+        "Villablino",
+        "Villablino",
+        "Villablino",
+        "Villablino",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e88fb8201030000",
+]
+weathercities105["Astorga"] = [
+    ["アストルガ", "Astorga", "Astorga", "Astorga", "Astorga", "Astorga", "Astorga"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e31fbb201030000",
+]
+weathercities105["Sahagún"] = [
+    ["サアグン", "Sahagún", "Sahagún", "Sahagún", "Sahagún", "Sahagún", "Sahagún"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e21fc6d01030000",
+]
+weathercities105["Riaño"] = [
+    ["リアニョ", "Riaño", "Riaño", "Riaño", "Riaño", "Riaño", "Riaño"],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e8efc7201030000",
+]
+weathercities105["Cervera de Pisuerga"] = [
+    [
+        "セルベサ・デ・ピスエルガ",
+        "Cervera de Pisuerga",
+        "Cervera de Pisuerga",
+        "Cervera de Pisuerga",
+        "Cervera de Pisuerga",
+        "Cervera de Pisuerga",
+        "Cervera de Pisuerga",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e7afccf01030000",
+]
+weathercities105["Benavente"] = [
+    [
+        "ベナベンテ",
+        "Benavente",
+        "Benavente",
+        "Benavente",
+        "Benavente",
+        "Benavente",
+        "Benavente",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ddefbf701030000",
+]
+weathercities105["Puebla de Sanabria"] = [
+    [
+        "プエブラ・デ・サナブリア",
+        "Puebla de Sanabria",
+        "Puebla de Sanabria",
+        "Puebla de Sanabria",
+        "Puebla de Sanabria",
+        "Puebla de Sanabria",
+        "Puebla de Sanabria",
+    ],
+    [
+        "カスティーリャ・レオン",
+        "Castilla y León",
+        "Kastilien-León",
+        "Castille-et-León",
+        "Castilla y León",
+        "Castiglia e Leon",
+        "Kastilië en León",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1de8fb4a01030000",
+]
+weathercities105["Barcelona"] = [
+    [
+        "バルセロナ",
+        "Barcelona",
+        "Barcelona",
+        "Barcelone",
+        "Barcelona",
+        "Barcellona",
+        "Barcelona",
+    ],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d6d018b04030000",
+]
+weathercities105["Girona"] = [
+    ["ジローナ", "Girona", "Girona", "Gérone", "Girona", "Girona", "Gerona"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1dd9020101030000",
+]
+weathercities105["Lleida"] = [
+    ["レリダ", "Lleida", "Lleida", "Lérida", "Lleida", "Lleida", "Lleida"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d98007301030000",
+]
+weathercities105["Tarragona"] = [
+    [
+        "タラゴーナ",
+        "Tarragona",
+        "Tarragona",
+        "Tarragone",
+        "Tarragona",
+        "Tarragona",
+        "Tarragona",
+    ],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d3d00e301030000",
+]
+weathercities105["Tortosa"] = [
+    ["トルトサ", "Tortosa", "Tortosa", "Tortosa", "Tortosa", "Tortosa", "Tortosa"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d05005e01030000",
+]
+weathercities105["Vic"] = [
+    ["ビク", "Vic", "Vic", "Vic", "Vic", "Vic", "Vic"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1dd1019901030000",
+]
+weathercities105["Calella"] = [
+    ["Calella", "Calella", "Calella", "Calella", "Calella", "Calella", "Calella"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d9801e501030000",
+]
+weathercities105["Setcases"] = [
+    [
+        "Setcases",
+        "Setcases",
+        "Setcases",
+        "Setcases",
+        "Setcases",
+        "Setcases",
+        "Setcases",
+    ],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e2201a301030000",
+]
+weathercities105["Figueres"] = [
+    ["フィゲレス", "Figueres", "Figueres", "Figueras", "Figueres", "Figueres", "Figueres"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e0e021c01030000",
+]
+weathercities105["Tàrrega"] = [
+    ["タラガ", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega", "Tàrrega"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d9e00ce01030000",
+]
+weathercities105["El Pont de Suert"] = [
+    [
+        "El Pont de Suert",
+        "El Pont de Suert",
+        "El Pont de Suert",
+        "El Pont de Suert",
+        "El Pont de Suert",
+        "El Pont de Suert",
+        "El Pont de Suert",
+    ],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e27008601030000",
+]
+weathercities105["Les, Catalonia"] = [
+    ["レ", "Les, Catalonia", "Les", "Catalogne", "Les", "Les", "Les"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e71008101030000",
+]
+weathercities105["Solsona"] = [
+    ["Solsona", "Solsona", "Solsona", "Solsona", "Solsona", "Solsona", "Solsona"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ddc011401030000",
+]
+weathercities105["Artesa de Segre"] = [
+    [
+        "アルテサ・デ・セグレ",
+        "Artesa de Segre",
+        "Artesa de Segre",
+        "Artesa de Segre",
+        "Artesa de Segre",
+        "Artesa de Segre",
+        "Artesa de Segre",
+    ],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1dcb00be01030000",
+]
+weathercities105["Ascó"] = [
+    ["アスコー", "Ascó", "Ascó", "Ascó", "Ascò", "Ascó", "Ascó"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d49006701030000",
+]
+weathercities105["Manresa"] = [
+    ["マンレサ", "Manresa", "Manresa", "Manrèse", "Manresa", "Manresa", "Manresa"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Cataluña",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1dab014b01030000",
+]
+weathercities105["Valencian Community"] = [
+    [
+        "バレンシア",
+        "Valencian Community",
+        "Land Valencia",
+        "Valence",
+        "Valencia",
+        "Comunità Valenzana",
+        "Valencia",
+    ],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c11ffbe04030000",
+]
+weathercities105["Gandia"] = [
+    ["ガンディア", "Gandia", "Gandia", "Gandie", "Gandia", "Gandia", "Gandia"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bb6ffe001030000",
+]
+weathercities105["Municipality of Alicante"] = [
+    [
+        "アリカンテ",
+        "Municipality of Alicante",
+        "Alicante",
+        "Alicante",
+        "Alacant / Alicante",
+        "Alicante",
+        "Alicante",
+    ],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b44ffa801030000",
+]
+weathercities105["Municipality of Castelló de la Plana"] = [
+    [
+        "カステリョン・デ・ラ・プラナ",
+        "Municipality of Castelló de la Plana",
+        "Castellón de la Plana",
+        "Castellón de la Plana",
+        "Castellón de la Plana / Castelló de la Plana",
+        "Castellón de la Plana",
+        "Castellón de la Plana",
+    ],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c6efffa01030000",
+]
+weathercities105["Benidorm"] = [
+    ["ベニドルム", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b68ffe901030000",
+]
+weathercities105["Villena"] = [
+    ["ビリェナ", "Villena", "Villena", "Villena", "Villena", "Villena", "Villena"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b78ff6301030000",
+]
+weathercities105["Xèrica"] = [
+    ["Xèrica", "Xèrica", "Jérica", "Jérica", "Jérica", "Jérica", "Jérica"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c61ff9901030000",
+]
+weathercities105["Vinaròs"] = [
+    ["ビナロス", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1cc7005601030000",
+]
+weathercities105["Morella"] = [
+    ["モレリャ", "Morella", "Morella", "Morella", "Morella", "Morella", "Morella"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ce2ffee01030000",
+]
+weathercities105["Bicorp"] = [
+    ["ビコルプ", "Bicorp", "Bicorp", "Bicorp", "Bicorp", "Bicorp", "Bicorp"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bd3ff7101030000",
+]
+weathercities105["Requena"] = [
+    ["レケナ", "Requena", "Requena", "Requena", "Requena", "Requena", "Requena"],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c14ff3801030000",
+]
+weathercities105["Aras de los Olmos"] = [
+    [
+        "アラス・デ・ロス・オルモス",
+        "Aras de los Olmos",
+        "Aras de los Olmos",
+        "Aras de los Olmos",
+        "Aras de los Olmos",
+        "Aras de los Olmos",
+        "Aras de los Olmos",
+    ],
+    [
+        "バレンシア州",
+        "Valencia",
+        "Valencia",
+        "Valence",
+        "Comunidad Valenciana",
+        "Comunità Valenciana",
+        "Valencia",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c64ff3201030000",
+]
+weathercities105["Mérida"] = [
+    ["メリダ", "Mérida", "Mérida", "Mérida", "Mérida", "Mérida", "Mérida"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bacfb7e02030000",
+]
+weathercities105["Cáceres"] = [
+    ["カセレス", "Cáceres", "Cáceres", "Cáceres", "Cáceres", "Cáceres", "Cáceres"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c12fb7901030000",
+]
+weathercities105["Badajoz"] = [
+    ["バダホス", "Badajoz", "Badajoz", "Badajoz", "Badajoz", "Badajoz", "Badajoz"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ba5fb0c01030000",
+]
+weathercities105["San Vicente de Alcántara"] = [
+    [
+        "サン・ビセンテ・デ・アルカンタラ",
+        "San Vicente de Alcántara",
+        "San Vicente de Alcántara",
+        "San Vicente de Alcántara",
+        "San Vicente de Alcántara",
+        "San Vicente de Alcántara",
+        "San Vicente de Alcántara",
+    ],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bfdfaed01030000",
+]
+weathercities105["Valencia de las Torres"] = [
+    [
+        "バレンシア",
+        "Valencia de las Torres",
+        "Valencia de las Torres",
+        "Valence",
+        "Valencia de las Torres",
+        "Valencia de las Torres",
+        "Valencia de las Torres",
+    ],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b4ffbbc01030000",
+]
+weathercities105["Castuera"] = [
+    ["カストゥエラ", "Castuera", "Castuera", "Castuera", "Castuera", "Castuera", "Castuera"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b89fc0f01030000",
+]
+weathercities105["Villanueva del Fresno"] = [
+    [
+        "ビジャヌエバ・デル・フレスノ",
+        "Villanueva del Fresno",
+        "Villanueva del Fresno",
+        "Villanueva del Fresno",
+        "Villanueva del Fresno",
+        "Villanueva del Fresno",
+        "Villanueva del Fresno",
+    ],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b4afae801030000",
+]
+weathercities105["Zafra"] = [
+    ["サフラ", "Zafra", "Zafra", "Zafra", "Zafra", "Zafra", "Zafra"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b52fb7101030000",
+]
+weathercities105["Plasencia"] = [
+    [
+        "プラセンシア",
+        "Plasencia",
+        "Plasencia",
+        "Plasence",
+        "Plasencia",
+        "Plasencia",
+        "Plasencia",
+    ],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c77fbac01030000",
+]
+weathercities105["Guadalupe"] = [
+    [
+        "グアダルペ",
+        "Guadalupe",
+        "Guadalupe",
+        "Guadalupe",
+        "Guadalupe",
+        "Guadalupe",
+        "Guadalupe",
+    ],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c0dfc3701030000",
+]
+weathercities105["Navalmoral de la Mata"] = [
+    [
+        "ナバルモラル・デ・ラ・マタ",
+        "Navalmoral de la Mata",
+        "Navalmoral de la Mata",
+        "Navalmoral de la Mata",
+        "Navalmoral de la Mata",
+        "Navalmoral de la Mata",
+        "Navalmoral de la Mata",
+    ],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c5dfc1001030000",
+]
+weathercities105["Trujillo"] = [
+    ["トルヒーリョ", "Trujillo", "Trujillo", "Trujillo", "Trujillo", "Trujillo", "Trujillo"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c0ffbd201030000",
+]
+weathercities105["Coria"] = [
+    ["コリア", "Coria", "Coria", "Coria", "Coria", "Coria", "Coria"],
+    [
+        "エストレマドゥーラ",
+        "Extremadura",
+        "Extremadura",
+        "Estrémadure",
+        "Extremadura",
+        "Estremadura",
+        "Extremadura",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c6ffb5b01030000",
+]
+weathercities105["Santiago de Compostela"] = [
+    [
+        "サンティアゴ・デ・コンポステーラ",
+        "Santiago de Compostela",
+        "Santiago de Compostela",
+        "Saint-Jacques-de-Compostelle",
+        "Santiago de Compostela",
+        "Santiago di Compostela",
+        "Santiago de Compostella",
+    ],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e7df9ed04030000",
+]
+weathercities105["A Coruña"] = [
+    [
+        "ア・コルーニャ",
+        "A Coruña",
+        "A Coruña",
+        "La Corogne",
+        "A Coruña",
+        "La Coruña",
+        "A Coruña",
+    ],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ed5fa0701030000",
+]
+weathercities105["Lugo"] = [
+    ["ルーゴ", "Lugo", "Lugo", "Lugo", "Lugo", "Lugo", "Lugo"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e96faa101030000",
+]
+weathercities105["Ourense"] = [
+    ["オーレンセ", "Ourense", "Ourense", "Orense", "Ourense", "Ourense", "Ourense"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e1cfa6801030000",
+]
+weathercities105["Vigo"] = [
+    ["ビーゴ", "Vigo", "Vigo", "Vigo", "Vigo", "Vigo", "Vigo"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e08f9ce01030000",
+]
+weathercities105["Pontevedra"] = [
+    [
+        "ポンテベドラ",
+        "Pontevedra",
+        "Pontevedra",
+        "Pontevedra",
+        "Pontevedra",
+        "Pontevedra",
+        "Pontevedra",
+    ],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e2cf9da01030000",
+]
+weathercities105["Lalín"] = [
+    ["ラリン", "Lalín", "Lalín", "Lalín", "Lalín", "Lalín", "Lalín"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e56fa3c01030000",
+]
+weathercities105["Verín"] = [
+    ["ベリン", "Verín", "Verín", "Verín", "Verín", "Verín", "Verín"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1dd3fab701030000",
+]
+weathercities105["A Rúa"] = [
+    ["A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa", "A Rúa"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e25faf001030000",
+]
+weathercities105["Monforte de Lemos"] = [
+    [
+        "モンフォルテ・デ・レモス",
+        "Monforte de Lemos",
+        "Monforte de Lemos",
+        "Monforte de Lemos",
+        "Monforte de Lemos",
+        "Monforte de Lemos",
+        "Monforte de Lemos",
+    ],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e3dfaab01030000",
+]
+weathercities105["Vilalba"] = [
+    ["ビラルバ", "Vilalba", "Vilalba", "Vilalba", "Villalba", "Vilalba", "Vilalba"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ec9fa8c01030000",
+]
+weathercities105["Ribadeo"] = [
+    ["リバデオ", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo", "Ribadeo"],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ef5faff01030000",
+]
+weathercities105["Ortigueira"] = [
+    [
+        "オルティゲイラ",
+        "Ortigueira",
+        "Ortigueira",
+        "Ortigueira",
+        "Ortigueira",
+        "Ortigueira",
+        "Ortigueira",
+    ],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1f10fa6b01030000",
+]
+weathercities105["Fisterra"] = [
+    [
+        "フィステーラ",
+        "Fisterra",
+        "Fisterra",
+        "Finisterre",
+        "Fisterra",
+        "Finisterre",
+        "Fisterra",
+    ],
+    ["ガリーシア", "Galicia", "Galicien", "Galice", "Galicia", "Galizia", "Galicië"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e82f96a01030000",
+]
+weathercities105["Murcia"] = [
+    ["ムルシア", "Murcia", "Murcia", "Murcie", "Murcia", "Murcia", "Murcia"],
+    ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b02ff3402030000",
+]
+weathercities105["Cartagena"] = [
+    [
+        "カルタヘナ",
+        "Cartagena",
+        "Cartagena",
+        "Carthagène",
+        "Cartagena",
+        "Cartagena",
+        "Cartagena",
+    ],
+    ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1abeff4c01030000",
+]
+weathercities105["Lorca"] = [
+    ["ロルカ", "Lorca", "Lorca", "Lorca", "Lorca", "Lorca", "Lorca"],
+    ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1acafecd01030000",
+]
+weathercities105["Aguilas"] = [
+    ["アギラス", "Aguilas", "Águilas", "Águilas", "Águilas", "Águilas", "Águilas"],
+    ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1a99fee001030000",
+]
+weathercities105["Moratalla, Murcia"] = [
+    [
+        "モラタリャ",
+        "Moratalla, Murcia",
+        "Moratalla",
+        "Moratalla",
+        "Moratalla",
+        "Moratalla",
+        "Moratalla",
+    ],
+    ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b27fea901030000",
+]
+weathercities105["Jumilla"] = [
+    ["フミリャ", "Jumilla", "Jumilla", "Jumilla", "Jumilla", "Jumilla", "Jumilla"],
+    ["ムルシア州", "Murcia", "Murcia", "Murcie", "Región de Murcia", "Murcia", "Murcia"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b5cff1001030000",
+]
+weathercities105["Pamplona"] = [
+    [
+        "パンプローナ",
+        "Pamplona",
+        "Pamplona",
+        "Pampelune",
+        "Pamplona / Iruña",
+        "Pamplona",
+        "Pamplona",
+    ],
+    [
+        "ナバーラ州",
+        "Navarre",
+        "Navarra",
+        "Navarre",
+        "Comunidad Foral de Navarra",
+        "Navarra",
+        "Navarra",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e72fed402030000",
+]
+weathercities105["Güesa – Gorza"] = [
+    [
+        "グエサ",
+        "Güesa – Gorza",
+        "Güesa – Gorza",
+        "Güesa",
+        "Güesa / Gorza",
+        "Gorza",
+        "Güesa",
+    ],
+    [
+        "ナバーラ州",
+        "Navarre",
+        "Navarra",
+        "Navarre",
+        "Comunidad Foral de Navarra",
+        "Navarra",
+        "Navarra",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e70ff3901030000",
+]
+weathercities105["Tudela"] = [
+    ["トゥデラ", "Tudela", "Tudela", "Tudela", "Tudela", "Tudela", "Tudela"],
+    [
+        "ナバーラ州",
+        "Navarre",
+        "Navarra",
+        "Navarre",
+        "Comunidad Foral de Navarra",
+        "Navarra",
+        "Navarra",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1de9fedb01030000",
+]
+weathercities105["Elizondo"] = [
+    [
+        "エリソンド",
+        "Elizondo",
+        "Elizondo",
+        "Elizondo",
+        "Elizondo (Baztan)",
+        "Elizondo",
+        "Elizondo",
+    ],
+    [
+        "ナバーラ州",
+        "Navarre",
+        "Navarra",
+        "Navarre",
+        "Comunidad Foral de Navarra",
+        "Navarra",
+        "Navarra",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1eaefeec01030000",
+]
+weathercities105["Vitoria-Gasteiz"] = [
+    [
+        "ビトリア",
+        "Vitoria-Gasteiz",
+        "Vitoria-Gasteiz",
+        "Vitoria-Gasteiz",
+        "Vitoria-Gasteiz",
+        "Vitoria-Gasteiz",
+        "Gasteiz",
+    ],
+    [
+        "バスク",
+        "Basque Country",
+        "Baskenland",
+        "Pays basque",
+        "País Vasco",
+        "Paesi Baschi",
+        "Baskenland",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e78fe1a04030000",
+]
+weathercities105["Bilbao"] = [
+    ["ビルバオ", "Bilbao", "Bilbao", "Bilbao", "Bilbao", "Bilbao", "Bilbao"],
+    [
+        "バスク",
+        "Basque Country",
+        "Baskenland",
+        "Pays basque",
+        "País Vasco",
+        "Paesi Baschi",
+        "Baskenland",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ec3fdeb01030000",
+]
+weathercities105["Donostia-San Sebastian"] = [
+    [
+        "サン・セバスティアン",
+        "Donostia-San Sebastian",
+        "Donostia-San Sebastián",
+        "Saint-Sébastien",
+        "Donostia-San Sebastián",
+        "San Sebastián",
+        "San Sebastian",
+    ],
+    [
+        "バスク",
+        "Basque Country",
+        "Baskenland",
+        "Pays basque",
+        "País Vasco",
+        "Paesi Baschi",
+        "Baskenland",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1ecdfe9701030000",
+]
+weathercities105["Logroño"] = [
+    ["ログローニョ", "Logroño", "Logroño", "Logroño", "Logroño", "Logroño", "Logroño"],
+    ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e32fe4202030000",
+]
+weathercities105["Calahorra"] = [
+    [
+        "カラオラ",
+        "Calahorra",
+        "Calahorra",
+        "Calahorra",
+        "Calahorra",
+        "Calahorra",
+        "Calahorra",
+    ],
+    ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e15fe9a01030000",
+]
+weathercities105["Ezcaray"] = [
+    ["エスカライ", "Ezcaray", "Ezcaray", "Ezcaray", "Ezcaray", "Ezcaray", "Ezcaray"],
+    ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e19fddc01030000",
+]
+weathercities105["Lumbreras"] = [
+    [
+        "ルンブレラス",
+        "Lumbreras",
+        "Lumbreras",
+        "Lumbreras",
+        "Lumbreras",
+        "Lumbreras",
+        "Lumbreras",
+    ],
+    ["ラ・リオハ州", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja", "La Rioja"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1df0fe2401030000",
+]
 
 weathercities107 = {}
 
@@ -42454,7 +45312,15 @@ weathercities_international["Jerusalem"] = [
     "1696190a05030000",
 ]
 weathercities_international["Nur-Sultan"] = [
-    ["ヌルスルタン", "Nur-Sultan", "Nur-Sultan", "Noursultan", "Nur-sultán", "Nur-Sultan", "Nur-Sultan"],
+    [
+        "ヌルスルタン",
+        "Nur-Sultan",
+        "Nur-Sultan",
+        "Noursultan",
+        "Nur-sultán",
+        "Nur-Sultan",
+        "Nur-Sultan",
+    ],
     ["", "", "", "", "", "", ""],
     [
         "カザフスタン",
