@@ -38127,15 +38127,16 @@ weathercities105["Lumbreras"] = [
 ]
 weathercities105["Ceuta"] = [
     ["セウタ", "Ceuta", "Ceuta", "Ceuta", "Ceuta", "Ceuta", "Ceuta"],
-    ["セウタ", "Ceuta", "Ceuta", "Ceuta", "Ceuta", "Ceuta", "Ceuta"]
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1985fc3809030000",
+    ["セウタ", "Ceuta", "Ceuta", "Ceuta", "Ceuta", "Ceuta", "Ceuta"][
+        "スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"
+    ],
+    "1985fc3801030000",
 ]
 weathercities105["Melilla"] = [
     ["メリリャ", "Melilla", "Melilla", "Melilla", "Melilla", "Melilla", "Melilla"],
     ["メリリャ", "Melilla", "Melilla", "Melilla", "Melilla", "Melilla", "Melilla"],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1918fdea09030000",
+    "1918fdea01030000",
 ]
 
 weathercities107 = {}
