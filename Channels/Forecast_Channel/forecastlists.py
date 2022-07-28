@@ -37341,16 +37341,8 @@ weathercities105["Manresa"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1dab014b01030000",
 ]
-weathercities105["Valencian Community"] = [
-    [
-        "バレンシア",
-        "Valencian Community",
-        "Land Valencia",
-        "Valence",
-        "Valencia",
-        "Comunità Valenzana",
-        "Valencia",
-    ],
+weathercities105["Valencia"] = [
+    ["バレンシア", "Valencia", "Valencia", "Valence", "Valencia", "Valencia", "Valencia"],
     [
         "バレンシア州",
         "Valencia",
