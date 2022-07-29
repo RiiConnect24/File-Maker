@@ -38873,83 +38873,43 @@ weathercities108["Bern"] = [
     ["ベルン", "Bern", "Bern", "Berne", "Berna", "Berna", "Bern"],
     ["ベルン州", "Bern", "Bern", "Berne", "Berna", "Berna", "Bern"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "2158054a00030000",
+    "2163054606030000",
 ]
 weathercities108["Biel"] = [
-    ["ビール", "Biel", "Biel", "Bienne", "Biel/Bienne", "Bienna", "Biel/Bienne"],
+    ["ビール", "Biel", "Biel", "Bienne", "Bienne", "Bienna", "Bienne"],
     ["ベルン州", "Bern", "Bern", "Berne", "Berna", "Berna", "Bern"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "217b052606030000",
-]
-weathercities108["Köniz"] = [
-    ["ケーニッツ", "Köniz", "Köniz", "Köniz", "Köniz", "Köniz", "Köniz"],
-    ["ベルン州", "Bern", "Bern", "Berne", "Berna", "Berna", "Bern"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "2154054405030000",
-]
-weathercities108["Thun"] = [
-    ["トゥーン", "Thun", "Thun", "Thoune", "Thun", "Thun", "Thun"],
-    ["ベルン州", "Bern", "Bern", "Berne", "Berna", "Berna", "Bern"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "2134056a06030000",
-]
-weathercities108["Appenzell"] = [
-    [
-        "アッペンツェル",
-        "Appenzell",
-        "Appenzell",
-        "Appenzell",
-        "Appenzell",
-        "Appenzello",
-        "Appenzell District",
-    ],
-    [
-        "アッペンツェル",
-        "Appenzell",
-        "Appenzell",
-        "Appenzell",
-        "Appenzell",
-        "Appenzello",
-        "Appenzell",
-    ],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "219d06af02030000",
+    "2197054601030000",
 ]
 weathercities108["Aarau"] = [
     ["アーラウ", "Aarau", "Aarau", "Aarau", "Aarau", "Aarau", "Aarau"],
     ["アールガウ州", "Aargau", "Aargau", "Argovie", "Argovia", "Argovia", "Aargau"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21a805b606030000",
+    "21b605b801030000",
 ]
 weathercities108["Basel"] = [
     ["バーゼル", "Basel", "Basel", "Bâle", "Basilea", "Basilea", "Bazel"],
     ["バーゼル", "Basel-City", "Basel", "Bâle-Ville", "Basilea", "Basilea Città", "Bazel"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21c7056201030000",
+    "21ce056501030000",
 ]
 weathercities108["Fribourg"] = [
     ["フリブール", "Fribourg", "Freiburg", "Fribourg", "Friburgo", "Friburgo", "Freiburg"],
     ["フリブール州", "Fribourg", "Freiburg", "Fribourg", "Friburgo", "Friburgo", "Fribourg"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "213d051407030000",
+    "2148051701030000",
 ]
 weathercities108["Geneva"] = [
     ["ジュネーヴ", "Geneva", "Genf", "Genève", "Ginebra", "Ginevra", "Genève"],
     ["ジュネーヴ州", "Geneva", "Genf", "Genève", "Ginebra", "Ginevra", "Genève"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "20d0045c09030000",
-]
-weathercities108["Vernier"] = [
-    ["ベルニエ", "Vernier", "Vernier", "Vernier", "Vernier", "Vernier", "Vernier"],
-    ["ジュネーヴ州", "Geneva", "Genf", "Genève", "Ginebra", "Ginevra", "Genève"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "20d2045106030000",
+    "20da046302030000",
 ]
 weathercities108["Glarus"] = [
     ["グラールス", "Glarus", "Glarus", "Glaris", "Glaris", "Glarona", "Glarus"],
     ["グラールス州", "Glarus", "Glarus", "Glaris", "Glaris", "Glarona", "Glarus"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "2169067003030000",
+    "2172067301030000",
 ]
 weathercities108["Chur"] = [
     ["クール", "Chur", "Chur", "Coire", "Cuera", "Coira", "Chur"],
@@ -38963,41 +38923,35 @@ weathercities108["Chur"] = [
         "Graubünden",
     ],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "214606c507030000",
+    "215206c801030000",
 ]
-weathercities108["Delémont"] = [
-    ["ドレモン", "Delémont", "Delsberg", "Delémont", "Delémont", "Delemonte", "Delémont"],
-    ["ジュラ州", "Jura", "Jura", "Jura", "Jura", "Giura", "Jura"],
+weathercities108["Saint Moritz"] = [
+    [
+        "サン・モリッツ",
+        "Saint Moritz",
+        "Sankt Moritz",
+        "Saint-Moritz",
+        "Sankt Moritz",
+        "San Maurizio",
+        "Sankt Moritz",
+    ],
+    [
+        "グラウビュンデン州",
+        "Graubünden",
+        "Graubünden",
+        "Grisons",
+        "Grisones",
+        "Grigioni",
+        "Graubünden",
+    ],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21a3053701030000",
+    "210f06ff01030000",
 ]
 weathercities108["Lucerne"] = [
     ["ルツェルン", "Lucerne", "Luzern", "Lucerne", "Lucerna", "Lucerna", "Luzern"],
     ["ルツェルン州", "Luzern", "Luzern", "Lucerne", "Lucerna", "Lucerna", "Luzern"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "216905e605030000",
-]
-weathercities108["La Chaux-de-Fonds"] = [
-    [
-        "ラ・ショー・ド・フォン",
-        "La Chaux-de-Fonds",
-        "La Chaux-de-Fonds",
-        "La Chaux-de-Fonds",
-        "La Chaux-de-Fonds",
-        "La Chaux-de-Fonds",
-        "La Chaux-de-Fonds",
-    ],
-    [
-        "ヌシャテル州",
-        "Neuchâtel",
-        "Neuenburg",
-        "Neuchâtel",
-        "Neuchatel",
-        "Neuchâtel",
-        "Neuchâtel",
-    ],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "217404da06030000",
+    "217505e801030000",
 ]
 weathercities108["Neuchâtel"] = [
     [
@@ -39019,19 +38973,13 @@ weathercities108["Neuchâtel"] = [
         "Neuchâtel",
     ],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "216004ec06030000",
-]
-weathercities108["Sarnen"] = [
-    ["ザルネン", "Sarnen", "Sarnen", "Sarnen", "Sarnen", "Sarnen", "Sarnen"],
-    ["オプバルデン準州", "Obwalden", "Obwalden", "Obwald", "Obwalden", "Obvaldo", "Obwalden"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "214e05db00030000",
+    "216304ee01030000",
 ]
 weathercities108["St. Gallen"] = [
     [
         "ザンクト・ガレン",
         "St. Gallen",
-        "Sankt Gallen",
+        "St. Gallen",
         "Saint-Gall",
         "San Galo",
         "San Gallo",
@@ -39047,29 +38995,7 @@ weathercities108["St. Gallen"] = [
         "Sankt Gallen",
     ],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21ae06a800030000",
-]
-weathercities108["Werdenberg"] = [
-    [
-        "ヴェルデンベルク",
-        "Werdenberg",
-        "Werdenberg",
-        "District de Werdenberg",
-        "Distrito de Werdenberg",
-        "Distretto di Werdenberg",
-        "Werdenberg",
-    ],
-    [
-        "ザンクト・ガレン州",
-        "St. Gallen",
-        "Sankt Gallen",
-        "Saint-Gall",
-        "Sankt Gallen",
-        "San Gallo",
-        "Sankt Gallen",
-    ],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "218006b802030000",
+    "21b906aa01030000",
 ]
 weathercities108["Schaffhausen"] = [
     [
@@ -39091,103 +39017,49 @@ weathercities108["Schaffhausen"] = [
         "Schaffhausen",
     ],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21e0062106030000",
-]
-weathercities108["Schwyz"] = [
-    ["シュウィーツ", "Schwyz", "Schwyz", "Schwytz", "Schwyz", "Svitto", "Schwyz"],
-    ["シュビーツ州", "Schwyz", "Schwyz", "Schwytz", "Schwyz", "Svitto", "Schwyz"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "2165062507030000",
-]
-weathercities108["Solothurn"] = [
-    ["ゾロトゥルン", "Solothurn", "Solothurn", "Soleure", "Soleura", "Soletta", "Solothurn"],
-    [
-        "ゾーロトゥルン州",
-        "Solothurn",
-        "Solothurn",
-        "Soleure",
-        "Soleura",
-        "Soletta",
-        "Solothurn",
-    ],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "2187055907030000",
-]
-weathercities108["Frauenfeld"] = [
-    [
-        "フラウエンフェルト",
-        "Frauenfeld",
-        "Frauenfeld",
-        "Frauenfeld",
-        "Frauenfeld",
-        "Frauenfeld",
-        "Frauenfeld",
-    ],
-    ["トゥールガウ州", "Thurgau", "Thurgau", "Thurgovie", "Turgovia", "Turgovia", "Thurgau"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21c6065108030000",
+    "21eb062301030000",
 ]
 weathercities108["Lugano"] = [
     ["ルガノ", "Lugano", "Lugano", "Lugano", "Lugano", "Lugano", "Lugano"],
     ["ティチーノ州", "Ticino", "Tessin", "Tessin", "Tesino", "Ticino", "Ticino"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "20ad065b05030000",
+    "20b6065d02030000",
 ]
-weathercities108["Altdorf"] = [
-    ["アルトドルフ", "Altdorf", "Altdorf", "Altdorf", "Altdorf", "Altdorf", "Altdorf"],
-    ["ウーリ州", "Uri", "Uri", "Uri", "Uri", "Uri", "Uri"],
+weathercities108["Locarno"] = [
+    ["ロカルノ", "Locarno", "Locarno", "Locarno", "Locarno", "Locarno", "Locarno"],
+    ["ティチーノ州", "Ticino", "Tessin", "Tessin", "Tesino", "Ticino", "Ticino"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "214b062309030000",
-]
-weathercities108["Brig"] = [
-    ["ブリーク", "Brig", "Brig", "Brig", "Brig", "Briga", "Brig"],
-    ["バレー州", "Valais", "Wallis", "Valais", "Valais", "Vallese", "Wallis"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "20e405ab02030000",
+    "20d4064401030000",
 ]
 weathercities108["Sion"] = [
     ["シオン", "Sion", "Sitten", "Sion", "Sion", "Sion", "Sion"],
     ["バレー州", "Valais", "Wallis", "Valais", "Valais", "Vallese", "Wallis"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "20d5053907030000",
+    "20e1053b01030000",
+]
+weathercities108["Brig"] = [
+    ["ブリーク", "Brig", "Brig", "Brigue", "Brig", "Briga", "Brig"],
+    ["バレー州", "Valais", "Wallis", "Valais", "Valais", "Vallese", "Wallis"],
+    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
+    "20f005aa01030000",
 ]
 weathercities108["Lausanne"] = [
     ["ローザンヌ", "Lausanne", "Lausanne", "Lausanne", "Lausana", "Losanna", "Lausanne"],
     ["ボー州", "Vaud", "Waadt", "Vaud", "Vaud", "Vaud", "Vaud"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "210a04b605030000",
+    "211504b601030000",
 ]
 weathercities108["Zug"] = [
     ["ツーク", "Zug", "Zug", "Zoug", "Zug", "Zugo", "Zug"],
     ["ツーク州", "Zug", "Zug", "Zoug", "Zug", "Zugo", "Zug"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "217f060c06030000",
-]
-weathercities108["Uster"] = [
-    ["ウスター", "Uster", "Uster", "Uster", "Uster", "Uster", "Uster"],
-    ["チューリヒ州", "Zürich", "Zürich", "Zurich", "Zúrich", "Zurigo", "Zürich"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21a1063102030000",
-]
-weathercities108["Winterthur"] = [
-    [
-        "ヴィンタートゥール",
-        "Winterthur",
-        "Winterthur",
-        "Winterthour",
-        "Winterthur",
-        "Winterthur",
-        "Winterthur",
-    ],
-    ["チューリヒ州", "Zürich", "Zürich", "Zurich", "Zúrich", "Zurigo", "Zürich"],
-    ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21bc063206030000",
+    "218c060c01030000",
 ]
 weathercities108["Zürich"] = [
     ["チューリッヒ", "Zürich", "Zürich", "Zurich", "Zúrich", "Zurigo", "Zürich"],
     ["チューリヒ州", "Zürich", "Zürich", "Zurich", "Zúrich", "Zurigo", "Zürich"],
     ["スイス", "Switzerland", "Schweiz", "Suisse", "Suiza", "Svizzera", "Zwitserland"],
-    "21a4061006030000",
+    "21b3061202030000",
 ]
 
 weathercities110 = {}
