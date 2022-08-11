@@ -35771,6 +35771,34 @@ weathercities105["Calatayud"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1d67fed701030000",
 ]
+weathercities105["Sabiñánigo"] = [
+    [
+        "サビニャニゴ",
+        "Sabiñánigo",
+        "Sabiñánigo",
+        "Sabiñánigo",
+        "Sabiñánigo",
+        "Sabiñánigo",
+        "Sabiñánigo",
+    ],
+    ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1e3cffbe01030000",
+]
+weathercities105["Calamocha"] = [
+    [
+        "カラモチャ",
+        "Calamocha",
+        "Calamocha",
+        "Calamocha",
+        "Calamocha",
+        "Calamocha",
+        "Calamocha",
+    ],
+    ["アラゴン州", "Aragon", "Aragonien", "Aragon", "Aragón", "Aragona", "Aragón"],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d18ff1401030000",
+]
 weathercities105["Oviedo"] = [
     ["オビエド", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo", "Oviedo"],
     [
@@ -36122,28 +36150,6 @@ weathercities105["Arrecife"] = [
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1497f65e01030000",
-]
-weathercities105["Fuencaliente"] = [
-    [
-        "フエンカリエンテ・デ・ラ・パルマ",
-        "Fuencaliente",
-        "Fuencaliente",
-        "Fuencaliente",
-        "Fuencaliente",
-        "Fuencaliente",
-        "Fuencaliente",
-    ],
-    [
-        "カナリア諸島",
-        "Canary Islands",
-        "Kanarische Inseln",
-        "Canaries",
-        "Canarias",
-        "Canarie",
-        "Canarische Eilanden",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1445f35001030000",
 ]
 weathercities105["Santander"] = [
     [
@@ -36540,6 +36546,100 @@ weathercities105["Sigüenza"] = [
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1d33fe2001030000",
+]
+weathercities105["Fuencaliente"] = [
+    [
+        "フエンカリエンテ",
+        "Fuencaliente",
+        "Fuencaliente",
+        "Fuencaliente",
+        "Fuencaliente",
+        "Fuencaliente",
+        "Fuencaliente",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Kastilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1b4ffcf101030000",
+]
+weathercities105["Almagro"] = [
+    ["アルマグロ", "Almagro", "Almagro", "Almagro", "Almagro", "Almagro", "Almagro"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Castilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1baafd5b01030000",
+]
+weathercities105["Piedrabuena"] = [
+    [
+        "ピエドラブエナ",
+        "Piedrabuena",
+        "Piedrabuena",
+        "Piedrabuena",
+        "Piedrabuena",
+        "Piedrabuena",
+        "Piedrabuena",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Castilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1bc2fd0901030000",
+]
+weathercities105["Ocaña"] = [
+    ["オカーニャ", "Ocaña", "Ocaña", "Ocaña", "Ocaña", "Ocaña", "Ocaña"],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Castilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c69fd8401030000",
+]
+weathercities105["Quintanar de la Orden"] = [
+    [
+        "キンタナル・デ・ラ・オルデン",
+        "Quintanar de la Orden",
+        "Quintanar de la Orden",
+        "Quintanar de la Orden",
+        "Quintanar de la Orden",
+        "Quintanar de la Orden",
+        "Quintanar de la Orden",
+    ],
+    [
+        "カスティーリャ・ラ・マンチャ",
+        "Castile-La Mancha",
+        "Kastilien-La Mancha",
+        "Castille-La Manche",
+        "Castilla-La Mancha",
+        "Castiglia-La Mancia",
+        "Castilië-La Mancha",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1c27fdd701030000",
 ]
 weathercities105["Valladolid"] = [
     [
@@ -37097,92 +37197,6 @@ weathercities105["Puebla de Sanabria"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1de8fb4a01030000",
 ]
-weathercities105["Almagro"] = [
-    ["アルマグロ", "Almagro", "Almagro", "Almagro", "Almagro", "Almagro", "Almagro"],
-    [
-        "カスティーリャ・レオン",
-        "Castile and León",
-        "Kastilien-León",
-        "Castille-et-León",
-        "Castilla y León",
-        "Castiglia e Leon",
-        "Kastilië en León",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1baafd5b01030000",
-]
-weathercities105["Piedrabuena"] = [
-    [
-        "ピエドラブエナ",
-        "Piedrabuena",
-        "Piedrabuena",
-        "Piedrabuena",
-        "Piedrabuena",
-        "Piedrabuena",
-        "Piedrabuena",
-    ],
-    [
-        "カスティーリャ・レオン",
-        "Castile and León",
-        "Kastilien-León",
-        "Castille-et-León",
-        "Castilla y León",
-        "Castiglia e Leon",
-        "Kastilië en León",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bc2fd0901030000",
-]
-weathercities105["Porzuna"] = [
-    ["ポルスナ", "Porzuna", "Porzuna", "Porzuna", "Porzuna", "Porzuna", "Porzuna"],
-    [
-        "カスティーリャ・レオン",
-        "Castile and León",
-        "Kastilien-León",
-        "Castille-et-León",
-        "Castilla y León",
-        "Castiglia e Leon",
-        "Kastilië en León",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1bd6fd0c01030000",
-]
-weathercities105["Ocaña"] = [
-    ["オカーニャ", "Ocaña", "Ocaña", "Ocaña", "Ocaña", "Ocaña", "Ocaña"],
-    [
-        "カスティーリャ・レオン",
-        "Castile and León",
-        "Kastilien-León",
-        "Castille-et-León",
-        "Castilla y León",
-        "Castiglia e Leon",
-        "Kastilië en León",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c69fd8401030000",
-]
-weathercities105["Quintanar de la Orden"] = [
-    [
-        "キンタナル・デ・ラ・オルデン",
-        "Quintanar de la Orden",
-        "Quintanar de la Orden",
-        "Quintanar de la Orden",
-        "Quintanar de la Orden",
-        "Quintanar de la Orden",
-        "Quintanar de la Orden",
-    ],
-    [
-        "カスティーリャ・レオン",
-        "Castile and León",
-        "Kastilien-León",
-        "Castille-et-León",
-        "Castilla y León",
-        "Castiglia e Leon",
-        "Kastilië en León",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1c27fdd701030000",
-]
 weathercities105["Barcelona"] = [
     [
         "バルセロナ",
@@ -37475,20 +37489,6 @@ weathercities105["Portbou"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1e2b023c01030000",
 ]
-weathercities105["Ripoll"] = [
-    ["リポル", "Ripoll", "Ripoll", "Ripoll", "Ripoll", "Ripoll", "Ripoll"],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1e01019101030000",
-]
 weathercities105["La Seu d'Urgell"] = [
     [
         "セオ・デ・ウルヘル",
@@ -37569,78 +37569,6 @@ weathercities105["Mataró"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1d8901bd01030000",
 ]
-weathercities105["Reus"] = [
-    ["レウス", "Reus", "Reus", "Reus", "Reus", "Reus", "Reus"],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d4300c901030000",
-]
-weathercities105["Sant Cugat del Vallès"] = [
-    [
-        "Sant Cugat del Vallès",
-        "Sant Cugat del Vallès",
-        "Sant Cugat del Vallès",
-        "Sant Cugat del Vallès",
-        "Sant Cugat del Vallès",
-        "Sant Cugat del Vallès",
-        "Sant Cugat del Vallès",
-    ],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d7d017b01030000",
-]
-weathercities105["Rubí"] = [
-    ["ルビー", "Rubí", "Rubí", "Rubí", "Rubí", "Rubí", "Rubí"],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d82017201030000",
-]
-weathercities105["Viladecans"] = [
-    [
-        "ビラダカンス",
-        "Viladecans",
-        "Viladecans",
-        "Viladecans",
-        "Viladecans",
-        "Viladecans",
-        "Viladecans",
-    ],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d61016e01030000",
-]
 weathercities105["Igualada"] = [
     ["イグアラダ", "Igualada", "Igualada", "Igualada", "Igualada", "Igualada", "Igualada"],
     [
@@ -37655,56 +37583,6 @@ weathercities105["Igualada"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1d92012501030000",
 ]
-weathercities105["Cambrils"] = [
-    ["カンブリス", "Cambrils", "Cambrils", "Cambrils", "Cambrils", "Cambrils", "Cambrils"],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d3300c101030000",
-]
-weathercities105["Sitges"] = [
-    ["シッチェス", "Sitges", "Sitges", "Sitges", "Sitges", "Sitges", "Sitges"],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d53014801030000",
-]
-weathercities105["Vilafranca del Penedès"] = [
-    [
-        "ヴィラフラーンカ デル ペネデース",
-        "Vilafranca del Penedès",
-        "Vilafranca del Penedès",
-        "Vilafranca del Penedès",
-        "Vilafranca del Penedès",
-        "Vilafranca del Penedès",
-        "Vilafranca del Penedès",
-    ],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d66013501030000",
-]
 weathercities105["Sort"] = [
     ["ソート", "Sort", "Sort", "Sort", "Sort", "Sort", "Sort"],
     [
@@ -37718,50 +37596,6 @@ weathercities105["Sort"] = [
     ],
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1e2d00c501030000",
-]
-weathercities105["Sant Feliu de Llobregat"] = [
-    [
-        "サンフェリウデロブレガット",
-        "Sant Feliu de Llobregat",
-        "Sant Feliu de Llobregat",
-        "Sant Feliu de Llobregat",
-        "Sant Feliu de Llobregat",
-        "Sant Feliu de Llobregat",
-        "Sant Feliu de Llobregat",
-    ],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d6d017501030000",
-]
-weathercities105["Granollers"] = [
-    [
-        "グラノリェース",
-        "Granollers",
-        "Granollers",
-        "Granollers",
-        "Granollers",
-        "Granollers",
-        "Granollers",
-    ],
-    [
-        "カタルーニャ",
-        "Catalonia",
-        "Katalonien",
-        "Catalogne",
-        "Catalunya",
-        "Catalogna",
-        "Catalonië",
-    ],
-    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
-    "1d9601a001030000",
 ]
 weathercities105["Olot"] = [
     ["オロト", "Olot", "Olot", "Olot", "Olot", "Olot", "Olot"],
@@ -37827,11 +37661,39 @@ weathercities105["Cambrils"] = [
     ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
     "1d3300c101030000",
 ]
+weathercities105["Berga"] = [
+    ["ベルガ", "Berga", "Berga", "Berga", "Berga", "Berga", "Berga"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Catalunya",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1df0014f01030000",
+]
+weathercities105["Seròs"] = [
+    ["Seròs", "Seròs", "Seròs", "Seròs", "Seròs", "Seròs", "Seròs"],
+    [
+        "カタルーニャ",
+        "Catalonia",
+        "Katalonien",
+        "Catalogne",
+        "Catalunya",
+        "Catalogna",
+        "Catalonië",
+    ],
+    ["スペイン", "Spain", "Spanien", "Espagne", "España", "Spagna", "Spanje"],
+    "1d7c004a01030000",
+]
 weathercities105["Valencia"] = [
     ["バレンシア", "Valencia", "Valencia", "Valence", "València", "Valencia", "Valencia"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37845,7 +37707,7 @@ weathercities105["Gandia"] = [
     ["ガンディア", "Gandia", "Gandia", "Gandie", "Gandia", "Gandia", "Gandia"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37867,7 +37729,7 @@ weathercities105["Alacant"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37889,7 +37751,7 @@ weathercities105["Castelló de la Plana"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37903,7 +37765,7 @@ weathercities105["Benidorm"] = [
     ["ベニドルム", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm", "Benidorm"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37917,7 +37779,7 @@ weathercities105["Villena"] = [
     ["ビリェナ", "Villena", "Villena", "Villena", "Villena", "Villena", "Villena"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37931,7 +37793,7 @@ weathercities105["Xèrica"] = [
     ["Xèrica", "Xèrica", "Jérica", "Jérica", "Jérica", "Jérica", "Jérica"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37945,7 +37807,7 @@ weathercities105["Vinaròs"] = [
     ["ビナロス", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs", "Vinaròs"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37959,7 +37821,7 @@ weathercities105["Morella"] = [
     ["モレリャ", "Morella", "Morella", "Morella", "Morella", "Morella", "Morella"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37973,7 +37835,7 @@ weathercities105["Requena"] = [
     ["レケナ", "Requena", "Requena", "Requena", "Requena", "Requena", "Requena"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -37995,7 +37857,7 @@ weathercities105["Aras de los Olmos"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38017,7 +37879,7 @@ weathercities105["Santa Pola"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38031,7 +37893,7 @@ weathercities105["Dénia"] = [
     ["デニア", "Dénia", "Dénia", "Dénia", "Dénia", "Dénia", "Dénia"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38045,7 +37907,7 @@ weathercities105["Sagunto"] = [
     ["サグント", "Sagunto", "Sagunto", "Sagunto", "Sagunto", "Sagunto", "Sagunto"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38059,7 +37921,7 @@ weathercities105["Xàtiva"] = [
     ["ハティバ", "Xàtiva", "Xàtiva", "Xàtiva", "Xàtiva", "Xàtiva", "Xàtiva"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38081,7 +37943,7 @@ weathercities105["Ontinyent"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38103,7 +37965,7 @@ weathercities105["Torrevieja"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38117,7 +37979,7 @@ weathercities105["Elx"] = [
     ["エルチェ", "Elx", "Elx", "Elx", "Elche", "Elche", "Elx"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -38139,7 +38001,7 @@ weathercities105["Peníscola"] = [
     ],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
@@ -44633,7 +44495,7 @@ weathercities_international["Valencia"] = [
     ["バレンシア", "Valencia", "Valencia", "Valence", "Valencia", "Valencia", "Valencia"],
     [
         "バレンシア州",
-        "Valencia Region",
+        "Valencian Country",
         "Land Valencia",
         "Pays valencien",
         "Comunitat Valenciana",
