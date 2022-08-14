@@ -764,17 +764,17 @@ class Parse(News):
             pass
 
     def parse_dpa_german(self):
-        if " (dpa)" not in self.article:
+        """if " (dpa)" not in self.article:
             self.article = None
-            return
+            return"""
 
         article = self.article.split("\n")
         
         i = 0
 
         for a in article:
-            if " (dpa)" in a:
-                break
+            """if " (dpa)" in a:
+                break"""
             i += 1
 
         self.article = "\n".join(article[i:])
@@ -785,7 +785,7 @@ class Parse(News):
         except AttributeError:
             pass
 
-        self.location = self.article.split(" (dpa)")[0].split("/")[0]
+        # self.location = self.article.split(" (dpa)")[0].split("/")[0]
 
     def parse_ansa(self):
         try:
