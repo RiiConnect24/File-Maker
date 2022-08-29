@@ -54,7 +54,53 @@ sources = {
         "picture": 0,
         "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
-        "countries": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52],
+        "countries": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+        ],
     },
     "ap_spanish": {
         "topics_news": {
@@ -69,7 +115,73 @@ sources = {
         "picture": 0,
         "position": 1,
         "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
-        "countries": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
+        "countries": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            65,
+            66,
+            67,
+            74,
+            76,
+            77,
+            78,
+            79,
+            82,
+            83,
+            88,
+            94,
+            95,
+            96,
+            97,
+            98,
+            105,
+            107,
+            108,
+            110,
+        ],
     },
     "reuters_europe_english": {
         "topics_news": {
@@ -88,7 +200,28 @@ sources = {
         "picture": 0,
         "position": 4,
         "copyright": "© {} Thomson Reuters. All rights reserved. Republication or redistribution of Thomson Reuters content, including by framing or similar means, is prohibited without the prior written consent of Thomson Reuters. Thomson Reuters and the Kinesis logo are trademarks of Thomson Reuters and its affiliated companies.",
-        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
+        "countries": [
+            65,
+            66,
+            67,
+            74,
+            76,
+            77,
+            78,
+            79,
+            82,
+            83,
+            88,
+            94,
+            95,
+            96,
+            97,
+            98,
+            105,
+            107,
+            108,
+            110,
+        ],
     },
     "afp_french": {
         "topics_news": {
@@ -105,17 +238,80 @@ sources = {
         "picture": 4,
         "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
-        "countries": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
+        "countries": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            65,
+            66,
+            67,
+            74,
+            76,
+            77,
+            78,
+            79,
+            82,
+            83,
+            88,
+            94,
+            95,
+            96,
+            97,
+            98,
+            105,
+            107,
+            108,
+            110,
+        ],
     },
-    "dpa_german": {
+    "afp_german": {
         "topics_news": {
-            "Deutschland": "germany",
-            "Nachrichten": "world",
             "Politik": "politics",
             "Wirtschaft": "economy",
             "Gesundheit": "health",
-            "Boulevard": "boulevard",
-            "Unterhaltung": "entertainment",
+            "Panorama": "panorama",
             "Sport": "sports",
         },
         "languages": [1, 2, 3, 4, 5, 6],
@@ -123,8 +319,29 @@ sources = {
         "country_code": 110,  # UK
         "picture": 4,
         "position": 4,
-        "copyright": "Alle Rechte für die Wiedergabe, Verwertung und Darstellung reserviert. © {} dpa",
-        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
+        "copyright": "© {} AFP",
+        "countries": [
+            65,
+            66,
+            67,
+            74,
+            76,
+            77,
+            78,
+            79,
+            82,
+            83,
+            88,
+            94,
+            95,
+            96,
+            97,
+            98,
+            105,
+            107,
+            108,
+            110,
+        ],
     },
     "ansa_italian": {
         "topics_news": {
@@ -141,7 +358,28 @@ sources = {
         "picture": 6,
         "position": 6,
         "copyright": "© {} ANSA, Tutti i diritti riservati. Testi, foto, grafica non potranno essere pubblicali, riscritti, commercializzati, distribuiti, videotrasmessi, da parte dagli tanti e del terzi in genere, in alcun modo e sotto qualsiasi forma.",
-        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
+        "countries": [
+            65,
+            66,
+            67,
+            74,
+            76,
+            77,
+            78,
+            79,
+            82,
+            83,
+            88,
+            94,
+            95,
+            96,
+            97,
+            98,
+            105,
+            107,
+            108,
+            110,
+        ],
     },
     "anp_dutch": {
         "topics_news": {
@@ -157,7 +395,28 @@ sources = {
         "picture": 0,
         "position": 5,
         "copyright": "© {} B.V. Algemeen Nederlands Persbureau ANP",
-        "countries": [65, 66, 67, 74, 76, 77, 78, 79, 82, 83, 88, 94, 95, 96, 97, 98, 105, 107, 108, 110],
+        "countries": [
+            65,
+            66,
+            67,
+            74,
+            76,
+            77,
+            78,
+            79,
+            82,
+            83,
+            88,
+            94,
+            95,
+            96,
+            97,
+            98,
+            105,
+            107,
+            108,
+            110,
+        ],
     },
     "reuters_japanese": {
         "topics_news": {
@@ -172,7 +431,7 @@ sources = {
         "country_code": 1,  # Japan
         "picture": 0,
         "position": 4,
-        "copyright": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 ",\
+        "copyright": "© Copyright Reuters {}. All rights reserved.　ユーザーは、自己の個人的使用及び非商用目的に限り、このサイトにおけるコンテンツの抜粋をダウンロードまたは印刷することができます。ロイターが事前に書面により承認した場合を除き、ロイター・コンテンツを再発行や再配布すること（フレーミングまたは類似の方法による場合を含む）は、明示的に禁止されています。Reutersおよび地球をデザインしたマークは、登録商標であり、全世界のロイター・グループの商標となっています。 ",
         "countries": [1],
     },
 }
@@ -219,10 +478,7 @@ def process_news(name, mode, language, region, d):
                 limit -= 3
 
             filesize = sum(
-                os.path.getsize(f) - 320
-                for f in glob.glob(
-                    path + "/news.bin.*"
-                )
+                os.path.getsize(f) - 320 for f in glob.glob(path + "/news.bin.*")
             )  # let's do one more check to see if the filesize is ok
 
             if filesize > 3712000:
@@ -610,12 +866,19 @@ def make_timestamps_table(mode, topics_table, topics_news):
 
                         if keys not in times:
                             for keys2 in times.keys():
-                                if difflib.SequenceMatcher(None, keys.decode("utf-16be"), keys2.decode("utf-16be")).ratio() > 0.85:
+                                if (
+                                    difflib.SequenceMatcher(
+                                        None,
+                                        keys.decode("utf-16be"),
+                                        keys2.decode("utf-16be"),
+                                    ).ratio()
+                                    > 0.85
+                                ):
                                     removed = True
                                     break
                         else:
                             removed = True
-                        
+
                         if not removed:
                             times[keys] = newstime[keys]
         except:
@@ -1021,7 +1284,6 @@ def make_source_pictures(source_table, data):
     sources = [
         "ANP",
         "AP",
-        "dpa",
         "Reuters",
         "SID",
     ]  # these are the news sources which will use a custom JPG for the logo
@@ -1087,6 +1349,7 @@ def make_riiconnect24_text():
     riiconnect24_text["padding"] = u32(0) * 4  # Padding.
     riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
+
 def purge_cache(region, source):
     if config["production"]:
         if config["cloudflare_cache_purge"]:
@@ -1102,7 +1365,7 @@ def purge_cache(region, source):
                 )
 
                 purge_cache2(url)
-            
+
             url = "http://{}/v2/{}_{}/wc24dl.vff".format(
                 config["cloudflare_hostname"],
                 str(source["language_code"]),
@@ -1110,6 +1373,7 @@ def purge_cache(region, source):
             )
 
             purge_cache2(url)
+
 
 def purge_cache2(url):
     cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
@@ -1122,6 +1386,7 @@ def purge_cache2(url):
             ]
         },
     )
+
 
 def packVFF(region):
     path = "{}/v2/{}_{}/".format(config["file_path"], language_code, region)
@@ -1141,7 +1406,7 @@ def packVFF(region):
         ],
         stdout=subprocess.DEVNULL,
     )  # Pack VFF
-    
+
     for i in range(0, 24):
         os.remove(path + "wc24dl/2.BIN.%s" % str(i).zfill(2))
     os.rmdir(path + "wc24dl")

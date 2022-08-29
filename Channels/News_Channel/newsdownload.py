@@ -11,6 +11,7 @@
 import binascii
 import collections
 import json
+import locale
 import random
 import re
 import sys
@@ -100,18 +101,15 @@ sources = {
             "politique": "politics",
         },
     },
-    "dpa_german": {
-        "name": "dpa",
-        "url": "https://feeds.t-online.de/rss/%s",
+    "afp_german": {
+        "name": "AFP_German",
+        "url": "https://tah.de/%s",
         "lang": "de",
         "cat": {
-            "deutschland": "germany",
-            "nachrichten": "world",
             "politik": "politics",
             "wirtschaft": "economy",
-            "gesundheit": "health",
-            "boulevard": "boulevard",
-            "unterhaltung": "entertainment",
+            "medizingesundheit": "health",
+            "weltimspiegel": "panorama",
             "sport": "sports",
         },
     },
@@ -181,9 +179,7 @@ sources = {
 
 def enc(text):
     if text:
-        return ftfy.fix_encoding(unescape(text)).encode(
-            "utf-16be", "replace"
-        )
+        return ftfy.fix_encoding(unescape(text)).encode("utf-16be", "replace")
 
 
 # resize the image and strip metadata (to make the image size smaller)
@@ -222,7 +218,7 @@ def shrink_image(
 
     buffer = BytesIO()
     image_without_exif.save(buffer, format="jpeg")
-    
+
     return buffer.getvalue()
 
 
@@ -444,6 +440,9 @@ class News:
                 return i
         elif self.source == "AFP_French" or self.source == "ANP":
             feed = feedparser.parse(self.url)
+        elif self.source == "AFP_German":
+            webpage = requests.get(self.url % key).content
+            soup = BeautifulSoup(webpage, "lxml")
         elif self.source == "ANSA" and value == "italy":
             feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
         elif self.source == "ANSA":
@@ -470,6 +469,8 @@ class News:
                     continue
         elif self.source == "AFP_French":
             entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
+        elif self.source == "AFP_German":
+            entries = soup.find_all("div", {"class": "article articletype-0 mb-4 mt-5"})
         else:
             entries = feed.entries
 
@@ -491,12 +492,20 @@ class News:
                     update = time.strptime(
                         entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
                     )
+                elif self.source == "AFP_German":
+                    locale.setlocale(locale.LC_ALL, "de_DE")
+                    update = time.strptime(
+                        entry.find("i").text.strip(), "%A, %d. %B %Y %H:%M"
+                    )
+                    locale.setlocale(locale.LC_ALL, "en_US")
                 else:
                     update = entry["updated_parsed"]
 
                 updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                if self.source == "AFP_French" and current_time - updated_time < 0:
+                if self.source == "AFP_German" and current_time - updated_time < 0:
+                    updated_time -= 120
+                elif self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 180
 
                 if (
@@ -522,6 +531,8 @@ class News:
                         title = entry["headline"]
                     elif self.source == "Reuters":
                         title = entry["story"]["hed"]
+                    elif self.source == "AFP_German":
+                        title = entry.find("a")["title"]
                     else:
                         title = entry["title"]
 
@@ -531,6 +542,8 @@ class News:
                         entry_url = json.dumps(entry)
                     elif self.source == "Reuters":
                         entry_url = self.url[:30] + entry["template_action"]["api_path"]
+                    elif self.source == "AFP_German":
+                        entry_url = "https://tah.de" + entry.find("a")["href"]
                     else:
                         entry_url = entry["link"]
 
@@ -592,7 +605,7 @@ class Parse(News):
             "AP": self.parse_ap,
             "Reuters": self.parse_reuters,
             "AFP_French": self.parse_afp_french,
-            "dpa": self.parse_dpa_german,
+            "AFP_German": self.parse_afp_german,
             "ANSA": self.parse_ansa,
             "ANP": self.parse_anp,
         }[self.source]()
@@ -668,7 +681,9 @@ class Parse(News):
             "",
         )
 
-        self.article = re.sub("\n\nHub peek embed ((.*)) - Compressed layout ((.*))", "", self.article)
+        self.article = re.sub(
+            "\n\nHub peek embed ((.*)) - Compressed layout ((.*))", "", self.article
+        )
 
         if self.article[-2:] == "\n":
             self.article = self.article[:-2]
@@ -693,7 +708,8 @@ class Parse(News):
                 )
 
                 self.caption = newspaper.fulltext(
-                    self.newsdata["media"][0]["caption"] + "<p></p>", language=self.language
+                    self.newsdata["media"][0]["caption"] + "<p></p>",
+                    language=self.language,
                 )
 
                 self.credits = self.caption.rsplit("(")[-1][:-1]
@@ -703,7 +719,9 @@ class Parse(News):
             self.picture = None
 
         if " (AP)" in self.article:
-            self.location = self.article.split(" (AP)")[0].split("\u2014")[0].split("\n")[-1]
+            self.location = (
+                self.article.split(" (AP)")[0].split("\u2014")[0].split("\n")[-1]
+            )
         elif "Live Updates" in self.headline:
             self.location = self.article.split(" \u2014")[0]
 
@@ -763,29 +781,41 @@ class Parse(News):
         except AttributeError:
             pass
 
-    def parse_dpa_german(self):
-        """if " (dpa)" not in self.article:
-            self.article = None
-            return"""
+    def parse_afp_german(self):
+        self.location = self.soup.find("span", {"itemprop": "name"}).get_text()
 
-        article = self.article.split("\n")
-        
-        i = 0
-
-        for a in article:
-            """if " (dpa)" in a:
-                break"""
-            i += 1
-
-        self.article = "\n".join(article[i:])
+        if "(SID)" in self.location:
+            self.location = self.location.split(" (SID)")[0]
+            self.article = self.location + " (SID) " + self.article
+        elif "(AFP)" in self.location:
+            self.location = self.location.split(" (AFP)")[0]
+            self.article = self.location + " (AFP) " + self.article
 
         try:
             self.resize = True
-            self.caption = self.soup.find("p", {"class": "Tbu"}).text
+            self.caption = (
+                self.soup.find(
+                    "p",
+                    {"class": "news-img-caption text-small text-white p-2 mb-0 w-100"},
+                )
+                .get_text()
+                .strip()
+                .split(" - (")[0]
+            )
+            self.credits = (
+                self.soup.find(
+                    "p",
+                    {"class": "news-img-caption text-small text-white p-2 mb-0 w-100"},
+                )
+                .get_text()
+                .strip()
+                .split("(")[1]
+                .split(")")[0]
+                .split(" / SID")[0]
+                .split(" / AFP")[0]
+            )
         except AttributeError:
             pass
-
-        # self.location = self.article.split(" (dpa)")[0].split("/")[0]
 
     def parse_ansa(self):
         try:
