@@ -19,7 +19,7 @@ import textwrap
 import time
 from html.parser import unescape
 from io import BytesIO, StringIO
-from datetime import datetime
+from datetime import datetime, date
 
 import feedparser
 import ftfy
@@ -113,6 +113,17 @@ sources = {
             "sport": "sports",
         },
     },
+    "afp_spanish": {
+        "name": "AFP_Spanish",
+        "url": "https://www.rfi.fr/es/más-noticias/rss",
+        "lang": "es",
+        "cat": {
+            "mundo": "world",
+            "cultura": "cultura",
+            "sociedad": "society",
+            "economia": "economy",
+        },
+    },
     "ansa_italian": {
         "name": "ANSA",
         "url": "http://ansa.it/sito/notizie/%s/%s_rss.xml",
@@ -192,7 +203,10 @@ def shrink_image(
         return None
 
     try:
-        picture = session.get(data).content
+        if source == "AFP_Spanish":
+            picture = session.get(data, headers={"User-Agent": "Python"}).content
+        else:
+            picture = session.get(data).content
     except requests.exceptions.ReadTimeout:
         return None
     except requests.exceptions.MissingSchema:
@@ -443,6 +457,10 @@ class News:
         elif self.source == "AFP_German":
             webpage = requests.get(self.url % key).content
             soup = BeautifulSoup(webpage, "lxml")
+        elif self.source == "AFP_Spanish":
+            feed = feedparser.parse(
+                requests.get(self.url, headers={"User-Agent": "Python"}).text
+            )
         elif self.source == "ANSA" and value == "italy":
             feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
         elif self.source == "ANSA":
@@ -522,7 +540,10 @@ class News:
                     if self.source == "AFP_French" or self.source == "ANP_Dutch":
                         if key not in entry["link"]:
                             continue
-                    elif self.source == "AFP" and "SID" in entry["description"]:
+                    elif self.source == "AFP_Spanish":
+                        if key not in entry["category"].lower():
+                            continue
+                    elif self.source == "AFP_German" and "SID" in entry["description"]:
                         self.source = "SID"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
@@ -606,6 +627,7 @@ class Parse(News):
             "Reuters": self.parse_reuters,
             "AFP_French": self.parse_afp_french,
             "AFP_German": self.parse_afp_german,
+            "AFP_Spanish": self.parse_afp_spanish,
             "ANSA": self.parse_ansa,
             "ANP": self.parse_anp,
         }[self.source]()
@@ -816,6 +838,30 @@ class Parse(News):
             )
         except AttributeError:
             pass
+
+    def parse_afp_spanish(self):
+        if "(AFP)" not in self.article:
+            return
+
+        for i in range(1, 10):
+            self.article = self.article.replace("\n\n#photo" + str(i), "")
+
+        self.article = self.article.replace(
+            "\n\n© " + str(date.today().year) + " AFP", ""
+        )
+
+        try:
+            self.resize = True
+            self.credits = self.soup.find_all("span", {"class": "a-media-legend"})[
+                1
+            ].get_text()
+            self.caption = self.soup.find_all("span", {"class": "a-media-legend"})[
+                0
+            ].get_text()
+        except AttributeError:
+            pass
+
+        self.location = self.article.split(" (AFP)")[0].split("\n\n")[1]
 
     def parse_ansa(self):
         try:
