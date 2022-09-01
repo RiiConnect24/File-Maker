@@ -18,6 +18,7 @@ def main():
         download("reuters_europe_english")
         download("afp_french")
         download("afp_german")
+        download("afp_spanish")
         download("ansa_italian")
         download("anp_dutch")
         download("reuters_japanese")
