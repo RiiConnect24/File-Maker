@@ -72,6 +72,23 @@ sources = {
             "apf-Entretenimiento": "shows",
         },
     },
+    "ap_canada": {
+        "name": "AP",
+        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
+        "url2": "https://www.thestar.com/content/thestar/feed.RSSManagerServlet.articles.news.canada.rss",
+        "lang": "en",
+        "cat": {
+            "canada": "canada",
+            "world-news": "world",
+            "sports": "sports",
+            "entertainment": "entertainment",
+            "business": "business",
+            "science": "science",
+            "health": "science",
+            "technology": "technology",
+            "oddities": "oddities",
+        },
+    },
     "reuters_europe_english": {
         "name": "Reuters",
         "url": "https://wireapi.reuters.com/v7/feed/rapp/uk/tabbar/feeds/%s",
@@ -445,11 +462,18 @@ class News:
     def parse_feed(self, key, value, i):
         if self.source == "AP" or self.source == "Reuters":
             try:
-                news_url = self.url % key
+                if key == "canada":
+                    feed = feedparser.parse(requests.get(self.sourceinfo["url2"]).text)
+            except:
+                pass
 
-                feed = requests.get(
-                    news_url
-                ).json()  # we use AP's API to download their news, it's epic and it uses JSON
+            try:
+                if key != "canada":
+                    news_url = self.url % key
+
+                    feed = requests.get(
+                        news_url
+                    ).json()  # we use AP's API to download their news, it's epic and it uses JSON
             except:
                 return i
         elif self.source == "AFP_French" or self.source == "ANP":
@@ -470,7 +494,7 @@ class News:
 
         j = 0
 
-        if self.source == "AP":
+        if self.source == "AP" and key != "canada":
             entries = feed["cards"]
         elif self.source == "Reuters":
             entries = []
@@ -494,17 +518,20 @@ class News:
 
         for entry in entries:
             try:
-                if self.source == "AP":
+                if self.source == "AP" and key != "canada":
                     try:
                         entry = entry["contents"][0]
                     except:
+                        continue
+                elif self.source == "AP" and key == "canada":
+                    if entry["author"] != "The Canadian Press":
                         continue
 
                 current_time = int(
                     (time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60
                 )
 
-                if self.source == "AP":
+                if self.source == "AP" and key != "canada":
                     update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
                 elif self.source == "Reuters":
                     update = time.strptime(
@@ -546,7 +573,7 @@ class News:
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
 
-                    if self.source == "AP":
+                    if self.source == "AP" and key != "canada":
                         title = entry["headline"]
                     elif self.source == "Reuters":
                         title = entry["story"]["hed"]
@@ -557,7 +584,7 @@ class News:
 
                     print(title)
 
-                    if self.source == "AP":
+                    if self.source == "AP" and key != "canada":
                         entry_url = json.dumps(entry)
                     elif self.source == "Reuters":
                         entry_url = self.url[:30] + entry["template_action"]["api_path"]
@@ -566,9 +593,15 @@ class News:
                     else:
                         entry_url = entry["link"]
 
+                    if key == "canada":
+                        self.source = "CanadianPress"
+
                     downloaded_news = Parse(
                         entry_url, self.source, updated_time, title, self.language
                     ).get_news()
+
+                    if key == "canada":
+                        self.source = "AP"
 
                     if downloaded_news:
                         self.newsdata[value + str(j)] = downloaded_news
@@ -622,6 +655,7 @@ class Parse(News):
 
         {
             "AP": self.parse_ap,
+            "CanadianPress": self.parse_canadian_press,
             "Reuters": self.parse_reuters,
             "AFP_French": self.parse_afp_french,
             "AFP_German": self.parse_afp_german,
@@ -744,6 +778,15 @@ class Parse(News):
             )
         elif "Live Updates" in self.headline:
             self.location = self.article.split(" \u2014")[0]
+
+    def parse_canadian_press(self):
+        self.article = self.article.replace("\n\nRead more about:", "").replace(
+            "\n\nSHARE:", ""
+        )
+
+        self.resize = True
+
+        self.location = self.article.split(" - ")[0] + ", Canada"
 
     def parse_reuters(self):
         try:
