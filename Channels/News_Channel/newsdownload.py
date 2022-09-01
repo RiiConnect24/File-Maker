@@ -543,8 +543,6 @@ class News:
                     elif self.source == "AFP_Spanish":
                         if key not in entry["category"].lower():
                             continue
-                    elif self.source == "AFP_German" and "SID" in entry["description"]:
-                        self.source = "SID"
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
 
@@ -807,6 +805,7 @@ class Parse(News):
         self.location = self.soup.find("span", {"itemprop": "name"}).get_text()
 
         if "(SID)" in self.location:
+            self.source = "SID"
             self.location = self.location.split(" (SID)")[0]
             self.article = self.location + " (SID) " + self.article
         elif "(AFP)" in self.location:
