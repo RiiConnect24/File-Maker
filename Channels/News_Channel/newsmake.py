@@ -1298,7 +1298,9 @@ def make_source_pictures(source_table, data):
     source_articles = []
 
     sources = [
-        "AFP",
+        "AFP_French",
+        "AFP_German",
+        "AFP_Spanish",
         "ANP",
         "AP",
         "Reuters",
