@@ -235,7 +235,7 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 3,
         "country_code": 110,  # UK
-        "picture": 4,
+        "picture": 0,
         "position": 4,
         "copyright": "Tous droits de reproduction et de diffusion réservés. © {} Agence France-Presse",
         "countries": [
@@ -317,7 +317,7 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 2,
         "country_code": 110,  # UK
-        "picture": 4,
+        "picture": 0,
         "position": 4,
         "copyright": "© {} AFP",
         "countries": [
@@ -353,7 +353,7 @@ sources = {
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 4,
         "country_code": 110,  # UK
-        "picture": 4,
+        "picture": 0,
         "position": 4,
         "copyright": "© {} AFP",
         "countries": [
@@ -1318,6 +1318,7 @@ def make_source_pictures(source_table, data):
     source_articles = []
 
     sources = [
+        "AFP",
         "ANP",
         "AP",
         "Reuters",
