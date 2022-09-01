@@ -163,6 +163,71 @@ sources = {
             52,
         ],
     },
+    "ap_canada": {
+        "topics_news": {
+            "National News": "canada",
+            "International News": "world",
+            "Sports": "sports",
+            "Arts/Entertainment": "entertainment",
+            "Business": "business",
+            "Science/Health": "science",
+            "Technology": "technology",
+            "Oddities": "oddities",
+        },
+        "languages": [1, 3, 4],
+        "language_code": 1,
+        "country_code": 18,  # Canada
+        "picture": 0,
+        "position": 1,
+        "copyright": "Copyright {} The Associated Press. All rights reserved. This material may not be published, broadcast, rewritten or redistributed.",
+        "countries": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+        ],
+    },
     "reuters_europe_english": {
         "topics_news": {
             "World": "world",
@@ -459,6 +524,7 @@ def process_news(name, mode, language, region, d):
 
     language_code = language
     data = d.newsdata
+    print(data)
     newsfilename = "news.bin.{}.{}".format(str(datetime.utcnow().hour).zfill(2), mode)
 
     # This is where we do some checks so that the file doesn't get too large
@@ -1303,6 +1369,7 @@ def make_source_pictures(source_table, data):
         "AFP_Spanish",
         "ANP",
         "AP",
+        "CanadianPress",
         "Reuters",
         "SID",
     ]  # these are the news sources which will use a custom JPG for the logo
