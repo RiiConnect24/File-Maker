@@ -1395,14 +1395,17 @@ def purge_cache(region, source):
 def purge_cache2(url):
     cf = CloudFlare.CloudFlare(token=config["cloudflare_token"])
 
-    cf.zones.purge_cache.post(
-        config["cloudflare_zone_name"],
-        data={
-            "files": [
-                url,
-            ]
-        },
-    )
+    try:
+        cf.zones.purge_cache.post(
+            config["cloudflare_zone_name"],
+            data={
+                "files": [
+                    url,
+                ]
+            },
+        )
+    except:
+        pass
 
 
 def packVFF(region):
