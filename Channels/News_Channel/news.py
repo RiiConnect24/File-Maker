@@ -32,7 +32,7 @@ def download(source):
         elif source == "ap_spanish":
             process_news("AP Spanish", "ap_spanish", 4, "America", News("ap_spanish"))
         elif source == "ap_canada":
-            process_news("AP Canada", "ap_canada", 1, "America", News("ap_canada"))
+            process_news("AP Canada", "ap_canada", 1, "Canada", News("ap_canada"))
         elif source == "reuters_europe_english":
             process_news(
                 "Reuters Europe English",
