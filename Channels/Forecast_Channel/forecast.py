@@ -985,10 +985,10 @@ def packVFF(language_code, country_code):
         config["file_path"], language_code, str(country_code).zfill(3)
     )
     os.makedirs(path + "wc24dl", exist_ok=True)
-    with open(path + "forecast.bin", "rb") as source:
+    with open(path + "forecast.alt", "rb") as source:
         with open(path + "wc24dl/3.BIN", "wb") as dest:
             dest.write(source.read()[320:])
-    with open(path + "short.bin", "rb") as source:
+    with open(path + "short.alt", "rb") as source:
         with open(path + "wc24dl/4.BIN", "wb") as dest:
             dest.write(source.read()[320:])
     subprocess.call(
