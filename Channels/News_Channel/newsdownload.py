@@ -138,7 +138,9 @@ sources = {
             "mundo": "world",
             "cultura": "cultura",
             "sociedad": "society",
-            "economia": "economy",
+            "economía": "economy",
+            "deportes": "sports",
+            "gente": "people",
         },
     },
     "ansa_italian": {
