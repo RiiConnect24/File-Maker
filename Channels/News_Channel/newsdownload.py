@@ -200,6 +200,7 @@ sources = {
         "lang": "nl",
         "cat": {
             "algemeen": "general",
+            "nl12": "national",
             "economie": "economy",
             "sport": "sports",
             "entertainment": "entertainment",

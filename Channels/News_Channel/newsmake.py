@@ -532,6 +532,7 @@ sources = {
     "anp_dutch": {
         "topics_news": {
             "Algemeen": "general",
+            "Regionaal": "national",
             "Economie": "economy",
             "Sport": "sports",
             "Entertainment": "entertainment",
@@ -539,7 +540,7 @@ sources = {
         },
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 6,
-        "country_code": 110,  # Uk
+        "country_code": 110,  # UK
         "picture": 0,
         "position": 5,
         "copyright": "© {} B.V. Algemeen Nederlands Persbureau ANP",
