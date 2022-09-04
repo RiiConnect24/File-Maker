@@ -16,6 +16,7 @@ def main():
         download("ap_english")
         download("ap_spanish")
         download("ap_canada")
+        download("ap_australia")
         download("reuters_europe_english")
         download("afp_french")
         download("afp_german")
@@ -33,6 +34,10 @@ def download(source):
             process_news("AP Spanish", "ap_spanish", 4, "America", News("ap_spanish"))
         elif source == "ap_canada":
             process_news("AP Canada", "ap_canada", 1, "Canada", News("ap_canada"))
+        elif source == "ap_australia":
+            process_news(
+                "AP Australia", "ap_australia", 1, "Australia", News("ap_australia")
+            )
         elif source == "reuters_europe_english":
             process_news(
                 "Reuters Europe English",

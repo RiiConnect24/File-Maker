@@ -52,13 +52,13 @@ sources = {
         "cat": {
             "us-news": "national",
             "world-news": "world",
+            "oddities": "oddities",
+            "technology": "technology",
+            "science": "science",
+            "health": "science",
             "sports": "sports",
             "entertainment": "entertainment",
             "business": "business",
-            "science": "science",
-            "health": "science",
-            "technology": "technology",
-            "oddities": "oddities",
         },
     },
     "ap_spanish": {
@@ -78,15 +78,31 @@ sources = {
         "url2": "https://www.thestar.com/content/thestar/feed.RSSManagerServlet.articles.news.canada.rss",
         "lang": "en",
         "cat": {
-            "canada": "canada",
+            "canada": ["canada_", "canada"],
             "world-news": "world",
+            "oddities": "oddities",
+            "technology": "technology",
+            "science": "science",
+            "health": "science",
             "sports": "sports",
             "entertainment": "entertainment",
             "business": "business",
+        },
+    },
+    "ap_australia": {
+        "name": "AP",
+        "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
+        "lang": "en",
+        "cat": {
+            "national": ["australia", "new-zealand"],
+            "world-news": "world",
+            "oddities": "oddities",
+            "technology": "technology",
             "science": "science",
             "health": "science",
-            "technology": "technology",
-            "oddities": "oddities",
+            "sports": "sports",
+            "entertainment": "entertainment",
+            "business": "business",
         },
     },
     "reuters_europe_english": {
@@ -180,7 +196,7 @@ sources = {
     },
     "anp_dutch": {
         "name": "ANP",
-        "url": "https://nieuws.nl/feed/",
+        "url": "https://nieuws.nl/%s/feed/",
         "lang": "nl",
         "cat": {
             "algemeen": "general",
@@ -437,6 +453,7 @@ class News:
         self.url = self.sourceinfo["url"]
         self.language = self.sourceinfo["lang"]
         self.newsdata = {}
+        self.headlines = []
 
         self.source = self.sourceinfo["name"]
 
@@ -464,13 +481,13 @@ class News:
     def parse_feed(self, key, value, i):
         if self.source == "AP" or self.source == "Reuters":
             try:
-                if key == "canada":
+                if key == "canada_":
                     feed = feedparser.parse(requests.get(self.sourceinfo["url2"]).text)
             except:
                 pass
 
             try:
-                if key != "canada":
+                if key != "canada_":
                     news_url = self.url % key
 
                     feed = requests.get(
@@ -496,7 +513,7 @@ class News:
 
         j = 0
 
-        if self.source == "AP" and key != "canada":
+        if self.source == "AP" and key != "canada_":
             entries = feed["cards"]
         elif self.source == "Reuters":
             entries = []
@@ -520,12 +537,12 @@ class News:
 
         for entry in entries:
             try:
-                if self.source == "AP" and key != "canada":
+                if self.source == "AP" and key != "canada_":
                     try:
                         entry = entry["contents"][0]
                     except:
                         continue
-                elif self.source == "AP" and key == "canada":
+                elif self.source == "AP" and key == "canada_":
                     if entry["author"] != "The Canadian Press":
                         continue
 
@@ -533,7 +550,7 @@ class News:
                     (time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60
                 )
 
-                if self.source == "AP" and key != "canada":
+                if self.source == "AP" and key != "canada_":
                     update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
                 elif self.source == "Reuters":
                     update = time.strptime(
@@ -575,7 +592,7 @@ class News:
                     elif self.source == "NU.nl" and entry["author"] == "ANP":
                         self.source = "ANP"
 
-                    if self.source == "AP" and key != "canada":
+                    if self.source == "AP" and key != "canada_":
                         title = entry["headline"]
                     elif self.source == "Reuters":
                         title = entry["story"]["hed"]
@@ -584,29 +601,34 @@ class News:
                     else:
                         title = entry["title"]
 
-                    print(title)
+                    if title not in self.headlines:
+                        self.headlines.append(title)
 
-                    if self.source == "AP" and key != "canada":
-                        entry_url = json.dumps(entry)
-                    elif self.source == "Reuters":
-                        entry_url = self.url[:30] + entry["template_action"]["api_path"]
-                    elif self.source == "AFP_German":
-                        entry_url = "https://tah.de" + entry.find("a")["href"]
-                    else:
-                        entry_url = entry["link"]
+                        print(title)
 
-                    if key == "canada":
-                        self.source = "CanadianPress"
+                        if self.source == "AP" and key != "canada_":
+                            entry_url = json.dumps(entry)
+                        elif self.source == "Reuters":
+                            entry_url = (
+                                self.url[:30] + entry["template_action"]["api_path"]
+                            )
+                        elif self.source == "AFP_German":
+                            entry_url = "https://tah.de" + entry.find("a")["href"]
+                        else:
+                            entry_url = entry["link"]
 
-                    downloaded_news = Parse(
-                        entry_url, self.source, updated_time, title, self.language
-                    ).get_news()
+                        if key == "canada_":
+                            self.source = "CanadianPress"
 
-                    if key == "canada":
-                        self.source = "AP"
+                        downloaded_news = Parse(
+                            entry_url, self.source, updated_time, title, self.language
+                        ).get_news()
 
-                    if downloaded_news:
-                        self.newsdata[value + str(j)] = downloaded_news
+                        if key == "canada_":
+                            self.source = "AP"
+
+                        if downloaded_news:
+                            self.newsdata[value + str(j)] = downloaded_news
             except Exception as e:
                 ex = "Failed to parse feed - line {}: {}".format(
                     sys.exc_info()[-1].tb_lineno, str(e)
