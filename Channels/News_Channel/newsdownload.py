@@ -496,11 +496,15 @@ class News:
                     ).json()  # we use AP's API to download their news, it's epic and it uses JSON
             except:
                 return i
-        elif self.source == "AFP_Spanish" or self.source == "AFP_French":
+        elif self.source == "AFP_French":
             feed = feedparser.parse(self.url)
         elif self.source == "AFP_German":
             webpage = requests.get(self.url % key).content
             soup = BeautifulSoup(webpage, "lxml")
+        elif self.source == "AFP_Spanish":
+            feed = feedparser.parse(
+                requests.get(self.url, headers={"User-Agent": "Python"}).text
+            )
         elif self.source == "ANSA" and value == "italy":
             feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
         elif self.source == "ANSA":
