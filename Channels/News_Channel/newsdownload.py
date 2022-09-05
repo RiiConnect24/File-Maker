@@ -809,6 +809,9 @@ class Parse(News):
             "\n\nSHARE:", ""
         )
 
+        if "thestar-ribbon.png" in self.picture:
+            self.picture = False
+
         self.resize = True
 
         self.location = self.article.split(" - ")[0] + ", Canada"
