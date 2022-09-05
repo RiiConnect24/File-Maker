@@ -496,7 +496,7 @@ class News:
                     ).json()  # we use AP's API to download their news, it's epic and it uses JSON
             except:
                 return i
-        elif self.source == "AFP_French" or self.source == "ANP":
+        elif self.source == "AFP_French":
             feed = feedparser.parse(self.url)
         elif self.source == "AFP_German":
             webpage = requests.get(self.url % key).content
