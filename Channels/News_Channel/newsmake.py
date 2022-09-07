@@ -592,7 +592,7 @@ def process_news(name, mode, language, region, d):
 
     language_code = language
     data = d.newsdata
-    print(data)
+    print(data.keys())
     newsfilename = "news.bin.{}.{}".format(str(datetime.utcnow().hour).zfill(2), mode)
 
     # This is where we do some checks so that the file doesn't get too large
