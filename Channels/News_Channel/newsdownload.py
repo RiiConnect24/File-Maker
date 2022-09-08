@@ -515,7 +515,10 @@ class News:
         j = 0
 
         if self.source == "AP" and key != "canada_":
-            entries = feed["cards"]
+            try:
+                entries = feed["cards"]
+            except:
+                continue
         elif self.source == "Reuters":
             entries = []
             entries2 = feed["wireitems"]
