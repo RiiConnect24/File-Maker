@@ -724,6 +724,7 @@ class Parse(News):
             return []
 
         self.article = self.newsdata.text
+        self.location = self.newsdata.text
         self.picture = self.newsdata.top_image
         self.html = self.newsdata.html
         self.soup = BeautifulSoup(self.html, "lxml")
