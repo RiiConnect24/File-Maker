@@ -643,12 +643,7 @@ class News:
                     continue
 
             return i
-    except Exception as e:
-        ex = "Error - line {}: {}".format(
-            sys.exc_info()[-1].tb_lineno, str(e)
-        )
-        print(ex)
-        log(ex, "INFO")
+    except:
         continue
 
 
