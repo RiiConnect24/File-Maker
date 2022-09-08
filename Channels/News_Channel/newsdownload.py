@@ -518,7 +518,7 @@ class News:
             try:
                 entries = feed["cards"]
             except:
-                continue
+                return
         elif self.source == "Reuters":
             entries = []
             entries2 = feed["wireitems"]
