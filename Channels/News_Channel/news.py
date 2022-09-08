@@ -5,6 +5,7 @@ from Channels.News_Channel import newsdownload, newsmake
 from .newsdownload import News
 from .newsmake import process_news
 import sys
+import threading
 from utils import *
 
 
@@ -13,17 +14,27 @@ def main():
     if len(sys.argv) > 1:
         download(sys.argv[1])
     else:
-        download("ap_english")
-        download("ap_spanish")
-        download("reuters_europe_english")
-        download("afp_french")
-        download("afp_german")
-        download("afp_spanish")
-        download("ansa_italian")
-        download("anp_dutch")
-        download("reuters_japanese")
-        download("ap_canada")
-        download("ap_australia")
+        threads = []
+
+        sources = [
+            "ap_english",
+            "ap_spanish",
+            "reuters_europe_english",
+            "afp_french",
+            "afp_german",
+            "afp_spanish",
+            "ansa_italian",
+            "anp_dutch",
+            "reuters_japanese",
+        ]
+
+        for source in sources:
+            t = threading.Thread(target=download, args=(source,))
+            threads.append(t)
+            t.start()
+
+        for t in threads:
+            t.join()
 
 
 def download(source):
