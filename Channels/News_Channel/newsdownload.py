@@ -470,181 +470,186 @@ class News:
 
         i = 0
 
-        for key, value in list(self.sourceinfo["cat"].items()):
-            if isinstance(value, list):
-                for v in random.sample(
-                    value, len(value)
-                ):  # reverse and mix up the list
-                    i = self.parse_feed(v, key, i)
-            else:
-                i = self.parse_feed(key, value, i)
+        try:
+            for key, value in list(self.sourceinfo["cat"].items()):
+                if isinstance(value, list):
+                    for v in random.sample(
+                        value, len(value)
+                    ):  # reverse and mix up the list
+                        i = self.parse_feed(v, key, i)
+                else:
+                    i = self.parse_feed(key, value, i)
+        except Exception as e:
+            ex = "Failed to parse feed - line {}: {}".format(
+                sys.exc_info()[-1].tb_lineno, str(e)
+            )
+            print(ex)
+            log(ex, "INFO")
+            return
 
     def parse_feed(self, key, value, i):
-        try:
-            if self.source == "AP" or self.source == "Reuters":
+        if self.source == "AP" or self.source == "Reuters":
+            try:
+                if key == "canada_":
+                    feed = feedparser.parse(requests.get(self.sourceinfo["url2"]).text)
+            except:
+                pass
+
+            try:
+                if key != "canada_":
+                    news_url = self.url % key
+
+                    feed = requests.get(
+                        news_url
+                    ).json()  # we use AP's API to download their news, it's epic and it uses JSON
+            except:
+                return i
+        elif self.source == "AFP_French":
+            feed = feedparser.parse(self.url)
+        elif self.source == "AFP_German":
+            webpage = requests.get(self.url % key).content
+            soup = BeautifulSoup(webpage, "lxml")
+        elif self.source == "AFP_Spanish":
+            feed = feedparser.parse(
+                requests.get(self.url, headers={"User-Agent": "Python"}).text
+            )
+        elif self.source == "ANSA" and value == "italy":
+            feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
+        elif self.source == "ANSA":
+            feed = feedparser.parse(self.url % (key, key))
+        else:
+            feed = feedparser.parse(self.url % key)
+
+        j = 0
+
+        if self.source == "AP" and key != "canada_":
+            try:
+                entries = feed["cards"]
+            except:
+                return
+        elif self.source == "Reuters":
+            entries = []
+            entries2 = feed["wireitems"]
+            for entry in entries2:
                 try:
-                    if key == "canada_":
-                        feed = feedparser.parse(requests.get(self.sourceinfo["url2"]).text)
+                    entry = entry["templates"][1]
+                    if entry["type"] == "story":
+                        entries.append(entry)
+                    elif entry["type"] == "headlines":
+                        for entry2 in entry["headlines"]:
+                            entries.append(entry2)
                 except:
-                    pass
+                    continue
+        elif self.source == "AFP_French":
+            entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
+        elif self.source == "AFP_German":
+            entries = soup.find_all("div", {"class": "article articletype-0 mb-4 mt-5"})
+        else:
+            entries = feed.entries
 
-                try:
-                    if key != "canada_":
-                        news_url = self.url % key
-
-                        feed = requests.get(
-                            news_url
-                        ).json()  # we use AP's API to download their news, it's epic and it uses JSON
-                except:
-                    return i
-            elif self.source == "AFP_French":
-                feed = feedparser.parse(self.url)
-            elif self.source == "AFP_German":
-                webpage = requests.get(self.url % key).content
-                soup = BeautifulSoup(webpage, "lxml")
-            elif self.source == "AFP_Spanish":
-                feed = feedparser.parse(
-                    requests.get(self.url, headers={"User-Agent": "Python"}).text
-                )
-            elif self.source == "ANSA" and value == "italy":
-                feed = feedparser.parse(self.sourceinfo["url2"] % (key, key))
-            elif self.source == "ANSA":
-                feed = feedparser.parse(self.url % (key, key))
-            else:
-                feed = feedparser.parse(self.url % key)
-
-            j = 0
-
-            if self.source == "AP" and key != "canada_":
-                try:
-                    entries = feed["cards"]
-                except:
-                    return
-            elif self.source == "Reuters":
-                entries = []
-                entries2 = feed["wireitems"]
-                for entry in entries2:
+        for entry in entries:
+            try:
+                if self.source == "AP" and key != "canada_":
                     try:
-                        entry = entry["templates"][1]
-                        if entry["type"] == "story":
-                            entries.append(entry)
-                        elif entry["type"] == "headlines":
-                            for entry2 in entry["headlines"]:
-                                entries.append(entry2)
+                        entry = entry["contents"][0]
                     except:
                         continue
-            elif self.source == "AFP_French":
-                entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
-            elif self.source == "AFP_German":
-                entries = soup.find_all("div", {"class": "article articletype-0 mb-4 mt-5"})
-            else:
-                entries = feed.entries
+                elif self.source == "AP" and key == "canada_":
+                    if entry["author"] != "The Canadian Press":
+                        continue
 
-            for entry in entries:
-                try:
-                    if self.source == "AP" and key != "canada_":
-                        try:
-                            entry = entry["contents"][0]
-                        except:
-                            continue
-                    elif self.source == "AP" and key == "canada_":
-                        if entry["author"] != "The Canadian Press":
-                            continue
+                current_time = int(
+                    (time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60
+                )
 
-                    current_time = int(
-                        (time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60
+                if self.source == "AP" and key != "canada_":
+                    update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
+                elif self.source == "Reuters":
+                    update = time.strptime(
+                        entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
                     )
+                elif self.source == "AFP_German":
+                    locale.setlocale(locale.LC_ALL, "de_DE")
+                    update = time.strptime(
+                        entry.find("i").text.strip(), "%A, %d. %B %Y %H:%M"
+                    )
+                    locale.setlocale(locale.LC_ALL, "en_US")
+                else:
+                    update = entry["updated_parsed"]
 
-                    if self.source == "AP" and key != "canada_":
-                        update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
-                    elif self.source == "Reuters":
-                        update = time.strptime(
-                            entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
-                        )
-                    elif self.source == "AFP_German":
-                        locale.setlocale(locale.LC_ALL, "de_DE")
-                        update = time.strptime(
-                            entry.find("i").text.strip(), "%A, %d. %B %Y %H:%M"
-                        )
-                        locale.setlocale(locale.LC_ALL, "en_US")
-                    else:
-                        update = entry["updated_parsed"]
+                updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                    updated_time = int((time.mktime(update) - 946684800) / 60)
+                if self.source == "AFP_German" and current_time - updated_time < 0:
+                    updated_time -= 120
+                elif self.source == "AFP_French" and current_time - updated_time < 0:
+                    updated_time -= 180
 
-                    if self.source == "AFP_German" and current_time - updated_time < 0:
-                        updated_time -= 120
-                    elif self.source == "AFP_French" and current_time - updated_time < 0:
-                        updated_time -= 180
+                if (
+                    current_time - updated_time < 60
+                ):  # if it's a new article since the last hour
+                    i += 1
+                    j += 1
 
                     if (
-                        current_time - updated_time < 60
-                    ):  # if it's a new article since the last hour
-                        i += 1
-                        j += 1
+                        i > 25
+                    ):  # in case we have too many articles, we don't want the news file to get too big, there's a limit
+                        break
 
-                        if (
-                            i > 25
-                        ):  # in case we have too many articles, we don't want the news file to get too big, there's a limit
-                            break
+                    if self.source == "AFP_French" or self.source == "ANP_Dutch":
+                        if key not in entry["link"]:
+                            continue
+                    elif self.source == "AFP_Spanish":
+                        if key not in entry["category"].lower():
+                            continue
+                    elif self.source == "NU.nl" and entry["author"] == "ANP":
+                        self.source = "ANP"
 
-                        if self.source == "AFP_French" or self.source == "ANP_Dutch":
-                            if key not in entry["link"]:
-                                continue
-                        elif self.source == "AFP_Spanish":
-                            if key not in entry["category"].lower():
-                                continue
-                        elif self.source == "NU.nl" and entry["author"] == "ANP":
-                            self.source = "ANP"
+                    if self.source == "AP" and key != "canada_":
+                        title = entry["headline"]
+                    elif self.source == "Reuters":
+                        title = entry["story"]["hed"]
+                    elif self.source == "AFP_German":
+                        title = entry.find("a")["title"]
+                    else:
+                        title = entry["title"]
+
+                    if title not in self.headlines:
+                        self.headlines.append(title)
+
+                        print(title)
 
                         if self.source == "AP" and key != "canada_":
-                            title = entry["headline"]
+                            entry_url = json.dumps(entry)
                         elif self.source == "Reuters":
-                            title = entry["story"]["hed"]
+                            entry_url = (
+                                self.url[:30] + entry["template_action"]["api_path"]
+                            )
                         elif self.source == "AFP_German":
-                            title = entry.find("a")["title"]
+                            entry_url = "https://tah.de" + entry.find("a")["href"]
                         else:
-                            title = entry["title"]
+                            entry_url = entry["link"]
 
-                        if title not in self.headlines:
-                            self.headlines.append(title)
+                        if key == "canada_":
+                            self.source = "CanadianPress"
 
-                            print(title)
+                        downloaded_news = Parse(
+                            entry_url, self.source, updated_time, title, self.language
+                        ).get_news()
 
-                            if self.source == "AP" and key != "canada_":
-                                entry_url = json.dumps(entry)
-                            elif self.source == "Reuters":
-                                entry_url = (
-                                    self.url[:30] + entry["template_action"]["api_path"]
-                                )
-                            elif self.source == "AFP_German":
-                                entry_url = "https://tah.de" + entry.find("a")["href"]
-                            else:
-                                entry_url = entry["link"]
+                        if key == "canada_":
+                            self.source = "AP"
 
-                            if key == "canada_":
-                                self.source = "CanadianPress"
+                        if downloaded_news:
+                            self.newsdata[value + str(j)] = downloaded_news
+            except Exception as e:
+                ex = "Failed to parse feed - line {}: {}".format(
+                    sys.exc_info()[-1].tb_lineno, str(e)
+                )
+                print(ex)
+                log(ex, "INFO")
+                continue
 
-                            downloaded_news = Parse(
-                                entry_url, self.source, updated_time, title, self.language
-                            ).get_news()
-
-                            if key == "canada_":
-                                self.source = "AP"
-
-                            if downloaded_news:
-                                self.newsdata[value + str(j)] = downloaded_news
-                except Exception as e:
-                    ex = "Failed to parse feed - line {}: {}".format(
-                        sys.exc_info()[-1].tb_lineno, str(e)
-                    )
-                    print(ex)
-                    log(ex, "INFO")
-                    continue
-
-            return i
-    except:
-        continue
+        return i
 
 
 class Parse(News):
