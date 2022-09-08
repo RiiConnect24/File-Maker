@@ -804,6 +804,8 @@ class Parse(News):
             )
         elif "Live Updates" in self.headline:
             self.location = self.article.split(" \u2014")[0]
+        else:
+            self.location = self.article
 
     def parse_canadian_press(self):
         self.article = self.article.replace("\n\nRead more about:", "").replace(
