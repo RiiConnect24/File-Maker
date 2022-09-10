@@ -390,8 +390,6 @@ def locations_download(
         if name == "":
             continue
 
-        print(name)
-
         coordinates = None
 
         if name not in cities:
@@ -401,6 +399,8 @@ def locations_download(
                 for loc in read[0]["address_components"]:
                     if "locality" in loc["types"]:
                         loc_name = loc["long_name"]
+
+                print(loc_name)
 
                 loc_name = enc(loc_name)
 
@@ -507,7 +507,7 @@ class News:
             except:
                 return i
         elif self.source == "AFP_French":
-            feed = feedparser.parse(self.url)
+            feed = feedparser.parse(requests.get(self.url).content)
         elif self.source == "AFP_German":
             webpage = requests.get(self.url % key).content
             soup = BeautifulSoup(webpage, "lxml")
@@ -587,7 +587,7 @@ class News:
                     updated_time -= 180
 
                 if (
-                    current_time - updated_time < 60
+                    current_time - updated_time < 300
                 ):  # if it's a new article since the last hour
                     i += 1
                     j += 1
@@ -823,9 +823,9 @@ class Parse(News):
     def parse_canadian_press(self):
         self.article = self.article.replace("\n\nRead more about:", "").replace(
             "\n\nSHARE:", ""
-        )
+        )  # remove junk from the article
 
-        if "thestar-ribbon.png" in self.picture:
+        if "thestar-ribbon.png" in self.picture:  # this is the default picture used
             self.picture = False
 
         self.resize = True
@@ -867,10 +867,16 @@ class Parse(News):
         except:
             pass
 
+        # move the credits for the article to the end of the article
+
+        if self.article[:3] == "By ":
+            self.article = (
+                self.article.split("\n\n")[1] + "\n\n" + self.article.split("\n\n")[0]
+            )
+
     def parse_afp_french(self):
         try:
             self.resize = True
-            self.caption = self.soup.find("figcaption", {"class": "art-caption"}).text
         except AttributeError:
             pass
 
@@ -878,12 +884,14 @@ class Parse(News):
 
         try:
             if "(AFP)" in self.article:
-                buf = StringIO(self.article)
-                line = buf.readlines()[-1]
-                buf = StringIO(self.article)
-                self.location = line.strip()[22:-19]
-                self.article = line.strip()[22:-10] + buf.readlines()[1:].replace(
-                    "\n\n" + line, ""
+                line = self.article.split("\n\n")[-1]
+                self.location = line.split(" - ")[1].split(" (AFP)")[0]
+                self.article = (
+                    self.location
+                    + " (AFP) - "
+                    + self.article.replace(self.headline + "\n\n", "").replace(
+                        "\n\n" + line, ""
+                    )
                 )
         except AttributeError:
             pass
@@ -894,10 +902,10 @@ class Parse(News):
         if "(SID)" in self.location:
             self.source = "SID"
             self.location = self.location.split(" (SID)")[0]
-            self.article = self.location + " (SID) " + self.article
+            self.article = self.location + " (SID) - " + self.article
         elif "(AFP)" in self.location:
             self.location = self.location.split(" (AFP)")[0]
-            self.article = self.location + " (AFP) " + self.article
+            self.article = self.location + " (AFP) - " + self.article
 
         try:
             self.resize = True
@@ -946,6 +954,8 @@ class Parse(News):
             ].get_text()
         except AttributeError:
             pass
+
+        self.article = self.article.replace(self.caption + "\n\n", "")
 
         self.location = self.article.split(" (AFP)")[0].split("\n\n")[1]
 
