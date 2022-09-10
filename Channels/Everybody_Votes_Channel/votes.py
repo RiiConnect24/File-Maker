@@ -515,12 +515,13 @@ def sign_file(name):
                 with open(path + "voting.bin", "rb") as source:
                     with open(path + "wc24dl/VOTING.BIN", "wb") as dest:
                         dest.write(source.read()[320:])
+                os.remove(path + "wc24dl.vff")
                 subprocess.call(
                     [
                         "vfftool",
                         "create",
-                        path + "wc24dl",
                         path + "wc24dl.vff",
+                        path + "wc24dl",
                         "65536",
                     ],
                     stdout=subprocess.DEVNULL,
