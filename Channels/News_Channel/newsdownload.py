@@ -486,9 +486,7 @@ class News:
         if self.source == "AP" or self.source == "Reuters":
             try:
                 if key == "canada_":
-                    feed = feedparser.parse(
-                        self.session.get(self.sourceinfo["url2"]).text
-                    )
+                    feed = feedparser.parse(self.sourceinfo["url2"])
             except:
                 pass
 
