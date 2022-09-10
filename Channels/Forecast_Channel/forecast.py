@@ -991,7 +991,8 @@ def packVFF(language_code, country_code):
     with open(path + "short.alt", "rb") as source:
         with open(path + "wc24dl/4.BIN", "wb") as dest:
             dest.write(source.read()[320:])
-    os.remove(path + "wc24dl.vff")
+    if os.path.exists(path + "wc24dl.vff"):
+            os.remove(path + "wc24dl.vff")
     subprocess.call(
         ["vfftool", "create", path + "wc24dl.vff", path + "wc24dl", "204800"],
         stdout=subprocess.DEVNULL,
