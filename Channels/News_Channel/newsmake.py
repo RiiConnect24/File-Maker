@@ -1618,7 +1618,8 @@ class NewsMake:
             with open(path + "news.bin.%s" % str(i).zfill(2), "rb") as source:
                 with open(path + "wc24dl/2.BIN.%s" % str(i).zfill(2), "wb") as dest:
                     dest.write(source.read()[320:])
-        os.remove(path + "wc24dl.vff")
+        if os.path.exists(path + "wc24dl.vff"):
+            os.remove(path + "wc24dl.vff")
         subprocess.call(
             ["vfftool", "create", path + "wc24dl.vff", path + "wc24dl", "3801088"],
             stdout=subprocess.DEVNULL,
