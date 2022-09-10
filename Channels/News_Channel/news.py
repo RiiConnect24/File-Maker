@@ -3,7 +3,7 @@
 
 from Channels.News_Channel import newsdownload, newsmake
 from .newsdownload import News
-from .newsmake import process_news
+from .newsmake import NewsMake
 import sys
 import threading
 from utils import *
@@ -42,11 +42,11 @@ def main():
 def download(source):
     try:
         if source == "ap_english":
-            process_news("AP English", "ap_english", 1, "America", News("ap_english"))
+            NewsMake("AP English", "ap_english", 1, "America", News("ap_english"))
         elif source == "ap_spanish":
-            process_news("AP Spanish", "ap_spanish", 4, "America", News("ap_spanish"))
+            NewsMake("AP Spanish", "ap_spanish", 4, "America", News("ap_spanish"))
         elif source == "reuters_europe_english":
-            process_news(
+            NewsMake(
                 "Reuters Europe English",
                 "reuters_europe_english",
                 1,
@@ -54,21 +54,17 @@ def download(source):
                 News("reuters_europe_english"),
             )
         elif source == "afp_french":
-            process_news(
-                "AFP French", "afp_french", 3, "International", News("afp_french")
-            )
+            NewsMake("AFP French", "afp_french", 3, "International", News("afp_french"))
         elif source == "afp_german":
-            process_news("AFP German", "afp_german", 2, "Europe", News("afp_german"))
+            NewsMake("AFP German", "afp_german", 2, "Europe", News("afp_german"))
         elif source == "afp_spanish":
-            process_news("AFP Spanish", "afp_spanish", 4, "Europe", News("afp_spanish"))
+            NewsMake("AFP Spanish", "afp_spanish", 4, "Europe", News("afp_spanish"))
         elif source == "ansa_italian":
-            process_news(
-                "ANSA Italian", "ansa_italian", 5, "Europe", News("ansa_italian")
-            )
+            NewsMake("ANSA Italian", "ansa_italian", 5, "Europe", News("ansa_italian"))
         elif source == "anp_dutch":
-            process_news("ANP Dutch", "anp_dutch", 6, "Europe", News("anp_dutch"))
+            NewsMake("ANP Dutch", "anp_dutch", 6, "Europe", News("anp_dutch"))
         elif source == "reuters_japanese":
-            process_news(
+            NewsMake(
                 "Reuters Japanese",
                 "reuters_japanese",
                 0,
@@ -76,9 +72,9 @@ def download(source):
                 News("reuters_japanese"),
             )
         elif source == "ap_canada":
-            process_news("AP Canada", "ap_canada", 1, "Canada", News("ap_canada"))
+            NewsMake("AP Canada", "ap_canada", 1, "Canada", News("ap_canada"))
         elif source == "ap_australia":
-            process_news(
+            NewsMake(
                 "AP Australia", "ap_australia", 1, "Australia", News("ap_australia")
             )
         else:
