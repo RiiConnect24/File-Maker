@@ -585,10 +585,12 @@ sources = {
     },
 }
 
+# When I wrote this code, I didn't know how to write a class in Python.
+# At some point I should clean this code up and make all this code be in a class.
+
 
 def process_news(name, mode, language, region, d):
     print("Making news.bin for {}...\n".format(name))
-    global language_code, newsfilename  # I don't like global variables but we're still using them for now
 
     language_code = language
     data = d.newsdata
@@ -684,10 +686,10 @@ def process_news(name, mode, language, region, d):
         for url in config["webhook_urls"]:
             requests.post(url, json=webhook, allow_redirects=True)
 
-        copy_file(region)
+        copy_file(region, language_code, newsfilename)
 
         if config["packVFF"]:
-            packVFF(region)
+            packVFF(region, language_code, newsfilename)
 
         os.remove(newsfilename)
 
@@ -695,7 +697,7 @@ def process_news(name, mode, language, region, d):
 # copy the temp files to the correct path that the Wii will request from the server
 
 
-def copy(region, hour):
+def copy(region, hour, language_code, newsfilename):
     newsfilename2 = "news.bin.{}".format(str(datetime.utcnow().hour).zfill(2))
     path = "{}/v2/{}_{}".format(config["file_path"], language_code, region)
     mkdir_p(path)
@@ -703,12 +705,12 @@ def copy(region, hour):
     subprocess.call(["cp", newsfilename, path])
 
 
-def copy_file(region):
+def copy_file(region, language_code, newsfilename):
     if config["force_all"]:
         for hour in range(0, 24):
-            copy(region, hour)  # copy to all 24 files
+            copy(region, hour, language_code, newsfilename)  # copy to all 24 files
     else:
-        copy(region, datetime.utcnow().hour)
+        copy(region, datetime.utcnow().hour, language_code, newsfilename)
 
 
 # Run the functions to make the news
@@ -752,9 +754,11 @@ def make_news_bin(mode, data, locations_data, region):
 
     dictionaries = []
 
+    newsfilename = "news.bin.{}.{}".format(str(datetime.utcnow().hour).zfill(2), mode)
+
     # ton of functions to make news
 
-    header = make_header(data)
+    header = make_header(data, language_code)
     make_wiimenu_articles(header, data)
     topics_table = make_topics_table(header, topics_news)
     make_timestamps_table(mode, topics_table, topics_news)
@@ -770,7 +774,7 @@ def make_news_bin(mode, data, locations_data, region):
     make_pictures(pictures_table, data)
     make_riiconnect24_text()
 
-    write_dictionary(mode)
+    write_dictionary(mode, newsfilename)
 
     headlines = []
 
@@ -785,7 +789,7 @@ def make_news_bin(mode, data, locations_data, region):
 
     make_news = "".join(headlines)
 
-    purge_cache(region, source)
+    purge_cache(region, source, language_code)
 
     return make_news
 
@@ -840,7 +844,7 @@ def remove_duplicates(data):
 # First part of the header
 
 
-def make_header(data):
+def make_header(data, language_code):
     header = {}
     dictionaries.append(header)
 
@@ -1013,6 +1017,8 @@ def make_timestamps_table(mode, topics_table, topics_news):
 
                     for keys in list(newstime.keys()):
                         removed = False
+
+                        # Check if any headlines are similar and exclude them.
 
                         if keys not in times:
                             for keys2 in times.keys():
@@ -1504,7 +1510,7 @@ def make_riiconnect24_text():
     riiconnect24_text["text"] = "RIICONNECT24".encode("ascii")  # Text.
 
 
-def purge_cache(region, source):
+def purge_cache(region, source, language_code):
     if config["production"]:
         if config["cloudflare_cache_purge"]:
             print("\nPurging cache...")
@@ -1545,7 +1551,7 @@ def purge_cache2(url):
         pass
 
 
-def packVFF(region):
+def packVFF(region, language_code, newsfilename):
     path = "{}/v2/{}_{}/".format(config["file_path"], language_code, region)
     os.makedirs(path + "wc24dl", exist_ok=True)
     for i in range(0, 24):
@@ -1572,7 +1578,7 @@ def packVFF(region):
 # Write everything to the file
 
 
-def write_dictionary(mode):
+def write_dictionary(mode, newsfilename):
     for dictionary in dictionaries:
         for name, value in dictionary.items():
             with open(newsfilename + "-1", "ba+") as dest_file:
