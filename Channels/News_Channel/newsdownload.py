@@ -491,7 +491,9 @@ class News:
         if self.source == "AP" or self.source == "Reuters":
             try:
                 if key == "canada_":
-                    feed = feedparser.parse(requests.get(self.sourceinfo["url2"]).text)
+                    feed = feedparser.parse(
+                        self.session.get(self.sourceinfo["url2"]).text
+                    )
             except:
                 pass
 
@@ -742,7 +744,7 @@ class Parse(News):
 
     def parse_ap(self):
         try:
-            self.newsdata = json.loads(self.url)
+            self.newsdata = self.session.get(self.url).json()
         except:
             self.article = None
             return
@@ -861,7 +863,7 @@ class Parse(News):
                 self.location = self.article.split("［")[1].split("］")[0].split(" ")[0]
 
             if self.location == "":
-                self.location = None
+                self.location = self.article
         except:
             pass
 
