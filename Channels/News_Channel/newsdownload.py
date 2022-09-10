@@ -9,16 +9,13 @@
 # ===========================================================================
 
 import binascii
-import collections
 import json
 import locale
 import random
 import re
 import sys
-import textwrap
 import time
 from html.parser import unescape
-from io import BytesIO, StringIO
 from datetime import datetime, date
 
 import feedparser
@@ -26,13 +23,10 @@ import ftfy
 import googlemaps
 import newspaper
 import requests
-import zlib
 from PIL import Image
 from bs4 import BeautifulSoup
-from unidecode import unidecode
 
 from utils import setup_log, log, u8, u16, u32, u32_littleendian, s16
-import importlib
 
 with open("./Channels/News_Channel/config.json", "rb") as f:
     config = json.load(f)
