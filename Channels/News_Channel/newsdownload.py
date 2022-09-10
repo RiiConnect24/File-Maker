@@ -952,12 +952,10 @@ class Parse(News):
             self.caption = self.soup.find_all("span", {"class": "a-media-legend"})[
                 0
             ].get_text()
+            self.location = self.article.split(" (AFP)")[0].split("\n\n")[1]
+            self.article = self.article.replace(self.caption + "\n\n", "")
         except AttributeError:
             pass
-
-        self.article = self.article.replace(self.caption + "\n\n", "")
-
-        self.location = self.article.split(" (AFP)")[0].split("\n\n")[1]
 
     def parse_ansa(self):
         try:
