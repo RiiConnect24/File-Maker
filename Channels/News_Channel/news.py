@@ -17,8 +17,6 @@ def main():
         threads = []
 
         sources = [
-            "ap_english",
-            "ap_spanish",
             "reuters_europe_english",
             "afp_french",
             "afp_german",
