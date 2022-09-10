@@ -13,8 +13,6 @@
     "http://example.com/"
   ],
   "packVFF": true,
-  "winePath": "/bin/wine",
-  "prfArcPath": "/path/to/prfarc.exe",
   "download_locations": false,
   "cloudflare_cache_purge": true,
   "cloudflare_zone_name": "id",

@@ -992,14 +992,7 @@ def packVFF(language_code, country_code):
         with open(path + "wc24dl/4.BIN", "wb") as dest:
             dest.write(source.read()[320:])
     subprocess.call(
-        [
-            config["winePath"],
-            config["prfArcPath"],
-            "-v",
-            "200",
-            path + "wc24dl",
-            path + "wc24dl.vff",
-        ],
+        ["vfftool", "create", path + "wc24dl", path + "wc24dl.vff", "204800"],
         stdout=subprocess.DEVNULL,
     )  # Pack VFF
     os.remove(path + "wc24dl/3.BIN")

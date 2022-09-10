@@ -1619,14 +1619,7 @@ class NewsMake:
                 with open(path + "wc24dl/2.BIN.%s" % str(i).zfill(2), "wb") as dest:
                     dest.write(source.read()[320:])
         subprocess.call(
-            [
-                config["winePath"],
-                config["prfArcPath"],
-                "-v",
-                "3712",
-                path + "wc24dl",
-                path + "wc24dl.vff",
-            ],
+            ["vfftool", "create", path + "wc24dl", path + "wc24dl.vff", "3801088"],
             stdout=subprocess.DEVNULL,
         )  # Pack VFF
 

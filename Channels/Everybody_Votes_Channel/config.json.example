@@ -9,7 +9,5 @@
   "webhook_urls": [
     "http://status.domain.tld/"
   ],
-  "packVFF": true,
-  "winePath": "/bin/wine",
-  "prfArcPath": "/path/to/prfarc.exe"
+  "packVFF": true
 }
