@@ -5,6 +5,7 @@ from Channels.News_Channel import newsdownload, newsmake
 from .newsdownload import News
 from .newsmake import process_news
 import sys
+import threading
 from utils import *
 
 
@@ -13,17 +14,27 @@ def main():
     if len(sys.argv) > 1:
         download(sys.argv[1])
     else:
-        download("ap_english")
-        download("ap_spanish")
-        download("ap_canada")
-        download("ap_australia")
-        download("reuters_europe_english")
-        download("afp_french")
-        download("afp_german")
-        download("afp_spanish")
-        download("ansa_italian")
-        download("anp_dutch")
-        download("reuters_japanese")
+        threads = []
+
+        sources = [
+            "ap_english",
+            "ap_spanish",
+            "reuters_europe_english",
+            "afp_french",
+            "afp_german",
+            "afp_spanish",
+            "ansa_italian",
+            "anp_dutch",
+            "reuters_japanese",
+        ]
+
+        for source in sources:
+            t = threading.Thread(target=download, args=(source,))
+            threads.append(t)
+            t.start()
+
+        for t in threads:
+            t.join()
 
 
 def download(source):
@@ -32,12 +43,6 @@ def download(source):
             process_news("AP English", "ap_english", 1, "America", News("ap_english"))
         elif source == "ap_spanish":
             process_news("AP Spanish", "ap_spanish", 4, "America", News("ap_spanish"))
-        elif source == "ap_canada":
-            process_news("AP Canada", "ap_canada", 1, "Canada", News("ap_canada"))
-        elif source == "ap_australia":
-            process_news(
-                "AP Australia", "ap_australia", 1, "Australia", News("ap_australia")
-            )
         elif source == "reuters_europe_english":
             process_news(
                 "Reuters Europe English",
@@ -67,6 +72,12 @@ def download(source):
                 0,
                 "Japan",
                 News("reuters_japanese"),
+            )
+        elif source == "ap_canada":
+            process_news("AP Canada", "ap_canada", 1, "Canada", News("ap_canada"))
+        elif source == "ap_australia":
+            process_news(
+                "AP Australia", "ap_australia", 1, "Australia", News("ap_australia")
             )
         else:
             print("Invalid source specified.")

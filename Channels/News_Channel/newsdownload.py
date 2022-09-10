@@ -744,7 +744,7 @@ class Parse(News):
 
     def parse_ap(self):
         try:
-            self.newsdata = self.session.get(self.url).json()
+            self.newsdata = json.loads(self.url)
         except:
             self.article = None
             return
