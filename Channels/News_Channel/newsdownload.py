@@ -16,6 +16,7 @@ import re
 import sys
 import time
 from html.parser import unescape
+from io import BytesIO
 from datetime import datetime, date
 
 import feedparser
@@ -679,6 +680,14 @@ class Parse(News):
         self.html = html
         self.soup = soup
         self.session = requests.Session()
+
+        retries = requests.adapters.Retry(
+            total=5, backoff_factor=0.1, status_forcelist=[500, 502, 503, 504]
+        )
+
+        self.session.mount(
+            "http://", requests.adapters.HTTPAdapter(max_retries=retries)
+        )
 
         if self.source != "AP" and self.source != "Reuters":
             init = self.newspaper_init()
