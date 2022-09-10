@@ -32,7 +32,8 @@ from Channels.Everybody_Votes_Channel.voteslists import *
 with open("./Channels/Everybody_Votes_Channel/config.json", "rb") as f:
     config = json.load(f)
 
-if config["production"]: setup_log(config["sentry_url"], True)
+if config["production"]:
+    setup_log(config["sentry_url"], True)
 
 print("Everybody Votes Channel File Generator \n")
 print("By John Pansera / Larsen Vallecillo / www.rc24.xyz \n")
@@ -55,6 +56,7 @@ if file_type != "v":
     arg = sys.argv[2]
 else:
     arg = None
+
 
 def get_timestamp(mode, type, date):
     if mode == 0:
@@ -89,7 +91,8 @@ def get_year():
     return year
 
 
-def pad(amnt): return b"\0" * amnt
+def pad(amnt):
+    return b"\0" * amnt
 
 
 def prepare():
@@ -146,7 +149,10 @@ def automatic_votes():
     question_sort()
     questions = national + worldwide
     question_count = len(question_data)
-    print("Loaded %s %s" % (question_count, "Question" if question_count == 1 else "Questions"))
+    print(
+        "Loaded %s %s"
+        % (question_count, "Question" if question_count == 1 else "Questions")
+    )
     for v in list(reversed(list(range(1, 7)))):
         results[poll_id] = mysql_get_votes(7, "n", v)
     results[poll_id] = mysql_get_votes(15, "w", 1)
@@ -155,30 +161,39 @@ def automatic_votes():
     except KeyError:
         pass
 
+
 def question_sort():
     global question_keys
     question_keys = sorted(question_data.keys())
 
     for q in question_keys:
-        if get_type(q) == "w": # put the worldwide questions at the end
+        if get_type(q) == "w":  # put the worldwide questions at the end
             question_keys.remove(q)
             question_keys.append(q)
+
 
 def mysql_connect():
     print("Connecting to MySQL ...")
     try:
         global cnx
-        cnx = MySQLdb.connect(user=config["mysql_user"], password=config["mysql_password"],
-                                      host='127.0.0.1',
-                                      database=config["mysql_database"],
-                                      charset='utf8',
-                                      use_unicode=True)
+        cnx = MySQLdb.connect(
+            user=config["mysql_user"],
+            password=config["mysql_password"],
+            host="127.0.0.1",
+            database=config["mysql_database"],
+            charset="utf8",
+            use_unicode=True,
+        )
     except:
         sys.exit(1)
 
+
 def mysql_get_votes(days, vote_type, index):
     cursor = cnx.cursor()
-    query = "SELECT questionID from rc24_EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC" % (days, vote_type)
+    query = (
+        "SELECT questionID from rc24_EVC.questions WHERE DATE(date) <= CURDATE() - INTERVAL %s DAY AND type = '%s' ORDER BY questionID DESC"
+        % (days, vote_type)
+    )
     cursor.execute(query)
     global poll_id, poll_type
 
@@ -235,8 +250,12 @@ def mysql_get_votes(days, vote_type, index):
                 male_voters_response_2[country_index] += int(anscnt[2])
                 female_voters_response_2[country_index] += int(anscnt[3])
 
-                region_response_1[country_index][region_id] += int(anscnt[0]) + int(anscnt[1])
-                region_response_2[country_index][region_id] += int(anscnt[2]) + int(anscnt[3])
+                region_response_1[country_index][region_id] += int(anscnt[0]) + int(
+                    anscnt[1]
+                )
+                region_response_2[country_index][region_id] += int(anscnt[2]) + int(
+                    anscnt[3]
+                )
             except:
                 pass
         elif row[1] == 1:
@@ -257,16 +276,25 @@ def mysql_get_votes(days, vote_type, index):
 
     cursor.close()
 
-    return [male_voters_response_1, female_voters_response_1,
-            male_voters_response_2, female_voters_response_2,
-            predict_response_1, predict_response_2,
-            region_response_1, region_response_2,
-            vote_type]
+    return [
+        male_voters_response_1,
+        female_voters_response_1,
+        male_voters_response_2,
+        female_voters_response_2,
+        predict_response_1,
+        predict_response_2,
+        region_response_1,
+        region_response_2,
+        vote_type,
+    ]
 
 
 def mysql_get_questions(days, count, vote_type):
     cursor = cnx.cursor()
-    query = "SELECT * from rc24_EVC.questions WHERE DATE(date) > CURDATE() - INTERVAL %s DAY AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID DESC" % (days, vote_type)
+    query = (
+        "SELECT * from rc24_EVC.questions WHERE DATE(date) > CURDATE() - INTERVAL %s DAY AND DATE(date) <= CURDATE() AND type = '%s' ORDER BY questionID DESC"
+        % (days, vote_type)
+    )
 
     cursor.execute(query)
 
@@ -274,7 +302,8 @@ def mysql_get_questions(days, count, vote_type):
 
     while i < count:
         row = cursor.fetchone()
-        if row is None: break
+        if row is None:
+            break
         add_question(row)
         i += 1
 
@@ -288,22 +317,28 @@ def num():
     return num1
 
 
-def get_question(id, language_code): return question_data[id][0][language_code - 1]
+def get_question(id, language_code):
+    return question_data[id][0][language_code - 1]
 
 
-def get_response1(id, language_code): return question_data[id][1][language_code - 1]
+def get_response1(id, language_code):
+    return question_data[id][1][language_code - 1]
 
 
-def get_response2(id, language_code): return question_data[id][2][language_code - 1]
+def get_response2(id, language_code):
+    return question_data[id][2][language_code - 1]
 
 
-def get_type(id): return question_data[id][3]
+def get_type(id):
+    return question_data[id][3]
 
 
-def get_category(id): return question_data[id][4]
+def get_category(id):
+    return question_data[id][4]
 
 
-def get_date(id): return question_data[id][5]
+def get_date(id):
+    return question_data[id][5]
 
 
 def add_question(row):
@@ -350,22 +385,48 @@ def webhook():
             webhook_type = "national"
         elif get_type(q) == "w":
             webhook_type = "worldwide"
-        webhook_text = "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)" % (
-            webhook_type, get_question(q, 1), get_response1(q, 1), get_response2(q, 1))
+        webhook_text = (
+            "New %s Everybody Votes Channel question is out!\n\n%s (%s / %s)"
+            % (
+                webhook_type,
+                get_question(q, 1),
+                get_response1(q, 1),
+                get_response2(q, 1),
+            )
+        )
         if config["production"]:
-                data = {"username": "Votes Bot",
-                               "content": "New %s Everybody Votes Channel question is out!" % type,
-                               "avatar_url": "http://rc24.xyz/images/logo-small.png", "attachments": [
-                {"fallback": "Everybody Votes Channel Data Update", "color": "#68C7D0",
-                 "author_name": "RiiConnect24 Everybody Votes Channel Script",
-                 "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png", "text": webhook_text,
-                 "title": "Update!",
-                 "fields": [{"title": "Script", "value": "Everybody Votes Channel", "short": "false"}],
-                 "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png" % webhook_type,
-                 "footer": "RiiConnect24 Script", "footer_icon": "https://rc24.xyz/images/logo-small.png",
-                 "ts": int(calendar.timegm(datetime.datetime.utcnow().timetuple()))}]}
+            data = {
+                "username": "Votes Bot",
+                "content": "New %s Everybody Votes Channel question is out!" % type,
+                "avatar_url": "http://rc24.xyz/images/logo-small.png",
+                "attachments": [
+                    {
+                        "fallback": "Everybody Votes Channel Data Update",
+                        "color": "#68C7D0",
+                        "author_name": "RiiConnect24 Everybody Votes Channel Script",
+                        "author_icon": "https://rc24.xyz/images/webhooks/votes/profile.png",
+                        "text": webhook_text,
+                        "title": "Update!",
+                        "fields": [
+                            {
+                                "title": "Script",
+                                "value": "Everybody Votes Channel",
+                                "short": "false",
+                            }
+                        ],
+                        "thumb_url": "https://rc24.xyz/images/webhooks/votes/vote_%s.png"
+                        % webhook_type,
+                        "footer": "RiiConnect24 Script",
+                        "footer_icon": "https://rc24.xyz/images/logo-small.png",
+                        "ts": int(
+                            calendar.timegm(datetime.datetime.utcnow().timetuple())
+                        ),
+                    }
+                ],
+            }
         for url in config["webhook_urls"]:
             post_webhook = requests.post(url, json=data, allow_redirects=True)
+
 
 def purge_cache():
     if config["production"]:
@@ -385,23 +446,33 @@ def purge_cache():
                     data={"files": [url + "voting.bin"]},
                 )
 
+
 dictionaries = []
 
 
-def offset_count(): return u32(12 + sum(len(values) for dictionary in dictionaries for values in list(dictionary.values()) if values))
+def offset_count():
+    return u32(
+        12
+        + sum(
+            len(values)
+            for dictionary in dictionaries
+            for values in list(dictionary.values())
+            if values
+        )
+    )
 
 
 def sign_file(name):
-    final = name + '.bin'
+    final = name + ".bin"
     print("Processing " + final + " ...")
-    file = open(name, 'rb')
+    file = open(name, "rb")
     copy = file.read()
     file.close()
     print("Calculating CRC32 ...")
-    crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, '08x')
+    crc32 = format(binascii.crc32(copy) & 0xFFFFFFFF, "08x")
     print("Calculating Size ...")
     size = os.path.getsize(name) + 12
-    dest = open(final + '-1', 'wb+')
+    dest = open(final + "-1", "wb+")
     dest.write(u32(0))
     dest.write(u32(size))
     dest.write(binascii.unhexlify(crc32))
@@ -409,15 +480,19 @@ def sign_file(name):
     os.remove(name)
     dest.close()
     print("Compressing ...")
-    nlzss.encode_file(final + '-1', final + '-1')
-    file = open(final + '-1', 'rb')
+    nlzss.encode_file(final + "-1", final + "-1")
+    file = open(final + "-1", "rb")
     new = file.read()
     dest = open(final, "wb+")
-    key = open(config["key_path"], 'rb')
+    key = open(config["key_path"], "rb")
     print("RSA Signing ...")
     private_key = rsa.PrivateKey.load_pkcs1(key.read(), "PEM")  # Loads the RSA key.
-    signature = rsa.sign(new, private_key, "SHA-1")  # Makes a SHA1 with ASN1 padding. Beautiful.
-    dest.write(b"\0" * 64)  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
+    signature = rsa.sign(
+        new, private_key, "SHA-1"
+    )  # Makes a SHA1 with ASN1 padding. Beautiful.
+    dest.write(
+        b"\0" * 64
+    )  # Padding. This is where data for an encrypted WC24 file would go (such as the header and IV), but this is not encrypted so it's blank.
     dest.write(signature)
     dest.write(new)
     dest.close()
@@ -429,8 +504,9 @@ def sign_file(name):
                 folder = str(country_code).zfill(3)
             elif arg == "w":
                 folder = "world"
-            subprocess.call(["mkdir", "-p", "%s/%s/%s" % (
-                config["file_path"], folder, get_year())])  # If folder for the year does not exist, make it.
+            subprocess.call(
+                ["mkdir", "-p", "%s/%s/%s" % (config["file_path"], folder, get_year())]
+            )  # If folder for the year does not exist, make it.
             path = "/".join([config["file_path"], folder, get_year(), final])
         elif file_type == "v":
             path = "/".join([config["file_path"], str(country_code).zfill(3), ""])
@@ -438,24 +514,23 @@ def sign_file(name):
                 os.makedirs(path + "wc24dl", exist_ok=True)
                 with open(path + "voting.bin", "rb") as source:
                     with open(path + "wc24dl/VOTING.BIN", "wb") as dest:
-                            dest.write(source.read()[320:])
+                        dest.write(source.read()[320:])
                 subprocess.call(
                     [
-                        config["winePath"],
-                        config["prfArcPath"],
-                        "-v",
-                        "64",
+                        "vfftool",
+                        "create",
                         path + "wc24dl",
                         path + "wc24dl.vff",
+                        "65536",
                     ],
                     stdout=subprocess.DEVNULL,
                 )  # Pack VFF
-                
+
                 os.remove(path + "wc24dl/VOTING.BIN")
                 os.rmdir(path + "wc24dl")
             path += final
     subprocess.call(["mv", final, path])
-    os.remove(final + '-1')
+    os.remove(final + "-1")
 
 
 def make_bin(country_code):
@@ -491,7 +566,7 @@ def make_bin(country_code):
 
     else:
         question_file = "voting"
-    
+
     print("Writing to %s.bin ..." % question_file)
 
     with open(question_file, "wb") as f:
@@ -500,7 +575,7 @@ def make_bin(country_code):
             for name, values in dictionary.items():
                 f.write(values)
         f.write(pad(16))
-        f.write('RIICONNECT24'.encode("ASCII"))
+        f.write("RIICONNECT24".encode("ASCII"))
         f.flush()
 
     if config["production"]:
@@ -510,6 +585,7 @@ def make_bin(country_code):
 
     for dictionary in dictionaries:
         dictionary.clear()
+
 
 def make_header():
     header = collections.OrderedDict()
@@ -528,15 +604,31 @@ def make_header():
     header["question_offset"] = u32(0)
     header["national_result_entry"] = u8(national_results)
     header["national_result_offset"] = u32(0)
-    header["national_result_detailed_number"] = u16(national_results * region_number[country_code])
+    header["national_result_detailed_number"] = u16(
+        national_results * region_number[country_code]
+    )
     header["national_result_detailed_offset"] = u32(0)
-    header["position_number"] = u16(0 if file_type == "q" or national_results == 0 else 22 if country_code == 77 else len(position_table[country_code]) if country_code in list(position_table.keys()) else 0)
+    header["position_number"] = u16(
+        0
+        if file_type == "q" or national_results == 0
+        else 22
+        if country_code == 77
+        else len(position_table[country_code])
+        if country_code in list(position_table.keys())
+        else 0
+    )
     header["position_offset"] = u32(0)
     header["worldwide_result_number"] = u8(worldwide_results)
     header["worldwide_result_offset"] = u32(0)
     header["worldwide_result_detailed_number"] = u16(0)
     header["worldwide_result_detailed_offset"] = u32(0)
-    header["country_name_number"] = u16(len(countries) * 7 if file_type == "r" and arg == "w" else 0 if file_type == "q" or file_type == "r" else len(countries) * 7)
+    header["country_name_number"] = u16(
+        len(countries) * 7
+        if file_type == "r" and arg == "w"
+        else 0
+        if file_type == "q" or file_type == "r"
+        else len(countries) * 7
+    )
     header["country_name_offset"] = u32(0)
 
     return header
@@ -555,11 +647,21 @@ def make_national_question_table(header):
                 header["national_question_offset"] = offset_count()
             national_question_table["poll_id_%s" % num()] = u32(q)
             national_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
-            national_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-            national_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, "n", get_date(q)))
-            national_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "n", get_date(q)))
-            national_question_table["question_table_count_%s" % num()] = u8(len(country_language[country_code]))
-            national_question_table["question_table_start_%s" % num()] = u32(question_table_count)
+            national_question_table["poll_category_2_%s" % num()] = u8(
+                categories[get_category(q)]
+            )
+            national_question_table["opening_timestamp_%s" % num()] = u32(
+                get_timestamp(1, "n", get_date(q))
+            )
+            national_question_table["closing_timestamp_%s" % num()] = u32(
+                get_timestamp(2, "n", get_date(q))
+            )
+            national_question_table["question_table_count_%s" % num()] = u8(
+                len(country_language[country_code])
+            )
+            national_question_table["question_table_start_%s" % num()] = u32(
+                question_table_count
+            )
             question_table_count += len(country_language[country_code])
 
     return national_question_table
@@ -587,11 +689,21 @@ def make_worldwide_question_table(header):
         if get_type(q) == "w":
             worldwide_question_table["poll_id_%s" % num()] = u32(q)
             worldwide_question_table["poll_category_1_%s" % num()] = u8(get_category(q))
-            worldwide_question_table["poll_category_2_%s" % num()] = u8(categories[get_category(q)])
-            worldwide_question_table["opening_timestamp_%s" % num()] = u32(get_timestamp(1, "w", get_date(q)))
-            worldwide_question_table["closing_timestamp_%s" % num()] = u32(get_timestamp(2, "w", get_date(q)))
-            worldwide_question_table["question_table_count_%s" % num()] = u8(question_table_count)
-            worldwide_question_table["question_table_start_%s" % num()] = u32(question_table_start)
+            worldwide_question_table["poll_category_2_%s" % num()] = u8(
+                categories[get_category(q)]
+            )
+            worldwide_question_table["opening_timestamp_%s" % num()] = u32(
+                get_timestamp(1, "w", get_date(q))
+            )
+            worldwide_question_table["closing_timestamp_%s" % num()] = u32(
+                get_timestamp(2, "w", get_date(q))
+            )
+            worldwide_question_table["question_table_count_%s" % num()] = u8(
+                question_table_count
+            )
+            worldwide_question_table["question_table_start_%s" % num()] = u32(
+                question_table_start
+            )
             question_table_count += 1
 
     return worldwide_question_table
@@ -615,10 +727,18 @@ def make_question_text_table(header):
         for language_code in poll_list:
             if get_question(q, language_code) is not None:
                 num = question_keys.index(q)
-                question_text_table["language_code_%s_%s" % (num, language_code)] = u8(language_code)
-                question_text_table["question_offset_%s_%s" % (num, language_code)] = u32(0)
-                question_text_table["response_1_offset_%s_%s" % (num, language_code)] = u32(0)
-                question_text_table["response_2_offset_%s_%s" % (num, language_code)] = u32(0)
+                question_text_table["language_code_%s_%s" % (num, language_code)] = u8(
+                    language_code
+                )
+                question_text_table[
+                    "question_offset_%s_%s" % (num, language_code)
+                ] = u32(0)
+                question_text_table[
+                    "response_1_offset_%s_%s" % (num, language_code)
+                ] = u32(0)
+                question_text_table[
+                    "response_2_offset_%s_%s" % (num, language_code)
+                ] = u32(0)
 
     return question_text_table
 
@@ -636,17 +756,35 @@ def make_national_result_table(header):
             country_index = country_codes.index(country_code)
 
             table["poll_id_%s" % num()] = u32(i)
-            table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][country_index])
-            table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][country_index])
-            table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][country_index])
-            table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][country_index])
-            table["predictors_response_1_num_%s" % num()] = u32(results[i][4][country_index])
-            table["predictors_response_2_num_%s" % num()] = u32(results[i][5][country_index])
+            table["male_voters_response_1_num_%s" % num()] = u32(
+                results[i][0][country_index]
+            )
+            table["male_voters_response_2_num_%s" % num()] = u32(
+                results[i][2][country_index]
+            )
+            table["female_voters_response_1_num_%s" % num()] = u32(
+                results[i][1][country_index]
+            )
+            table["female_voters_response_2_num_%s" % num()] = u32(
+                results[i][3][country_index]
+            )
+            table["predictors_response_1_num_%s" % num()] = u32(
+                results[i][4][country_index]
+            )
+            table["predictors_response_2_num_%s" % num()] = u32(
+                results[i][5][country_index]
+            )
             table["show_voter_number_flag_%s" % num()] = u8(1)
             table["detailed_results_flag_%s" % num()] = u8(1)
-            table["national_result_detailed_number_number_%s" % num()] = u8(national_result_detailed_number_tables)
-            table["starting_national_result_detailed_number_table_number_%s" % num()] = u32(national_result_detailed_number_count)
-            national_result_detailed_number_count += national_result_detailed_number_tables
+            table["national_result_detailed_number_number_%s" % num()] = u8(
+                national_result_detailed_number_tables
+            )
+            table[
+                "starting_national_result_detailed_number_table_number_%s" % num()
+            ] = u32(national_result_detailed_number_count)
+            national_result_detailed_number_count += (
+                national_result_detailed_number_tables
+            )
 
     return table
 
@@ -661,10 +799,26 @@ def make_national_result_detailed_table(header):
         if results[i][8] == "n":
             for j in range(region_number[country_code]):
                 country_index = country_codes.index(country_code)
-                table["voters_response_1_num_%s" % num()] = u32(results[i][6][country_index][j])
-                table["voters_response_2_num_%s" % num()] = u32(results[i][7][country_index][j])
-                table["position_entry_table_count_%s" % num()] = u8(0 if (results[i][6][country_index][j] == 0 and results[i][7][country_index][j] == 0) or (country_code not in list(position_table.keys())) else position_table[country_code][j])
-                table["starting_position_entry_table_%s" % num()] = u32(sum(position_table[country_code][:j]) if country_code in list(position_table.keys()) else 0)
+                table["voters_response_1_num_%s" % num()] = u32(
+                    results[i][6][country_index][j]
+                )
+                table["voters_response_2_num_%s" % num()] = u32(
+                    results[i][7][country_index][j]
+                )
+                table["position_entry_table_count_%s" % num()] = u8(
+                    0
+                    if (
+                        results[i][6][country_index][j] == 0
+                        and results[i][7][country_index][j] == 0
+                    )
+                    or (country_code not in list(position_table.keys()))
+                    else position_table[country_code][j]
+                )
+                table["starting_position_entry_table_%s" % num()] = u32(
+                    sum(position_table[country_code][:j])
+                    if country_code in list(position_table.keys())
+                    else 0
+                )
 
     return table
 
@@ -702,8 +856,12 @@ def make_worldwide_result_table(header):
             table["female_voters_response_2_num_%s" % num()] = u32(sum(results[i][3]))
             table["predictors_response_1_num_%s" % num()] = u32(sum(results[i][4]))
             table["predictors_response_2_num_%s" % num()] = u32(sum(results[i][5]))
-            table["total_worldwide_detailed_tables_%s" % num()] = u8(worldwide_detailed_table_count)
-            table["starting_worldwide_detailed_table_number_%s" % num()] = u32(worldwide_detailed_table_count_all)
+            table["total_worldwide_detailed_tables_%s" % num()] = u8(
+                worldwide_detailed_table_count
+            )
+            table["starting_worldwide_detailed_table_number_%s" % num()] = u32(
+                worldwide_detailed_table_count_all
+            )
             worldwide_detailed_table_count_all += worldwide_detailed_table_count
 
     return table
@@ -726,12 +884,22 @@ def make_worldwide_result_detailed_table(header):
                     total += results[i][voters][j]
                 if total > 0:
                     table["unknown_%s" % num()] = u32(0)
-                    table["male_voters_response_1_num_%s" % num()] = u32(results[i][0][j])
-                    table["male_voters_response_2_num_%s" % num()] = u32(results[i][2][j])
-                    table["female_voters_response_1_num_%s" % num()] = u32(results[i][1][j])
-                    table["female_voters_response_2_num_%s" % num()] = u32(results[i][3][j])
+                    table["male_voters_response_1_num_%s" % num()] = u32(
+                        results[i][0][j]
+                    )
+                    table["male_voters_response_2_num_%s" % num()] = u32(
+                        results[i][2][j]
+                    )
+                    table["female_voters_response_1_num_%s" % num()] = u32(
+                        results[i][1][j]
+                    )
+                    table["female_voters_response_2_num_%s" % num()] = u32(
+                        results[i][3][j]
+                    )
                     table["country_table_count_%s" % num()] = u16(7)
-                    table["starting_country_table_number_%s" % num()] = u32(country_table_count)
+                    table["starting_country_table_number_%s" % num()] = u32(
+                        country_table_count
+                    )
                     worldwide_region_number += 1
                 country_table_count += 7
 
@@ -791,14 +959,26 @@ def make_question_text(question_text_table):
         for language_code in country_language[country_code]:
             if get_question(q, language_code) is not None:
                 num = question_keys.index(q)
-                question_text_table["question_offset_%s_%s" % (num, language_code)] = offset_count()
-                question_text["question_%s_%s" % (num, language_code)] = get_question(q, language_code).encode("utf-16be")
+                question_text_table[
+                    "question_offset_%s_%s" % (num, language_code)
+                ] = offset_count()
+                question_text["question_%s_%s" % (num, language_code)] = get_question(
+                    q, language_code
+                ).encode("utf-16be")
                 question_text["question_pad_%s_%s" % (num, language_code)] = pad(2)
-                question_text_table["response_1_offset_%s_%s" % (num, language_code)] = offset_count()
-                question_text["response_1_%s_%s" % (num, language_code)] = get_response1(q, language_code).encode("utf-16be")
+                question_text_table[
+                    "response_1_offset_%s_%s" % (num, language_code)
+                ] = offset_count()
+                question_text[
+                    "response_1_%s_%s" % (num, language_code)
+                ] = get_response1(q, language_code).encode("utf-16be")
                 question_text["response_1_pad_%s_%s" % (num, language_code)] = pad(2)
-                question_text_table["response_2_offset_%s_%s" % (num, language_code)] = offset_count()
-                question_text["response_2_%s_%s" % (num, language_code)] = get_response2(q, language_code).encode("utf-16be")
+                question_text_table[
+                    "response_2_offset_%s_%s" % (num, language_code)
+                ] = offset_count()
+                question_text[
+                    "response_2_%s_%s" % (num, language_code)
+                ] = get_response2(q, language_code).encode("utf-16be")
                 question_text["response_2_pad_%s_%s" % (num, language_code)] = pad(2)
 
     return question_text

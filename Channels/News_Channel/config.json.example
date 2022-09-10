@@ -8,7 +8,5 @@
   "webhook_urls": [
     "http://status.domain.tld/"
   ],
-  "packVFF": true,
-  "winePath": "/usr/bin/wine",
-  "prfArcPath": "/var/rc24/File-Maker/PrfArc.exe"
+  "packVFF": true
 }
