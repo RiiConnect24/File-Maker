@@ -299,15 +299,19 @@ class OwnSearch:  # creates an ownsearch response given a craftsno
     def build(
         self, miis, craftsno
     ):  # must be sent a 2 dimensional array containing entryno, initials likes, skill, country, miidata, artisandata and master artisan flag
-
-        count = int(len(miis))
-        beginning = (
-            bytes.fromhex("4F53000000000000")
-            + u32(craftsno)
-            + bytes.fromhex("000000000000000000000000FFFFFFFFFFFFFFFF")
-        )
-        pntag = bytes.fromhex("504E000C00000001") + u32(count)
-        self.header = beginning + pntag
+        self.mii = {}
+        self.mii["tag"] = b"OS"
+        self.mii["tag_size"] = u16(0)
+        self.mii["country"] = u32(0)
+        self.mii["craftsno"] = u32(craftsno)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("0000000000000000FFFFFFFFFFFFFFFF")
+        # self.mii["padding2"] = bytes.fromhex("FFFFFFFFFFFFFFFF")
+        self.mii["pn"] = b"PN"
+        self.mii["pn_size"] = u16(12)
+        self.mii["unknown"] = u32(1)
+        self.mii["count"] = u32(int(len(miis)))
+        self.miilist += self.mii.values()
         self.craftsno = craftsno
 
         for entry in miis:
@@ -343,7 +347,6 @@ class OwnSearch:  # creates an ownsearch response given a craftsno
 
             self.miilist += self.mii.values()
 
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
         return (
             self.miilist
         )  # returns a 2 dimensional array containing the header and all the miis
@@ -359,15 +362,18 @@ class Search:  # creates a search or namesearch response given an entryno
         self, searchtype, miis, entryno, craftsno
     ):  # must be sent a 2 dimensional array containing entryno, initials likes, skill, country, miidata, artisandata and master artisan flag
         # searchtype must be SR or NS
-        count = int(len(miis))
-        beginning = (
-            bytes.fromhex("000000000000")
-            + u32(entryno)
-            + bytes.fromhex("000000000000000000000000FFFFFFFFFFFFFFFF")
-        )
-        pntag = bytes.fromhex("504E000C00000001") + u32(count)
-        self.header = searchtype.encode() + beginning + pntag
-        self.craftsno = craftsno
+        self.mii = {}
+        self.mii["tag"] = searchtype.encode()
+        self.mii["tag_size"] = u16(0)
+        self.mii["country"] = u32(0)
+        self.mii["list_number"] = u32(entryno)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.mii["pn"] = b"PN"
+        self.mii["pn_size"] = u16(12)
+        self.mii["unknown"] = u32(1)
+        self.mii["count"] = u32(int(len(miis)))
+        self.miilist += self.mii.values()
 
         for entry in miis:
             if len(entry[1]) == 1:
@@ -414,7 +420,6 @@ class Search:  # creates a search or namesearch response given an entryno
             self.mii["unk7"] = u16(0)
             self.miilist += self.mii.values()
 
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
         return (
             self.miilist
         )  # returns a 2 dimensional array containing the header and all the miis
@@ -433,21 +438,24 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
         # list_type can be SL, NL, RL, PL etc.
         list_type = list_type.upper()
         if list_type in ["SL", "RL", "PL", "CL"]:
-            countrytag = u32(
-                country
-            )  # this can be changed if we decide to use regional sorting
+            countrytag = (
+                country  # this can be changed if we decide to use regional sorting
+            )
 
         count = int(len(miis))
-        list_type = list_type.encode()
 
-        beginning = (
-            bytes.fromhex("0000")
-            + countrytag
-            + bytes.fromhex("0000000000000000000000000000000000000000FFFFFFFF")
-        )
-
-        pntag = bytes.fromhex("504E000C00000001") + u32(count)
-        self.header = list_type + beginning + pntag
+        self.mii = {}
+        self.mii["tag"] = list_type.encode()
+        self.mii["tag_size"] = u16(0)
+        self.mii["country"] = u32(countrytag)
+        self.mii["list_number"] = u32(0)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.mii["pn_tag"] = b"PN"
+        self.mii["pn_size"] = u16(12)
+        self.mii["unknown"] = u32(1)
+        self.mii["count"] = u32(count)
+        self.miilist += self.mii.values()
 
         for entry in miis:
             if len(entry[1]) == 1:
@@ -491,8 +499,6 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
             self.mii["unk7"] = u16(0)
             self.miilist += self.mii.values()
 
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
-
         data = b""
         for entry in self.miilist:
             data += entry
@@ -502,12 +508,6 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
     def infoBuild(
         self, craftsno, entryno, miidata, initial, master, popularity, ranking
     ):  # must be sent craftsno, entryno, most popular mii, initials, master artisan flag, popularity and ranking
-
-        self.header = (
-            bytes.fromhex("494E000000000000")
-            + u32(int(craftsno))
-            + bytes.fromhex("000000000000000000000000FFFFFFFFFFFFFFFF")
-        )
         miidata = decodeMii(miidata)
         if len(initial) == 1:
             initial = initial.encode() + b"\x00"  # add 0x00 to 1 letter initials
@@ -520,7 +520,12 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
             )
 
         self.mii = {}
-        self.mii["header"] = self.header
+        self.mii["tag"] = b"IN"
+        self.mii["tag_size"] = u16(0)
+        self.mii["country"] = u32(0)
+        self.mii["craftsno"] = u32(int(craftsno))
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("0000000000000000FFFFFFFFFFFFFFFF")
         self.mii["im_tag"] = b"IM"
         self.mii["im_size"] = u16(96)
         self.mii["unk1"] = u32(1)
@@ -561,14 +566,16 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
         month = int(datetime.now().month)
         day = int(datetime.now().day)
         count = int(len(artisans))
-        list_type = b"CL"
-        countrytag = u32(150)
-        beginning = (
-            bytes.fromhex("0000")
-            + countrytag
-            + bytes.fromhex("0000000000000000000000000000000000000000FFFFFFFF")
-        )
-        self.header = list_type + beginning
+
+        self.artisan = {}
+        self.artisan["tag"] = b"CL"
+        self.artisan["tag_size"] = u16(0)
+        self.artisan["country"] = u32(150)
+        self.artisan["list_number"] = u32(0)
+        self.artisan["error_code"] = u32(0)
+        self.artisan["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+
+        self.artisanlist += self.artisan.values()
 
         for entry in artisans:
 
@@ -599,15 +606,32 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
 
             self.artisanlist += self.artisan.values()
 
-        self.artisanlist.insert(
-            0, self.header
-        )  # inserts the header before all the miis
-
         data = b""
         for entry in self.artisanlist:
             data += entry
 
         return data  # returns the formatted data, ready to be compressed and encrypted for CMOC
+
+    def numberinfoBuild(self, mii_count, mii_artisan_count):
+        self.numberinfo = {}
+
+        self.numberinfo["tag"] = b"NI"
+        self.numberinfo["tag_size"] = u16(0)
+        self.numberinfo["country"] = u32(150)
+        self.numberinfo["list_number"] = u32(0)
+        self.numberinfo["error_code"] = u32(0)
+        self.numberinfo["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.numberinfo["ni_tag"] = b"NI"
+        self.numberinfo["ni_size"] = u16(16)
+        self.numberinfo["unk1"] = u32(1)
+        self.numberinfo["mii_count"] = u32(mii_count)
+        self.numberinfo["mii_artisan_count"] = u32(mii_artisan_count)
+
+        data = b""
+        for entry in self.numberinfo.values():
+            data += entry
+
+        return data
 
 
 class NumberedList:  # returns a temporary unencrypted mii list for new_list and bargain_list
@@ -620,21 +644,21 @@ class NumberedList:  # returns a temporary unencrypted mii list for new_list and
         # list_type can be NL1, NL2, NL3, RL1, RL2, RL3 etc.
 
         list_number = u32(int(list_type[2:]))  # get the number after NL or RL
+        list_type2 = list_type
         list_type = list_type[:2].upper()  # remove the number from NL or RL
 
-        countrytag = u32(country)
-        count = int(len(miis))
-        list_type = list_type.encode()
-        beginning = (
-            bytes.fromhex("0000")
-            + countrytag
-            + list_number
-            + bytes.fromhex("00000000000000000000000000000000FFFFFFFF")
-        )
-
-        pntag = bytes.fromhex("504E000C00000001") + u32(count)
-
-        self.header = list_type + beginning + pntag
+        self.mii = {}
+        self.mii["tag"] = list_type.encode()
+        self.mii["tag_size"] = bytes.fromhex("0000")
+        self.mii["country"] = u32(country)
+        self.mii["list_number"] = u32(list_number)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.mii["pn_tag"] = bytes.fromhex("504E")
+        self.mii["pn_size"] = u16(12)
+        self.mii["unknown"] = u32(1)
+        self.mii["mii_count"] = u32(int(len(miis)))
+        self.miilist += self.mii.values()
 
         for entry in miis:
             if len(entry[1]) == 1:
@@ -653,14 +677,15 @@ class NumberedList:  # returns a temporary unencrypted mii list for new_list and
             self.mii["mii_index"] = u32(miis.index(entry) + 1)
             self.mii["entry_number"] = u32(entry[0])
             self.mii["mii"] = miidata
-            self.mii["unk2"] = u16(0)
+            self.mii["unk2"] = u8(0)
+            # self.mii["unk2"] = u8(miis.index(entry) + int(list_type2[2:]))
             if (
                 entry[2] > 28
             ):  # 28 is the max popularity value possible on the client's side
                 self.mii["popularity"] = u8(28)
             else:
                 self.mii["popularity"] = u8(entry[2])
-            self.mii["unk3"] = u8(0)
+            self.mii["unk3"] = u16(0)
             self.mii["skill"] = u16(entry[3])
             self.mii["initials"] = initial
             self.mii["pc_tag"] = b"PC"
@@ -675,8 +700,6 @@ class NumberedList:  # returns a temporary unencrypted mii list for new_list and
             self.mii["country_code2"] = u8(entry[4])
             self.mii["unk7"] = u16(0)
             self.miilist += self.mii.values()
-
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
 
         data = b""
         for entry in self.miilist:
@@ -698,11 +721,15 @@ class WSR:  # returns an unencrypted mii list for wii sports resort
         close = (
             int(mktime(datetime.utcnow().timetuple())) - 946512000
         )  # current time since 1/1/2000 in seconds + 48 hours
-        self.header = (
-            u32(open)
-            + u32(close)
-            + bytes.fromhex("000041A0000000A864000000000000000000000000000000")
+
+        self.mii = {}
+        self.mii["open"] = u32(open)
+        self.mii["close"] = u32(close)
+        self.mii["header"] = bytes.fromhex(
+            "000041A0000000A864000000000000000000000000000000"
         )
+        self.miilist += self.mii.values()
+
         for entry in miis:
             if len(entry[0]) == 1:
                 initial = entry[0].encode() + b"\x00"  # add 0x00 to 1 letter initials
@@ -729,12 +756,9 @@ class WSR:  # returns an unencrypted mii list for wii sports resort
 
             self.miilist += self.mii.values()
 
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
-
         data = b""
         for entry in self.miilist:
             data += entry
-        print(len(data))
         return data
 
 
@@ -742,19 +766,40 @@ class ConDetail:
     def build(self, id, start, end, status, entrycount, topic, description):
         def conStatus(
             status,
-        ):  # the status flag in condetail is strange and requires a number that determines whether its open, judging, or showing results
+        ):
             if status == "open":
-                return 2
+                return 0b10
 
             elif status == "judging":
-                return 8
+                return 0b1000
 
             elif status == "results":
-                return 32
+                return 0b100000
 
             else:
                 print("Invalid status:", status)
                 exit()
+
+        options = 0
+
+        special_award = False
+        nickname_changing = True
+        worldwide = True
+
+        if special_award:
+            options |= 0b10000
+
+        if nickname_changing:
+            options |= 0b1000
+
+        if os.path.exists("/var/rc24/souvenir/{}.jpg".format(id)):
+            options |= 0b100
+
+        if os.path.exists("/var/rc24/thumbnail/{}.jpg".format(id)):
+            options |= 0b10
+
+        if worldwide:
+            options |= 0b1
 
         self.condetail = {}
         self.condetail["type"] = b"CD"
@@ -770,7 +815,7 @@ class ConDetail:
         self.condetail["id3"] = u32(1)
         self.condetail["id4"] = u32(id)
         self.condetail["status"] = u8(conStatus(status))
-        self.condetail["worldwide"] = u8(9)
+        self.condetail["options"] = u8(options)
         self.condetail["padding4"] = u16(0)
         self.condetail["entrycount"] = u32(entrycount)
         self.condetail["padding5"] = u32(0) * 5
@@ -794,23 +839,49 @@ class ConInfo:
     ):  # must be sent a 2 DIMENSIONAL array with each entry containing contest id and status
         def conStatus(
             status,
-        ):  # the status flag in condetail is strange and requires a number that determines whether its open, judging, or showing results
+        ):
             if status == "open":
-                return 2
+                return 0b10
 
             elif status == "judging":
-                return 8
+                return 0b1000
 
             elif status == "results":
-                return 32
+                return 0b100000
 
             else:
                 print("Invalid status:", status)
                 exit()
 
-        self.header = bytes.fromhex(
-            "434900000000009600000000000000000000000000000000FFFFFFFFFFFFFFFF"
-        )
+        options = 0
+
+        special_award = False
+        nickname_changing = True
+        worldwide = True
+
+        if special_award:
+            options |= 0b10000
+
+        if nickname_changing:
+            options |= 0b1000
+
+        if os.path.exists("/var/rc24/souvenir/{}.jpg".format(id)):
+            options |= 0b100
+
+        if os.path.exists("/var/rc24/thumbnail/{}.jpg".format(id)):
+            options |= 0b10
+
+        if worldwide:
+            options |= 0b1
+
+        self.contest = {}
+        self.contest["tag"] = b"CI"
+        self.contest["tag_size"] = u16(0)
+        self.contest["country"] = u32(150)
+        self.contest["list_number"] = u32(0)
+        self.contest["error_code"] = u32(0)
+        self.contest["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.conlist += self.contest.values()
 
         for entry in contests:
             self.contest = {}
@@ -819,19 +890,83 @@ class ConInfo:
             self.contest["contest_index"] = u32(contests.index(entry) + 1)
             self.contest["contest_id"] = u32(entry[0])
             self.contest["status"] = u8(conStatus(entry[1]))
-            self.contest["worldwide"] = u8(1) # set to 2 or 10 for it to try to grab thumbnails
+            self.contest["options"] = u8(options)
             self.contest["padding1"] = u8(0) * 18
             self.conlist += self.contest.values()
-
-        self.conlist.insert(
-            0, self.header
-        )  # inserts the header before all the contests
 
         data = b""
         for entry in self.conlist:
             data += entry
 
         return data  # returns the formatted data, ready to be compressed and encrypted for CMOC
+
+
+class Thumbnail:
+    def build(self, id):
+        with open("/var/rc24/thumbnail/{}.jpg".format(id), "rb") as f:
+            read = f.read()
+
+        if (len(read) + 32) > 0xFFFF:
+            return
+
+        if b"Exif" not in read:
+            return
+
+        self.thumbnail = {}
+        self.thumbnail["tag"] = b"TH"
+        self.thumbnail["tag_size"] = u16(0)
+        self.thumbnail["contest_number"] = u32(id)
+        self.thumbnail["list_number"] = u32(0)
+        self.thumbnail["error_code"] = u32(0)
+        self.thumbnail["padding"] = bytes.fromhex("0000000000000000")
+        self.thumbnail["padding2"] = bytes.fromhex("FFFFFFFFFFFFFFFF")
+        self.thumbnail["th_tag"] = b"TH"
+        self.thumbnail["th_size"] = u16(len(read) + 32)
+        self.thumbnail["unknown"] = u32(1)
+        self.thumbnail["padding3"] = bytes.fromhex(
+            "000000000000000000000000000000000000000000000000"
+        )
+        self.thumbnail["thumbnail"] = read
+
+        data = b""
+        for entry in self.thumbnail.values():
+            data += entry
+
+        return data
+
+
+class Photo:
+    def build(self, id):
+        with open("/var/rc24/souvenir/{}.jpg".format(id), "rb") as f:
+            read = f.read()
+
+        if (len(read) + 32) > 0xFFFF:
+            return
+
+        if b"Exif" not in read:
+            return
+
+        self.photo = {}
+        self.photo["tag"] = b"PH"
+        self.photo["tag_size"] = u16(0)
+        self.photo["contest_number"] = u32(id)
+        self.photo["list_number"] = u32(0)
+        self.photo["error_code"] = u32(0)
+        self.photo["padding"] = bytes.fromhex("0000000000000000")
+        self.photo["padding2"] = bytes.fromhex("FFFFFFFFFFFFFFFF")
+        self.photo["ph_tag"] = b"PH"
+        self.photo["ph_size"] = u16(len(read) + 32)
+        self.photo["unknown"] = u32(1)
+        self.photo["padding3"] = bytes.fromhex(
+            "000000000000000000000000000000000000000000000000"
+        )
+        self.photo["photo"] = read
+
+        data = b""
+        for entry in self.photo.values():
+            data += entry
+
+        return data
 
 
 class EntryList:  # EntryList has no PN tag. each entry_list file has exactly 10 miis
@@ -843,13 +978,16 @@ class EntryList:  # EntryList has no PN tag. each entry_list file has exactly 10
             len(miis) - len(miis) % 10
         ) // 10  # removes the remainder to give each list exactly 10 miis (make sure to return randomized query from the database)
         for listNumber in range(total):
-            self.header = (
-                bytes.fromhex("454C0000")
-                + u32(id)
-                + u32(listNumber + 1)
-                + bytes.fromhex("00000000000000000000000000000000FFFFFFFF")
-            )
             self.miilist = []
+
+            self.mii = {}
+            self.mii["tag"] = b"EL"
+            self.mii["tag_size"] = u16(0)
+            self.mii["id"] = u32(id)
+            self.mii["list_number"] = u32(listNumber + 1)
+            self.mii["error_code"] = u32(0)
+            self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+            self.miilist += self.mii.values()
 
             for entry in range(1, 11):
                 miidata = decodeMii(miis[entry + (listNumber * 10) - 1][1])  # 600 IQ
@@ -860,10 +998,6 @@ class EntryList:  # EntryList has no PN tag. each entry_list file has exactly 10
                 self.mii["craftsno"] = u32(miis[entry + (listNumber * 10) - 1][0])
                 self.mii["mii"] = miidata
                 self.miilist += self.mii.values()
-
-            self.miilist.insert(
-                0, self.header
-            )  # inserts the header before all the miis
 
             data = b""
             for entry in self.miilist:
@@ -878,15 +1012,20 @@ class BestList:  # similar to a regular CMOC list, but miis have no initials, sk
     def build(
         self, id, miis
     ):  # must be sent contest ID and a 2 DIMENSIONAL array with each entry containing entryno, craftsno, miidata, artisandata, country, and master artisan flag
-
-        header = (
-            bytes.fromhex("424C0000")
-            + u32(id)
-            + bytes.fromhex("0000000000000000000000000000000000000000FFFFFFFF")
-        )
-        cntag = bytes.fromhex("434E000C00000001") + u32(len(miis))
-        self.header = header + cntag
         self.miilist = []
+
+        self.mii = {}
+        self.mii["tag"] = b"BL"
+        self.mii["tag_size"] = u16(0)
+        self.mii["id"] = u32(id)
+        self.mii["list_number"] = u32(0)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.mii["cn_tag"] = b"CN"
+        self.mii["cn_size"] = u16(12)
+        self.mii["unknown"] = u32(1)
+        self.mii["mii_count"] = u32(len(miis))
+        self.miilist += self.mii.values()
 
         for entry in miis:
             miidata = decodeMii(
@@ -913,8 +1052,6 @@ class BestList:  # similar to a regular CMOC list, but miis have no initials, sk
             self.mii["unk7"] = u16(miis.index(entry) + 1)  # dookie
             self.miilist += self.mii.values()
 
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
-
         data = b""
         for entry in self.miilist:
             data += entry
@@ -929,11 +1066,16 @@ class ConResult:  # returns unencrypted list for conresult.cgi
     def build(
         self, id, miis
     ):  # must be sent contest ID and a 2 dimensional array containing craftsno and ranking
-        self.header = (
-            bytes.fromhex("43520000")
-            + u32(id)
-            + bytes.fromhex("00000000000000000000000000000000FFFFFFFFFFFFFFFF")
-        )
+        self.miilist = []
+
+        self.mii = {}
+        self.mii["tag"] = b"CR"
+        self.mii["tag_size"] = u16(0)
+        self.mii["id"] = u32(id)
+        self.mii["list_number"] = u32(0)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.miilist += self.mii.values()
 
         for i in range(len(miis)):
             self.mii = {}
@@ -950,7 +1092,6 @@ class ConResult:  # returns unencrypted list for conresult.cgi
             self.mii["unk1"] = u8(0)
             self.miilist += self.mii.values()
 
-        self.miilist.insert(0, self.header)  # inserts the header before all the miis
         data = b""
         for entry in self.miilist:
             data += entry

@@ -21,7 +21,7 @@ db = MySQLdb.connect(
 cursor = db.cursor()
 
 cursor.execute(
-    "SELECT id, status, description, sent FROM contests WHERE (status != 'closed' AND status != 'waiting')"
+    "SELECT id, status, description, sent, photo_url FROM contests WHERE (status != 'closed' AND status != 'waiting')"
 )
 contests = cursor.fetchall()
 
@@ -81,12 +81,12 @@ decfilename = "/var/rc24/File-Maker/Channels/Check_Mii_Out_Channel/decfiles/cont
 )
 
 if path.exists(decfilename):
-    boundary2 = "----=_CMOC_Contest_Icon"
+    boundary2 = "----=_CMOC_Contest_Details"
 
     with open(decfilename, "rb") as f:
-        contest_icon = str(
-            encodebytes(f.read()).replace(b"\n", b"\r\n").decode("utf-8")
-        )
+        con_detail = str(encodebytes(f.read()).replace(b"\n", b"\r\n").decode("utf-8"))
+
+    thumbnail_path = "/var/rc24/thumbnail/{}".format(str(contest_id))
 
     message += (
         boundary
@@ -107,16 +107,42 @@ if path.exists(decfilename):
         + boundary2
         + "\r\n"
         + "Content-Type: application/octet-stream;\r\n"
-        + " name=storage.bin\r\n"
+        + " name=con_detail1.bin\r\n"
         + "Content-Transfer-Encoding: base64\r\n"
         + "Content-Disposition: attachment;\r\n"
-        + " filename=storage.bin\r\n\r\n"
-        + contest_icon
+        + " filename=con_detail1.bin\r\n\r\n"
+        + con_detail
         + "\r\n\r\n"
-        + "--"
-        + boundary2
-        + "--\r\n\r\n"
     )
+
+    if path.exists(thumbnail_path + ".jpg"):
+        system("convert " + thumbnail_path + ".jpg " + thumbnail_path + ".png")
+        system("wimgt ENCODE " + thumbnail_path + ".png -x TPL.RGB565")
+        system("mv " + thumbnail_path + " " + thumbnail_path + ".tpl")
+
+        with open(thumbnail_path + ".tpl", "rb") as f:
+            con_icon = str(
+                encodebytes(f.read()[64:]).replace(b"\n", b"\r\n").decode("utf-8")
+            )
+
+        message += (
+            "--"
+            + boundary2
+            + "\r\n"
+            + "Content-Type: application/octet-stream;\r\n"
+            + " name=thumbnail_"
+            + str(contest_id)
+            + ".tpl\r\n"
+            + "Content-Transfer-Encoding: base64\r\n"
+            + "Content-Disposition: attachment;\r\n"
+            + " filename=thumbnail_"
+            + str(contest_id)
+            + ".tpl\r\n\r\n"
+            + con_icon
+            + "\r\n\r\n"
+        )
+
+    message += "--" + boundary2 + "--\r\n\r\n"
 
 # make text, photo and attachment
 
@@ -126,6 +152,14 @@ for c in contests:
     status = c[1]
     description = c[2]
     sent = c[3]
+    photo_url = c[4]
+
+    if not path.exists("/var/rc24/photo/{}.jpg".format(id)) and photo_url:
+        if photo_url:
+            photo = requests.get(photo_url).content
+
+            with open("/var/rc24/photo/{}.jpg".format(id), "wb") as f:
+                f.write(photo)
 
     if sent == 0:
         boundary2 = "----=_CMOC_Contest_{}".format(i)

@@ -54,6 +54,8 @@ for con in cursor.fetchall():
     ):  # contest is ready to be opened
         cursor.execute("UPDATE contests SET status = 'open' WHERE id = %s", [id])
 
+        new = True
+
     elif (
         start <= currentTime and end <= currentTime
     ):  # contest is ready to move to its next status
