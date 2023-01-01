@@ -6,7 +6,7 @@
 # VERSION 5.1
 # AUTHORS: JOHN PANSERA, LARSEN VALLECILLO
 # ***************************************************************************
-# Copyright (c) 2015-2022 RiiConnect24, and its (Lead) Developers
+# Copyright (c) 2015-2023 RiiConnect24, and its (Lead) Developers
 # ===========================================================================
 
 import binascii
@@ -424,7 +424,7 @@ class Forecast:
             pass  # Wait for main loop to start
         header = "=" * 64 + "\n\n"
         header += "--- RC24 Forecast Downloader [v%s] --- www.rc24.xyz\n" % self.VERSION
-        header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2021\n\n"
+        header += "By John Pansera / Larsen Vallecillo --- (C) 2015-2023\n\n"
         if self.config["production"]:
             header += " " * 13 + "*** Production Mode Enabled ***\n"
         else:
