@@ -938,15 +938,30 @@ class Parse(News):
         )
 
         try:
-            self.resize = True
-            self.credits = self.soup.find_all("span", {"class": "a-media-legend"})[
-                1
-            ].get_text()
-            self.caption = self.soup.find_all("span", {"class": "a-media-legend"})[
-                0
-            ].get_text()
-            self.location = self.article.split(" (AFP)")[0].split("\n\n")[1]
-            self.article = self.article.replace(self.caption + "\n\n", "")
+            try:
+                self.resize = True
+            except:
+                pass
+            try:
+                self.credits = self.soup.find_all("span", {"class": "a-media-legend"})[
+                    1
+                ].get_text()
+            except:
+                pass
+            try:
+                self.caption = self.soup.find_all("span", {"class": "a-media-legend"})[
+                    0
+                ].get_text()
+            except:
+                pass
+            try:
+                self.location = self.article.split(" (AFP)")[0]
+            except:
+                pass
+            try:
+                self.article = self.article.replace(self.caption + "\n\n", "")
+            except:
+                pass
         except AttributeError:
             pass
 
