@@ -1621,7 +1621,14 @@ class NewsMake:
         if os.path.exists(path + "wc24dl.vff"):
             os.remove(path + "wc24dl.vff")
         subprocess.call(
-            ["vfftool", "create", path + "wc24dl.vff", path + "wc24dl", "3801088"],
+            [
+                config["winePath"],
+                config["prfArcPath"],
+                "-v",
+                "3712",
+                path + "wc24dl",
+                path + "wc24dl.vff",
+            ],
             stdout=subprocess.DEVNULL,
         )  # Pack VFF
 

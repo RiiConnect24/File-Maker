@@ -54,13 +54,15 @@ for con in cursor.fetchall():
     ):  # contest is ready to be opened
         cursor.execute("UPDATE contests SET status = 'open' WHERE id = %s", [id])
 
+        new = True
+
     elif (
         start <= currentTime and end <= currentTime
     ):  # contest is ready to move to its next status
         # end time is increased by 7 days unless contest closes
-        endTime = int(end + (7 * 24 * 60 * 60))
 
         if status == "open":
+            endTime = int(end + (7 * 24 * 60 * 60))
             cursor.execute("SELECT COUNT(*) FROM conmiis WHERE contest = %s", [id])
             cursor.execute(
                 "UPDATE contests SET status = 'judging', end = %s, entrycount = %s, sent = 0 WHERE id = %s",
@@ -68,6 +70,7 @@ for con in cursor.fetchall():
             )
 
         elif status == "judging":
+            endTime = int(end + (30 * 24 * 60 * 60))
             cursor.execute(
                 "UPDATE contests SET status = 'results', end = %s, sent = 0 WHERE id = %s",
                 (endTime, id),

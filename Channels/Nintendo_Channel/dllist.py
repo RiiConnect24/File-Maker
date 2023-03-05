@@ -1,6 +1,8 @@
 import binascii
 import enum
 import json
+import mobiclip
+import MySQLdb
 import nlzss
 import os
 import sqlite3
@@ -278,7 +280,7 @@ class MakeDList:
                 "New3DS": 0x18,
                 "New3DSWare": 0x19,
                 "VC-NES": 0x1A,
-                "VC-GB": 0x1B,
+                "VC-GB": 0x14,
                 "VC-GBC": 0x1C,
                 "VC-GBA": 0x1D,
                 "VC-GG": 0x1E,
@@ -322,23 +324,27 @@ class MakeDList:
                 "VC-PCE": 0x24,
                 "VC-MSX": 0x25,
                 "Channel": 0x26,
-            }
+            },
         }  # The XML returns None for disc games when we query the type.
 
-        platforms = ["Wii", "NDS", "3DS", "WiiU", "Switch"]
+        platforms = ["Wii", "NDS", "3DS", "WiiU"]
 
         titles = {}
 
         # import leaderboards from RiiTag
         if config["production"]:
-            con = sqlite3.connect("/var/www/rc24/tag.rc24.xyz/public_html/games.db")
+            con = MySQLdb.connect(
+                "localhost", config["dbuser"], config["dbpass"], "rc24_RiiTag", charset="utf8mb4"
+            )
 
             cur = con.cursor()
 
             titles_ranking = []
 
-            for row in cur.execute("SELECT * FROM games ORDER BY count DESC"):
-                titles_ranking.append(row[2])
+            cur.execute("SELECT game_id FROM game ORDER BY playcount DESC")
+
+            for row in cur.fetchall():
+                titles_ranking.append(row)
 
         titles_keys = {}
 
@@ -423,12 +429,18 @@ class MakeDList:
                         s.find("id").text[:4], 4
                     )
 
-                    if s.find("type").text in game_type:
-                        self.header[f"title_titleType_{entry_number}"] = u8(
-                            game_type[title_platform][s.find("type").text]
-                        )
-                    else:
-                        self.header[f"title_titleType_{entry_number}"] = u8(0)
+                    try:
+                        if s.find("type").text in game_type[title_platform]:
+                            self.header[f"title_titleType_{entry_number}"] = u8(
+                                game_type[title_platform][s.find("type").text]
+                            )
+                        else:
+                            print(title_platform, s.find("type").text)
+                            continue
+                            # self.header[f"title_titleType_{entry_number}"] = u8(0)
+                    except:
+                        print(title_platform, s.find("type").text)
+                        continue
 
                     # Parse the genre's. The XML is a giant mess for this, this will be a giant dictionary.
                     genre_dict = {
@@ -679,7 +691,7 @@ class MakeDList:
                             )
 
                             os.system(
-                                "python3.8 info.py {} {}".format(
+                                "python3.10 info.py {} {}".format(
                                     title_platform, text_id
                                 )
                             )
@@ -709,13 +721,28 @@ class MakeDList:
             self.header["video_id_%s" % entry_number] = u32(
                 nin_videos_1_table[video]["id"]
             )
-            self.header["video_timeLength_%s" % entry_number] = u16(
-                nin_videos_1_table[video]["time_length"]
-            )
+            print(str(nin_videos_1_table[video]["id"]))
+            try:
+                with open("/var/www/rc24/wapp.wii.com/nintendo/entus/public_html/6/movie/US/en/" + str(nin_videos_1_table[video]["id"]) + "-h.mo", "rb") as f:
+                    f.seek(12)
+                    fps = struct.unpack("<I", f.read(4))[0]
+                    chunk_count = struct.unpack("<I", f.read(4))[0]
+                    f.close()
+                self.header["video_timeLength_%s" % entry_number] = u16(int(
+                    chunk_count / (fps / 256)
+                ))
+            except FileNotFoundError:
+                print(str(nin_popular_videos_table[pop]["id"]) + "-h.mo not found")
+                self.header["video_timeLength_%s" % entry_number] = u16(int(
+                    0
+                ))
             self.header["video_titleID_%s" % entry_number] = u32(
                 nin_videos_1_table[video]["title_id"]
             )
-            for i in range(15):
+            self.header["video_videoType_%s" % entry_number] = u8(
+                nin_videos_1_table[video]["video_type"]
+            )
+            for i in range(14):
                 self.header["bruh_unknown_%s_%s" % (i, entry_number)] = u8(0)
             self.header["video_unknown2_%s" % entry_number] = u8(
                 nin_videos_1_table[video]["unknown_2"]
@@ -750,9 +777,26 @@ class MakeDList:
             self.header["new_videoID_%s" % entry_number] = u32(
                 nin_new_video_table[new_video]["id"]
             )
-            self.header["new_video_unknown_%s" % entry_number] = u16(
-                nin_new_video_table[new_video]["unknown"]
-            )
+            try:
+                with open("/var/www/rc24/wapp.wii.com/nintendo/entus/public_html/6/movie/US/en/" + str(nin_new_video_table[new_video]["id"]) + "-h.mo", "rb") as f:
+                    f.seek(12)
+                    fps = struct.unpack("<I", f.read(4))[0]
+                    chunk_count = struct.unpack("<I", f.read(4))[0]
+                    f.close()
+                print(chunk_count / (fps / 256))
+                try:
+                    self.header["new_video_timeLength_%s" % entry_number] = u16(int(
+                        chunk_count / (fps / 256)
+                    ))
+                except:
+                    self.header["new_video_timeLength_%s" % entry_number] = u16(int(
+                        0
+                    ))
+            except FileNotFoundError:
+                print(str(nin_new_video_table[new_video]["id"]) + "-h.mo not found")
+                self.header["new_video_timeLength_%s" % entry_number] = u16(int(
+                    0
+                ))
             self.header["new_video_titleID_%s" % entry_number] = u32(
                 nin_new_video_table[new_video]["title_id"]
             )
@@ -840,9 +884,20 @@ class MakeDList:
             self.header["pop_video_id_%s" % entry_number] = u32(
                 nin_popular_videos_table[pop]["id"]
             )
-            self.header["pop_video_time_%s" % entry_number] = u16(
-                nin_popular_videos_table[pop]["time_length"]
-            )
+            try:
+                with open("/var/www/rc24/wapp.wii.com/nintendo/entus/public_html/6/movie/US/en/" + str(nin_popular_videos_table[pop]["id"]) + "-h.mo", "rb") as f:
+                    f.seek(12)
+                    fps = struct.unpack("<I", f.read(4))[0]
+                    chunk_count = struct.unpack("<I", f.read(4))[0]
+                    f.close()
+                self.header["pop_video_time_%s" % entry_number] = u16(int(
+                    chunk_count / (fps / 256)
+                ))
+            except FileNotFoundError:
+                print(str(nin_popular_videos_table[pop]["id"]) + "-h.mo not found")
+                self.header["pop_video_time_%s" % entry_number] = u16(int(
+                    0
+                ))
             self.header["pop_video_title_id_%s" % entry_number] = u32(0)
             self.header["pop_video_bar_color_%s" % entry_number] = u8(0)
             for i in range(15):
