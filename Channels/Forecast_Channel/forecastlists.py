@@ -30107,13 +30107,13 @@ weathercities079["Karditsa"] = [
 weathercities079["Nikaia"] = [
     ["Nikea", "Nikaia", "Nikea", "Nikea", "Nikea", "Nikea", "Nikea"],
     [
-        "テッサリーア",
-        "Thessaly",
-        "Thessalien",
-        "Thessalie",
-        "Tesalia",
-        "Tessaglia",
-        "Thessalië",
+        "アッティカ",
+        "Attica",
+        "Attika",
+        "Attique",
+        "Ática",
+        "Attica",
+        "Attika"
     ],
     ["ギリシャ", "Greece", "Griechenland", "Grèce", "Grecia", "Grecia", "Griekenland"],
     "1af710ca00030000",

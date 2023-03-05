@@ -458,6 +458,12 @@ class QuickList:  # returns a temporary unencrypted mii list for CGI scripts lik
             self.mii["pn_size"] = u16(12)
             self.mii["unknown"] = u32(1)
             self.mii["count"] = u32(count)
+        self.mii["error_code"] = u32(0)
+        self.mii["padding"] = bytes.fromhex("000000000000000000000000FFFFFFFF")
+        self.mii["pn_tag"] = b"PN"
+        self.mii["pn_size"] = u16(12)
+        self.mii["unknown"] = u32(1)
+        self.mii["count"] = u32(count)
         self.miilist += self.mii.values()
 
         for entry in miis:
@@ -972,6 +978,7 @@ class Photo:
         return data
 
 
+<<<<<<< HEAD
 class Addition:
     def build(self, region, message, skills, countries):
         language = int(region[2])
@@ -1026,6 +1033,8 @@ class Addition:
         return data
 
 
+=======
+>>>>>>> 83a10d161b3669d1b501f00063814c91abd51fdb
 class EntryList:  # EntryList has no PN tag. each entry_list file has exactly 10 miis
     def build(
         self, id, miis
