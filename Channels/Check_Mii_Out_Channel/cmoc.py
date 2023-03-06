@@ -978,7 +978,6 @@ class Photo:
         return data
 
 
-<<<<<<< HEAD
 class Addition:
     def build(self, region, message, skills, countries):
         language = int(region[2])
@@ -1033,8 +1032,6 @@ class Addition:
         return data
 
 
-=======
->>>>>>> 83a10d161b3669d1b501f00063814c91abd51fdb
 class EntryList:  # EntryList has no PN tag. each entry_list file has exactly 10 miis
     def build(
         self, id, miis
