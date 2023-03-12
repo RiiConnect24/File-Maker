@@ -776,6 +776,11 @@ class Parse(News):
 
         if self.newsdata["bylines"] != "" and self.newsdata["bylines"] != None:
             self.article += "\n\n" + self.newsdata["bylines"]
+            
+            if self.newsdata["reporters"] != "" and self.newsdata["reporters"] != None:
+                for reporter in reporters:
+                    if reporter["biography"] != "" and reporter["biography"] != None:
+                        self.article += "\n\n" + reporter["biography"]
 
         if (
             "storyHTML" in self.article
