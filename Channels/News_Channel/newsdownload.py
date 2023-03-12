@@ -768,7 +768,7 @@ class Parse(News):
         )
 
         self.article = re.sub(
-            "\n\nHub peek embed ((.*)) - Compressed layout ((.*))", "", self.article
+            "\n\nHub peek embed ((.*)) - Compressed layout", "", self.article
         )
 
         if self.article[-2:] == "\n":
