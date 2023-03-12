@@ -743,7 +743,7 @@ class NewsMake:
                 if topics in keys:
                     numbers += 1
 
-                    newstime[self.data[keys][3] + " - " + self.data[keys][2]] = self.get_timestamp(1) + u32(numbers)
+                    newstime[self.data[keys][3] + b" - " + self.data[keys][2]] = self.get_timestamp(1) + u32(numbers)
 
             pickle.dump(
                 newstime,
