@@ -712,9 +712,9 @@ class NewsMake:
         headlines = []
 
         for k, v in list(data.items()):
-            if v[3] not in headlines:
-                headlines.append(v[3])
-            elif v[3] in headlines:
+            if v[3].decode("utf-16be").split(" - ")[0].encode("utf-16be") not in headlines:
+                headlines.append(v[3].decode("utf-16be").split(" - ")[0].encode("utf-16be"))
+            elif v[3].decode("utf-16be").split(" - ")[0].encode("utf-16be") in headlines:
                 del data[k]
 
         return data
