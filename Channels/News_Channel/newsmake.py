@@ -712,9 +712,9 @@ class NewsMake:
         headlines = []
 
         for k, v in list(data.items()):
-            if v[3].decode("utf-16be").split(" - ")[0].encode("utf-16be") not in headlines:
-                headlines.append(v[3].decode("utf-16be").split(" - ")[0].encode("utf-16be"))
-            elif v[3].decode("utf-16be").split(" - ")[0].encode("utf-16be") in headlines:
+            if v[3] not in headlines:
+                headlines.append(v[3])
+            elif v[3] in headlines:
                 del data[k]
 
         return data
@@ -743,7 +743,7 @@ class NewsMake:
                 if topics in keys:
                     numbers += 1
 
-                    newstime[self.data[keys][3] + " - ".encode("utf-16be") + self.data[keys][2].decode("utf-16be").split("\n")[0].encode("utf-16be")] = self.get_timestamp(1) + u32(numbers)
+                    newstime[self.data[keys][3] + " - " + self.data[keys][2]] = self.get_timestamp(1) + u32(numbers)
 
             pickle.dump(
                 newstime,
