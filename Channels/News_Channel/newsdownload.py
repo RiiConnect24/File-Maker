@@ -767,6 +767,10 @@ class Parse(News):
             "",
         )
 
+        self.article = self.article.replace("\n\nRelated Coverage", "")
+
+        self.article = self.article.replace(" (automatic embed)", "")
+
         self.article = re.sub(
             "\n\nHub peek embed ((.*)) - Compressed layout", "", self.article
         )
