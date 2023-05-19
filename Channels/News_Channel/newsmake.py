@@ -600,10 +600,17 @@ class NewsMake:
         print("Making news.bin for {}...\n".format(self.name))
 
         self.language_code = self.language
-        self.data = self.d.newsdata
+        self.data = {}
+        self.source = sources[self.mode]
         self.newsfilename = "news.bin.{}.{}".format(
             str(datetime.utcnow().hour).zfill(2), self.mode
         )
+        self.topics_news = self.source["topics_news"]
+
+        for topic in list(self.topics_news.values()):
+            for k, v in self.d.newsdata.items():
+                if topic in k:
+                    self.data[k] = v
 
         # This is where we do some checks so that the file doesn't get too large
         # There's a limit on how much news we can have in total
@@ -712,6 +719,9 @@ class NewsMake:
         headlines = []
 
         for k, v in list(data.items()):
+            if b"urn:publicid:ap.org:" in v[3]:
+                v[3] = v[3].split(b"urn:publicid:ap.org:")[1]
+
             if v[3] not in headlines:
                 headlines.append(v[3])
             elif v[3] in headlines:
@@ -722,12 +732,9 @@ class NewsMake:
     # Run the functions to make the news
 
     def make_news_bin(self):
-        self.source = sources[self.mode]
-
         if self.source is None:
             print("Could not find %s in sources.")
 
-        self.topics_news = self.source["topics_news"]
         self.languages = self.source["languages"]
         self.country_code = self.source["country_code"]
 
@@ -781,9 +788,18 @@ class NewsMake:
         for article in list(self.data.values()):
             try:
                 if article[3].replace(b"\n", b"").decode("utf-16be") not in headlines:
-                    headlines.append(
-                        article[3].replace(b"\n", b"").decode("utf-16be") + "\n"
-                    )
+                    if "urn:publicid:ap.org:".encode("utf-16be") in headlines:
+                        headlines.append(
+                            article[3]
+                            .replace(b"\n", b"")
+                            .decode("utf-16be")
+                            .split(" urn:publicid:ap.org:".encode("utf-16be"))[0]
+                            + "\n"
+                        )
+                    else:
+                        headlines.append(
+                            article[3].replace(b"\n", b"").decode("utf-16be") + "\n"
+                        )
             except UnicodeDecodeError:
                 pass
 
@@ -867,7 +883,14 @@ class NewsMake:
             if numbers < 11:
                 if article[3].replace(b"\n", b"") not in headlines:
                     numbers += 1
-                    headlines.append(article[3])
+                    if "urn:publicid:ap.org:".encode("utf-16be") in article[3]:
+                        headlines.append(
+                            article[3].split(
+                                " urn:publicid:ap.org:".encode("utf-16be")
+                            )[0]
+                        )
+                    else:
+                        headlines.append(article[3])
                     self.header["headline_%s_size" % numbers] = u32(
                         0
                     )  # Size of the headline.
@@ -889,14 +912,23 @@ class NewsMake:
             if numbers < 11:
                 if article[3] not in headlines:
                     numbers += 1
-                    headlines.append(article[3])
+                    if "urn:publicid:ap.org:".encode("utf-16be") in article[3]:
+                        headline = article[3].split(
+                            " urn:publicid:ap.org:".encode("utf-16be")
+                        )[0]
+                    else:
+                        headline = article[3]
+
+                    headlines.append(headline)
+
                     self.header["headline_%s_size" % numbers] = u32(
-                        len(article[3].replace(b"\n", b""))
+                        len(headline.replace(b"\n", b""))
                     )  # Size of the headline.
                     self.header[
                         "headline_%s_offset" % numbers
                     ] = self.offset_count()  # Offset for the headline.
-                    self.wiimenu_articles["headline_%s" % numbers] = article[3].replace(
+
+                    self.wiimenu_articles["headline_%s" % numbers] = headline.replace(
                         b"\n", b""
                     )  # Headline.
 
@@ -1042,6 +1074,13 @@ class NewsMake:
         self.header["articles_offset"] = self.offset_count()
 
         for keys, article in list(self.data.items()):
+            if "urn:publicid:ap.org:".encode("utf-16be") in article[3]:
+                headline = article[3].split(" urn:publicid:ap.org:".encode("utf-16be"))[
+                    0
+                ]
+            else:
+                headline = article[3]
+
             numbers += 1
             self.articles_table["article_%s_number" % numbers] = u32(
                 numbers
@@ -1083,7 +1122,7 @@ class NewsMake:
                 1
             )  # Updated time.
             self.articles_table["headline_%s_size" % numbers] = u32(
-                len(article[3].replace(b"\n", b""))
+                len(headline.replace(b"\n", b""))
             )  # Size of the headline.
             self.articles_table["headline_%s_offset" % numbers] = u32(
                 0
@@ -1265,11 +1304,18 @@ class NewsMake:
         numbers = 0
 
         for article in list(self.data.values()):
+            if "urn:publicid:ap.org:".encode("utf-16be") in article[3]:
+                headline = article[3].split(" urn:publicid:ap.org:".encode("utf-16be"))[
+                    0
+                ]
+            else:
+                headline = article[3]
+
             numbers += 1
             self.articles_table[
                 "headline_%s_offset" % numbers
             ] = self.offset_count()  # Offset for the headline.
-            self.articles["headline_%s_read" % numbers] = article[3].replace(
+            self.articles["headline_%s_read" % numbers] = headline.replace(
                 b"\n", b""
             )  # Read the headline.
             self.articles["padding_%s_headline" % numbers] = u16(

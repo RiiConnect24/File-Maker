@@ -45,15 +45,15 @@ sources = {
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "en",
         "cat": {
+            "science": "science",
+            "health": "science",
+            "technology": "technology",
+            "oddities": "oddities",
             "us-news": "national",
             "world-news": "world",
             "sports": "sports",
             "entertainment": "entertainment",
             "business": "business",
-            "science": "science",
-            "health": "science",
-            "technology": "technology",
-            "oddities": "oddities",
         },
     },
     "ap_spanish": {
@@ -73,15 +73,15 @@ sources = {
         "url2": "https://www.thestar.com/content/thestar/feed.RSSManagerServlet.articles.news.canada.rss",
         "lang": "en",
         "cat": {
+            "science": "science",
+            "health": "science",
+            "technology": "technology",
+            "oddities": "oddities",
             "canada": ["canada_", "canada"],
             "world-news": "world",
             "sports": "sports",
             "entertainment": "entertainment",
             "business": "business",
-            "science": "science",
-            "health": "science",
-            "technology": "technology",
-            "oddities": "oddities",
         },
     },
     "ap_australia": {
@@ -89,15 +89,15 @@ sources = {
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
         "lang": "en",
         "cat": {
+            "science": "science",
+            "health": "science",
+            "technology": "technology",
+            "oddities": "oddities",
             "national": ["australia", "new-zealand"],
             "world-news": "world",
             "sports": "sports",
             "entertainment": "entertainment",
             "business": "business",
-            "science": "science",
-            "health": "science",
-            "technology": "technology",
-            "oddities": "oddities",
         },
     },
     "reuters_europe_english": {
@@ -600,7 +600,7 @@ class News:
                         self.source = "ANP"
 
                     if self.source == "AP" and key != "canada_":
-                        title = entry["headline"]
+                        title = entry["headline"] + " " + entry["id"]
                     elif self.source == "Reuters":
                         title = entry["story"]["hed"]
                     elif self.source == "AFP_German":
@@ -611,7 +611,10 @@ class News:
                     if title not in self.headlines:
                         self.headlines.append(title)
 
-                        print(title)
+                        if "urn:publicid:ap.org:" in title:
+                            print(title.split(" urn:publicid:ap.org:")[0])
+                        else:
+                            print(title)
 
                         if self.source == "AP" and key != "canada_":
                             entry_url = json.dumps(entry)
@@ -780,9 +783,16 @@ class Parse(News):
 
         if self.newsdata["bylines"] != "" and self.newsdata["bylines"] != None:
             self.article += "\n\n" + self.newsdata["bylines"]
-            
-            if self.newsdata["reporters"] != "" and self.newsdata["reporters"] != None and self.newsdata["reporters"] != []:
-                if self.newsdata["reporters"][0]["biography"] != "" and self.newsdata["reporters"][0]["biography"] != None:
+
+            if (
+                self.newsdata["reporters"] != ""
+                and self.newsdata["reporters"] != None
+                and self.newsdata["reporters"] != []
+            ):
+                if (
+                    self.newsdata["reporters"][0]["biography"] != ""
+                    and self.newsdata["reporters"][0]["biography"] != None
+                ):
                     self.article += "\n\n" + self.newsdata["reporters"][0]["biography"]
 
         if (
