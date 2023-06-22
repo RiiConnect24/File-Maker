@@ -131,14 +131,12 @@ sources = {
     },
     "afp_german": {
         "name": "AFP_German",
-        "url": "https://tah.de/%s",
+        "url": "https://spin.de/news/%s/",
         "lang": "de",
         "cat": {
-            "politik": "politics",
-            "wirtschaft": "economy",
-            "medizingesundheit": "health",
-            "weltimspiegel": "panorama",
-            "sport": "sports",
+            "Allegmein": "general",
+            "Panorama": "panorama",
+            "Sport": "sports",
         },
     },
     "afp_spanish": {
@@ -538,7 +536,7 @@ class News:
         elif self.source == "AFP_French":
             entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
         elif self.source == "AFP_German":
-            entries = soup.find_all("div", {"class": "article articletype-0 mb-4 mt-5"})
+            entries = soup.find_all("div", {"class": "label"})
         else:
             entries = feed.entries
 
@@ -564,23 +562,23 @@ class News:
                         entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
                     )
                 elif self.source == "AFP_German":
-                    locale.setlocale(locale.LC_ALL, "de_DE")
-                    update = time.strptime(
-                        entry.find("i").text.strip(), "%A, %d. %B %Y %H:%M"
-                    )
-                    locale.setlocale(locale.LC_ALL, "en_US")
+                    update = ""
                 else:
                     update = entry["updated_parsed"]
 
-                updated_time = int((time.mktime(update) - 946684800) / 60)
+                if self.source != "AFP_German":
+                    updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                if self.source == "AFP_German" and current_time - updated_time < 0:
-                    updated_time -= 120
+                if self.source == "AFP_German":
+                    updated_time = current_time - 1
                 elif self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 180
 
                 if (
-                    current_time - updated_time < 60
+                    self.source == "AFP_German"
+                    and i < 5
+                    or self.source != "AFP_German"
+                    and current_time - updated_time < 60
                 ):  # if it's a new article since the last hour
                     i += 1
                     j += 1
@@ -604,7 +602,7 @@ class News:
                     elif self.source == "Reuters":
                         title = entry["story"]["hed"]
                     elif self.source == "AFP_German":
-                        title = entry.find("a")["title"]
+                        title = entry.find("a").get_text()
                     else:
                         title = entry["title"]
 
@@ -623,7 +621,9 @@ class News:
                                 self.url[:30] + entry["template_action"]["api_path"]
                             )
                         elif self.source == "AFP_German":
-                            entry_url = "https://tah.de" + entry.find("a")["href"]
+                            entry_url = (
+                                "https://www.spin.de/news/" + entry.find("a")["href"]
+                            ).replace("../", "")
                         else:
                             entry_url = entry["link"]
 
@@ -908,41 +908,46 @@ class Parse(News):
             pass
 
     def parse_afp_german(self):
-        self.location = self.soup.find("span", {"itemprop": "name"}).get_text()
-
-        if "(SID)" in self.location:
-            self.source = "SID"
-            self.location = self.location.split(" (SID)")[0]
-            self.article = self.location + " (SID) - " + self.article
-        elif "(AFP)" in self.location:
-            self.location = self.location.split(" (AFP)")[0]
-            self.article = self.location + " (AFP) - " + self.article
+        locale.setlocale(locale.LC_ALL, "de_DE")
+        if (
+            int((time.mktime(datetime.utcnow().timetuple()) - 946684800) / 60)
+            - int(
+                (
+                    time.mktime(
+                        time.strptime(
+                            self.soup.find("td", {"style": "padding-right:10px"})
+                            .find("div", {"style": "float:left"})
+                            .get_text()
+                            .replace("Letzte Änderung: ", "")
+                            .replace("\n", "")[1:],
+                            "%d. %b %Y %H:%M",
+                        )
+                    )
+                    - 946684800 / 60
+                ),
+            )
+            > 60
+        ):
+            return
+        locale.setlocale(locale.LC_ALL, "en_US")
 
         try:
-            self.resize = True
-            self.caption = (
-                self.soup.find(
-                    "p",
-                    {"class": "news-img-caption text-small text-white p-2 mb-0 w-100"},
-                )
+            self.location = (
+                self.soup.find("td", {"style": "padding-right:10px"})
+                .find("div", {"style": "float:right"})
                 .get_text()
-                .strip()
-                .split(" - (")[0]
             )
-            self.credits = (
-                self.soup.find(
-                    "p",
-                    {"class": "news-img-caption text-small text-white p-2 mb-0 w-100"},
-                )
-                .get_text()
-                .strip()
-                .split("(")[1]
-                .split(")")[0]
-                .split(" / SID")[0]
-                .split(" / AFP")[0]
-            )
-        except AttributeError:
+            if "(SID)" in self.location:
+                self.source = "SID"
+                self.location = self.location.split(" (SID)")[0]
+                self.article = self.location + " (SID) - " + self.article
+            elif "(AFP)" in self.location:
+                self.location = self.location.split(" (AFP)")[0]
+                self.article = self.location + " (AFP) - " + self.article
+        except:
             pass
+
+        self.resize = True
 
     def parse_afp_spanish(self):
         if "(AFP)" not in self.article:
