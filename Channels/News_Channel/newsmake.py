@@ -418,9 +418,7 @@ sources = {
     },
     "afp_german": {
         "topics_news": {
-            "Politik": "politics",
-            "Wirtschaft": "economy",
-            "Gesundheit": "health",
+            "Allegmein": "general",
             "Panorama": "panorama",
             "Sport": "sports",
         },
