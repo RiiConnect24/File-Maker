@@ -175,9 +175,9 @@ regioninfo_018 = {
 	4: [48.43293574, -123.3692997, ["ブリティッシュ・コロンビア州", "British Columbia", "Britisch-Kolumbien", "Colombie-Britannique", "Columbia Británica", "Columbia Britannica", "Brits-Columbia"]],
 	5: [49.88439862, -97.14704472, ["マニトバ州", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba", "Manitoba"]],
 	6: [45.94541477, -66.6655816, ["ニュー・ブランズウィック州", "New Brunswick", "Neubraunschweig", "Nouveau-Brunswick", "Nuevo Brunswick", "Nuovo Brunswick", "Nieuw-Brunswijk"]],
-	7: [47.56658838, -52.73134462, ["ニューファンドランド州", "Newfoundland", "Neufundland", "Terre-Neuve", "Terranova", "Terranova", "Newfoundland"]],
-	8: [44.9, -63.5, ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Ecosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"]],
-	9: [46.24041836, -63.1333861, ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Ile-du-Prince-Edouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"]],
+	7: [47.56658838, -52.73134462, ["ニューファンドランド・ラブラドール州", "Newfoundland and Labrador", "Neufundland und Labrador", "Terre-Neuve-et-Labrador", "Terranova y Labrador", "Terranova e Labrador", "Newfoundland en Labrador"]],
+	8: [44.9, -63.5, ["ノバ・スコシア州", "Nova Scotia", "Neuschottland", "Nouvelle-Écosse", "Nueva Escocia", "Nuova Scozia", "Nova Scotia"]],
+	9: [46.24041836, -63.1333861, ["プリンス・エドワード・アイランド州", "Prince Edward Island", "Prinz-Edward-Insel", "Île-du-Prince-Édouard", "Isla del Príncipe Eduardo", "Isola del Principe Edoardo", "Prins Edwardeiland"]],
 	10: [46.8069, -71.2118, ["ケベック州", "Quebec", "Québec", "Québec", "Quebec", "Québec", "Québec"]],
 	11: [50.45008005, -104.6177979, ["サスカチュワン州", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan", "Saskatchewan"]],
 	12: [60.71611478, -135.0537476, ["ユーコン準州", "Yukon", "Yukon-Territorium", "Territoire du Yukon", "Yukón", "Yukon", "Yukon"]],
@@ -1144,7 +1144,7 @@ regioninfo_088 = {
 }
 
 regioninfo_089 = {
-	1: [0, 0, ["マケドニア", "F.Y.R. of Macedonia", "Mazedonien", "Macédoine", "Macedonia", "Macedonia", "Macedonië"]],
+	1: [0, 0, ["北マケドニア", "North Macedonia", "Nordmazedonien", "Macédoine du Nord", "Macedonia del Norte", "Macedonia del Nord", "Noord-Macedonië"]],
 	2: [42.00316667, 21.45016667, ["スコピエ", "Skopje", "Skopje", "Skopje", "Skopje", "Skopje", "Skopje"]],
 	3: [41.745, 22.196, ["東部", "Eastern", "Ostmazedonien", "Macédoine de l'Est", "Macedonia del Este", "Orientale", "Oost-Macedonië"]],
 	4: [42.1345, 21.72216667, ["北東部", "Northeastern", "Nordostmazedonien", "Macédoine du Nord-Est", "Macedonia del Noreste", "Nordorientale", "Noord-Oost-Macedonië"]],
@@ -1411,7 +1411,7 @@ regioninfo_105 = {
 }
 
 regioninfo_106 = {
-	1: [0, 0, ["スワジランド", "Swaziland", "Swasiland", "Swaziland", "Suazilandia", "Swaziland", "Swaziland"]],
+	1: [0, 0, ["エスワティニ", "Eswatini", "Eswatini", "Eswatini", "Eswatini", "Eswatini", "Eswatini"]],
 	2: [-26.31783333, 31.1395, ["ホホ", "Hhohho", "Hhohho", "Hhohho", "Hhohho", "Hhohho", "Hhohho"]],
 	3: [-26.453, 31.95116667, ["ルボンボ", "Lubombo", "Lubombo", "Lubombo", "Lubombo", "Lubombo", "Lubombo"]],
 	4: [-26.49033333, 31.38583333, ["マンジニ", "Manzini", "Manzini", "Manzini", "Manzini", "Manzini", "Manzini"]],
