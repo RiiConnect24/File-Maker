@@ -253,7 +253,7 @@ def shrink_image(
     image = image.convert("RGB")
 
     if resize:
-        image.thumbnail(maxsize, Image.ANTIALIAS)
+        image.thumbnail(maxsize, Image.LANCZOS)
 
     data = list(image.getdata())
     image_without_exif = Image.new(image.mode, image.size)
