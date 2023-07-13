@@ -358,8 +358,10 @@ def locations_download(
     language_code, data
 ):  # using Google Maps API is so much better than the crap Nintendo used for say, AP news.
     locations = {}
-    gmaps = googlemaps.Client(key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI")
-
+    requests.packages.urllib3.util.connection.HAS_IPV6 = False
+    session = requests.Session()
+    gmaps = googlemaps.Client(requests_session=session, key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI")
+    
     languages = {  # corresponds to the Wii's language codes
         0: "ja",
         1: "en",
