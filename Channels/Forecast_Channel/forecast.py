@@ -130,7 +130,15 @@ def get_lng(forecast_list, key):
 
 
 def isJapan(forecast_list, key):
-    return forecast_list[key][2][1] == "Japan"
+    return (
+        forecast_list[key][2][1] == "Japan"
+        or forecast_list[key][0][1] == "Taipei City"
+        and list(forecast_list).index(key) < 5
+        or forecast_list[key][0][1] == "Kaohsiung City"
+        and list(forecast_list).index(key) < 5
+        or forecast_list[key][0][1] == "Hong Kong"
+        and list(forecast_list).index(key) < 5
+    )
 
 
 def matches_country_code(forecast_list, key):
@@ -992,7 +1000,7 @@ def packVFF(language_code, country_code):
         with open(path + "wc24dl/4.BIN", "wb") as dest:
             dest.write(source.read()[320:])
     if os.path.exists(path + "wc24dl.vff"):
-            os.remove(path + "wc24dl.vff")
+        os.remove(path + "wc24dl.vff")
     subprocess.call(
         ["vfftool", "create", path + "wc24dl.vff", path + "wc24dl", "204800"],
         stdout=subprocess.DEVNULL,

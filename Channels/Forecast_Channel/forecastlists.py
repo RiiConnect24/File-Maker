@@ -41305,6 +41305,54 @@ weathercities110["Omagh"] = [
     "26d3facf01030000",
 ]
 
+weathercities128 = {}
+
+weathercities128["Taipei City"] = [
+    ["台北", "Taipei City", "Taipeh", "Taïpei", "Taipéi", "Taipei", "Taipei"],
+    ["台北市", "Taipei City", "Taipeh", "Taïpei", "Taipéi", "Taipei", "Taipei"],
+    ["台湾", "Taiwan", "Taiwan", "Taiwan", "Taiwán", "Taiwan", "Taiwan"],
+    "11d9566f05030000",
+]
+weathercities128["Kaohsiung City"] = [
+    [
+        "カオシュン",
+        "Kaohsiung City",
+        "Kaohsiung",
+        "Kaohsiung",
+        "Kaohsiung",
+        "Kaohsiung",
+        "Kaohsiung",
+    ],
+    [
+        "高雄市",
+        "Kaohsiung City",
+        "Kaohsiung",
+        "Kaohsiung",
+        "Condado de Kaohsiung",
+        "Kaohsiung",
+        "Kaohsiung",
+    ],
+    ["台湾", "Taiwan", "Taiwan", "Taiwan", "Taiwán", "Taiwan", "Taiwan"],
+    "1012558804030000",
+]
+
+weathercities144 = {}
+
+weathercities144["Hong Kong"] = [
+    ["香港", "Hong Kong", "Hongkong", "Hong Kong", "Hong Kong", "Hong Kong", "Hongkong"],
+    ["", "", "", "", "", "", ""],
+    [
+        "ホンコン",
+        "Hong Kong",
+        "Hongkong",
+        "Hong Kong",
+        "Hong Kong",
+        "Hong Kong",
+        "Hongkong",
+    ],
+    "0ff9514709030000",
+]
+
 weathercities_international = {}
 
 weathercities_international["Tokyo"] = [
@@ -46471,7 +46519,7 @@ bincountries["Sudan"] = 118
 bincountries["Eritrea"] = 119
 bincountries["Dijibouti"] = 120
 bincountries["Somalia"] = 121
-bincountries["Taiwan"] = 122
+bincountries["Taiwan"] = 128
 bincountries["South Korea"] = 136
 bincountries["Hong Kong"] = 144
 bincountries["Macao"] = 145
@@ -47194,4 +47242,6 @@ weathercities = [
     weathercities107,
     weathercities108,
     weathercities110,
+    weathercities128,
+    weathercities144,
 ]
