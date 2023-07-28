@@ -167,12 +167,8 @@ def check_coords(forecast_list, key, lat, lng):
 
 
 def get_bins(country_code):
-    if country_code == 1:
-        bins = [0]
-    elif 8 <= country_code <= 52:
-        bins = [1, 3, 4]
-    elif 64 <= country_code <= 110:
-        bins = [1, 2, 3, 4, 5, 6]
+    bins = [0, 1, 2, 3, 4, 5, 6]
+        
     else:
         log(
             "Unknown country code %s - generating English only" % country_code,
