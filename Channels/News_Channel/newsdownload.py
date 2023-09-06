@@ -134,7 +134,7 @@ sources = {
         "url": "https://spin.de/news/%s/",
         "lang": "de",
         "cat": {
-            "Allegmein": "general",
+            "Allgemein": "general",
             "Panorama": "panorama",
             "Sport": "sports",
         },
