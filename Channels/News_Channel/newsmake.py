@@ -418,7 +418,7 @@ sources = {
     },
     "afp_german": {
         "topics_news": {
-            "Allegmein": "general",
+            "Allgemein": "general",
             "Panorama": "panorama",
             "Sport": "sports",
         },
