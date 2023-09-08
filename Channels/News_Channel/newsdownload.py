@@ -642,7 +642,7 @@ class News:
 
                         if key == "canada_":
                             self.source = "AP"
-x
+
                         if downloaded_news:
                             self.newsdata[value + str(j)] = downloaded_news
             except Exception as e:
@@ -1022,7 +1022,7 @@ class Parse(News):
         try:
             self.location = self.soup.find("meta", {"property": "og:description"})[
                 "content"
-            ].split(" (ANP) - ")[0]
-            self.article = self.location + " (ANP) - " + self.article
+            ].split(" (ANP")[0]
+            self.article = self.location + " (ANP" + self.article
         except:
             pass
