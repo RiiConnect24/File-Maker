@@ -360,8 +360,10 @@ def locations_download(
     locations = {}
     requests.packages.urllib3.util.connection.HAS_IPV6 = False
     session = requests.Session()
-    gmaps = googlemaps.Client(requests_session=session, key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI")
-    
+    gmaps = googlemaps.Client(
+        requests_session=session, key="AIzaSyAC4YJleigYdZe3Bkw7QTcFUxilDL8BAeI"
+    )
+
     languages = {  # corresponds to the Wii's language codes
         0: "ja",
         1: "en",
@@ -474,6 +476,8 @@ class News:
                         i = self.parse_feed(v, key, i)
                 else:
                     i = self.parse_feed(key, value, i)
+                if self.source == "AFP_German":
+                    i = 0
         except Exception as e:
             ex = "Failed to parse feed - line {}: {}".format(
                 sys.exc_info()[-1].tb_lineno, str(e)
@@ -638,7 +642,7 @@ class News:
 
                         if key == "canada_":
                             self.source = "AP"
-
+x
                         if downloaded_news:
                             self.newsdata[value + str(j)] = downloaded_news
             except Exception as e:
