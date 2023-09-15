@@ -70,7 +70,7 @@ sources = {
     "ap_canada": {
         "name": "AP",
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
-        "url2": "https://www.thestar.com/content/thestar/feed.RSSManagerServlet.articles.news.canada.rss",
+        "url2": "https://www.thestar.com/search/?f=rss&t=article&c=news/canada*&l=50&s=start_time&sd=desc",
         "lang": "en",
         "cat": {
             "science": "science",
@@ -552,9 +552,6 @@ class News:
                     try:
                         entry = entry["contents"][0]
                     except:
-                        continue
-                elif self.source == "AP" and key == "canada_":
-                    if entry["author"] != "The Canadian Press":
                         continue
 
                 current_time = int(
