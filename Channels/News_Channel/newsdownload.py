@@ -882,8 +882,8 @@ class Parse(News):
             if self.location == "":
                 self.location = self.article
         except:
-            pass
-
+            self.location = self.article
+        
         # move the credits for the article to the end of the article
 
         if self.article[:3] == "By ":
@@ -951,7 +951,7 @@ class Parse(News):
                 self.location = self.location.split(" (AFP)")[0]
                 self.article = self.location + " (AFP) - " + self.article
         except:
-            pass
+            self.location = self.article
 
         self.resize = True
 
@@ -986,7 +986,7 @@ class Parse(News):
             try:
                 self.location = self.article.split(" (AFP)")[0]
             except:
-                pass
+                self.location = self.article
             try:
                 self.article = self.article.replace(self.caption + "\n\n", "")
             except:
