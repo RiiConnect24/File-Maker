@@ -586,6 +586,9 @@ class News:
                     i += 1
                     j += 1
 
+                    if not i:
+                        i = 0
+
                     if (
                         i > 25
                     ):  # in case we have too many articles, we don't want the news file to get too big, there's a limit
