@@ -577,8 +577,6 @@ class News:
                 elif self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 180
 
-                print(current_time - updated_time)
-
                 if (
                     self.source == "AFP_German"
                     and i < 5
