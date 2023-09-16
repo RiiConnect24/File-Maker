@@ -70,18 +70,18 @@ sources = {
     "ap_canada": {
         "name": "AP",
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
-        "url2": "https://12ft.io/www.thestar.com/search/?f=rss&t=article&c=news/canada*&l=50&s=start_time&sd=desc",
+        "url2": "https://www.thestar.com/search/?f=rss&t=article&c=news/canada*&l=50&s=start_time&sd=desc",
         "lang": "en",
         "cat": {
-            "science": "science",
-            "health": "science",
-            "technology": "technology",
-            "oddities": "oddities",
-            "canada": ["canada_", "canada"],
-            "world-news": "world",
-            "sports": "sports",
-            "entertainment": "entertainment",
-            "business": "business",
+            # "science": "science",
+            # "health": "science",
+            # "technology": "technology",
+            # "oddities": "oddities",
+            "canada": ["canada_"],
+            # "world-news": "world",
+            # "sports": "sports",
+            # "entertainment": "entertainment",
+            # "business": "business",
         },
     },
     "ap_australia": {
@@ -576,6 +576,8 @@ class News:
                     updated_time = current_time - 1
                 elif self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 180
+
+                print(current_time - updated_time)
 
                 if (
                     self.source == "AFP_German"
