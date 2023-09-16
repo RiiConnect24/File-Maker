@@ -632,7 +632,6 @@ class News:
 
                         if key == "canada_":
                             self.source = "CanadianPress"
-                            entry_url = "https://1ft.io/proxy?q=" + entry_url
 
                         downloaded_news = Parse(
                             entry_url, self.source, updated_time, title, self.language
@@ -836,11 +835,18 @@ class Parse(News):
             self.location = self.article
 
     def parse_canadian_press(self):
+        self.article = newspaper.fulltext(
+            str(self.soup.find("div", {"id": "article-body"}).find_all("p")),
+            language="en",
+        )
+
         self.article = self.article.replace("\n\nRead more about:", "").replace(
             "\n\nSHARE:", ""
         )  # remove junk from the article
 
-        if "thestar-ribbon.png" in self.picture:  # this is the default picture used
+        if (
+            "1c9fb3d4-ac84-11ed-bd51-4fdcc98165c8" in self.picture
+        ):  # this is the default picture used
             self.picture = False
 
         self.resize = True
