@@ -77,7 +77,7 @@ sources = {
             "health": "science",
             "technology": "technology",
             "oddities": "oddities",
-            "canada": ["canada_", "canada"],
+            "canada": ["canada", "canada_"],
             "world-news": "world",
             "sports": "sports",
             "entertainment": "entertainment",
@@ -583,7 +583,11 @@ class News:
                     or self.source != "AFP_German"
                     and current_time - updated_time < 60
                 ):  # if it's a new article since the last hour
-                    i += 1
+                    try:
+                        i += 1
+                    except:
+                        print(feed)
+
                     j += 1
 
                     if (
