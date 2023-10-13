@@ -932,6 +932,7 @@ class Parse(News):
                             .find("div", {"style": "float:left"})
                             .get_text()
                             .replace("Letzte Änderung: ", "")
+                            .replace("Erstellet: ", "")
                             .replace("\n", "")[1:],
                             "%d. %b %Y %H:%M",
                         )
