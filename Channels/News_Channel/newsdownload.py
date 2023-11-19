@@ -561,10 +561,7 @@ class News:
                 if self.source == "AP" and key != "canada_":
                     update = time.strptime(entry["updated"], "%Y-%m-%d %H:%M:%S")
                 elif self.source == "AP" and key == "canada_":
-                    update = (
-                        time.strptime(entry["updated"], "%a, %d %b %Y %H:%M:%S %z")
-                        - 300
-                    )
+                    update = time.strptime(entry["updated"], "%a, %d %b %Y %H:%M:%S %z")
                 elif self.source == "Reuters":
                     update = time.strptime(
                         entry["story"]["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
@@ -577,7 +574,9 @@ class News:
                 if self.source != "AFP_German":
                     updated_time = int((time.mktime(update) - 946684800) / 60)
 
-                if self.source == "AFP_German":
+                if self.source == "AP" and key == "canada_":
+                    updated_time -= 300
+                elif self.source == "AFP_German":
                     updated_time = current_time - 1
                 elif self.source == "AFP_French" and current_time - updated_time < 0:
                     updated_time -= 60
