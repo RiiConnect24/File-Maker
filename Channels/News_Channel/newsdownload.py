@@ -575,7 +575,7 @@ class News:
                     updated_time = int((time.mktime(update) - 946684800) / 60)
 
                 if self.source == "AP" and key == "canada_":
-                    updated_time -= 300
+                    updated_time += 300
                 elif self.source == "AFP_German":
                     updated_time = current_time - 1
                 elif self.source == "AFP_French" and current_time - updated_time < 0:
