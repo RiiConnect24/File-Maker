@@ -786,7 +786,7 @@ class NewsMake:
         for article in list(self.data.values()):
             try:
                 if article[3].replace(b"\n", b"").decode("utf-16be") not in headlines:
-                    if "urn:publicid:ap.org:".encode("utf-16be") in headlines:
+                    if " urn:publicid:ap.org:".encode("utf-16be") in article[3]:
                         headlines.append(
                             article[3]
                             .replace(b"\n", b"")
