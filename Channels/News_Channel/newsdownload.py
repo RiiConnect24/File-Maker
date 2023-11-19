@@ -542,7 +542,7 @@ class News:
         elif self.source == "AFP_French":
             entries = feed.entries + feedparser.parse(self.sourceinfo["url2"]).entries
         elif self.source == "AFP_German":
-            entries = soup.find_all("div", {"class": "label"})
+            entries = soup.find("table").find_all("td")
         else:
             entries = feed.entries
 
@@ -628,8 +628,10 @@ class News:
                             )
                         elif self.source == "AFP_German":
                             entry_url = (
-                                "https://www.spin.de/news/" + entry.find("a")["href"]
-                            ).replace("../", "")
+                                ("https://www.spin.de/news/" + entry.find("a")["href"])
+                                .replace("//news/", "/")
+                                .replace("../", "")
+                            )
                         else:
                             entry_url = entry["link"]
 
