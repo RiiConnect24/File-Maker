@@ -791,7 +791,7 @@ class NewsMake:
                             article[3]
                             .replace(b"\n", b"")
                             .decode("utf-16be")
-                            .split(" urn:publicid:ap.org:".encode("utf-16be"))[0]
+                            .split(" urn:publicid:ap.org:")[0]
                             + "\n"
                         )
                     else:
