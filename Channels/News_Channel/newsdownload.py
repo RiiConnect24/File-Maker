@@ -102,13 +102,13 @@ sources = {
     },
     "reuters_europe_english": {
         "name": "Reuters",
-        "url": "https://wireapi.reuters.com/v7/feed/rapp/uk/tabbar/feeds/%s",
+        "url": "https://www.reuters.com/arc/outboundfeeds/v4/mobile/section/%s/?outputType=json&from=0&size=20",
         "lang": "en",
         "cat": {
             "world": "world",
-            "uk": "uk",
+            "world/uk": "uk",
             "science": "science",
-            "tech": "technology",
+            "technology": "technology",
             "entertainment": "entertainment",
             "sports": "sports",
             "lifestyle": "lifestyle",
@@ -628,7 +628,9 @@ class News:
                             entry_url = json.dumps(entry)
                         elif self.source == "Reuters":
                             entry_url = (
-                                self.url[:30] + entry["template_action"]["api_path"]
+                                "https://www.reuters.com/arc/outboundfeeds/v3/mobile/article/"
+                                + entry["cid"]
+                                + "/?outputType=json&key=dianomi"
                             )
                         elif self.source == "AFP_German":
                             entry_url = (
