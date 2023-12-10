@@ -880,9 +880,9 @@ class Parse(News):
         try:
             self.caption = self.newsdata["images"][0]["caption"]
 
-            self.picture = self.newsdata["images"][0]["url"] + "&w=200.0"
+            self.picture = self.newsdata["images"][0]["url"]
 
-            self.resize = False
+            self.resize = True
         except:
             pass
 
