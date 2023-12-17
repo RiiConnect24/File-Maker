@@ -587,11 +587,11 @@ class News:
                     or self.source != "AFP_German"
                     and current_time - updated_time < 60
                 ):  # if it's a new article since the last hour
-                    i += 1
-                    j += 1
-
                     if not i:
                         i = 0
+                        
+                    i += 1
+                    j += 1
 
                     if (
                         i > 25
