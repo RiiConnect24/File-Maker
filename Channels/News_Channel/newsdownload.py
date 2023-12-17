@@ -163,7 +163,7 @@ sources = {
             "sport": "sports",
             "economia": "economy",
             "tecnologia": "technology",
-            # yeah this is a mess, shame on ANSA for seemingly not having an all-Italian feed
+            # yeah this is a mess, shame on ANSA for seemingly not doing an all-Italian feed
             "italy": [
                 "abruzzo",
                 "basilicata",
