@@ -94,7 +94,7 @@ sources = {
             "technology": "technology",
             "oddities": "oddities",
             "new-zealand": "australia",
-            "australia": "national",
+            "australia": "australia",
             "world-news": "world",
             "sports": "sports",
             "entertainment": "entertainment",
