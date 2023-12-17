@@ -418,7 +418,7 @@ def locations_download(
                     + region
                     + location
                     + zoom_factor
-                )  # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max int for a 16-bit int
+                )  # latitude and longitude is divided by the value of 360 (degrees of a full circle) divided by the max value for a 16-bit int
             except Exception as e:
                 ex = "There was a error downloading the location data - line {}: {}".format(
                     sys.exc_info()[-1].tb_lineno, str(e)
