@@ -497,6 +497,7 @@ sources = {
             "Economia": "economy",
             "Tecnologia": "technology",
             "Cultura": "culture",
+            "Cinema": "cinema",
         },
         "languages": [1, 2, 3, 4, 5, 6],
         "language_code": 5,
