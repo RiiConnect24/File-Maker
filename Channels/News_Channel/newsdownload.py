@@ -70,7 +70,7 @@ sources = {
     "ap_canada": {
         "name": "AP",
         "url": "https://afs-prod.appspot.com/api/v2/feed/tag?tags=%s",
-        "url2": "https://www.thestar.com/search/?f=rss&t=article&c=news/canada*&l=50&s=start_time&sd=desc",
+        "url2": "https://www.thestar.com/search/?f=rss&c=news/canada",
         "lang": "en",
         "cat": {
             "science": "science",
